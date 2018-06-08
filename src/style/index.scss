@@ -1,12 +1,10 @@
 @import url('https://js.arcgis.com/4.7/esri/css/main.css');
 @import '~calcite-web/dist/css/calcite-web.min.css';
 
-body {
-    background-color: cornflowerblue;
-}
-
-
 #app {
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

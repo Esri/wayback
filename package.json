@@ -39,6 +39,7 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "esri-loader": "^2.3.0"
+    "esri-loader": "^2.3.0",
+    "jquery": "^3.3.1"
   }
 }
