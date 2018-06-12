@@ -1,10 +1,121 @@
-@import url('https://js.arcgis.com/4.7/esri/css/main.css');
 @import '~calcite-web/dist/css/calcite-web.min.css';
+@import url('https://js.arcgis.com/4.7/esri/css/main.css');
 
-#app {
+// variables
+$inactive-opacity: .75;
+$timeline-border-color: rgba(220, 220, 220, .4);
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#mapDiv, #referenceTilesDiv {
     position: absolute;
     top: 0;
-    bottom: 0;
     left: 0;
+    bottom: 0;
     right: 0;
 }
+
+#referenceTilesDiv {
+    background-color: rgba(0,0,0,.8);
+    z-index: 10;
+    position: relative;
+}
+
+// .ref-tile {
+//     // position: absolute;
+//     height: 256px;
+//     width: 256px;
+//     border: solid 1px red;   
+// }
+
+#sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100%;
+    background-color: rgba(0,0,0,.85);
+    color: #efefef;
+    z-index: 99;
+    overflow: auto;
+}
+
+.panel-no-background {
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.timeline-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+    border-left: solid 1px $timeline-border-color;
+}
+
+.timeline-item-title {
+    width: 100px;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100px;
+}
+
+.timeline-item-title span {
+    position: relative;
+    background-color: rgba(76,76,76,.6);
+    border-radius: 0 5% 5% 0;
+    margin-left: -1px;
+    cursor: pointer;
+}
+
+.timeline-item-title span::after{
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    margin-top: -1px;
+    margin-left: .5rem;
+    width: 100%;
+    height: 1px;
+    background-color: $timeline-border-color;
+    z-index: 5;
+}
+
+.tile-image-preview {
+    width: 200px;
+    height: 200px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.tile-image-preview img {
+    width: 100%;
+    height: 100%;
+    -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
+    filter: brightness(60%);
+}
+
+.is-active {
+
+    .timeline-item-title {
+        // background: #0079c1;
+        opacity: 1;
+    }
+
+    .timeline-item-title span {
+        background-color: #0079c1;
+    }
+
+    .tile-image-preview img {
+        -webkit-filter: brightness(100%); /* Safari 6.0 - 9.0 */
+        filter: brightness(100%);
+    }
+} 
+
