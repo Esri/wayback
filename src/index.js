@@ -26,6 +26,7 @@ esriLoader.loadModules([
     'esri/views/MapView', 
     'esri/WebMap',
     "esri/geometry/Extent",
+    "esri/geometry/Point",
 
     "esri/layers/BaseTileLayer",
     "esri/request",
@@ -38,6 +39,7 @@ esriLoader.loadModules([
     MapView, 
     WebMap,
     Extent,
+    Point,
 
     BaseTileLayer,
     esriRequest,
@@ -50,7 +52,8 @@ esriLoader.loadModules([
 
         this.dataModel = null;
         this.mapView = null;
-        this.basemapTileElements = []; // list of basemap tile objects in current view  
+        this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view  
+        // this.basemapTileElements = []; // list of basemap tile objects in current view  
 
         this.init = ()=>{
 
@@ -79,7 +82,7 @@ esriLoader.loadModules([
 
             this.setMapView(view);
             this.setMapEventHandlers(view);
-            this.setBasemapViewWatcher(view);
+            // this.setBasemapViewWatcher(view);
         };
 
         this.initWaybackImageryLayer = ()=>{
@@ -114,6 +117,8 @@ esriLoader.loadModules([
             this.removeWaybackImageryLayer();
 
             this.mapView.map.add(waybackLyr);
+
+            this.setWatcherForLayerUpdateEndEvt(waybackLyr);
         };
 
         this.getWaybackImageryLayer = ()=>{
@@ -131,67 +136,167 @@ esriLoader.loadModules([
         this.setMapEventHandlers = (view)=>{
             view.on('click', (evt)=>{
                 // console.log('click map', evt);
-                this.getBasemapTileElement(evt.mapPoint);
+                // this.getBasemapTileElement(evt.mapPoint);
+                this.getWaybackImageryTileElement(evt.mapPoint);
             });
         };
 
-        // watch the change of basemap tiles based on example from : https://jsbin.com/zojaxev/edit?html,output
-        this.setBasemapViewWatcher = (view)=>{
-            let basemapView;
-            view.basemapView.baseLayerViews.on('change', changes => {
-                if (!basemapView){
-                    basemapView = changes.added[0];
-                    watchUtils.whenFalse(basemapView, 'updating', f => {
-                        this.setBasemapTileElements(basemapView._tileContainer.children);
-                    });
-                }
-            });
-        };
+        // // watch the change of basemap tiles based on example from : https://jsbin.com/zojaxev/edit?html,output
+        // this.setBasemapViewWatcher = (view)=>{
+        //     let basemapView;
+        //     view.basemapView.baseLayerViews.on('change', changes => {
+        //         if (!basemapView){
+        //             basemapView = changes.added[0];
+        //             watchUtils.whenFalse(basemapView, 'updating', f => {
+        //                 this.setBasemapTileElements(basemapView._tileContainer.children);
+        //             });
+        //         }
+        //     });
+        // };
 
-        this.setBasemapTileElements = (items)=>{
-            this.basemapTileElements = items;
-        };
-
-        this.getBasemapTileElement = (mapPoint=null)=>{
-
-            const tileClicked = mapPoint
-            ? this.basemapTileElements.filter(d=>{
-                const extentGeom = new Extent({
-                    xmin: d.key.extent[0],
-                    xmax: d.key.extent[1],
-                    ymin: d.key.extent[2],
-                    ymax: d.key.extent[3],
-                    spatialReference: { wkid: 102100 }
+        this.setWatcherForLayerUpdateEndEvt = (layer)=>{
+            this.mapView.whenLayerView(layer)
+            .then((layerView)=>{
+                // console.log('layerView', layerView);
+                // The layerview for the layer
+                watchUtils.whenFalse(layerView, 'updating', f => {
+                    // console.log(layerView._tileContainer.children);
+                    this.setWaybackImageryTileElements(layerView._tileContainer.children)
                 });
-                return geometryEngine.intersects(extentGeom, mapPoint);
-              })[0]
-            : null; 
+            })
+            .catch((error)=>{
+                // An error occurred during the layerview creation
+            });
+        };
+
+        // this.setBasemapTileElements = (items)=>{
+        //     this.basemapTileElements = items;
+        // };
+
+        // this.getBasemapTileElement = (mapPoint=null)=>{
+
+        //     const tileClicked = mapPoint
+        //     ? this.basemapTileElements.filter(d=>{
+        //         const extentGeom = new Extent({
+        //             xmin: d.key.extent[0],
+        //             xmax: d.key.extent[1],
+        //             ymin: d.key.extent[2],
+        //             ymax: d.key.extent[3],
+        //             spatialReference: { wkid: 102100 }
+        //         });
+        //         return geometryEngine.intersects(extentGeom, mapPoint);
+        //       })[0]
+        //     : null; 
+
+        //     console.log(tileClicked);
+        //     console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+        //     console.log(this.mapView);
+
+        //     // const wayback = this.getWaybackImageryLayer();
+        //     // console.log(wayback);
+
+        //     // this.searchWayback(this.mapView.zoom, tileClicked.key.row, tileClicked.key.col);
+        // };
+
+        this.setWaybackImageryTileElements = (items)=>{
+            // this.waybackImageryTileElements = items;
+
+            this.waybackImageryTileElements = items.filter(d=>{
+                const centerPoint = new Point({
+                    x: d.x,
+                    y: d.y,
+                    spatialReference: { wkid: 3857 }
+                });
+
+                const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, centerPoint);
+
+                d.geometry = centerPoint;
+
+                return isInCurrentMapExt;
+            });
+        };
+
+        this.getWaybackImageryTileElement = (mapPoint=null)=>{
+
+            // console.log(this.waybackImageryTileElements);
+
+            let minDist = Number.POSITIVE_INFINITY;
+            let tileClicked = null;
+
+            this.waybackImageryTileElements.forEach(d=>{
+                const dist = mapPoint.distance(d.geometry);
+
+                if(dist < minDist){
+                    minDist = dist;
+                    tileClicked = d;
+                }
+                // console.log(dist);
+            });
 
             // console.log(tileClicked);
+            // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+
             this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
         };
 
         this.searchWayback = (level, row, column)=>{
 
-            this.dataModel.getReleaseItemsByLRC(level, row, column);
+            const onSuccessHandler = (res)=>{
+                console.log('onSuccessHandler', res);
+
+                res.forEach(rNum=>{
+                    const tileURL = this.getWaybackTileURL(rNum, level, row, column);
+                    console.log(tileURL);
+                    this.imageToDataUri(tileURL);
+                });
+            };
+
+            this.dataModel.getReleaseNumbersByLRC(level, row, column, onSuccessHandler);
         };
 
-        const WaybackImageryLayer = BaseTileLayer.createSubclass({
+        // TODO: need to process this in back end
+        this.imageToDataUri = (imageURL)=>{
+            var canvas = document.getElementById("tileImageCanvas");
+            if(!canvas){
+                canvas = document.createElement('canvas');
+                canvas.setAttribute("id", "tileImageCanvas");
+            }
 
-            properties: {
-                urlTemplate: null,
-                m: null // m encodes the release number
-            },
-    
-            getTileUrl: function(level, row, col) {
-                const m = this.m;
-                return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
-            },
-        });
+            var img = new Image();
+            img.crossOrigin="Anonymous";
+            img.src = imageURL;
+            img.onload = function () {
+                var context = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0, img.width, img.height);
+            
+                console.log(canvas.toDataURL('image/png').substr(25,270));
+            };
+        };
+
+        this.getWaybackTileURL = (rNum, level, row, column, isReturnTileData)=>{
+            return URL_WAYBACK_IMAGERY_TILES.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
+        };
 
         this.init();
 
     };
+
+    const WaybackImageryLayer = BaseTileLayer.createSubclass({
+
+        properties: {
+            urlTemplate: null,
+            m: null // m encodes the release number
+        },
+
+        getTileUrl: function(level, row, col) {
+            const m = this.m;
+            // console.log('WaybackImageryLayer getTileUrk', level, row, col);
+            return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
+        },
+
+    });
 
     const AppDataModel = function(selectJsonResponse){
 
@@ -206,7 +311,7 @@ esriLoader.loadModules([
 
             this.initReleasesDict();
 
-            console.log(this.releasesDict);
+            // console.log(this.releasesDict);
         };
 
         this.initReleasesDict = ()=>{
@@ -242,27 +347,38 @@ esriLoader.loadModules([
 
                 const requestUrl =  URL_WAYBACK_IMAGERY_TILEMAP.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
 
+                console.log('check if there is update for selected area in release', rNum);
+
                 $.ajax({
                     type: "GET",
                     url: requestUrl,
                     success: (res)=>{
 
+                        console.log('tileRequest response', res);
+
                         // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                         // we will save it to the finalResults so it can be added to the timeline
-                        const lastRelease = res.select[0] || rNum; 
-                        results.push(lastRelease);
+                        const lastRelease = res.select && res.select[0] ? res.select[0] : rNum; 
+                        results.push(+lastRelease);
+
+                        console.log('no updates found in release', +rNum);
+                        console.log('this area was updated during release:', +lastRelease, '\n\n');
 
                         // we need to keep check previous releases to see if it has updated data for the selected area or not, 
                         // to do that, just start from the release before last release
                         const nextReleaseToCheck = this.getReleaseNumOneBefore(lastRelease); 
 
-                        console.log(lastRelease, nextReleaseToCheck);
+                        // console.log(lastRelease, nextReleaseToCheck);
+                        console.log('no update in release', rNum);
                         
                         if(nextReleaseToCheck){
                             tileRequest(nextReleaseToCheck);
                         } else {
-                            console.log('final results', results);
-                            callback(results);
+                            console.log('list releases with updated for selected location', results);
+                            
+                            if(callback){
+                                callback(results);
+                            }
                         }
                     },
                     error: function (request, textStatus, errorThrown) {
