@@ -9,7 +9,32 @@
     <body>
         <div id="sidebar" class=''>
             <div class='panel panel-no-border panel-no-background'>
+
+                <div class='control-items-wrap trailer-half'>
+                    <div class='fill'>
+                        <input id='search-input' class="location-search-input input-group-input" type="text" placeholder="Search location...">
+                    </div>
+                    <div class='margin-left-half control-btn'>
+                        <span class="icon-ui-handle-vertical"></span>
+                    </div>
+
+                    <!-- <div class='margin-left-half control-btn'>
+                        <span class="icon-ui-question"></span>
+                    </div> -->
+                </div>
+
+                <div class=" font-size--2 trailer-half padding-trailer-quarter border-bottom">
+                    <nav class='breadcrumb-nav inline-block'>
+                        <span class="pseudo-divider is-active" data-target-container="">timeline</span>
+                        <span class="" data-target-container="">list</span>
+                    </nav>
+
+                    <span class='right'>releases: <span class=''>0</span></span>
+                </div>
+
                 <div id='timeline' class='v-timeline'>
+
+                    <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
 
                     <!-- <div class='timeline-item padding-trailer-1 is-active'>
                         <div class='timeline-item-title'>
@@ -45,6 +70,5 @@
             </div>
         </div>
         <div id="mapDiv"></div>
-        <div id='referenceTilesDiv'></div>
     </body>
 </html>

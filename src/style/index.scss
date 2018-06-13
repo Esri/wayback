@@ -4,6 +4,7 @@
 // variables
 $inactive-opacity: .75;
 $timeline-border-color: rgba(220, 220, 220, .4);
+$map-controls-border-color: rgba(220, 220, 220, .3);
 
 html, body {
     padding: 0;
@@ -13,7 +14,7 @@ html, body {
     overflow: hidden;
 }
 
-#mapDiv, #referenceTilesDiv {
+#mapDiv {
     position: absolute;
     top: 0;
     left: 0;
@@ -21,24 +22,11 @@ html, body {
     right: 0;
 }
 
-#referenceTilesDiv {
-    background-color: rgba(0,0,0,.8);
-    z-index: 10;
-    position: relative;
-}
-
-// .ref-tile {
-//     // position: absolute;
-//     height: 256px;
-//     width: 256px;
-//     border: solid 1px red;   
-// }
-
 #sidebar {
     position: absolute;
     top: 0;
     right: 0;
-    width: 350px;
+    width: 375px;
     height: 100%;
     background-color: rgba(0,0,0,.85);
     color: #efefef;
@@ -118,4 +106,66 @@ html, body {
         filter: brightness(100%);
     }
 } 
+
+.control-items-wrap {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+    align-items: stretch;
+    position: relative;
+}
+
+.control-items-wrap .fill {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 200px;
+    position: relative;
+}
+
+.location-search-input {
+    background-color: rgba(0,0,0,.85);
+    border: 1px solid $map-controls-border-color;
+    color: #ccc;
+}
+
+.control-btn {
+    line-height: 32px;
+    width: 40px;
+    text-align: center;
+    border: solid 1px $map-controls-border-color;
+    color: #ccc;
+    cursor: pointer;
+}
+
+// .control-btn:hover {
+//     border: solid 1px #6e6e6e;
+// }
+
+.breadcrumb-nav span{
+    opacity: .7;
+    cursor: pointer;
+}
+
+.breadcrumb-nav span.is-active{
+    opacity: 1;
+    font-weight: 600;
+}
+
+.pseudo-divider::after {
+    content: '/';
+    font-weight: 400;
+    padding: 0 .2rem 0 .4rem;
+    display: inline-block;
+    opacity: 1;
+}
+
+[class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
+    padding-right: 0;
+}
+
+.border-bottom {
+    border-bottom: solid 1px $map-controls-border-color;
+}
 

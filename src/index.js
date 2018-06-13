@@ -134,6 +134,11 @@ esriLoader.loadModules([
             return waybackLyr;
         }
 
+        this.getReleaseNumFromWaybackImageryLayer = ()=>{
+            const waybackLyr = this.getWaybackImageryLayer();
+            return waybackLyr.m;
+        };
+
         this.removeWaybackImageryLayer = ()=>{
             const waybackLyr = this.getWaybackImageryLayer();
             if(waybackLyr){
@@ -169,25 +174,27 @@ esriLoader.loadModules([
             // this.waybackImageryTileElements = items;
 
             this.waybackImageryTileElements = items.filter(d=>{
-                const centerPoint = new Point({
+
+                const tileTopLeftPoint = new Point({
                     x: d.x,
                     y: d.y,
                     spatialReference: { wkid: 3857 }
                 });
 
-                const centerPointToScreen = this.mapView.toScreen(centerPoint);
+                const tileTopLeftPointToScreen = this.mapView.toScreen(tileTopLeftPoint);
 
-                const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, centerPoint);
+                const tileCenetrPoint = this.mapView.toMap(tileTopLeftPointToScreen.x + 128, tileTopLeftPointToScreen.y + 128);
 
-                d.geometry = centerPoint;
-                d.screenPoint = centerPointToScreen;
+                const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
 
-                console.log(centerPointToScreen.x, centerPointToScreen.y);
+                d.centroid = tileCenetrPoint;
+
+                // console.log(tileTopLeftPointToScreen.x, tileTopLeftPointToScreen.y);
 
                 return isInCurrentMapExt;
             });
 
-            console.log(this.waybackImageryTileElements);
+            // console.log(this.waybackImageryTileElements);
         };
 
         this.getWaybackImageryTileElement = (mapPoint=null)=>{
@@ -198,8 +205,7 @@ esriLoader.loadModules([
             let tileClicked = null;
 
             this.waybackImageryTileElements.forEach(d=>{
-                const dist = mapPoint.distance(d.geometry);
-
+                const dist = mapPoint.distance(d.centroid);
                 if(dist < minDist){
                     minDist = dist;
                     tileClicked = d;
@@ -251,9 +257,20 @@ esriLoader.loadModules([
 
                     this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
 
-                    appView.timeline.populate(resultsWithDuplicatesRemoved);
+                    const releaseNumOfVisibleWaybackLyr = this.getReleaseNumFromWaybackImageryLayer();
 
-                    console.log(this.waybackImagerySearchResults);
+                    // console.log(releaseNumOfVisibleWaybackLyr);
+
+                    // check if the latest release number from resultsWithDuplicatesRemoved (which will be turned on in the timeline by default) is same with 
+                    // release number used to create the wayback layer, if not, redraw wayback layer using latest release number from resultsWithDuplicatesRemoved to keep 
+                    // timeline and wayback layer synced
+                    if(resultsWithDuplicatesRemoved[0].release !== releaseNumOfVisibleWaybackLyr){
+                        this.addWaybackImageryLayer(resultsWithDuplicatesRemoved[0].release);
+                    }
+
+                    appView.populateWaybackSearchResults(resultsWithDuplicatesRemoved);
+
+                    // console.log(this.waybackImagerySearchResults);
                 });
 
             };
@@ -369,26 +386,29 @@ esriLoader.loadModules([
 
                 const requestUrl =  URL_WAYBACK_IMAGERY_TILEMAP.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
 
-                // console.log('check if there is update for selected area in release', rNum);
+                console.log('check if there is update for selected area in release', requestUrl);
 
                 $.ajax({
                     type: "GET",
                     url: requestUrl,
                     success: (res)=>{
 
-                        // console.log('tileRequest response', res);
+                        console.log('tileRequest response', res);
 
                         // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                         // we will save it to the finalResults so it can be added to the timeline
                         const lastRelease = res.select && res.select[0] ? res.select[0] : rNum; 
-                        results.push(+lastRelease);
 
-                        // console.log('no updates found in release', +rNum);
-                        // console.log('this area was updated during release:', +lastRelease, '\n\n');
-
+                        if(res.data[0]){
+                            results.push(+lastRelease);
+                        }
+                        
                         // we need to keep check previous releases to see if it has updated data for the selected area or not, 
                         // to do that, just start from the release before last release
-                        const nextReleaseToCheck = this.getReleaseNumOneBefore(lastRelease); 
+                        const nextReleaseToCheck = res.data[0] ? this.getReleaseNumOneBefore(lastRelease) : null; 
+
+                        console.log('no updates found in release', +rNum);
+                        console.log('this area was updated during release:', +lastRelease, '\n\n');
 
                         // console.log(lastRelease, nextReleaseToCheck);
                         // console.log('no update in release', rNum);
@@ -396,7 +416,7 @@ esriLoader.loadModules([
                         if(nextReleaseToCheck){
                             tileRequest(nextReleaseToCheck);
                         } else {
-                            // console.log('list releases with updated for selected location', results);
+                            console.log('list releases with updated for selected location', results);
                             
                             if(callback){
                                 callback(results);
@@ -418,13 +438,28 @@ esriLoader.loadModules([
     };
 
     const AppView = function(){
-
+        // cache dom elements
         const $body = $('body');
 
+        // app view components
         this.timeline = null;
+
+        // state observers
+        this.observerWaybackSearchResults = null;
 
         this.init = ()=>{
             this.timeline = new Timeline(DOM_ID_TIMELINE);
+
+            this.initobserverWaybackSearchResults();
+        };
+
+        this.initobserverWaybackSearchResults = ()=>{
+            this.observerWaybackSearchResults = new Observable();
+            this.observerWaybackSearchResults.subscribe(this.timeline.populate);
+        };
+
+        this.populateWaybackSearchResults = (results=[])=>{
+            this.observerWaybackSearchResults.notify(results);
         };
 
         const Timeline = function(constainerID){
@@ -489,6 +524,23 @@ esriLoader.loadModules([
         })();
 
         this.init();
+    };
+
+    const Observable = function(){
+        this.observers = [];
+
+        this.subscribe = (f)=>{
+          this.observers.push(f);
+        };
+      
+        this.unsubscribe = (f)=>{
+          this.observers = this.observers.filter(subscriber => subscriber !== f);
+        }
+
+        this.notify = (data)=>{
+            // console.log('notify', data);
+            this.observers.forEach(observer => observer(data));
+        }
     };
 
     // init app and core components
