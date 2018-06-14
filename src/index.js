@@ -60,7 +60,7 @@ esriLoader.loadModules([
         this.dataModel = null;
         this.mapView = null;
         this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view  
-        this.waybackImagerySearchResults = [];
+        // this.waybackImagerySearchResults = [];
 
         this.init = ()=>{
 
@@ -108,13 +108,13 @@ esriLoader.loadModules([
             this.mapView = mapView;
         };
 
-        this.setWaybackImagerySearchResults = (results=[])=>{
-            this.waybackImagerySearchResults = results;
-        };
+        // this.setWaybackImagerySearchResults = (results=[])=>{
+        //     this.waybackImagerySearchResults = results;
+        // };
 
-        this.getWaybackImagerySearchResults = ()=>{
-            return this.waybackImagerySearchResults;
-        };
+        // this.getWaybackImagerySearchResults = ()=>{
+        //     return this.waybackImagerySearchResults;
+        // };
 
         this.addWaybackImageryLayer = (releaseNum)=>{
             if(!releaseNum){
@@ -234,7 +234,7 @@ esriLoader.loadModules([
         // search all releases with updated data for tile image at given level, row, col
         this.searchWayback = (level, row, column)=>{
 
-            this.setWaybackImagerySearchResults(null); // reset the WaybackImagerySearchResults
+            // this.setWaybackImagerySearchResults(null); // reset the WaybackImagerySearchResults
 
             const onSuccessHandler = (res)=>{
                 // console.log('onSuccessHandler', res);
@@ -283,9 +283,9 @@ esriLoader.loadModules([
                         this.addWaybackImageryLayer(resultsWithDuplicatesRemoved[0].release);
                     }
 
-                    this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
+                    // this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
 
-                    appView.populateWaybackSearchResults(resultsWithDuplicatesRemoved);
+                    appView.updateViewModel(resultsWithDuplicatesRemoved);
 
                     // console.log(this.waybackImagerySearchResults);
                 });
@@ -331,24 +331,24 @@ esriLoader.loadModules([
             return URL_WAYBACK_IMAGERY_TILES.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
         };
 
+        const WaybackImageryLayer = BaseTileLayer.createSubclass({
+
+            properties: {
+                urlTemplate: null,
+                m: null // m encodes the release number
+            },
+    
+            getTileUrl: function(level, row, col) {
+                const m = this.m;
+                // console.log('WaybackImageryLayer getTileUrk', level, row, col);
+                return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
+            },
+    
+        });
+
         this.init();
 
     };
-
-    const WaybackImageryLayer = BaseTileLayer.createSubclass({
-
-        properties: {
-            urlTemplate: null,
-            m: null // m encodes the release number
-        },
-
-        getTileUrl: function(level, row, col) {
-            const m = this.m;
-            // console.log('WaybackImageryLayer getTileUrk', level, row, col);
-            return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
-        },
-
-    });
 
     const AppDataModel = function(selectJsonResponse){
 
@@ -363,8 +363,8 @@ esriLoader.loadModules([
 
             this.initReleasesArr(releasesData);
 
-            console.log(this.releasesDict);
-            console.log(this.releases);
+            // console.log(this.releasesDict);
+            // console.log(this.releases);
         };
 
         this.initReleasesArr = (data=[])=>{
@@ -486,48 +486,30 @@ esriLoader.loadModules([
     };
 
     const AppView = function(){
+
         // cache dom elements
         const $body = $('body');
         const $vizInfoContainers = $('.viz-info-containers');
         const $numOfReleasesTxt = $('.val-holder-num-of-releases');
         const $waybackDataLoadingIndicator = $('.wayback-data-loading-indicator');
 
-        // app view components
+        // app view core components
+        this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
         this.timeline = null;
         this.barChart = null;
 
-        // state observers
-        this.observerWaybackSearchResults = null; 
-        this.observerSelectedWaybackSearchResult = null; 
-
         this.init = ()=>{
+            this.viewModel = new ViewModel(this);
             this.timeline = new Timeline(DOM_ID_TIMELINE);
-            this.barChart = new BarChart(DOM_ID_BARCHART)
-            
-            this.initObservers();
+            this.barChart = new BarChart(DOM_ID_BARCHART);
+
+            // init observers after all components are ready
+            this.viewModel.initObservers(); 
         };
 
-        this.initObservers = ()=>{
-            // watch the change of wayback imagery search results to make sure the results are populated to each viz container
-            this.observerWaybackSearchResults = new Observable();
-            this.observerWaybackSearchResults.subscribe(this.timeline.populate);
-            this.observerWaybackSearchResults.subscribe(this.barChart.populate);
-            this.observerWaybackSearchResults.subscribe(this.setNumOfReleasesTxt);
-
-            // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
-            this.observerSelectedWaybackSearchResult = new Observable();
-            this.observerSelectedWaybackSearchResult.subscribe(app.addWaybackImageryLayer);
-            this.observerSelectedWaybackSearchResult.subscribe(this.timeline.setActiveItem);
-            this.observerSelectedWaybackSearchResult.subscribe(this.barChart.setActiveItem);
-        };
-
-        this.populateWaybackSearchResults = (results=[])=>{
+        this.updateViewModel = (results=[])=>{
             this.toggleLoadingIndicator(false);
-            this.observerWaybackSearchResults.notify(results);
-        };
-
-        this.setSelectedWaybackSearchResult = (rNum)=>{
-            this.observerSelectedWaybackSearchResult.notify(rNum);
+            this.viewModel.setData(results);
         };
 
         this.setNumOfReleasesTxt = (results=[])=>{
@@ -539,6 +521,54 @@ esriLoader.loadModules([
             $vizInfoContainers.toggleClass('hide' , isLoading);
         };
 
+        const ViewModel = function(appView){
+
+            this.data = [];
+
+            // state observers
+            this.observerViewModelUpdate = null; 
+            this.observerForActiveItem = null; 
+
+            this.setData = (data)=>{
+                this.observerViewModelUpdate.notify(data);
+                this.data = data;
+            }
+
+            this.setActiveItem = (rNum)=>{
+                this.observerForActiveItem.notify(rNum);
+                this.data.forEach(d=>{
+                    const isActive = (+d.release === +rNum) ? true : false;
+                    d.isActive = isActive;
+                });
+            };
+
+            this.setSelectedItem = (rNum, isSelected)=>{
+                this.data.forEach(d=>{
+                    if(+d.release === +rNum){
+                        d.isSelected = isSelected;
+                    }
+                });
+            };
+
+            this.getData = ()=>{
+                return this.data;
+            };
+
+            this.initObservers = ()=>{
+                // watch the change of view data model (wayback imagery search results) to make sure the results are populated to each viz container
+                this.observerViewModelUpdate = new Observable();
+                this.observerViewModelUpdate.subscribe(appView.timeline.populate);
+                this.observerViewModelUpdate.subscribe(appView.barChart.populate);
+                this.observerViewModelUpdate.subscribe(appView.setNumOfReleasesTxt);
+    
+                // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
+                this.observerForActiveItem = new Observable();
+                this.observerForActiveItem.subscribe(app.addWaybackImageryLayer);
+                this.observerForActiveItem.subscribe(appView.timeline.setActiveItem);
+                this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
+            };
+        };
+
         const Timeline = function(constainerID){
             
             const $container = $('#' + constainerID);
@@ -547,8 +577,6 @@ esriLoader.loadModules([
                 const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
                 targetItem.addClass('is-active');
                 targetItem.siblings().removeClass('is-active');
-
-                console.log(rNum, targetItem);
             };
 
             this.populate = (data)=>{
@@ -647,9 +675,9 @@ esriLoader.loadModules([
                     .data(data)		
                     .enter().append("rect")
                     .attr('class', function(d, i){
-                        // highlight the bar for most recent release
+                        // highlight the bar for the active item
                         let classes = ['bar'];
-                        if(i===0 ){
+                        if(d.isActive){
                             classes.push('highlight');
                             self.setBarChartTitle(d.releaseName);
                         }
@@ -663,7 +691,7 @@ esriLoader.loadModules([
                     .attr("height", height)
                     .on("click", function(d){
                         // console.log(d);
-                        appView.setSelectedWaybackSearchResult(d.release);
+                        appView.viewModel.setActiveItem(d.release);
                         self.setBarChartTitle(d.releaseName);
                     });
                 }
@@ -680,9 +708,9 @@ esriLoader.loadModules([
 
             // the chart won't be ready till the container is visible, therefore, need to call this function to populate the chart if it's not ready but the search results are there
             this.checkIfIsReady = ()=>{
-                const searchResults = app.getWaybackImagerySearchResults();
-                if(searchResults.length && !this.isReady){
-                    this.populate(searchResults);
+                const viewModelData = appView.viewModel.getData();
+                if(viewModelData.length && !this.isReady){
+                    this.populate(viewModelData);
                 }
             };
 
@@ -697,7 +725,7 @@ esriLoader.loadModules([
             $body.on('click', '.js-show-wayback-imagery', function(evt){
                 const traget = $(this);
                 const rNum = traget.attr('data-release-number');
-                appView.setSelectedWaybackSearchResult(rNum);
+                appView.viewModel.setActiveItem(rNum);
                 // console.log('display wayback imagery for release', rNum);
             });
 
