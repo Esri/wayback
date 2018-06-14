@@ -25,48 +25,63 @@
 
                 <div class=" font-size--2 trailer-half padding-trailer-quarter border-bottom">
                     <nav class='breadcrumb-nav inline-block'>
-                        <span class="pseudo-divider is-active" data-target-container="">timeline</span>
-                        <span class="" data-target-container="">list</span>
+                        <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
+                        <span class="pseudo-divider js-toggle-viz-info-container" data-target-container-id="barChartWrap">chart</span>
+                        <span class="js-toggle-viz-info-container" data-target-container-id="">list</span>
                     </nav>
 
-                    <span class='right'>releases: <span class=''>0</span></span>
+                    <span class='right'>releases: <span class='val-holder-num-of-releases'>0</span></span>
                 </div>
 
-                <div id='timeline' class='v-timeline'>
+                <div class='viz-info-containers'>
 
-                    <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
-
-                    <!-- <div class='timeline-item padding-trailer-1 is-active'>
-                        <div class='timeline-item-title'>
-                            <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
+                    <div id='timelineWrap' class='v-timeline viz-info-container'>
+                        <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
+                        <!-- <div class='timeline-item padding-trailer-1 is-active'>
+                            <div class='timeline-item-title'>
+                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
+                            </div>
+    
+                            <div class='tile-image-preview'>
+                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/15359/16/26164/11431" alt="release 1">
+                            </div>
                         </div>
-
-                        <div class='tile-image-preview'>
-                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/15359/16/26164/11431" alt="release 1">
+    
+                        <div class='timeline-item padding-trailer-1'>
+                            <div class='timeline-item-title'>
+                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
+                            </div>
+    
+                            <div class='tile-image-preview'>
+                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/16/26164/11431" alt="release 1" height="200" width="200">
+                            </div>
                         </div>
+    
+                        <div class='timeline-item padding-trailer-1'>
+                            <div class='timeline-item-title'>
+                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
+                            </div>
+    
+                            <div class='tile-image-preview'>
+                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/10/16/26164/11431" alt="release 1" height="200" width="200">
+                            </div>
+                        </div> -->
                     </div>
 
-                    <div class='timeline-item padding-trailer-1'>
-                        <div class='timeline-item-title'>
-                            <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
+                    <div id='barChartWrap' class='viz-info-container hide'>
+                        <div class='leader-quarter trailer-quarter'>
+                            <p class='margin-left-1 trailer-0 font-size--3 bar-chart-title'></p>
                         </div>
-
-                        <div class='tile-image-preview'>
-                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/16/26164/11431" alt="release 1" height="200" width="200">
-                        </div>
+                        <div id='barChartDiv' class=''></div>
                     </div>
-
-                    <div class='timeline-item padding-trailer-1'>
-                        <div class='timeline-item-title'>
-                            <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>2017 R21</span>
-                        </div>
-
-                        <div class='tile-image-preview'>
-                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/10/16/26164/11431" alt="release 1" height="200" width="200">
-                        </div>
-                    </div> -->
 
                 </div>
+
+                <div class="wayback-data-loading-indicator loader padding-leader-2 padding-trailer-2">
+                    <div class="loader-bars"></div>
+                    <div class="loader-text">Loading...</div>
+                </div>
+
             </div>
         </div>
         <div id="mapDiv"></div>

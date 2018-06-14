@@ -5,6 +5,10 @@
 $inactive-opacity: .75;
 $timeline-border-color: rgba(220, 220, 220, .4);
 $map-controls-border-color: rgba(220, 220, 220, .3);
+$controls-text-color: #ccc;
+
+$barchart-axis-color: rgba(255,255,255,.4);
+
 
 html, body {
     padding: 0;
@@ -26,7 +30,7 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 375px;
+    width: 400px;
     height: 100%;
     background-color: rgba(0,0,0,.85);
     color: #efefef;
@@ -127,7 +131,7 @@ html, body {
 .location-search-input {
     background-color: rgba(0,0,0,.85);
     border: 1px solid $map-controls-border-color;
-    color: #ccc;
+    color: $controls-text-color;
 }
 
 .control-btn {
@@ -135,7 +139,7 @@ html, body {
     width: 40px;
     text-align: center;
     border: solid 1px $map-controls-border-color;
-    color: #ccc;
+    color: $controls-text-color;
     cursor: pointer;
 }
 
@@ -168,4 +172,47 @@ html, body {
 .border-bottom {
     border-bottom: solid 1px $map-controls-border-color;
 }
+
+#barChartWrap {
+    border: solid 1px $map-controls-border-color;
+}
+
+#barChartDiv {
+    height: 100px;
+    width: 100%;
+    // background-color:rgba(0,0,0,.85);
+    // border: solid 1px $map-controls-border-color;
+}
+
+.bar {
+    fill: #0079c1;
+}
+
+.bar:hover {
+    fill: #56a5d8;
+}
+
+.bar.highlight,
+.bar.highlight:hover {
+    fill: #e8912e;
+}
+
+.axis--x {
+
+    path {
+        /* display: none; */
+        stroke: $barchart-axis-color;
+    }
+
+    .tick {
+        line {
+            stroke: $barchart-axis-color;
+        }
+
+        text {
+            fill: $controls-text-color;
+        }
+    }
+}
+
 

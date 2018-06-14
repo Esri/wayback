@@ -1,7 +1,8 @@
 // import dependencies and libraries
-import $ from 'jquery'
-import * as esriLoader from 'esri-loader'
-import * as calcite from 'calcite-web'
+import $ from 'jquery';
+import * as d3 from "d3";
+import * as esriLoader from 'esri-loader';
+import * as calcite from 'calcite-web';
 
 // import style files
 import './style/index.scss';
@@ -23,7 +24,9 @@ const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
 
 const DOM_ID_MAP_CONTAINER = 'mapDiv';
-const DOM_ID_TIMELINE = 'timeline';
+const DOM_ID_TIMELINE = 'timelineWrap';
+const DOM_ID_BARCHART_WRAP = 'barChartWrap';
+const DOM_ID_BARCHART = 'barChartDiv';
 
 
 esriLoader.loadModules([
@@ -109,6 +112,10 @@ esriLoader.loadModules([
             this.waybackImagerySearchResults = results;
         };
 
+        this.getWaybackImagerySearchResults = ()=>{
+            return this.waybackImagerySearchResults;
+        };
+
         this.addWaybackImageryLayer = (releaseNum)=>{
             if(!releaseNum){
                 console.error('release number ({m} value) is required to add wayback imagery layer');
@@ -150,7 +157,8 @@ esriLoader.loadModules([
             view.on('click', (evt)=>{
                 // console.log('click map', evt);
                 this.getWaybackImageryTileElement(evt.mapPoint);
-                appView.timeline.showLoadingIndicator();
+
+                appView.toggleLoadingIndicator(true);
             });
         };
 
@@ -204,18 +212,23 @@ esriLoader.loadModules([
             let minDist = Number.POSITIVE_INFINITY;
             let tileClicked = null;
 
-            this.waybackImageryTileElements.forEach(d=>{
-                const dist = mapPoint.distance(d.centroid);
-                if(dist < minDist){
-                    minDist = dist;
-                    tileClicked = d;
-                }
-            });
+            if(this.waybackImageryTileElements.length){
+                this.waybackImageryTileElements.forEach(d=>{
+                    const dist = mapPoint.distance(d.centroid);
+                    if(dist < minDist){
+                        minDist = dist;
+                        tileClicked = d;
+                    }
+                });
+    
+                // console.log(tileClicked);
+                // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+    
+                this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+            } else {
+                console.log('wayback imagery is still loading');
+            }
 
-            // console.log(tileClicked);
-            // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
-
-            this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
         };
 
         // search all releases with updated data for tile image at given level, row, col
@@ -240,22 +253,24 @@ esriLoader.loadModules([
 
                     resolvedResults.forEach((d, i)=>{
                         if(!uniqueDataURIs.includes(d.dataUri)){
-                            const releaseName = this.dataModel.getReleaseName(d.release);
+                            const rName = this.dataModel.getReleaseName(d.release);
+                            const rDate = this.dataModel.getReleaseDate(d.release);
+                            const rDateTime = this.dataModel.getReleaseDate(d.release, true);
                             const isActive = i===0 ? true : false;
 
                             uniqueDataURIs.push(d.dataUri);
 
                             resultsWithDuplicatesRemoved.push({
                                 release: d.release,
-                                releaseName: releaseName,
+                                releaseName: rName,
+                                releaseDate: rDate,
+                                releaseDateTime: rDateTime,
                                 imageUrl: d.imageUrl,
                                 isActive: isActive,
                                 isSelected: false
                             });
                         }
                     });
-
-                    this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
 
                     const releaseNumOfVisibleWaybackLyr = this.getReleaseNumFromWaybackImageryLayer();
 
@@ -267,6 +282,8 @@ esriLoader.loadModules([
                     if(resultsWithDuplicatesRemoved[0].release !== releaseNumOfVisibleWaybackLyr){
                         this.addWaybackImageryLayer(resultsWithDuplicatesRemoved[0].release);
                     }
+
+                    this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
 
                     appView.populateWaybackSearchResults(resultsWithDuplicatesRemoved);
 
@@ -335,29 +352,39 @@ esriLoader.loadModules([
 
     const AppDataModel = function(selectJsonResponse){
 
-        this.releases = selectJsonResponse || null; // array of all release numbers since 2014
+        this.releases = []; // array of all release numbers since 2014
         this.releasesDict = null; // lookup table with release number as key, will need to use it to get the index of the element 
 
-        this.init = ()=>{
-            if(!this.releases || !this.releases.length){
+        this.init = (releasesData)=>{
+            if(!releasesData || !releasesData.length){
                 console.error('list of releases from the select.json file is required to init AppDataModel');
                 return;
             }
 
-            this.initReleasesDict();
+            this.initReleasesArr(releasesData);
 
-            // console.log(this.releasesDict);
+            console.log(this.releasesDict);
+            console.log(this.releases);
         };
 
-        this.initReleasesDict = ()=>{
+        this.initReleasesArr = (data=[])=>{
             const dict = {};
-            
-            this.releases.forEach((element, index) => {
-                const releaseNum = element[KEY_RELEASE_NUM];
-                element.index = index;
-                dict[releaseNum] = element;
+
+            this.releases = data.map((d, index) => {
+                const rNum = d[KEY_RELEASE_NUM];
+                const rDate = this.extractDateFromStr(d[KEY_RELEASE_NAME]);
+                d.index = index;
+                d.releaseDate = rDate
+                d.releaseDatetime = this.convertToDate(rDate);
+                dict[rNum] = d;
+
+                return d;
             });
 
+            this.initReleasesDict(dict);
+        };
+
+        this.initReleasesDict = (dict={})=>{
             this.releasesDict = dict; 
         };
 
@@ -365,8 +392,18 @@ esriLoader.loadModules([
             return this.releasesDict[rNum][KEY_RELEASE_NAME];
         };
 
+        this.getReleaseDate = (rNum, isOutputInDateTimeFormat)=>{
+            return isOutputInDateTimeFormat ? this.releasesDict[rNum].releaseDatetime : this.releasesDict[rNum].releaseDate;
+        };
+
         this.getMostRecentReleaseNum = ()=>{
             return this.releases[0][KEY_RELEASE_NUM];
+        };
+
+        this.getFirstAndLastReleaseDates = ()=>{
+            const oldestReleaseDate =  this.convertToDate(this.releases[this.releases.length - 1].releaseDate);
+            const latestReleaseDate = this.convertToDate(this.releases[0].releaseDate);
+            return [oldestReleaseDate, latestReleaseDate];
         };
 
         // get the release number of the item before the given item... e.g. input=>Release Number for 2018 Release 10; output=>Release Number for 2018 Release 9
@@ -386,14 +423,14 @@ esriLoader.loadModules([
 
                 const requestUrl =  URL_WAYBACK_IMAGERY_TILEMAP.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
 
-                console.log('check if there is update for selected area in release', requestUrl);
+                // console.log('check if there is update for selected area in release', requestUrl);
 
                 $.ajax({
                     type: "GET",
                     url: requestUrl,
                     success: (res)=>{
 
-                        console.log('tileRequest response', res);
+                        // console.log('tileRequest response', res);
 
                         // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                         // we will save it to the finalResults so it can be added to the timeline
@@ -407,8 +444,8 @@ esriLoader.loadModules([
                         // to do that, just start from the release before last release
                         const nextReleaseToCheck = res.data[0] ? this.getReleaseNumOneBefore(lastRelease) : null; 
 
-                        console.log('no updates found in release', +rNum);
-                        console.log('this area was updated during release:', +lastRelease, '\n\n');
+                        // console.log('no updates found in release', +rNum);
+                        // console.log('this area was updated during release:', +lastRelease, '\n\n');
 
                         // console.log(lastRelease, nextReleaseToCheck);
                         // console.log('no update in release', rNum);
@@ -416,7 +453,7 @@ esriLoader.loadModules([
                         if(nextReleaseToCheck){
                             tileRequest(nextReleaseToCheck);
                         } else {
-                            console.log('list releases with updated for selected location', results);
+                            // console.log('list releases with updated for selected location', results);
                             
                             if(callback){
                                 callback(results);
@@ -433,48 +470,85 @@ esriLoader.loadModules([
             tileRequest(mostRecentRelease);
         };
 
-        this.init();
+        this.extractDateFromStr = (inputStr)=>{
+            const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
+            const results = inputStr.match(regexpYYYYMMDD);
+            return results.length ? results[0] : inputStr;
+        };
+
+        this.convertToDate = (dateInStr)=>{
+            const dateParts = dateInStr.split('-');
+            return new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+        };
+
+        this.init(selectJsonResponse);
 
     };
 
     const AppView = function(){
         // cache dom elements
         const $body = $('body');
+        const $vizInfoContainers = $('.viz-info-containers');
+        const $numOfReleasesTxt = $('.val-holder-num-of-releases');
+        const $waybackDataLoadingIndicator = $('.wayback-data-loading-indicator');
 
         // app view components
         this.timeline = null;
+        this.barChart = null;
 
         // state observers
-        this.observerWaybackSearchResults = null;
+        this.observerWaybackSearchResults = null; 
+        this.observerSelectedWaybackSearchResult = null; 
 
         this.init = ()=>{
             this.timeline = new Timeline(DOM_ID_TIMELINE);
-
-            this.initobserverWaybackSearchResults();
+            this.barChart = new BarChart(DOM_ID_BARCHART)
+            
+            this.initObservers();
         };
 
-        this.initobserverWaybackSearchResults = ()=>{
+        this.initObservers = ()=>{
+            // watch the change of wayback imagery search results to make sure the results are populated to each viz container
             this.observerWaybackSearchResults = new Observable();
             this.observerWaybackSearchResults.subscribe(this.timeline.populate);
+            this.observerWaybackSearchResults.subscribe(this.barChart.populate);
+            this.observerWaybackSearchResults.subscribe(this.setNumOfReleasesTxt);
+
+            // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
+            this.observerSelectedWaybackSearchResult = new Observable();
+            this.observerSelectedWaybackSearchResult.subscribe(app.addWaybackImageryLayer);
+            this.observerSelectedWaybackSearchResult.subscribe(this.timeline.setActiveItem);
+            this.observerSelectedWaybackSearchResult.subscribe(this.barChart.setActiveItem);
         };
 
         this.populateWaybackSearchResults = (results=[])=>{
+            this.toggleLoadingIndicator(false);
             this.observerWaybackSearchResults.notify(results);
+        };
+
+        this.setSelectedWaybackSearchResult = (rNum)=>{
+            this.observerSelectedWaybackSearchResult.notify(rNum);
+        };
+
+        this.setNumOfReleasesTxt = (results=[])=>{
+            $numOfReleasesTxt.text(results.length);
+        };
+
+        this.toggleLoadingIndicator = (isLoading)=>{
+            $waybackDataLoadingIndicator.toggleClass('is-active' , isLoading);
+            $vizInfoContainers.toggleClass('hide' , isLoading);
         };
 
         const Timeline = function(constainerID){
             
             const $container = $('#' + constainerID);
 
-            this.showLoadingIndicator = ()=>{
-                const html = `
-                    <div class="loader is-active padding-leader-3 padding-trailer-3">
-                        <div class="loader-bars"></div>
-                        <div class="loader-text">Loading...</div>
-                    </div>
-                `;
+            this.setActiveItem= (rNum)=>{
+                const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
+                targetItem.addClass('is-active');
+                targetItem.siblings().removeClass('is-active');
 
-                $container.html(html);
+                console.log(rNum, targetItem);
             };
 
             this.populate = (data)=>{
@@ -482,14 +556,15 @@ esriLoader.loadModules([
                 const timelineItemsHtmlStr = data.map((d,idx)=>{
 
                     const rNum = d.release;
-                    const rName = d.releaseName;
+                    // const rName = d.releaseName;
+                    const rDate = d.releaseDate;
                     const isActiveClass = d.isActive ? 'is-active' : '';
-                    const rNameShortened = rName.split(' ').slice(2).join(' ');
+                    // const rNameShortened = rName.split(' ').slice(2).join(' ');
 
                     const htmlStr = `
                         <div class='timeline-item padding-trailer-1 ${isActiveClass} js-show-wayback-imagery' data-release-number='${rNum}'>
                             <div class='timeline-item-title'>
-                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>${rNameShortened}</span>
+                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>${rDate}</span>
                             </div>
 
                             <div class='tile-image-preview'>
@@ -503,22 +578,146 @@ esriLoader.loadModules([
 
                 $container.html(timelineItemsHtmlStr);
                 
-            }
+            };
+
+        };
+
+        const BarChart = function(containerID){
+
+            const self = this;
+            const container = d3.select("#"+containerID);
+            const $barChartTitleTxt = $('.bar-chart-title');
+        
+            const svg = container.append("svg").style("width", "100%").style("height", "100%");
+            const margin = {top: 10, right: 20, bottom: 30, left: 20};
+            const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            
+            let width = 0;
+            let height = 0;
+            let xScale = null; // = d3.scaleTime().range([0, width]).domain([new Date(2014, 0, 1), new Date(2018, 10, 1)]).nice();
+            let bars = null;
+            
+            this.isReady = false;
+
+            this.init = ()=>{
+
+                const containerRect = container.node().getBoundingClientRect();
+
+                if(containerRect.width <= 0 || containerRect.height <= 0){
+                    // console.log('constainer size is less than 0');
+                    return;
+                }
+
+                width = containerRect.width - margin.left - margin.right;
+                height = containerRect.height - margin.top - margin.bottom;
+                this.setXScale();
+                this.createAxis();
+
+                this.isReady = true;
+            };
+
+            this.setXScale = ()=>{
+                const releaseDatesDomian = app.dataModel.getFirstAndLastReleaseDates();
+                xScale = d3.scaleTime()
+                    .range([0, width])
+                    .domain(releaseDatesDomian).nice();
+            };
+
+            this.createAxis = ()=>{
+                g.append("g")
+                    .attr("class", "axis axis--x")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(xScale).ticks(5));
+
+                // g.append("g")
+                //   .attr("class", "axis axis--y")
+                //   .call(d3.axisLeft(y).ticks(0));
+            };
+
+            this.populate = (data)=>{
+
+                if(!this.isReady){
+                    this.init();
+                } 
+
+                if(this.isReady){
+                    bars = g.selectAll(".bar")
+                    .remove()
+                    .exit()
+                    .data(data)		
+                    .enter().append("rect")
+                    .attr('class', function(d, i){
+                        // highlight the bar for most recent release
+                        let classes = ['bar'];
+                        if(i===0 ){
+                            classes.push('highlight');
+                            self.setBarChartTitle(d.releaseName);
+                        }
+                        return classes.join(' ');
+                    })
+                    .attr("x", function(d) { 
+                        return xScale(d.releaseDateTime); 
+                    })
+                    .attr("y", 0)
+                    .attr("width", 4)
+                    .attr("height", height)
+                    .on("click", function(d){
+                        // console.log(d);
+                        appView.setSelectedWaybackSearchResult(d.release);
+                        self.setBarChartTitle(d.releaseName);
+                    });
+                }
+            };
+
+            this.setActiveItem = (rNum)=>{
+                if(bars){
+                    bars.classed("highlight", false);
+                    bars.filter(function(item){
+                        return item.release === +rNum;
+                    }).classed("highlight", true);
+                }
+            };
+
+            // the chart won't be ready till the container is visible, therefore, need to call this function to populate the chart if it's not ready but the search results are there
+            this.checkIfIsReady = ()=>{
+                const searchResults = app.getWaybackImagerySearchResults();
+                if(searchResults.length && !this.isReady){
+                    this.populate(searchResults);
+                }
+            };
+
+            this.setBarChartTitle = (titleStr)=>{
+                $barChartTitleTxt.text(titleStr)
+            }; 
+
         };
 
         const initEventHandlers = (()=>{
 
             $body.on('click', '.js-show-wayback-imagery', function(evt){
-
                 const traget = $(this);
                 const rNum = traget.attr('data-release-number');
+                appView.setSelectedWaybackSearchResult(rNum);
+                // console.log('display wayback imagery for release', rNum);
+            });
 
+            $body.on('click', '.js-toggle-viz-info-container', function(evt){
+                const traget = $(this);
+                const targetContainerID = traget.attr('data-target-container-id');
+
+                $vizInfoContainers.children().addClass('hide');
+
+                if(targetContainerID){
+                    $vizInfoContainers.find('#'+targetContainerID).removeClass('hide');
+                }
+                
                 traget.siblings().removeClass('is-active');
                 traget.addClass('is-active');
+                // console.log(targetContainerID);
 
-                app.addWaybackImageryLayer(rNum);
-
-                console.log('display wayback imagery for release', rNum);
+                if(targetContainerID === DOM_ID_BARCHART_WRAP){
+                    appView.barChart.checkIfIsReady();
+                }
             });
 
         })();
