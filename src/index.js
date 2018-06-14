@@ -27,6 +27,7 @@ const DOM_ID_MAP_CONTAINER = 'mapDiv';
 const DOM_ID_TIMELINE = 'timelineWrap';
 const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
+const DOM_ID_ITEMLIST = 'listCardsWrap';
 
 
 esriLoader.loadModules([
@@ -133,6 +134,10 @@ esriLoader.loadModules([
 
             this.mapView.map.add(waybackLyr);
 
+            this.mapView.map.reorder(waybackLyr, 0); //bring the layer to bottom so the labels are visible
+
+            // console.log('add wayback layer');
+
             this.setWatcherForLayerUpdateEndEvt(waybackLyr);
         };
 
@@ -157,8 +162,6 @@ esriLoader.loadModules([
             view.on('click', (evt)=>{
                 // console.log('click map', evt);
                 this.getWaybackImageryTileElement(evt.mapPoint);
-
-                appView.toggleLoadingIndicator(true);
             });
         };
 
@@ -223,8 +226,8 @@ esriLoader.loadModules([
     
                 // console.log(tileClicked);
                 // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
-    
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+                appView.toggleLoadingIndicator(true);
             } else {
                 console.log('wayback imagery is still loading');
             }
@@ -497,11 +500,13 @@ esriLoader.loadModules([
         this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
         this.timeline = null;
         this.barChart = null;
+        this.itemList = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
             this.timeline = new Timeline(DOM_ID_TIMELINE);
             this.barChart = new BarChart(DOM_ID_BARCHART);
+            this.itemList = new ItemList(DOM_ID_ITEMLIST)
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -521,6 +526,11 @@ esriLoader.loadModules([
             $vizInfoContainers.toggleClass('hide' , isLoading);
         };
 
+        this.toggleSaveAsWebmapBtn = (isAnySelectedItem=false)=>{
+            const $saveWebmapBtn = $('.save-web-map-btn');
+            $saveWebmapBtn.toggleClass('btn-disabled', !isAnySelectedItem);
+        };
+
         const ViewModel = function(appView){
 
             this.data = [];
@@ -528,6 +538,7 @@ esriLoader.loadModules([
             // state observers
             this.observerViewModelUpdate = null; 
             this.observerForActiveItem = null; 
+            this.observerForSelectedItem = null; 
 
             this.setData = (data)=>{
                 this.observerViewModelUpdate.notify(data);
@@ -543,11 +554,24 @@ esriLoader.loadModules([
             };
 
             this.setSelectedItem = (rNum, isSelected)=>{
+
+                let isAnySelectedItem = false;
+
                 this.data.forEach(d=>{
                     if(+d.release === +rNum){
                         d.isSelected = isSelected;
                     }
+                    if(d.isSelected){
+                        isAnySelectedItem = true;
+                    }
                 });
+
+                this.observerForSelectedItem.notify({
+                    release: rNum,
+                    isSelected: isSelected
+                });
+
+                appView.toggleSaveAsWebmapBtn(isAnySelectedItem);
             };
 
             this.getData = ()=>{
@@ -559,6 +583,7 @@ esriLoader.loadModules([
                 this.observerViewModelUpdate = new Observable();
                 this.observerViewModelUpdate.subscribe(appView.timeline.populate);
                 this.observerViewModelUpdate.subscribe(appView.barChart.populate);
+                this.observerViewModelUpdate.subscribe(appView.itemList.populate);
                 this.observerViewModelUpdate.subscribe(appView.setNumOfReleasesTxt);
     
                 // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
@@ -566,7 +591,67 @@ esriLoader.loadModules([
                 this.observerForActiveItem.subscribe(app.addWaybackImageryLayer);
                 this.observerForActiveItem.subscribe(appView.timeline.setActiveItem);
                 this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
+                this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
+
+
+                this.observerForSelectedItem = new Observable();
+                this.observerForSelectedItem.subscribe(appView.timeline.toggleSelectedItem);
+                this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
             };
+        };
+
+        const ItemList = function(constainerID){
+
+            const $container = $('#' + constainerID);
+
+            this.setActiveItem= (rNum)=>{
+                const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
+                targetItem.addClass('is-active');
+                targetItem.siblings().removeClass('is-active');
+            };
+
+            this.toggleSelectedItem= (options)=>{
+                const rNum = options.release;
+                const isSelected = options.isSelected;
+                
+                if(!rNum){
+                    console.error('release number is required to toggle selected item');
+                    return;
+                }
+
+                const targetItem = $(`.set-selected-item-cbox[data-release-number="${rNum}"]`);
+                targetItem.toggleClass('is-selected', isSelected);
+            };
+
+            this.populate = (data)=>{
+
+                const timelineItemsHtmlStr = data.map((d)=>{
+
+                    const rNum = d.release;
+                    const rName = d.releaseName;
+                    const isActiveClass = d.isActive ? 'is-active' : '';
+
+                    const htmlStr = `
+                        <div class='list-card trailer-half ${isActiveClass}' data-release-number='${rNum}'>
+                            <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rName}</span>
+                            <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item' data-release-number='${rNum}'>
+                                <span class='icon-ui-checkbox-checked'></span>
+                                <span class='icon-ui-checkbox-unchecked'></span>
+                            </div>
+                        </div>
+                    `;
+
+                    return htmlStr;
+                }).join('');
+
+                const saveToWebmapBtnHtmlStr = `<div><button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button></div>`;
+
+                const finalHtmlStr = timelineItemsHtmlStr + saveToWebmapBtnHtmlStr;
+
+                $container.html(finalHtmlStr);
+                
+            };
+
         };
 
         const Timeline = function(constainerID){
@@ -579,9 +664,21 @@ esriLoader.loadModules([
                 targetItem.siblings().removeClass('is-active');
             };
 
+            this.toggleSelectedItem= (options)=>{
+                const rNum = options.release;
+                const isSelected = options.isSelected;
+                
+                if(!rNum){
+                    console.error('release number is required to toggle selected item');
+                    return;
+                }
+                const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
+                targetItem.toggleClass('is-selected', isSelected);
+            };
+
             this.populate = (data)=>{
 
-                const timelineItemsHtmlStr = data.map((d,idx)=>{
+                const timelineItemsHtmlStr = data.map((d)=>{
 
                     const rNum = d.release;
                     // const rName = d.releaseName;
@@ -590,13 +687,13 @@ esriLoader.loadModules([
                     // const rNameShortened = rName.split(' ').slice(2).join(' ');
 
                     const htmlStr = `
-                        <div class='timeline-item padding-trailer-1 ${isActiveClass} js-show-wayback-imagery' data-release-number='${rNum}'>
-                            <div class='timeline-item-title'>
-                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2'>${rDate}</span>
+                        <div class='timeline-item ${isActiveClass}' data-release-number='${rNum}'>
+                            <div class='timeline-item-title child-align-v-center js-set-active-item' data-release-number='${rNum}'>
+                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center'>${rDate}</span>
                             </div>
 
-                            <div class='tile-image-preview'>
-                                <img src="${d.imageUrl}" alt="${d.releaseName}">
+                            <div class='tile-image-preview child-align-v-center js-set-active-item' data-release-number='${rNum}'>
+                                <img class='' src="${d.imageUrl}" alt="${d.releaseName}">
                             </div>
                         </div>
                     `;
@@ -722,10 +819,18 @@ esriLoader.loadModules([
 
         const initEventHandlers = (()=>{
 
-            $body.on('click', '.js-show-wayback-imagery', function(evt){
+            $body.on('click', '.js-set-active-item', function(evt){
                 const traget = $(this);
                 const rNum = traget.attr('data-release-number');
                 appView.viewModel.setActiveItem(rNum);
+                // console.log('display wayback imagery for release', rNum);
+            });
+
+            $body.on('click', '.js-set-selected-item', function(evt){
+                const traget = $(this);
+                const rNum = traget.attr('data-release-number');
+                const isSelected = !traget.hasClass('is-selected');
+                appView.viewModel.setSelectedItem(rNum, isSelected);
                 // console.log('display wayback imagery for release', rNum);
             });
 
@@ -746,6 +851,10 @@ esriLoader.loadModules([
                 if(targetContainerID === DOM_ID_BARCHART_WRAP){
                     appView.barChart.checkIfIsReady();
                 }
+            });
+
+            $body.on('click', '.js-save-web-map', function(evt){
+                alert('cannot save items to web map at this moment, still working on it');
             });
 
         })();

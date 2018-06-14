@@ -9,6 +9,9 @@ $controls-text-color: #ccc;
 
 $barchart-axis-color: rgba(255,255,255,.4);
 
+$color-inactive-item: rgba(76,76,76, 1);
+$color-active-item: #0079c1;
+
 
 html, body {
     padding: 0;
@@ -30,9 +33,9 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 375px;
     height: 100%;
-    background-color: rgba(0,0,0,.85);
+    background-color: rgba(0,0,0,.9);
     color: #efefef;
     z-index: 99;
     overflow: auto;
@@ -49,38 +52,51 @@ html, body {
     justify-content: flex-start;
     align-content: stretch;
     align-items: stretch;
-    border-left: solid 1px $timeline-border-color;
+    // border-left: solid 1px $timeline-border-color;
 }
 
 .timeline-item-title {
-    width: 100px;
+    position: relative;
+    width: 150px;
     flex-grow: 1;
     flex-shrink: 0;
-    flex-basis: 100px;
+    flex-basis: 150px;
 }
 
-.timeline-item-title span {
-    position: relative;
-    background-color: rgba(76,76,76,.6);
-    border-radius: 0 5% 5% 0;
-    margin-left: -1px;
-    cursor: pointer;
-}
-
-.timeline-item-title span::after{
+.timeline-item-title::after{
     content: ' ';
     display: inline-block;
     position: absolute;
     top: 50%;
+    right: 0;
     margin-top: -1px;
     margin-left: .5rem;
     width: 100%;
     height: 1px;
     background-color: $timeline-border-color;
+}
+
+.timeline-item-title::before {
+    content: '';
+    width: 0;
+    height: 100%;
+    position: absolute;
+    border: solid .5px $timeline-border-color;
+    top: 0;
+    left: 43px;
+}
+
+.timeline-item-title span {
+    width: 86px;
+    background-color: $color-inactive-item;
+    border-radius: 5%;
+    margin-left: -1px;
+    cursor: pointer;
     z-index: 5;
 }
 
 .tile-image-preview {
+    position: relative;
     width: 200px;
     height: 200px;
     z-index: 100;
@@ -88,11 +104,18 @@ html, body {
 }
 
 .tile-image-preview img {
-    width: 100%;
-    height: 100%;
+    width: 85%;
+    height: 85%;
     -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
     filter: brightness(60%);
 }
+
+// .tile-image-control {
+//     position: absolute;
+//     top: .5rem;
+//     left: .5rem;
+//     z-index: 5;
+// }
 
 .is-active {
 
@@ -102,7 +125,7 @@ html, body {
     }
 
     .timeline-item-title span {
-        background-color: #0079c1;
+        background-color: $color-active-item
     }
 
     .tile-image-preview img {
@@ -110,6 +133,37 @@ html, body {
         filter: brightness(100%);
     }
 } 
+
+.list-card {
+    padding: .5rem 1rem;
+    border: solid 1px $map-controls-border-color;
+
+    .icon-ui-checkbox-checked {
+        display: none;
+    };
+
+    .icon-ui-checkbox-unchecked {
+        display: inline-block;
+    };
+}
+
+.list-card.is-active {
+    border-left: solid 4px $color-active-item;
+}
+
+.is-selected {
+
+    .icon-ui-checkbox-checked {
+        display: inline-block;
+    };
+
+    .icon-ui-checkbox-unchecked {
+        display: none;
+    };
+
+}
+
+
 
 .control-items-wrap {
     display:flex;
@@ -185,7 +239,7 @@ html, body {
 }
 
 .bar {
-    fill: #0079c1;
+    fill: $color-inactive-item;
 }
 
 .bar:hover {
@@ -194,7 +248,7 @@ html, body {
 
 .bar.highlight,
 .bar.highlight:hover {
-    fill: #e8912e;
+    fill: $color-active-item;
 }
 
 .axis--x {
@@ -213,6 +267,20 @@ html, body {
             fill: $controls-text-color;
         }
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.child-align-v-center {
+    display:flex;
+    align-items:center;
+}
+
+.child-align-h-right {
+    display:flex;
+    justify-content: flex-end;
 }
 
 
