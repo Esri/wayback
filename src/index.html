@@ -7,6 +7,9 @@
 
     </head>
     <body>
+        <div id='mapLoaderDiv' class="loader is-active map-loader">
+            <div class="loader-bars"></div>
+        </div>
         <div id="sidebar" class=''>
             <div class='panel panel-no-border panel-no-background'>
 
@@ -25,9 +28,9 @@
 
                 <div class=" font-size--2 trailer-half padding-trailer-quarter border-bottom">
                     <nav class='breadcrumb-nav inline-block'>
-                        <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
+                        <!-- <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
                         <span class="pseudo-divider js-toggle-viz-info-container" data-target-container-id="listCardsWrap">list</span>
-                        <span class="js-toggle-viz-info-container" data-target-container-id="barChartWrap">chart</span>
+                        <span class="js-toggle-viz-info-container" data-target-container-id="barChartWrap">chart</span> -->
                         
                     </nav>
 
@@ -36,7 +39,7 @@
 
                 <div class='viz-info-containers'>
 
-                    <div id='timelineWrap' class='v-timeline viz-info-container'>
+                    <div id='timelineWrap' class='v-timeline viz-info-container hide'>
                         <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
 
                         <!-- <div class="timeline-item  js-set-active-item" data-release-number="22961">
@@ -75,7 +78,7 @@
 
                     </div>
 
-                    <div id='listCardsWrap' class='viz-info-container font-size--1 hide'>
+                    <div id='listCardsWrap' class='viz-info-container font-size--1'>
                         <!-- <div class='list-card trailer-half is-active is-selected'>
                             <span>World Imagery (Wayback 2018-01-08)</span>
                             <span class='right icon-ui-checkbox-checked'></span>
@@ -109,6 +112,7 @@
 
             </div>
         </div>
-        <div id="mapDiv"></div>
+        <div id="mapDiv">
+        </div>
     </body>
 </html>

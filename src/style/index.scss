@@ -29,6 +29,15 @@ html, body {
     right: 0;
 }
 
+#mapLoaderDiv {
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: -50px;
+    left: 50%;
+    z-index: 10;
+}
+
 #sidebar {
     position: absolute;
     top: 0;
@@ -145,6 +154,14 @@ html, body {
     .icon-ui-checkbox-unchecked {
         display: inline-block;
     };
+
+    opacity: .85;
+    color: #a9a9a9
+}
+
+.list-card.is-highlighted {
+    opacity: 1;
+    color: #fff
 }
 
 .list-card.is-active {
