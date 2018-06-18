@@ -172,7 +172,7 @@ esriLoader.loadModules([
 
         this.getReleaseNumFromWaybackImageryLayer = ()=>{
             const waybackLyr = this.getWaybackImageryLayer();
-            return waybackLyr.m;
+            return +waybackLyr.m;
         };
 
         this.removeWaybackImageryLayer = ()=>{
@@ -326,6 +326,8 @@ esriLoader.loadModules([
 
                     const releasesWithChanges = [];
 
+                    const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
+
                     // resolvedResults.forEach((d, i)=>{
                     //     if(!uniqueDataURIs.includes(d.dataUri)){
                     //         const rName = this.dataModel.getReleaseName(d.release);
@@ -352,7 +354,8 @@ esriLoader.loadModules([
                             // const rName = this.dataModel.getReleaseName(d.release);
                             // const rDate = this.dataModel.getReleaseDate(d.release);
                             // const rDateTime = this.dataModel.getReleaseDate(d.release, true);
-                            // const isActive = i===0 ? true : false;
+
+                            // const isActive = +releaseNumForActiveItem === +d.release ? true : false;
 
                             uniqueDataURIs.push(d.dataUri);
 
@@ -366,6 +369,11 @@ esriLoader.loadModules([
                             //     isSelected: false
                             // });
 
+                            // const item = {
+                            //     release: d.release,
+                            //     isActive: isActive
+                            // };
+
                             releasesWithChanges.push(d.release);
                         }
                     });
@@ -374,7 +382,7 @@ esriLoader.loadModules([
 
                     // console.log(releasesWithChanges);
 
-                    const releaseNumOfVisibleWaybackLyr = this.getReleaseNumFromWaybackImageryLayer();
+                    
 
                     // console.log(releaseNumOfVisibleWaybackLyr);
 
@@ -382,15 +390,17 @@ esriLoader.loadModules([
                     // // release number used to create the wayback layer, if not, redraw wayback layer using latest release number from resultsWithDuplicatesRemoved to keep 
                     // // timeline and wayback layer synced
 
-                    if(releasesWithChanges[0] !== releaseNumOfVisibleWaybackLyr){
-                        this.addWaybackImageryLayer(releasesWithChanges[0]);
-                    }
+                    
+
+                    // if(releasesWithChanges[0] !== releaseNumOfVisibleWaybackLyr){
+                    //     this.addWaybackImageryLayer(releasesWithChanges[0]);
+                    // }
 
                     // this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
 
                     // appView.updateViewModel(resultsWithDuplicatesRemoved);
 
-                    const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges);
+                    const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
 
                     appView.updateViewModel(releasesToDisplay);
 
@@ -506,16 +516,15 @@ esriLoader.loadModules([
             this.releasesDict = dict; 
         };
 
-        this.getFullListOfReleases = (highlightedItems=[])=>{
-            let outputList = this.releases;
+        this.getFullListOfReleases = (highlightedItems=[], rNumForActiveItem)=>{
+            let outputList = JSON.parse(JSON.stringify(this.releases));  // get a deep copy of the full list of releases
 
             if(highlightedItems.length){
 
                 outputList = outputList.map(d=>{
                     const isHighlighted = highlightedItems.includes(d.release);
-                    const isActive = d.release === highlightedItems[0] ? true : false;
-                    d.isActive = isActive;
                     d.isHighlighted = isHighlighted;
+                    d.isActive = d.release === rNumForActiveItem ? true : false;
                     return d;
                 });
             }
