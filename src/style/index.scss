@@ -49,11 +49,39 @@ html, body {
     background-color: rgba(0,0,0,.9);
     color: #efefef;
     z-index: 99;
-    overflow: auto;
+    overflow: hidden;
+}
+
+.viz-info-containers {
+    position: relative;
+    overflow-y: auto;
+    height: calc(100% - 190px);
+}
+
+.viz-info-containers .full-size-wrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: .99rem;
+    right: .99rem;
+    background: rgba(0,0,0,.65);
+    z-index: 100;
+}
+
+.is-loading .iz-info-container {
+    opacity: .1;
 }
 
 .panel-no-background {
     background-color: rgba(0,0,0,0) !important;
+}
+
+.panel-padding-leader-0 {
+    padding-top: 0;
+}
+
+.panel-semi-transparent {
+    background-color: rgba(0,0,0,.9)
 }
 
 .timeline-item {
@@ -309,22 +337,14 @@ html, body {
     right:0;
 }
 
-.panel-semi-transparent {
-    background-color: rgba(0,0,0,.9)
-}
-
-.stick-at-bottom .fix-width {
-    padding-right: 23px;
-}
-
 /* width */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #ccc; 
+    background: rgba(100, 100, 100, .5); 
 }
  
 /* Handle */
@@ -334,5 +354,5 @@ html, body {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+    background: #666; 
 }

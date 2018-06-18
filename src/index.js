@@ -29,7 +29,7 @@ const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
 
-const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 500;
+const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 1000;
 
 
 esriLoader.loadModules([
@@ -103,8 +103,7 @@ esriLoader.loadModules([
             const mostRecentRelease = this.dataModel.getMostRecentReleaseNum();
 
             const waybackLayerOnReadyHandler = (isReady)=>{
-                console.log('wayback layer is initated for the very first time...', isReady);
-
+                // console.log('wayback layer is initated for the very first time...', isReady);
                 this.getWaybackImageryTileElement(this.mapView.center);
             };
 
@@ -126,16 +125,21 @@ esriLoader.loadModules([
             this.isMapViewStationary = isStationary;
             // console.log('isMapViewStationary', this.isMapViewStationary);
 
-            if(isStationary){
+            if(!isStationary){
+                appView.toggleMapLoader(true);
+            } else {
                 this.updateEventsOnEndHandler();
             }
+            
         };
 
         this.toggleIsWaybackLayerUpdateEnd = (isEnd)=>{
             this.isWaybackLayerUpdateEnd = isEnd;
             // console.log('isWaybackLayerUpdateEnd', this.isWaybackLayerUpdateEnd);
 
-            if(isEnd){
+            if(!isEnd){
+                appView.toggleMapLoader(true);
+            } else {
                 this.updateEventsOnEndHandler();
             }
         };
@@ -208,10 +212,7 @@ esriLoader.loadModules([
 
                 watchUtils.whenTrue(layerView, 'updating', f => {
                     // console.log('layer view is updating');
-
                     this.toggleIsWaybackLayerUpdateEnd(false);
-
-                    appView.toggleMapLoader(true);
                 });
 
                 // The layerview for the layer
@@ -221,10 +222,10 @@ esriLoader.loadModules([
 
                     this.setWaybackImageryTileElements(layerView._tileContainer.children);
 
-                    appView.toggleMapLoader(false);
-
                     if(!layer.isLayerReady){
                         layer.isLayerReady = true;
+
+                        appView.toggleMapLoader(false);
 
                         if(wayBackLayerOnReadyHandler){
                             wayBackLayerOnReadyHandler(layer.isLayerReady);
@@ -285,6 +286,9 @@ esriLoader.loadModules([
             let tileClicked = null;
 
             if(this.waybackImageryTileElements.length){
+
+                appView.toggleLoadingIndicator(true);
+
                 this.waybackImageryTileElements.forEach(d=>{
                     const dist = mapPoint.distance(d.centroid);
                     if(dist < minDist){
@@ -293,11 +297,10 @@ esriLoader.loadModules([
                     }
                 });
     
-                // console.log(tileClicked);
                 // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
 
-                appView.toggleLoadingIndicator(true);
+                
             } else {
                 console.log('wayback imagery is still loading');
             }
@@ -322,39 +325,14 @@ esriLoader.loadModules([
                 Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
 
                     const uniqueDataURIs = [];
-                    // const resultsWithDuplicatesRemoved = [];
-
                     const releasesWithChanges = [];
-
                     const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
-
-                    // resolvedResults.forEach((d, i)=>{
-                    //     if(!uniqueDataURIs.includes(d.dataUri)){
-                    //         const rName = this.dataModel.getReleaseName(d.release);
-                    //         const rDate = this.dataModel.getReleaseDate(d.release);
-                    //         const rDateTime = this.dataModel.getReleaseDate(d.release, true);
-                    //         const isActive = i===0 ? true : false;
-
-                    //         uniqueDataURIs.push(d.dataUri);
-
-                    //         resultsWithDuplicatesRemoved.push({
-                    //             release: d.release,
-                    //             releaseName: rName,
-                    //             releaseDate: rDate,
-                    //             releaseDateTime: rDateTime,
-                    //             imageUrl: d.imageUrl,
-                    //             isActive: isActive,
-                    //             isSelected: false
-                    //         });
-                    //     }
-                    // });
 
                     resolvedResults.forEach((d, i)=>{
                         if(!uniqueDataURIs.includes(d.dataUri)){
                             // const rName = this.dataModel.getReleaseName(d.release);
                             // const rDate = this.dataModel.getReleaseDate(d.release);
                             // const rDateTime = this.dataModel.getReleaseDate(d.release, true);
-
                             // const isActive = +releaseNumForActiveItem === +d.release ? true : false;
 
                             uniqueDataURIs.push(d.dataUri);
@@ -369,42 +347,19 @@ esriLoader.loadModules([
                             //     isSelected: false
                             // });
 
-                            // const item = {
-                            //     release: d.release,
-                            //     isActive: isActive
-                            // };
-
                             releasesWithChanges.push(d.release);
                         }
                     });
 
-                    // console.log(resolvedResults);
+                    const isDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
 
-                    // console.log(releasesWithChanges);
+                    if(!isDataSame){
+                        const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
+                        appView.updateViewModel(releasesToDisplay);
+                    } else {
+                        appView.toggleLoadingIndicator(false);
+                    }
 
-                    
-
-                    // console.log(releaseNumOfVisibleWaybackLyr);
-
-                    // // check if the latest release number from resultsWithDuplicatesRemoved (which will be turned on in the timeline by default) is same with 
-                    // // release number used to create the wayback layer, if not, redraw wayback layer using latest release number from resultsWithDuplicatesRemoved to keep 
-                    // // timeline and wayback layer synced
-
-                    
-
-                    // if(releasesWithChanges[0] !== releaseNumOfVisibleWaybackLyr){
-                    //     this.addWaybackImageryLayer(releasesWithChanges[0]);
-                    // }
-
-                    // this.setWaybackImagerySearchResults(resultsWithDuplicatesRemoved);
-
-                    // appView.updateViewModel(resultsWithDuplicatesRemoved);
-
-                    const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
-
-                    appView.updateViewModel(releasesToDisplay);
-
-                    // console.log(this.waybackImagerySearchResults);
                 });
 
             };
@@ -661,8 +616,9 @@ esriLoader.loadModules([
         };
 
         this.updateViewModel = (results=[])=>{
-            this.toggleLoadingIndicator(false);
             this.viewModel.setData(results);
+            this.toggleLoadingIndicator(false);
+            this.toggleSaveAsWebmapBtn(false);
         };
 
         this.setNumOfReleasesTxt = (results=[])=>{
@@ -677,8 +633,7 @@ esriLoader.loadModules([
 
         this.toggleLoadingIndicator = (isLoading)=>{
             $waybackDataLoadingIndicator.toggleClass('is-active' , isLoading);
-            $vizInfoContainers.toggleClass('hide' , isLoading);
-
+            $vizInfoContainers.toggleClass('is-loading' , isLoading);
             this.toggleMapLoader(isLoading);
         };
 
@@ -697,7 +652,7 @@ esriLoader.loadModules([
             this.isOnlyShowingHighlighedItems = false; // if true, only show releases that come with changes cover current map area, otherwise show all releases
 
             // state observers
-            this.observerForViewItems = null; 
+            this.observerForViewData = null; 
             this.observerForActiveItem = null; 
             this.observerForSelectedItem = null; 
 
@@ -707,7 +662,7 @@ esriLoader.loadModules([
                 if(this.isOnlyShowingHighlighedItems){
                     this.filterData();
                 } else {
-                    this.observerForViewItems.notify(data);
+                    this.observerForViewData.notify(data);
                 }
             };
 
@@ -722,7 +677,7 @@ esriLoader.loadModules([
 
                 // console.log(this.data, data);
                 
-                this.observerForViewItems.notify(data);
+                this.observerForViewData.notify(data);
             };
 
             // active item is the one visible on map
@@ -765,13 +720,25 @@ esriLoader.loadModules([
                 return this.data;
             };
 
+            // compare the array of release numbers to highlighted items (releases with changes) from viewModel, return false if two arrays are same so it won't update the viewModel 
+            this.compareReleasesWithChanges = (releases)=>{
+                const highlightedItems = this.data.reduce((accu, curr)=>{
+                    if(curr.isHighlighted){
+                        accu.push(curr.release);
+                    }
+                    return accu;
+                }, []);
+
+                return arraysEqual(highlightedItems, releases);
+            };
+
             this.initObservers = ()=>{
                 // watch the change of view data model (wayback imagery search results) to make sure the results are populated to each viz container
-                this.observerForViewItems = new Observable();
-                // this.observerForViewItems.subscribe(appView.timeline.populate);
-                // this.observerForViewItems.subscribe(appView.barChart.populate);
-                this.observerForViewItems.subscribe(appView.itemList.populate);
-                this.observerForViewItems.subscribe(appView.setNumOfReleasesTxt);
+                this.observerForViewData = new Observable();
+                // this.observerForViewData.subscribe(appView.timeline.populate);
+                // this.observerForViewData.subscribe(appView.barChart.populate);
+                this.observerForViewData.subscribe(appView.itemList.populate);
+                this.observerForViewData.subscribe(appView.setNumOfReleasesTxt);
     
                 // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
                 this.observerForActiveItem = new Observable();
@@ -1093,6 +1060,19 @@ esriLoader.loadModules([
     // init app and core components
     const app = new WaybackApp();
     const appView = new AppView();
+
+    // util functions
+    function arraysEqual(arr1, arr2) {
+        if(arr1.length !== arr2.length){
+            return false;
+        }
+        for(var i = arr1.length; i--;) {
+            if(arr1[i] !== arr2[i]){
+                return false;
+            }
+        }
+        return true;
+    }
     
 
 }).catch(err => {

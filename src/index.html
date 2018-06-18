@@ -29,7 +29,7 @@
                 <!-- end of first row of control items: locator, menu btn -->
 
                 <!-- second row of control items: filter btns -->
-                <div class=" font-size--2 trailer-half padding-trailer-quarter border-bottom">
+                <div class=" font-size--2 padding-trailer-quarter border-bottom">
                     <!-- <nav class='breadcrumb-nav inline-block'>
                         <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
                         <span class="pseudo-divider js-toggle-viz-info-container" data-target-container-id="listCardsWrap">list</span>
@@ -44,87 +44,86 @@
                     <span class='right'>releases: <span class='val-holder-num-of-releases'>0</span></span>
                 </div>
                 <!-- end second row of control items: filter btns -->
+            </div>
 
-                <div class='viz-info-containers'>
+            <div class='viz-info-containers panel panel-no-border panel-no-background panel-padding-leader-0 is-loading'>
 
-                    <div id='timelineWrap' class='v-timeline viz-info-container hide'>
-                        <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
-
-                        <!-- <div class="timeline-item  js-set-active-item" data-release-number="22961">
-                            <div class="timeline-item-title child-align-v-center">
-                                <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
-                            </div>
-
-                            <div class="tile-image-preview child-align-v-center">
-                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
-                            </div>
-                        </div>
-    
-                        <div class="timeline-item  js-set-active-item" data-release-number="22961">
-                            <div class="timeline-item-title child-align-v-center">
-                                <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
-                            </div>
-
-                            <div class="tile-image-preview child-align-v-center">
-                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
-                            </div>
-                        </div>
-    
-                        <div class="timeline-item  js-set-active-item" data-release-number="22961">
-                            <div class="timeline-item-title child-align-v-center">
-                                <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
-                            </div>
-
-                            <div class="tile-image-preview child-align-v-center">
-                                <div class='tile-image-control is-selected'>
-                                    <span class='right icon-ui-checkbox-checked'></span>
-                                    <span class='right icon-ui-checkbox-unchecked'></span>
-                                </div>
-                                <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
-                            </div>
-                        </div> -->
-
-                    </div>
-
-                    <div id='listCardsWrap' class='viz-info-container font-size--1'>
-                        <!-- <div class='list-card trailer-half is-active is-selected'>
-                            <span>World Imagery (Wayback 2018-01-08)</span>
-                            <span class='right icon-ui-checkbox-checked'></span>
-                            <span class='right icon-ui-checkbox-unchecked'></span>
-                        </div>
-                        <div class='list-card trailer-half is-selected'>
-                            <span>World Imagery (Wayback 2018-01-08)</span>
-                            <span class='right icon-ui-checkbox-checked'></span>
-                            <span class='right icon-ui-checkbox-unchecked'></span>
-                        </div>
-                        <div class='list-card trailer-half'>
-                            <span>World Imagery (Wayback 2018-01-08)</span>
-                            <span class='right icon-ui-checkbox-checked'></span>
-                            <span class='right icon-ui-checkbox-unchecked'></span>
-                        </div> -->
-                    </div>
-
-                    <div id='barChartWrap' class='viz-info-container hide'>
-                        <div class='leader-quarter trailer-quarter'>
-                            <p class='margin-left-1 trailer-0 font-size--3 bar-chart-title'></p>
-                        </div>
-                        <div id='barChartDiv' class=''></div>
-                    </div>
-
-                </div>
-
-                <div class="wayback-data-loading-indicator loader padding-leader-2 padding-trailer-2">
+                <div class="wayback-data-loading-indicator full-size-wrap loader is-active padding-leader-4 padding-trailer-4">
                     <div class="loader-bars"></div>
                     <div class="loader-text">Loading...</div>
                 </div>
 
+                <div id='timelineWrap' class='v-timeline viz-info-container hide'>
+                    <p class='font-size--2 leader-1'>Click anywhere on map to view Imageries from all releases.</p>
+
+                    <!-- <div class="timeline-item  js-set-active-item" data-release-number="22961">
+                        <div class="timeline-item-title child-align-v-center">
+                            <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
+                        </div>
+
+                        <div class="tile-image-preview child-align-v-center">
+                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
+                        </div>
+                    </div>
+
+                    <div class="timeline-item  js-set-active-item" data-release-number="22961">
+                        <div class="timeline-item-title child-align-v-center">
+                            <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
+                        </div>
+
+                        <div class="tile-image-preview child-align-v-center">
+                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
+                        </div>
+                    </div>
+
+                    <div class="timeline-item  js-set-active-item" data-release-number="22961">
+                        <div class="timeline-item-title child-align-v-center">
+                            <span class="padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center">2015-07-08</span>
+                        </div>
+
+                        <div class="tile-image-preview child-align-v-center">
+                            <div class='tile-image-control is-selected'>
+                                <span class='right icon-ui-checkbox-checked'></span>
+                                <span class='right icon-ui-checkbox-unchecked'></span>
+                            </div>
+                            <img src="https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/22961/17/52331/22868" alt="World Imagery (Wayback 2015-07-08)">
+                        </div>
+                    </div> -->
+
+                </div>
+
+                <div id='listCardsWrap' class='viz-info-container font-size--1'>
+                    <!-- <div class='list-card trailer-half is-active is-selected'>
+                        <span>World Imagery (Wayback 2018-01-08)</span>
+                        <span class='right icon-ui-checkbox-checked'></span>
+                        <span class='right icon-ui-checkbox-unchecked'></span>
+                    </div>
+                    <div class='list-card trailer-half is-selected'>
+                        <span>World Imagery (Wayback 2018-01-08)</span>
+                        <span class='right icon-ui-checkbox-checked'></span>
+                        <span class='right icon-ui-checkbox-unchecked'></span>
+                    </div>
+                    <div class='list-card trailer-half'>
+                        <span>World Imagery (Wayback 2018-01-08)</span>
+                        <span class='right icon-ui-checkbox-checked'></span>
+                        <span class='right icon-ui-checkbox-unchecked'></span>
+                    </div> -->
+                </div>
+
+                <div id='barChartWrap' class='viz-info-container hide'>
+                    <div class='leader-quarter trailer-quarter'>
+                        <p class='margin-left-1 trailer-0 font-size--3 bar-chart-title'></p>
+                    </div>
+                    <div id='barChartDiv' class=''></div>
+                </div>
+
             </div>
 
-            <!-- <div class='stick-at-bottom'>
-                <div class='panel panel-no-border panel-semi-transparent fix-width'>
+            <div class='stick-at-bottom'>
+                <div class='panel panel-no-border panel-no-background'>
                     <button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button>
                 </div>
-            </div> -->
+            </div>
 
         </div>
 
