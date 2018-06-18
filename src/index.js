@@ -685,6 +685,7 @@ esriLoader.loadModules([
         const ViewModel = function(appView){
 
             this.data = [];
+            this.isOnlyShowingHighlighedItems = false; // if true, only show releases that come with changes cover current map area, otherwise show all releases
 
             // state observers
             this.observerForViewItems = null; 
@@ -693,18 +694,26 @@ esriLoader.loadModules([
 
             this.setData = (data)=>{
                 this.data = data;
-                this.observerForViewItems.notify(data);
+
+                if(this.isOnlyShowingHighlighedItems){
+                    this.filterData();
+                } else {
+                    this.observerForViewItems.notify(data);
+                }
             };
 
-            this.filterData = (key, value)=>{
+            this.filterData = ()=>{
                 let data = this.data;
                 
-                if(key && value){
+                if(this.isOnlyShowingHighlighedItems){
                     data = data.filter(d=>{
-                        return d[key] === value;
+                        return d.isHighlighted === true;
                     });
                 }
-                return data;
+
+                // console.log(this.data, data);
+                
+                this.observerForViewItems.notify(data);
             };
 
             // active item is the one visible on map
@@ -736,6 +745,11 @@ esriLoader.loadModules([
                 });
 
                 appView.toggleSaveAsWebmapBtn(isAnySelectedItem);
+            };
+
+            this.toggleHighlightedItems = ()=>{
+                this.isOnlyShowingHighlighedItems = !this.isOnlyShowingHighlighedItems;
+                this.filterData();
             };
 
             this.getData = ()=>{
@@ -789,12 +803,13 @@ esriLoader.loadModules([
 
             this.populate = (data)=>{
 
-                const timelineItemsHtmlStr = data.map((d)=>{
+                const itemsHtmlStr = data.map((d)=>{
 
                     const rNum = d.release || d[KEY_RELEASE_NUM];
                     const rName = d.releaseName || d[KEY_RELEASE_NAME];
                     const isActiveClass = d.isActive ? 'is-active' : '';
                     const isHighlightedClass = d.isHighlighted ? 'is-highlighted' : ''; 
+                    const isSelected = d.isSelected ? 'is-selected': '';
 
                     // const htmlStr = `
                     //     <div class='list-card trailer-half ${isActiveClass}' data-release-number='${rNum}'>
@@ -809,6 +824,10 @@ esriLoader.loadModules([
                     const htmlStr = `
                         <div class='list-card trailer-half ${isActiveClass} ${isHighlightedClass}' data-release-number='${rNum}'>
                             <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rName}</span>
+                            <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item ${isSelected}' data-release-number='${rNum}'>
+                                <span class='icon-ui-checkbox-checked'></span>
+                                <span class='icon-ui-checkbox-unchecked'></span>
+                            </div>
                         </div>
                     `;
 
@@ -816,9 +835,9 @@ esriLoader.loadModules([
                 }).join('');
 
                 // const saveToWebmapBtnHtmlStr = `<div><button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button></div>`;
-                // const finalHtmlStr = timelineItemsHtmlStr + saveToWebmapBtnHtmlStr;
+                // const finalHtmlStr = itemsHtmlStr + saveToWebmapBtnHtmlStr;
 
-                $container.html(timelineItemsHtmlStr);
+                $container.html(itemsHtmlStr);
                 
             };
 
@@ -1021,6 +1040,19 @@ esriLoader.loadModules([
                 if(targetContainerID === DOM_ID_BARCHART_WRAP){
                     appView.barChart.checkIfIsReady();
                 }
+            });
+
+            $body.on('click', '.js-toggle-highlighted-items', function(evt){
+                const traget = $(this);
+                const targetValue = traget.attr('data-val') === 'true' ? true : false;
+                const isTargetActive = traget.hasClass('is-active');
+
+                if(!isTargetActive){
+                    traget.siblings().removeClass('is-active');
+                    traget.addClass('is-active');
+                    appView.viewModel.toggleHighlightedItems();
+                }
+
             });
 
             $body.on('click', '.js-save-web-map', function(evt){

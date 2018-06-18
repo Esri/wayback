@@ -13,6 +13,7 @@
         <div id="sidebar" class=''>
             <div class='panel panel-no-border panel-no-background'>
 
+                <!-- first row of control items: locator, menu btn -->
                 <div class='control-items-wrap trailer-half'>
                     <div class='fill'>
                         <input id='search-input' class="location-search-input input-group-input" type="text" placeholder="Search location...">
@@ -25,17 +26,24 @@
                         <span class="icon-ui-question"></span>
                     </div> -->
                 </div>
+                <!-- end of first row of control items: locator, menu btn -->
 
+                <!-- second row of control items: filter btns -->
                 <div class=" font-size--2 trailer-half padding-trailer-quarter border-bottom">
-                    <nav class='breadcrumb-nav inline-block'>
-                        <!-- <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
+                    <!-- <nav class='breadcrumb-nav inline-block'>
+                        <span class="pseudo-divider is-active js-toggle-viz-info-container" data-target-container-id="timelineWrap">timeline</span>
                         <span class="pseudo-divider js-toggle-viz-info-container" data-target-container-id="listCardsWrap">list</span>
-                        <span class="js-toggle-viz-info-container" data-target-container-id="barChartWrap">chart</span> -->
-                        
+                        <span class="js-toggle-viz-info-container" data-target-container-id="barChartWrap">chart</span>
+                    </nav> -->
+
+                    <nav class='breadcrumb-nav inline-block'>
+                        <span class="pseudo-divider is-active js-toggle-highlighted-items" data-val='false'>all</span>
+                        <span class="js-toggle-highlighted-items" data-val='true'>filtered</span>
                     </nav>
 
                     <span class='right'>releases: <span class='val-holder-num-of-releases'>0</span></span>
                 </div>
+                <!-- end second row of control items: filter btns -->
 
                 <div class='viz-info-containers'>
 
@@ -111,7 +119,15 @@
                 </div>
 
             </div>
+
+            <!-- <div class='stick-at-bottom'>
+                <div class='panel panel-no-border'>
+                    <button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button>
+                </div>
+            </div> -->
+
         </div>
+
         <div id="mapDiv">
         </div>
     </body>

@@ -2,6 +2,8 @@
 @import url('https://js.arcgis.com/4.7/esri/css/main.css');
 
 // variables
+$sidebar-width: 375px;
+
 $inactive-opacity: .75;
 $timeline-border-color: rgba(220, 220, 220, .4);
 $map-controls-border-color: rgba(220, 220, 220, .3);
@@ -42,7 +44,7 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 375px;
+    width: $sidebar-width;
     height: 100%;
     background-color: rgba(0,0,0,.9);
     color: #efefef;
@@ -300,4 +302,10 @@ html, body {
     justify-content: flex-end;
 }
 
+.stick-at-bottom {
+    position: fixed;
+    bottom: 0;
+    width: inherit;
+    max-width: $sidebar-width;
+}
 
