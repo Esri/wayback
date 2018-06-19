@@ -1018,6 +1018,10 @@ esriLoader.loadModules([
                 return idxOfHighlightedItem;
             };
 
+            const resetIdxForHighlightedCandidate = ()=>{
+                this.idxForHighlightedCandidate = -1;
+            };
+
             const getCandidates = (searchTerm)=>{
                 esriRequest(searchRequestURL, {
                     query: {
@@ -1043,6 +1047,7 @@ esriLoader.loadModules([
                 }).join('');
                 $addressCandidatesList.html(candidatesHtmlStr);
                 self.toggleAutoCompleteDropdownMenu(true);
+                resetIdxForHighlightedCandidate();
             };
 
             const setTextInputVal = (val='')=>{
@@ -1095,7 +1100,7 @@ esriLoader.loadModules([
 
                 const addressCandidateOnClickHandler = function(evt){
                     const target = $(this);
-                    const targetIdx = +target.attr('data-index');
+                    const targetIdx = +target.attr('data-candidate-index');
                     candidateOnSelectHandler(targetIdx);
                 };
 
