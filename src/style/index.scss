@@ -337,6 +337,31 @@ html, body {
     right:0;
 }
 
+/* address locator styles */
+.address-candidates-list {
+    position: absolute;
+    width: 100%;
+    top: 39px;
+    z-index: 1000;
+}
+
+.address-candidates-list > div {
+    padding: .5rem .5rem;
+    border-bottom: 1px solid rgba(120,120,120,0.2);
+    background-color: #efefef;
+    color: #303030;
+    font-size: .825rem;
+    cursor: pointer;
+}
+
+.address-candidates-list > div:hover,
+.address-candidates-list > div.is-highlighted {
+    background-color: #0079c1;
+    color: #fff;
+}
+
+/* end of address locator styles */
+
 /* width */
 ::-webkit-scrollbar {
     width: 5px;

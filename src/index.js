@@ -19,6 +19,7 @@ const URL_WAYBACK_IMAGERY_BASE = 'https://wayback.maptiles.arcgis.com/arcgis/res
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
+const URL_FIND_ADDRESS_CANDIDATES = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
@@ -28,6 +29,7 @@ const DOM_ID_TIMELINE = 'timelineWrap';
 const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
+const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
 
 const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 1000;
 
@@ -119,6 +121,14 @@ esriLoader.loadModules([
 
         this.setMapView = (mapView)=>{
             this.mapView = mapView;
+        };
+
+        this.setMapCenter = (lat, lon)=>{
+            const pt = new Point({
+                longitude: lon,
+                latitude: lat
+            });
+            this.mapView.center = pt;
         };
 
         this.toggleIsMapViewStationary = (isStationary)=>{
@@ -254,14 +264,10 @@ esriLoader.loadModules([
                 });
 
                 const tileTopLeftPointToScreen = this.mapView.toScreen(tileTopLeftPoint);
-
                 const tileCenetrPoint = this.mapView.toMap(tileTopLeftPointToScreen.x + 128, tileTopLeftPointToScreen.y + 128);
-
                 const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
 
                 d.centroid = tileCenetrPoint;
-
-                // console.log(tileTopLeftPointToScreen.x, tileTopLeftPointToScreen.y);
 
                 return isInCurrentMapExt;
             });
@@ -310,10 +316,7 @@ esriLoader.loadModules([
         // search all releases with updated data for tile image at given level, row, col
         this.searchWayback = (level, row, column)=>{
 
-            // this.setWaybackImagerySearchResults(null); // reset the WaybackImagerySearchResults
-
             const onSuccessHandler = (res)=>{
-                // console.log('onSuccessHandler', res);
 
                 // download the tile image file using each release number in res, convert to to dataUri to so we can check if there are duplicated items
                 const resolvedTileDataUriArray = res.map(rNum=>{
@@ -359,12 +362,9 @@ esriLoader.loadModules([
                     } else {
                         appView.toggleLoadingIndicator(false);
                     }
-
                 });
 
             };
-
-            // this.dataModel.getReleaseNumbersByLRC(level, row, column, onSuccessHandler);
 
             this.dataModel.getReleaseNumbersByLRC(level, row, column).then(releases=>{
                 // console.log('getReleaseNumbersByLRC results', releases);
@@ -601,15 +601,17 @@ esriLoader.loadModules([
 
         // app view core components
         this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
-        this.timeline = null;
-        this.barChart = null;
         this.itemList = null;
+        this.locator = null;
+        // this.timeline = null;
+        // this.barChart = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
-            this.timeline = new Timeline(DOM_ID_TIMELINE);
-            this.barChart = new BarChart(DOM_ID_BARCHART);
-            this.itemList = new ItemList(DOM_ID_ITEMLIST)
+            // this.timeline = new Timeline(DOM_ID_TIMELINE);
+            // this.barChart = new BarChart(DOM_ID_BARCHART);
+            this.itemList = new ItemList(DOM_ID_ITEMLIST);
+            this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -982,6 +984,130 @@ esriLoader.loadModules([
 
         };
 
+        const AddressLocator = function(containerID, searchRequestURL){
+
+            const self = this;
+            const container = $('#'+containerID);
+            const $textInput = container.find('input[type=text]');
+            const $addressCandidatesList = container.find('.address-candidates-list');
+
+            this.candidates = [];
+            this.idxForHighlightedCandidate = -1;
+
+            this.init = ()=>{
+                initEventHandlers();
+            };
+
+            this.toggleAutoCompleteDropdownMenu = (isVisible)=>{
+                $addressCandidatesList.toggleClass('hide', !isVisible);
+            };
+
+            const setCandidates = (data)=>{
+                this.candidates = data.length > 5 ? data.slice(0, 5) : data;;
+                populateCandidates(this.candidates);
+            };
+
+            const getIdxOfCandidateToHighlight = (isGettingPrev)=>{
+                const idxOfCurrentItem = this.idxForHighlightedCandidate;
+                let idxOfHighlightedItem = isGettingPrev ? idxOfCurrentItem - 1 : idxOfCurrentItem + 1;
+                idxOfHighlightedItem = idxOfHighlightedItem < 0 ? this.candidates.length - 1 : idxOfHighlightedItem;
+                idxOfHighlightedItem = idxOfHighlightedItem > this.candidates.length - 1 ? 0 : idxOfHighlightedItem;
+
+                this.idxForHighlightedCandidate = idxOfHighlightedItem;
+
+                return idxOfHighlightedItem;
+            };
+
+            const getCandidates = (searchTerm)=>{
+                esriRequest(searchRequestURL, {
+                    query: {
+                        f: 'json',
+                        singleLine: searchTerm,
+                    },
+                    responseType: "json"
+                }).then(function(response){
+                    // The requested data
+                    // console.log(response);
+                    setCandidates(response.data.candidates);
+                });
+            };
+
+            const getCandidateDataByIdx = (idx)=>{
+                return this.candidates[idx];
+            };
+
+            const populateCandidates = (candidates=[])=>{
+                const candidatesHtmlStr = candidates.map((d, idx)=>{
+                    const address = d.address;
+                    return `<div class='js-select-address-candidate autocomplete-menu-item' data-candidate-index=${idx}>${address}</div>`;
+                }).join('');
+                $addressCandidatesList.html(candidatesHtmlStr);
+                self.toggleAutoCompleteDropdownMenu(true);
+            };
+
+            const setTextInputVal = (val='')=>{
+                $textInput.val(val);
+            };
+
+            const setHighlightedCandidateByIdx = (idx)=>{
+                const target = $('.autocomplete-menu-item[data-candidate-index="' + idx + '"]');
+                target.toggleClass('is-highlighted', true);
+                target.siblings().toggleClass('is-highlighted', false);
+            };
+
+            const candidateOnSelectHandler = (idx)=>{
+                idx = +idx;
+                const candidate = getCandidateDataByIdx(idx);
+
+                setTextInputVal(candidate.address);
+                self.toggleAutoCompleteDropdownMenu(false);
+
+                app.setMapCenter(candidate.location.y, candidate.location.x);
+            };
+
+            const initEventHandlers = ()=>{
+
+                const searchInputOnKeyUpHandler = function(evt){
+
+                    let currentText = $(this).val();
+
+                    if(evt.keyCode == 13){
+                        searchInputOnEnterHandler();
+                    } 
+                    else if (evt.keyCode === 38 || evt.keyCode === 40){
+                        const isGettingPrev = evt.keyCode === 38 ? true : false;
+                        const idx = getIdxOfCandidateToHighlight(isGettingPrev);
+                        setHighlightedCandidateByIdx(idx);
+                    }
+                    else {
+                        if(currentText.length > 3){
+                            // console.log('find address candidate', currentText);
+                            getCandidates(currentText);
+                        } else {
+                            // console.log('close autodropdown menu');
+                        }
+                    }
+                };
+
+                const searchInputOnEnterHandler = function(evt){
+                    candidateOnSelectHandler(self.idxForHighlightedCandidate);
+                };
+
+                const addressCandidateOnClickHandler = function(evt){
+                    const target = $(this);
+                    const targetIdx = +target.attr('data-index');
+                    candidateOnSelectHandler(targetIdx);
+                };
+
+                $textInput.on('keyup', searchInputOnKeyUpHandler);
+
+                $body.on('click', '.js-select-address-candidate', addressCandidateOnClickHandler);
+            };
+
+            this.init();
+
+        }
+
         const initEventHandlers = (()=>{
 
             $body.on('click', '.js-set-active-item', function(evt){
@@ -1013,9 +1139,9 @@ esriLoader.loadModules([
                 traget.addClass('is-active');
                 // console.log(targetContainerID);
 
-                if(targetContainerID === DOM_ID_BARCHART_WRAP){
-                    appView.barChart.checkIfIsReady();
-                }
+                // if(targetContainerID === DOM_ID_BARCHART_WRAP){
+                //     appView.barChart.checkIfIsReady();
+                // }
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
