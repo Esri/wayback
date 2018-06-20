@@ -1198,6 +1198,7 @@ esriLoader.loadModules([
                             getCandidates(currentText);
                         } else {
                             // console.log('close autodropdown menu');
+                            self.toggleAutoCompleteDropdownMenu(false);
                         }
                     }
                 };
@@ -1215,6 +1216,12 @@ esriLoader.loadModules([
                 $textInput.on('keyup', searchInputOnKeyUpHandler);
 
                 $body.on('click', '.js-select-address-candidate', addressCandidateOnClickHandler);
+
+                $body.on('click', (evt)=>{
+                    if(!$addressCandidatesList.is(evt.target) && $addressCandidatesList.has(evt.target).length === 0) {
+                        self.toggleAutoCompleteDropdownMenu(false);
+                    }
+                });
             };
 
             this.init();
