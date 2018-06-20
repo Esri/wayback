@@ -44,6 +44,10 @@ module.exports = (env, options)=> {
                 template: "./src/index.html",
                 filename: "./index.html"
             }),
+            new HtmlWebPackPlugin({ 
+                template: 'src/oauth-callback.html',
+                filename: './oauth-callback.html'
+            }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional

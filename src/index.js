@@ -12,6 +12,8 @@ import './style/index.scss';
 
 
 // app configs 
+const OAUTH_APPID = '4Op8YK3SdKZEplai';
+
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
 
@@ -44,7 +46,11 @@ esriLoader.loadModules([
     "esri/request",
     "esri/core/watchUtils",
     "esri/geometry/geometryEngine",
-    "esri/config",
+    "esri/geometry/support/webMercatorUtils",
+    
+    "esri/identity/OAuthInfo",
+    "esri/identity/IdentityManager",
+    "esri/portal/Portal",
 
     "dojo/domReady!"
 ]).then(([
@@ -57,7 +63,11 @@ esriLoader.loadModules([
     esriRequest,
     watchUtils,
     geometryEngine,
-    esriConfig
+    webMercatorUtils,
+    
+    OAuthInfo, 
+    esriId,
+    Portal
 ])=>{
 
     const WaybackApp = function(){
@@ -68,9 +78,11 @@ esriLoader.loadModules([
         this.isMapViewStationary = false; 
         this.isWaybackLayerUpdateEnd = false;
         this.delayForMapViewWhenStationary = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
-
+        this.portalUser = null;
 
         this.init = ()=>{
+
+            this.signIn();
 
             this.initMap();
 
@@ -129,6 +141,16 @@ esriLoader.loadModules([
                 latitude: lat
             });
             this.mapView.center = pt;
+        };
+
+        this.getMapViewExtent = ()=>{
+            const mapExtInGeoUnits = webMercatorUtils.webMercatorToGeographic(this.mapView.extent);
+            return mapExtInGeoUnits.toJSON();
+        };
+
+        this.setPortalUser = (portalUser)=>{
+            // console.log(portalUser);
+            this.portalUser = portalUser;
         };
 
         this.toggleIsMapViewStationary = (isStationary)=>{
@@ -293,7 +315,7 @@ esriLoader.loadModules([
 
             if(this.waybackImageryTileElements.length){
 
-                appView.toggleLoadingIndicator(true);
+                appView.toggleMapLoader(true);
 
                 this.waybackImageryTileElements.forEach(d=>{
                     const dist = mapPoint.distance(d.centroid);
@@ -360,7 +382,7 @@ esriLoader.loadModules([
                         const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
                         appView.updateViewModel(releasesToDisplay);
                     } else {
-                        appView.toggleLoadingIndicator(false);
+                        appView.toggleMapLoader(false);
                     }
                 });
 
@@ -406,6 +428,76 @@ esriLoader.loadModules([
 
         this.getWaybackTileURL = (rNum, level, row, column, isReturnTileData)=>{
             return URL_WAYBACK_IMAGERY_TILES.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
+        };
+
+        this.saveAsWebMap = ()=>{
+            const requestURL = this.portalUser.userContentUrl + '/addItem'; 
+            const currentMapExtent = this.getMapViewExtent();
+            const webMapTitle = `wayback-imagery-2018-06-19`;
+            const webMapDesc = `wayback imagery layer is awesome!`;
+
+            const uploadRequestContent = {
+                'title': webMapTitle,
+                'description': webMapDesc, 
+                'tags':'wayback imagery',
+                'extent': [currentMapExtent.xmin, currentMapExtent.ymin, currentMapExtent.xmax, currentMapExtent.ymax].join(','),
+                'type': 'Web Map',
+                'overwrite': true,
+                'f': 'json'
+            };
+
+            const requestText = {  
+                "operationalLayers":[
+
+                ],
+                "baseMap":{  
+                    "baseMapLayers":[  
+                        {  
+                            "id":"defaultBasemap",
+                            "layerType":"ArcGISTiledMapServiceLayer",
+                            "url":"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer",
+                            "visibility": true,
+                            "opacity": 1,
+                            "title": "Topographic"
+                        }
+                    ],
+                    "title":"Topographic"
+                },
+                "spatialReference":{"wkid":102100,"latestWkid":3857}
+            };
+
+            uploadRequestContent.text = JSON.stringify(requestText);
+
+            // esriRequest(requestURL, {
+            //     method: 'post',
+            //     query: uploadRequestContent,
+            //     responseType: "json"
+            // }).then(function(response){
+            //     console.log(response);
+            // });
+
+            // console.log(uploadRequestContent);
+        };
+
+        this.signIn = ()=>{
+
+            const info = new OAuthInfo({
+                appId: OAUTH_APPID,
+                popup: false
+            });
+
+            esriId.registerOAuthInfos([info]);
+
+            const portal = new Portal();
+
+            // Setting authMode to immediate signs the user in once loaded
+            portal.authMode = "immediate";
+
+            // Once portal is loaded, user signed in
+            portal.load().then((res)=>{
+                // console.log('res', res);
+                this.setPortalUser(res.user);
+            });
         };
 
         const WaybackImageryLayer = BaseTileLayer.createSubclass({
@@ -472,7 +564,7 @@ esriLoader.loadModules([
         };
 
         this.getFullListOfReleases = (highlightedItems=[], rNumForActiveItem)=>{
-            let outputList = JSON.parse(JSON.stringify(this.releases));  // get a deep copy of the full list of releases
+            let outputList = this.releases;
 
             if(highlightedItems.length){
 
@@ -581,9 +673,13 @@ esriLoader.loadModules([
             return results.length ? results[0] : inputStr;
         };
 
-        this.convertToDate = (dateInStr)=>{
+        // use margin month to get a date in future/past month, need this to optimize the xScale of bar chart 
+        this.convertToDate = (dateInStr, marginMonth=0)=>{
             const dateParts = dateInStr.split('-');
-            return new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            const year = dateParts[0];
+            const mon = marginMonth ? ((dateParts[1] - 1) + marginMonth): dateParts[1] - 1;
+            const day = marginMonth ? '1' : dateParts[2];
+            return new Date(year, mon, day);
         };
 
         this.init(selectJsonResponse);
@@ -604,12 +700,12 @@ esriLoader.loadModules([
         this.itemList = null;
         this.locator = null;
         // this.timeline = null;
-        // this.barChart = null;
+        this.barChart = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
             // this.timeline = new Timeline(DOM_ID_TIMELINE);
-            // this.barChart = new BarChart(DOM_ID_BARCHART);
+            this.barChart = new BarChart(DOM_ID_BARCHART);
             this.itemList = new ItemList(DOM_ID_ITEMLIST);
             this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
 
@@ -620,6 +716,7 @@ esriLoader.loadModules([
         this.updateViewModel = (results=[])=>{
             this.viewModel.setData(results);
             this.toggleLoadingIndicator(false);
+            this.toggleMapLoader(false);
             this.toggleSaveAsWebmapBtn(false);
         };
 
@@ -738,7 +835,7 @@ esriLoader.loadModules([
                 // watch the change of view data model (wayback imagery search results) to make sure the results are populated to each viz container
                 this.observerForViewData = new Observable();
                 // this.observerForViewData.subscribe(appView.timeline.populate);
-                // this.observerForViewData.subscribe(appView.barChart.populate);
+                this.observerForViewData.subscribe(appView.barChart.populate);
                 this.observerForViewData.subscribe(appView.itemList.populate);
                 this.observerForViewData.subscribe(appView.setNumOfReleasesTxt);
     
@@ -746,7 +843,7 @@ esriLoader.loadModules([
                 this.observerForActiveItem = new Observable();
                 this.observerForActiveItem.subscribe(app.addWaybackImageryLayer);
                 // this.observerForActiveItem.subscribe(appView.timeline.setActiveItem);
-                // this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
+                this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
                 this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
 
 
@@ -910,8 +1007,10 @@ esriLoader.loadModules([
 
             this.setXScale = ()=>{
                 const releaseDatesDomian = app.dataModel.getFirstAndLastReleaseDates();
+                // console.log(releaseDatesDomian);
                 xScale = d3.scaleTime()
                     .range([0, width])
+                    // .domain(releaseDatesDomian);
                     .domain(releaseDatesDomian).nice();
             };
 
@@ -938,20 +1037,29 @@ esriLoader.loadModules([
                     .exit()
                     .data(data)		
                     .enter().append("rect")
-                    .attr('class', function(d, i){
+                    .attr('class', function(d){
                         // highlight the bar for the active item
                         let classes = ['bar'];
-                        if(d.isActive){
-                            classes.push('highlight');
-                            self.setBarChartTitle(d.releaseName);
+
+                        if(d.isHighlighted){
+                            classes.push('is-highlighted');
                         }
+
+                        if(d.isActive){
+                            classes.push('is-active');
+                            self.setBarChartTitle(d.releaseName);
+
+                        } 
+                        
                         return classes.join(' ');
                     })
                     .attr("x", function(d) { 
-                        return xScale(d.releaseDateTime); 
+                        return xScale(d.releaseDatetime); 
                     })
                     .attr("y", 0)
-                    .attr("width", 4)
+                    .attr("width", function(d, i){
+                        return d.isHighlighted ? 4 : 2;
+                    })
                     .attr("height", height)
                     .on("click", function(d){
                         // console.log(d);
@@ -963,10 +1071,10 @@ esriLoader.loadModules([
 
             this.setActiveItem = (rNum)=>{
                 if(bars){
-                    bars.classed("highlight", false);
+                    bars.classed("is-active", false);
                     bars.filter(function(item){
                         return item.release === +rNum;
-                    }).classed("highlight", true);
+                    }).classed("is-active", true);
                 }
             };
 
@@ -1144,9 +1252,9 @@ esriLoader.loadModules([
                 traget.addClass('is-active');
                 // console.log(targetContainerID);
 
-                // if(targetContainerID === DOM_ID_BARCHART_WRAP){
-                //     appView.barChart.checkIfIsReady();
-                // }
+                if(targetContainerID === DOM_ID_BARCHART_WRAP){
+                    appView.barChart.checkIfIsReady();
+                }
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
@@ -1163,7 +1271,8 @@ esriLoader.loadModules([
             });
 
             $body.on('click', '.js-save-web-map', function(evt){
-                alert('cannot save items to web map at this moment, still working on it');
+                // alert('cannot save items to web map at this moment, still working on it');
+                app.saveAsWebMap();
             });
 
         })();

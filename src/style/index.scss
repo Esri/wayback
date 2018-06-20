@@ -2,7 +2,7 @@
 @import url('https://js.arcgis.com/4.7/esri/css/main.css');
 
 // variables
-$sidebar-width: 375px;
+$sidebar-width: 400px;
 
 $inactive-opacity: .75;
 $timeline-border-color: rgba(220, 220, 220, .4);
@@ -11,8 +11,10 @@ $controls-text-color: #ccc;
 
 $barchart-axis-color: rgba(255,255,255,.4);
 
-$color-inactive-item: rgba(76,76,76, 1);
+$color-inactive-item: rgba(76,76,76, .6);
 $color-active-item: #0079c1;
+$color-highlight-item: #fff;
+$color-highlight-item-hover: #56a5d8;
 
 
 html, body {
@@ -52,10 +54,10 @@ html, body {
     overflow: hidden;
 }
 
-.viz-info-containers {
+.viz-info-containers.y-scroll-visible {
     position: relative;
     overflow-y: auto;
-    height: calc(100% - 190px);
+    height: calc(100% - 340px);
 }
 
 .viz-info-containers .full-size-wrap {
@@ -80,74 +82,78 @@ html, body {
     padding-top: 0;
 }
 
+.panel-padding-trailer-0 {
+    padding-bottom: 0;
+}
+
 .panel-semi-transparent {
     background-color: rgba(0,0,0,.9)
 }
 
-.timeline-item {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;
-    // border-left: solid 1px $timeline-border-color;
-}
+// .timeline-item {
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: nowrap;
+//     justify-content: flex-start;
+//     align-content: stretch;
+//     align-items: stretch;
+//     // border-left: solid 1px $timeline-border-color;
+// }
 
-.timeline-item-title {
-    position: relative;
-    width: 150px;
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 150px;
-}
+// .timeline-item-title {
+//     position: relative;
+//     width: 150px;
+//     flex-grow: 1;
+//     flex-shrink: 0;
+//     flex-basis: 150px;
+// }
 
-.timeline-item-title::after{
-    content: ' ';
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    right: 0;
-    margin-top: -1px;
-    margin-left: .5rem;
-    width: 100%;
-    height: 1px;
-    background-color: $timeline-border-color;
-}
+// .timeline-item-title::after{
+//     content: ' ';
+//     display: inline-block;
+//     position: absolute;
+//     top: 50%;
+//     right: 0;
+//     margin-top: -1px;
+//     margin-left: .5rem;
+//     width: 100%;
+//     height: 1px;
+//     background-color: $timeline-border-color;
+// }
 
-.timeline-item-title::before {
-    content: '';
-    width: 0;
-    height: 100%;
-    position: absolute;
-    border: solid .5px $timeline-border-color;
-    top: 0;
-    left: 43px;
-}
+// .timeline-item-title::before {
+//     content: '';
+//     width: 0;
+//     height: 100%;
+//     position: absolute;
+//     border: solid .5px $timeline-border-color;
+//     top: 0;
+//     left: 43px;
+// }
 
-.timeline-item-title span {
-    width: 86px;
-    background-color: $color-inactive-item;
-    border-radius: 5%;
-    margin-left: -1px;
-    cursor: pointer;
-    z-index: 5;
-}
+// .timeline-item-title span {
+//     width: 86px;
+//     background-color: $color-inactive-item;
+//     border-radius: 5%;
+//     margin-left: -1px;
+//     cursor: pointer;
+//     z-index: 5;
+// }
 
-.tile-image-preview {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    z-index: 100;
-    cursor: pointer;
-}
+// .tile-image-preview {
+//     position: relative;
+//     width: 200px;
+//     height: 200px;
+//     z-index: 100;
+//     cursor: pointer;
+// }
 
-.tile-image-preview img {
-    width: 85%;
-    height: 85%;
-    -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
-    filter: brightness(60%);
-}
+// .tile-image-preview img {
+//     width: 85%;
+//     height: 85%;
+//     -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
+//     filter: brightness(60%);
+// }
 
 // .tile-image-control {
 //     position: absolute;
@@ -156,22 +162,22 @@ html, body {
 //     z-index: 5;
 // }
 
-.is-active {
+// .is-active {
 
-    .timeline-item-title {
-        // background: #0079c1;
-        opacity: 1;
-    }
+//     .timeline-item-title {
+//         // background: #0079c1;
+//         opacity: 1;
+//     }
 
-    .timeline-item-title span {
-        background-color: $color-active-item
-    }
+//     .timeline-item-title span {
+//         background-color: $color-active-item
+//     }
 
-    .tile-image-preview img {
-        -webkit-filter: brightness(100%); /* Safari 6.0 - 9.0 */
-        filter: brightness(100%);
-    }
-} 
+//     .tile-image-preview img {
+//         -webkit-filter: brightness(100%); /* Safari 6.0 - 9.0 */
+//         filter: brightness(100%);
+//     }
+// } 
 
 .list-card {
     padding: .5rem 1rem;
@@ -191,7 +197,7 @@ html, body {
 
 .list-card.is-highlighted {
     opacity: 1;
-    color: #fff
+    color: $color-highlight-item;
 }
 
 .list-card.is-active {
@@ -209,8 +215,6 @@ html, body {
     };
 
 }
-
-
 
 .control-items-wrap {
     display:flex;
@@ -290,11 +294,19 @@ html, body {
 }
 
 .bar:hover {
-    fill: #56a5d8;
+    fill: #888;
 }
 
-.bar.highlight,
-.bar.highlight:hover {
+.bar.is-highlighted  {
+    fill: $color-highlight-item;
+}
+
+.bar.is-highlighted:hover {
+    fill: $color-highlight-item-hover;
+}
+
+.bar.is-active,
+.bar.is-highlighted.is-active {
     fill: $color-active-item;
 }
 
@@ -356,7 +368,7 @@ html, body {
 
 .address-candidates-list > div:hover,
 .address-candidates-list > div.is-highlighted {
-    background-color: #0079c1;
+    background-color: $color-active-item;
     color: #fff;
 }
 
