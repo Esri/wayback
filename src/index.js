@@ -17,6 +17,7 @@ const OAUTH_APPID = '4Op8YK3SdKZEplai';
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
 
+// const URL_WAYBACK_IMAGERY_BASE = 'https://wayback-euc1.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_BASE = 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
@@ -33,7 +34,7 @@ const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
 const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
 
-const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 1000;
+const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
 
 
 esriLoader.loadModules([
@@ -77,7 +78,9 @@ esriLoader.loadModules([
         this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view 
         this.isMapViewStationary = false; 
         this.isWaybackLayerUpdateEnd = false;
-        this.delayForMapViewWhenStationary = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
+        this.delayForUpdateOnEndEvt = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
+        this.selectedTile = null; // tile element that is selected to search wayback imagery releases
+
         this.portalUser = null;
 
         this.init = ()=>{
@@ -143,6 +146,20 @@ esriLoader.loadModules([
             this.mapView.center = pt;
         };
 
+        this.setSelectedTile = (tileElement)=>{
+            const topLeftScreenPoint = this.getScreenPointFromXY(tileElement.x, tileElement.y);
+
+            this.selectedTile = new SelectedTileElement({
+                topLeftScreenPoint: topLeftScreenPoint
+            });
+
+            // console.log('selected tile', tileElement);
+        };
+
+        this.removeSelectedTile = ()=>{
+            this.selectedTile = null;
+        }
+
         this.getMapViewExtent = ()=>{
             const mapExtInGeoUnits = webMercatorUtils.webMercatorToGeographic(this.mapView.extent);
             return mapExtInGeoUnits.toJSON();
@@ -162,7 +179,7 @@ esriLoader.loadModules([
             } else {
                 this.updateEventsOnEndHandler();
             }
-            
+
         };
 
         this.toggleIsWaybackLayerUpdateEnd = (isEnd)=>{
@@ -225,12 +242,12 @@ esriLoader.loadModules([
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
-                clearTimeout(this.delayForMapViewWhenStationary);
+                clearTimeout(this.delayForUpdateOnEndEvt);
                 this.toggleIsMapViewStationary(false);
             });
 
             watchUtils.whenTrue(view, "stationary", (evt)=>{
-                this.delayForMapViewWhenStationary = setTimeout(()=>{
+                this.delayForUpdateOnEndEvt = setTimeout(()=>{
                     this.toggleIsMapViewStationary(true);
                 }, DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT);
             });
@@ -290,40 +307,69 @@ esriLoader.loadModules([
                 const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
 
                 d.centroid = tileCenetrPoint;
+                // d.topLeftScreenPoint = tileTopLeftPointToScreen;
 
                 return isInCurrentMapExt;
             });
 
-            // console.log(this.waybackImageryTileElements);
+            // console.log('waybackImageryTileElements', this.waybackImageryTileElements);
         };
 
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
             if(this.isMapViewStationary && this.isWaybackLayerUpdateEnd){
-                console.log('map is stable and wayback layer is ready, start searching releases using tile from view center');
-                // console.log(this.mapView.center);
+                // console.log('map is stable and wayback layer is ready, start searching releases using tile from view center');
+                // console.log('map view center before calling getWaybackImageryTileElement', this.mapView.center);
                 this.getWaybackImageryTileElement(this.mapView.center);
             }
+        };
+
+        this.findTileElementByPoint = (mapPoint=null)=>{
+
+            mapPoint = mapPoint || this.mapView.center;
+
+            let tileElement = null;
+            let minDist = Number.POSITIVE_INFINITY;
+            let realZoomLevel = this.waybackImageryTileElements[this.waybackImageryTileElements.length - 1].key.level;
+
+            this.waybackImageryTileElements.forEach(d=>{
+                const isZoomLevelCorrect = d.key.level === realZoomLevel ? true : false;
+                const dist = mapPoint.distance(d.centroid);
+                if(isZoomLevelCorrect && dist < minDist){
+                    minDist = dist;
+                    tileElement = d;
+                }
+            });
+
+            return tileElement;
         };
 
         this.getWaybackImageryTileElement = (mapPoint=null)=>{
 
             // console.log(this.waybackImageryTileElements);
 
-            let minDist = Number.POSITIVE_INFINITY;
-            let tileClicked = null;
+            this.removeSelectedTile();
+
+            // let minDist = Number.POSITIVE_INFINITY;
+            // let tileClicked = null;
+            // let realZoomLevel = this.waybackImageryTileElements[this.waybackImageryTileElements.length - 1].key.level;
 
             if(this.waybackImageryTileElements.length){
 
                 appView.toggleMapLoader(true);
 
-                this.waybackImageryTileElements.forEach(d=>{
-                    const dist = mapPoint.distance(d.centroid);
-                    if(dist < minDist){
-                        minDist = dist;
-                        tileClicked = d;
-                    }
-                });
+                // this.waybackImageryTileElements.forEach(d=>{
+                //     const isZoomLevelCorrect = d.key.level === realZoomLevel ? true : false;
+                //     const dist = mapPoint.distance(d.centroid);
+                //     if(isZoomLevelCorrect && dist < minDist){
+                //         minDist = dist;
+                //         tileClicked = d;
+                //     }
+                // });
+
+                const tileClicked = this.findTileElementByPoint(mapPoint);
+
+                this.setSelectedTile(tileClicked);
     
                 // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
@@ -337,6 +383,8 @@ esriLoader.loadModules([
 
         // search all releases with updated data for tile image at given level, row, col
         this.searchWayback = (level, row, column)=>{
+
+            // console.log('start search wayback imageries for selected l,r,c');
 
             const onSuccessHandler = (res)=>{
 
@@ -372,17 +420,29 @@ esriLoader.loadModules([
                             //     isSelected: false
                             // });
 
+                            this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
+
                             releasesWithChanges.push(d.release);
                         }
                     });
 
-                    const isDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
+                    // console.log(this.selectedTile);
 
-                    if(!isDataSame){
+                    const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
+
+                    // console.log('isViewDataSame', isViewDataSame);
+
+                    // console.log('map view center after wayback search results returned', this.mapView.center);
+
+                    if(!isViewDataSame){
                         const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
                         appView.updateViewModel(releasesToDisplay);
+
+                        // console.log('update view data model', '\n');
                     } else {
                         appView.toggleMapLoader(false);
+
+                        // console.log('no need to update view data model \n');
                     }
                 });
 
@@ -479,6 +539,15 @@ esriLoader.loadModules([
             // console.log(uploadRequestContent);
         };
 
+        this.getScreenPointFromXY = (x, y)=>{
+            const pt = new Point({
+                x: x,
+                y: y,
+                spatialReference: { wkid: 3857 }
+            });
+            return this.mapView.toScreen(pt);
+        };
+
         this.signIn = ()=>{
 
             const info = new OAuthInfo({
@@ -516,6 +585,41 @@ esriLoader.loadModules([
     
         });
 
+        // 
+        const SelectedTileElement = function(options){
+
+            let delayFortoggleVisibility = null;
+
+            this.topLeftScreenPoint = options.topLeftScreenPoint || null;
+            this.imageUrlByReleaseNumber = {};
+
+            this.addImageUrlByReleaseNumber = (rNum, imageUrl)=>{
+                this.imageUrlByReleaseNumber[+rNum] = imageUrl;
+            };
+
+            this.getImageUrlByReleaseNumber = (rNum)=>{
+                return this.imageUrlByReleaseNumber[+rNum];
+            };
+
+            this.showPreview = (rNum)=>{
+                clearTimeout(delayFortoggleVisibility);
+
+                const imageUrl = this.getImageUrlByReleaseNumber(rNum);
+                const topLeftPos = this.topLeftScreenPoint;
+                const date = app.dataModel.getReleaseDate(rNum);
+
+                if(topLeftPos && imageUrl){
+                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+                }
+            };
+
+            this.hidePreview = ()=>{
+                delayFortoggleVisibility = setTimeout(()=>{
+                    appView.tilePreviewWindow.hide();
+                }, 100);
+            };
+        };
+
         this.init();
 
     };
@@ -546,7 +650,7 @@ esriLoader.loadModules([
                 d.index = index;
                 d.release = rNum;
                 d.releaseName = d[KEY_RELEASE_NAME];
-                d.releaseDate = rDate
+                d.releaseDate = rDate;
                 d.releaseDatetime = this.convertToDate(rDate);
                 d.isActive = false;
                 d.isSelected = false;
@@ -699,8 +803,9 @@ esriLoader.loadModules([
         this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
         this.itemList = null;
         this.locator = null;
-        // this.timeline = null;
         this.barChart = null;
+        this.tilePreviewWindow = null;
+        // this.timeline = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
@@ -708,6 +813,7 @@ esriLoader.loadModules([
             this.barChart = new BarChart(DOM_ID_BARCHART);
             this.itemList = new ItemList(DOM_ID_ITEMLIST);
             this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
+            this.tilePreviewWindow = new TilePreviewWindow();
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -882,8 +988,8 @@ esriLoader.loadModules([
 
                     const rNum = d.release || d[KEY_RELEASE_NUM];
                     const rName = d.releaseName || d[KEY_RELEASE_NAME];
-                    const isActiveClass = d.isActive ? 'is-active' : '';
-                    const isHighlightedClass = d.isHighlighted ? 'is-highlighted' : ''; 
+                    const classesForActiveItem = d.isActive ? 'is-active' : '';
+                    const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted js-show-selected-tile-on-map' : ''
                     const isSelected = d.isSelected ? 'is-selected': '';
 
                     // const htmlStr = `
@@ -897,7 +1003,7 @@ esriLoader.loadModules([
                     // `;
 
                     const htmlStr = `
-                        <div class='list-card trailer-half ${isActiveClass} ${isHighlightedClass}' data-release-number='${rNum}'>
+                        <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
                             <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rName}</span>
                             <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item ${isSelected}' data-release-number='${rNum}'>
                                 <span class='icon-ui-checkbox-checked'></span>
@@ -913,59 +1019,6 @@ esriLoader.loadModules([
                 // const finalHtmlStr = itemsHtmlStr + saveToWebmapBtnHtmlStr;
 
                 $container.html(itemsHtmlStr);
-                
-            };
-
-        };
-
-        const Timeline = function(constainerID){
-            
-            const $container = $('#' + constainerID);
-
-            this.setActiveItem= (rNum)=>{
-                const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
-                targetItem.addClass('is-active');
-                targetItem.siblings().removeClass('is-active');
-            };
-
-            this.toggleSelectedItem= (options)=>{
-                const rNum = options.release;
-                const isSelected = options.isSelected;
-                
-                if(!rNum){
-                    console.error('release number is required to toggle selected item');
-                    return;
-                }
-                const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
-                targetItem.toggleClass('is-selected', isSelected);
-            };
-
-            this.populate = (data)=>{
-
-                const timelineItemsHtmlStr = data.map((d)=>{
-
-                    const rNum = d.release;
-                    // const rName = d.releaseName;
-                    const rDate = d.releaseDate;
-                    const isActiveClass = d.isActive ? 'is-active' : '';
-                    // const rNameShortened = rName.split(' ').slice(2).join(' ');
-
-                    const htmlStr = `
-                        <div class='timeline-item ${isActiveClass}' data-release-number='${rNum}'>
-                            <div class='timeline-item-title child-align-v-center js-set-active-item' data-release-number='${rNum}'>
-                                <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center'>${rDate}</span>
-                            </div>
-
-                            <div class='tile-image-preview child-align-v-center js-set-active-item' data-release-number='${rNum}'>
-                                <img class='' src="${d.imageUrl}" alt="${d.releaseName}">
-                            </div>
-                        </div>
-                    `;
-
-                    return htmlStr;
-                }).join('');
-
-                $container.html(timelineItemsHtmlStr);
                 
             };
 
@@ -1204,7 +1257,8 @@ esriLoader.loadModules([
                 };
 
                 const searchInputOnEnterHandler = function(evt){
-                    candidateOnSelectHandler(self.idxForHighlightedCandidate);
+                    const candidateIdx = self.idxForHighlightedCandidate !== -1 ? self.idxForHighlightedCandidate : 0;
+                    candidateOnSelectHandler(candidateIdx);
                 };
 
                 const addressCandidateOnClickHandler = function(evt){
@@ -1226,7 +1280,102 @@ esriLoader.loadModules([
 
             this.init();
 
-        }
+        };
+
+        const TilePreviewWindow = function(){
+
+            let $previewWindow = null;
+            let $previewWindowImg = null; 
+            let $releaseDateTxt = null; 
+
+            this.init = ()=>{
+                const tilePreviewWindowHtml = `
+                    <div class="tile-preview-window hide">
+                        <img>
+                        <div class='tile-preview-title fonr-size-2 avenir-demi text-right'>
+                            <span class='margin-right-half val-holder-release-date'></span>
+                        </div>
+                    </div>
+                `;
+                const tilePreviewWindowDom = $(tilePreviewWindowHtml);
+                $body.append(tilePreviewWindowDom);
+
+                $previewWindow = tilePreviewWindowDom;
+                $previewWindowImg = $previewWindow.find('img');
+                $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
+            };
+
+            this.show = (topLeftPos, imageUrl, date)=>{
+                $previewWindow.css('top', topLeftPos.y);
+                $previewWindow.css('left', topLeftPos.x);
+                $previewWindowImg.attr('src', imageUrl);
+                $releaseDateTxt.text(date);
+                this.toggleVisibility(true);
+            };
+
+            this.hide = ()=>{
+                this.toggleVisibility(false);
+            };
+
+            this.toggleVisibility = (isVisible)=>{
+                $previewWindow.toggleClass('hide', !isVisible);
+            };
+
+            this.init();
+        };
+
+        // const Timeline = function(constainerID){
+            
+        //     const $container = $('#' + constainerID);
+
+        //     this.setActiveItem= (rNum)=>{
+        //         const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
+        //         targetItem.addClass('is-active');
+        //         targetItem.siblings().removeClass('is-active');
+        //     };
+
+        //     this.toggleSelectedItem= (options)=>{
+        //         const rNum = options.release;
+        //         const isSelected = options.isSelected;
+                
+        //         if(!rNum){
+        //             console.error('release number is required to toggle selected item');
+        //             return;
+        //         }
+        //         const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
+        //         targetItem.toggleClass('is-selected', isSelected);
+        //     };
+
+        //     this.populate = (data)=>{
+
+        //         const timelineItemsHtmlStr = data.map((d)=>{
+
+        //             const rNum = d.release;
+        //             // const rName = d.releaseName;
+        //             const rDate = d.releaseDate;
+        //             const isActiveClass = d.isActive ? 'is-active' : '';
+        //             // const rNameShortened = rName.split(' ').slice(2).join(' ');
+
+        //             const htmlStr = `
+        //                 <div class='timeline-item ${isActiveClass}' data-release-number='${rNum}'>
+        //                     <div class='timeline-item-title child-align-v-center js-set-active-item' data-release-number='${rNum}'>
+        //                         <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center'>${rDate}</span>
+        //                     </div>
+
+        //                     <div class='tile-image-preview child-align-v-center js-set-active-item' data-release-number='${rNum}'>
+        //                         <img class='' src="${d.imageUrl}" alt="${d.releaseName}">
+        //                     </div>
+        //                 </div>
+        //             `;
+
+        //             return htmlStr;
+        //         }).join('');
+
+        //         $container.html(timelineItemsHtmlStr);
+                
+        //     };
+
+        // };
 
         const initEventHandlers = (()=>{
 
@@ -1245,28 +1394,28 @@ esriLoader.loadModules([
                 // console.log('display wayback imagery for release', rNum);
             });
 
-            $body.on('click', '.js-toggle-viz-info-container', function(evt){
-                const traget = $(this);
-                const targetContainerID = traget.attr('data-target-container-id');
+            // $body.on('click', '.js-toggle-viz-info-container', function(evt){
+            //     const traget = $(this);
+            //     const targetContainerID = traget.attr('data-target-container-id');
 
-                $vizInfoContainers.children().addClass('hide');
+            //     $vizInfoContainers.children().addClass('hide');
 
-                if(targetContainerID){
-                    $vizInfoContainers.find('#'+targetContainerID).removeClass('hide');
-                }
+            //     if(targetContainerID){
+            //         $vizInfoContainers.find('#'+targetContainerID).removeClass('hide');
+            //     }
                 
-                traget.siblings().removeClass('is-active');
-                traget.addClass('is-active');
-                // console.log(targetContainerID);
+            //     traget.siblings().removeClass('is-active');
+            //     traget.addClass('is-active');
+            //     // console.log(targetContainerID);
 
-                if(targetContainerID === DOM_ID_BARCHART_WRAP){
-                    appView.barChart.checkIfIsReady();
-                }
-            });
+            //     if(targetContainerID === DOM_ID_BARCHART_WRAP){
+            //         appView.barChart.checkIfIsReady();
+            //     }
+            // });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
                 const traget = $(this);
-                const targetValue = traget.attr('data-val') === 'true' ? true : false;
+                // const targetValue = traget.attr('data-val') === 'true' ? true : false;
                 const isTargetActive = traget.hasClass('is-active');
 
                 if(!isTargetActive){
@@ -1280,6 +1429,28 @@ esriLoader.loadModules([
             $body.on('click', '.js-save-web-map', function(evt){
                 // alert('cannot save items to web map at this moment, still working on it');
                 app.saveAsWebMap();
+            });
+
+            $body.on('mouseenter', '.js-show-selected-tile-on-map', function(evt){
+                const traget = $(this);
+                const rNum = traget.attr('data-release-number');
+
+                // const imageUrl = app.selectedTile.getImageUrlByReleaseNumber(rNum);
+                // const topLeftPos = app.selectedTile.topLeftScreenPoint;
+                // // console.log(topLeftPos, imageUrl);
+
+                // if(topLeftPos && imageUrl){
+                //     appView.tilePreviewWindow.show(topLeftPos, imageUrl);
+                // }
+
+                app.selectedTile.showPreview(rNum);
+
+            });
+
+            $body.on('mouseleave', '.js-show-selected-tile-on-map', function(evt){
+                // console.log('hide tile on map');
+                // appView.tilePreviewWindow.hide();
+                app.selectedTile.hidePreview();
             });
 
         })();
