@@ -36,7 +36,8 @@ html, body {
     overflow: hidden;
 }
 
-#mapDiv {
+#mapDiv,
+#mapLoaderWrap {
     position: absolute;
     top: 0;
     left: $gutter-width + $sidebar-width;
