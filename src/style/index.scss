@@ -426,24 +426,74 @@ html, body {
 
 /* end of tile preview window styles */
 
+/* style for crosshair marker */
+
+    $crosshairHeight: 20px;
+    $crosshairWidth: $crosshairHeight / 5;
+
+    .crosshair-marker {
+        position: absolute;
+        top: 500px;
+        left: 500px;
+        width: $crosshairWidth;
+        height: $crosshairHeight;
+        background-color: #efefef;
+        z-index: 51;
+        box-shadow: 0 0 16px 8px rgba(0,0,0,.6);
+    }
+
+    .crosshair-marker:after {
+        background: #efefef;
+        content: "";
+        height: $crosshairWidth;
+        left: -$crosshairWidth * 2;
+        position: absolute;
+        top: $crosshairWidth * 2;
+        width: $crosshairHeight;
+    }
+
+/* style for crosshair marker */
+
+
+/* style for customized-tooltip */
+
+    .customized-tooltip {
+        background: #fff;
+        color: #333;
+        padding: .5rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        max-width: 190px;
+    }
+
+
+/* style for customized-tooltip */
+
+
+
+
 /* style for scroll bar*/
 
-/* width */
-::-webkit-scrollbar {
-    width: 5px;
-}
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
 
-/* Track */
-::-webkit-scrollbar-track {
-    background: rgba(100, 100, 100, .5); 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888; 
-}
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: rgba(100, 100, 100, .5); 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #666; 
-}
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #666; 
+    }
+
+/* end of style for scroll bar*/;

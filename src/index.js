@@ -42,6 +42,7 @@ esriLoader.loadModules([
     'esri/WebMap',
     "esri/geometry/Extent",
     "esri/geometry/Point",
+    "esri/Graphic",
 
     "esri/layers/BaseTileLayer",
     "esri/request",
@@ -59,6 +60,7 @@ esriLoader.loadModules([
     WebMap,
     Extent,
     Point,
+    Graphic,
 
     BaseTileLayer,
     esriRequest,
@@ -281,6 +283,9 @@ esriLoader.loadModules([
                         if(wayBackLayerOnReadyHandler){
                             wayBackLayerOnReadyHandler(layer.isLayerReady);
                         }
+
+                        this.isWaybackLayerUpdateEnd = true;
+
                         // console.log('layer view is ready');
                     } else {
                         // console.log('layer view is updated');
@@ -376,6 +381,8 @@ esriLoader.loadModules([
                 // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
 
+                appView.crosshairMarker.setPos(this.getScreenPointFromXY(mapPoint.x, mapPoint.y));
+
                 
             } else {
                 console.log('wayback imagery is still loading');
@@ -421,7 +428,7 @@ esriLoader.loadModules([
                             //     isActive: isActive,
                             //     isSelected: false
                             // });
-
+                            
                             this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
 
                             releasesWithChanges.push(d.release);
@@ -540,7 +547,7 @@ esriLoader.loadModules([
 
             // console.log(uploadRequestContent);
 
-            alert('save items as a webmap');
+            alert('save items as a webmap...will finish this part when we have items for each release ready on AGOL');
         };
 
         this.getScreenPointFromXY = (x, y)=>{
@@ -631,7 +638,7 @@ esriLoader.loadModules([
         this.hidePreview = ()=>{
             delayFortoggleVisibility = setTimeout(()=>{
                 appView.tilePreviewWindow.hide();
-            }, 100);
+            }, 200);
         };
     };
 
@@ -834,6 +841,8 @@ esriLoader.loadModules([
         this.itemList = null;
         this.barChart = null;
         this.tilePreviewWindow = null;
+        this.crosshairMarker = null;
+        this.tooltip = null;
         // this.locator = null;
 
         this.init = ()=>{
@@ -841,10 +850,14 @@ esriLoader.loadModules([
             this.barChart = new BarChart(DOM_ID_BARCHART);
             this.itemList = new ItemList(DOM_ID_ITEMLIST);
             this.tilePreviewWindow = new TilePreviewWindow();
+            this.crosshairMarker = new CrosshairMarker();
+            this.tooltip = new CustomizedTooltip();
             // this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
+
+            this.initEventHandlers();
         };
 
         this.updateViewModel = (results=[])=>{
@@ -891,7 +904,7 @@ esriLoader.loadModules([
             $countOfSelectedItems.text(selectedItems.length);
         };
 
-        (function initEventHandlers(){
+        this.initEventHandlers = ()=>{
 
             $body.on('click', '.js-set-active-item', function(evt){
                 const traget = $(this);
@@ -923,16 +936,30 @@ esriLoader.loadModules([
             $body.on('mouseenter', '.js-show-selected-tile-on-map', function(evt){
                 const traget = $(this);
                 const rNum = traget.attr('data-release-number');
-                app.selectedTile.showPreview(rNum);
+                if(app.selectedTile && app.isMapViewStationary && app.isWaybackLayerUpdateEnd){
+                    app.selectedTile.showPreview(rNum);
+                }
             });
 
             $body.on('mouseleave', '.js-show-selected-tile-on-map', function(evt){
                 // console.log('hide tile on map');
                 // appView.tilePreviewWindow.hide();
-                app.selectedTile.hidePreview();
+                if(app.selectedTile){
+                    app.selectedTile.hidePreview();
+                }
             });
 
-        })();
+            $body.on('mouseenter', '.js-show-customized-tooltip', function(evt){
+                const target = $(this);
+                const tooltipContent = target.hasClass('is-active') || target.hasClass('is-selected') ? target.attr('data-tooltip-content-alt') : target.attr('data-tooltip-content');
+                appView.tooltip.show(tooltipContent, target);
+            });
+
+            $body.on('mouseleave', '.js-show-customized-tooltip ', function(evt){
+                appView.tooltip.toggleVisibility(false);
+            });
+
+        };
 
         this.init();
     };
@@ -1076,7 +1103,7 @@ esriLoader.loadModules([
                 const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted js-show-selected-tile-on-map' : ''
                 const isSelected = d.isSelected ? 'is-selected': '';
                 const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
-                const waybackItemURL = '';
+                const waybackItemURL = 'https://www.arcgis.com';
 
                 // const htmlStr = `
                 //     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
@@ -1091,8 +1118,8 @@ esriLoader.loadModules([
                 const htmlStr = `
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected}' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
-                        <div class='js-set-selected-item add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}'></div>
-                        <a href='${waybackItemURL}' target='_blank' class='open-item-btn icon-ui-link-external margin-right-half right ${linkColor}'></a>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                        <a href='${waybackItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
                     </div>
                 `;
 
@@ -1122,10 +1149,11 @@ esriLoader.loadModules([
         let height = 0;
         let xScale = null; // = d3.scaleTime().range([0, width]).domain([new Date(2014, 0, 1), new Date(2018, 10, 1)]).nice();
         let bars = null;
+        let barWidth = 0;
         
         this.isReady = false;
 
-        this.init = ()=>{
+        this.init = (data)=>{
 
             const containerRect = container.node().getBoundingClientRect();
 
@@ -1136,6 +1164,8 @@ esriLoader.loadModules([
 
             width = containerRect.width - margin.left - margin.right;
             height = containerRect.height - margin.top - margin.bottom;
+            barWidth = width/data.length;
+
             this.setXScale();
             this.createAxis();
 
@@ -1165,7 +1195,7 @@ esriLoader.loadModules([
         this.populate = (data)=>{
 
             if(!this.isReady){
-                this.init();
+                this.init(data);
             } 
 
             if(this.isReady){
@@ -1195,7 +1225,7 @@ esriLoader.loadModules([
                 })
                 .attr("y", 0)
                 .attr("width", function(d, i){
-                    return d.isHighlighted ? 4 : 2;
+                    return d.isHighlighted ? 4 : barWidth;
                 })
                 .attr("height", height)
                 .on("click", function(d){
@@ -1386,10 +1416,9 @@ esriLoader.loadModules([
                     </div>
                 </div>
             `;
-            const tilePreviewWindowDom = $(tilePreviewWindowHtml);
-            $body.append(tilePreviewWindowDom);
+            $previewWindow = $(tilePreviewWindowHtml);
+            $body.append($previewWindow);
 
-            $previewWindow = tilePreviewWindowDom;
             $previewWindowImg = $previewWindow.find('img');
             $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
         };
@@ -1413,6 +1442,74 @@ esriLoader.loadModules([
         this.init();
     };
 
+    const CrosshairMarker = function(){
+
+        // cache dom elements
+        const $body = $('body');
+
+        let crosshairMarker = null;
+        let posOffset = 0;
+
+        this.init = ()=>{
+            const crosshairMarkerHtml = `<div class="crosshair-marker hide"></div>`;
+            crosshairMarker = $(crosshairMarkerHtml);
+            $body.append(crosshairMarker);
+            posOffset = crosshairMarker.width() / 2;
+        };
+
+        this.setPos = (pos)=>{
+            crosshairMarker.css('top', pos.y - posOffset);
+            crosshairMarker.css('left', pos.x - posOffset);
+            this.toggleVisibility(true);
+        };
+
+        this.toggleVisibility = (isVisible)=>{
+            crosshairMarker.toggleClass('hide', !isVisible);
+        };
+
+        this.init();
+    };
+
+    const CustomizedTooltip = function(){
+
+        // cache dom elements
+        const $body = $('body');
+
+        let tooltip = null;
+
+        this.init = ()=>{
+            const tooltipHtml = `<div class="customized-tooltip font-size--3 hide"></div>`;
+            tooltip = $(tooltipHtml);
+            $body.append(tooltip);
+        };
+
+        this.show = (content, targetDom)=>{
+            tooltip.text(content);
+            this.setTootipPos(targetDom);
+            this.toggleVisibility(true);
+        };
+
+        this.setTootipPos = (target)=>{
+            const targetOffset = target.offset();
+            const targetWidth = target.width();
+            const leftOffset = targetWidth < 20 ? 10 : 5;
+
+            const tooltipPos = {
+                top: targetOffset.top,
+                left: targetOffset.left + targetWidth + leftOffset
+            };
+
+            tooltip.css('top', tooltipPos.top);
+            tooltip.css('left', tooltipPos.left);
+        };
+
+        this.toggleVisibility = (isVisible)=>{
+            tooltip.toggleClass('hide', !isVisible);
+        };
+
+        this.init();
+    };
+
     const Observable = function(){
         this.observers = [];
 
@@ -1429,6 +1526,7 @@ esriLoader.loadModules([
             this.observers.forEach(observer => observer(data));
         }
     };
+
 
     // init app and core components
     const app = new WaybackApp();
