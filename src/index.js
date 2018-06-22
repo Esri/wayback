@@ -279,16 +279,17 @@ esriLoader.loadModules([
 
         // // imspired by this example taht watch the change of basemap tiles: https://jsbin.com/zojaxev/edit?html,output
         this.setWatcherForLayerUpdateEndEvt = (layer, wayBackLayerOnReadyHandler)=>{
-            this.mapView.whenLayerView(layer)
-            .then((layerView)=>{
+            
+            this.mapView.whenLayerView(layer).then((layerView)=>{
                 // console.log('layerView', layerView);
 
+                // when layer view is updating
                 watchUtils.whenTrue(layerView, 'updating', f => {
-                    // console.log('layer view is updating');
+                    console.log('layer view is updating', layerView);
                     this.toggleIsWaybackLayerUpdateEnd(false);
                 });
 
-                // The layerview for the layer
+                // when layer view is updated
                 watchUtils.whenFalse(layerView, 'updating', f => {
                     // console.log(layerView._tileContainer.children);
                     // console.log('layer view is updated');
@@ -312,10 +313,12 @@ esriLoader.loadModules([
                         this.toggleIsWaybackLayerUpdateEnd(true);
                     }
                 });
+
             })
             .catch((error)=>{
                 // An error occurred during the layerview creation
             });
+
         };
 
         this.setWaybackImageryTileElements = (items)=>{
@@ -373,32 +376,18 @@ esriLoader.loadModules([
 
         this.getWaybackImageryTileElement = (mapPoint=null)=>{
 
-            // console.log(this.waybackImageryTileElements);
-
             this.removeSelectedTile();
-
-            // let minDist = Number.POSITIVE_INFINITY;
-            // let tileClicked = null;
-            // let realZoomLevel = this.waybackImageryTileElements[this.waybackImageryTileElements.length - 1].key.level;
 
             if(this.waybackImageryTileElements.length){
 
                 appView.toggleMapLoader(true);
 
-                // this.waybackImageryTileElements.forEach(d=>{
-                //     const isZoomLevelCorrect = d.key.level === realZoomLevel ? true : false;
-                //     const dist = mapPoint.distance(d.centroid);
-                //     if(isZoomLevelCorrect && dist < minDist){
-                //         minDist = dist;
-                //         tileClicked = d;
-                //     }
-                // });
-
                 const tileClicked = this.findTileElementByPoint(mapPoint);
 
                 this.setSelectedTile(tileClicked);
     
-                // console.log(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+                // console.log('getWaybackImageryTileElement=>tileClicked', tileClicked);
+
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
 
                 appView.crosshairMarker.setPos(this.getScreenPointFromXY(mapPoint.x, mapPoint.y));
@@ -413,7 +402,7 @@ esriLoader.loadModules([
         // search all releases with updated data for tile image at given level, row, col
         this.searchWayback = (level, row, column)=>{
 
-            // console.log('start search wayback imageries for selected l,r,c');
+            // console.log('start search wayback imageries for selected l,r,c', level, row, column);
 
             const onSuccessHandler = (res)=>{
 
@@ -432,25 +421,8 @@ esriLoader.loadModules([
 
                     resolvedResults.forEach((d, i)=>{
                         if(!uniqueDataURIs.includes(d.dataUri)){
-                            // const rName = this.dataModel.getReleaseName(d.release);
-                            // const rDate = this.dataModel.getReleaseDate(d.release);
-                            // const rDateTime = this.dataModel.getReleaseDate(d.release, true);
-                            // const isActive = +releaseNumForActiveItem === +d.release ? true : false;
-
                             uniqueDataURIs.push(d.dataUri);
-
-                            // resultsWithDuplicatesRemoved.push({
-                            //     release: d.release,
-                            //     releaseName: rName,
-                            //     releaseDate: rDate,
-                            //     releaseDateTime: rDateTime,
-                            //     imageUrl: d.imageUrl,
-                            //     isActive: isActive,
-                            //     isSelected: false
-                            // });
-                            
                             this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
-
                             releasesWithChanges.push(d.release);
                         }
                     });
@@ -630,7 +602,7 @@ esriLoader.loadModules([
     // 
     const SelectedTileElement = function(options){
 
-        let delayFortoggleVisibility = null;
+        let delayForToggleVisibility = null;
 
         this.topLeftScreenPoint = options.topLeftScreenPoint || null;
         this.imageUrlByReleaseNumber = {};
@@ -640,13 +612,17 @@ esriLoader.loadModules([
         };
 
         this.getAltImageUrl = (rNum)=>{
+            let altURL = null;
             const urlTemplate = this.imageUrlByReleaseNumber[Object.keys(this.imageUrlByReleaseNumber)[0]];
-            const urlParts = urlTemplate.split('://');
-            const subParts = urlParts[1].split('/');
 
-            subParts[subParts.length - 4] = rNum; // replace the release number 
-            const newSubPartsStr = subParts.join('/');
-            const altURL = urlParts[0] + '://' + newSubPartsStr;
+            if(urlTemplate){
+                const urlParts = urlTemplate.split('://');
+                const subParts = urlParts[1].split('/');
+    
+                subParts[subParts.length - 4] = rNum; // replace the release number 
+                const newSubPartsStr = subParts.join('/');
+                altURL = urlParts[0] + '://' + newSubPartsStr;
+            }
 
             return altURL;
         }
@@ -662,19 +638,23 @@ esriLoader.loadModules([
         };
 
         this.showPreview = (rNum)=>{
-            clearTimeout(delayFortoggleVisibility);
+            clearTimeout(delayForToggleVisibility);
 
             const imageUrl = this.getImageUrlByReleaseNumber(rNum);
             const topLeftPos = this.topLeftScreenPoint;
             const date = app.dataModel.getReleaseDate(rNum);
 
             if(topLeftPos && imageUrl){
-                appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+                delayForToggleVisibility = setTimeout(()=>{
+                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+                }, 200);
             }
         };
 
         this.hidePreview = ()=>{
-            delayFortoggleVisibility = setTimeout(()=>{
+            clearTimeout(delayForToggleVisibility);
+
+            delayForToggleVisibility = setTimeout(()=>{
                 appView.tilePreviewWindow.hide();
             }, 200);
         };
@@ -1009,7 +989,7 @@ esriLoader.loadModules([
             });
 
             $body.on('mouseleave', '.js-show-customized-tooltip ', function(evt){
-                appView.tooltip.toggleVisibility(false);
+                appView.tooltip.hide();
             });
 
         };
@@ -1537,6 +1517,7 @@ esriLoader.loadModules([
         const $body = $('body');
 
         let tooltip = null;
+        let delay = null;
 
         this.init = ()=>{
             const tooltipHtml = `<div class="customized-tooltip font-size--3 hide"></div>`;
@@ -1545,10 +1526,17 @@ esriLoader.loadModules([
         };
 
         this.show = (content, targetDom)=>{
-            tooltip.text(content);
-            this.setTootipPos(targetDom);
-            this.toggleVisibility(true);
+            delay = setTimeout(()=>{
+                tooltip.text(content);
+                this.setTootipPos(targetDom);
+                this.toggleVisibility(true);
+            },200)
         };
+
+        this.hide = ()=>{
+            clearTimeout(delay);
+            this.toggleVisibility(false)
+        }
 
         this.setTootipPos = (target)=>{
             const targetOffset = target.offset();
