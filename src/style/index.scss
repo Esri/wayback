@@ -131,7 +131,7 @@ html, body {
     border-left: solid 4px #1C1C1C;
 
     .open-item-btn {
-        font-size: 1.2019rem;
+        font-size: 1rem;
     }
 
     .add-to-webmap-btn {
@@ -322,6 +322,10 @@ html, body {
 
 .panel-padding-trailer-0 {
     padding-bottom: 0;
+}
+
+.panel-padding-leader-half {
+    padding-top: .5rem;
 }
 
 .panel-semi-transparent {

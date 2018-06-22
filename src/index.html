@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset=utf-8 />
-        <title>Basemap Imagery Explorer</title>
+        <title>Wayback Imagery</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     </head>
@@ -17,7 +17,7 @@
         <div id='gutter'>
 
             <div class='gutter-nav-btn text-center shadow-trailer font-size-3'>
-                <span class='icon-ui-notice-round js-modal-toggle' data-modal="about"></span>
+                <span class='icon-ui-description js-modal-toggle' data-modal="about"></span>
             </div>
 
             <div class='gutter-nav-btn create-agol-webmap js-save-web-map js-show-customized-tooltip' data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
@@ -29,7 +29,7 @@
         </div>
 
         <div id="sidebar" class=''>
-            <div class='panel panel-no-border panel-no-background panel-padding-trailer-0'>
+            <div class='panel panel-no-border panel-no-background panel-padding-leader-half panel-padding-trailer-0'>
 
                 <div class='font-size-22px text-center'>
                     <span>World Imagery <span class='text-white'>Wayback</span></span>
@@ -40,43 +40,17 @@
                     <div class="loader-text">Loading...</div>
                 </div>
 
-                <!-- first row of control items: locator, menu btn -->
-                <!-- <div class='control-items-wrap trailer-half'>
-                    <div id='search-input-wrap' class='fill'>
-                        <input id='search-input' class="location-search-input input-group-input" type="text" placeholder="Search location...">
-                        <div class='address-candidates-list'></div>
-                    </div>
-                    <div class='margin-left-half control-btn'>
-                        <span class="icon-ui-handle-vertical"></span>
-                    </div>
-                </div> -->
-                <!-- end of first row of control items: locator, menu btn -->
-
-                <!-- second row of control items: filter btns -->
-                <!-- <div class=" font-size--2 padding-trailer-quarter border-bottom">
-
-                    <nav class='breadcrumb-nav inline-block'>
-                        <span class="pseudo-divider is-active js-toggle-highlighted-items" data-val='false'>all</span>
-                        <span class="js-toggle-highlighted-items" data-val='true'>filtered</span>
-                    </nav>
-
-                    <span class='right'>releases: <span class='val-holder-num-of-releases'>0</span></span>
-                </div> -->
-                <!-- end second row of control items: filter btns -->
             </div>
 
             <div class='panel panel-no-border panel-no-background panel-padding-leader-0 panel-padding-trailer-0 initally-hide'>
-                <div id='barChartWrap' class='viz-info-container trailer-quarter'>
-                    <!-- <div class='leader-quarter trailer-quarter'>
-                        <p class='margin-left-1 trailer-0 font-size--3 bar-chart-title'></p>
-                    </div> -->
+                <div id='barChartWrap' class='viz-info-container leader-quarter trailer-quarter'>
                     <div id='barChartDiv' class=''></div>
                 </div>
             </div>
 
             <div class='panel panel-no-border panel-no-background panel-padding-leader-0 panel-padding-trailer-0 trailer-quarter initally-hide'>
                 <div class='font-size-22px text-center text-blue trailer-half'>
-                    <span class='val-holder-active-item-title'></span>
+                    <span class='val-holder-active-item-title active-item-title'></span>
                 </div>
 
                 <div class='js-toggle-highlighted-items filter-with-cbox cursor-pointer font-size--2'>

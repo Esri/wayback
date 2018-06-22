@@ -54,6 +54,8 @@ esriLoader.loadModules([
     "esri/identity/IdentityManager",
     "esri/portal/Portal",
 
+    "esri/widgets/Search",
+
     "dojo/domReady!"
 ]).then(([
     MapView, 
@@ -67,10 +69,12 @@ esriLoader.loadModules([
     watchUtils,
     geometryEngine,
     webMercatorUtils,
-    
+
     OAuthInfo, 
     esriId,
-    Portal
+    Portal,
+
+    Search
 ])=>{
 
     const WaybackApp = function(){
@@ -120,6 +124,7 @@ esriLoader.loadModules([
 
             this.setMapView(view);
             this.setMapEventHandlers(view);
+            this.initSearchWidget(view)
             // this.setBasemapViewWatcher(view);
         };
 
@@ -136,6 +141,21 @@ esriLoader.loadModules([
             };
 
             this.addWaybackImageryLayer(mostRecentRelease, waybackLayerOnReadyHandler);
+        };
+
+        this.initSearchWidget = (view)=>{
+            const searchWidget = new Search({
+                view: view,
+                resultGraphicEnabled: false,
+                popupEnabled: false
+            });
+
+              // Adds the search widget below other elements in
+              // the top left corner of the view
+            view.ui.add(searchWidget, {
+                position: "top-right",
+                index: 0
+            });
         };
 
         this.setMapView = (mapView)=>{
@@ -619,8 +639,26 @@ esriLoader.loadModules([
             this.imageUrlByReleaseNumber[+rNum] = imageUrl;
         };
 
+        this.getAltImageUrl = (rNum)=>{
+            const urlTemplate = this.imageUrlByReleaseNumber[Object.keys(this.imageUrlByReleaseNumber)[0]];
+            const urlParts = urlTemplate.split('://');
+            const subParts = urlParts[1].split('/');
+
+            subParts[subParts.length - 4] = rNum; // replace the release number 
+            const newSubPartsStr = subParts.join('/');
+            const altURL = urlParts[0] + '://' + newSubPartsStr;
+
+            return altURL;
+        }
+
         this.getImageUrlByReleaseNumber = (rNum)=>{
-            return this.imageUrlByReleaseNumber[+rNum];
+            let imgUrl = this.imageUrlByReleaseNumber[+rNum];
+            
+            if(!imgUrl){
+                imgUrl = this.getAltImageUrl(rNum);
+            }
+
+            return imgUrl;
         };
 
         this.showPreview = (rNum)=>{
@@ -882,10 +920,29 @@ esriLoader.loadModules([
             this.setActiveItemTitleTxt(rNum);
         };
 
-        this.setActiveItemTitleTxt = (rNum)=>{
+        this.setActiveItemTitleTxt = (rNum, isShowingAlternative)=>{
+
+            rNum = rNum || $activeItemTitle.attr('data-active-item-release-num');
+
             const rDate = app.dataModel.getReleaseDate(rNum);
             const titleTxt = 'Wayback to ' + rDate;
             $activeItemTitle.text(titleTxt);
+
+            if(!isShowingAlternative){
+                $activeItemTitle.attr('data-active-item-release-num', rNum);
+            }
+        };
+
+        this.showTilePreviewWindow = (rNum)=>{
+            if(app.selectedTile && app.isMapViewStationary && app.isWaybackLayerUpdateEnd){
+                app.selectedTile.showPreview(rNum);
+            }
+        };
+
+        this.hideTilePreviewWindow = ()=>{
+            if(app.selectedTile){
+                app.selectedTile.hidePreview();
+            }
         };
 
         // this.toggleLoadingIndicator = (isLoading)=>{
@@ -907,24 +964,24 @@ esriLoader.loadModules([
         this.initEventHandlers = ()=>{
 
             $body.on('click', '.js-set-active-item', function(evt){
-                const traget = $(this);
-                const rNum = traget.attr('data-release-number');
+                const target = $(this);
+                const rNum = target.attr('data-release-number');
                 appView.viewModel.setActiveItem(rNum);
                 // console.log('display wayback imagery for release', rNum);
             });
 
             $body.on('click', '.js-set-selected-item', function(evt){
-                const traget = $(this);
-                const rNum = traget.attr('data-release-number');
-                const isSelected = !traget.hasClass('is-selected');
+                const target = $(this);
+                const rNum = target.attr('data-release-number');
+                const isSelected = !target.hasClass('is-selected');
                 appView.viewModel.setSelectedItem(rNum, isSelected);
-                traget.toggleClass('is-selected');
+                target.toggleClass('is-selected');
                 // console.log('display wayback imagery for release', rNum);
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
-                const traget = $(this);
-                traget.toggleClass('is-checked');
+                const target = $(this);
+                target.toggleClass('is-checked');
                 appView.viewModel.toggleHighlightedItems();
             });
 
@@ -934,19 +991,15 @@ esriLoader.loadModules([
             });
 
             $body.on('mouseenter', '.js-show-selected-tile-on-map', function(evt){
-                const traget = $(this);
-                const rNum = traget.attr('data-release-number');
-                if(app.selectedTile && app.isMapViewStationary && app.isWaybackLayerUpdateEnd){
-                    app.selectedTile.showPreview(rNum);
-                }
+                const target = $(this);
+                const rNum = target.attr('data-release-number');
+                appView.showTilePreviewWindow(rNum);
             });
 
             $body.on('mouseleave', '.js-show-selected-tile-on-map', function(evt){
                 // console.log('hide tile on map');
                 // appView.tilePreviewWindow.hide();
-                if(app.selectedTile){
-                    app.selectedTile.hidePreview();
-                }
+                appView.hideTilePreviewWindow();
             });
 
             $body.on('mouseenter', '.js-show-customized-tooltip', function(evt){
@@ -1100,7 +1153,7 @@ esriLoader.loadModules([
                 // const rName = d.releaseName;
                 const rDate = d.releaseDate;
                 const classesForActiveItem = d.isActive ? 'is-active' : '';
-                const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted js-show-selected-tile-on-map' : ''
+                const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted' : ''
                 const isSelected = d.isSelected ? 'is-selected': '';
                 const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
                 const waybackItemURL = 'https://www.arcgis.com';
@@ -1116,7 +1169,7 @@ esriLoader.loadModules([
                 // `;
 
                 const htmlStr = `
-                    <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected}' data-release-number='${rNum}'>
+                    <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
                         <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
                         <a href='${waybackItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
@@ -1232,6 +1285,14 @@ esriLoader.loadModules([
                     // console.log(d);
                     appView.viewModel.setActiveItem(d.release);
                     // self.setBarChartTitle(d.releaseName);
+                })
+                .on('mouseover', function(d){
+                    appView.setActiveItemTitleTxt(d.release, true);
+                    appView.showTilePreviewWindow(d.release);
+                })
+                .on('mouseout', function(d){
+                    appView.setActiveItemTitleTxt();
+                    appView.hideTilePreviewWindow();
                 });
             }
         };
