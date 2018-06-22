@@ -2,7 +2,18 @@
 @import url('https://js.arcgis.com/4.7/esri/css/main.css');
 
 // variables
-$sidebar-width: 400px;
+$default-text-color: #ccc;
+
+$gutter-width: 50px;
+$gutter-bgColor: #444444;
+
+$sidebar-width: 300px;
+$sidebar-bgColor: #121212;
+
+
+$list-card-height: 38px;
+$list-card-is-selected-bgColor: #555555;
+$add-to-webmap-btn-is-selected-bgColor: rgba(255,255,255,.2);
 
 $inactive-opacity: .75;
 $timeline-border-color: rgba(220, 220, 220, .4);
@@ -12,10 +23,10 @@ $controls-text-color: #ccc;
 $barchart-axis-color: rgba(255,255,255,.4);
 
 $color-inactive-item: rgba(76,76,76, .6);
-$color-active-item: #0079c1;
+$color-active-item: #2267AE;
 $color-highlight-item: #fff;
 $color-highlight-item-hover: #56a5d8;
-
+$color-hover-item: #1A3D60;
 
 html, body {
     padding: 0;
@@ -28,7 +39,7 @@ html, body {
 #mapDiv {
     position: absolute;
     top: 0;
-    left: 0;
+    left: $gutter-width + $sidebar-width;
     bottom: 0;
     right: 0;
 }
@@ -42,178 +53,128 @@ html, body {
     z-index: 100;
 }
 
+#gutter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: $gutter-width;
+    background-color: $gutter-bgColor;
+    color: $default-text-color;
+
+    .gutter-nav-btn {
+        position: relative;
+        width: $gutter-width;
+        height: $gutter-width;
+        line-height: $gutter-width;
+        cursor: pointer;
+
+        .overlay-label {
+            position: absolute;
+            bottom: -5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50%;
+            background-color: $color-active-item;
+            font-size: .65rem;
+            display: none;
+        }
+    }
+
+    .create-agol-webmap {
+        background: url('../assets/icons/QueueGroupNo.png') center no-repeat;
+        cursor: default;
+    }
+
+    .create-agol-webmap.is-active {
+        margin-top: .5rem;
+        background: url('../assets/icons/QueueGroupYes.png') center no-repeat;
+        cursor: pointer;
+
+        .overlay-label {
+            display: block;
+        }
+    }
+
+    .shadow-trailer {
+        box-shadow: 0 0 12px 4px rgba(0,0,0,.5);
+    }
+}
+
 #sidebar {
     position: absolute;
     top: 0;
-    right: 0;
+    left: $gutter-width;
     width: $sidebar-width;
     height: 100%;
-    background-color: rgba(0,0,0,.9);
-    color: #efefef;
+    background-color: $sidebar-bgColor;
+    color: $default-text-color;
     z-index: 99;
     overflow: hidden;
 }
 
-.viz-info-containers.y-scroll-visible {
+.y-scroll-visible {
     position: relative;
     overflow-y: auto;
-    height: calc(100% - 340px);
+    height: calc(100% - 260px);
 }
-
-.viz-info-containers .full-size-wrap {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: .99rem;
-    right: .99rem;
-    background: rgba(0,0,0,.65);
-    z-index: 100;
-}
-
-.is-loading .iz-info-container {
-    opacity: .1;
-}
-
-.panel-no-background {
-    background-color: rgba(0,0,0,0) !important;
-}
-
-.panel-padding-leader-0 {
-    padding-top: 0;
-}
-
-.panel-padding-trailer-0 {
-    padding-bottom: 0;
-}
-
-.panel-semi-transparent {
-    background-color: rgba(0,0,0,.9)
-}
-
-// .timeline-item {
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: nowrap;
-//     justify-content: flex-start;
-//     align-content: stretch;
-//     align-items: stretch;
-//     // border-left: solid 1px $timeline-border-color;
-// }
-
-// .timeline-item-title {
-//     position: relative;
-//     width: 150px;
-//     flex-grow: 1;
-//     flex-shrink: 0;
-//     flex-basis: 150px;
-// }
-
-// .timeline-item-title::after{
-//     content: ' ';
-//     display: inline-block;
-//     position: absolute;
-//     top: 50%;
-//     right: 0;
-//     margin-top: -1px;
-//     margin-left: .5rem;
-//     width: 100%;
-//     height: 1px;
-//     background-color: $timeline-border-color;
-// }
-
-// .timeline-item-title::before {
-//     content: '';
-//     width: 0;
-//     height: 100%;
-//     position: absolute;
-//     border: solid .5px $timeline-border-color;
-//     top: 0;
-//     left: 43px;
-// }
-
-// .timeline-item-title span {
-//     width: 86px;
-//     background-color: $color-inactive-item;
-//     border-radius: 5%;
-//     margin-left: -1px;
-//     cursor: pointer;
-//     z-index: 5;
-// }
-
-// .tile-image-preview {
-//     position: relative;
-//     width: 200px;
-//     height: 200px;
-//     z-index: 100;
-//     cursor: pointer;
-// }
-
-// .tile-image-preview img {
-//     width: 85%;
-//     height: 85%;
-//     -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
-//     filter: brightness(60%);
-// }
-
-// .tile-image-control {
-//     position: absolute;
-//     top: .5rem;
-//     left: .5rem;
-//     z-index: 5;
-// }
-
-// .is-active {
-
-//     .timeline-item-title {
-//         // background: #0079c1;
-//         opacity: 1;
-//     }
-
-//     .timeline-item-title span {
-//         background-color: $color-active-item
-//     }
-
-//     .tile-image-preview img {
-//         -webkit-filter: brightness(100%); /* Safari 6.0 - 9.0 */
-//         filter: brightness(100%);
-//     }
-// } 
 
 .list-card {
-    padding: .5rem 1rem;
-    border: solid 1px $map-controls-border-color;
+    // padding: .5rem;
+    height: $list-card-height;
+    line-height: $list-card-height;
+    padding-left: .5rem;
+    background-color: #1C1C1C;
+    border-left: solid 4px #1C1C1C;
 
-    .icon-ui-checkbox-checked {
-        display: none;
-    };
+    .open-item-btn {
+        font-size: 1.2019rem;
+    }
 
-    .icon-ui-checkbox-unchecked {
-        display: inline-block;
-    };
+    .add-to-webmap-btn {
+        width: $list-card-height;
+        height: $list-card-height;
+        background: url('../assets/icons/QueueOff.png') center no-repeat;
+    }
+}
 
-    opacity: .85;
-    color: #a9a9a9
+.list-card.is-selected {
+    .add-to-webmap-btn {
+        background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOn.png') center no-repeat;
+        // background-color: rgba(255,255,255,.3);
+    }
 }
 
 .list-card.is-highlighted {
     opacity: 1;
-    color: $color-highlight-item;
+    border-left: solid 4px $color-highlight-item;
+
+    .add-to-webmap-btn {
+        background: url('../assets/icons/QueueOffSelected.png') center no-repeat;
+    }
 }
+
+.list-card.is-highlighted.is-selected {
+    .add-to-webmap-btn {
+        background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOnSelected.png') center no-repeat;
+    }
+}
+
 
 .list-card.is-active {
-    border-left: solid 4px $color-active-item;
+    background-color: $color-active-item;
 }
 
-.is-selected {
+.list-card.is-active:hover,
+.list-card.is-highlighted:hover {
+    border-left: solid 4px $color-highlight-item;
+}
 
-    .icon-ui-checkbox-checked {
-        display: inline-block;
-    };
-
-    .icon-ui-checkbox-unchecked {
-        display: none;
-    };
-
+.list-card:hover {
+    background-color: $color-hover-item;
+    border-left: solid 4px $color-hover-item;
 }
 
 .control-items-wrap {
@@ -252,23 +213,23 @@ html, body {
 //     border: solid 1px #6e6e6e;
 // }
 
-.breadcrumb-nav span{
-    opacity: .7;
-    cursor: pointer;
-}
+// .breadcrumb-nav span{
+//     opacity: .7;
+//     cursor: pointer;
+// }
 
-.breadcrumb-nav span.is-active{
-    opacity: 1;
-    font-weight: 600;
-}
+// .breadcrumb-nav span.is-active{
+//     opacity: 1;
+//     font-weight: 600;
+// }
 
-.pseudo-divider::after {
-    content: '/';
-    font-weight: 400;
-    padding: 0 .2rem 0 .4rem;
-    display: inline-block;
-    opacity: 1;
-}
+// .pseudo-divider::after {
+//     content: '/';
+//     font-weight: 400;
+//     padding: 0 .2rem 0 .4rem;
+//     display: inline-block;
+//     opacity: 1;
+// }
 
 [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
     padding-right: 0;
@@ -278,9 +239,9 @@ html, body {
     border-bottom: solid 1px $map-controls-border-color;
 }
 
-#barChartWrap {
-    border: solid 1px $map-controls-border-color;
-}
+// #barChartWrap {
+//     border: solid 1px $map-controls-border-color;
+// }
 
 #barChartDiv {
     height: 100px;
@@ -302,7 +263,7 @@ html, body {
 }
 
 .bar.is-highlighted:hover {
-    fill: $color-highlight-item-hover;
+    fill: $color-hover-item;
 }
 
 .bar.is-active,
@@ -328,6 +289,10 @@ html, body {
     }
 }
 
+.initally-hide {
+    display: none;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -342,11 +307,46 @@ html, body {
     justify-content: flex-end;
 }
 
-.stick-at-bottom {
-    position: fixed;
-    bottom: 0;
-    left: calc(100% - #{$sidebar-width});
-    right:0;
+.font-size-22px {
+    font-size: 22px;
+}
+
+.panel-no-background {
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.panel-padding-leader-0 {
+    padding-top: 0;
+}
+
+.panel-padding-trailer-0 {
+    padding-bottom: 0;
+}
+
+.panel-semi-transparent {
+    background-color: rgba(0,0,0,.9)
+}
+
+.filter-with-cbox {
+
+    .icon-ui-checkbox-checked {
+        display: none;
+    };
+
+    .icon-ui-checkbox-unchecked {
+        display: inline-block;
+    };
+}
+
+.filter-with-cbox.is-checked {
+    
+    .icon-ui-checkbox-checked {
+        display: inline-block;
+    };
+
+    .icon-ui-checkbox-unchecked {
+        display: none;
+    };
 }
 
 /* address locator styles */
@@ -426,6 +426,7 @@ html, body {
 
 /* end of tile preview window styles */
 
+/* style for scroll bar*/
 
 /* width */
 ::-webkit-scrollbar {

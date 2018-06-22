@@ -29,14 +29,22 @@ module.exports = (env, options)=> {
                     test: /\.s?[ac]ss$/,
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-                        "css-loader", // translates CSS into CommonJS
-                        "sass-loader" // compiles Sass to CSS
+                        {
+                            loader: "css-loader", options: {
+                                sourceMap: true
+                            }
+                        }, {
+                            loader: "sass-loader", options: {
+                                sourceMap: true
+                            }
+                        }
                     ]
                 },
                 { test: /\.woff$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
                 { test: /\.ttf$/,  loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
                 { test: /\.eot$/,  loader: "file-loader" },
-                { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" }
+                { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
+                { test: /\.(png|jpg|gif)$/,  loader: "file-loader" },
             ]
         },
         plugins: [

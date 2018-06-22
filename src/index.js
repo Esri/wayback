@@ -2,7 +2,7 @@
 import $ from 'jquery';
 import * as d3 from "d3";
 import * as esriLoader from 'esri-loader';
-// import * as calcite from 'calcite-web';
+import * as calcite from 'calcite-web';
 
 // import style files
 import './style/index.scss';
@@ -73,7 +73,7 @@ esriLoader.loadModules([
 
     const WaybackApp = function(){
 
-        this.dataModel = null;
+        this.dataModel = new AppDataModel();
         this.mapView = null;
         this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view 
         this.isMapViewStationary = false; 
@@ -84,17 +84,22 @@ esriLoader.loadModules([
         this.portalUser = null;
 
         this.init = ()=>{
-
             this.signIn();
-
             this.initMap();
+            this.fetchWaybackReleasesData();
+        };
 
-            this.fetchWaybackReleasesData(res=>{
-                // init app data model and wayback imagery layer
-                this.dataModel = new AppDataModel(res);
-                this.initWaybackImageryLayer();
+        // get json file that will be used as a lookup table for all releases since 2014
+        this.fetchWaybackReleasesData = ()=>{
+            $.getJSON(URL_WAYBACK_IMAGERY_SELECT, response=>{
+                this.waybackReleaseDataOnReadyHandler(response.Selection);
             });
+        };
 
+        this.waybackReleaseDataOnReadyHandler = (res)=>{
+            // init app data model and wayback imagery layer
+            this.initDataModel(res);
+            this.initWaybackImageryLayer();
         };
 
         this.initMap = ()=>{
@@ -116,6 +121,10 @@ esriLoader.loadModules([
             // this.setBasemapViewWatcher(view);
         };
 
+        this.initDataModel = (data)=>{
+            this.dataModel.init(data);
+        };
+
         this.initWaybackImageryLayer = ()=>{
             const mostRecentRelease = this.dataModel.getMostRecentReleaseNum();
 
@@ -125,13 +134,6 @@ esriLoader.loadModules([
             };
 
             this.addWaybackImageryLayer(mostRecentRelease, waybackLayerOnReadyHandler);
-        };
-
-        // get json file that will be used as a lookup table for all releases since 2014
-        this.fetchWaybackReleasesData = (callback)=>{
-            $.getJSON(URL_WAYBACK_IMAGERY_SELECT, response=>{
-                callback(response.Selection);
-            });
         };
 
         this.setMapView = (mapView)=>{
@@ -537,15 +539,25 @@ esriLoader.loadModules([
             // });
 
             // console.log(uploadRequestContent);
+
+            alert('save items as a webmap');
         };
 
         this.getScreenPointFromXY = (x, y)=>{
+
+            const xOffsetForMapDiv = 350; 
+
             const pt = new Point({
                 x: x,
                 y: y,
                 spatialReference: { wkid: 3857 }
             });
-            return this.mapView.toScreen(pt);
+
+            const screenPt = this.mapView.toScreen(pt);
+
+            screenPt.x = screenPt.x + xOffsetForMapDiv; // need to add this offset because we have gutter and side bar at left of the page
+
+            return screenPt;
         };
 
         this.signIn = ()=>{
@@ -569,59 +581,58 @@ esriLoader.loadModules([
             });
         };
 
-        const WaybackImageryLayer = BaseTileLayer.createSubclass({
+        this.init();
+    };
 
-            properties: {
-                urlTemplate: null,
-                m: null, // m encodes the release number,
-                isLayerReady: false
-            },
-    
-            getTileUrl: function(level, row, col) {
-                const m = this.m;
-                // console.log('WaybackImageryLayer getTileUrk', level, row, col);
-                return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
-            },
-    
-        });
+    const WaybackImageryLayer = BaseTileLayer.createSubclass({
 
-        // 
-        const SelectedTileElement = function(options){
+        properties: {
+            urlTemplate: null,
+            m: null, // m encodes the release number,
+            isLayerReady: false
+        },
 
-            let delayFortoggleVisibility = null;
+        getTileUrl: function(level, row, col) {
+            const m = this.m;
+            // console.log('WaybackImageryLayer getTileUrk', level, row, col);
+            return this.urlTemplate.replace("{m}", m).replace("{l}", level).replace("{r}", row).replace("{c}", col);
+        },
 
-            this.topLeftScreenPoint = options.topLeftScreenPoint || null;
-            this.imageUrlByReleaseNumber = {};
+    });
 
-            this.addImageUrlByReleaseNumber = (rNum, imageUrl)=>{
-                this.imageUrlByReleaseNumber[+rNum] = imageUrl;
-            };
+    // 
+    const SelectedTileElement = function(options){
 
-            this.getImageUrlByReleaseNumber = (rNum)=>{
-                return this.imageUrlByReleaseNumber[+rNum];
-            };
+        let delayFortoggleVisibility = null;
 
-            this.showPreview = (rNum)=>{
-                clearTimeout(delayFortoggleVisibility);
+        this.topLeftScreenPoint = options.topLeftScreenPoint || null;
+        this.imageUrlByReleaseNumber = {};
 
-                const imageUrl = this.getImageUrlByReleaseNumber(rNum);
-                const topLeftPos = this.topLeftScreenPoint;
-                const date = app.dataModel.getReleaseDate(rNum);
-
-                if(topLeftPos && imageUrl){
-                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
-                }
-            };
-
-            this.hidePreview = ()=>{
-                delayFortoggleVisibility = setTimeout(()=>{
-                    appView.tilePreviewWindow.hide();
-                }, 100);
-            };
+        this.addImageUrlByReleaseNumber = (rNum, imageUrl)=>{
+            this.imageUrlByReleaseNumber[+rNum] = imageUrl;
         };
 
-        this.init();
+        this.getImageUrlByReleaseNumber = (rNum)=>{
+            return this.imageUrlByReleaseNumber[+rNum];
+        };
 
+        this.showPreview = (rNum)=>{
+            clearTimeout(delayFortoggleVisibility);
+
+            const imageUrl = this.getImageUrlByReleaseNumber(rNum);
+            const topLeftPos = this.topLeftScreenPoint;
+            const date = app.dataModel.getReleaseDate(rNum);
+
+            if(topLeftPos && imageUrl){
+                appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+            }
+        };
+
+        this.hidePreview = ()=>{
+            delayFortoggleVisibility = setTimeout(()=>{
+                appView.tilePreviewWindow.hide();
+            }, 100);
+        };
     };
 
     const AppDataModel = function(selectJsonResponse){
@@ -665,6 +676,19 @@ esriLoader.loadModules([
 
         this.initReleasesDict = (dict={})=>{
             this.releasesDict = dict; 
+        };
+
+        this.toggleSelectedItem = (options)=>{
+            const rNum = options.release;
+            const isSelected = options.isSelected;
+            this.releasesDict[rNum].isSelected = isSelected;
+        };
+
+        this.getSelectedItems = ()=>{
+            const selectedItems = this.releases.filter(d=>{
+                return d.isSelected;
+            });
+            return selectedItems;
         };
 
         this.getFullListOfReleases = (highlightedItems=[], rNumForActiveItem)=>{
@@ -786,7 +810,7 @@ esriLoader.loadModules([
             return new Date(year, mon, day);
         };
 
-        this.init(selectJsonResponse);
+        // this.init(selectJsonResponse);
 
     };
 
@@ -794,590 +818,80 @@ esriLoader.loadModules([
 
         // cache dom elements
         const $body = $('body');
-        const $vizInfoContainers = $('.viz-info-containers');
-        const $numOfReleasesTxt = $('.val-holder-num-of-releases');
-        const $waybackDataLoadingIndicator = $('.wayback-data-loading-indicator');
+        const $initallyHideItems = $('.initally-hide');
+        const $sidebarLoader = $('.sidebar-loader');
+        // const $waybackDataLoadingIndicator = $('.wayback-data-loading-indicator');
         const $mapLoader = $('.map-loader');
+        const $createWebmapBtn = $('.create-agol-webmap');
+        const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
+        const $activeItemTitle = $('.val-holder-active-item-title');
+
+        // app view properties
+        let isInitallyHideItemsVisible = false;
 
         // app view core components
         this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
         this.itemList = null;
-        this.locator = null;
         this.barChart = null;
         this.tilePreviewWindow = null;
-        // this.timeline = null;
+        // this.locator = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
-            // this.timeline = new Timeline(DOM_ID_TIMELINE);
             this.barChart = new BarChart(DOM_ID_BARCHART);
             this.itemList = new ItemList(DOM_ID_ITEMLIST);
-            this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
             this.tilePreviewWindow = new TilePreviewWindow();
+            // this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
         };
 
         this.updateViewModel = (results=[])=>{
+            this.housekeeping();
             this.viewModel.setData(results);
-            this.toggleLoadingIndicator(false);
             this.toggleMapLoader(false);
-            this.toggleSaveAsWebmapBtn(false);
+            // this.toggleLoadingIndicator(false);
         };
 
-        this.setNumOfReleasesTxt = (results=[])=>{
-            const countOfReleasesWithChanges = results.reduce((accm, curr)=>{
-                if(curr.isHighlighted){
-                    accm++;
-                }
-                return accm;
-            }, 0)
-            $numOfReleasesTxt.text(countOfReleasesWithChanges + ' out of ' + results.length);
+        this.housekeeping = ()=>{
+            // the contains for charts/list are hidden initally, so we need to turn them on and hide the sidebar loader
+            if(!isInitallyHideItemsVisible){
+                this.initActiveItemTitle();
+                $sidebarLoader.toggleClass('is-active');
+                $initallyHideItems.toggleClass('initally-hide', false);
+                isInitallyHideItemsVisible = true;
+            }
         };
 
-        this.toggleLoadingIndicator = (isLoading)=>{
-            $waybackDataLoadingIndicator.toggleClass('is-active' , isLoading);
-            $vizInfoContainers.toggleClass('is-loading' , isLoading);
-            this.toggleMapLoader(isLoading);
+        this.initActiveItemTitle = ()=>{
+            const rNum = app.dataModel.getMostRecentReleaseNum();
+            this.setActiveItemTitleTxt(rNum);
         };
+
+        this.setActiveItemTitleTxt = (rNum)=>{
+            const rDate = app.dataModel.getReleaseDate(rNum);
+            const titleTxt = 'Wayback to ' + rDate;
+            $activeItemTitle.text(titleTxt);
+        };
+
+        // this.toggleLoadingIndicator = (isLoading)=>{
+        //     $waybackDataLoadingIndicator.toggleClass('is-active' , isLoading);
+        //     this.toggleMapLoader(isLoading);
+        // };
 
         this.toggleMapLoader = (isLoading)=>{
             $mapLoader.toggleClass('is-active', isLoading);
         };
 
-        this.toggleSaveAsWebmapBtn = (isAnySelectedItem=false)=>{
-            const $saveWebmapBtn = $('.save-web-map-btn');
-            $saveWebmapBtn.toggleClass('btn-disabled', !isAnySelectedItem);
+        this.toggleCreateWebmapBtnStatus = ()=>{
+            const selectedItems = app.dataModel.getSelectedItems();
+            const isActive = selectedItems.length ? true: false;
+            $createWebmapBtn.toggleClass('is-active', isActive);
+            $countOfSelectedItems.text(selectedItems.length);
         };
 
-        const ViewModel = function(appView){
-
-            this.data = [];
-            this.isOnlyShowingHighlighedItems = false; // if true, only show releases that come with changes cover current map area, otherwise show all releases
-
-            // state observers
-            this.observerForViewData = null; 
-            this.observerForActiveItem = null; 
-            this.observerForSelectedItem = null; 
-
-            this.setData = (data)=>{
-                this.data = data;
-
-                if(this.isOnlyShowingHighlighedItems){
-                    this.filterData();
-                } else {
-                    this.observerForViewData.notify(data);
-                }
-            };
-
-            this.filterData = ()=>{
-                let data = this.data;
-                
-                if(this.isOnlyShowingHighlighedItems){
-                    data = data.filter(d=>{
-                        return d.isHighlighted === true;
-                    });
-                }
-
-                // console.log(this.data, data);
-                
-                this.observerForViewData.notify(data);
-            };
-
-            // active item is the one visible on map
-            this.setActiveItem = (rNum)=>{
-                this.observerForActiveItem.notify(rNum);
-                this.data.forEach(d=>{
-                    const isActive = (+d.release === +rNum) ? true : false;
-                    d.isActive = isActive;
-                });
-            };
-
-            // selected item is the one with checkbox checked
-            this.setSelectedItem = (rNum, isSelected)=>{
-
-                let isAnySelectedItem = false;
-
-                this.data.forEach(d=>{
-                    if(+d.release === +rNum){
-                        d.isSelected = isSelected;
-                    }
-                    if(d.isSelected){
-                        isAnySelectedItem = true;
-                    }
-                });
-
-                this.observerForSelectedItem.notify({
-                    release: rNum,
-                    isSelected: isSelected
-                });
-
-                appView.toggleSaveAsWebmapBtn(isAnySelectedItem);
-            };
-
-            this.toggleHighlightedItems = ()=>{
-                this.isOnlyShowingHighlighedItems = !this.isOnlyShowingHighlighedItems;
-                this.filterData();
-            };
-
-            this.getData = ()=>{
-                return this.data;
-            };
-
-            // compare the array of release numbers to highlighted items (releases with changes) from viewModel, return false if two arrays are same so it won't update the viewModel 
-            this.compareReleasesWithChanges = (releases)=>{
-                const highlightedItems = this.data.reduce((accu, curr)=>{
-                    if(curr.isHighlighted){
-                        accu.push(curr.release);
-                    }
-                    return accu;
-                }, []);
-
-                return arraysEqual(highlightedItems, releases);
-            };
-
-            this.initObservers = ()=>{
-                // watch the change of view data model (wayback imagery search results) to make sure the results are populated to each viz container
-                this.observerForViewData = new Observable();
-                // this.observerForViewData.subscribe(appView.timeline.populate);
-                this.observerForViewData.subscribe(appView.barChart.populate);
-                this.observerForViewData.subscribe(appView.itemList.populate);
-                this.observerForViewData.subscribe(appView.setNumOfReleasesTxt);
-    
-                // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
-                this.observerForActiveItem = new Observable();
-                this.observerForActiveItem.subscribe(app.addWaybackImageryLayer);
-                // this.observerForActiveItem.subscribe(appView.timeline.setActiveItem);
-                this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
-                this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
-
-
-                this.observerForSelectedItem = new Observable();
-                // this.observerForSelectedItem.subscribe(appView.timeline.toggleSelectedItem);
-                this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
-            };
-        };
-
-        const ItemList = function(constainerID){
-
-            const $container = $('#' + constainerID);
-
-            this.setActiveItem= (rNum)=>{
-                const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
-                targetItem.addClass('is-active');
-                targetItem.siblings().removeClass('is-active');
-            };
-
-            this.toggleSelectedItem= (options)=>{
-                const rNum = options.release;
-                const isSelected = options.isSelected;
-                
-                if(!rNum){
-                    console.error('release number is required to toggle selected item');
-                    return;
-                }
-
-                const targetItem = $(`.set-selected-item-cbox[data-release-number="${rNum}"]`);
-                targetItem.toggleClass('is-selected', isSelected);
-            };
-
-            this.populate = (data)=>{
-
-                const itemsHtmlStr = data.map((d)=>{
-
-                    const rNum = d.release || d[KEY_RELEASE_NUM];
-                    const rName = d.releaseName || d[KEY_RELEASE_NAME];
-                    const classesForActiveItem = d.isActive ? 'is-active' : '';
-                    const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted js-show-selected-tile-on-map' : ''
-                    const isSelected = d.isSelected ? 'is-selected': '';
-
-                    // const htmlStr = `
-                    //     <div class='list-card trailer-half ${isActiveClass}' data-release-number='${rNum}'>
-                    //         <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rName}</span>
-                    //         <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item' data-release-number='${rNum}'>
-                    //             <span class='icon-ui-checkbox-checked'></span>
-                    //             <span class='icon-ui-checkbox-unchecked'></span>
-                    //         </div>
-                    //     </div>
-                    // `;
-
-                    const htmlStr = `
-                        <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
-                            <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rName}</span>
-                            <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item ${isSelected}' data-release-number='${rNum}'>
-                                <span class='icon-ui-checkbox-checked'></span>
-                                <span class='icon-ui-checkbox-unchecked'></span>
-                            </div>
-                        </div>
-                    `;
-
-                    return htmlStr;
-                }).join('');
-
-                // const saveToWebmapBtnHtmlStr = `<div><button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button></div>`;
-                // const finalHtmlStr = itemsHtmlStr + saveToWebmapBtnHtmlStr;
-
-                $container.html(itemsHtmlStr);
-                
-            };
-
-        };
-
-        const BarChart = function(containerID){
-
-            const self = this;
-            const container = d3.select("#"+containerID);
-            const $barChartTitleTxt = $('.bar-chart-title');
-        
-            const svg = container.append("svg").style("width", "100%").style("height", "100%");
-            const margin = {top: 10, right: 20, bottom: 30, left: 20};
-            const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            
-            let width = 0;
-            let height = 0;
-            let xScale = null; // = d3.scaleTime().range([0, width]).domain([new Date(2014, 0, 1), new Date(2018, 10, 1)]).nice();
-            let bars = null;
-            
-            this.isReady = false;
-
-            this.init = ()=>{
-
-                const containerRect = container.node().getBoundingClientRect();
-
-                if(containerRect.width <= 0 || containerRect.height <= 0){
-                    // console.log('constainer size is less than 0');
-                    return;
-                }
-
-                width = containerRect.width - margin.left - margin.right;
-                height = containerRect.height - margin.top - margin.bottom;
-                this.setXScale();
-                this.createAxis();
-
-                this.isReady = true;
-            };
-
-            this.setXScale = ()=>{
-                const releaseDatesDomian = app.dataModel.getFirstAndLastReleaseDates();
-                // console.log(releaseDatesDomian);
-                xScale = d3.scaleTime()
-                    .range([0, width])
-                    // .domain(releaseDatesDomian);
-                    .domain(releaseDatesDomian).nice();
-            };
-
-            this.createAxis = ()=>{
-                g.append("g")
-                    .attr("class", "axis axis--x")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(xScale).ticks(5));
-
-                // g.append("g")
-                //   .attr("class", "axis axis--y")
-                //   .call(d3.axisLeft(y).ticks(0));
-            };
-
-            this.populate = (data)=>{
-
-                if(!this.isReady){
-                    this.init();
-                } 
-
-                if(this.isReady){
-                    bars = g.selectAll(".bar")
-                    .remove()
-                    .exit()
-                    .data(data)		
-                    .enter().append("rect")
-                    .attr('class', function(d){
-                        // highlight the bar for the active item
-                        let classes = ['bar'];
-
-                        if(d.isHighlighted){
-                            classes.push('is-highlighted');
-                        }
-
-                        if(d.isActive){
-                            classes.push('is-active');
-                            self.setBarChartTitle(d.releaseName);
-
-                        } 
-                        
-                        return classes.join(' ');
-                    })
-                    .attr("x", function(d) { 
-                        return xScale(d.releaseDatetime); 
-                    })
-                    .attr("y", 0)
-                    .attr("width", function(d, i){
-                        return d.isHighlighted ? 4 : 2;
-                    })
-                    .attr("height", height)
-                    .on("click", function(d){
-                        // console.log(d);
-                        appView.viewModel.setActiveItem(d.release);
-                        self.setBarChartTitle(d.releaseName);
-                    });
-                }
-            };
-
-            this.setActiveItem = (rNum)=>{
-                if(bars){
-                    bars.classed("is-active", false);
-                    bars.filter(function(item){
-                        return item.release === +rNum;
-                    }).classed("is-active", true);
-                }
-            };
-
-            // the chart won't be ready till the container is visible, therefore, need to call this function to populate the chart if it's not ready but the search results are there
-            this.checkIfIsReady = ()=>{
-                const viewModelData = appView.viewModel.getData();
-                if(viewModelData.length && !this.isReady){
-                    this.populate(viewModelData);
-                }
-            };
-
-            this.setBarChartTitle = (titleStr)=>{
-                $barChartTitleTxt.text(titleStr)
-            }; 
-
-        };
-
-        const AddressLocator = function(containerID, searchRequestURL){
-
-            const self = this;
-            const container = $('#'+containerID);
-            const $textInput = container.find('input[type=text]');
-            const $addressCandidatesList = container.find('.address-candidates-list');
-
-            this.candidates = [];
-            this.idxForHighlightedCandidate = -1;
-
-            this.init = ()=>{
-                initEventHandlers();
-            };
-
-            this.toggleAutoCompleteDropdownMenu = (isVisible)=>{
-                $addressCandidatesList.toggleClass('hide', !isVisible);
-            };
-
-            const setCandidates = (data)=>{
-                this.candidates = data.length > 5 ? data.slice(0, 5) : data;;
-                populateCandidates(this.candidates);
-            };
-
-            const getIdxOfCandidateToHighlight = (isGettingPrev)=>{
-                const idxOfCurrentItem = this.idxForHighlightedCandidate;
-                let idxOfHighlightedItem = isGettingPrev ? idxOfCurrentItem - 1 : idxOfCurrentItem + 1;
-                idxOfHighlightedItem = idxOfHighlightedItem < 0 ? this.candidates.length - 1 : idxOfHighlightedItem;
-                idxOfHighlightedItem = idxOfHighlightedItem > this.candidates.length - 1 ? 0 : idxOfHighlightedItem;
-
-                this.idxForHighlightedCandidate = idxOfHighlightedItem;
-
-                return idxOfHighlightedItem;
-            };
-
-            const resetIdxForHighlightedCandidate = ()=>{
-                this.idxForHighlightedCandidate = -1;
-            };
-
-            const getCandidates = (searchTerm)=>{
-                esriRequest(searchRequestURL, {
-                    query: {
-                        f: 'json',
-                        singleLine: searchTerm,
-                    },
-                    responseType: "json"
-                }).then(function(response){
-                    // The requested data
-                    // console.log(response);
-                    setCandidates(response.data.candidates);
-                });
-            };
-
-            const getCandidateDataByIdx = (idx)=>{
-                return this.candidates[idx];
-            };
-
-            const populateCandidates = (candidates=[])=>{
-                const candidatesHtmlStr = candidates.map((d, idx)=>{
-                    const address = d.address;
-                    return `<div class='js-select-address-candidate autocomplete-menu-item' data-candidate-index=${idx}>${address}</div>`;
-                }).join('');
-                $addressCandidatesList.html(candidatesHtmlStr);
-                self.toggleAutoCompleteDropdownMenu(true);
-                resetIdxForHighlightedCandidate();
-            };
-
-            const setTextInputVal = (val='')=>{
-                $textInput.val(val);
-            };
-
-            const setHighlightedCandidateByIdx = (idx)=>{
-                const target = $('.autocomplete-menu-item[data-candidate-index="' + idx + '"]');
-                target.toggleClass('is-highlighted', true);
-                target.siblings().toggleClass('is-highlighted', false);
-            };
-
-            const candidateOnSelectHandler = (idx)=>{
-                idx = +idx;
-                const candidate = getCandidateDataByIdx(idx);
-
-                setTextInputVal(candidate.address);
-                self.toggleAutoCompleteDropdownMenu(false);
-
-                app.setMapCenter(candidate.location.y, candidate.location.x);
-            };
-
-            const initEventHandlers = ()=>{
-
-                const searchInputOnKeyUpHandler = function(evt){
-
-                    let currentText = $(this).val();
-
-                    if(evt.keyCode == 13){
-                        searchInputOnEnterHandler();
-                    } 
-                    else if (evt.keyCode === 38 || evt.keyCode === 40){
-                        const isGettingPrev = evt.keyCode === 38 ? true : false;
-                        const idx = getIdxOfCandidateToHighlight(isGettingPrev);
-                        setHighlightedCandidateByIdx(idx);
-                    }
-                    else {
-                        if(currentText.length > 3){
-                            // console.log('find address candidate', currentText);
-                            getCandidates(currentText);
-                        } else {
-                            // console.log('close autodropdown menu');
-                            self.toggleAutoCompleteDropdownMenu(false);
-                        }
-                    }
-                };
-
-                const searchInputOnEnterHandler = function(evt){
-                    const candidateIdx = self.idxForHighlightedCandidate !== -1 ? self.idxForHighlightedCandidate : 0;
-                    candidateOnSelectHandler(candidateIdx);
-                };
-
-                const addressCandidateOnClickHandler = function(evt){
-                    const target = $(this);
-                    const targetIdx = +target.attr('data-candidate-index');
-                    candidateOnSelectHandler(targetIdx);
-                };
-
-                $textInput.on('keyup', searchInputOnKeyUpHandler);
-
-                $body.on('click', '.js-select-address-candidate', addressCandidateOnClickHandler);
-
-                $body.on('click', (evt)=>{
-                    if(!$addressCandidatesList.is(evt.target) && $addressCandidatesList.has(evt.target).length === 0) {
-                        self.toggleAutoCompleteDropdownMenu(false);
-                    }
-                });
-            };
-
-            this.init();
-
-        };
-
-        const TilePreviewWindow = function(){
-
-            let $previewWindow = null;
-            let $previewWindowImg = null; 
-            let $releaseDateTxt = null; 
-
-            this.init = ()=>{
-                const tilePreviewWindowHtml = `
-                    <div class="tile-preview-window hide">
-                        <img>
-                        <div class='tile-preview-title fonr-size-2 avenir-demi text-right'>
-                            <span class='margin-right-half val-holder-release-date'></span>
-                        </div>
-                    </div>
-                `;
-                const tilePreviewWindowDom = $(tilePreviewWindowHtml);
-                $body.append(tilePreviewWindowDom);
-
-                $previewWindow = tilePreviewWindowDom;
-                $previewWindowImg = $previewWindow.find('img');
-                $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
-            };
-
-            this.show = (topLeftPos, imageUrl, date)=>{
-                $previewWindow.css('top', topLeftPos.y);
-                $previewWindow.css('left', topLeftPos.x);
-                $previewWindowImg.attr('src', imageUrl);
-                $releaseDateTxt.text(date);
-                this.toggleVisibility(true);
-            };
-
-            this.hide = ()=>{
-                this.toggleVisibility(false);
-            };
-
-            this.toggleVisibility = (isVisible)=>{
-                $previewWindow.toggleClass('hide', !isVisible);
-            };
-
-            this.init();
-        };
-
-        // const Timeline = function(constainerID){
-            
-        //     const $container = $('#' + constainerID);
-
-        //     this.setActiveItem= (rNum)=>{
-        //         const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
-        //         targetItem.addClass('is-active');
-        //         targetItem.siblings().removeClass('is-active');
-        //     };
-
-        //     this.toggleSelectedItem= (options)=>{
-        //         const rNum = options.release;
-        //         const isSelected = options.isSelected;
-                
-        //         if(!rNum){
-        //             console.error('release number is required to toggle selected item');
-        //             return;
-        //         }
-        //         const targetItem = $(`.timeline-item[data-release-number="${rNum}"]`);
-        //         targetItem.toggleClass('is-selected', isSelected);
-        //     };
-
-        //     this.populate = (data)=>{
-
-        //         const timelineItemsHtmlStr = data.map((d)=>{
-
-        //             const rNum = d.release;
-        //             // const rName = d.releaseName;
-        //             const rDate = d.releaseDate;
-        //             const isActiveClass = d.isActive ? 'is-active' : '';
-        //             // const rNameShortened = rName.split(' ').slice(2).join(' ');
-
-        //             const htmlStr = `
-        //                 <div class='timeline-item ${isActiveClass}' data-release-number='${rNum}'>
-        //                     <div class='timeline-item-title child-align-v-center js-set-active-item' data-release-number='${rNum}'>
-        //                         <span class='padding-leader-quarter padding-trailer-quarter padding-left-half padding-right-half font-size--2 text-center'>${rDate}</span>
-        //                     </div>
-
-        //                     <div class='tile-image-preview child-align-v-center js-set-active-item' data-release-number='${rNum}'>
-        //                         <img class='' src="${d.imageUrl}" alt="${d.releaseName}">
-        //                     </div>
-        //                 </div>
-        //             `;
-
-        //             return htmlStr;
-        //         }).join('');
-
-        //         $container.html(timelineItemsHtmlStr);
-                
-        //     };
-
-        // };
-
-        const initEventHandlers = (()=>{
+        (function initEventHandlers(){
 
             $body.on('click', '.js-set-active-item', function(evt){
                 const traget = $(this);
@@ -1391,42 +905,17 @@ esriLoader.loadModules([
                 const rNum = traget.attr('data-release-number');
                 const isSelected = !traget.hasClass('is-selected');
                 appView.viewModel.setSelectedItem(rNum, isSelected);
+                traget.toggleClass('is-selected');
                 // console.log('display wayback imagery for release', rNum);
             });
 
-            // $body.on('click', '.js-toggle-viz-info-container', function(evt){
-            //     const traget = $(this);
-            //     const targetContainerID = traget.attr('data-target-container-id');
-
-            //     $vizInfoContainers.children().addClass('hide');
-
-            //     if(targetContainerID){
-            //         $vizInfoContainers.find('#'+targetContainerID).removeClass('hide');
-            //     }
-                
-            //     traget.siblings().removeClass('is-active');
-            //     traget.addClass('is-active');
-            //     // console.log(targetContainerID);
-
-            //     if(targetContainerID === DOM_ID_BARCHART_WRAP){
-            //         appView.barChart.checkIfIsReady();
-            //     }
-            // });
-
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
                 const traget = $(this);
-                // const targetValue = traget.attr('data-val') === 'true' ? true : false;
-                const isTargetActive = traget.hasClass('is-active');
-
-                if(!isTargetActive){
-                    traget.siblings().removeClass('is-active');
-                    traget.addClass('is-active');
-                    appView.viewModel.toggleHighlightedItems();
-                }
-
+                traget.toggleClass('is-checked');
+                appView.viewModel.toggleHighlightedItems();
             });
 
-            $body.on('click', '.js-save-web-map', function(evt){
+            $body.on('click', '.js-save-web-map.is-active', function(evt){
                 // alert('cannot save items to web map at this moment, still working on it');
                 app.saveAsWebMap();
             });
@@ -1434,17 +923,7 @@ esriLoader.loadModules([
             $body.on('mouseenter', '.js-show-selected-tile-on-map', function(evt){
                 const traget = $(this);
                 const rNum = traget.attr('data-release-number');
-
-                // const imageUrl = app.selectedTile.getImageUrlByReleaseNumber(rNum);
-                // const topLeftPos = app.selectedTile.topLeftScreenPoint;
-                // // console.log(topLeftPos, imageUrl);
-
-                // if(topLeftPos && imageUrl){
-                //     appView.tilePreviewWindow.show(topLeftPos, imageUrl);
-                // }
-
                 app.selectedTile.showPreview(rNum);
-
             });
 
             $body.on('mouseleave', '.js-show-selected-tile-on-map', function(evt){
@@ -1454,6 +933,482 @@ esriLoader.loadModules([
             });
 
         })();
+
+        this.init();
+    };
+
+    const ViewModel = function(appView){
+
+        this.data = [];
+        this.isOnlyShowingHighlighedItems = false; // if true, only show releases that come with changes cover current map area, otherwise show all releases
+
+        // state observers
+        this.observerForViewData = null; 
+        this.observerForActiveItem = null; 
+        this.observerForSelectedItem = null; 
+
+        this.setData = (data)=>{
+            this.data = data;
+
+            if(this.isOnlyShowingHighlighedItems){
+                this.filterData();
+            } else {
+                this.observerForViewData.notify(data);
+            }
+        };
+
+        this.filterData = ()=>{
+            let data = this.data;
+            
+            if(this.isOnlyShowingHighlighedItems){
+                data = data.filter(d=>{
+                    return d.isHighlighted === true;
+                });
+            }
+
+            // console.log(this.data, data);
+            
+            this.observerForViewData.notify(data);
+        };
+
+        // active item is the one visible on map
+        this.setActiveItem = (rNum)=>{
+            this.observerForActiveItem.notify(rNum);
+            this.data.forEach(d=>{
+                const isActive = (+d.release === +rNum) ? true : false;
+                d.isActive = isActive;
+            });
+        };
+
+        // selected item is the one with checkbox checked
+        this.setSelectedItem = (rNum, isSelected)=>{
+
+            this.data.forEach(d=>{
+                if(+d.release === +rNum){
+                    d.isSelected = isSelected;
+                }
+            });
+
+            this.observerForSelectedItem.notify({
+                release: rNum,
+                isSelected: isSelected
+            });
+
+            // appView.toggleSaveAsWebmapBtn(isAnySelectedItem);
+        };
+
+        this.toggleHighlightedItems = ()=>{
+            this.isOnlyShowingHighlighedItems = !this.isOnlyShowingHighlighedItems;
+            this.filterData();
+        };
+
+        this.getData = ()=>{
+            return this.data;
+        };
+
+        // compare the array of release numbers to highlighted items (releases with changes) from viewModel, return false if two arrays are same so it won't update the viewModel 
+        this.compareReleasesWithChanges = (releases)=>{
+            const highlightedItems = this.data.reduce((accu, curr)=>{
+                if(curr.isHighlighted){
+                    accu.push(curr.release);
+                }
+                return accu;
+            }, []);
+
+            return arraysEqual(highlightedItems, releases);
+        };
+
+        this.initObservers = ()=>{
+            // watch the change of view data model (wayback imagery search results) to make sure the results are populated to each viz container
+            this.observerForViewData = new Observable();
+            // this.observerForViewData.subscribe(appView.timeline.populate);
+            this.observerForViewData.subscribe(appView.barChart.populate);
+            this.observerForViewData.subscribe(appView.itemList.populate);
+            // this.observerForViewData.subscribe(appView.setNumOfReleasesTxt);
+
+            // watch the selected wayback result to make sure the item for selected release gets highlighted in each viz container, also add the wayback layer for selected release to map
+            this.observerForActiveItem = new Observable();
+            this.observerForActiveItem.subscribe(app.addWaybackImageryLayer);
+            // this.observerForActiveItem.subscribe(appView.timeline.setActiveItem);
+            this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
+            this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
+            this.observerForActiveItem.subscribe(appView.setActiveItemTitleTxt);
+
+            this.observerForSelectedItem = new Observable();
+            // this.observerForSelectedItem.subscribe(appView.timeline.toggleSelectedItem);
+            this.observerForSelectedItem.subscribe(app.dataModel.toggleSelectedItem);
+            this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
+            this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
+        };
+    };
+
+    const ItemList = function(constainerID){
+
+        const $container = $('#' + constainerID);
+
+        this.setActiveItem= (rNum)=>{
+            const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
+            targetItem.addClass('is-active');
+            targetItem.siblings().removeClass('is-active');
+        };
+
+        this.toggleSelectedItem= (options)=>{
+            const rNum = options.release;
+            const isSelected = options.isSelected;
+            
+            if(!rNum){
+                console.error('release number is required to toggle selected item');
+                return;
+            }
+
+            const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
+            targetItem.toggleClass('is-selected', isSelected);
+        };
+
+        this.populate = (data)=>{
+
+            const itemsHtmlStr = data.map((d)=>{
+
+                const rNum = d.release;
+                // const rName = d.releaseName;
+                const rDate = d.releaseDate;
+                const classesForActiveItem = d.isActive ? 'is-active' : '';
+                const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted js-show-selected-tile-on-map' : ''
+                const isSelected = d.isSelected ? 'is-selected': '';
+                const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
+                const waybackItemURL = '';
+
+                // const htmlStr = `
+                //     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
+                //         <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rDate}</span>
+                //         <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item ${isSelected}' data-release-number='${rNum}'>
+                //             // <span class='icon-ui-checkbox-checked'></span>
+                //             // <span class='icon-ui-checkbox-unchecked'></span>
+                //         </div>
+                //     </div>
+                // `;
+
+                const htmlStr = `
+                    <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected}' data-release-number='${rNum}'>
+                        <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
+                        <div class='js-set-selected-item add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}'></div>
+                        <a href='${waybackItemURL}' target='_blank' class='open-item-btn icon-ui-link-external margin-right-half right ${linkColor}'></a>
+                    </div>
+                `;
+
+                return htmlStr;
+            }).join('');
+
+            // const saveToWebmapBtnHtmlStr = `<div><button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button></div>`;
+            // const finalHtmlStr = itemsHtmlStr + saveToWebmapBtnHtmlStr;
+
+            $container.html(itemsHtmlStr);
+            
+        };
+
+    };
+
+    const BarChart = function(containerID){
+
+        // const self = this;
+        const container = d3.select("#"+containerID);
+        // const $barChartTitleTxt = $('.bar-chart-title');
+    
+        const svg = container.append("svg").style("width", "100%").style("height", "100%");
+        const margin = {top: 10, right: 15, bottom: 30, left: 15};
+        const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+        let width = 0;
+        let height = 0;
+        let xScale = null; // = d3.scaleTime().range([0, width]).domain([new Date(2014, 0, 1), new Date(2018, 10, 1)]).nice();
+        let bars = null;
+        
+        this.isReady = false;
+
+        this.init = ()=>{
+
+            const containerRect = container.node().getBoundingClientRect();
+
+            if(containerRect.width <= 0 || containerRect.height <= 0){
+                // console.log('constainer size is less than 0');
+                return;
+            }
+
+            width = containerRect.width - margin.left - margin.right;
+            height = containerRect.height - margin.top - margin.bottom;
+            this.setXScale();
+            this.createAxis();
+
+            this.isReady = true;
+        };
+
+        this.setXScale = ()=>{
+            const releaseDatesDomian = app.dataModel.getFirstAndLastReleaseDates();
+            // console.log(releaseDatesDomian);
+            xScale = d3.scaleTime()
+                .range([0, width])
+                // .domain(releaseDatesDomian);
+                .domain(releaseDatesDomian).nice();
+        };
+
+        this.createAxis = ()=>{
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(xScale).ticks(5));
+
+            // g.append("g")
+            //   .attr("class", "axis axis--y")
+            //   .call(d3.axisLeft(y).ticks(0));
+        };
+
+        this.populate = (data)=>{
+
+            if(!this.isReady){
+                this.init();
+            } 
+
+            if(this.isReady){
+                bars = g.selectAll(".bar")
+                .remove()
+                .exit()
+                .data(data)		
+                .enter().append("rect")
+                .attr('class', function(d){
+                    // highlight the bar for the active item
+                    let classes = ['bar'];
+
+                    if(d.isHighlighted){
+                        classes.push('is-highlighted');
+                    }
+
+                    if(d.isActive){
+                        classes.push('is-active');
+                        // self.setBarChartTitle(d.releaseName);
+
+                    } 
+                    
+                    return classes.join(' ');
+                })
+                .attr("x", function(d) { 
+                    return xScale(d.releaseDatetime); 
+                })
+                .attr("y", 0)
+                .attr("width", function(d, i){
+                    return d.isHighlighted ? 4 : 2;
+                })
+                .attr("height", height)
+                .on("click", function(d){
+                    // console.log(d);
+                    appView.viewModel.setActiveItem(d.release);
+                    // self.setBarChartTitle(d.releaseName);
+                });
+            }
+        };
+
+        this.setActiveItem = (rNum)=>{
+            if(bars){
+                bars.classed("is-active", false);
+                bars.filter(function(item){
+                    return item.release === +rNum;
+                }).classed("is-active", true);
+            }
+        };
+
+        // the chart won't be ready till the container is visible, therefore, need to call this function to populate the chart if it's not ready but the search results are there
+        this.checkIfIsReady = ()=>{
+            const viewModelData = appView.viewModel.getData();
+            if(viewModelData.length && !this.isReady){
+                this.populate(viewModelData);
+            }
+        };
+
+        // this.setBarChartTitle = (titleStr)=>{
+        //     $barChartTitleTxt.text(titleStr)
+        // }; 
+
+    };
+
+    // const AddressLocator = function(containerID, searchRequestURL){
+    //     // cache dom elements
+    //     const $body = $('body');
+
+    //     const self = this;
+    //     const container = $('#'+containerID);
+    //     const $textInput = container.find('input[type=text]');
+    //     const $addressCandidatesList = container.find('.address-candidates-list');
+
+    //     this.candidates = [];
+    //     this.idxForHighlightedCandidate = -1;
+
+    //     this.init = ()=>{
+    //         initEventHandlers();
+    //     };
+
+    //     this.toggleAutoCompleteDropdownMenu = (isVisible)=>{
+    //         $addressCandidatesList.toggleClass('hide', !isVisible);
+    //     };
+
+    //     const setCandidates = (data)=>{
+    //         this.candidates = data.length > 5 ? data.slice(0, 5) : data;;
+    //         populateCandidates(this.candidates);
+    //     };
+
+    //     const getIdxOfCandidateToHighlight = (isGettingPrev)=>{
+    //         const idxOfCurrentItem = this.idxForHighlightedCandidate;
+    //         let idxOfHighlightedItem = isGettingPrev ? idxOfCurrentItem - 1 : idxOfCurrentItem + 1;
+    //         idxOfHighlightedItem = idxOfHighlightedItem < 0 ? this.candidates.length - 1 : idxOfHighlightedItem;
+    //         idxOfHighlightedItem = idxOfHighlightedItem > this.candidates.length - 1 ? 0 : idxOfHighlightedItem;
+
+    //         this.idxForHighlightedCandidate = idxOfHighlightedItem;
+
+    //         return idxOfHighlightedItem;
+    //     };
+
+    //     const resetIdxForHighlightedCandidate = ()=>{
+    //         this.idxForHighlightedCandidate = -1;
+    //     };
+
+    //     const getCandidates = (searchTerm)=>{
+    //         esriRequest(searchRequestURL, {
+    //             query: {
+    //                 f: 'json',
+    //                 singleLine: searchTerm,
+    //             },
+    //             responseType: "json"
+    //         }).then(function(response){
+    //             // The requested data
+    //             // console.log(response);
+    //             setCandidates(response.data.candidates);
+    //         });
+    //     };
+
+    //     const getCandidateDataByIdx = (idx)=>{
+    //         return this.candidates[idx];
+    //     };
+
+    //     const populateCandidates = (candidates=[])=>{
+    //         const candidatesHtmlStr = candidates.map((d, idx)=>{
+    //             const address = d.address;
+    //             return `<div class='js-select-address-candidate autocomplete-menu-item' data-candidate-index=${idx}>${address}</div>`;
+    //         }).join('');
+    //         $addressCandidatesList.html(candidatesHtmlStr);
+    //         self.toggleAutoCompleteDropdownMenu(true);
+    //         resetIdxForHighlightedCandidate();
+    //     };
+
+    //     const setTextInputVal = (val='')=>{
+    //         $textInput.val(val);
+    //     };
+
+    //     const setHighlightedCandidateByIdx = (idx)=>{
+    //         const target = $('.autocomplete-menu-item[data-candidate-index="' + idx + '"]');
+    //         target.toggleClass('is-highlighted', true);
+    //         target.siblings().toggleClass('is-highlighted', false);
+    //     };
+
+    //     const candidateOnSelectHandler = (idx)=>{
+    //         idx = +idx;
+    //         const candidate = getCandidateDataByIdx(idx);
+
+    //         setTextInputVal(candidate.address);
+    //         self.toggleAutoCompleteDropdownMenu(false);
+
+    //         app.setMapCenter(candidate.location.y, candidate.location.x);
+    //     };
+
+    //     const initEventHandlers = ()=>{
+
+    //         const searchInputOnKeyUpHandler = function(evt){
+
+    //             let currentText = $(this).val();
+
+    //             if(evt.keyCode == 13){
+    //                 searchInputOnEnterHandler();
+    //             } 
+    //             else if (evt.keyCode === 38 || evt.keyCode === 40){
+    //                 const isGettingPrev = evt.keyCode === 38 ? true : false;
+    //                 const idx = getIdxOfCandidateToHighlight(isGettingPrev);
+    //                 setHighlightedCandidateByIdx(idx);
+    //             }
+    //             else {
+    //                 if(currentText.length > 3){
+    //                     // console.log('find address candidate', currentText);
+    //                     getCandidates(currentText);
+    //                 } else {
+    //                     // console.log('close autodropdown menu');
+    //                     self.toggleAutoCompleteDropdownMenu(false);
+    //                 }
+    //             }
+    //         };
+
+    //         const searchInputOnEnterHandler = function(evt){
+    //             const candidateIdx = self.idxForHighlightedCandidate !== -1 ? self.idxForHighlightedCandidate : 0;
+    //             candidateOnSelectHandler(candidateIdx);
+    //         };
+
+    //         const addressCandidateOnClickHandler = function(evt){
+    //             const target = $(this);
+    //             const targetIdx = +target.attr('data-candidate-index');
+    //             candidateOnSelectHandler(targetIdx);
+    //         };
+
+    //         $textInput.on('keyup', searchInputOnKeyUpHandler);
+
+    //         $body.on('click', '.js-select-address-candidate', addressCandidateOnClickHandler);
+
+    //         $body.on('click', (evt)=>{
+    //             if(!$addressCandidatesList.is(evt.target) && $addressCandidatesList.has(evt.target).length === 0) {
+    //                 self.toggleAutoCompleteDropdownMenu(false);
+    //             }
+    //         });
+    //     };
+
+    //     this.init();
+
+    // };
+
+    const TilePreviewWindow = function(){
+
+        // cache dom elements
+        const $body = $('body');
+
+        let $previewWindow = null;
+        let $previewWindowImg = null; 
+        let $releaseDateTxt = null; 
+
+        this.init = ()=>{
+            const tilePreviewWindowHtml = `
+                <div class="tile-preview-window hide">
+                    <img>
+                    <div class='tile-preview-title fonr-size-2 avenir-demi text-right'>
+                        <span class='margin-right-half val-holder-release-date'></span>
+                    </div>
+                </div>
+            `;
+            const tilePreviewWindowDom = $(tilePreviewWindowHtml);
+            $body.append(tilePreviewWindowDom);
+
+            $previewWindow = tilePreviewWindowDom;
+            $previewWindowImg = $previewWindow.find('img');
+            $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
+        };
+
+        this.show = (topLeftPos, imageUrl, date)=>{
+            $previewWindow.css('top', topLeftPos.y);
+            $previewWindow.css('left', topLeftPos.x);
+            $previewWindowImg.attr('src', imageUrl);
+            $releaseDateTxt.text(date);
+            this.toggleVisibility(true);
+        };
+
+        this.hide = ()=>{
+            this.toggleVisibility(false);
+        };
+
+        this.toggleVisibility = (isVisible)=>{
+            $previewWindow.toggleClass('hide', !isVisible);
+        };
 
         this.init();
     };
@@ -1498,6 +1453,6 @@ esriLoader.loadModules([
     console.error(err);
 });
 
-// calcite.init();
+calcite.init();
 
 
