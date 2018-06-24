@@ -8,7 +8,7 @@ import * as calcite from 'calcite-web';
 import './style/index.scss';
 
 // import other files
-// import selectJson from './select.json' 
+import waybackAgolItemIds from './assets/wayback-layers.json';
 
 
 // app configs 
@@ -297,15 +297,15 @@ esriLoader.loadModules([
                     this.setWaybackImageryTileElements(layerView._tileContainer.children);
 
                     if(!layer.isLayerReady){
-                        layer.isLayerReady = true;
 
-                        appView.toggleMapLoader(false);
+                        layer.isLayerReady = true;
+                        this.isWaybackLayerUpdateEnd = true;
 
                         if(wayBackLayerOnReadyHandler){
                             wayBackLayerOnReadyHandler(layer.isLayerReady);
                         }
 
-                        this.isWaybackLayerUpdateEnd = true;
+                        appView.toggleMapLoader(false);
 
                         // console.log('layer view is ready');
                     } else {
@@ -492,25 +492,40 @@ esriLoader.loadModules([
         };
 
         this.saveAsWebMap = ()=>{
+            const selectedItems = app.dataModel.getSelectedItems();
             const requestURL = this.portalUser.userContentUrl + '/addItem'; 
             const currentMapExtent = this.getMapViewExtent();
-            const webMapTitle = `wayback-imagery-2018-06-19`;
+
+            // NEED TO CHANGE 
+            const webMapTitle = `wayback-imagery`; 
             const webMapDesc = `wayback imagery layer is awesome!`;
+            const webMapSnippet = `Detailed description of data`;
 
             const uploadRequestContent = {
                 'title': webMapTitle,
+                'snippet': webMapSnippet,
                 'description': webMapDesc, 
-                'tags':'wayback imagery',
+                'tags':'wayback, imagery',
                 'extent': [currentMapExtent.xmin, currentMapExtent.ymin, currentMapExtent.xmax, currentMapExtent.ymax].join(','),
                 'type': 'Web Map',
                 'overwrite': true,
                 'f': 'json'
             };
 
-            const requestText = {  
-                "operationalLayers":[
+            const operationalLayers = selectedItems.map(d=>{
+                const layerInfo = {
+                    "templateUrl": d.layerURL,
+                    "visibility": d.isActive,
+                    "title": d.releaseName,
+                    "type": "WebTiledLayer",
+                    "layerType": "WebTiledLayer",
+                    "itemId": d.agolItemID
+                };
+                return layerInfo;
+            });
 
-                ],
+            const requestText = {  
+                "operationalLayers": operationalLayers,
                 "baseMap":{  
                     "baseMapLayers":[  
                         {  
@@ -539,7 +554,7 @@ esriLoader.loadModules([
 
             // console.log(uploadRequestContent);
 
-            alert('save items as a webmap...will finish this part when we have items for each release ready on AGOL');
+            // alert('save items as a webmap...will finish this part when we have items for each release ready on AGOL');
         };
 
         this.getScreenPointFromXY = (x, y)=>{
@@ -660,7 +675,7 @@ esriLoader.loadModules([
         };
     };
 
-    const AppDataModel = function(selectJsonResponse){
+    const AppDataModel = function(){
 
         this.releases = []; // array of all release numbers since 2014
         this.releasesDict = null; // lookup table with release number as key, will need to use it to get the index of the element 
@@ -681,22 +696,35 @@ esriLoader.loadModules([
             const dict = {};
 
             this.releases = data.map((d, index) => {
+
                 const rNum = +d[KEY_RELEASE_NUM];
-                const rDate = this.extractDateFromStr(d[KEY_RELEASE_NAME]);
+                const rName = d[KEY_RELEASE_NAME];
+                const agolItemID = waybackAgolItemIds[rNum].itemID;
+                const rDate = helper.extractDateFromStr(rName);
+                const rDatetime = helper.convertToDate(rDate);
+                const agolItemURL = helper.getAgolUrlByItemID(agolItemID); // ArcGIS Online item url
+                const layerURL = waybackAgolItemIds[rNum].itemURL; // the actual layer url that will needs to be used when create webmap
+
                 d.index = index;
                 d.release = rNum;
-                d.releaseName = d[KEY_RELEASE_NAME];
+                d.releaseName = rName;
                 d.releaseDate = rDate;
-                d.releaseDatetime = this.convertToDate(rDate);
+                d.releaseDatetime = rDatetime;
                 d.isActive = false;
                 d.isSelected = false;
                 d.isHighlighted = false;
+                d.agolItemID = agolItemID;
+                d.agolItemURL = agolItemURL;
+                d.layerURL = layerURL;
+
                 dict[rNum] = d;
 
                 return d;
             });
 
             this.initReleasesDict(dict);
+
+            // console.log(this.releases);
         };
 
         this.initReleasesDict = (dict={})=>{
@@ -745,8 +773,10 @@ esriLoader.loadModules([
         };
 
         this.getFirstAndLastReleaseDates = ()=>{
-            const oldestReleaseDate =  this.convertToDate(this.releases[this.releases.length - 1].releaseDate);
-            const latestReleaseDate = this.convertToDate(this.releases[0].releaseDate);
+            // const oldestReleaseDate =  helper.convertToDate(this.releases[this.releases.length - 1].releaseDate);
+            // const latestReleaseDate = helper.convertToDate(this.releases[0].releaseDate);
+            const oldestReleaseDate = this.releases[this.releases.length - 1].releaseDatetime;
+            const latestReleaseDate = this.releases[0].releaseDatetime;
             return [oldestReleaseDate, latestReleaseDate];
         };
 
@@ -818,21 +848,6 @@ esriLoader.loadModules([
                 tileRequest(mostRecentRelease);
             });
 
-        };
-
-        this.extractDateFromStr = (inputStr)=>{
-            const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
-            const results = inputStr.match(regexpYYYYMMDD);
-            return results.length ? results[0] : inputStr;
-        };
-
-        // use margin month to get a date in future/past month, need this to optimize the xScale of bar chart 
-        this.convertToDate = (dateInStr, marginMonth=0)=>{
-            const dateParts = dateInStr.split('-');
-            const year = dateParts[0];
-            const mon = marginMonth ? ((dateParts[1] - 1) + marginMonth): dateParts[1] - 1;
-            const day = marginMonth ? '1' : dateParts[2];
-            return new Date(year, mon, day);
         };
 
         // this.init(selectJsonResponse);
@@ -1075,7 +1090,7 @@ esriLoader.loadModules([
                 return accu;
             }, []);
 
-            return arraysEqual(highlightedItems, releases);
+            return helper.arraysEqual(highlightedItems, releases);
         };
 
         this.initObservers = ()=>{
@@ -1136,7 +1151,7 @@ esriLoader.loadModules([
                 const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted' : ''
                 const isSelected = d.isSelected ? 'is-selected': '';
                 const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
-                const waybackItemURL = 'https://www.arcgis.com';
+                const agolItemURL = d.agolItemURL;
 
                 // const htmlStr = `
                 //     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
@@ -1152,7 +1167,7 @@ esriLoader.loadModules([
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
                         <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                        <a href='${waybackItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
+                        <a href='${agolItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
                     </div>
                 `;
 
@@ -1285,159 +1300,7 @@ esriLoader.loadModules([
                 }).classed("is-active", true);
             }
         };
-
-        // the chart won't be ready till the container is visible, therefore, need to call this function to populate the chart if it's not ready but the search results are there
-        this.checkIfIsReady = ()=>{
-            const viewModelData = appView.viewModel.getData();
-            if(viewModelData.length && !this.isReady){
-                this.populate(viewModelData);
-            }
-        };
-
-        // this.setBarChartTitle = (titleStr)=>{
-        //     $barChartTitleTxt.text(titleStr)
-        // }; 
-
     };
-
-    // const AddressLocator = function(containerID, searchRequestURL){
-    //     // cache dom elements
-    //     const $body = $('body');
-
-    //     const self = this;
-    //     const container = $('#'+containerID);
-    //     const $textInput = container.find('input[type=text]');
-    //     const $addressCandidatesList = container.find('.address-candidates-list');
-
-    //     this.candidates = [];
-    //     this.idxForHighlightedCandidate = -1;
-
-    //     this.init = ()=>{
-    //         initEventHandlers();
-    //     };
-
-    //     this.toggleAutoCompleteDropdownMenu = (isVisible)=>{
-    //         $addressCandidatesList.toggleClass('hide', !isVisible);
-    //     };
-
-    //     const setCandidates = (data)=>{
-    //         this.candidates = data.length > 5 ? data.slice(0, 5) : data;;
-    //         populateCandidates(this.candidates);
-    //     };
-
-    //     const getIdxOfCandidateToHighlight = (isGettingPrev)=>{
-    //         const idxOfCurrentItem = this.idxForHighlightedCandidate;
-    //         let idxOfHighlightedItem = isGettingPrev ? idxOfCurrentItem - 1 : idxOfCurrentItem + 1;
-    //         idxOfHighlightedItem = idxOfHighlightedItem < 0 ? this.candidates.length - 1 : idxOfHighlightedItem;
-    //         idxOfHighlightedItem = idxOfHighlightedItem > this.candidates.length - 1 ? 0 : idxOfHighlightedItem;
-
-    //         this.idxForHighlightedCandidate = idxOfHighlightedItem;
-
-    //         return idxOfHighlightedItem;
-    //     };
-
-    //     const resetIdxForHighlightedCandidate = ()=>{
-    //         this.idxForHighlightedCandidate = -1;
-    //     };
-
-    //     const getCandidates = (searchTerm)=>{
-    //         esriRequest(searchRequestURL, {
-    //             query: {
-    //                 f: 'json',
-    //                 singleLine: searchTerm,
-    //             },
-    //             responseType: "json"
-    //         }).then(function(response){
-    //             // The requested data
-    //             // console.log(response);
-    //             setCandidates(response.data.candidates);
-    //         });
-    //     };
-
-    //     const getCandidateDataByIdx = (idx)=>{
-    //         return this.candidates[idx];
-    //     };
-
-    //     const populateCandidates = (candidates=[])=>{
-    //         const candidatesHtmlStr = candidates.map((d, idx)=>{
-    //             const address = d.address;
-    //             return `<div class='js-select-address-candidate autocomplete-menu-item' data-candidate-index=${idx}>${address}</div>`;
-    //         }).join('');
-    //         $addressCandidatesList.html(candidatesHtmlStr);
-    //         self.toggleAutoCompleteDropdownMenu(true);
-    //         resetIdxForHighlightedCandidate();
-    //     };
-
-    //     const setTextInputVal = (val='')=>{
-    //         $textInput.val(val);
-    //     };
-
-    //     const setHighlightedCandidateByIdx = (idx)=>{
-    //         const target = $('.autocomplete-menu-item[data-candidate-index="' + idx + '"]');
-    //         target.toggleClass('is-highlighted', true);
-    //         target.siblings().toggleClass('is-highlighted', false);
-    //     };
-
-    //     const candidateOnSelectHandler = (idx)=>{
-    //         idx = +idx;
-    //         const candidate = getCandidateDataByIdx(idx);
-
-    //         setTextInputVal(candidate.address);
-    //         self.toggleAutoCompleteDropdownMenu(false);
-
-    //         app.setMapCenter(candidate.location.y, candidate.location.x);
-    //     };
-
-    //     const initEventHandlers = ()=>{
-
-    //         const searchInputOnKeyUpHandler = function(evt){
-
-    //             let currentText = $(this).val();
-
-    //             if(evt.keyCode == 13){
-    //                 searchInputOnEnterHandler();
-    //             } 
-    //             else if (evt.keyCode === 38 || evt.keyCode === 40){
-    //                 const isGettingPrev = evt.keyCode === 38 ? true : false;
-    //                 const idx = getIdxOfCandidateToHighlight(isGettingPrev);
-    //                 setHighlightedCandidateByIdx(idx);
-    //             }
-    //             else {
-    //                 if(currentText.length > 3){
-    //                     // console.log('find address candidate', currentText);
-    //                     getCandidates(currentText);
-    //                 } else {
-    //                     // console.log('close autodropdown menu');
-    //                     self.toggleAutoCompleteDropdownMenu(false);
-    //                 }
-    //             }
-    //         };
-
-    //         const searchInputOnEnterHandler = function(evt){
-    //             const candidateIdx = self.idxForHighlightedCandidate !== -1 ? self.idxForHighlightedCandidate : 0;
-    //             candidateOnSelectHandler(candidateIdx);
-    //         };
-
-    //         const addressCandidateOnClickHandler = function(evt){
-    //             const target = $(this);
-    //             const targetIdx = +target.attr('data-candidate-index');
-    //             candidateOnSelectHandler(targetIdx);
-    //         };
-
-    //         $textInput.on('keyup', searchInputOnKeyUpHandler);
-
-    //         $body.on('click', '.js-select-address-candidate', addressCandidateOnClickHandler);
-
-    //         $body.on('click', (evt)=>{
-    //             if(!$addressCandidatesList.is(evt.target) && $addressCandidatesList.has(evt.target).length === 0) {
-    //                 self.toggleAutoCompleteDropdownMenu(false);
-    //             }
-    //         });
-    //     };
-
-    //     this.init();
-
-    // };
 
     const TilePreviewWindow = function(){
 
@@ -1576,24 +1439,49 @@ esriLoader.loadModules([
         }
     };
 
+    // helpers class with miscellaneous utility functions
+    const Helper = function(){
+
+        this.arraysEqual = (arr1, arr2)=>{
+            if(arr1.length !== arr2.length){
+                return false;
+            }
+            for(var i = arr1.length; i--;) {
+                if(arr1[i] !== arr2[i]){
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        this.getAgolUrlByItemID = (itemID)=>{
+            const agolBaseUrl = 'https://www.arcgis.com/home/item.html?id=';
+            return agolBaseUrl + itemID;
+        };
+
+        this.extractDateFromStr = (inputStr)=>{
+            const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
+            const results = inputStr.match(regexpYYYYMMDD);
+            return results.length ? results[0] : inputStr;
+        };
+
+        // use margin month to get a date in future/past month, need this to optimize the xScale of bar chart 
+        this.convertToDate = (dateInStr, marginMonth=0)=>{
+            const dateParts = dateInStr.split('-');
+            const year = dateParts[0];
+            const mon = marginMonth ? ((dateParts[1] - 1) + marginMonth): dateParts[1] - 1;
+            const day = marginMonth ? '1' : dateParts[2];
+            return new Date(year, mon, day);
+        };
+
+    };
+
 
     // init app and core components
     const app = new WaybackApp();
     const appView = new AppView();
+    const helper = new Helper();
 
-    // util functions
-    function arraysEqual(arr1, arr2) {
-        if(arr1.length !== arr2.length){
-            return false;
-        }
-        for(var i = arr1.length; i--;) {
-            if(arr1[i] !== arr2[i]){
-                return false;
-            }
-        }
-        return true;
-    }
-    
 
 }).catch(err => {
     // handle any errors
