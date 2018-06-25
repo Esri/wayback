@@ -33,6 +33,7 @@ const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
 const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
+const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
 const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
 
@@ -390,7 +391,7 @@ esriLoader.loadModules([
 
                 this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
 
-                appView.crosshairMarker.setPos(this.getScreenPointFromXY(mapPoint.x, mapPoint.y));
+                // appView.crosshairMarker.setPos(this.getScreenPointFromXY(mapPoint.x, mapPoint.y));
 
                 
             } else {
@@ -414,6 +415,8 @@ esriLoader.loadModules([
 
                 // check and remove the duplicated items once DataUri for all images are resolved
                 Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
+
+                    resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
 
                     const uniqueDataURIs = [];
                     const releasesWithChanges = [];
@@ -461,6 +464,8 @@ esriLoader.loadModules([
 
             return new Promise((resolve, reject) => {
 
+                const releaseName = app.dataModel.getReleaseName(rNum);
+
                 let canvas = document.getElementById("tileImageCanvas");
                 if(!canvas){
                     canvas = document.createElement('canvas');
@@ -479,6 +484,7 @@ esriLoader.loadModules([
 
                     resolve({
                         release: rNum,
+                        releaseName: releaseName,
                         dataUri: tileImageDataUri,
                         imageUrl: imageURL
                     });
@@ -491,7 +497,7 @@ esriLoader.loadModules([
             return URL_WAYBACK_IMAGERY_TILES.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
         };
 
-        this.saveAsWebMap = ()=>{
+        this.saveAsWebMap = (callback)=>{
             const selectedItems = app.dataModel.getSelectedItems();
             const requestURL = this.portalUser.userContentUrl + '/addItem'; 
             const currentMapExtent = this.getMapViewExtent();
@@ -544,17 +550,13 @@ esriLoader.loadModules([
 
             uploadRequestContent.text = JSON.stringify(requestText);
 
-            // esriRequest(requestURL, {
-            //     method: 'post',
-            //     query: uploadRequestContent,
-            //     responseType: "json"
-            // }).then(function(response){
-            //     console.log(response);
-            // });
-
-            // console.log(uploadRequestContent);
-
-            // alert('save items as a webmap...will finish this part when we have items for each release ready on AGOL');
+            esriRequest(requestURL, {
+                method: 'post',
+                query: uploadRequestContent,
+                responseType: "json"
+            }).then(function(response){
+                callback(response.data);
+            });
         };
 
         this.getScreenPointFromXY = (x, y)=>{
@@ -590,7 +592,6 @@ esriLoader.loadModules([
 
             // Once portal is loaded, user signed in
             portal.load().then((res)=>{
-                // console.log('res', res);
                 this.setPortalUser(res.user);
             });
         };
@@ -662,7 +663,7 @@ esriLoader.loadModules([
             if(topLeftPos && imageUrl){
                 delayForToggleVisibility = setTimeout(()=>{
                     appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
-                }, 200);
+                }, 50);
             }
         };
 
@@ -731,11 +732,11 @@ esriLoader.loadModules([
             this.releasesDict = dict; 
         };
 
-        this.toggleSelectedItem = (options)=>{
-            const rNum = options.release;
-            const isSelected = options.isSelected;
-            this.releasesDict[rNum].isSelected = isSelected;
-        };
+        // this.toggleSelectedItem = (options)=>{
+        //     const rNum = options.release;
+        //     const isSelected = options.isSelected;
+        //     this.releasesDict[rNum].isSelected = isSelected;
+        // };
 
         this.getSelectedItems = ()=>{
             const selectedItems = this.releases.filter(d=>{
@@ -806,7 +807,7 @@ esriLoader.loadModules([
                         url: requestUrl,
                         success: (res)=>{
     
-                            // console.log('tileRequest response', res);
+                            // console.log('tileRequest', requestUrl, res);
     
                             // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                             // we will save it to the finalResults so it can be added to the timeline
@@ -823,7 +824,7 @@ esriLoader.loadModules([
                             // console.log('no updates found in release', +rNum);
                             // console.log('this area was updated during release:', +lastRelease, '\n\n');
     
-                            // console.log(lastRelease, nextReleaseToCheck);
+                            // console.log('next release to check', nextReleaseToCheck);
                             // console.log('no update in release', rNum);
                             
                             if(nextReleaseToCheck){
@@ -874,8 +875,9 @@ esriLoader.loadModules([
         this.itemList = null;
         this.barChart = null;
         this.tilePreviewWindow = null;
-        this.crosshairMarker = null;
+        // this.crosshairMarker = null;
         this.tooltip = null;
+        this.uploadWebMapModal = null;
         // this.locator = null;
 
         this.init = ()=>{
@@ -883,8 +885,9 @@ esriLoader.loadModules([
             this.barChart = new BarChart(DOM_ID_BARCHART);
             this.itemList = new ItemList(DOM_ID_ITEMLIST);
             this.tilePreviewWindow = new TilePreviewWindow();
-            this.crosshairMarker = new CrosshairMarker();
+            // this.crosshairMarker = new CrosshairMarker();
             this.tooltip = new CustomizedTooltip();
+            this.uploadWebMapModal = new UploadWebMapModal(MODAL_ID_UPLAOD_WEBMAP);
             // this.locator  = new AddressLocator(DOM_ID_SEARCH_INPUT_WRAP, URL_FIND_ADDRESS_CANDIDATES);
 
             // init observers after all components are ready
@@ -952,7 +955,9 @@ esriLoader.loadModules([
         this.toggleCreateWebmapBtnStatus = ()=>{
             const selectedItems = app.dataModel.getSelectedItems();
             const isActive = selectedItems.length ? true: false;
+            const btnWrap = $createWebmapBtn.parent();
             $createWebmapBtn.toggleClass('is-active', isActive);
+            btnWrap.toggleClass('is-active', isActive);
             $countOfSelectedItems.text(selectedItems.length);
         };
 
@@ -967,10 +972,11 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-set-selected-item', function(evt){
                 const target = $(this);
-                const rNum = target.attr('data-release-number');
-                const isSelected = !target.hasClass('is-selected');
+                const listItem = target.parent();
+                const rNum = listItem.attr('data-release-number');
+                const isSelected = !listItem.hasClass('is-selected');
                 appView.viewModel.setSelectedItem(rNum, isSelected);
-                target.toggleClass('is-selected');
+                // target.toggleClass('is-selected');
                 // console.log('display wayback imagery for release', rNum);
             });
 
@@ -982,7 +988,29 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-save-web-map.is-active', function(evt){
                 // alert('cannot save items to web map at this moment, still working on it');
-                app.saveAsWebMap();
+
+                appView.uploadWebMapModal.show();
+
+                if(!appView.uploadWebMapModal.isWebmapReady){
+
+                    setTimeout(()=>{
+
+                        app.saveAsWebMap(res=>{
+                            // console.log(res);
+                            if(res.success){
+                                const webmapId = res.id
+                                const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
+                                // console.log(webMapUrl);
+                                appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
+                            }
+                        });
+    
+                    }, 500);
+                }
+            });
+
+            $body.on('click', '.js-open-wayback-webmap', function(evt){
+                appView.uploadWebMapModal.openWebmapLink();
             });
 
             $body.on('mouseenter', '.js-show-selected-tile-on-map', function(evt){
@@ -1006,6 +1034,10 @@ esriLoader.loadModules([
             $body.on('mouseleave', '.js-show-customized-tooltip ', function(evt){
                 appView.tooltip.hide();
             });
+
+            $body.on('click', '.js-clear-all-selected-items', function(evt){
+                appView.viewModel.setSelectedItem(null);
+            })
 
         };
 
@@ -1058,11 +1090,19 @@ esriLoader.loadModules([
         // selected item is the one with checkbox checked
         this.setSelectedItem = (rNum, isSelected)=>{
 
-            this.data.forEach(d=>{
-                if(+d.release === +rNum){
-                    d.isSelected = isSelected;
-                }
-            });
+            if(rNum){
+                this.data.forEach(d=>{
+                    if(+d.release === +rNum){
+                        d.isSelected = isSelected;
+                    }
+                });
+            } else {
+                // set isSelectd flag for all items as false
+                this.data.forEach(d=>{
+                    d.isSelected = false;
+                });
+            }
+
 
             this.observerForSelectedItem.notify({
                 release: rNum,
@@ -1111,9 +1151,11 @@ esriLoader.loadModules([
 
             this.observerForSelectedItem = new Observable();
             // this.observerForSelectedItem.subscribe(appView.timeline.toggleSelectedItem);
-            this.observerForSelectedItem.subscribe(app.dataModel.toggleSelectedItem);
+            // this.observerForSelectedItem.subscribe(app.dataModel.toggleSelectedItem);
             this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
             this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
+            this.observerForSelectedItem.subscribe(appView.uploadWebMapModal.resetIsWebMapReady); // reset isWebMapReady flag to false so it would create a new web map when user make new selections
+            
         };
     };
 
@@ -1131,13 +1173,13 @@ esriLoader.loadModules([
             const rNum = options.release;
             const isSelected = options.isSelected;
             
-            if(!rNum){
-                console.error('release number is required to toggle selected item');
-                return;
+            if(rNum){
+                const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
+                targetItem.toggleClass('is-selected', isSelected);
+            } else {
+                // set all list card as unselected
+                $(`.list-card`).toggleClass('is-selected', false);
             }
-
-            const targetItem = $(`.list-card[data-release-number="${rNum}"]`);
-            targetItem.toggleClass('is-selected', isSelected);
         };
 
         this.populate = (data)=>{
@@ -1166,7 +1208,7 @@ esriLoader.loadModules([
                 const htmlStr = `
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
-                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right ${isSelected}' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
                         <a href='${agolItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
                     </div>
                 `;
@@ -1346,33 +1388,33 @@ esriLoader.loadModules([
         this.init();
     };
 
-    const CrosshairMarker = function(){
+    // const CrosshairMarker = function(){
 
-        // cache dom elements
-        const $body = $('body');
+    //     // cache dom elements
+    //     const $body = $('body');
 
-        let crosshairMarker = null;
-        let posOffset = 0;
+    //     let crosshairMarker = null;
+    //     let posOffset = 0;
 
-        this.init = ()=>{
-            const crosshairMarkerHtml = `<div class="crosshair-marker hide"></div>`;
-            crosshairMarker = $(crosshairMarkerHtml);
-            $body.append(crosshairMarker);
-            posOffset = crosshairMarker.width() / 2;
-        };
+    //     this.init = ()=>{
+    //         const crosshairMarkerHtml = `<div class="crosshair-marker hide"></div>`;
+    //         crosshairMarker = $(crosshairMarkerHtml);
+    //         $body.append(crosshairMarker);
+    //         posOffset = crosshairMarker.width() / 2;
+    //     };
 
-        this.setPos = (pos)=>{
-            crosshairMarker.css('top', pos.y - posOffset);
-            crosshairMarker.css('left', pos.x - posOffset);
-            this.toggleVisibility(true);
-        };
+    //     this.setPos = (pos)=>{
+    //         crosshairMarker.css('top', pos.y - posOffset);
+    //         crosshairMarker.css('left', pos.x - posOffset);
+    //         this.toggleVisibility(true);
+    //     };
 
-        this.toggleVisibility = (isVisible)=>{
-            crosshairMarker.toggleClass('hide', !isVisible);
-        };
+    //     this.toggleVisibility = (isVisible)=>{
+    //         crosshairMarker.toggleClass('hide', !isVisible);
+    //     };
 
-        this.init();
-    };
+    //     this.init();
+    // };
 
     const CustomizedTooltip = function(){
 
@@ -1422,6 +1464,58 @@ esriLoader.loadModules([
         this.init();
     };
 
+    const UploadWebMapModal = function(modalID){
+
+        const container = $('.modal-overlay[data-modal="' + modalID + '"]');
+        const launchBtn = container.find('.launch-webmap-btn');
+        const msgWebmapNotReady = container.find('.message-webamap-not-ready');
+        const msgWebmapIsReady = container.find('.message-webamap-is-ready');
+
+        this.isWebmapReady = false;
+        this.webMapUrl = 'https://arcgis.com';
+
+        this.setWebMapUrl = (url)=>{
+            this.webMapUrl = url;
+            this.toggleIsWebmapReady(true);
+        };
+
+        this.resetIsWebMapReady = ()=>{
+            this.toggleIsWebmapReady(false);
+        }
+
+        this.toggleIsWebmapReady = (isReady)=>{
+            this.isWebmapReady = isReady;
+            this.toggleContent();
+        };
+
+        this.toggleContent = ()=>{
+            launchBtn.toggleClass('btn-disabled', !this.isWebmapReady);
+            msgWebmapNotReady.toggleClass('hide', this.isWebmapReady);
+            msgWebmapIsReady.toggleClass('hide', !this.isWebmapReady);
+        };
+
+        this.openWebmapLink = ()=>{
+            this.hide();
+            window.open(this.webMapUrl, '_blank');
+        }
+
+        this.show = ()=>{
+            this.toggleVisibility(true);
+        };
+
+        this.hide = ()=>{
+            this.toggleVisibility(false);
+        };
+
+        this.toggleVisibility = (isVisible)=>{
+            if(isVisible){
+                calcite.bus.emit('modal:open', {id: modalID});
+            } else {
+                calcite.bus.emit('modal:close');
+            }
+        };
+    };
+
     const Observable = function(){
         this.observers = [];
 
@@ -1454,9 +1548,11 @@ esriLoader.loadModules([
             return true;
         };
 
-        this.getAgolUrlByItemID = (itemID)=>{
-            const agolBaseUrl = 'https://www.arcgis.com/home/item.html?id=';
-            return agolBaseUrl + itemID;
+        this.getAgolUrlByItemID = (itemID, isUrlForWebMap)=>{
+            const agolBaseUrl = 'https://www.arcgis.com';
+            const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
+            const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
+            return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
 
         this.extractDateFromStr = (inputStr)=>{

@@ -69,6 +69,12 @@ html, body {
         height: $gutter-width;
         line-height: $gutter-width;
         cursor: pointer;
+    }
+
+    .create-agol-webmap {
+        background: url('../assets/icons/QueueGroupNo.png') center no-repeat;
+        margin-top: .3rem;
+        cursor: default;
 
         .overlay-label {
             position: absolute;
@@ -80,23 +86,27 @@ html, body {
             border-radius: 50%;
             background-color: $color-active-item;
             font-size: .65rem;
+            box-shadow: 1px 1px 10px 3px rgba(0,0,0,.5);
             display: none;
         }
     }
 
-    .create-agol-webmap {
-        background: url('../assets/icons/QueueGroupNo.png') center no-repeat;
-        cursor: default;
-    }
-
-    .create-agol-webmap.is-active {
-        margin-top: .5rem;
+    .is-active .create-agol-webmap {
+        // margin-top: .5rem;
         background: url('../assets/icons/QueueGroupYes.png') center no-repeat;
         cursor: pointer;
 
         .overlay-label {
             display: block;
         }
+    }
+
+    .visible-when-parent-is-active {
+        display: none;
+    }
+
+    .is-active .visible-when-parent-is-active {
+        display: block;
     }
 
     .shadow-trailer {
@@ -141,6 +151,11 @@ html, body {
     }
 }
 
+.list-card.is-active {
+    background-color: $color-active-item;
+    border-left: solid 4px $color-active-item;
+}
+
 .list-card.is-selected {
     .add-to-webmap-btn {
         background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOn.png') center no-repeat;
@@ -157,18 +172,17 @@ html, body {
     }
 }
 
+.list-card.is-active.is-highlighted {
+    background-color: $color-active-item;
+    border-left: solid 4px $color-highlight-item;
+}
+
 .list-card.is-highlighted.is-selected {
     .add-to-webmap-btn {
         background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOnSelected.png') center no-repeat;
     }
 }
 
-
-.list-card.is-active {
-    background-color: $color-active-item;
-}
-
-.list-card.is-active:hover,
 .list-card.is-highlighted:hover {
     border-left: solid 4px $color-highlight-item;
 }
@@ -288,48 +302,6 @@ html, body {
             fill: $controls-text-color;
         }
     }
-}
-
-.initally-hide {
-    display: none;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.child-align-v-center {
-    display:flex;
-    align-items:center;
-}
-
-.child-align-h-right {
-    display:flex;
-    justify-content: flex-end;
-}
-
-.font-size-22px {
-    font-size: 22px;
-}
-
-.panel-no-background {
-    background-color: rgba(0,0,0,0) !important;
-}
-
-.panel-padding-leader-0 {
-    padding-top: 0;
-}
-
-.panel-padding-trailer-0 {
-    padding-bottom: 0;
-}
-
-.panel-padding-leader-half {
-    padding-top: .5rem;
-}
-
-.panel-semi-transparent {
-    background-color: rgba(0,0,0,.9)
 }
 
 .filter-with-cbox {
@@ -475,6 +447,68 @@ html, body {
 
 
 /* style for customized-tooltip */
+
+
+/* style for customized modal */
+    .customized-modal {
+        background-color: rgba(26,61,96, 0.9);
+        // color: #B77600;
+
+        .modal-content {
+            background: #000;
+            color: $default-text-color;
+        }
+    }
+/* end of style for customized modal */
+
+
+/* site wide styles */
+    .initally-hide {
+        display: none;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .child-align-v-center {
+        display:flex;
+        align-items:center;
+    }
+
+    .child-align-h-right {
+        display:flex;
+        justify-content: flex-end;
+    }
+
+    .font-size-22px {
+        font-size: 22px;
+    }
+
+    .panel-no-background {
+        background-color: rgba(0,0,0,0) !important;
+    }
+
+    .panel-padding-leader-0 {
+        padding-top: 0;
+    }
+
+    .panel-padding-trailer-0 {
+        padding-bottom: 0;
+    }
+
+    .panel-padding-leader-half {
+        padding-top: .5rem;
+    }
+
+    .panel-semi-transparent {
+        background-color: rgba(0,0,0,.9)
+    }
+
+    .font-size--4 {
+        font-size: 0.7rem;
+    }
+/* end of site wide styles */
 
 
 
