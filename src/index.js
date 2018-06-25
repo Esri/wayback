@@ -13,6 +13,7 @@ import waybackAgolItemIds from './assets/wayback-layers.json';
 
 // app configs 
 const OAUTH_APPID = '4Op8YK3SdKZEplai';
+// const OAUTH_APPID = 'WaybackImagery';
 
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
@@ -22,17 +23,17 @@ const URL_WAYBACK_IMAGERY_BASE = 'https://wayback.maptiles.arcgis.com/arcgis/res
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
-const URL_FIND_ADDRESS_CANDIDATES = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
+// const URL_FIND_ADDRESS_CANDIDATES = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
 
 const DOM_ID_MAP_CONTAINER = 'mapDiv';
-const DOM_ID_TIMELINE = 'timelineWrap';
-const DOM_ID_BARCHART_WRAP = 'barChartWrap';
+// const DOM_ID_TIMELINE = 'timelineWrap';
+// const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
-const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
+// const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
 const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
 const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
