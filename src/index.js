@@ -976,8 +976,15 @@ esriLoader.loadModules([
                 const rNum = listItem.attr('data-release-number');
                 const isSelected = !listItem.hasClass('is-selected');
                 appView.viewModel.setSelectedItem(rNum, isSelected);
-                // target.toggleClass('is-selected');
                 // console.log('display wayback imagery for release', rNum);
+
+                evt.stopPropagation();
+            });
+
+            $body.on('click', '.js-open-item-link', function(evt){
+                const link = $(this).attr('data-href');
+                evt.stopPropagation();
+                window.open(link, '_blank');
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
@@ -1037,7 +1044,7 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-clear-all-selected-items', function(evt){
                 appView.viewModel.setSelectedItem(null);
-            })
+            });
 
         };
 
@@ -1196,22 +1203,20 @@ esriLoader.loadModules([
                 const agolItemURL = d.agolItemURL;
 
                 // const htmlStr = `
-                //     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem}' data-release-number='${rNum}'>
-                //         <span class='js-set-active-item cursor-pointer' data-release-number='${rNum}'>${rDate}</span>
-                //         <div class='inline-block right cursor-pointer set-selected-item-cbox js-set-selected-item ${isSelected}' data-release-number='${rNum}'>
-                //             // <span class='icon-ui-checkbox-checked'></span>
-                //             // <span class='icon-ui-checkbox-unchecked'></span>
-                //         </div>
+                //     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map' data-release-number='${rNum}'>
+                //         <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
+                //         <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                //         <a href='${agolItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
                 //     </div>
                 // `;
 
                 const htmlStr = `
-                    <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map' data-release-number='${rNum}'>
-                        <a href='javascript:void();' class='js-set-active-item margin-left-half ${linkColor}' data-release-number='${rNum}'>${rDate}</a>
-                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                        <a href='${agolItemURL}' target='_blank' class='open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half right ${linkColor}' data-tooltip-content='Learn more about this update...'></a>
-                    </div>
-                `;
+                <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
+                    <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
+                    <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                    <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer  right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
+                </div>
+            `;
 
                 return htmlStr;
             }).join('');
