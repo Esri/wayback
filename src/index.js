@@ -12,8 +12,8 @@ import waybackAgolItemIds from './assets/wayback-layers.json';
 
 
 // app configs 
-const OAUTH_APPID = '4Op8YK3SdKZEplai';
-// const OAUTH_APPID = 'WaybackImagery';
+const OAUTH_APPID_DEV = '4Op8YK3SdKZEplai';
+const OAUTH_APPID_PROD = 'WaybackImagery';
 
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
@@ -674,8 +674,10 @@ esriLoader.loadModules([
 
         this.signIn = ()=>{
 
+            const oauth_appid = window.location.port ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+
             const info = new OAuthInfo({
-                appId: OAUTH_APPID,
+                appId: oauth_appid,
                 popup: false,
                 // portalUrl: 'https://devext.arcgis.com'
             });
@@ -1504,34 +1506,6 @@ esriLoader.loadModules([
         this.init();
     };
 
-    // const CrosshairMarker = function(){
-
-    //     // cache dom elements
-    //     const $body = $('body');
-
-    //     let crosshairMarker = null;
-    //     let posOffset = 0;
-
-    //     this.init = ()=>{
-    //         const crosshairMarkerHtml = `<div class="crosshair-marker hide"></div>`;
-    //         crosshairMarker = $(crosshairMarkerHtml);
-    //         $body.append(crosshairMarker);
-    //         posOffset = crosshairMarker.width() / 2;
-    //     };
-
-    //     this.setPos = (pos)=>{
-    //         crosshairMarker.css('top', pos.y - posOffset);
-    //         crosshairMarker.css('left', pos.x - posOffset);
-    //         this.toggleVisibility(true);
-    //     };
-
-    //     this.toggleVisibility = (isVisible)=>{
-    //         crosshairMarker.toggleClass('hide', !isVisible);
-    //     };
-
-    //     this.init();
-    // };
-
     const CustomizedTooltip = function(){
 
         // cache dom elements
@@ -1688,6 +1662,33 @@ esriLoader.loadModules([
 
     };
 
+    // const CrosshairMarker = function(){
+
+    //     // cache dom elements
+    //     const $body = $('body');
+
+    //     let crosshairMarker = null;
+    //     let posOffset = 0;
+
+    //     this.init = ()=>{
+    //         const crosshairMarkerHtml = `<div class="crosshair-marker hide"></div>`;
+    //         crosshairMarker = $(crosshairMarkerHtml);
+    //         $body.append(crosshairMarker);
+    //         posOffset = crosshairMarker.width() / 2;
+    //     };
+
+    //     this.setPos = (pos)=>{
+    //         crosshairMarker.css('top', pos.y - posOffset);
+    //         crosshairMarker.css('left', pos.x - posOffset);
+    //         this.toggleVisibility(true);
+    //     };
+
+    //     this.toggleVisibility = (isVisible)=>{
+    //         crosshairMarker.toggleClass('hide', !isVisible);
+    //     };
+
+    //     this.init();
+    // };
 
     // init app and core components
     const app = new WaybackApp();
