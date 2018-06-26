@@ -139,7 +139,7 @@ esriLoader.loadModules([
 
             const waybackLayerOnReadyHandler = (isReady)=>{
                 // console.log('wayback layer is initated for the very first time...', isReady);
-                this.getWaybackImageryTileElement(this.mapView.center);
+                this.searchWayback(this.mapView.center);
             };
 
             this.addWaybackImageryLayer(mostRecentRelease, waybackLayerOnReadyHandler);
@@ -264,7 +264,7 @@ esriLoader.loadModules([
         this.setMapEventHandlers = (view)=>{
             view.on('click', (evt)=>{
                 // console.log('click map', evt);
-                this.getWaybackImageryTileElement(evt.mapPoint);
+                this.searchWayback(evt.mapPoint);
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
@@ -352,7 +352,7 @@ esriLoader.loadModules([
             if(this.isMapViewStationary && this.isWaybackLayerUpdateEnd){
                 // console.log('map is stable and wayback layer is ready, start searching releases using tile from view center');
                 // console.log('map view center before calling getWaybackImageryTileElement', this.mapView.center);
-                this.getWaybackImageryTileElement(this.mapView.center);
+                this.searchWayback(this.mapView.center);
             }
         };
 
@@ -382,114 +382,209 @@ esriLoader.loadModules([
 
             if(this.waybackImageryTileElements.length){
 
-                appView.toggleMapLoader(true);
-
                 const tileClicked = this.findTileElementByPoint(mapPoint);
 
                 this.setSelectedTile(tileClicked);
     
-                // console.log('getWaybackImageryTileElement=>tileClicked', tileClicked);
+                // callback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
 
-                this.searchWayback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
-
-                // appView.crosshairMarker.setPos(this.getScreenPointFromXY(mapPoint.x, mapPoint.y));
-
+                return {
+                    level: tileClicked.key.level,
+                    row: tileClicked.key.row,
+                    col: tileClicked.key.col
+                }
                 
             } else {
                 console.log('wayback imagery is still loading');
+                return;
             }
-
         };
 
         // search all releases with updated data for tile image at given level, row, col
-        this.searchWayback = (level, row, column)=>{
+        this.searchWayback = (mapPoint=null)=>{
+
+            appView.toggleMapLoader(true);
 
             // console.log('start search wayback imageries for selected l,r,c', level, row, column);
 
-            const onSuccessHandler = (res)=>{
+            const tileInfo = this.getWaybackImageryTileElement(mapPoint);
 
-                // download the tile image file using each release number in res, convert to to dataUri to so we can check if there are duplicated items
-                const resolvedTileDataUriArray = res.map(rNum=>{
-                    const tileURL = this.getWaybackTileURL(rNum, level, row, column);
-                    return this.imageToDataUri(tileURL, rNum);
+            if(tileInfo && tileInfo.level && tileInfo.row && tileInfo.col){
+
+                this.dataModel.getReleaseNumbersByLRC(tileInfo.level, tileInfo.row, tileInfo.col).then(releases=>{
+                    // console.log('getReleaseNumbersByLRC results', releases);
+                    this.serachWaybackOnSuccessHandler(releases, tileInfo);
                 });
+            }
 
-                // check and remove the duplicated items once DataUri for all images are resolved
-                Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
+            // const onSuccessHandler = (res)=>{
 
-                    resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
+            //     // download the tile image file using each release number in res, convert to to dataUri to so we can check if there are duplicated items
+            //     const resolvedTileDataUriArray = res.map(rNum=>{
+            //         const tileURL = this.getWaybackTileURL(rNum, level, row, column);
+            //         return this.getImageBlob(tileURL, rNum);
+            //         // return this.imageToDataUri(tileURL, rNum);
+            //     });
 
-                    const uniqueDataURIs = [];
-                    const releasesWithChanges = [];
-                    const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
+            //     // check and remove the duplicated items once DataUri for all images are resolved
+            //     Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
 
-                    resolvedResults.forEach((d, i)=>{
-                        if(!uniqueDataURIs.includes(d.dataUri)){
-                            uniqueDataURIs.push(d.dataUri);
-                            this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
-                            releasesWithChanges.push(d.release);
-                        }
-                    });
+            //         resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
 
-                    // console.log(this.selectedTile);
+            //         const uniqueDataURIs = [];
+            //         const releasesWithChanges = [];
+            //         const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
 
-                    const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
+            //         resolvedResults.forEach((d, i)=>{
+            //             if(!uniqueDataURIs.includes(d.dataUri)){
+            //                 uniqueDataURIs.push(d.dataUri);
+            //                 this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
+            //                 releasesWithChanges.push(d.release);
+            //             }
+            //         });
 
-                    // console.log('isViewDataSame', isViewDataSame);
+            //         // console.log(this.selectedTile);
 
-                    // console.log('map view center after wayback search results returned', this.mapView.center);
+            //         const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
 
-                    if(!isViewDataSame){
-                        const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
-                        appView.updateViewModel(releasesToDisplay);
+            //         // console.log('isViewDataSame', isViewDataSame);
 
-                        // console.log('update view data model', '\n');
-                    } else {
-                        appView.toggleMapLoader(false);
+            //         // console.log('map view center after wayback search results returned', this.mapView.center);
 
-                        // console.log('no need to update view data model \n');
-                    }
-                });
+            //         if(!isViewDataSame){
+            //             const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
+            //             appView.updateViewModel(releasesToDisplay);
 
-            };
+            //             // console.log('update view data model', '\n');
+            //         } else {
+            //             appView.toggleMapLoader(false);
 
-            this.dataModel.getReleaseNumbersByLRC(level, row, column).then(releases=>{
-                // console.log('getReleaseNumbersByLRC results', releases);
-                onSuccessHandler(releases);
+            //             // console.log('no need to update view data model \n');
+            //         }
+            //     });
+
+            // };
+        };
+
+        this.removeReleasesWithDuplicates = (releasesData)=>{
+            
+            const finalResults = [];
+
+            releasesData.reduce((accu, curr)=>{
+                if(!accu.includes(curr.dataUri)){
+                    accu.push(curr.dataUri);
+                    finalResults.push(curr);
+                }
+                return accu;
+            }, []);
+
+            return finalResults;
+        };
+
+        this.serachWaybackOnSuccessHandler = (releasesNumbers, tileInfo)=>{
+
+            const level = tileInfo.level;
+            const row = tileInfo.row;
+            const column = tileInfo.col;
+
+            // download the tile image file using each release number in res, convert to to dataUri to so we can check if there are duplicated items
+            const resolvedTileDataUriArray = releasesNumbers.map(rNum=>{
+                const tileURL = this.getWaybackTileURL(rNum, level, row, column);
+                return this.getImageBlob(tileURL, rNum);
+                // return this.imageToDataUri(tileURL, rNum);
+            });
+
+            // check and remove the duplicated items once DataUri for all images are resolved
+            Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
+
+                resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
+                resolvedResults = this.removeReleasesWithDuplicates(resolvedResults);
+
+                const releasesWithChanges = resolvedResults.map(d=>{
+                    this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
+                    return d.release;
+                })
+                
+                const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
+                const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
+
+                if(!isViewDataSame){
+                    const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
+                    appView.updateViewModel(releasesToDisplay);
+                } else {
+                    appView.toggleMapLoader(false);
+                }
             });
         };
 
 
-        // TODO: need to process this in back end
-        this.imageToDataUri = (imageURL, rNum)=>{
+        // // TODO: need to process this in back end
+        // this.imageToDataUri = (imageURL, rNum)=>{
+
+        //     return new Promise((resolve, reject) => {
+
+        //         const releaseName = app.dataModel.getReleaseName(rNum);
+
+        //         let canvas = document.getElementById("tileImageCanvas");
+        //         if(!canvas){
+        //             canvas = document.createElement('canvas');
+        //             canvas.setAttribute("id", "tileImageCanvas");
+        //         }
+    
+        //         const img = new Image();
+        //         img.crossOrigin="Anonymous";
+        //         img.src = imageURL;
+        //         img.onload = function () {
+        //             const context = canvas.getContext('2d');
+        //             canvas.width = img.width;
+        //             canvas.height = img.height;
+        //             context.drawImage(img, 0, 0, img.width, img.height);
+        //             const tileImageDataUri = canvas.toDataURL('image/png').substr(75,320); 
+
+        //             resolve({
+        //                 release: rNum,
+        //                 releaseName: releaseName,
+        //                 dataUri: tileImageDataUri,
+        //                 imageUrl: imageURL
+        //             });
+        //         };
+        //     });
+
+        // };
+
+        this.getImageBlob = (imageURL, rNum)=>{
 
             return new Promise((resolve, reject) => {
 
                 const releaseName = app.dataModel.getReleaseName(rNum);
-
-                let canvas = document.getElementById("tileImageCanvas");
-                if(!canvas){
-                    canvas = document.createElement('canvas');
-                    canvas.setAttribute("id", "tileImageCanvas");
-                }
+            
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', imageURL, true);
+                xhr.responseType = 'arraybuffer';
     
-                const img = new Image();
-                img.crossOrigin="Anonymous";
-                img.src = imageURL;
-                img.onload = function () {
-                    const context = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    context.drawImage(img, 0, 0, img.width, img.height);
-                    const tileImageDataUri = canvas.toDataURL('image/png').substr(75,320); 
-
-                    resolve({
-                        release: rNum,
-                        releaseName: releaseName,
-                        dataUri: tileImageDataUri,
-                        imageUrl: imageURL
-                    });
+                xhr.onload = function(e) {
+                    if (this.status == 200) {
+                        const uInt8Array = new Uint8Array(this.response);
+                        let i = uInt8Array.length;
+                        const binaryString = new Array(i);
+                        while (i--){
+                            binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                        }
+                        const data = binaryString.join('');
+                        const base64 = window.btoa(data);
+                        const tileImageDataUri = base64.substr(512,5000); 
+                        // console.log(tileImageDataUri);
+    
+                        resolve({
+                            release: rNum,
+                            releaseName: releaseName,
+                            dataUri: tileImageDataUri,
+                            imageUrl: imageURL
+                        });
+                    }
                 };
+    
+                xhr.send();
             });
 
         };
@@ -581,7 +676,8 @@ esriLoader.loadModules([
 
             const info = new OAuthInfo({
                 appId: OAUTH_APPID,
-                popup: false
+                popup: false,
+                // portalUrl: 'https://devext.arcgis.com'
             });
 
             esriId.registerOAuthInfos([info]);
@@ -631,7 +727,7 @@ esriLoader.loadModules([
         this.getAltImageUrl = (rNum)=>{
             let altURL = null;
             const urlTemplate = this.imageUrlByReleaseNumber[Object.keys(this.imageUrlByReleaseNumber)[0]];
-
+            
             if(urlTemplate){
                 const urlParts = urlTemplate.split('://');
                 const subParts = urlParts[1].split('/');
@@ -646,9 +742,11 @@ esriLoader.loadModules([
 
         this.getImageUrlByReleaseNumber = (rNum)=>{
             let imgUrl = this.imageUrlByReleaseNumber[+rNum];
-            
+
             if(!imgUrl){
-                imgUrl = this.getAltImageUrl(rNum);
+                const altRNum = app.dataModel.getAltReleaseNum(+rNum);
+                imgUrl = this.imageUrlByReleaseNumber[altRNum] || this.getAltImageUrl(rNum);
+                // imgUrl = this.getAltImageUrl(rNum);
             }
 
             return imgUrl;
@@ -764,6 +862,18 @@ esriLoader.loadModules([
 
         this.getReleaseName = (rNum)=>{
             return this.releasesDict[rNum][KEY_RELEASE_NAME];
+        };
+
+        // find the release num of the one that is before the given release but with updated tiles
+        this.getAltReleaseNum = (rNum)=>{
+            const idxOfGivenRNum = this.releasesDict[rNum].index
+            const altReleases = this.releases
+                                        .slice(idxOfGivenRNum + 1)
+                                        .filter(d=>{
+                                            return d.isHighlighted;
+                                        });
+
+            return altReleases[0] ? altReleases[0].release : null;
         };
 
         this.getReleaseDate = (rNum, isOutputInDateTimeFormat)=>{
