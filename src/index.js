@@ -287,7 +287,7 @@ esriLoader.loadModules([
 
                 // when layer view is updating
                 watchUtils.whenTrue(layerView, 'updating', f => {
-                    console.log('layer view is updating', layerView);
+                    // console.log('layer view is updating', layerView);
                     this.toggleIsWaybackLayerUpdateEnd(false);
                 });
 
@@ -395,7 +395,7 @@ esriLoader.loadModules([
                 }
                 
             } else {
-                console.log('wayback imagery is still loading');
+                // console.log('wayback imagery is still loading');
                 return;
             }
         };
@@ -593,66 +593,79 @@ esriLoader.loadModules([
             return URL_WAYBACK_IMAGERY_TILES.replace("{m}", rNum).replace("{l}", level).replace("{r}", row).replace("{c}", column);
         };
 
-        this.saveAsWebMap = (callback)=>{
-            const selectedItems = app.dataModel.getSelectedItems();
+        this.saveAsWebMap = (options, callback)=>{
+            const selectedItems = app.dataModel.getSelectedItems().reverse(); // reverse the array so most recent releases will be on top of the webmap's table of content
             const requestURL = this.portalUser.userContentUrl + '/addItem'; 
             const currentMapExtent = this.getMapViewExtent();
 
-            // NEED TO CHANGE 
-            const webMapTitle = `wayback-imagery`; 
-            const webMapDesc = `wayback imagery layer is awesome!`;
-            const webMapSnippet = `Detailed description of data`;
+            const webMapTitle = options.title || ''; 
+            const webMapDesc =  options.desc || '';
+            const webMapSnippet = options.snippet || '';
+            const webMaptags = options.tags || '';
 
-            const uploadRequestContent = {
-                'title': webMapTitle,
-                'snippet': webMapSnippet,
-                'description': webMapDesc, 
-                'tags':'wayback, imagery',
-                'extent': [currentMapExtent.xmin, currentMapExtent.ymin, currentMapExtent.xmax, currentMapExtent.ymax].join(','),
-                'type': 'Web Map',
-                'overwrite': true,
-                'f': 'json'
-            };
+            if(webMapTitle && webMaptags){
 
-            const operationalLayers = selectedItems.map(d=>{
-                const layerInfo = {
-                    "templateUrl": d.layerURL,
-                    "visibility": d.isActive,
-                    "title": d.releaseName,
-                    "type": "WebTiledLayer",
-                    "layerType": "WebTiledLayer",
-                    "itemId": d.agolItemID
+                const uploadRequestContent = {
+                    'title': webMapTitle,
+                    'snippet': webMapSnippet,
+                    'description': webMapDesc, 
+                    'tags': webMaptags,
+                    'extent': [currentMapExtent.xmin, currentMapExtent.ymin, currentMapExtent.xmax, currentMapExtent.ymax].join(','),
+                    'type': 'Web Map',
+                    'overwrite': true,
+                    'f': 'json'
                 };
-                return layerInfo;
-            });
+    
+                const operationalLayers = selectedItems.map( (d, i)=>{
+                    const layerInfo = {
+                        "templateUrl": d.layerURL,
+                        "visibility": i === 0 ? true : false,
+                        "title": d.releaseName,
+                        "type": "WebTiledLayer",
+                        "layerType": "WebTiledLayer",
+                        "itemId": d.agolItemID
+                    };
+                    return layerInfo;
+                });
+    
+                const requestText = {  
+                    "operationalLayers": operationalLayers,
+                    "baseMap":{  
+                        "baseMapLayers":[  
+                            {  
+                                "id":"defaultBasemap",
+                                "layerType":"ArcGISTiledMapServiceLayer",
+                                "url":"https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/",
+                                "visibility": true,
+                                "opacity": 1,
+                                "title": "World Imagery"
+                            },
+                            {
+                                "id": "World_Boundaries_and_Places",
+                                "layerType": "ArcGISTiledMapServiceLayer",
+                                "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer",
+                                "visibility": true,
+                                "opacity": 1,
+                                "title": "World Boundaries and Places",
+                                "isReference": true
+                            }
+                        ],
+                        "title":"Imagery with Labels"
+                    },
+                    "spatialReference":{"wkid":102100,"latestWkid":3857}
+                };
+    
+                uploadRequestContent.text = JSON.stringify(requestText);
+    
+                esriRequest(requestURL, {
+                    method: 'post',
+                    query: uploadRequestContent,
+                    responseType: "json"
+                }).then(function(response){
+                    callback(response.data);
+                });
+            }
 
-            const requestText = {  
-                "operationalLayers": operationalLayers,
-                "baseMap":{  
-                    "baseMapLayers":[  
-                        {  
-                            "id":"defaultBasemap",
-                            "layerType":"ArcGISTiledMapServiceLayer",
-                            "url":"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer",
-                            "visibility": true,
-                            "opacity": 1,
-                            "title": "Topographic"
-                        }
-                    ],
-                    "title":"Topographic"
-                },
-                "spatialReference":{"wkid":102100,"latestWkid":3857}
-            };
-
-            uploadRequestContent.text = JSON.stringify(requestText);
-
-            esriRequest(requestURL, {
-                method: 'post',
-                query: uploadRequestContent,
-                responseType: "json"
-            }).then(function(response){
-                callback(response.data);
-            });
         };
 
         this.getScreenPointFromXY = (x, y)=>{
@@ -1106,27 +1119,31 @@ esriLoader.loadModules([
                 appView.viewModel.toggleHighlightedItems();
             });
 
-            $body.on('click', '.js-save-web-map.is-active', function(evt){
+            $body.on('click', '.js-open-save-web-map-modal.is-active', function(evt){
                 // alert('cannot save items to web map at this moment, still working on it');
 
                 appView.uploadWebMapModal.show();
+            });
 
-                if(!appView.uploadWebMapModal.isWebmapReady){
+            $body.on('click', '.js-save-web-map', function(evt){
 
-                    setTimeout(()=>{
+                const webMapData = {
+                    title: appView.uploadWebMapModal.titleStr,
+                    tags: appView.uploadWebMapModal.tagsStr,
+                    snippet: appView.uploadWebMapModal.snippetStr,
+                    desc: appView.uploadWebMapModal.descStr,
+                };
 
-                        app.saveAsWebMap(res=>{
-                            // console.log(res);
-                            if(res.success){
-                                const webmapId = res.id
-                                const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
-                                // console.log(webMapUrl);
-                                appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
-                            }
-                        });
-    
-                    }, 500);
-                }
+                appView.uploadWebMapModal.toggleWebMapOnCreatingIndocator(true);
+
+                app.saveAsWebMap(webMapData, res=>{
+                    // console.log(res);
+                    if(res.success){
+                        const webmapId = res.id
+                        const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
+                        appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
+                    }
+                });
             });
 
             $body.on('click', '.js-open-wayback-webmap', function(evt){
@@ -1333,9 +1350,6 @@ esriLoader.loadModules([
 
                 return htmlStr;
             }).join('');
-
-            // const saveToWebmapBtnHtmlStr = `<div><button class="btn btn-disabled btn-fill save-web-map-btn js-save-web-map"> Save as Web Map </button></div>`;
-            // const finalHtmlStr = itemsHtmlStr + saveToWebmapBtnHtmlStr;
 
             $container.html(itemsHtmlStr);
             
@@ -1557,16 +1571,83 @@ esriLoader.loadModules([
     const UploadWebMapModal = function(modalID){
 
         const container = $('.modal-overlay[data-modal="' + modalID + '"]');
-        const launchBtn = container.find('.launch-webmap-btn');
-        const msgWebmapNotReady = container.find('.message-webamap-not-ready');
-        const msgWebmapIsReady = container.find('.message-webamap-is-ready');
+        const $launchBtn = container.find('.launch-webmap-btn');
+        const $uploadBtn = container.find('.upload-webmap-btn');
+        const $webMapOnCreatingIndocator = container.find('.web-map-on-creating-indicator');
+        // const msgWebmapNotReady = container.find('.message-webamap-not-ready');
+        // const msgWebmapIsReady = container.find('.message-webamap-is-ready');
+
+        const $titleTextInput = $('#webmap-title-text-input');
+        const $tagsTextInput = $('#webmap-tags-text-input');
+        const $snippetTextInput = $('#webmap-snippet-text-input');
+        const $descTextArea= $('#webmap-desc-textarea');
 
         this.isWebmapReady = false;
         this.webMapUrl = 'https://arcgis.com';
 
+        this.titleStr = 'Custom Wayback Imagery Web Map';
+        this.tagsStr = 'custom';
+        this.snippetStr = 'This custom web map was generated from Wayback layers selected in the World Imagery Wayback app.';
+        this.descStr = 'This custom web map was generated from Wayback layers selected in the World Imagery Wayback app. Wayback imagery is a digital archive of the World Imagery basemap, enabling users to access different versions of World Imagery captured over the years. Each Wayback layer in this web map represents World Imagery as it existed on the date specified.';
+
+        this.init = ()=>{
+            $titleTextInput.val(this.titleStr);
+            $tagsTextInput.val(this.tagsStr);
+            $snippetTextInput.val(this.snippetStr);
+            $descTextArea.val(this.descStr);
+
+            this.initEventHandlers();
+            this.toggleUploadWebMapBtn();
+        };
+
+        this.initEventHandlers = ()=>{
+
+            const self = this;
+
+            $titleTextInput.on('input', function(evt){
+                const target = $(this);
+                const newVal = target.val();
+                if(!newVal){
+                    self.toggleInputIsSuccess(target, false);
+                } else {
+                    self.toggleInputIsSuccess(target, true);
+                }
+                self.titleStr = newVal;
+                self.toggleUploadWebMapBtn();
+            });
+
+
+            $tagsTextInput.on('input', function(evt){
+                const target = $(this);
+                const newVal = target.val();
+                if(!newVal){
+                    self.toggleInputIsSuccess(target, false);
+                } else {
+                    self.toggleInputIsSuccess(target, true);
+                }
+                self.tagsStr = newVal;
+                self.toggleUploadWebMapBtn();
+            });
+
+            $snippetTextInput.on('input', function(evt){
+                const target = $(this);
+                const newVal = target.val();
+                self.snippetStr = newVal;
+            });
+
+            $descTextArea.on('input', function(evt){
+                const target = $(this);
+                const newVal = target.val();
+                self.descStr = newVal;
+                console.log(self.descStr);
+            });
+
+        };
+
         this.setWebMapUrl = (url)=>{
             this.webMapUrl = url;
             this.toggleIsWebmapReady(true);
+            this.toggleWebMapOnCreatingIndocator(false);
         };
 
         this.resetIsWebMapReady = ()=>{
@@ -1579,9 +1660,8 @@ esriLoader.loadModules([
         };
 
         this.toggleContent = ()=>{
-            launchBtn.toggleClass('btn-disabled', !this.isWebmapReady);
-            msgWebmapNotReady.toggleClass('hide', this.isWebmapReady);
-            msgWebmapIsReady.toggleClass('hide', !this.isWebmapReady);
+            $launchBtn.toggleClass('btn-disabled', !this.isWebmapReady);
+            this.toggleUploadWebMapBtn(!this.isWebmapReady)
         };
 
         this.openWebmapLink = ()=>{
@@ -1604,6 +1684,22 @@ esriLoader.loadModules([
                 calcite.bus.emit('modal:close');
             }
         };
+
+        this.toggleInputIsSuccess = (targetDom, isSuccess)=>{
+            targetDom.toggleClass('input-success', isSuccess);
+            targetDom.toggleClass('input-error', !isSuccess);
+        };
+
+        this.toggleUploadWebMapBtn = ()=>{
+            const isDisabled = !this.titleStr || !this.tagsStr ? true : false;
+            $uploadBtn.toggleClass('btn-disabled', isDisabled);
+        };
+
+        this.toggleWebMapOnCreatingIndocator= (isVisible)=>{
+            $webMapOnCreatingIndocator.toggleClass('hide', !isVisible);
+        };
+
+        this.init();
     };
 
     const Observable = function(){

@@ -4,6 +4,10 @@
         <meta charset=utf-8 />
         <title>Wayback Imagery</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <meta name="keywords" content="Wayback,World Imagery,Living Atlas of the World">
+        <meta name='description' content='Wayback imagery is a digital archive of the World Imagery basemap, enabling users to access different versions of World Imagery captured over the years. Each record in the archive represents World Imagery as it existed on the date new imagery was published. Wayback currently supports all updated versions of World Imagery dating back to February 20, 2014.' />
+        <meta name="author" content="Living Atlas of the World">
+        <link rel="icon" href="//www.esri.com/favicon.ico">
 
     </head>
     <body>
@@ -21,7 +25,7 @@
             </div>
 
             <div class=''>
-                <div class='gutter-nav-btn create-agol-webmap js-save-web-map js-show-customized-tooltip' data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
+                <div class='gutter-nav-btn create-agol-webmap js-open-save-web-map-modal js-show-customized-tooltip' data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
                     <div class='overlay-label text-white text-center'>
                         <span class='val-holder-count-of-selected-items'></span>
                     </div>
@@ -102,7 +106,7 @@
         </div>
 
         <div class="js-modal modal-overlay initally-hide customized-modal" data-modal="web-map-loading-indicator">
-            <div class="modal-content column-6" role="dialog" aria-labelledby="modal" role="dialog">
+            <div class="modal-content column-8" role="dialog" aria-labelledby="modal" role="dialog">
 
                 <div class='trailer-0 text-right'>
                     <span class="js-modal-toggle cursor-pointer" href="#" aria-label="close-modal">
@@ -110,11 +114,38 @@
                     </span>
                 </div>
 
-                <p class='message-webamap-not-ready'>Creating your Wayback Map...</p>
-                <p class='message-webamap-is-ready hide'>Your Wayback Map is ready!</p>
+                <!-- <p class='message-webamap-not-ready'>Creating your Wayback Map...</p>
+                <p class='message-webamap-is-ready hide'>Your Wayback Map is ready!</p> -->
 
-                <div class="leader-half">
-                    <btn class="btn btn-fill btn-disabled launch-webmap-btn js-open-wayback-webmap">
+                <div>
+                    <label>
+                        Title
+                        <input id='webmap-title-text-input' type="text" placeholder="Tilte is required" class="input-success" value="Custom Wayback Imagery Web Map" required>
+                    </label>
+
+                    <label>
+                        Tags
+                        <input id='webmap-tags-text-input' type="text" placeholder="tags are required" class="input-success" value="custom" required>
+                    </label>
+
+                    <label>
+                        Snippet: (Optional)
+                        <input id='webmap-snippet-text-input' type="text" placeholder="Summary text" class="" value="">
+                    </label>
+
+                    <label>
+                        Description: (Optional)
+                        <textarea id='webmap-desc-textarea'  placeholder="" class="Description text">
+                        </textarea>
+                    </label>
+                </div>
+
+                <div class="leader-half text-right">
+                    <span class='font-size--2 margin-right-quarter web-map-on-creating-indicator hide'>Creating...</span>
+                    <btn class="btn btn-disabled upload-webmap-btn js-save-web-map">
+                        Create Wayback Map
+                    </btn>
+                    <btn class="btn btn-disabled launch-webmap-btn js-open-wayback-webmap">
                         Open Wayback Map
                     </btn>
                 </div>
