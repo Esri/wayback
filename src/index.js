@@ -600,7 +600,7 @@ esriLoader.loadModules([
 
             const webMapTitle = options.title || ''; 
             const webMapDesc =  options.desc || '';
-            const webMapSnippet = options.snippet || '';
+            const webMapSnippet = helper.getSnippetStr(selectedItems); // need to generate on the fly
             const webMaptags = options.tags || '';
 
             if(webMapTitle && webMaptags){
@@ -933,7 +933,7 @@ esriLoader.loadModules([
                         url: requestUrl,
                         success: (res)=>{
     
-                            // console.log('tileRequest', requestUrl, res);
+                            console.log('tileRequest', requestUrl, res);
     
                             // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                             // we will save it to the finalResults so it can be added to the timeline
@@ -1134,7 +1134,7 @@ esriLoader.loadModules([
                     desc: appView.uploadWebMapModal.descStr,
                 };
 
-                appView.uploadWebMapModal.toggleWebMapOnCreatingIndocator(true);
+                appView.uploadWebMapModal.toggleIsWebMapOnUploading(true);
 
                 app.saveAsWebMap(webMapData, res=>{
                     // console.log(res);
@@ -1573,9 +1573,10 @@ esriLoader.loadModules([
         const container = $('.modal-overlay[data-modal="' + modalID + '"]');
         const $launchBtn = container.find('.launch-webmap-btn');
         const $uploadBtn = container.find('.upload-webmap-btn');
+        const $uploadBtnWrap = $uploadBtn.parent();
         const $webMapOnCreatingIndocator = container.find('.web-map-on-creating-indicator');
-        // const msgWebmapNotReady = container.find('.message-webamap-not-ready');
-        // const msgWebmapIsReady = container.find('.message-webamap-is-ready');
+        const $dialogWebmapNotReady = container.find('.webmap-not-ready-dialog');
+        const $dialogWebmapIsReady = container.find('.webmap-is-ready-dialog');
 
         const $titleTextInput = $('#webmap-title-text-input');
         const $tagsTextInput = $('#webmap-tags-text-input');
@@ -1587,13 +1588,11 @@ esriLoader.loadModules([
 
         this.titleStr = 'Custom Wayback Imagery Web Map';
         this.tagsStr = 'custom';
-        this.snippetStr = 'This custom web map was generated from Wayback layers selected in the World Imagery Wayback app.';
         this.descStr = 'This custom web map was generated from Wayback layers selected in the World Imagery Wayback app. Wayback imagery is a digital archive of the World Imagery basemap, enabling users to access different versions of World Imagery captured over the years. Each Wayback layer in this web map represents World Imagery as it existed on the date specified.';
 
         this.init = ()=>{
             $titleTextInput.val(this.titleStr);
             $tagsTextInput.val(this.tagsStr);
-            $snippetTextInput.val(this.snippetStr);
             $descTextArea.val(this.descStr);
 
             this.initEventHandlers();
@@ -1629,12 +1628,6 @@ esriLoader.loadModules([
                 self.toggleUploadWebMapBtn();
             });
 
-            $snippetTextInput.on('input', function(evt){
-                const target = $(this);
-                const newVal = target.val();
-                self.snippetStr = newVal;
-            });
-
             $descTextArea.on('input', function(evt){
                 const target = $(this);
                 const newVal = target.val();
@@ -1647,7 +1640,7 @@ esriLoader.loadModules([
         this.setWebMapUrl = (url)=>{
             this.webMapUrl = url;
             this.toggleIsWebmapReady(true);
-            this.toggleWebMapOnCreatingIndocator(false);
+            this.toggleIsWebMapOnUploading(false);
         };
 
         this.resetIsWebMapReady = ()=>{
@@ -1661,7 +1654,9 @@ esriLoader.loadModules([
 
         this.toggleContent = ()=>{
             $launchBtn.toggleClass('btn-disabled', !this.isWebmapReady);
-            this.toggleUploadWebMapBtn(!this.isWebmapReady)
+            $dialogWebmapNotReady.toggleClass('hide', this.isWebmapReady);
+            $dialogWebmapIsReady.toggleClass('hide', !this.isWebmapReady);
+            this.toggleUploadWebMapBtn(!this.isWebmapReady);
         };
 
         this.openWebmapLink = ()=>{
@@ -1695,8 +1690,9 @@ esriLoader.loadModules([
             $uploadBtn.toggleClass('btn-disabled', isDisabled);
         };
 
-        this.toggleWebMapOnCreatingIndocator= (isVisible)=>{
-            $webMapOnCreatingIndocator.toggleClass('hide', !isVisible);
+        this.toggleIsWebMapOnUploading= (isUploading)=>{
+            $uploadBtnWrap.toggleClass('is-uploading', isUploading);
+            $uploadBtn.toggleClass('btn-disabled', isUploading);
         };
 
         this.init();
@@ -1754,6 +1750,16 @@ esriLoader.loadModules([
             const mon = marginMonth ? ((dateParts[1] - 1) + marginMonth): dateParts[1] - 1;
             const day = marginMonth ? '1' : dateParts[2];
             return new Date(year, mon, day);
+        };
+
+        this.getSnippetStr = (items)=>{
+            let snippetStr = 'Wayback imagery from ';
+            items = items.map(d=>{
+                return d.releaseDate;
+            });
+            snippetStr += items.slice(0, items.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
+            snippetStr += ' and ' + items[items.length - 1] // add last one to str with and in front, so we will have "a, b, c and d"
+            return snippetStr;
         };
 
     };

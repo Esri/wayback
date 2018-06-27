@@ -459,6 +459,16 @@ html, body {
             color: $default-text-color;
         }
     }
+
+    .web-map-on-creating-indicator {
+        display: none;
+    }
+
+    .is-uploading {
+        .web-map-on-creating-indicator {
+            display: inline-block;
+        }
+    }
 /* end of style for customized modal */
 
 
