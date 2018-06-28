@@ -18,22 +18,17 @@ const OAUTH_APPID_PROD = 'WaybackImagery';
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
 
-// const URL_WAYBACK_IMAGERY_BASE = 'https://wayback-euc1.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_BASE = 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
-// const URL_FIND_ADDRESS_CANDIDATES = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
 
 const DOM_ID_MAP_CONTAINER = 'mapDiv';
-// const DOM_ID_TIMELINE = 'timelineWrap';
-// const DOM_ID_BARCHART_WRAP = 'barChartWrap';
 const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
-// const DOM_ID_SEARCH_INPUT_WRAP = 'search-input-wrap';
 const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
 const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
@@ -88,9 +83,6 @@ esriLoader.loadModules([
         this.isWaybackLayerUpdateEnd = false;
         this.delayForUpdateOnEndEvt = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
         this.selectedTile = null; // tile element that is selected to search wayback imagery releases
-
-        // this.waybackLayerLoadingTimeout = null;
-
         this.portalUser = null;
 
         this.init = ()=>{
@@ -217,7 +209,6 @@ esriLoader.loadModules([
             if(!isEnd){
                 appView.toggleMapLoader(true);
             } else {
-                // clearTimeout(this.waybackLayerLoadingTimeout);
                 this.updateEventsOnEndHandler();
             }
         };
@@ -289,27 +280,14 @@ esriLoader.loadModules([
                 
                 // when layer view is updating
                 watchUtils.whenTrue(layerView, 'updating', f => {
-
                     // console.log('layer view is updating', layerView);
                     this.toggleIsWaybackLayerUpdateEnd(false);
-
-                    // // cancel updating layer if it's still in updating after 5 seconds
-                    // if(layer.isLayerReady){
-                    //     clearTimeout(this.waybackLayerLoadingTimeout);
-
-                    //     this.waybackLayerLoadingTimeout = setTimeout(()=>{
-                    //         // console.log('taking too long to load, cancel it');
-                    //         appView.showWaybakLayerLoadingFailedMsg();
-                    //     }, 5000);
-                    // }
-
                 });
 
                 // when layer view is updated
                 watchUtils.whenFalse(layerView, 'updating', f => {
                     // console.log(layerView._tileContainer.children);
                     // console.log('layer view is updated');
-
                     this.setWaybackImageryTileElements(layerView._tileContainer.children);
 
                     if(!layer.isLayerReady){
@@ -351,9 +329,7 @@ esriLoader.loadModules([
                 const tileTopLeftPointToScreen = this.mapView.toScreen(tileTopLeftPoint);
                 const tileCenetrPoint = this.mapView.toMap(tileTopLeftPointToScreen.x + 128, tileTopLeftPointToScreen.y + 128);
                 const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
-
                 d.centroid = tileCenetrPoint;
-                // d.topLeftScreenPoint = tileTopLeftPointToScreen;
 
                 return isInCurrentMapExt;
             });
@@ -430,54 +406,6 @@ esriLoader.loadModules([
                     this.serachWaybackOnSuccessHandler(releases, tileInfo);
                 });
             }
-
-            // const onSuccessHandler = (res)=>{
-
-            //     // download the tile image file using each release number in res, convert to to dataUri to so we can check if there are duplicated items
-            //     const resolvedTileDataUriArray = res.map(rNum=>{
-            //         const tileURL = this.getWaybackTileURL(rNum, level, row, column);
-            //         return this.getImageBlob(tileURL, rNum);
-            //         // return this.imageToDataUri(tileURL, rNum);
-            //     });
-
-            //     // check and remove the duplicated items once DataUri for all images are resolved
-            //     Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
-
-            //         resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
-
-            //         const uniqueDataURIs = [];
-            //         const releasesWithChanges = [];
-            //         const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
-
-            //         resolvedResults.forEach((d, i)=>{
-            //             if(!uniqueDataURIs.includes(d.dataUri)){
-            //                 uniqueDataURIs.push(d.dataUri);
-            //                 this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
-            //                 releasesWithChanges.push(d.release);
-            //             }
-            //         });
-
-            //         // console.log(this.selectedTile);
-
-            //         const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
-
-            //         // console.log('isViewDataSame', isViewDataSame);
-
-            //         // console.log('map view center after wayback search results returned', this.mapView.center);
-
-            //         if(!isViewDataSame){
-            //             const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
-            //             appView.updateViewModel(releasesToDisplay);
-
-            //             // console.log('update view data model', '\n');
-            //         } else {
-            //             appView.toggleMapLoader(false);
-
-            //             // console.log('no need to update view data model \n');
-            //         }
-            //     });
-
-            // };
         };
 
         this.removeReleasesWithDuplicates = (releasesData)=>{
@@ -530,41 +458,6 @@ esriLoader.loadModules([
                 }
             });
         };
-
-
-        // // TODO: need to process this in back end
-        // this.imageToDataUri = (imageURL, rNum)=>{
-
-        //     return new Promise((resolve, reject) => {
-
-        //         const releaseName = app.dataModel.getReleaseName(rNum);
-
-        //         let canvas = document.getElementById("tileImageCanvas");
-        //         if(!canvas){
-        //             canvas = document.createElement('canvas');
-        //             canvas.setAttribute("id", "tileImageCanvas");
-        //         }
-    
-        //         const img = new Image();
-        //         img.crossOrigin="Anonymous";
-        //         img.src = imageURL;
-        //         img.onload = function () {
-        //             const context = canvas.getContext('2d');
-        //             canvas.width = img.width;
-        //             canvas.height = img.height;
-        //             context.drawImage(img, 0, 0, img.width, img.height);
-        //             const tileImageDataUri = canvas.toDataURL('image/png').substr(75,320); 
-
-        //             resolve({
-        //                 release: rNum,
-        //                 releaseName: releaseName,
-        //                 dataUri: tileImageDataUri,
-        //                 imageUrl: imageURL
-        //             });
-        //         };
-        //     });
-
-        // };
 
         this.getImageBlob = (imageURL, rNum)=>{
 
@@ -860,12 +753,6 @@ esriLoader.loadModules([
             this.releasesDict = dict; 
         };
 
-        // this.toggleSelectedItem = (options)=>{
-        //     const rNum = options.release;
-        //     const isSelected = options.isSelected;
-        //     this.releasesDict[rNum].isSelected = isSelected;
-        // };
-
         this.getSelectedItems = ()=>{
             const selectedItems = this.releases.filter(d=>{
                 return d.isSelected;
@@ -990,9 +877,7 @@ esriLoader.loadModules([
             });
 
         };
-
-        // this.init(selectJsonResponse);
-
+        
     };
 
     const AppView = function(){
@@ -1001,7 +886,6 @@ esriLoader.loadModules([
         const $body = $('body');
         const $initallyHideItems = $('.initally-hide');
         const $sidebarLoader = $('.sidebar-loader');
-        // const $waybackDataLoadingIndicator = $('.wayback-data-loading-indicator');
         const $mapLoader = $('.map-loader');
         const $createWebmapBtn = $('.create-agol-webmap');
         const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
@@ -1094,11 +978,6 @@ esriLoader.loadModules([
                 app.selectedTile.hidePreview();
             }
         };
-
-        // this.toggleLoadingIndicator = (isLoading)=>{
-        //     $waybackDataLoadingIndicator.toggleClass('is-active' , isLoading);
-        //     this.toggleMapLoader(isLoading);
-        // };
 
         this.toggleMapLoader = (isLoading)=>{
             $mapLoader.toggleClass('is-active', isLoading);
@@ -1371,12 +1250,12 @@ esriLoader.loadModules([
                 // `;
 
                 const htmlStr = `
-                <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
-                    <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
-                    <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                    <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer  right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
-                </div>
-            `;
+                    <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
+                        <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer  right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
+                    </div>
+                `;
 
                 return htmlStr;
             }).join('');
@@ -1604,13 +1483,13 @@ esriLoader.loadModules([
         const $launchBtn = container.find('.launch-webmap-btn');
         const $uploadBtn = container.find('.upload-webmap-btn');
         const $uploadBtnWrap = $uploadBtn.parent();
-        const $webMapOnCreatingIndocator = container.find('.web-map-on-creating-indicator');
+        // const $webMapOnCreatingIndocator = container.find('.web-map-on-creating-indicator');
         const $dialogWebmapNotReady = container.find('.webmap-not-ready-dialog');
         const $dialogWebmapIsReady = container.find('.webmap-is-ready-dialog');
 
         const $titleTextInput = $('#webmap-title-text-input');
         const $tagsTextInput = $('#webmap-tags-text-input');
-        const $snippetTextInput = $('#webmap-snippet-text-input');
+        // const $snippetTextInput = $('#webmap-snippet-text-input');
         const $descTextArea= $('#webmap-desc-textarea');
 
         this.isWebmapReady = false;
@@ -1662,7 +1541,6 @@ esriLoader.loadModules([
                 const target = $(this);
                 const newVal = target.val();
                 self.descStr = newVal;
-                console.log(self.descStr);
             });
 
         };
