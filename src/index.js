@@ -8,7 +8,7 @@ import * as calcite from 'calcite-web';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-layers.json';
+import waybackAgolItemIds from './assets/wayback-layers-prod.json';
 
 
 // app configs 
@@ -88,6 +88,8 @@ esriLoader.loadModules([
         this.isWaybackLayerUpdateEnd = false;
         this.delayForUpdateOnEndEvt = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
         this.selectedTile = null; // tile element that is selected to search wayback imagery releases
+
+        // this.waybackLayerLoadingTimeout = null;
 
         this.portalUser = null;
 
@@ -215,6 +217,7 @@ esriLoader.loadModules([
             if(!isEnd){
                 appView.toggleMapLoader(true);
             } else {
+                // clearTimeout(this.waybackLayerLoadingTimeout);
                 this.updateEventsOnEndHandler();
             }
         };
@@ -283,12 +286,23 @@ esriLoader.loadModules([
         this.setWatcherForLayerUpdateEndEvt = (layer, wayBackLayerOnReadyHandler)=>{
             
             this.mapView.whenLayerView(layer).then((layerView)=>{
-                // console.log('layerView', layerView);
-
+                
                 // when layer view is updating
                 watchUtils.whenTrue(layerView, 'updating', f => {
+
                     // console.log('layer view is updating', layerView);
                     this.toggleIsWaybackLayerUpdateEnd(false);
+
+                    // // cancel updating layer if it's still in updating after 5 seconds
+                    // if(layer.isLayerReady){
+                    //     clearTimeout(this.waybackLayerLoadingTimeout);
+
+                    //     this.waybackLayerLoadingTimeout = setTimeout(()=>{
+                    //         // console.log('taking too long to load, cancel it');
+                    //         appView.showWaybakLayerLoadingFailedMsg();
+                    //     }, 5000);
+                    // }
+
                 });
 
                 // when layer view is updated
@@ -933,7 +947,7 @@ esriLoader.loadModules([
                         url: requestUrl,
                         success: (res)=>{
     
-                            console.log('tileRequest', requestUrl, res);
+                            // console.log('tileRequest', requestUrl, res);
     
                             // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                             // we will save it to the finalResults so it can be added to the timeline
@@ -992,6 +1006,7 @@ esriLoader.loadModules([
         const $createWebmapBtn = $('.create-agol-webmap');
         const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
         const $activeItemTitle = $('.val-holder-active-item-title');
+        // const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1028,6 +1043,17 @@ esriLoader.loadModules([
             this.toggleMapLoader(false);
             // this.toggleLoadingIndicator(false);
         };
+
+        // this.showWaybakLayerLoadingFailedMsg = ()=>{
+        //     // alert('loading is failed');
+        //     this.toggleMapLoader(false);
+
+        //     $waybackLayerLoadingFailedAlert.toggleClass('is-active', true);
+
+        //     setTimeout(()=>{
+        //         $waybackLayerLoadingFailedAlert.toggleClass('is-active', false);
+        //     }, 7500);
+        // }
 
         this.housekeeping = ()=>{
             // the contains for charts/list are hidden initally, so we need to turn them on and hide the sidebar loader
@@ -1175,6 +1201,10 @@ esriLoader.loadModules([
             $body.on('click', '.js-clear-all-selected-items', function(evt){
                 appView.viewModel.setSelectedItem(null);
             });
+
+            // $body.on('click', '.js-close-alert', function(evt){
+            //     $waybackLayerLoadingFailedAlert.toggleClass('is-active', false);
+            // });
 
         };
 
