@@ -86,7 +86,9 @@ esriLoader.loadModules([
         this.portalUser = null;
 
         this.init = ()=>{
-            this.signIn();
+            if(!window.isUsingOauthPopupWindow){
+                this.signIn();
+            }
             this.initMap();
             this.fetchWaybackReleasesData();
         };
@@ -602,16 +604,43 @@ esriLoader.loadModules([
                 // portalUrl: 'https://devext.arcgis.com'
             });
 
+            esriId.useSignInPage = false;
+
             esriId.registerOAuthInfos([info]);
 
-            const portal = new Portal();
+            this.initPortal();
+        };
 
+        this.signInViaPopUpWindow = ()=>{
+
+            const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+
+            const info = new OAuthInfo({
+                // Swap this ID out with registered application ID
+                appId: oauth_appid,
+                popup: true
+            });
+
+            esriId.registerOAuthInfos([info]);
+
+            esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
+                this.initPortal();
+            }).catch(()=>{
+                // error handler
+            });
+        };
+
+        this.initPortal = ()=>{
+            const portal = new Portal();
             // Setting authMode to immediate signs the user in once loaded
             portal.authMode = "immediate";
-
-            // Once portal is loaded, user signed in
+            // Once loaded, user is signed in
             portal.load().then((res)=>{
                 this.setPortalUser(res.user);
+
+                if(window.isUsingOauthPopupWindow){
+                    appView.uploadWebMapModal.show();
+                }
             });
         };
 
@@ -1027,7 +1056,19 @@ esriLoader.loadModules([
             $body.on('click', '.js-open-save-web-map-modal.is-active', function(evt){
                 // alert('cannot save items to web map at this moment, still working on it');
 
-                appView.uploadWebMapModal.show();
+                if(window.isUsingOauthPopupWindow){
+
+                    if(!app.portalUser){
+                        app.signInViaPopUpWindow();
+                    } else {
+                        appView.uploadWebMapModal.show();
+                    }
+
+                } else {
+                    appView.uploadWebMapModal.show(); 
+                }
+
+                // appView.uploadWebMapModal.show();
             });
 
             $body.on('click', '.js-save-web-map', function(evt){
