@@ -621,6 +621,8 @@ esriLoader.loadModules([
                 popup: true
             });
 
+            esriId.useSignInPage = false;
+
             esriId.registerOAuthInfos([info]);
 
             esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
@@ -1087,6 +1089,7 @@ esriLoader.loadModules([
                     if(res.success){
                         const webmapId = res.id
                         const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
+                        // const webMapUrl = helper.getAgolOrgUrlByItemID(webmapId, true, true);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
@@ -1685,6 +1688,15 @@ esriLoader.loadModules([
             const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
             return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
+
+        // this.getAgolOrgUrlByItemID = (itemID, isOrgDomain, isUrlForWebMap)=>{
+        //     const customBaseUrl = app.portalUser.portal.customBaseUrl;
+        //     const urlKey = app.portalUser.portal.urlKey;
+        //     const agolBaseUrl = isOrgDomain ? 'https://' + urlKey + '.' + customBaseUrl : 'https://www.arcgis.com';
+        //     const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
+        //     const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
+        //     return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+        // };
 
         this.extractDateFromStr = (inputStr)=>{
             const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
