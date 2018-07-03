@@ -118,6 +118,9 @@ esriLoader.loadModules([
             const view = new MapView({
                 map: webmap,
                 container: DOM_ID_MAP_CONTAINER,
+                constraints: {
+                    rotationEnabled: false
+                }
             });
 
             this.setMapView(view);
@@ -1088,8 +1091,8 @@ esriLoader.loadModules([
                     // console.log(res);
                     if(res.success){
                         const webmapId = res.id
-                        const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
-                        // const webMapUrl = helper.getAgolOrgUrlByItemID(webmapId, true, true);
+                        // const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
+                        const webMapUrl = helper.getAgolOrgUrlByItemID(webmapId, true, true);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
@@ -1689,14 +1692,14 @@ esriLoader.loadModules([
             return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
 
-        // this.getAgolOrgUrlByItemID = (itemID, isOrgDomain, isUrlForWebMap)=>{
-        //     const customBaseUrl = app.portalUser.portal.customBaseUrl;
-        //     const urlKey = app.portalUser.portal.urlKey;
-        //     const agolBaseUrl = isOrgDomain ? 'https://' + urlKey + '.' + customBaseUrl : 'https://www.arcgis.com';
-        //     const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
-        //     const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
-        //     return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
-        // };
+        this.getAgolOrgUrlByItemID = (itemID, isOrgDomain, isUrlForWebMap)=>{
+            const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
+            const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
+            const agolBaseUrl = isOrgDomain && customBaseUrl && urlKey ? 'https://' + urlKey + '.' + customBaseUrl : 'https://www.arcgis.com';
+            const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
+            const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
+            return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+        };
 
         this.extractDateFromStr = (inputStr)=>{
             const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
