@@ -31,7 +31,7 @@ const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
 const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
-const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
+// const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
 
 
 esriLoader.loadModules([
@@ -78,10 +78,10 @@ esriLoader.loadModules([
 
         this.dataModel = new AppDataModel();
         this.mapView = null;
-        this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view 
+        // this.waybackImageryTileElements = []; // list of wayback imagery tile objects in current view 
         this.isMapViewStationary = false; 
-        this.isWaybackLayerUpdateEnd = false;
-        this.delayForUpdateOnEndEvt = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
+        // this.isWaybackLayerUpdateEnd = false;
+        // this.delayForUpdateOnEndEvt = null; // use this delay to wait one sec before calling handler functions when map view becomes stationary
         this.selectedTile = null; // tile element that is selected to search wayback imagery releases
         this.portalUser = null;
 
@@ -90,7 +90,7 @@ esriLoader.loadModules([
                 this.signIn();
             }
             this.initMap();
-            this.fetchWaybackReleasesData();
+            // this.fetchWaybackReleasesData();
         };
 
         // get json file that will be used as a lookup table for all releases since 2014
@@ -123,10 +123,12 @@ esriLoader.loadModules([
                 }
             });
 
-            this.setMapView(view);
-            this.setMapEventHandlers(view);
-            this.initSearchWidget(view)
-            // this.setBasemapViewWatcher(view);
+            view.when(()=>{
+                this.setMapView(view);
+                this.setMapEventHandlers(view);
+                this.initSearchWidget(view);
+                this.fetchWaybackReleasesData();
+            });
         };
 
         this.initDataModel = (data)=>{
@@ -136,12 +138,18 @@ esriLoader.loadModules([
         this.initWaybackImageryLayer = ()=>{
             const mostRecentRelease = this.dataModel.getMostRecentReleaseNum();
 
-            const waybackLayerOnReadyHandler = (isReady)=>{
-                // console.log('wayback layer is initated for the very first time...', isReady);
-                this.searchWayback(this.mapView.center);
-            };
+            const mapCenter = this.mapView.center;
 
-            this.addWaybackImageryLayer(mostRecentRelease, waybackLayerOnReadyHandler);
+            // const waybackLayerOnReadyHandler = (isReady)=>{
+            //     // console.log('wayback layer is initated for the very first time...', isReady);
+            //     this.searchWayback(this.mapView.center);
+            // };
+
+            // this.addWaybackImageryLayer(mostRecentRelease, waybackLayerOnReadyHandler);
+
+            this.addWaybackImageryLayer(mostRecentRelease);
+
+            this.searchWayback(mapCenter);
         };
 
         this.initSearchWidget = (view)=>{
@@ -207,18 +215,18 @@ esriLoader.loadModules([
 
         };
 
-        this.toggleIsWaybackLayerUpdateEnd = (isEnd)=>{
-            this.isWaybackLayerUpdateEnd = isEnd;
-            // console.log('isWaybackLayerUpdateEnd', this.isWaybackLayerUpdateEnd);
+        // this.toggleIsWaybackLayerUpdateEnd = (isEnd)=>{
+        //     this.isWaybackLayerUpdateEnd = isEnd;
+        //     // console.log('isWaybackLayerUpdateEnd', this.isWaybackLayerUpdateEnd);
 
-            if(!isEnd){
-                appView.toggleMapLoader(true);
-            } else {
-                this.updateEventsOnEndHandler();
-            }
-        };
+        //     if(!isEnd){
+        //         appView.toggleMapLoader(true);
+        //     } else {
+        //         this.updateEventsOnEndHandler();
+        //     }
+        // };
 
-        this.addWaybackImageryLayer = (releaseNum, wayBackLayerOnReadyHandler)=>{
+        this.addWaybackImageryLayer = (releaseNum)=>{
 
             // console.log('adding layer for release num', releaseNum);
 
@@ -240,7 +248,7 @@ esriLoader.loadModules([
 
             this.mapView.map.reorder(waybackLyr, 0); //bring the layer to bottom so the labels are visible
 
-            this.setWatcherForLayerUpdateEndEvt(waybackLyr, wayBackLayerOnReadyHandler);
+            // this.setWatcherForLayerUpdateEndEvt(waybackLyr, wayBackLayerOnReadyHandler);
         };
 
         this.getWaybackImageryLayer = ()=>{
@@ -267,150 +275,174 @@ esriLoader.loadModules([
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
-                clearTimeout(this.delayForUpdateOnEndEvt);
                 this.toggleIsMapViewStationary(false);
             });
 
             watchUtils.whenTrue(view, "stationary", (evt)=>{
-                this.delayForUpdateOnEndEvt = setTimeout(()=>{
-                    this.toggleIsMapViewStationary(true);
-                }, DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT);
+                this.toggleIsMapViewStationary(true);
             });
         };
 
-        // // imspired by this example taht watch the change of basemap tiles: https://jsbin.com/zojaxev/edit?html,output
-        this.setWatcherForLayerUpdateEndEvt = (layer, wayBackLayerOnReadyHandler)=>{
+        // // // imspired by this example taht watch the change of basemap tiles: https://jsbin.com/zojaxev/edit?html,output
+        // this.setWatcherForLayerUpdateEndEvt = (layer, wayBackLayerOnReadyHandler)=>{
             
-            this.mapView.whenLayerView(layer).then((layerView)=>{
+        //     this.mapView.whenLayerView(layer).then((layerView)=>{
                 
-                // when layer view is updating
-                watchUtils.whenTrue(layerView, 'updating', f => {
-                    // console.log('layer view is updating', layerView);
-                    this.toggleIsWaybackLayerUpdateEnd(false);
-                });
+        //         // when layer view is updating
+        //         watchUtils.whenTrue(layerView, 'updating', f => {
+        //             // console.log('layer view is updating', layerView);
+        //             this.toggleIsWaybackLayerUpdateEnd(false);
+        //         });
 
-                // when layer view is updated
-                watchUtils.whenFalse(layerView, 'updating', f => {
-                    // console.log(layerView._tileContainer.children);
-                    // console.log('layer view is updated');
-                    this.setWaybackImageryTileElements(layerView._tileContainer.children);
+        //         // when layer view is updated
+        //         watchUtils.whenFalse(layerView, 'updating', f => {
+        //             // console.log(layerView._tileContainer.children);
+        //             // console.log('layer view is updated');
+        //             this.setWaybackImageryTileElements(layerView._tileContainer.children);
 
-                    if(!layer.isLayerReady){
+        //             if(!layer.isLayerReady){
 
-                        layer.isLayerReady = true;
-                        this.isWaybackLayerUpdateEnd = true;
+        //                 layer.isLayerReady = true;
+        //                 this.isWaybackLayerUpdateEnd = true;
 
-                        if(wayBackLayerOnReadyHandler){
-                            wayBackLayerOnReadyHandler(layer.isLayerReady);
-                        }
+        //                 if(wayBackLayerOnReadyHandler){
+        //                     wayBackLayerOnReadyHandler(layer.isLayerReady);
+        //                 }
 
-                        appView.toggleMapLoader(false);
+        //                 appView.toggleMapLoader(false);
 
-                        // console.log('layer view is ready');
-                    } else {
-                        // console.log('layer view is updated');
-                        this.toggleIsWaybackLayerUpdateEnd(true);
-                    }
-                });
+        //                 // console.log('layer view is ready');
+        //             } else {
+        //                 // console.log('layer view is updated');
+        //                 this.toggleIsWaybackLayerUpdateEnd(true);
+        //             }
+        //         });
 
-            })
-            .catch((error)=>{
-                // An error occurred during the layerview creation
-            });
+        //     })
+        //     .catch((error)=>{
+        //         // An error occurred during the layerview creation
+        //     });
 
-        };
+        // };
 
-        this.setWaybackImageryTileElements = (items)=>{
-            // this.waybackImageryTileElements = items;
+        // this.setWaybackImageryTileElements = (items)=>{
+        //     // this.waybackImageryTileElements = items;
 
-            this.waybackImageryTileElements = items.filter(d=>{
+        //     this.waybackImageryTileElements = items.filter(d=>{
 
-                const tileTopLeftPoint = new Point({
-                    x: d.x,
-                    y: d.y,
-                    spatialReference: { wkid: 3857 }
-                });
+        //         const tileTopLeftPoint = new Point({
+        //             x: d.x,
+        //             y: d.y,
+        //             spatialReference: { wkid: 3857 }
+        //         });
 
-                const tileTopLeftPointToScreen = this.mapView.toScreen(tileTopLeftPoint);
-                const tileCenetrPoint = this.mapView.toMap(tileTopLeftPointToScreen.x + 128, tileTopLeftPointToScreen.y + 128);
-                const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
-                d.centroid = tileCenetrPoint;
+        //         const tileTopLeftPointToScreen = this.mapView.toScreen(tileTopLeftPoint);
+        //         const tileCenetrPoint = this.mapView.toMap(tileTopLeftPointToScreen.x + 128, tileTopLeftPointToScreen.y + 128);
+        //         const isInCurrentMapExt = geometryEngine.intersects(this.mapView.extent, tileCenetrPoint);
+        //         d.centroid = tileCenetrPoint;
 
-                return isInCurrentMapExt;
-            });
+        //         return isInCurrentMapExt;
+        //     });
 
-            // console.log('waybackImageryTileElements', this.waybackImageryTileElements);
-        };
+        //     // console.log('waybackImageryTileElements', this.waybackImageryTileElements);
+        // };
 
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
-            if(this.isMapViewStationary && this.isWaybackLayerUpdateEnd){
-                // console.log('map is stable and wayback layer is ready, start searching releases using tile from view center');
-                // console.log('map view center before calling getWaybackImageryTileElement', this.mapView.center);
+            // if(this.isMapViewStationary && this.isWaybackLayerUpdateEnd){
+            //     // console.log('map is stable and wayback layer is ready, start searching releases using tile from view center');
+            //     // console.log('map view center before calling getWaybackImageryTileElement', this.mapView.center);
+            //     this.searchWayback(this.mapView.center);
+            // }
+
+            if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
             }
         };
 
-        this.findTileElementByPoint = (mapPoint=null)=>{
+        // this.findTileElementByPoint = (mapPoint=null)=>{
 
-            mapPoint = mapPoint || this.mapView.center;
+        //     mapPoint = mapPoint || this.mapView.center;
 
-            let tileElement = null;
-            let minDist = Number.POSITIVE_INFINITY;
-            let realZoomLevel = this.waybackImageryTileElements[this.waybackImageryTileElements.length - 1].key.level;
+        //     let tileElement = null;
+        //     let minDist = Number.POSITIVE_INFINITY;
+        //     let realZoomLevel = this.waybackImageryTileElements[this.waybackImageryTileElements.length - 1].key.level;
 
-            this.waybackImageryTileElements.forEach(d=>{
-                const isZoomLevelCorrect = d.key.level === realZoomLevel ? true : false;
-                const dist = mapPoint.distance(d.centroid);
-                if(isZoomLevelCorrect && dist < minDist){
-                    minDist = dist;
-                    tileElement = d;
-                }
-            });
+        //     this.waybackImageryTileElements.forEach(d=>{
+        //         const isZoomLevelCorrect = d.key.level === realZoomLevel ? true : false;
+        //         const dist = mapPoint.distance(d.centroid);
+        //         if(isZoomLevelCorrect && dist < minDist){
+        //             minDist = dist;
+        //             tileElement = d;
+        //         }
+        //     });
 
-            return tileElement;
-        };
+        //     return tileElement;
+        // };
 
-        this.getWaybackImageryTileElement = (mapPoint=null)=>{
+        // this.getWaybackImageryTileElement = (mapPoint=null)=>{
 
-            this.removeSelectedTile();
+        //     this.removeSelectedTile();
 
-            if(this.waybackImageryTileElements.length){
+        //     if(this.waybackImageryTileElements.length){
 
-                const tileClicked = this.findTileElementByPoint(mapPoint);
-
-                this.setSelectedTile(tileClicked);
-    
-                // callback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
-
-                return {
-                    level: tileClicked.key.level,
-                    row: tileClicked.key.row,
-                    col: tileClicked.key.col
-                }
+        //         const tileClicked = this.findTileElementByPoint(mapPoint);
                 
-            } else {
-                // console.log('wayback imagery is still loading');
-                return;
-            }
-        };
+        //         this.setSelectedTile(tileClicked);
+    
+        //         // callback(tileClicked.key.level, tileClicked.key.row, tileClicked.key.col);
+
+        //         return {
+        //             level: tileClicked.key.level,
+        //             row: tileClicked.key.row,
+        //             col: tileClicked.key.col
+        //         }
+                
+        //     } else {
+        //         // console.log('wayback imagery is still loading');
+        //         return;
+        //     }
+        // };
 
         // search all releases with updated data for tile image at given level, row, col
         this.searchWayback = (mapPoint=null)=>{
 
+            this.removeSelectedTile();
+
+            const level = this.mapView.zoom;
+
+            const tileInfo = {
+                level: level,
+                row: helper.lat2tile(mapPoint.latitude, level),
+                col: helper.long2tile(mapPoint.longitude, level)
+            };
+
+            const latFromTile = helper.tile2lat(tileInfo.row, level);
+            const longFromTile = helper.tile2Long(tileInfo.col, level);
+            const tileTopLeftXY = webMercatorUtils.lngLatToXY(longFromTile, latFromTile)
+
+            this.setSelectedTile({
+                x: tileTopLeftXY[0],
+                y: tileTopLeftXY[1]
+            });
+
+            this.dataModel.getReleaseNumbersByLRC(tileInfo.level, tileInfo.row, tileInfo.col).then(releases=>{
+                // console.log('getReleaseNumbersByLRC results', releases);
+                this.serachWaybackOnSuccessHandler(releases, tileInfo);
+            });
+
             appView.toggleMapLoader(true);
 
-            // console.log('start search wayback imageries for selected l,r,c', level, row, column);
+            // const tileInfo = this.getWaybackImageryTileElement(mapPoint);
+            // console.log('tileInfo.col tileInfo.row', level, tileInfo.col, tileInfo.row);
 
-            const tileInfo = this.getWaybackImageryTileElement(mapPoint);
+            // if(tileInfo && tileInfo.level && tileInfo.row && tileInfo.col){
 
-            if(tileInfo && tileInfo.level && tileInfo.row && tileInfo.col){
-
-                this.dataModel.getReleaseNumbersByLRC(tileInfo.level, tileInfo.row, tileInfo.col).then(releases=>{
-                    // console.log('getReleaseNumbersByLRC results', releases);
-                    this.serachWaybackOnSuccessHandler(releases, tileInfo);
-                });
-            }
+            //     this.dataModel.getReleaseNumbersByLRC(tileInfo.level, tileInfo.row, tileInfo.col).then(releases=>{
+            //         // console.log('getReleaseNumbersByLRC results', releases);
+            //         this.serachWaybackOnSuccessHandler(releases, tileInfo);
+            //     });
+            // }
         };
 
         this.removeReleasesWithDuplicates = (releasesData)=>{
@@ -735,6 +767,7 @@ esriLoader.loadModules([
 
         this.releases = []; // array of all release numbers since 2014
         this.releasesDict = null; // lookup table with release number as key, will need to use it to get the index of the element 
+        this.isReady = false;
 
         this.init = (releasesData)=>{
             if(!releasesData || !releasesData.length){
@@ -743,6 +776,8 @@ esriLoader.loadModules([
             }
 
             this.initReleasesArr(releasesData);
+
+            this.isReady = true;
 
             // console.log(this.releasesDict);
             // console.log(this.releases);
@@ -1002,7 +1037,10 @@ esriLoader.loadModules([
         };
 
         this.showTilePreviewWindow = (rNum)=>{
-            if(app.selectedTile && app.isMapViewStationary && app.isWaybackLayerUpdateEnd){
+            // if(app.selectedTile && app.isMapViewStationary && app.isWaybackLayerUpdateEnd){
+            //     app.selectedTile.showPreview(rNum);
+            // }
+            if(app.selectedTile && app.isMapViewStationary){
                 app.selectedTile.showPreview(rNum);
             }
         };
@@ -1724,6 +1762,23 @@ esriLoader.loadModules([
             snippetStr += items.slice(0, items.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
             snippetStr += ' and ' + items[items.length - 1] // add last one to str with and in front, so we will have "a, b, c and d"
             return snippetStr;
+        };
+
+        this.long2tile = (lon, zoom)=>{
+            return (Math.floor((lon+180)/360 * Math.pow(2,zoom)));
+        };
+
+        this.lat2tile = (lat, zoom)=>{
+            return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom)));
+        };
+
+        this.tile2Long = (x,z)=>{
+            return (x/Math.pow(2,z)*360-180);
+        };
+
+        this.tile2lat = (y,z)=>{
+            const n=Math.PI-2*Math.PI*y/Math.pow(2,z);
+            return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
         };
 
     };
