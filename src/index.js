@@ -419,7 +419,7 @@ esriLoader.loadModules([
 
             const latFromTile = helper.tile2lat(tileInfo.row, level);
             const longFromTile = helper.tile2Long(tileInfo.col, level);
-            const tileTopLeftXY = webMercatorUtils.lngLatToXY(longFromTile, latFromTile)
+            const tileTopLeftXY = webMercatorUtils.lngLatToXY(longFromTile, latFromTile);
 
             this.setSelectedTile({
                 x: tileTopLeftXY[0],
@@ -486,6 +486,10 @@ esriLoader.loadModules([
                 
                 const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
                 const isViewDataSame = appView.viewModel.compareReleasesWithChanges(releasesWithChanges);
+
+                if(!releasesWithChanges.length){
+                    appView.toggleWaybakLayerLoadingFailedMsg(true);
+                }
 
                 if(!isViewDataSame){
                     const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
@@ -832,15 +836,22 @@ esriLoader.loadModules([
         this.getFullListOfReleases = (highlightedItems=[], rNumForActiveItem)=>{
             let outputList = this.releases;
 
-            if(highlightedItems.length){
+            // if(highlightedItems.length){
 
-                outputList = outputList.map(d=>{
-                    const isHighlighted = highlightedItems.includes(d.release);
-                    d.isHighlighted = isHighlighted;
-                    d.isActive = d.release === rNumForActiveItem ? true : false;
-                    return d;
-                });
-            }
+            //     outputList = outputList.map(d=>{
+            //         const isHighlighted = highlightedItems.includes(d.release);
+            //         d.isHighlighted = isHighlighted;
+            //         d.isActive = d.release === rNumForActiveItem ? true : false;
+            //         return d;
+            //     });
+            // }
+
+            outputList = outputList.map(d=>{
+                const isHighlighted = highlightedItems.includes(d.release);
+                d.isHighlighted = isHighlighted;
+                d.isActive = d.release === rNumForActiveItem ? true : false;
+                return d;
+            });
 
             return outputList;
         };
@@ -959,10 +970,11 @@ esriLoader.loadModules([
         const $createWebmapBtn = $('.create-agol-webmap');
         const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
         const $activeItemTitle = $('.val-holder-active-item-title');
-        // const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
+        const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
+        let waybakLayerLoadingFailedMsgHideDelay = null;
 
         // app view core components
         this.viewModel =  null; // view model that stores wayback search results data and its states (isActive, isSelected) that we use to populate data viz containers 
@@ -997,16 +1009,26 @@ esriLoader.loadModules([
             // this.toggleLoadingIndicator(false);
         };
 
-        // this.showWaybakLayerLoadingFailedMsg = ()=>{
-        //     // alert('loading is failed');
-        //     this.toggleMapLoader(false);
+        this.toggleWaybakLayerLoadingFailedMsg = (isVisible)=>{
 
-        //     $waybackLayerLoadingFailedAlert.toggleClass('is-active', true);
+            if(isVisible){
 
-        //     setTimeout(()=>{
-        //         $waybackLayerLoadingFailedAlert.toggleClass('is-active', false);
-        //     }, 7500);
-        // }
+                clearTimeout(waybakLayerLoadingFailedMsgHideDelay);
+                
+                // alert('loading is failed');
+                this.toggleMapLoader(false);
+
+                $waybackLayerLoadingFailedAlert.toggleClass('is-active', true);
+
+                waybakLayerLoadingFailedMsgHideDelay = setTimeout(()=>{
+                    $waybackLayerLoadingFailedAlert.toggleClass('is-active', false);
+                }, 5000);
+
+            } else {
+                $waybackLayerLoadingFailedAlert.toggleClass('is-active', false);
+            }
+
+        };
 
         this.housekeeping = ()=>{
             // the contains for charts/list are hidden initally, so we need to turn them on and hide the sidebar loader
@@ -1053,6 +1075,10 @@ esriLoader.loadModules([
 
         this.toggleMapLoader = (isLoading)=>{
             $mapLoader.toggleClass('is-active', isLoading);
+
+            if(isLoading){
+                this.toggleWaybakLayerLoadingFailedMsg(false);
+            }
         };
 
         this.toggleCreateWebmapBtnStatus = ()=>{
@@ -1323,7 +1349,8 @@ esriLoader.loadModules([
                 const classesForActiveItem = d.isActive ? 'is-active' : '';
                 const classesForHighlightedItem = d.isHighlighted ? 'is-highlighted' : ''
                 const isSelected = d.isSelected ? 'is-selected': '';
-                const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
+                // const linkColor = d.isActive || d.isHighlighted ? 'link-white' : 'link-light-gray';
+                const linkColor = 'link-light-gray';
                 const agolItemURL = d.agolItemURL;
 
                 // const htmlStr = `
@@ -1338,7 +1365,7 @@ esriLoader.loadModules([
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
                         <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer  right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
+                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
                     </div>
                 `;
 

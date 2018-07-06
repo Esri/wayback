@@ -154,6 +154,11 @@ html, body {
 .list-card.is-active {
     background-color: $color-active-item;
     border-left: solid 4px $color-active-item;
+
+    a, .open-item-btn {
+        text-decoration: none;
+        color: #fff;
+    }
 }
 
 .list-card.is-selected {
@@ -169,6 +174,11 @@ html, body {
 
     .add-to-webmap-btn {
         background: url('../assets/icons/QueueOffSelected.png') center no-repeat;
+    }
+
+    a, .open-item-btn  {
+        text-decoration: none;
+        color: #fff;
     }
 }
 
@@ -520,13 +530,12 @@ html, body {
     }
 /* end of site wide styles */
 
-// .wayback-layer-loading-failed-alert {
-//     position: absolute;
-//     right: 10px;
-//     bottom: 20px;
-//     min-width: 300px;
-// }
-
+.wayback-layer-loading-failed-alert {
+    position: absolute;
+    right: 10px;
+    bottom: 20px;
+    min-width: 300px;
+}
 
 /* style for scroll bar*/
 
