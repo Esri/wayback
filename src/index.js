@@ -10,6 +10,36 @@ import './style/index.scss';
 // import other files
 import waybackAgolItemIds from './assets/wayback-layers-prod.json';
 
+const urlQueryParams = (function(){
+    // parse the devMode data from location search params
+    // http://localhost:8080/?devMode=true&baseUrl=https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer
+
+    const outputData = {};
+
+    const isDevServer = window.location.hostname === 'localhost' || window.location.hostname === 'livingatlasdev.arcgis.com';
+
+    if(window.location.search){
+
+        const locationSearchStr = window.location.search.substring(1);
+
+        const locationSearchData = locationSearchStr.split('&');
+
+        locationSearchData.forEach(function(d){
+            d = d.split('=');
+            const key = d[0];
+            const val = d[1];
+            outputData[key]=val;
+        });
+
+        outputData.devMode = outputData.devMode === 'true' && isDevServer ? true : false;
+
+    } 
+
+    return outputData;
+
+})();
+
+// console.log(urlQueryParams);
 
 // app configs 
 const OAUTH_APPID_DEV = '4Op8YK3SdKZEplai';
@@ -18,7 +48,7 @@ const OAUTH_APPID_PROD = 'WaybackImagery';
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
 
-const URL_WAYBACK_IMAGERY_BASE = 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
+const URL_WAYBACK_IMAGERY_BASE = urlQueryParams.devMode && urlQueryParams.baseUrl ? urlQueryParams.baseUrl : 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
@@ -477,8 +507,12 @@ esriLoader.loadModules([
             Promise.all(resolvedTileDataUriArray).then(resolvedResults => {
 
                 resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
-                resolvedResults = this.removeReleasesWithDuplicates(resolvedResults);
 
+                // remove duplicates only if the devMode is false
+                if(!urlQueryParams.devMode){
+                    resolvedResults = this.removeReleasesWithDuplicates(resolvedResults);
+                }
+                
                 const releasesWithChanges = resolvedResults.map(d=>{
                     this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
                     return d.release;
@@ -635,7 +669,7 @@ esriLoader.loadModules([
 
         this.signIn = ()=>{
 
-            const oauth_appid = window.location.port ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+            const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
 
             const info = new OAuthInfo({
                 appId: oauth_appid,
