@@ -132,92 +132,96 @@ html, body {
     height: calc(100% - 260px);
 }
 
-.list-card {
-    // padding: .5rem;
-    height: $list-card-height;
-    line-height: $list-card-height;
-    padding-left: .5rem;
-    background-color: #1C1C1C;
-    border-left: solid 4px #1C1C1C;
+/* styles for list cards */
 
-    .open-item-btn {
-        font-size: 1rem;
-    }
-
-    .add-to-webmap-btn {
-        width: $list-card-height;
+    .list-card {
+        // padding: .5rem;
         height: $list-card-height;
-        background: url('../assets/icons/QueueOff.png') center no-repeat;
-    }
-}
+        line-height: $list-card-height;
+        padding-left: .5rem;
+        background-color: #1C1C1C;
+        border-left: solid 4px #1C1C1C;
 
-.list-card.is-active {
-    background-color: $color-active-item;
-    border-left: solid 4px $color-active-item;
+        .open-item-btn {
+            font-size: 1rem;
+        }
 
-    a, .open-item-btn {
-        text-decoration: none;
-        color: #fff;
-    }
-}
-
-.list-card.is-selected {
-    .add-to-webmap-btn {
-        background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOn.png') center no-repeat;
-        // background-color: rgba(255,255,255,.3);
-    }
-}
-
-.list-card.is-highlighted {
-    opacity: 1;
-    border-left: solid 4px $color-highlight-item;
-
-    .add-to-webmap-btn {
-        background: url('../assets/icons/QueueOffSelected.png') center no-repeat;
+        .add-to-webmap-btn {
+            width: $list-card-height;
+            height: $list-card-height;
+            background: url('../assets/icons/QueueOff.png') center no-repeat;
+        }
     }
 
-    a, .open-item-btn  {
-        text-decoration: none;
-        color: #fff;
+    .list-card.is-active {
+        background-color: $color-active-item;
+        border-left: solid 4px $color-active-item;
+
+        a, .open-item-btn {
+            text-decoration: none;
+            color: #fff;
+        }
     }
-}
 
-.list-card.is-active.is-highlighted {
-    background-color: $color-active-item;
-    border-left: solid 4px $color-highlight-item;
-}
-
-.list-card.is-highlighted.is-selected {
-    .add-to-webmap-btn {
-        background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOnSelected.png') center no-repeat;
+    .list-card.is-selected {
+        .add-to-webmap-btn {
+            background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOn.png') center no-repeat;
+            // background-color: rgba(255,255,255,.3);
+        }
     }
-}
 
-.list-card.is-highlighted:hover {
-    border-left: solid 4px $color-highlight-item;
-}
+    .list-card.is-highlighted {
+        opacity: 1;
+        border-left: solid 4px $color-highlight-item;
 
-.list-card:hover {
-    background-color: $color-hover-item;
-    border-left: solid 4px $color-hover-item;
-}
+        .add-to-webmap-btn {
+            background: url('../assets/icons/QueueOffSelected.png') center no-repeat;
+        }
 
-.control-items-wrap {
-    display:flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-content: stretch;
-    align-items: stretch;
-    position: relative;
-}
+        a, .open-item-btn  {
+            text-decoration: none;
+            color: #fff;
+        }
+    }
 
-.control-items-wrap .fill {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 200px;
-    position: relative;
-}
+    .list-card.is-active.is-highlighted {
+        background-color: $color-active-item;
+        border-left: solid 4px $color-highlight-item;
+    }
+
+    .list-card.is-highlighted.is-selected {
+        .add-to-webmap-btn {
+            background: $add-to-webmap-btn-is-selected-bgColor url('../assets/icons/QueueOnSelected.png') center no-repeat;
+        }
+    }
+
+    .list-card.is-highlighted:hover {
+        border-left: solid 4px $color-highlight-item;
+    }
+
+    .list-card:hover {
+        background-color: $color-hover-item;
+        border-left: solid 4px $color-hover-item;
+    }
+
+    .control-items-wrap {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-content: stretch;
+        align-items: stretch;
+        position: relative;
+    }
+
+    .control-items-wrap .fill {
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 200px;
+        position: relative;
+    }
+
+/* end of styles for list cards */
 
 .location-search-input {
     background-color: rgba(0,0,0,.85);
@@ -234,28 +238,6 @@ html, body {
     cursor: pointer;
 }
 
-// .control-btn:hover {
-//     border: solid 1px #6e6e6e;
-// }
-
-// .breadcrumb-nav span{
-//     opacity: .7;
-//     cursor: pointer;
-// }
-
-// .breadcrumb-nav span.is-active{
-//     opacity: 1;
-//     font-weight: 600;
-// }
-
-// .pseudo-divider::after {
-//     content: '/';
-//     font-weight: 400;
-//     padding: 0 .2rem 0 .4rem;
-//     display: inline-block;
-//     opacity: 1;
-// }
-
 [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
     padding-right: 0;
 }
@@ -264,15 +246,9 @@ html, body {
     border-bottom: solid 1px $map-controls-border-color;
 }
 
-// #barChartWrap {
-//     border: solid 1px $map-controls-border-color;
-// }
-
 #barChartDiv {
     height: 100px;
     width: 100%;
-    // background-color:rgba(0,0,0,.85);
-    // border: solid 1px $map-controls-border-color;
 }
 
 .bar {
@@ -338,41 +314,32 @@ html, body {
 
 /* address locator styles */
 
-    .address-candidates-list {
-        position: absolute;
-        width: 100%;
-        top: 39px;
-        z-index: 1000;
-    }
+    // .address-candidates-list {
+    //     position: absolute;
+    //     width: 100%;
+    //     top: 39px;
+    //     z-index: 1000;
+    // }
 
-    .address-candidates-list > div {
-        padding: .5rem .5rem;
-        border-bottom: 1px solid rgba(120,120,120,0.2);
-        background-color: #efefef;
-        color: #303030;
-        font-size: .825rem;
-        cursor: pointer;
-    }
+    // .address-candidates-list > div {
+    //     padding: .5rem .5rem;
+    //     border-bottom: 1px solid rgba(120,120,120,0.2);
+    //     background-color: #efefef;
+    //     color: #303030;
+    //     font-size: .825rem;
+    //     cursor: pointer;
+    // }
 
-    .address-candidates-list > div:hover,
-    .address-candidates-list > div.is-highlighted {
-        background-color: $color-active-item;
-        color: #fff;
-    }
+    // .address-candidates-list > div:hover,
+    // .address-candidates-list > div.is-highlighted {
+    //     background-color: $color-active-item;
+    //     color: #fff;
+    // }
 
 /* end of address locator styles */
 
 
 /* tile preview window styles */
-
-    // .tile-preview-window-wrap {
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     bottom: 0;
-    //     right: 0;
-    //     // background-color: rgba(0,0,0,.65);
-    // };
 
     .tile-preview-window {
         position: absolute;
@@ -415,29 +382,29 @@ html, body {
 
 /* style for crosshair marker */
 
-    $crosshairHeight: 20px;
-    $crosshairWidth: $crosshairHeight / 5;
+    // $crosshairHeight: 20px;
+    // $crosshairWidth: $crosshairHeight / 5;
 
-    .crosshair-marker {
-        position: absolute;
-        top: 500px;
-        left: 500px;
-        width: $crosshairWidth;
-        height: $crosshairHeight;
-        background-color: #efefef;
-        z-index: 51;
-        box-shadow: 0 0 16px 8px rgba(0,0,0,.6);
-    }
+    // .crosshair-marker {
+    //     position: absolute;
+    //     top: 500px;
+    //     left: 500px;
+    //     width: $crosshairWidth;
+    //     height: $crosshairHeight;
+    //     background-color: #efefef;
+    //     z-index: 51;
+    //     box-shadow: 0 0 16px 8px rgba(0,0,0,.6);
+    // }
 
-    .crosshair-marker:after {
-        background: #efefef;
-        content: "";
-        height: $crosshairWidth;
-        left: -$crosshairWidth * 2;
-        position: absolute;
-        top: $crosshairWidth * 2;
-        width: $crosshairHeight;
-    }
+    // .crosshair-marker:after {
+    //     background: #efefef;
+    //     content: "";
+    //     height: $crosshairWidth;
+    //     left: -$crosshairWidth * 2;
+    //     position: absolute;
+    //     top: $crosshairWidth * 2;
+    //     width: $crosshairHeight;
+    // }
 
 /* style for crosshair marker */
 
