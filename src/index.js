@@ -657,11 +657,11 @@ esriLoader.loadModules([
 
                 const rNum = +d[KEY_RELEASE_NUM];
                 const rName = d[KEY_RELEASE_NAME];
-                const agolItemID = waybackAgolItemIds[rNum].itemID;
+                const agolItemID = waybackAgolItemIds[rNum] ? waybackAgolItemIds[rNum].itemID : null;
                 const rDate = helper.extractDateFromStr(rName);
                 const rDatetime = helper.convertToDate(rDate);
                 const agolItemURL = helper.getAgolUrlByItemID(agolItemID); // ArcGIS Online item url
-                const layerURL = waybackAgolItemIds[rNum].itemURL; // the actual layer url that will needs to be used when create webmap
+                const layerURL = waybackAgolItemIds[rNum] ? waybackAgolItemIds[rNum].itemURL :null; // the actual layer url that will needs to be used when create webmap
 
                 d.index = index;
                 d.release = rNum;
