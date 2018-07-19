@@ -23,7 +23,7 @@ Now you can start the webpack dev server to test the app on your local machine:
 
 ```sh
 # it will start a server instance and begin listening for connections from localhost on port 8080
-npm run server
+npm run start
 ```
 
 ## Deployment
