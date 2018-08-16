@@ -347,7 +347,7 @@ esriLoader.loadModules([
                 if(!urlQueryParams.devMode){
                     resolvedResults = this.removeReleasesWithDuplicates(resolvedResults);
                 }
-                
+
                 const releasesWithChanges = resolvedResults.map(d=>{
                     this.selectedTile.addImageUrlByReleaseNumber(d.release, d.imageUrl);
                     return d.release;
