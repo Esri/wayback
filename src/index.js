@@ -109,11 +109,13 @@ esriLoader.loadModules([
         this.isMapViewStationary = false; 
         this.selectedTile = null; // tile element that is selected to search wayback imagery releases
         this.portalUser = null;
+        this.stateManager = new AppStateManager();
+        this.oauthManager = new OAuthManager();
 
         this.init = ()=>{
-            if(!window.isUsingOauthPopupWindow){
-                this.signIn();
-            }
+            // if(!window.isUsingOauthPopupWindow){
+            //     this.signIn();
+            // }
             this.initMap();
         };
 
@@ -146,6 +148,13 @@ esriLoader.loadModules([
                     rotationEnabled: false
                 }
             });
+
+            // check map ext from state manager, need to do this when user get redirect to the sign in page and direct back to app page, we want to make sure 
+            // that it zooms back to the map extent before sign in
+            const prevMapExt = this.stateManager.getMapExt();
+            if(prevMapExt){
+                view.extent = prevMapExt;
+            }
 
             view.when(()=>{
                 this.setMapView(view);
@@ -203,9 +212,10 @@ esriLoader.loadModules([
             this.selectedTile = null;
         }
 
-        this.getMapViewExtent = ()=>{
-            const mapExtInGeoUnits = webMercatorUtils.webMercatorToGeographic(this.mapView.extent);
-            return mapExtInGeoUnits.toJSON();
+        this.getMapViewExtent = (isInGeoUnits)=>{
+            const mapExt = isInGeoUnits ? webMercatorUtils.webMercatorToGeographic(this.mapView.extent) : this.mapView.extent;
+            // const mapExtInGeoUnits = webMercatorUtils.webMercatorToGeographic(this.mapView.extent);
+            return mapExt.toJSON();
         };
 
         this.setPortalUser = (portalUser)=>{
@@ -362,7 +372,13 @@ esriLoader.loadModules([
 
                 if(!isViewDataSame){
                     const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
-                    appView.updateViewModel(releasesToDisplay);
+
+                    appView.updateViewModel(releasesToDisplay, ()=>{
+                        if(this.stateManager.shouldRestore()){
+                            this.stateManager.restore();
+                        }
+                    });
+
                 } else {
                     appView.toggleMapLoader(false);
                 }
@@ -412,8 +428,9 @@ esriLoader.loadModules([
 
         this.saveAsWebMap = (options, callback)=>{
             const selectedItems = app.dataModel.getSelectedItems().reverse(); // reverse the array so most recent releases will be on top of the webmap's table of content
-            const requestURL = this.portalUser.userContentUrl + '/addItem'; 
-            const currentMapExtent = this.getMapViewExtent();
+            // const requestURL = this.portalUser.userContentUrl + '/addItem'; 
+            const requestURL = this.oauthManager.getUserContentUrl() + '/addItem'; 
+            const currentMapExtent = this.getMapViewExtent(true);
 
             const webMapTitle = options.title || ''; 
             const webMapDesc =  options.desc || '';
@@ -502,58 +519,257 @@ esriLoader.loadModules([
             return screenPt;
         };
 
-        this.signIn = ()=>{
+        // this.saveAppStates = ()=>{
 
-            const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+        //     const appStates = {
+        //         extent: 'currentMapExt',
+        //         selectedReleases: 'selectedReleases'
+        //     };
 
-            const info = new OAuthInfo({
-                appId: oauth_appid,
-                popup: false,
-            });
+        //     localStorage.setItem(KEY_LOCALSTORAGE_APP_STATES, JSON.stringify(appStates));
+        // };
 
-            esriId.useSignInPage = false;
+        // this.checkAppStates = ()=>{
 
-            esriId.registerOAuthInfos([info]);
+        //     let appStates = localStorage.getItem(KEY_LOCALSTORAGE_APP_STATES);
+        //     appStates = appStates ? JSON.parse(appStates) : null;
 
-            this.initPortal();
-        };
+        //     if(appStates){
+        //         console.log('appStates is found', appStates);
+        //         localStorage.removeItem(KEY_LOCALSTORAGE_APP_STATES);
+        //     } else {
+        //         console.log('previously stored app states not found');
+        //     }
+        // };
 
-        this.signInViaPopUpWindow = ()=>{
+        // this.signIn = ()=>{
 
-            const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
 
-            const info = new OAuthInfo({
-                // Swap this ID out with registered application ID
-                appId: oauth_appid,
-                popup: true
-            });
+        //     const info = new OAuthInfo({
+        //         appId: oauth_appid,
+        //         popup: false,
+        //     });
 
-            esriId.useSignInPage = false;
+        //     esriId.useSignInPage = false;
 
-            esriId.registerOAuthInfos([info]);
+        //     esriId.registerOAuthInfos([info]);
 
-            esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
-                this.initPortal();
-            }).catch(()=>{
-                // error handler
-            });
-        };
+        //     this.initPortal();
+        // };
 
-        this.initPortal = ()=>{
-            const portal = new Portal();
-            // Setting authMode to immediate signs the user in once loaded
-            portal.authMode = "immediate";
-            // Once loaded, user is signed in
-            portal.load().then((res)=>{
-                this.setPortalUser(res.user);
+        // this.signInViaPopUpWindow = ()=>{
 
-                if(window.isUsingOauthPopupWindow){
-                    appView.uploadWebMapModal.show();
-                }
-            });
-        };
+        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+
+        //     const info = new OAuthInfo({
+        //         // Swap this ID out with registered application ID
+        //         appId: oauth_appid,
+        //         popup: true
+        //     });
+
+        //     esriId.useSignInPage = false;
+
+        //     esriId.registerOAuthInfos([info]);
+
+        //     esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
+        //         this.initPortal();
+        //     }).catch(()=>{
+        //         // error handler
+        //     });
+        // };
+
+        // this.signOut = ()=>{
+        //     esriId.destroyCredentials();
+        //     window.location.reload();
+        // };
+
+        // this.initPortal = ()=>{
+        //     const portal = new Portal();
+        //     // Setting authMode to immediate signs the user in once loaded
+        //     portal.authMode = "immediate";
+        //     // Once loaded, user is signed in
+        //     portal.load().then((res)=>{
+        //         this.setPortalUser(res.user);
+
+        //         // if(window.isUsingOauthPopupWindow){
+        //         //     appView.uploadWebMapModal.show();
+        //         // }
+
+        //         appView.uploadWebMapModal.show();
+        //     });
+        // };
 
         this.init();
+    };
+
+    const OAuthManager = function(){
+        
+        const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+
+        const info = new OAuthInfo({
+            appId: oauth_appid,
+            popup: false,
+        });
+
+        let userCredential = null;
+        let isAnonymous = true;
+
+        const init = ()=>{
+            esriId.useSignInPage = false;
+            esriId.registerOAuthInfos([info]);
+
+            esriId.checkSignInStatus(info.portalUrl + "/sharing").then((res)=>{
+                setUserCredential(res);
+            }).catch(()=>{
+                // Anonymous view
+                // console.log('Anonymous view');
+            });
+        };
+
+        const signIn = ()=>{
+            esriId.getCredential(info.portalUrl + "/sharing").then((res)=>{
+                setUserCredential(res);
+            });
+        };
+
+        const signOut = ()=>{
+            esriId.destroyCredentials();
+            window.location.reload();
+        };
+
+        const setUserCredential = (credentialObject)=>{
+            userCredential = credentialObject;
+            isAnonymous = credentialObject ? false : true;
+        };
+
+        const getUserContentUrl = ()=>{
+            //https://www.arcgis.com/sharing/rest/content/users/vannizhang@gmail.com/addItem
+            const outputUrl =  `${userCredential.server}/sharing/rest/content/users/${userCredential.userId}`;
+            return outputUrl
+        };
+
+        const checkIsAnonymous = ()=>{
+            return isAnonymous;
+        };
+
+        init();
+
+        return {
+            signIn: signIn,
+            signOut: signOut,
+            getUserContentUrl: getUserContentUrl,
+            checkIsAnonymous: checkIsAnonymous
+        };
+
+    };
+
+    const AppStateManager = function(){
+
+        const KEY_LOCALSTORAGE_APP_STATES = 'appStates';
+
+        let mapExt = null;
+        let selectedItems = [];
+        let rNumForActiveLayer = null;
+        let isOnlyShowingHighlighedItems = false;
+        let shouldRestoreAppView = false;
+
+        const init = ()=>{
+
+            let appStates = localStorage.getItem(KEY_LOCALSTORAGE_APP_STATES);
+            appStates = appStates ? JSON.parse(appStates) : null;
+
+            if(appStates){
+                console.log('appStates is found', appStates);
+
+                if(appStates.mapExt){
+                    mapExt = appStates.mapExt;
+                }
+
+                if(appStates.selectedItems){
+                    selectedItems = appStates.selectedItems;
+                }
+
+                if(appStates.rNumForActiveLayer){
+                    rNumForActiveLayer = appStates.rNumForActiveLayer;
+                }
+
+                if(appStates.isOnlyShowingHighlighedItems){
+                    isOnlyShowingHighlighedItems = appStates.isOnlyShowingHighlighedItems;
+                }
+
+                localStorage.removeItem(KEY_LOCALSTORAGE_APP_STATES);
+
+                shouldRestoreAppView = true;
+
+            } else {
+                console.log('previously stored app states not found');
+            }
+        };
+
+        const getMapExt = ()=>{
+            const outputMapExt = mapExt ? JSON.parse(JSON.stringify(mapExt)) : null;
+            return outputMapExt;
+        };
+
+        const getSelectedItems = ()=>{
+            const outputReleases = selectedItems ? JSON.parse(JSON.stringify(selectedItems)) : null;
+            return outputReleases;
+        };
+
+        const reset = ()=>{
+            shouldRestoreAppView = false;
+            selectedItems.length = 0;
+            rNumForActiveLayer = null;
+            mapExt = null;
+            isOnlyShowingHighlighedItems = false;
+        };
+
+        const saveAppStates = ()=>{
+
+            const appStates = {
+                mapExt: app.getMapViewExtent(),
+                selectedItems: app.dataModel.getSelectedItems(true),
+                rNumForActiveLayer: app.getReleaseNumFromWaybackImageryLayer(),
+                isOnlyShowingHighlighedItems: appView.viewModel.isOnlyShowingHighlighedItems
+            };
+
+            localStorage.setItem(KEY_LOCALSTORAGE_APP_STATES, JSON.stringify(appStates));
+        };
+
+        const restoreAppView = ()=>{
+            console.log('calling restoreAppView');
+
+            const prevSelectedItem = getSelectedItems();
+            if(prevSelectedItem.length){
+                prevSelectedItem.forEach(rNum=>{
+                    appView.viewModel.setSelectedItem(rNum, true);
+                });
+            }
+
+            if(rNumForActiveLayer){
+                appView.viewModel.setActiveItem(rNumForActiveLayer);
+            }
+
+            if(isOnlyShowingHighlighedItems){
+                appView.viewModel.toggleHighlightedItems();
+            }
+
+            reset();
+        };
+
+        const checkShouldRestore = ()=>{
+            return shouldRestoreAppView;
+        };
+
+        init();
+
+        return {
+            getMapExt: getMapExt,
+            save: saveAppStates,
+            restore: restoreAppView,
+            shouldRestore: checkShouldRestore
+        };
     };
 
     const WaybackImageryLayer = BaseTileLayer.createSubclass({
@@ -689,10 +905,17 @@ esriLoader.loadModules([
             this.releasesDict = dict; 
         };
 
-        this.getSelectedItems = ()=>{
-            const selectedItems = this.releases.filter(d=>{
+        this.getSelectedItems = (shouldOnlyReturnReleaseNum)=>{
+            let selectedItems = this.releases.filter(d=>{
                 return d.isSelected;
             });
+
+            if(shouldOnlyReturnReleaseNum){
+                selectedItems = selectedItems.map(d=>{
+                    return d.release
+                });
+            }
+
             return selectedItems;
         };
 
@@ -804,6 +1027,7 @@ esriLoader.loadModules([
         const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
+        const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -830,10 +1054,14 @@ esriLoader.loadModules([
             this.initEventHandlers();
         };
 
-        this.updateViewModel = (results=[])=>{
+        this.updateViewModel = (results=[], viewOnUpdateEndHandler)=>{
             this.housekeeping();
             this.viewModel.setData(results);
             this.toggleMapLoader(false);
+
+            if(viewOnUpdateEndHandler){
+                viewOnUpdateEndHandler();
+            }
         };
 
         this.toggleWaybakLayerLoadingFailedMsg = (isVisible)=>{
@@ -913,6 +1141,10 @@ esriLoader.loadModules([
             $countOfSelectedItems.text(selectedItems.length);
         };
 
+        this.toggleHighlightedItemsBtnStyle = ()=>{
+            $cboxToggleHighlightedItems.toggleClass('is-checked');
+        };
+
         this.initEventHandlers = ()=>{
 
             $body.on('click', '.js-set-active-item', function(evt){
@@ -938,23 +1170,38 @@ esriLoader.loadModules([
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
-                const target = $(this);
-                target.toggleClass('is-checked');
+                // const target = $(this);
+                // target.toggleClass('is-checked');
                 appView.viewModel.toggleHighlightedItems();
             });
 
             $body.on('click', '.js-open-save-web-map-modal.is-active', function(evt){
 
-                if(window.isUsingOauthPopupWindow){
+                // if(window.isUsingOauthPopupWindow){
 
-                    if(!app.portalUser){
-                        app.signInViaPopUpWindow();
-                    } else {
-                        appView.uploadWebMapModal.show();
-                    }
+                //     if(!app.portalUser){
+                //         app.signInViaPopUpWindow();
+                //     } else {
+                //         appView.uploadWebMapModal.show();
+                //     }
 
+                // } else {
+                //     appView.uploadWebMapModal.show(); 
+                // }
+
+                // if(!app.portalUser){
+                //     app.stateManager.save();
+                //     app.signIn();
+                // } else {
+                //     appView.uploadWebMapModal.show();
+                // }
+
+                if(app.oauthManager.checkIsAnonymous()){
+                    // save current App/UI states so we can restore the app after direct back to the sign in page
+                    app.stateManager.save();
+                    app.oauthManager.signIn();
                 } else {
-                    appView.uploadWebMapModal.show(); 
+                    appView.uploadWebMapModal.show();
                 }
 
             });
@@ -997,7 +1244,8 @@ esriLoader.loadModules([
 
             $body.on('mouseenter', '.js-show-customized-tooltip', function(evt){
                 const target = $(this);
-                const tooltipContent = target.hasClass('is-active') || target.hasClass('is-selected') ? target.attr('data-tooltip-content-alt') : target.attr('data-tooltip-content');
+                // const tooltipContent = target.hasClass('is-active') || target.hasClass('is-selected') ? target.attr('data-tooltip-content-alt') : target.attr('data-tooltip-content');
+                const tooltipContent = target.parent().hasClass('is-selected') ? target.attr('data-tooltip-content-alt') : target.attr('data-tooltip-content');
                 appView.tooltip.show(tooltipContent, target);
             });
 
@@ -1023,6 +1271,7 @@ esriLoader.loadModules([
         this.observerForViewData = null; 
         this.observerForActiveItem = null; 
         this.observerForSelectedItem = null; 
+        this.observerForToggleHighlightedItem = null; 
 
         this.setData = (data)=>{
             this.data = data;
@@ -1080,7 +1329,8 @@ esriLoader.loadModules([
 
         this.toggleHighlightedItems = ()=>{
             this.isOnlyShowingHighlighedItems = !this.isOnlyShowingHighlighedItems;
-            this.filterData();
+            // this.filterData();
+            this.observerForToggleHighlightedItem.notify();
         };
 
         this.getData = ()=>{
@@ -1117,6 +1367,9 @@ esriLoader.loadModules([
             this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
             this.observerForSelectedItem.subscribe(appView.uploadWebMapModal.resetIsWebMapReady); // reset isWebMapReady flag to false so it would create a new web map when user make new selections
             
+            this.observerForToggleHighlightedItem = new Observable();
+            this.observerForToggleHighlightedItem.subscribe(this.filterData);
+            this.observerForToggleHighlightedItem.subscribe(appView.toggleHighlightedItemsBtnStyle);
         };
     };
 
@@ -1592,6 +1845,10 @@ esriLoader.loadModules([
     const app = new WaybackApp();
     const appView = new AppView();
     const helper = new Helper();
+
+    window.appDebugger = {
+        signOut: app.oauthManager.signOut
+    }
 
 
 }).catch(err => {
