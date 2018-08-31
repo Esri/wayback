@@ -372,7 +372,13 @@ esriLoader.loadModules([
 
                 if(!isViewDataSame){
                     const releasesToDisplay = this.dataModel.getFullListOfReleases(releasesWithChanges, releaseNumForActiveItem);
-                    appView.updateViewModel(releasesToDisplay);
+
+                    appView.updateViewModel(releasesToDisplay, ()=>{
+                        if(this.stateManager.shouldRestore()){
+                            this.stateManager.restore();
+                        }
+                    });
+
                 } else {
                     appView.toggleMapLoader(false);
                 }
@@ -665,6 +671,7 @@ esriLoader.loadModules([
         let mapExt = null;
         let selectedItems = [];
         let rNumForActiveLayer = null;
+        let isOnlyShowingHighlighedItems = false;
         let shouldRestoreAppView = false;
 
         const init = ()=>{
@@ -687,6 +694,10 @@ esriLoader.loadModules([
                     rNumForActiveLayer = appStates.rNumForActiveLayer;
                 }
 
+                if(appStates.isOnlyShowingHighlighedItems){
+                    isOnlyShowingHighlighedItems = appStates.isOnlyShowingHighlighedItems;
+                }
+
                 localStorage.removeItem(KEY_LOCALSTORAGE_APP_STATES);
 
                 shouldRestoreAppView = true;
@@ -698,20 +709,20 @@ esriLoader.loadModules([
 
         const getMapExt = ()=>{
             const outputMapExt = mapExt ? JSON.parse(JSON.stringify(mapExt)) : null;
-            mapExt = null;
             return outputMapExt;
         };
 
         const getSelectedItems = ()=>{
             const outputReleases = selectedItems ? JSON.parse(JSON.stringify(selectedItems)) : null;
-            selectedItems.length = 0;
             return outputReleases;
         };
 
-        const getReleaseNumForActiveLayer = ()=>{
-            const outputRnum = rNumForActiveLayer;
+        const reset = ()=>{
+            shouldRestoreAppView = false;
+            selectedItems.length = 0;
             rNumForActiveLayer = null;
-            return outputRnum;
+            mapExt = null;
+            isOnlyShowingHighlighedItems = false;
         };
 
         const saveAppStates = ()=>{
@@ -719,13 +730,16 @@ esriLoader.loadModules([
             const appStates = {
                 mapExt: app.getMapViewExtent(),
                 selectedItems: app.dataModel.getSelectedItems(true),
-                rNumForActiveLayer: app.getReleaseNumFromWaybackImageryLayer()
+                rNumForActiveLayer: app.getReleaseNumFromWaybackImageryLayer(),
+                isOnlyShowingHighlighedItems: appView.viewModel.isOnlyShowingHighlighedItems
             };
 
             localStorage.setItem(KEY_LOCALSTORAGE_APP_STATES, JSON.stringify(appStates));
         };
 
         const restoreAppView = ()=>{
+            console.log('calling restoreAppView');
+
             const prevSelectedItem = getSelectedItems();
             if(prevSelectedItem.length){
                 prevSelectedItem.forEach(rNum=>{
@@ -733,26 +747,28 @@ esriLoader.loadModules([
                 });
             }
 
-            const rNumForPrevActiveLayer = getReleaseNumForActiveLayer();
-            if(rNumForPrevActiveLayer){
-                appView.viewModel.setActiveItem(rNumForPrevActiveLayer);
+            if(rNumForActiveLayer){
+                appView.viewModel.setActiveItem(rNumForActiveLayer);
             }
+
+            if(isOnlyShowingHighlighedItems){
+                appView.viewModel.toggleHighlightedItems();
+            }
+
+            reset();
         };
 
-        const checkShouldRestoreAppView = ()=>{
-            if(shouldRestoreAppView){
-                restoreAppView();
-            }
-
-            shouldRestoreAppView = false;
-        }
+        const checkShouldRestore = ()=>{
+            return shouldRestoreAppView;
+        };
 
         init();
 
         return {
             getMapExt: getMapExt,
             save: saveAppStates,
-            checkShouldRestoreAppView: checkShouldRestoreAppView
+            restore: restoreAppView,
+            shouldRestore: checkShouldRestore
         };
     };
 
@@ -1011,6 +1027,7 @@ esriLoader.loadModules([
         const $countOfSelectedItems = $('.val-holder-count-of-selected-items');
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
+        const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1037,12 +1054,14 @@ esriLoader.loadModules([
             this.initEventHandlers();
         };
 
-        this.updateViewModel = (results=[])=>{
+        this.updateViewModel = (results=[], viewOnUpdateEndHandler)=>{
             this.housekeeping();
             this.viewModel.setData(results);
             this.toggleMapLoader(false);
 
-            app.stateManager.checkShouldRestoreAppView();
+            if(viewOnUpdateEndHandler){
+                viewOnUpdateEndHandler();
+            }
         };
 
         this.toggleWaybakLayerLoadingFailedMsg = (isVisible)=>{
@@ -1122,6 +1141,10 @@ esriLoader.loadModules([
             $countOfSelectedItems.text(selectedItems.length);
         };
 
+        this.toggleHighlightedItemsBtnStyle = ()=>{
+            $cboxToggleHighlightedItems.toggleClass('is-checked');
+        };
+
         this.initEventHandlers = ()=>{
 
             $body.on('click', '.js-set-active-item', function(evt){
@@ -1147,8 +1170,8 @@ esriLoader.loadModules([
             });
 
             $body.on('click', '.js-toggle-highlighted-items', function(evt){
-                const target = $(this);
-                target.toggleClass('is-checked');
+                // const target = $(this);
+                // target.toggleClass('is-checked');
                 appView.viewModel.toggleHighlightedItems();
             });
 
@@ -1174,6 +1197,7 @@ esriLoader.loadModules([
                 // }
 
                 if(app.oauthManager.checkIsAnonymous()){
+                    // save current App/UI states so we can restore the app after direct back to the sign in page
                     app.stateManager.save();
                     app.oauthManager.signIn();
                 } else {
@@ -1247,6 +1271,7 @@ esriLoader.loadModules([
         this.observerForViewData = null; 
         this.observerForActiveItem = null; 
         this.observerForSelectedItem = null; 
+        this.observerForToggleHighlightedItem = null; 
 
         this.setData = (data)=>{
             this.data = data;
@@ -1304,7 +1329,8 @@ esriLoader.loadModules([
 
         this.toggleHighlightedItems = ()=>{
             this.isOnlyShowingHighlighedItems = !this.isOnlyShowingHighlighedItems;
-            this.filterData();
+            // this.filterData();
+            this.observerForToggleHighlightedItem.notify();
         };
 
         this.getData = ()=>{
@@ -1341,6 +1367,9 @@ esriLoader.loadModules([
             this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
             this.observerForSelectedItem.subscribe(appView.uploadWebMapModal.resetIsWebMapReady); // reset isWebMapReady flag to false so it would create a new web map when user make new selections
             
+            this.observerForToggleHighlightedItem = new Observable();
+            this.observerForToggleHighlightedItem.subscribe(this.filterData);
+            this.observerForToggleHighlightedItem.subscribe(appView.toggleHighlightedItemsBtnStyle);
         };
     };
 

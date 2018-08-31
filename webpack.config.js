@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env, options)=> {
 
@@ -7,6 +8,9 @@ module.exports = (env, options)=> {
     console.log('devMode', devMode);
 
     return {
+        output: {
+            filename: 'bundle.[hash].js'
+        },
         module: {
             rules: [
                 {
@@ -62,7 +66,18 @@ module.exports = (env, options)=> {
                 filename: devMode ? '[name].css' : '[name].[hash].css',
                 chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
             })
-        ]
+        ],
+        optimization: {
+            minimizer: [
+                new UglifyJsPlugin({
+                    uglifyOptions: {
+                        compress: {
+                            drop_console: true,
+                        }
+                    }
+                })
+            ]
+        }
     }
 
 };
