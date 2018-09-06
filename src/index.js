@@ -8,7 +8,7 @@ import * as calcite from 'calcite-web';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-layers-prod.json';
+import waybackAgolItemIds from './assets/wayback-lookup_2018.r12.json';
 
 const urlQueryParams = (function(){
     // parse the devMode data from location search params
@@ -65,19 +65,19 @@ const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 esriLoader.loadModules([
     'esri/views/MapView', 
     'esri/WebMap',
-    "esri/geometry/Extent",
+    // "esri/geometry/Extent",
     "esri/geometry/Point",
-    "esri/Graphic",
+    // "esri/Graphic",
 
     "esri/layers/BaseTileLayer",
     "esri/request",
     "esri/core/watchUtils",
-    "esri/geometry/geometryEngine",
+    // "esri/geometry/geometryEngine",
     "esri/geometry/support/webMercatorUtils",
     
     "esri/identity/OAuthInfo",
     "esri/identity/IdentityManager",
-    "esri/portal/Portal",
+    // "esri/portal/Portal",
 
     "esri/widgets/Search",
 
@@ -85,19 +85,19 @@ esriLoader.loadModules([
 ]).then(([
     MapView, 
     WebMap,
-    Extent,
+    // Extent,
     Point,
-    Graphic,
+    // Graphic,
 
     BaseTileLayer,
     esriRequest,
     watchUtils,
-    geometryEngine,
+    // geometryEngine,
     webMercatorUtils,
 
     OAuthInfo, 
     esriId,
-    Portal,
+    // Portal,
 
     Search
 ])=>{
