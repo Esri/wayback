@@ -8,7 +8,7 @@ import * as calcite from 'calcite-web';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-lookup_2018.r12.json';
+import waybackAgolItemIds from './assets/wayback-lookup_2018.r13.json';
 
 const urlQueryParams = (function(){
     // parse the devMode data from location search params
