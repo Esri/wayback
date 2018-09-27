@@ -250,7 +250,7 @@
     "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14342/{level}/{row}/{col}"
   },
   "14426": {
-    "itemID": " de2b6cae87d3458c844446123ec6e05f",
+    "itemID": "de2b6cae87d3458c844446123ec6e05f",
     "itemTitle": "World Imagery (Wayback 2018-09-26)",
     "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14426/{level}/{row}/{col}"
   },

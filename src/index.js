@@ -2,7 +2,7 @@
 import $ from 'jquery';
 import * as d3 from "d3";
 import * as esriLoader from 'esri-loader';
-import * as calcite from 'calcite-web';
+import * as calcite from 'calcite-web/dist/js/calcite-web';
 
 // import style files
 import './style/index.scss';
