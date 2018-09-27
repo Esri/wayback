@@ -10,6 +10,9 @@ import './style/index.scss';
 // import other files
 import waybackAgolItemIds from './assets/wayback-lookup_2018.r13.json';
 
+// import the polyfill for ES6-style Promises
+const Promise = require('es6-promise').Promise;
+
 const urlQueryParams = (function(){
     // parse the devMode data from location search params
     // http://localhost:8080/?devMode=true&baseUrl=https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer
@@ -59,9 +62,8 @@ const DOM_ID_BARCHART = 'barChartDiv';
 const DOM_ID_ITEMLIST = 'listCardsWrap';
 const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
-// const DELAY_TIME_FOR_MAPVIEW_STATIONARY_EVT = 250;
-
-
+// before using esri-loader, tell it to use the promise library
+esriLoader.utils.Promise = Promise;
 esriLoader.loadModules([
     'esri/views/MapView', 
     'esri/WebMap',

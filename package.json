@@ -24,7 +24,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
-    "calcite-web": "github:esri/calcite-web#v1.0.1",
+    "calcite-web": "github:Esri/calcite-web#v1.1.0",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "d3": "^5.4.0",
+    "es6-promise": "^4.2.5",
     "esri-loader": "^2.3.0",
     "jquery": "^3.3.1"
   }
