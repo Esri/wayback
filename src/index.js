@@ -8,7 +8,7 @@ import * as calcite from 'calcite-web/dist/js/calcite-web';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-lookup_2018.r13.json';
+import waybackAgolItemIds from './assets/wayback-lookup_2018.r14.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
