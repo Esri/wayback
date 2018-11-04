@@ -113,6 +113,7 @@ esriLoader.loadModules([
         this.portalUser = null;
         this.stateManager = new AppStateManager();
         this.oauthManager = new OAuthManager();
+        this.waybackMetadataManager = new WaybackMetadataManager();
 
         this.init = ()=>{
             // if(!window.isUsingOauthPopupWindow){
@@ -237,6 +238,8 @@ esriLoader.loadModules([
 
         this.addWaybackImageryLayer = (releaseNum)=>{
 
+            console.log('calling addWaybackImageryLayer');
+
             if(!releaseNum){
                 console.error('release number ({m} value) is required to add wayback imagery layer');
                 return;
@@ -289,6 +292,7 @@ esriLoader.loadModules([
 
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
+            console.log('calling updateEventsOnEndHandler');
             if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
             }
@@ -521,88 +525,27 @@ esriLoader.loadModules([
             return screenPt;
         };
 
-        // this.saveAppStates = ()=>{
-
-        //     const appStates = {
-        //         extent: 'currentMapExt',
-        //         selectedReleases: 'selectedReleases'
-        //     };
-
-        //     localStorage.setItem(KEY_LOCALSTORAGE_APP_STATES, JSON.stringify(appStates));
-        // };
-
-        // this.checkAppStates = ()=>{
-
-        //     let appStates = localStorage.getItem(KEY_LOCALSTORAGE_APP_STATES);
-        //     appStates = appStates ? JSON.parse(appStates) : null;
-
-        //     if(appStates){
-        //         console.log('appStates is found', appStates);
-        //         localStorage.removeItem(KEY_LOCALSTORAGE_APP_STATES);
-        //     } else {
-        //         console.log('previously stored app states not found');
-        //     }
-        // };
-
-        // this.signIn = ()=>{
-
-        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
-
-        //     const info = new OAuthInfo({
-        //         appId: oauth_appid,
-        //         popup: false,
-        //     });
-
-        //     esriId.useSignInPage = false;
-
-        //     esriId.registerOAuthInfos([info]);
-
-        //     this.initPortal();
-        // };
-
-        // this.signInViaPopUpWindow = ()=>{
-
-        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
-
-        //     const info = new OAuthInfo({
-        //         // Swap this ID out with registered application ID
-        //         appId: oauth_appid,
-        //         popup: true
-        //     });
-
-        //     esriId.useSignInPage = false;
-
-        //     esriId.registerOAuthInfos([info]);
-
-        //     esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
-        //         this.initPortal();
-        //     }).catch(()=>{
-        //         // error handler
-        //     });
-        // };
-
-        // this.signOut = ()=>{
-        //     esriId.destroyCredentials();
-        //     window.location.reload();
-        // };
-
-        // this.initPortal = ()=>{
-        //     const portal = new Portal();
-        //     // Setting authMode to immediate signs the user in once loaded
-        //     portal.authMode = "immediate";
-        //     // Once loaded, user is signed in
-        //     portal.load().then((res)=>{
-        //         this.setPortalUser(res.user);
-
-        //         // if(window.isUsingOauthPopupWindow){
-        //         //     appView.uploadWebMapModal.show();
-        //         // }
-
-        //         appView.uploadWebMapModal.show();
-        //     });
-        // };
-
         this.init();
+    };
+
+    const WaybackMetadataManager =  function(){
+
+        // can only get metadata when the map is between the min and max zoom level (10 <= mapZoom <= 23) 
+        const maxZoom = 23;
+        const minZoom = 10;
+
+        const getMetaData = (mapPoint)=>{
+            console.log(mapPoint);
+        };
+
+        const setMetaData = ()=>{
+
+        };
+
+        const queryMetaData = ()=>{
+
+        };
+
     };
 
     const OAuthManager = function(){
