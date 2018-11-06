@@ -8,7 +8,8 @@ import * as calcite from 'calcite-web/dist/js/calcite-web';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-lookup_2018.r14.json';
+import waybackAgolItemIds from './assets/wayback-lookup.testing.json';
+// import waybackAgolItemIds from './assets/wayback-lookup_2018.r14.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
@@ -238,7 +239,7 @@ esriLoader.loadModules([
 
         this.addWaybackImageryLayer = (releaseNum)=>{
 
-            console.log('calling addWaybackImageryLayer');
+            // console.log('calling addWaybackImageryLayer');
 
             if(!releaseNum){
                 console.error('release number ({m} value) is required to add wayback imagery layer');
@@ -257,6 +258,8 @@ esriLoader.loadModules([
             this.mapView.map.add(waybackLyr);
 
             this.mapView.map.reorder(waybackLyr, 0); //bring the layer to bottom so the labels are visible
+
+            this.getMetaData();
         };
 
         this.getWaybackImageryLayer = ()=>{
@@ -295,6 +298,7 @@ esriLoader.loadModules([
             console.log('calling updateEventsOnEndHandler');
             if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
+                this.getMetaData();
             }
         };
 
@@ -388,6 +392,20 @@ esriLoader.loadModules([
                 } else {
                     appView.toggleMapLoader(false);
                 }
+            });
+        };
+
+        this.getMetaData = ()=>{
+            const mapCenter = this.mapView.center;
+            const zoom = this.mapView.zoom;
+            const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
+
+            this.waybackMetadataManager.getData(mapCenter, zoom, releaseNumForActiveItem).then(metadata=>{
+                console.log('metadata', metadata);
+                appView.populateMetadata(metadata);
+            }).catch(errorMsg=>{
+                console.error('cannot get metadata:', errorMsg);
+                appView.populateMetadata();
             });
         };
 
@@ -528,22 +546,93 @@ esriLoader.loadModules([
         this.init();
     };
 
-    const WaybackMetadataManager =  function(){
+    const WaybackMetadataManager =  function(options={}){
 
         // can only get metadata when the map is between the min and max zoom level (10 <= mapZoom <= 23) 
-        const maxZoom = 23;
-        const minZoom = 10;
+        const MAX_ZOOM = 23;
+        const MIN_ZOOM = 10;
+        const FIELD_NAME_SRC_DATE = 'SRC_DATE2';
+        const FIELD_NAME_SRC_NAME = 'NICE_DESC';
 
-        const getMetaData = (mapPoint)=>{
-            console.log(mapPoint);
+        const getData = (mapPoint, zoom, releaseNum)=>{
+
+            return new Promise((resolve, reject)=>{
+
+                const metadataLayerUrl = getMetaDataLayerUrl(releaseNum, zoom);
+            
+                if(metadataLayerUrl){
+                    queryData(metadataLayerUrl, mapPoint).then(res=>{
+                        // console.log(res);
+                        if(res){
+                            resolve(res);
+                        } else {
+                            reject('no metadata result from the query');
+                        }
+                        
+                    });
+                } else {
+                    reject('no metadata layer available');
+                }
+            });
+            
         };
 
-        const setMetaData = ()=>{
+        const queryData = (metadataLayerUrl, mapPoint)=>{
+
+            const queryParam = {
+                geometry: JSON.stringify({"x": mapPoint.x, "y":mapPoint.y, "spatialReference":{"wkid":102100,"latestWkid":3857}}),
+                geometryType: 'esriGeometryPoint',
+                inSR: 102100,
+                spatialRel: 'esriSpatialRelIntersects',
+                outFields: "*",
+                returnGeometry: false,
+                f: 'json'
+            };
+
+            return new Promise((resolve, reject)=>{
+
+                esriRequest(metadataLayerUrl + '/query', {
+                    method: 'get',
+                    query: queryParam,
+                    responseType: "json"
+                }).then(function(response){
+                    // callback(response.data);
+                    // console.log(response);
+                    const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
+                    const outputData = feature ? { "date": feature.attributes[FIELD_NAME_SRC_DATE], "provider": feature.attributes[FIELD_NAME_SRC_NAME] } : null;
+                    resolve(outputData);
+                });
+            });
 
         };
 
-        const queryMetaData = ()=>{
+        const getMetaDataLayerId = (zoom)=>{
+            zoom = +zoom;
+            const layerID = MAX_ZOOM - zoom;
+            const layerIdForMinZoom = MAX_ZOOM - MIN_ZOOM; // the service has 14 sub layers that provide metadata up to zoom level 10 (layer ID 14), if the zoom level is small that (e.g. 5), there are no metadata
+            // console.log('zoom', zoom);
+            return layerID <= layerIdForMinZoom ? layerID : layerIdForMinZoom;
+        };
 
+        // url to the map service for that release 
+        const getMetaDataLayerUrl = (releaseNum, zoom)=>{
+
+            const metadataServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayer ? waybackAgolItemIds[releaseNum].metadataLayer : null;
+            const layerID = getMetaDataLayerId(zoom);
+
+            // console.log(layerID);
+
+            if(!metadataServiceUrl){
+                console.error('no Metadata Layer found for release >', releaseNum);
+                return;
+            }
+
+            return metadataServiceUrl + '/' + layerID;
+
+        };
+
+        return {
+            getData
         };
 
     };
@@ -973,6 +1062,7 @@ esriLoader.loadModules([
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
         const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
+        const $metadataInfo = $('#metadataInfoDiv');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1088,6 +1178,20 @@ esriLoader.loadModules([
 
         this.toggleHighlightedItemsBtnStyle = ()=>{
             $cboxToggleHighlightedItems.toggleClass('is-checked');
+        };
+
+        this.populateMetadata = (data)=>{
+            let metadataInfoHtml = '';
+            const dateFormat = d3.timeFormat("%Y-%m-%d");
+
+            if(data && data.date && data.provider){
+                metadataInfoHtml = `
+                    <div class='trailer-1'>
+                        <span class='trailer-0 margin-right-half'>Imagery was acquired on <b>${dateFormat(new Date(data.date))}<b></span>
+                    </div>
+                `;
+            }
+            $metadataInfo.html(metadataInfoHtml);
         };
 
         this.initEventHandlers = ()=>{
