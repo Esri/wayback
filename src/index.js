@@ -474,16 +474,37 @@ esriLoader.loadModules([
                     'f': 'json'
                 };
     
-                const operationalLayers = selectedItems.map( (d, i)=>{
-                    const layerInfo = {
+                const operationalLayers = [];
+                
+                selectedItems.forEach((d, i)=>{
+
+                    const isVisible = i === 0 ? true : false;
+
+                    const metadataLayerUrl = this.waybackMetadataManager.getMetadataMapServiceUrl(d.release);
+
+                    const waybackLayerInfo = {
                         "templateUrl": d.layerURL,
-                        "visibility": i === 0 ? true : false,
+                        "visibility": isVisible,
                         "title": d.releaseName,
                         "type": "WebTiledLayer",
                         "layerType": "WebTiledLayer",
                         "itemId": d.agolItemID
                     };
-                    return layerInfo;
+
+                    operationalLayers.push(waybackLayerInfo);
+
+                    if(metadataLayerUrl){
+                        const metadataLayerTitle = "Metadata for " + d.releaseName;
+                        const metadataLayerInfo = {
+                            "layerType": "ArcGISTiledMapServiceLayer",
+                            "url": metadataLayerUrl,
+                            "visibility": isVisible,
+                            "opacity": 1,
+                            "title": metadataLayerTitle
+                        };
+                        operationalLayers.push(metadataLayerInfo);
+                    }
+
                 });
     
                 const requestText = {  
@@ -606,6 +627,11 @@ esriLoader.loadModules([
 
         };
 
+        const getMetadataMapServiceUrl = (releaseNum)=>{
+            const mapServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayer ? waybackAgolItemIds[releaseNum].metadataLayer : null;
+            return mapServiceUrl;
+        };
+
         const getMetaDataLayerId = (zoom)=>{
             zoom = +zoom;
             const layerID = MAX_ZOOM - zoom;
@@ -617,7 +643,7 @@ esriLoader.loadModules([
         // url to the map service for that release 
         const getMetaDataLayerUrl = (releaseNum, zoom)=>{
 
-            const metadataServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayer ? waybackAgolItemIds[releaseNum].metadataLayer : null;
+            const metadataServiceUrl = getMetadataMapServiceUrl(releaseNum);
             const layerID = getMetaDataLayerId(zoom);
 
             // console.log(layerID);
@@ -632,7 +658,8 @@ esriLoader.loadModules([
         };
 
         return {
-            getData
+            getData,
+            getMetadataMapServiceUrl
         };
 
     };
