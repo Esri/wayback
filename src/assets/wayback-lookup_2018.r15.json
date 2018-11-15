@@ -1,0 +1,437 @@
+{
+  "10": {
+    "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
+    "itemTitle": "World Imagery (Wayback 2014-02-20)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10/{level}/{row}/{col}"
+  },
+  "388": {
+    "itemID": "8e7e0f751fa04d99be133b1acf80af29",
+    "itemTitle": "World Imagery (Wayback 2016-04-20)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/388/{level}/{row}/{col}"
+  },
+  "577": {
+    "itemID": "dea581ad8542487ab36e01910b70820b",
+    "itemTitle": "World Imagery (Wayback 2017-01-11)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/577/{level}/{row}/{col}"
+  },
+  "784": {
+    "itemID": "cbb8bb93ddcf409b8615ba9fc2a04f0f",
+    "itemTitle": "World Imagery (Wayback 2017-05-03)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/784/{level}/{row}/{col}"
+  },
+  "1052": {
+    "itemID": "51feb5bbab904450a410109df97daab3",
+    "itemTitle": "World Imagery (Wayback 2017-04-19)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1052/{level}/{row}/{col}"
+  },
+  "1296": {
+    "itemID": "cd21e40a815549a69bb54d575777d973",
+    "itemTitle": "World Imagery (Wayback 2018-04-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1296/{level}/{row}/{col}"
+  },
+  "1431": {
+    "itemID": "a07d33935177469d976ce63c185ef81e",
+    "itemTitle": "World Imagery (Wayback 2015-09-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1431/{level}/{row}/{col}"
+  },
+  "1858": {
+    "itemID": "1fafd8ba266e4cc68fe4721fd79c63da",
+    "itemTitle": "World Imagery (Wayback 2018-08-15)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1858/{level}/{row}/{col}"
+  },
+  "2168": {
+    "itemID": "9bf3332be9354b219c482e0855757204",
+    "itemTitle": "World Imagery (Wayback 2018-09-06)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/2168/{level}/{row}/{col}"
+  },
+  "2730": {
+    "itemID": "a70ce255e5ce4a18b43287abece6838e",
+    "itemTitle": "World Imagery (Wayback 2015-03-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/2730/{level}/{row}/{col}"
+  },
+  "3026": {
+    "itemID": "ca9c65a9487b4188a4d7251e24acc0b6",
+    "itemTitle": "World Imagery (Wayback 2014-07-02)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3026/{level}/{row}/{col}"
+  },
+  "3201": {
+    "itemID": "f1d75d38d15240f7aa51b106cd0c9aae",
+    "itemTitle": "World Imagery (Wayback 2018-11-07)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3201/{level}/{row}/{col}"
+  },
+  "3319": {
+    "itemID": "af9bb3197b6d4d0eb8039acf34a25b85",
+    "itemTitle": "World Imagery (Wayback 2017-07-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3319/{level}/{row}/{col}"
+  },
+  "3515": {
+    "itemID": "4257d2eaac99403dba1850dbab4c9368",
+    "itemTitle": "World Imagery (Wayback 2016-01-13)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3515/{level}/{row}/{col}"
+  },
+  "3630": {
+    "itemID": "ef99934f006b433b8fc00f5ee33f196a",
+    "itemTitle": "World Imagery (Wayback 2015-09-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3630/{level}/{row}/{col}"
+  },
+  "4073": {
+    "itemID": "982800ab3dac47b4ad540064c8305a45",
+    "itemTitle": "World Imagery (Wayback 2017-06-27)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4073/{level}/{row}/{col}"
+  },
+  "4222": {
+    "itemID": "3518b50b7fb74542914227ea97980262",
+    "itemTitle": "World Imagery (Wayback 2016-10-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4222/{level}/{row}/{col}"
+  },
+  "4230": {
+    "itemID": "dbc370acb862499e8085a33e3393df77",
+    "itemTitle": "World Imagery (Wayback 2014-03-26)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4230/{level}/{row}/{col}"
+  },
+  "5097": {
+    "itemID": "b75ef272f7f14e9c9cd7a96f0b5827c0",
+    "itemTitle": "World Imagery (Wayback 2016-07-20)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5097/{level}/{row}/{col}"
+  },
+  "5205": {
+    "itemID": "44aa7f0251684e8b94718486f2be2441",
+    "itemTitle": "World Imagery (Wayback 2017-03-29)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5205/{level}/{row}/{col}"
+  },
+  "5232": {
+    "itemID": "74a4e853abae4b7498899248c148b8ea",
+    "itemTitle": "World Imagery (Wayback 2014-07-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5232/{level}/{row}/{col}"
+  },
+  "5769": {
+    "itemID": "4b8dd6deefd142dbada1bb1f8c1547d9",
+    "itemTitle": "World Imagery (Wayback 2016-04-28)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5769/{level}/{row}/{col}"
+  },
+  "5844": {
+    "itemID": "0b3dd18105544e7bbaea33d9ebdf1154",
+    "itemTitle": "World Imagery (Wayback 2014-12-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5844/{level}/{row}/{col}"
+  },
+  "6354": {
+    "itemID": "5e923c4065824360957da6fca901efa5",
+    "itemTitle": "World Imagery (Wayback 2016-02-04)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6354/{level}/{row}/{col}"
+  },
+  "6678": {
+    "itemID": "1beb71b206d7451c9525b23731abbe4d",
+    "itemTitle": "World Imagery (Wayback 2016-12-07)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6678/{level}/{row}/{col}"
+  },
+  "6984": {
+    "itemID": "f736a7cd248b468ea60b21ee9d94ca04",
+    "itemTitle": "World Imagery (Wayback 2016-09-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6984/{level}/{row}/{col}"
+  },
+  "7072": {
+    "itemID": "098c68a0edc24be9a4e9ea5697320887",
+    "itemTitle": "World Imagery (Wayback 2018-03-28)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/7072/{level}/{row}/{col}"
+  },
+  "8249": {
+    "itemID": "474c65ab3e1941468511785495eb8987",
+    "itemTitle": "World Imagery (Wayback 2018-06-06)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8249/{level}/{row}/{col}"
+  },
+  "8255": {
+    "itemID": "6c4bca28818244a2a9759311a4981c44",
+    "itemTitle": "World Imagery (Wayback 2018-03-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8255/{level}/{row}/{col}"
+  },
+  "8551": {
+    "itemID": "4ee9e8f78a3749f38d47e7ab6a68ccef",
+    "itemTitle": "World Imagery (Wayback 2016-05-11)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8551/{level}/{row}/{col}"
+  },
+  "8781": {
+    "itemID": "945d1a6828f642c1991ac6dfc137a007",
+    "itemTitle": "World Imagery (Wayback 2015-11-18)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8781/{level}/{row}/{col}"
+  },
+  "9175": {
+    "itemID": "d02f6b6905a142a2a3726844e7f3da2b",
+    "itemTitle": "World Imagery (Wayback 2016-08-31)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9175/{level}/{row}/{col}"
+  },
+  "9203": {
+    "itemID": "e87756d6de764c20b108f2bc576db1ba",
+    "itemTitle": "World Imagery (Wayback 2015-04-15)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9203/{level}/{row}/{col}"
+  },
+  "9486": {
+    "itemID": "b7d8c5793c784a3081798f8268c1adc6",
+    "itemTitle": "World Imagery (Wayback 2017-01-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9486/{level}/{row}/{col}"
+  },
+  "10443": {
+    "itemID": "325a81849a9340be87e6cf5d5996caea",
+    "itemTitle": "World Imagery (Wayback 2015-02-18)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10443/{level}/{row}/{col}"
+  },
+  "10768": {
+    "itemID": "9701f2a29b1c459089a59044647a3f7b",
+    "itemTitle": "World Imagery (Wayback 2018-01-31)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10768/{level}/{row}/{col}"
+  },
+  "10850": {
+    "itemID": "356aa26c2e5a49b3a78395a16500794d",
+    "itemTitle": "World Imagery (Wayback 2015-10-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10850/{level}/{row}/{col}"
+  },
+  "11019": {
+    "itemID": "a5fc12e9c4324663bafde942a7d1e1d3",
+    "itemTitle": "World Imagery (Wayback 2014-10-29)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11019/{level}/{row}/{col}"
+  },
+  "11033": {
+    "itemID": "129198abd5fe49008e05aeea8fbfc2b8",
+    "itemTitle": "World Imagery (Wayback 2014-06-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11033/{level}/{row}/{col}"
+  },
+  "11092": {
+    "itemID": "2f582e04e33042a586c20ecdf2ee9536",
+    "itemTitle": "World Imagery (Wayback 2015-10-28)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11092/{level}/{row}/{col}"
+  },
+  "11262": {
+    "itemID": "5a02e65986c64b6991959639dbec042d",
+    "itemTitle": "World Imagery (Wayback 2016-02-17)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11262/{level}/{row}/{col}"
+  },
+  "11334": {
+    "itemID": "2ae3908a772546828a1436025c4b14a2",
+    "itemTitle": "World Imagery (Wayback 2018-06-27)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11334/{level}/{row}/{col}"
+  },
+  "11509": {
+    "itemID": "9563e36b0527473797dcc8397e292b2e",
+    "itemTitle": "World Imagery (Wayback 2016-06-13)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11509/{level}/{row}/{col}"
+  },
+  "11952": {
+    "itemID": "7b06f2c7497746e9964c99437ede0aa9",
+    "itemTitle": "World Imagery (Wayback 2015-06-24)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11952/{level}/{row}/{col}"
+  },
+  "13045": {
+    "itemID": "2f2d18a67a93482cadc696f28001e386",
+    "itemTitle": "World Imagery (Wayback 2018-01-18)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13045/{level}/{row}/{col}"
+  },
+  "13067": {
+    "itemID": "d16846fb68894fa38ea157da545a25ed",
+    "itemTitle": "World Imagery (Wayback 2018-02-23)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13067/{level}/{row}/{col}"
+  },
+  "13161": {
+    "itemID": "d722c8eca54d4adb8087870f5ca0ef78",
+    "itemTitle": "World Imagery (Wayback 2018-01-08)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13161/{level}/{row}/{col}"
+  },
+  "13240": {
+    "itemID": "cd067f20d4d84588a66810e0d876df6f",
+    "itemTitle": "World Imagery (Wayback 2016-07-06)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13240/{level}/{row}/{col}"
+  },
+  "13770": {
+    "itemID": "47f87eb35b024b09ab646c1d3b8d0c22",
+    "itemTitle": "World Imagery (Wayback 2016-10-12)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13770/{level}/{row}/{col}"
+  },
+  "14035": {
+    "itemID": "361822e658734dd7aa419d9f9bc0491e",
+    "itemTitle": "World Imagery (Wayback 2017-08-10)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14035/{level}/{row}/{col}"
+  },
+  "14342": {
+    "itemID": "eddb2fb76fe14d3ea40e05764919e84a",
+    "itemTitle": "World Imagery (Wayback 2017-05-31)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14342/{level}/{row}/{col}"
+  },
+  "14426": {
+    "itemID": "de2b6cae87d3458c844446123ec6e05f",
+    "itemTitle": "World Imagery (Wayback 2018-09-26)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14426/{level}/{row}/{col}"
+  },
+  "14720": {
+    "itemID": "676422c53ca6422d9d6849666b9f2552",
+    "itemTitle": "World Imagery (Wayback 2014-12-18)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14720/{level}/{row}/{col}"
+  },
+  "14765": {
+    "itemID": "7e739dee52d745c9ace1883131cd8c0a",
+    "itemTitle": "World Imagery (Wayback 2017-06-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14765/{level}/{row}/{col}"
+  },
+  "14829": {
+    "itemID": "4291f5876e1040e2934a089149af59bd",
+    "itemTitle": "World Imagery (Wayback 2018-07-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14829/{level}/{row}/{col}"
+  },
+  "15084": {
+    "itemID": "21a29eb19b724d2390d71d78fa1ec25c",
+    "itemTitle": "World Imagery (Wayback 2015-03-18)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/15084/{level}/{row}/{col}"
+  },
+  "15212": {
+    "itemID": "8b068965d24b4e57b0b7beb70b737fde",
+    "itemTitle": "World Imagery (Wayback 2017-10-04)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/15212/{level}/{row}/{col}"
+  },
+  "16513": {
+    "itemID": "920d9c042eea4c119d44f67ebcf42ad3",
+    "itemTitle": "World Imagery (Wayback 2014-05-14)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/16513/{level}/{row}/{col}"
+  },
+  "18358": {
+    "itemID": "8ec53e2b21a44eb4af53a14f6ef74f2a",
+    "itemTitle": "World Imagery (Wayback 2017-09-13)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18358/{level}/{row}/{col}"
+  },
+  "18820": {
+    "itemID": "52e1227c0a1043fbb843ba4b747f0a8c",
+    "itemTitle": "World Imagery (Wayback 2018-10-17)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18820/{level}/{row}/{col}"
+  },
+  "18966": {
+    "itemID": "4658a63f59764dceaaa5d5dc68428d57",
+    "itemTitle": "World Imagery (Wayback 2016-12-20)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18966/{level}/{row}/{col}"
+  },
+  "19085": {
+    "itemID": "7c15c3ea11fa4f2c958bee6339ae9657",
+    "itemTitle": "World Imagery (Wayback 2016-03-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19085/{level}/{row}/{col}"
+  },
+  "19819": {
+    "itemID": "ff8cda5f98424ca78ad496112b8d1fff",
+    "itemTitle": "World Imagery (Wayback 2014-04-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19819/{level}/{row}/{col}"
+  },
+  "19930": {
+    "itemID": "e321561769bc468586d19156de6cef3d",
+    "itemTitle": "World Imagery (Wayback 2015-05-13)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19930/{level}/{row}/{col}"
+  },
+  "20222": {
+    "itemID": "4781716956284d2ea7831b2c9837b52d",
+    "itemTitle": "World Imagery (Wayback 2015-01-21)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20222/{level}/{row}/{col}"
+  },
+  "20365": {
+    "itemID": "99264f40bd1249c98140d3eb88d4e3d9",
+    "itemTitle": "World Imagery (Wayback 2017-05-17)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20365/{level}/{row}/{col}"
+  },
+  "20399": {
+    "itemID": "9fc4b9df0cfa471daae1d217e0b07908",
+    "itemTitle": "World Imagery (Wayback 2018-04-11)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20399/{level}/{row}/{col}"
+  },
+  "20443": {
+    "itemID": "2f33c09b5e9d42d2a159a87591619cd2",
+    "itemTitle": "World Imagery (Wayback 2016-03-02)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20443/{level}/{row}/{col}"
+  },
+  "21750": {
+    "itemID": "060a9a68c1774b78bd7cb5ec2332b969",
+    "itemTitle": "World Imagery (Wayback 2016-11-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/21750/{level}/{row}/{col}"
+  },
+  "22692": {
+    "itemID": "e23fe831aea34b1b87cfe0fd9073d319",
+    "itemTitle": "World Imagery (Wayback 2014-10-01)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/22692/{level}/{row}/{col}"
+  },
+  "23264": {
+    "itemID": "142407ec40104d678072fc4347aeacd2",
+    "itemTitle": "World Imagery (Wayback 2017-10-25)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23264/{level}/{row}/{col}"
+  },
+  "23383": {
+    "itemID": "408d5b24fc4e4650bc7799dd1e1e606f",
+    "itemTitle": "World Imagery (Wayback 2014-12-03)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23383/{level}/{row}/{col}"
+  },
+  "23601": {
+    "itemID": "db4f466b0a33403f99be46f36c2bf674",
+    "itemTitle": "World Imagery (Wayback 2016-08-11)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23601/{level}/{row}/{col}"
+  },
+  "23880": {
+    "itemID": "593966cdb3a24fc5b74feb1d1b498d3e",
+    "itemTitle": "World Imagery (Wayback 2015-04-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23880/{level}/{row}/{col}"
+  },
+  "24007": {
+    "itemID": "9b5f377a483a4c1c863f85250d1b707a",
+    "itemTitle": "World Imagery (Wayback 2015-07-08)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/24007/{level}/{row}/{col}"
+  },
+  "25379": {
+    "itemID": "20c760aa5cec450a9b32d72340f4959e",
+    "itemTitle": "World Imagery (Wayback 2017-08-30)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25379/{level}/{row}/{col}"
+  },
+  "25521": {
+    "itemID": "b794bc15295e4be3896b5b91ebfd2c20",
+    "itemTitle": "World Imagery (Wayback 2017-11-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25521/{level}/{row}/{col}"
+  },
+  "25586": {
+    "itemID": "a87d911d19a94cd085d86118f98a1b9a",
+    "itemTitle": "World Imagery (Wayback 2014-09-17)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25586/{level}/{row}/{col}"
+  },
+  "27946": {
+    "itemID": "121123062bf0421199e5cec9556a61a2",
+    "itemTitle": "World Imagery (Wayback 2017-02-08)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/27946/{level}/{row}/{col}"
+  },
+  "28163": {
+    "itemID": "520249a818984ead8f72194f3505b442",
+    "itemTitle": "World Imagery (Wayback 2015-12-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/28163/{level}/{row}/{col}"
+  },
+  "28219": {
+    "itemID": "feb0524c476a4c7b9fec7fc61f4aea4a",
+    "itemTitle": "World Imagery (Wayback 2015-08-19)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/28219/{level}/{row}/{col}"
+  },
+  "29387": {
+    "itemID": "56bef461913a4c3b90f08ed8e4429d13",
+    "itemTitle": "World Imagery (Wayback 2017-03-15)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/29387/{level}/{row}/{col}"
+  },
+  "30195": {
+    "itemID": "333683359d8742da9a25ad9c5a34df15",
+    "itemTitle": "World Imagery (Wayback 2014-11-12)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/30195/{level}/{row}/{col}"
+  },
+  "30584": {
+    "itemID": "5a39021bb07b47ff8a7f3b7c1f51a575",
+    "itemTitle": "World Imagery (Wayback 2015-09-02)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/30584/{level}/{row}/{col}"
+  },
+  "31026": {
+    "itemID": "9badc1f6b6a64a609a87fc75e8a6b083",
+    "itemTitle": "World Imagery (Wayback 2017-02-27)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/31026/{level}/{row}/{col}"
+  },
+  "31144": {
+    "itemID": "80905345d5c34168b1975656907a1a17",
+    "itemTitle": "World Imagery (Wayback 2014-06-11)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/31144/{level}/{row}/{col}"
+  },
+  "32337": {
+    "itemID": "2036ae13b70b4b9ea8f892e765297395",
+    "itemTitle": "World Imagery (Wayback 2018-05-16)",
+    "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/32337/{level}/{row}/{col}"
+  }
+}

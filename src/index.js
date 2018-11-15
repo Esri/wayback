@@ -4,6 +4,8 @@ import * as d3 from "d3";
 import * as esriLoader from 'esri-loader';
 import * as calcite from 'calcite-web/dist/js/calcite-web';
 
+import PopupInfoWindow from './ui-components/PopupInfoWindow';
+
 // import style files
 import './style/index.scss';
 
@@ -259,7 +261,7 @@ esriLoader.loadModules([
 
             this.mapView.map.reorder(waybackLyr, 0); //bring the layer to bottom so the labels are visible
 
-            this.getMetaData();
+            // this.getMetaData();
         };
 
         this.getWaybackImageryLayer = ()=>{
@@ -280,8 +282,19 @@ esriLoader.loadModules([
         };
 
         this.setMapEventHandlers = (view)=>{
+
             view.on('click', (evt)=>{
-                this.searchWayback(evt.mapPoint);
+                // this.searchWayback(evt.mapPoint);
+                const mapPoint = evt.mapPoint;
+
+                this.getMetaData({ mapPoint }).then(metadata=>{
+                    const screenPoint = this.convertToScreenPoint(mapPoint);
+
+                    appView.popupInfoWindow.show({
+                        screenPoint,
+                        metadata
+                    });
+                });
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
@@ -298,7 +311,6 @@ esriLoader.loadModules([
             console.log('calling updateEventsOnEndHandler');
             if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
-                this.getMetaData();
             }
         };
 
@@ -395,17 +407,18 @@ esriLoader.loadModules([
             });
         };
 
-        this.getMetaData = ()=>{
-            const mapCenter = this.mapView.center;
+        this.getMetaData = (options={})=>{
+            const mapPoint = options.mapPoint || this.mapView.center;
+            const releaseNum = options.releaseNum || this.getReleaseNumFromWaybackImageryLayer();
             const zoom = this.mapView.zoom;
-            const releaseNumForActiveItem = this.getReleaseNumFromWaybackImageryLayer();
-
-            this.waybackMetadataManager.getData(mapCenter, zoom, releaseNumForActiveItem).then(metadata=>{
-                console.log('metadata', metadata);
-                appView.populateMetadata(metadata);
-            }).catch(errorMsg=>{
-                console.error('cannot get metadata:', errorMsg);
-                appView.populateMetadata();
+            
+            return new Promise((resolve, reject) => {
+                this.waybackMetadataManager.getData(mapPoint, zoom, releaseNum).then(metadata=>{
+                    resolve(metadata);
+                }).catch(errorMsg=>{
+                    console.error('cannot get metadata:', errorMsg);
+                    reject({error: errorMsg});
+                });
             });
         };
 
@@ -549,15 +562,20 @@ esriLoader.loadModules([
 
         this.getScreenPointFromXY = (x, y)=>{
 
-            const xOffsetForMapDiv = 350; 
-
             const pt = new Point({
                 x: x,
                 y: y,
                 spatialReference: { wkid: 3857 }
             });
 
-            const screenPt = this.mapView.toScreen(pt);
+            return this.convertToScreenPoint(pt);
+        };
+
+        this.convertToScreenPoint = (mapPoint)=>{
+
+            const xOffsetForMapDiv = 350; 
+
+            const screenPt = this.mapView.toScreen(mapPoint);
 
             screenPt.x = screenPt.x + xOffsetForMapDiv; // need to add this offset because we have gutter and side bar at left of the page
 
@@ -574,6 +592,7 @@ esriLoader.loadModules([
         const MIN_ZOOM = 10;
         const FIELD_NAME_SRC_DATE = 'SRC_DATE2';
         const FIELD_NAME_SRC_NAME = 'NICE_DESC';
+        const FIELD_NAME_SRC_RES = 'SRC_RES';
 
         const getData = (mapPoint, zoom, releaseNum)=>{
 
@@ -620,7 +639,10 @@ esriLoader.loadModules([
                     // callback(response.data);
                     // console.log(response);
                     const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
-                    const outputData = feature ? { "date": feature.attributes[FIELD_NAME_SRC_DATE], "provider": feature.attributes[FIELD_NAME_SRC_NAME] } : null;
+                    const date = feature.attributes[FIELD_NAME_SRC_DATE];
+                    const provider = feature.attributes[FIELD_NAME_SRC_NAME];
+                    const resolution = feature.attributes[FIELD_NAME_SRC_RES];
+                    const outputData = feature ? { date, provider, resolution } : null;
                     resolve(outputData);
                 });
             });
@@ -649,7 +671,7 @@ esriLoader.loadModules([
             // console.log(layerID);
 
             if(!metadataServiceUrl){
-                console.error('no Metadata Layer found for release >', releaseNum);
+                // console.error('no Metadata Layer found for release >', releaseNum);
                 return;
             }
 
@@ -893,11 +915,19 @@ esriLoader.loadModules([
 
             const imageUrl = this.getImageUrlByReleaseNumber(rNum);
             const topLeftPos = this.topLeftScreenPoint;
-            const date = app.dataModel.getReleaseDate(rNum);
+            const releaseDate = app.dataModel.getReleaseDate(rNum);
 
             if(topLeftPos && imageUrl){
                 delayForToggleVisibility = setTimeout(()=>{
-                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+                    app.getMetaData({
+                        releaseNum: rNum
+                    }).then(metadata=>{
+                        console.log('metadata for preview window', metadata);
+                        const imageAcquiredDate = metadata.date;
+                        appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate, imageAcquiredDate);
+                    }).catch(error=>{
+                        appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
+                    })
                 }, 50);
             }
         };
@@ -1102,6 +1132,7 @@ esriLoader.loadModules([
         this.tilePreviewWindow = null;
         this.tooltip = null;
         this.uploadWebMapModal = null;
+        this.popupInfoWindow = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
@@ -1110,6 +1141,7 @@ esriLoader.loadModules([
             this.tilePreviewWindow = new TilePreviewWindow();
             this.tooltip = new CustomizedTooltip();
             this.uploadWebMapModal = new UploadWebMapModal(MODAL_ID_UPLAOD_WEBMAP);
+            this.popupInfoWindow = new PopupInfoWindow();
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -1166,7 +1198,7 @@ esriLoader.loadModules([
             rNum = rNum || $activeItemTitle.attr('data-active-item-release-num');
 
             const rDate = app.dataModel.getReleaseDate(rNum);
-            const titleTxt = 'Wayback to ' + rDate;
+            const titleTxt = rDate + ' Release';
             $activeItemTitle.text(titleTxt);
 
             if(!isShowingAlternative){
@@ -1207,19 +1239,19 @@ esriLoader.loadModules([
             $cboxToggleHighlightedItems.toggleClass('is-checked');
         };
 
-        this.populateMetadata = (data)=>{
-            let metadataInfoHtml = '';
-            const dateFormat = d3.timeFormat("%Y-%m-%d");
+        // this.populateMetadata = (data)=>{
+        //     let metadataInfoHtml = '';
+        //     const dateFormat = d3.timeFormat("%Y-%m-%d");
 
-            if(data && data.date && data.provider){
-                metadataInfoHtml = `
-                    <div class='trailer-1'>
-                        <span class='trailer-0 margin-right-half'>Imagery was acquired on <b>${dateFormat(new Date(data.date))}<b></span>
-                    </div>
-                `;
-            }
-            $metadataInfo.html(metadataInfoHtml);
-        };
+        //     if(data && data.date && data.provider){
+        //         metadataInfoHtml = `
+        //             <div class='trailer-1'>
+        //                 <span class='trailer-0 margin-right-half'>Imagery was acquired on <b>${dateFormat(new Date(data.date))}<b></span>
+        //             </div>
+        //         `;
+        //     }
+        //     $metadataInfo.html(metadataInfoHtml);
+        // };
 
         this.initEventHandlers = ()=>{
 
@@ -1615,13 +1647,15 @@ esriLoader.loadModules([
         let $previewWindow = null;
         let $previewWindowImg = null; 
         let $releaseDateTxt = null; 
+        let $imageAcquireDateTxt = null;
 
         this.init = ()=>{
             const tilePreviewWindowHtml = `
                 <div class="tile-preview-window hide">
                     <img>
-                    <div class='tile-preview-title fonr-size-2 avenir-demi text-right'>
-                        <span class='margin-right-half val-holder-release-date'></span>
+                    <div class='tile-preview-title text-right'>
+                        <div><span class='margin-right-half val-holder-release-date font-size--1'></span></div>
+                        <div><span class='margin-right-half val-holder-acquire-date font-size--3'></span></div>
                     </div>
                 </div>
             `;
@@ -1630,13 +1664,22 @@ esriLoader.loadModules([
 
             $previewWindowImg = $previewWindow.find('img');
             $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
+            $imageAcquireDateTxt = $previewWindow.find('.val-holder-acquire-date');
         };
 
-        this.show = (topLeftPos, imageUrl, date)=>{
+        this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
+
+            const releaseDateTextStr = releaseDate + ' Release';
+            const acquireDateTextStr = acquireDate ? 'imagery date: ' + helper.formatDate(acquireDate) : '';
+
             $previewWindow.css('top', topLeftPos.y);
             $previewWindow.css('left', topLeftPos.x);
+
             $previewWindowImg.attr('src', imageUrl);
-            $releaseDateTxt.text(date);
+
+            $releaseDateTxt.text(releaseDateTextStr);
+            $imageAcquireDateTxt.text(acquireDateTextStr);
+
             this.toggleVisibility(true);
         };
 
@@ -1888,6 +1931,11 @@ esriLoader.loadModules([
             return new Date(year, mon, day);
         };
 
+        this.formatDate = (epochDate)=>{
+            const dateFormat = d3.timeFormat("%Y-%m-%d");
+            return dateFormat(new Date(epochDate))
+        };
+
         this.getSnippetStr = (items)=>{
             let snippetStr = 'Wayback imagery from ';
             items = items.map(d=>{
@@ -1913,6 +1961,34 @@ esriLoader.loadModules([
         this.tile2lat = (y,z)=>{
             const n=Math.PI-2*Math.PI*y/Math.pow(2,z);
             return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
+        };
+
+        this.detectBrowserType = ()=>{
+            // // Opera 8.0+
+            // const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+            
+            // // Firefox 1.0+
+            // const isFirefox = typeof InstallTrigger !== 'undefined';
+            
+            // // Safari 3.0+ "[object HTMLElementConstructor]" 
+            // const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+            
+            // Internet Explorer 6-11
+            const isIE = /*@cc_on!@*/false || !!document.documentMode;
+            
+            // Edge 20+
+            const isEdge = !isIE && !!window.StyleMedia;
+            
+            // // Chrome 1+
+            // const isChrome = !!window.chrome && !!window.chrome.webstore;
+            
+            // // Blink engine detection
+            // const isBlink = (isChrome || isOpera) && !!window.CSS;
+
+            return {
+                isIE,
+                isEdge
+            };
         };
 
     };
