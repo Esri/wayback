@@ -117,6 +117,7 @@ esriLoader.loadModules([
         this.stateManager = new AppStateManager();
         this.oauthManager = new OAuthManager();
         this.waybackMetadataManager = new WaybackMetadataManager();
+        this.popupWindowAnchorMapPoint = null;
 
         this.init = ()=>{
             // if(!window.isUsingOauthPopupWindow){
@@ -228,6 +229,10 @@ esriLoader.loadModules([
             this.portalUser = portalUser;
         };
 
+        this.setPopupWindowAnchorMapPoint = (mapPoint=null)=>{
+            this.popupWindowAnchorMapPoint = mapPoint;
+        }
+
         this.toggleIsMapViewStationary = (isStationary)=>{
             this.isMapViewStationary = isStationary;
 
@@ -286,15 +291,15 @@ esriLoader.loadModules([
             view.on('click', (evt)=>{
                 // this.searchWayback(evt.mapPoint);
                 const mapPoint = evt.mapPoint;
+                this.showPopupWindow(mapPoint);
+            });
 
-                this.getMetaData({ mapPoint }).then(metadata=>{
-                    const screenPoint = this.convertToScreenPoint(mapPoint);
+            view.on('mouse-wheel', (evt)=>{
+                this.hidePopupWindow();
+            });
 
-                    appView.popupInfoWindow.show({
-                        screenPoint,
-                        metadata
-                    });
-                });
+            watchUtils.watch(view, "center", (evt)=>{
+                console.log('view center is on updating', evt);
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
@@ -305,6 +310,46 @@ esriLoader.loadModules([
                 this.toggleIsMapViewStationary(true);
             });
         };
+
+        this.showPopupWindow = (mapPoint)=>{
+
+            this.getMetaData({ mapPoint }).then(metadata=>{
+
+                const screenPoint = this.convertToScreenPoint(mapPoint);
+                const releaseNum = metadata.releaseNum;
+
+                const releaseDate = app.dataModel.getReleaseDate(releaseNum);
+                const itemAgolUrl = app.dataModel.getItemAgolUrl(releaseNum);
+                const isSelected = app.dataModel.getIsSelected(releaseNum); 
+
+                metadata.releaseNum = releaseNum;
+                metadata.releaseDate = releaseDate;
+                metadata.itemAgolUrl = itemAgolUrl;
+                metadata.isSelected = isSelected;
+
+                // console.log('calling showPopupWindow', metadata);
+
+                this.setPopupWindowAnchorMapPoint(mapPoint);
+
+                appView.popupInfoWindow.show({
+                    screenPoint,
+                    metadata
+                });
+            });
+        };
+
+        this.hidePopupWindow = ()=>{
+            // reset popup anchor point to null
+            this.setPopupWindowAnchorMapPoint(); 
+            appView.popupInfoWindow.hide();
+        };
+
+        this.updatePopupPostion = ()=>{
+            if(this.popupWindowAnchorMapPoint){
+                const screenPoint = this.convertToScreenPoint(this.popupWindowAnchorMapPoint);
+                appView.popupInfoWindow.setPosition(screenPoint);
+            }
+        }
 
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
@@ -411,7 +456,7 @@ esriLoader.loadModules([
             const mapPoint = options.mapPoint || this.mapView.center;
             const releaseNum = options.releaseNum || this.getReleaseNumFromWaybackImageryLayer();
             const zoom = this.mapView.zoom;
-            
+
             return new Promise((resolve, reject) => {
                 this.waybackMetadataManager.getData(mapPoint, zoom, releaseNum).then(metadata=>{
                     resolve(metadata);
@@ -604,6 +649,7 @@ esriLoader.loadModules([
                     queryData(metadataLayerUrl, mapPoint).then(res=>{
                         // console.log(res);
                         if(res){
+                            res.releaseNum = releaseNum;
                             resolve(res);
                         } else {
                             reject('no metadata result from the query');
@@ -640,9 +686,10 @@ esriLoader.loadModules([
                     // console.log(response);
                     const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
                     const date = feature.attributes[FIELD_NAME_SRC_DATE];
+                    const dateFormatted = helper.formatDate(date);
                     const provider = feature.attributes[FIELD_NAME_SRC_NAME];
                     const resolution = feature.attributes[FIELD_NAME_SRC_RES];
-                    const outputData = feature ? { date, provider, resolution } : null;
+                    const outputData = feature ? { date, dateFormatted, provider, resolution } : null;
                     resolve(outputData);
                 });
             });
@@ -1043,6 +1090,14 @@ esriLoader.loadModules([
             return isOutputInDateTimeFormat ? this.releasesDict[rNum].releaseDatetime : this.releasesDict[rNum].releaseDate;
         };
 
+        this.getItemAgolUrl = (rNum)=>{
+            return this.releasesDict[rNum].agolItemURL;
+        };
+
+        this.getIsSelected = (rNum)=>{
+            return this.releasesDict[rNum].isSelected; 
+        };
+
         this.getMostRecentReleaseNum = ()=>{
             return this.releases[0][KEY_RELEASE_NUM];
         };
@@ -1119,7 +1174,7 @@ esriLoader.loadModules([
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
         const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
-        const $metadataInfo = $('#metadataInfoDiv');
+        // const $metadataInfo = $('#metadataInfoDiv');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1141,7 +1196,12 @@ esriLoader.loadModules([
             this.tilePreviewWindow = new TilePreviewWindow();
             this.tooltip = new CustomizedTooltip();
             this.uploadWebMapModal = new UploadWebMapModal(MODAL_ID_UPLAOD_WEBMAP);
-            this.popupInfoWindow = new PopupInfoWindow();
+            this.popupInfoWindow = new PopupInfoWindow({
+                addToWebMapBtnOnClick: (data)=>{
+                    // console.log('.js-add-to-webmap clicked', data)
+                    appView.viewModel.setSelectedItem(data.releaseNum, data.isSelected);
+                }
+            });
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -1474,6 +1534,7 @@ esriLoader.loadModules([
             this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
             this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
             this.observerForSelectedItem.subscribe(appView.uploadWebMapModal.resetIsWebMapReady); // reset isWebMapReady flag to false so it would create a new web map when user make new selections
+            this.observerForSelectedItem.subscribe(appView.popupInfoWindow.toggleAddToWebMapBtnStatus);
             
             this.observerForToggleHighlightedItem = new Observable();
             this.observerForToggleHighlightedItem.subscribe(this.filterData);
@@ -1519,7 +1580,7 @@ esriLoader.loadModules([
                 const htmlStr = `
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
-                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
                         <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
                     </div>
                 `;
@@ -1670,7 +1731,7 @@ esriLoader.loadModules([
         this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
 
             const releaseDateTextStr = releaseDate + ' Release';
-            const acquireDateTextStr = acquireDate ? 'imagery date: ' + helper.formatDate(acquireDate) : '';
+            const acquireDateTextStr = acquireDate ? 'Taken on ' + helper.formatDate(acquireDate) : '';
 
             $previewWindow.css('top', topLeftPos.y);
             $previewWindow.css('left', topLeftPos.x);
@@ -1932,7 +1993,8 @@ esriLoader.loadModules([
         };
 
         this.formatDate = (epochDate)=>{
-            const dateFormat = d3.timeFormat("%Y-%m-%d");
+            // const dateFormat = d3.timeFormat("%Y-%m-%d");
+            const dateFormat = d3.timeFormat("%b %d, %Y");
             return dateFormat(new Date(epochDate))
         };
 

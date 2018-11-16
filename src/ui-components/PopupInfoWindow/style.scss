@@ -1,9 +1,81 @@
 #customizedPopupInfoWindow{
     position: absolute;
-    top: 50px;
-    right: 70px;
-    width: 350px;
-    height: 100px;
-    background: rgba(0,0,0,.9);
+
+    // width: 295px;
+    height: 45px;
     z-index: 10;
+
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+
+    .content-wrap {
+        height: 100%;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 200px;
+        background: rgba(0,0,0,.75);
+
+        font-size: .75rem;
+        padding: 0 .5rem;
+
+        .text-wrap {
+            padding-top: .2rem;
+            padding-right: .75rem;
+
+            .release-name {
+                font-size: .95rem;
+            }
+        }
+
+        .btns-wrap {
+            height: 45px;
+            line-height: 45px;
+            padding-left: .75rem;
+            border-left: solid 1px rgba(255,255,255,.3);
+
+            .open-item-btn {
+                font-size: 1rem;
+            }
+
+            .add-to-webmap-btn {
+                height: 45px;
+                width: 30px;
+                background: url('../../assets/icons/QueueOffSelected.png') center center no-repeat;
+                // background-size: contain;
+            }
+
+            .add-to-webmap-btn.is-selected {
+                background: url('../../assets/icons/QueueOnSelected.png') center center no-repeat;
+            }
+        }
+
+
+    }
+
+    .reticle-wrap {
+        width: 45px;
+        height: 45px;
+        background: url('../../assets/ReticleLeft.png') center center no-repeat;
+        background-size: contain;
+    }
+
+    .reticle-wrap.is-right {
+        width: 45px;
+        height: 45px;
+        background: url('../../assets/ReticleRight.png') center center no-repeat;
+        background-size: contain;
+    }
+
+    .flex-container {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: stretch;
+        align-items: stretch;
+    }
 }
