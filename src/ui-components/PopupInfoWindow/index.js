@@ -128,4 +128,5 @@ export default class PopupInfoWindow {
         `;
         return containertHtml;
     }
+
 }

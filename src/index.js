@@ -299,7 +299,8 @@ esriLoader.loadModules([
             });
 
             watchUtils.watch(view, "center", (evt)=>{
-                console.log('view center is on updating', evt);
+                // console.log('view center is on updating', evt);
+                this.updatePopupPostion();
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
@@ -353,7 +354,7 @@ esriLoader.loadModules([
 
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
-            console.log('calling updateEventsOnEndHandler');
+            // console.log('calling updateEventsOnEndHandler');
             if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
             }
