@@ -13,6 +13,7 @@
     align-items: stretch;
 
     .content-wrap {
+        position: relative;
         height: 100%;
         flex-grow: 1;
         flex-shrink: 0;
@@ -53,6 +54,22 @@
             }
         }
 
+        .close-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            background: rgba(0,0,0,.75);
+            border-radius: 100px;
+            cursor: pointer;
+        }
+
+        .close-btn.is-right {
+            right: none;
+            left: -10px;
+        }
 
     }
 

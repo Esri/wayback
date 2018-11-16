@@ -30,6 +30,11 @@ export default class PopupInfoWindow {
             }
 
         });
+
+        this.container.on('click', '.js-close-popup-window', function(){
+            self.hide();
+        });
+        
     }
 
     show(options={}){
@@ -111,10 +116,13 @@ export default class PopupInfoWindow {
                     <span>Taken on ${data.dateFormatted} | ${resolution}m res</span>
                 </div>
                 <div class='btns-wrap flex-container'>
-                    <div class='open-item-btn margin-right-half' data-href=''>
+                    <div class='open-item-btn margin-right-half' title='Learn more about this update'>
                         <a class='text-white' href='${data.itemAgolUrl}' target='_blank'><span class='icon-ui-link-external'></span></a>
                     </div>
-                    <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}'></div>
+                    <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}' title='Add this update to an ArcGIS Online Map'></div>
+                </div>
+                <div class='close-btn js-close-popup-window text-center ${isReticleRightClass}'>
+                    <span class='icon-ui-close'></span>
                 </div>
             </div>
         `;

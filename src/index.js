@@ -1530,6 +1530,7 @@ esriLoader.loadModules([
             this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
             this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
             this.observerForActiveItem.subscribe(appView.setActiveItemTitleTxt);
+            this.observerForActiveItem.subscribe(app.hidePopupWindow);
 
             this.observerForSelectedItem = new Observable();
             this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
@@ -1716,8 +1717,8 @@ esriLoader.loadModules([
                 <div class="tile-preview-window hide">
                     <img>
                     <div class='tile-preview-title text-right'>
-                        <div><span class='margin-right-half val-holder-release-date font-size--1'></span></div>
-                        <div><span class='margin-right-half val-holder-acquire-date font-size--3'></span></div>
+                        <div class='trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
+                        <div><span class='margin-right-half taken-on-date-text val-holder-acquire-date'></span></div>
                     </div>
                 </div>
             `;
