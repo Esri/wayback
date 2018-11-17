@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import './style.scss';
 
-const POPUP_WINDOW_WIDTH = 310;
+const POPUP_WINDOW_WIDTH = 320;
 
 export default class PopupInfoWindow {
 
@@ -63,14 +63,14 @@ export default class PopupInfoWindow {
         this.toggleVisibility(false);
     }
 
-    setPosition(screenPoint){
-        // const containerWidth = this.container.width();
+    setPosition(screenPoint, isUpdatingPosition){
         const x = screenPoint.x || 0;
         const y = screenPoint.y || 0;
-        const isReticleOnRight = this.shouldPlaceReticleOnRight(x);
         const offset = 22.5;
 
-        const xPos = isReticleOnRight ? ( (x - POPUP_WINDOW_WIDTH) + offset ) : x - offset;
+        const shouldPlaceReticleOnRight = isUpdatingPosition ? $('.reticle-wrap').hasClass('is-right') : this.shouldPlaceReticleOnRight(x);
+
+        const xPos = shouldPlaceReticleOnRight ? ( (x - POPUP_WINDOW_WIDTH) + offset ) : x - offset;
         const yPos = y - offset;
 
         this.container.css('left', xPos + 'px');

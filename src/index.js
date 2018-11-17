@@ -348,7 +348,7 @@ esriLoader.loadModules([
         this.updatePopupPostion = ()=>{
             if(this.popupWindowAnchorMapPoint){
                 const screenPoint = this.convertToScreenPoint(this.popupWindowAnchorMapPoint);
-                appView.popupInfoWindow.setPosition(screenPoint);
+                appView.popupInfoWindow.setPosition(screenPoint, true);
             }
         }
 
