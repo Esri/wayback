@@ -1,0 +1,2174 @@
+{
+    "layers": [
+        {
+          "id": 4,
+          "popupInfo": {
+            "title": "30cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 2,
+          "popupInfo": {
+            "title": "7.5cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 3,
+          "popupInfo": {
+            "title": "15cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 1,
+          "popupInfo": {
+            "title": "3.7cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 0,
+          "popupInfo": {
+            "title": "1.9cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 5,
+          "popupInfo": {
+            "title": "60cm Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 7,
+          "popupInfo": {
+            "title": "2.4m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 8,
+          "popupInfo": {
+            "title": "4.8m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 9,
+          "popupInfo": {
+            "title": "9.6m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 10,
+          "popupInfo": {
+            "title": "19m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 11,
+          "popupInfo": {
+            "title": "38m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 13,
+          "popupInfo": {
+            "title": "150m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 12,
+          "popupInfo": {
+            "title": "75m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        },
+        {
+          "id": 6,
+          "popupInfo": {
+            "title": "1.2m Resolution Metadata: {NICE_NAME}",
+            "fieldInfos": [
+              {
+                "fieldName": "OBJECTID",
+                "label": "OBJECTID",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape",
+                "label": "Shape",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "SRC_DATE",
+                "label": "SRC_DATE",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_RES",
+                "label": "SRC_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_ACC",
+                "label": "SRC_ACC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SAMP_RES",
+                "label": "SAMP_RES",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DESC",
+                "label": "SRC_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "MinMapLevel",
+                "label": "MinMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "MaxMapLevel",
+                "label": "MaxMapLevel",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "NICE_NAME",
+                "label": "NICE_NAME",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "DrawOrder",
+                "label": "DrawOrder",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 0,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "SRC_DATE2",
+                "label": "SRC_DATE2",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "dateFormat": "shortDateShortTime"
+                }
+              },
+              {
+                "fieldName": "NICE_DESC",
+                "label": "NICE_DESC",
+                "tooltip": "",
+                "visible": true,
+                "stringFieldOption": "textbox"
+              },
+              {
+                "fieldName": "Shape_Length",
+                "label": "Shape_Length",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              },
+              {
+                "fieldName": "Shape_Area",
+                "label": "Shape_Area",
+                "tooltip": "",
+                "visible": false,
+                "stringFieldOption": "textbox",
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                }
+              }
+            ],
+            "description": null,
+            "showAttachments": true,
+            "mediaInfos": []
+          }
+        }
+      ]
+}

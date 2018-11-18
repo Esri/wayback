@@ -12,6 +12,7 @@ import './style/index.scss';
 // import other files
 import waybackAgolItemIds from './assets/wayback-lookup.testing.json';
 // import waybackAgolItemIds from './assets/wayback-lookup_2018.r14.json';
+import metadataSublayersInfo from './assets/metadata-sublayers-info.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
@@ -559,7 +560,8 @@ esriLoader.loadModules([
                             "url": metadataLayerUrl,
                             "visibility": isVisible,
                             "opacity": 1,
-                            "title": metadataLayerTitle
+                            "title": metadataLayerTitle,
+                            "layers": metadataSublayersInfo.layers
                         };
                         operationalLayers.push(metadataLayerInfo);
                     }
@@ -626,6 +628,17 @@ esriLoader.loadModules([
             screenPt.x = screenPt.x + xOffsetForMapDiv; // need to add this offset because we have gutter and side bar at left of the page
 
             return screenPt;
+        };
+
+        this.toggleReferenceOverlay = ()=>{
+            // console.log(this.mapView);
+
+            this.mapView.allLayerViews.items.forEach(lyr=>{
+
+                if(lyr.layer.title === 'Hybrid Reference Layer'){
+                    lyr.visible = !lyr.visible;
+                }
+            });
         };
 
         this.init();
@@ -725,6 +738,10 @@ esriLoader.loadModules([
 
             return metadataServiceUrl + '/' + layerID;
 
+        };
+
+        const getSubLayersInfo = ()=>{
+            // return 
         };
 
         return {
@@ -1175,7 +1192,7 @@ esriLoader.loadModules([
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
         const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
-        // const $metadataInfo = $('#metadataInfoDiv');
+        const $referenceLayerToggleBtn = $('.reference-layer-toggle-btn');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1298,6 +1315,10 @@ esriLoader.loadModules([
 
         this.toggleHighlightedItemsBtnStyle = ()=>{
             $cboxToggleHighlightedItems.toggleClass('is-checked');
+        };
+
+        this.toggleReferecnceOverlayBtnStyle = ()=>{
+            $referenceLayerToggleBtn.toggleClass('is-checked');
         };
 
         // this.populateMetadata = (data)=>{
@@ -1424,6 +1445,11 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-clear-all-selected-items', function(evt){
                 appView.viewModel.setSelectedItem(null);
+            });
+
+            $body.on('click', '.js-toggle-reference-layer', (evt)=>{
+                appView.toggleReferecnceOverlayBtnStyle();
+                app.toggleReferenceOverlay();
             });
 
         };

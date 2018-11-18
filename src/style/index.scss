@@ -127,6 +127,41 @@ html, body {
     overflow: hidden;
 }
 
+#layerToggleControlDiv{
+    position: absolute;
+    top: 48px;
+    right: 15px;
+    width: 240px;
+    height: 32px;
+    line-height: 32px;
+    background: rgba(0,0,0,.8);
+    z-index: 1;
+    font-size: 0.8125rem;
+
+    .reference-layer-toggle-btn {
+
+        .icon-ui-checkbox-checked {
+            display: none;
+        }
+
+        .icon-ui-checkbox-unchecked {
+            display: inline-block;
+        }
+    }
+
+    .reference-layer-toggle-btn.is-checked {
+
+        .icon-ui-checkbox-checked {
+            display: inline-block;
+        }
+
+        .icon-ui-checkbox-unchecked {
+            display: none;
+        }
+    }
+
+}
+
 .y-scroll-visible {
     position: relative;
     overflow-y: auto;
