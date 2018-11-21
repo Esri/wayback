@@ -1762,7 +1762,7 @@ esriLoader.loadModules([
         this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
 
             const releaseDateTextStr = 'Release ' + releaseDate;
-            const acquireDateTextStr = acquireDate ? 'Taken on ' + helper.formatDate(acquireDate) : '';
+            const acquireDateTextStr = acquireDate ? 'Photo taken on ' + helper.formatDate(acquireDate) : '';
 
             $previewWindow.css('top', topLeftPos.y);
             $previewWindow.css('left', topLeftPos.x);
