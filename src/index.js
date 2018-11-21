@@ -1761,7 +1761,7 @@ esriLoader.loadModules([
 
         this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
 
-            const releaseDateTextStr = releaseDate + ' Release';
+            const releaseDateTextStr = 'Release ' + releaseDate;
             const acquireDateTextStr = acquireDate ? 'Taken on ' + helper.formatDate(acquireDate) : '';
 
             $previewWindow.css('top', topLeftPos.y);

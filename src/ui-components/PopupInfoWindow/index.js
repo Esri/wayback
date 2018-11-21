@@ -115,7 +115,7 @@ export default class PopupInfoWindow {
                 <div class='text-wrap'>
                     <span class='release-name'>Release ${data.releaseDate}</span><br>
                     <span>Photo taken on ${data.dateFormatted}</span><br>
-                    <span>${resolution}m res | ${accuracy}m accuracy</span>
+                    <span>${resolution}m resolution | ${accuracy}m accuracy</span>
                 </div>
                 <div class='btns-wrap'>
                     <div class='open-item-btn' title='Learn more about this release'>
