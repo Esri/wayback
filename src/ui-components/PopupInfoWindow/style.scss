@@ -2,7 +2,7 @@
     position: absolute;
 
     // width: 295px;
-    height: 45px;
+    height: 65px;
     z-index: 10;
 
     display:flex;
@@ -33,19 +33,21 @@
         }
 
         .btns-wrap {
-            height: 45px;
-            line-height: 45px;
+            height: 100%;
+            // line-height: 45px;
             padding-left: .75rem;
             border-left: solid 1px rgba(255,255,255,.3);
 
             .open-item-btn {
-                font-size: 1rem;
+                margin-top: .25rem;
+                padding-left: .2rem;
+                font-size: 1.15rem;
             }
 
             .add-to-webmap-btn {
-                height: 45px;
+                height: 30px;
                 width: 30px;
-                background: url('../../assets/icons/QueueOffSelected.png') center center no-repeat;
+                background: url('../../assets/icons/QueueOffSelected.png') center left no-repeat;
                 // background-size: contain;
             }
 

@@ -652,6 +652,7 @@ esriLoader.loadModules([
         const FIELD_NAME_SRC_DATE = 'SRC_DATE2';
         const FIELD_NAME_SRC_NAME = 'NICE_DESC';
         const FIELD_NAME_SRC_RES = 'SRC_RES';
+        const FIELD_NAME_SRC_ACC = 'SRC_ACC';
 
         const getData = (mapPoint, zoom, releaseNum)=>{
 
@@ -703,7 +704,8 @@ esriLoader.loadModules([
                     const dateFormatted = helper.formatDate(date);
                     const provider = feature.attributes[FIELD_NAME_SRC_NAME];
                     const resolution = feature.attributes[FIELD_NAME_SRC_RES];
-                    const outputData = feature ? { date, dateFormatted, provider, resolution } : null;
+                    const accuracy = feature.attributes[FIELD_NAME_SRC_ACC];
+                    const outputData = feature ? { date, dateFormatted, provider, resolution, accuracy } : null;
                     resolve(outputData);
                 });
             });
@@ -740,9 +742,9 @@ esriLoader.loadModules([
 
         };
 
-        const getSubLayersInfo = ()=>{
-            // return 
-        };
+        // const getSubLayersInfo = ()=>{
+        //     // return 
+        // };
 
         return {
             getData,
@@ -1287,6 +1289,7 @@ esriLoader.loadModules([
         this.showTilePreviewWindow = (rNum)=>{
             if(app.selectedTile && app.isMapViewStationary){
                 app.selectedTile.showPreview(rNum);
+                this.popupInfoWindow.hide();
             }
         };
 
@@ -1608,8 +1611,8 @@ esriLoader.loadModules([
                 const htmlStr = `
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
-                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-release-number='${rNum}' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-release-number='${rNum}' data-tooltip-content='Add this release to an ArcGIS Online Map' data-tooltip-content-alt='Remove this release from your ArcGIS Online Map'></div>
+                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this release...'></div>
                     </div>
                 `;
 

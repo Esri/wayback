@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import './style.scss';
 
-const POPUP_WINDOW_WIDTH = 320;
+const POPUP_WINDOW_WIDTH = 280;
 
 export default class PopupInfoWindow {
 
@@ -104,7 +104,8 @@ export default class PopupInfoWindow {
     }
 
     getPopupHtml(data, isReticleOnRight){
-        const resolution = data.resolution >= 1 ? data.resolution : data.resolution.toFixed(1);
+        const resolution = data.resolution % 1 === 0 ? data.resolution : data.resolution.toFixed(1);
+        const accuracy = data.accuracy % 1 === 0 ? data.accuracy : data.accuracy.toFixed(1);
         const isSelectedClass = data.isSelected ? 'is-selected' : '';
         const isReticleRightClass = isReticleOnRight ? 'is-right' : '';
 
@@ -112,14 +113,15 @@ export default class PopupInfoWindow {
         const contentHtml = `
             <div class='content-wrap flex-container text-white'>
                 <div class='text-wrap'>
-                    <span class='release-name'>${data.releaseDate} Release</span><br>
-                    <span>Taken on ${data.dateFormatted} | ${resolution}m res</span>
+                    <span class='release-name'>Release ${data.releaseDate}</span><br>
+                    <span>Photo taken on ${data.dateFormatted}</span><br>
+                    <span>${resolution}m res | ${accuracy}m accuracy</span>
                 </div>
-                <div class='btns-wrap flex-container'>
-                    <div class='open-item-btn margin-right-half' title='Learn more about this update'>
+                <div class='btns-wrap'>
+                    <div class='open-item-btn' title='Learn more about this release'>
                         <a class='text-white' href='${data.itemAgolUrl}' target='_blank'><span class='icon-ui-link-external'></span></a>
                     </div>
-                    <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}' title='Add this update to an ArcGIS Online Map'></div>
+                    <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}' title='Add this release to an ArcGIS Online Map'></div>
                 </div>
                 <div class='close-btn js-close-popup-window text-center ${isReticleRightClass}'>
                     <span class='icon-ui-close'></span>
