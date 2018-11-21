@@ -1278,7 +1278,7 @@ esriLoader.loadModules([
             rNum = rNum || $activeItemTitle.attr('data-active-item-release-num');
 
             const rDate = app.dataModel.getReleaseDate(rNum);
-            const titleTxt = rDate + ' Release';
+            const titleTxt = 'Release ' + rDate;
             $activeItemTitle.text(titleTxt);
 
             if(!isShowingAlternative){
