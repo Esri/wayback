@@ -905,6 +905,8 @@ esriLoader.loadModules([
                 appView.viewModel.toggleHighlightedItems();
             }
 
+            appView.uploadWebMapModal.show();
+
             reset();
         };
 
@@ -1369,25 +1371,6 @@ esriLoader.loadModules([
             });
 
             $body.on('click', '.js-open-save-web-map-modal.is-active', function(evt){
-
-                // if(window.isUsingOauthPopupWindow){
-
-                //     if(!app.portalUser){
-                //         app.signInViaPopUpWindow();
-                //     } else {
-                //         appView.uploadWebMapModal.show();
-                //     }
-
-                // } else {
-                //     appView.uploadWebMapModal.show(); 
-                // }
-
-                // if(!app.portalUser){
-                //     app.stateManager.save();
-                //     app.signIn();
-                // } else {
-                //     appView.uploadWebMapModal.show();
-                // }
 
                 if(app.oauthManager.checkIsAnonymous()){
                     // save current App/UI states so we can restore the app after direct back to the sign in page
