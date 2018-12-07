@@ -650,7 +650,8 @@ esriLoader.loadModules([
         const MAX_ZOOM = 23;
         const MIN_ZOOM = 10;
         const FIELD_NAME_SRC_DATE = 'SRC_DATE2';
-        const FIELD_NAME_SRC_NAME = 'NICE_DESC';
+        const FIELD_NAME_SRC_PROVIDER = 'NICE_DESC';
+        const FIELD_NAME_SRC_NAME = 'SRC_DESC';
         const FIELD_NAME_SRC_RES = 'SRC_RES';
         const FIELD_NAME_SRC_ACC = 'SRC_ACC';
 
@@ -702,10 +703,11 @@ esriLoader.loadModules([
                     const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
                     const date = feature.attributes[FIELD_NAME_SRC_DATE];
                     const dateFormatted = helper.formatDate(date);
-                    const provider = feature.attributes[FIELD_NAME_SRC_NAME];
+                    const provider = feature.attributes[FIELD_NAME_SRC_PROVIDER];
+                    const source = feature.attributes[FIELD_NAME_SRC_NAME];
                     const resolution = feature.attributes[FIELD_NAME_SRC_RES];
                     const accuracy = feature.attributes[FIELD_NAME_SRC_ACC];
-                    const outputData = feature ? { date, dateFormatted, provider, resolution, accuracy } : null;
+                    const outputData = feature ? { date, dateFormatted, provider, source, resolution, accuracy } : null;
                     resolve(outputData);
                 });
             });
@@ -1280,7 +1282,7 @@ esriLoader.loadModules([
             rNum = rNum || $activeItemTitle.attr('data-active-item-release-num');
 
             const rDate = app.dataModel.getReleaseDate(rNum);
-            const titleTxt = 'Release ' + rDate;
+            const titleTxt = 'Wayback ' + rDate;
             $activeItemTitle.text(titleTxt);
 
             if(!isShowingAlternative){
@@ -1725,15 +1727,24 @@ esriLoader.loadModules([
         let $imageAcquireDateTxt = null;
 
         this.init = ()=>{
+            // const tilePreviewWindowHtml = `
+            //     <div class="tile-preview-window hide">
+            //         <img>
+            //         <div class='tile-preview-title text-right'>
+            //             <div class='trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
+            //             <div><span class='margin-right-half taken-on-date-text val-holder-acquire-date'></span></div>
+            //         </div>
+            //     </div>
+            // `;
             const tilePreviewWindowHtml = `
                 <div class="tile-preview-window hide">
                     <img>
-                    <div class='tile-preview-title text-right'>
-                        <div class='trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
-                        <div><span class='margin-right-half taken-on-date-text val-holder-acquire-date'></span></div>
+                    <div class='tile-preview-title'>
+                        <div class='margin-left-half trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
                     </div>
                 </div>
             `;
+
             $previewWindow = $(tilePreviewWindowHtml);
             $body.append($previewWindow);
 
@@ -1744,16 +1755,16 @@ esriLoader.loadModules([
 
         this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
 
-            const releaseDateTextStr = 'Release ' + releaseDate;
-            const acquireDateTextStr = acquireDate ? 'Photo taken on ' + helper.formatDate(acquireDate) : '';
+            const releaseDateTextStr = '<b>Wayback ' + releaseDate + '</b> preview';
+            // const acquireDateTextStr = acquireDate ? 'Photo taken on ' + helper.formatDate(acquireDate) : '';
 
             $previewWindow.css('top', topLeftPos.y);
             $previewWindow.css('left', topLeftPos.x);
 
             $previewWindowImg.attr('src', imageUrl);
 
-            $releaseDateTxt.text(releaseDateTextStr);
-            $imageAcquireDateTxt.text(acquireDateTextStr);
+            $releaseDateTxt.html(releaseDateTextStr);
+            // $imageAcquireDateTxt.text(acquireDateTextStr);
 
             this.toggleVisibility(true);
         };

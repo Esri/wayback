@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import './style.scss';
 
-const POPUP_WINDOW_WIDTH = 280;
+const POPUP_WINDOW_WIDTH = 360;
 
 export default class PopupInfoWindow {
 
@@ -106,28 +106,44 @@ export default class PopupInfoWindow {
     getPopupHtml(data, isReticleOnRight){
         const resolution = data.resolution % 1 === 0 ? data.resolution : data.resolution.toFixed(1);
         const accuracy = data.accuracy % 1 === 0 ? data.accuracy : data.accuracy.toFixed(1);
-        const isSelectedClass = data.isSelected ? 'is-selected' : '';
+        // const isSelectedClass = data.isSelected ? 'is-selected' : '';
         const isReticleRightClass = isReticleOnRight ? 'is-right' : '';
+        const provider = data.provider;
+        const source = data.source;
 
         const reticleHtml = `<div class='reticle-wrap ${isReticleRightClass}'></div>`;
+
         const contentHtml = `
-            <div class='content-wrap flex-container text-white'>
+            <div class='content-wrap text-white'>
                 <div class='text-wrap'>
-                    <span class='release-name'>Release ${data.releaseDate}</span><br>
-                    <span>Photo taken on ${data.dateFormatted}</span><br>
-                    <span>${resolution}m resolution | ${accuracy}m accuracy</span>
+                    <p class='trailer-half'>${provider} (${source}) image captured on <b>${data.dateFormatted}</b> and published in the <b>${data.releaseDate}</b> World Imagery basemap update.</p>
+                    <p class='trailer-half'><b>Resolution</b>: Pixels in the source image<br>represent a ground distance of ${resolution} meters</p>
+                    <p class='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br>are within ${accuracy} meters of true location</p>
                 </div>
-                <div class='btns-wrap'>
-                    <div class='open-item-btn' title='Learn more about this release'>
-                        <a class='text-white' href='${data.itemAgolUrl}' target='_blank'><span class='icon-ui-link-external'></span></a>
-                    </div>
-                    <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}' title='Add this release to an ArcGIS Online Map'></div>
-                </div>
-                <div class='close-btn js-close-popup-window text-center ${isReticleRightClass}'>
+                <div class='close-btn js-close-popup-window text-white text-center cursor-pointer ${isReticleRightClass}'>
                     <span class='icon-ui-close'></span>
                 </div>
             </div>
         `;
+
+        // const contentHtml = `
+        //     <div class='content-wrap flex-container text-white'>
+        //         <div class='text-wrap'>
+        //             <span class='release-name'>Release ${data.releaseDate}</span><br>
+        //             <span>Photo taken on ${data.dateFormatted}</span><br>
+        //             <span>${resolution}m resolution | ${accuracy}m accuracy</span>
+        //         </div>
+        //         <div class='btns-wrap'>
+        //             <div class='open-item-btn' title='Learn more about this release'>
+        //                 <a class='text-white' href='${data.itemAgolUrl}' target='_blank'><span class='icon-ui-link-external'></span></a>
+        //             </div>
+        //             <div class='js-add-to-webmap add-to-webmap-btn cursor-pointer ${isSelectedClass}' data-release-number='${data.releaseNum}' title='Add this release to an ArcGIS Online Map'></div>
+        //         </div>
+        //         <div class='close-btn js-close-popup-window text-center ${isReticleRightClass}'>
+        //             <span class='icon-ui-close'></span>
+        //         </div>
+        //     </div>
+        // `;
 
         return isReticleOnRight ? contentHtml + reticleHtml : reticleHtml + contentHtml;
     }
