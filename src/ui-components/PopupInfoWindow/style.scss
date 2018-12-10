@@ -11,6 +11,7 @@
     justify-content: flex-start;
     align-content: stretch;
     align-items: stretch;
+    pointer-events: none;
 
     .content-wrap {
         // position: relative;
@@ -22,6 +23,7 @@
 
         font-size: .85rem;
         padding: 0 .5rem;
+        pointer-events: auto;
 
         .text-wrap {
             padding: .6rem .75rem;
