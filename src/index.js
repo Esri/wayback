@@ -10,8 +10,7 @@ import PopupInfoWindow from './ui-components/PopupInfoWindow';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-lookup.testing.json';
-// import waybackAgolItemIds from './assets/wayback-lookup_2018.r14.json';
+import waybackAgolItemIds from './assets/wayback-lookup_2018.r16.json';
 import metadataSublayersInfo from './assets/metadata-sublayers-info.json';
 
 // import the polyfill for ES6-style Promises
@@ -83,7 +82,7 @@ esriLoader.loadModules([
     
     "esri/identity/OAuthInfo",
     "esri/identity/IdentityManager",
-    // "esri/portal/Portal",
+    "esri/portal/Portal",
 
     "esri/widgets/Search",
 
@@ -103,7 +102,7 @@ esriLoader.loadModules([
 
     OAuthInfo, 
     esriId,
-    // Portal,
+    Portal,
 
     Search
 ])=>{
@@ -540,6 +539,7 @@ esriLoader.loadModules([
 
                     const isVisible = i === 0 ? true : false;
 
+                    const metadataLayerItemID = this.waybackMetadataManager.getMetadataItemID(d.release);
                     const metadataLayerUrl = this.waybackMetadataManager.getMetadataMapServiceUrl(d.release);
 
                     const waybackLayerInfo = {
@@ -553,16 +553,27 @@ esriLoader.loadModules([
 
                     operationalLayers.push(waybackLayerInfo);
 
-                    if(metadataLayerUrl){
+                    if(metadataLayerItemID && metadataLayerUrl){
                         const metadataLayerTitle = "Metadata for " + d.releaseName;
+
+                        // const metadataLayerInfo = {
+                        //     "layerType": "ArcGISTiledMapServiceLayer",
+                        //     "url": metadataLayerUrl,
+                        //     "visibility": isVisible,
+                        //     "opacity": 1,
+                        //     "title": metadataLayerTitle,
+                        //     "layers": metadataSublayersInfo.layers
+                        // };
+
                         const metadataLayerInfo = {
-                            "layerType": "ArcGISTiledMapServiceLayer",
-                            "url": metadataLayerUrl,
+                            "itemId": metadataLayerItemID,
                             "visibility": isVisible,
                             "opacity": 1,
                             "title": metadataLayerTitle,
-                            "layers": metadataSublayersInfo.layers
+                            "layerType": "ArcGISMapServiceLayer",
+                            "url": metadataLayerUrl
                         };
+
                         operationalLayers.push(metadataLayerInfo);
                     }
 
@@ -715,8 +726,13 @@ esriLoader.loadModules([
         };
 
         const getMetadataMapServiceUrl = (releaseNum)=>{
-            const mapServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayer ? waybackAgolItemIds[releaseNum].metadataLayer : null;
+            const mapServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayerUrl ? waybackAgolItemIds[releaseNum].metadataLayerUrl : null;
             return mapServiceUrl;
+        };
+
+        const getMetadataItemID = (releaseNum)=>{
+            const itemID = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayerItemID ? waybackAgolItemIds[releaseNum].metadataLayerItemID : null;
+            return itemID;
         };
 
         const getMetaDataLayerId = (zoom)=>{
@@ -750,7 +766,8 @@ esriLoader.loadModules([
 
         return {
             getData,
-            getMetadataMapServiceUrl
+            getMetadataMapServiceUrl,
+            getMetadataItemID
         };
 
     };
@@ -766,6 +783,7 @@ esriLoader.loadModules([
 
         let userCredential = null;
         let isAnonymous = true;
+        let poralUser = null;
 
         const init = ()=>{
             esriId.useSignInPage = false;
@@ -773,6 +791,7 @@ esriLoader.loadModules([
 
             esriId.checkSignInStatus(info.portalUrl + "/sharing").then((res)=>{
                 setUserCredential(res);
+                setPortalUser();
             }).catch(()=>{
                 // Anonymous view
                 // console.log('Anonymous view');
@@ -801,6 +820,25 @@ esriLoader.loadModules([
             return outputUrl
         };
 
+        const setPortalUser = ()=>{
+
+            const portal = new Portal();
+
+            // Setting authMode to immediate signs the user in once loaded
+            portal.authMode = "immediate";
+
+            // Once loaded, user is signed in
+            portal.load().then(()=>{
+                console.log(portal);
+                console.log(portal.user);
+                poralUser = portal.user;
+            });
+        };
+
+        const getCustomBaseURL = ()=>{
+            return poralUser && poralUser.portal && poralUser.portal.urlKey ? `https://${poralUser.portal.urlKey}.maps.arcgis.com` : null;
+        };
+
         const checkIsAnonymous = ()=>{
             return isAnonymous;
         };
@@ -811,7 +849,8 @@ esriLoader.loadModules([
             signIn: signIn,
             signOut: signOut,
             getUserContentUrl: getUserContentUrl,
-            checkIsAnonymous: checkIsAnonymous
+            checkIsAnonymous: checkIsAnonymous,
+            getCustomBaseURL: getCustomBaseURL
         };
 
     };
@@ -990,15 +1029,16 @@ esriLoader.loadModules([
 
             if(topLeftPos && imageUrl){
                 delayForToggleVisibility = setTimeout(()=>{
-                    app.getMetaData({
-                        releaseNum: rNum
-                    }).then(metadata=>{
-                        console.log('metadata for preview window', metadata);
-                        const imageAcquiredDate = metadata.date;
-                        appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate, imageAcquiredDate);
-                    }).catch(error=>{
-                        appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
-                    })
+                    // app.getMetaData({
+                    //     releaseNum: rNum
+                    // }).then(metadata=>{
+                    //     console.log('metadata for preview window', metadata);
+                    //     const imageAcquiredDate = metadata.date;
+                    //     appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate, imageAcquiredDate);
+                    // }).catch(error=>{
+                    //     appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
+                    // })
+                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
                 }, 50);
             }
         };
@@ -1399,8 +1439,7 @@ esriLoader.loadModules([
                     // console.log(res);
                     if(res.success){
                         const webmapId = res.id
-                        // const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
-                        const webMapUrl = helper.getAgolOrgUrlByItemID(webmapId, true, true);
+                        const webMapUrl = helper.getAgolWebMapUrlByItemID(webmapId);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
@@ -1993,13 +2032,17 @@ esriLoader.loadModules([
             return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
 
-        this.getAgolOrgUrlByItemID = (itemID, isOrgDomain, isUrlForWebMap)=>{
-            const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
-            const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
-            const agolBaseUrl = isOrgDomain && customBaseUrl && urlKey ? 'https://' + urlKey + '.' + customBaseUrl : 'https://www.arcgis.com';
-            const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
+        this.getAgolWebMapUrlByItemID = (itemID)=>{
+            // const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
+            // const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
+            // console.log( app.oauthManager.getCustomBaseURL() );
+
+            const customBaseUrl = app.oauthManager.getCustomBaseURL();
+            const agolBaseUrl = customBaseUrl ? customBaseUrl : 'https://www.arcgis.com';
+            // const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
             const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
-            return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+            // return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+            return agolWebmapUrl;
         };
 
         this.extractDateFromStr = (inputStr)=>{

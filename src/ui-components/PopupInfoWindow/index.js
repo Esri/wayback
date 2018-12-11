@@ -116,9 +116,9 @@ export default class PopupInfoWindow {
         const contentHtml = `
             <div class='content-wrap text-white'>
                 <div class='text-wrap'>
-                    <p class='trailer-half'>${provider} (${source}) image captured on <b>${data.dateFormatted}</b> and published in the <b>${data.releaseDate}</b> World Imagery basemap update.</p>
-                    <p class='trailer-half'><b>Resolution</b>: Pixels in the source image<br>represent a ground distance of ${resolution} meters</p>
-                    <p class='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br>are within ${accuracy} meters of true location</p>
+                    <p class='trailer-half'>${provider} (${source}) image captured on <b>${data.dateFormatted}</b> as shown in the <b>${data.releaseDate}</b> version of the World Imagery basemap.</p>
+                    <p class='trailer-half'><b>Resolution</b>: Pixels in the source image<br>represent a ground distance of <b>${resolution} meters</b>.</p>
+                    <p class='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br>are within <b>${accuracy} meters</b> of true location.</p>
                 </div>
                 <div class='close-btn js-close-popup-window text-white text-center cursor-pointer ${isReticleRightClass}'>
                     <span class='icon-ui-close'></span>
