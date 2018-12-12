@@ -544,6 +544,9 @@ esriLoader.loadModules([
 
                     const waybackLayerInfo = {
                         "templateUrl": d.layerURL,
+                        "wmtsInfo": {
+                            "url": URL_WAYBACK_IMAGERY_BASE
+                        },
                         "visibility": isVisible,
                         "title": d.releaseName,
                         "type": "WebTiledLayer",
