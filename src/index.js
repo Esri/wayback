@@ -1658,7 +1658,7 @@ esriLoader.loadModules([
         const container = d3.select("#"+containerID);
     
         const svg = container.append("svg").style("width", "100%").style("height", "100%");
-        const margin = {top: 10, right: 15, bottom: 30, left: 15};
+        const margin = {top: 10, right: 15, bottom: 20, left: 15};
         const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
         let width = 0;
