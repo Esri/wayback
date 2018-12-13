@@ -11,7 +11,7 @@ import './style/index.scss';
 
 // import other files
 import waybackAgolItemIds from './assets/wayback-lookup_2018.r17.json';
-import metadataSublayersInfo from './assets/metadata-sublayers-info.json';
+// import metadataSublayersInfo from './assets/metadata-sublayers-info.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
