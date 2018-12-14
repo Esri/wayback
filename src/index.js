@@ -4,11 +4,14 @@ import * as d3 from "d3";
 import * as esriLoader from 'esri-loader';
 import * as calcite from 'calcite-web/dist/js/calcite-web';
 
+import PopupInfoWindow from './ui-components/PopupInfoWindow';
+
 // import style files
 import './style/index.scss';
 
 // import other files
 import waybackAgolItemIds from './assets/wayback-lookup_2018.r17.json';
+// import metadataSublayersInfo from './assets/metadata-sublayers-info.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
@@ -79,7 +82,7 @@ esriLoader.loadModules([
     
     "esri/identity/OAuthInfo",
     "esri/identity/IdentityManager",
-    // "esri/portal/Portal",
+    "esri/portal/Portal",
 
     "esri/widgets/Search",
 
@@ -99,7 +102,7 @@ esriLoader.loadModules([
 
     OAuthInfo, 
     esriId,
-    // Portal,
+    Portal,
 
     Search
 ])=>{
@@ -113,6 +116,8 @@ esriLoader.loadModules([
         this.portalUser = null;
         this.stateManager = new AppStateManager();
         this.oauthManager = new OAuthManager();
+        this.waybackMetadataManager = new WaybackMetadataManager();
+        this.popupWindowAnchorMapPoint = null;
 
         this.init = ()=>{
             // if(!window.isUsingOauthPopupWindow){
@@ -224,6 +229,10 @@ esriLoader.loadModules([
             this.portalUser = portalUser;
         };
 
+        this.setPopupWindowAnchorMapPoint = (mapPoint=null)=>{
+            this.popupWindowAnchorMapPoint = mapPoint;
+        }
+
         this.toggleIsMapViewStationary = (isStationary)=>{
             this.isMapViewStationary = isStationary;
 
@@ -236,6 +245,8 @@ esriLoader.loadModules([
         };
 
         this.addWaybackImageryLayer = (releaseNum)=>{
+
+            // console.log('calling addWaybackImageryLayer');
 
             if(!releaseNum){
                 console.error('release number ({m} value) is required to add wayback imagery layer');
@@ -254,6 +265,8 @@ esriLoader.loadModules([
             this.mapView.map.add(waybackLyr);
 
             this.mapView.map.reorder(waybackLyr, 0); //bring the layer to bottom so the labels are visible
+
+            // this.getMetaData();
         };
 
         this.getWaybackImageryLayer = ()=>{
@@ -274,8 +287,20 @@ esriLoader.loadModules([
         };
 
         this.setMapEventHandlers = (view)=>{
+
             view.on('click', (evt)=>{
-                this.searchWayback(evt.mapPoint);
+                // this.searchWayback(evt.mapPoint);
+                const mapPoint = evt.mapPoint;
+                this.showPopupWindow(mapPoint);
+            });
+
+            view.on('mouse-wheel', (evt)=>{
+                this.hidePopupWindow();
+            });
+
+            watchUtils.watch(view, "center", (evt)=>{
+                // console.log('view center is on updating', evt);
+                this.updatePopupPostion();
             });
 
             watchUtils.whenFalse(view, "stationary", (evt)=>{
@@ -287,8 +312,49 @@ esriLoader.loadModules([
             });
         };
 
+        this.showPopupWindow = (mapPoint)=>{
+
+            this.getMetaData({ mapPoint }).then(metadata=>{
+
+                const screenPoint = this.convertToScreenPoint(mapPoint);
+                const releaseNum = metadata.releaseNum;
+
+                const releaseDate = app.dataModel.getReleaseDate(releaseNum);
+                const itemAgolUrl = app.dataModel.getItemAgolUrl(releaseNum);
+                const isSelected = app.dataModel.getIsSelected(releaseNum); 
+
+                metadata.releaseNum = releaseNum;
+                metadata.releaseDate = releaseDate;
+                metadata.itemAgolUrl = itemAgolUrl;
+                metadata.isSelected = isSelected;
+
+                // console.log('calling showPopupWindow', metadata);
+
+                this.setPopupWindowAnchorMapPoint(mapPoint);
+
+                appView.popupInfoWindow.show({
+                    screenPoint,
+                    metadata
+                });
+            });
+        };
+
+        this.hidePopupWindow = ()=>{
+            // reset popup anchor point to null
+            this.setPopupWindowAnchorMapPoint(); 
+            appView.popupInfoWindow.hide();
+        };
+
+        this.updatePopupPostion = ()=>{
+            if(this.popupWindowAnchorMapPoint){
+                const screenPoint = this.convertToScreenPoint(this.popupWindowAnchorMapPoint);
+                appView.popupInfoWindow.setPosition(screenPoint, true);
+            }
+        }
+
         // we need to watch both layerView on update and mapView on update events and execute search once both of these two updates events are finished
         this.updateEventsOnEndHandler = ()=>{
+            // console.log('calling updateEventsOnEndHandler');
             if(this.isMapViewStationary && this.dataModel.isReady){
                 this.searchWayback(this.mapView.center);
             }
@@ -387,6 +453,21 @@ esriLoader.loadModules([
             });
         };
 
+        this.getMetaData = (options={})=>{
+            const mapPoint = options.mapPoint || this.mapView.center;
+            const releaseNum = options.releaseNum || this.getReleaseNumFromWaybackImageryLayer();
+            const zoom = this.mapView.zoom;
+
+            return new Promise((resolve, reject) => {
+                this.waybackMetadataManager.getData(mapPoint, zoom, releaseNum).then(metadata=>{
+                    resolve(metadata);
+                }).catch(errorMsg=>{
+                    console.error('cannot get metadata:', errorMsg);
+                    reject({error: errorMsg});
+                });
+            });
+        };
+
         this.getImageBlob = (imageURL, rNum)=>{
 
             return new Promise((resolve, reject) => {
@@ -452,16 +533,53 @@ esriLoader.loadModules([
                     'f': 'json'
                 };
     
-                const operationalLayers = selectedItems.map( (d, i)=>{
-                    const layerInfo = {
+                const operationalLayers = [];
+                
+                selectedItems.forEach((d, i)=>{
+
+                    const isVisible = i === 0 ? true : false;
+
+                    const metadataLayerItemID = this.waybackMetadataManager.getMetadataItemID(d.release);
+                    const metadataLayerUrl = this.waybackMetadataManager.getMetadataMapServiceUrl(d.release);
+
+                    const waybackLayerInfo = {
                         "templateUrl": d.layerURL,
-                        "visibility": i === 0 ? true : false,
+                        "wmtsInfo": {
+                            "url": URL_WAYBACK_IMAGERY_BASE
+                        },
+                        "visibility": isVisible,
                         "title": d.releaseName,
                         "type": "WebTiledLayer",
                         "layerType": "WebTiledLayer",
                         "itemId": d.agolItemID
                     };
-                    return layerInfo;
+
+                    operationalLayers.push(waybackLayerInfo);
+
+                    if(metadataLayerItemID && metadataLayerUrl){
+                        const metadataLayerTitle = "Metadata for " + d.releaseName;
+
+                        // const metadataLayerInfo = {
+                        //     "layerType": "ArcGISTiledMapServiceLayer",
+                        //     "url": metadataLayerUrl,
+                        //     "visibility": isVisible,
+                        //     "opacity": 1,
+                        //     "title": metadataLayerTitle,
+                        //     "layers": metadataSublayersInfo.layers
+                        // };
+
+                        const metadataLayerInfo = {
+                            "itemId": metadataLayerItemID,
+                            "visibility": isVisible,
+                            "opacity": 1,
+                            "title": metadataLayerTitle,
+                            "layerType": "ArcGISMapServiceLayer",
+                            "url": metadataLayerUrl
+                        };
+
+                        operationalLayers.push(metadataLayerInfo);
+                    }
+
                 });
     
                 const requestText = {  
@@ -506,103 +624,155 @@ esriLoader.loadModules([
 
         this.getScreenPointFromXY = (x, y)=>{
 
-            const xOffsetForMapDiv = 350; 
-
             const pt = new Point({
                 x: x,
                 y: y,
                 spatialReference: { wkid: 3857 }
             });
 
-            const screenPt = this.mapView.toScreen(pt);
+            return this.convertToScreenPoint(pt);
+        };
+
+        this.convertToScreenPoint = (mapPoint)=>{
+
+            const xOffsetForMapDiv = 350; 
+
+            const screenPt = this.mapView.toScreen(mapPoint);
 
             screenPt.x = screenPt.x + xOffsetForMapDiv; // need to add this offset because we have gutter and side bar at left of the page
 
             return screenPt;
         };
 
-        // this.saveAppStates = ()=>{
+        this.toggleReferenceOverlay = ()=>{
+            // console.log(this.mapView);
 
-        //     const appStates = {
-        //         extent: 'currentMapExt',
-        //         selectedReleases: 'selectedReleases'
-        //     };
+            this.mapView.allLayerViews.items.forEach(lyr=>{
 
-        //     localStorage.setItem(KEY_LOCALSTORAGE_APP_STATES, JSON.stringify(appStates));
-        // };
-
-        // this.checkAppStates = ()=>{
-
-        //     let appStates = localStorage.getItem(KEY_LOCALSTORAGE_APP_STATES);
-        //     appStates = appStates ? JSON.parse(appStates) : null;
-
-        //     if(appStates){
-        //         console.log('appStates is found', appStates);
-        //         localStorage.removeItem(KEY_LOCALSTORAGE_APP_STATES);
-        //     } else {
-        //         console.log('previously stored app states not found');
-        //     }
-        // };
-
-        // this.signIn = ()=>{
-
-        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
-
-        //     const info = new OAuthInfo({
-        //         appId: oauth_appid,
-        //         popup: false,
-        //     });
-
-        //     esriId.useSignInPage = false;
-
-        //     esriId.registerOAuthInfos([info]);
-
-        //     this.initPortal();
-        // };
-
-        // this.signInViaPopUpWindow = ()=>{
-
-        //     const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
-
-        //     const info = new OAuthInfo({
-        //         // Swap this ID out with registered application ID
-        //         appId: oauth_appid,
-        //         popup: true
-        //     });
-
-        //     esriId.useSignInPage = false;
-
-        //     esriId.registerOAuthInfos([info]);
-
-        //     esriId.getCredential(info.portalUrl + "/sharing").then(()=>{
-        //         this.initPortal();
-        //     }).catch(()=>{
-        //         // error handler
-        //     });
-        // };
-
-        // this.signOut = ()=>{
-        //     esriId.destroyCredentials();
-        //     window.location.reload();
-        // };
-
-        // this.initPortal = ()=>{
-        //     const portal = new Portal();
-        //     // Setting authMode to immediate signs the user in once loaded
-        //     portal.authMode = "immediate";
-        //     // Once loaded, user is signed in
-        //     portal.load().then((res)=>{
-        //         this.setPortalUser(res.user);
-
-        //         // if(window.isUsingOauthPopupWindow){
-        //         //     appView.uploadWebMapModal.show();
-        //         // }
-
-        //         appView.uploadWebMapModal.show();
-        //     });
-        // };
+                if(lyr.layer.title === 'Hybrid Reference Layer'){
+                    lyr.visible = !lyr.visible;
+                }
+            });
+        };
 
         this.init();
+    };
+
+    const WaybackMetadataManager =  function(options={}){
+
+        // can only get metadata when the map is between the min and max zoom level (10 <= mapZoom <= 23) 
+        const MAX_ZOOM = 23;
+        const MIN_ZOOM = 10;
+        const FIELD_NAME_SRC_DATE = 'SRC_DATE2';
+        const FIELD_NAME_SRC_PROVIDER = 'NICE_DESC';
+        const FIELD_NAME_SRC_NAME = 'SRC_DESC';
+        const FIELD_NAME_SRC_RES = 'SRC_RES';
+        const FIELD_NAME_SRC_ACC = 'SRC_ACC';
+
+        const getData = (mapPoint, zoom, releaseNum)=>{
+
+            return new Promise((resolve, reject)=>{
+
+                const metadataLayerUrl = getMetaDataLayerUrl(releaseNum, zoom);
+            
+                if(metadataLayerUrl){
+                    queryData(metadataLayerUrl, mapPoint).then(res=>{
+                        // console.log(res);
+                        if(res){
+                            res.releaseNum = releaseNum;
+                            resolve(res);
+                        } else {
+                            reject('no metadata result from the query');
+                        }
+                        
+                    });
+                } else {
+                    reject('no metadata layer available');
+                }
+            });
+            
+        };
+
+        const queryData = (metadataLayerUrl, mapPoint)=>{
+
+            const queryParam = {
+                geometry: JSON.stringify({"x": mapPoint.x, "y":mapPoint.y, "spatialReference":{"wkid":102100,"latestWkid":3857}}),
+                geometryType: 'esriGeometryPoint',
+                inSR: 102100,
+                spatialRel: 'esriSpatialRelIntersects',
+                outFields: "*",
+                returnGeometry: false,
+                f: 'json'
+            };
+
+            return new Promise((resolve, reject)=>{
+
+                esriRequest(metadataLayerUrl + '/query', {
+                    method: 'get',
+                    query: queryParam,
+                    responseType: "json"
+                }).then(function(response){
+                    // callback(response.data);
+                    // console.log(response);
+                    const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
+                    const date = feature.attributes[FIELD_NAME_SRC_DATE];
+                    const dateFormatted = helper.formatDate(date);
+                    const provider = feature.attributes[FIELD_NAME_SRC_PROVIDER];
+                    const source = feature.attributes[FIELD_NAME_SRC_NAME];
+                    const resolution = feature.attributes[FIELD_NAME_SRC_RES];
+                    const accuracy = feature.attributes[FIELD_NAME_SRC_ACC];
+                    const outputData = feature ? { date, dateFormatted, provider, source, resolution, accuracy } : null;
+                    resolve(outputData);
+                });
+            });
+
+        };
+
+        const getMetadataMapServiceUrl = (releaseNum)=>{
+            const mapServiceUrl = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayerUrl ? waybackAgolItemIds[releaseNum].metadataLayerUrl : null;
+            return mapServiceUrl;
+        };
+
+        const getMetadataItemID = (releaseNum)=>{
+            const itemID = waybackAgolItemIds[releaseNum] && waybackAgolItemIds[releaseNum].metadataLayerItemID ? waybackAgolItemIds[releaseNum].metadataLayerItemID : null;
+            return itemID;
+        };
+
+        const getMetaDataLayerId = (zoom)=>{
+            zoom = +zoom;
+            const layerID = MAX_ZOOM - zoom;
+            const layerIdForMinZoom = MAX_ZOOM - MIN_ZOOM; // the service has 14 sub layers that provide metadata up to zoom level 10 (layer ID 14), if the zoom level is small that (e.g. 5), there are no metadata
+            // console.log('zoom', zoom);
+            return layerID <= layerIdForMinZoom ? layerID : layerIdForMinZoom;
+        };
+
+        // url to the map service for that release 
+        const getMetaDataLayerUrl = (releaseNum, zoom)=>{
+
+            const metadataServiceUrl = getMetadataMapServiceUrl(releaseNum);
+            const layerID = getMetaDataLayerId(zoom);
+
+            // console.log(layerID);
+
+            if(!metadataServiceUrl){
+                // console.error('no Metadata Layer found for release >', releaseNum);
+                return;
+            }
+
+            return metadataServiceUrl + '/' + layerID;
+
+        };
+
+        // const getSubLayersInfo = ()=>{
+        //     // return 
+        // };
+
+        return {
+            getData,
+            getMetadataMapServiceUrl,
+            getMetadataItemID
+        };
+
     };
 
     const OAuthManager = function(){
@@ -616,6 +786,7 @@ esriLoader.loadModules([
 
         let userCredential = null;
         let isAnonymous = true;
+        let poralUser = null;
 
         const init = ()=>{
             esriId.useSignInPage = false;
@@ -623,6 +794,7 @@ esriLoader.loadModules([
 
             esriId.checkSignInStatus(info.portalUrl + "/sharing").then((res)=>{
                 setUserCredential(res);
+                setPortalUser();
             }).catch(()=>{
                 // Anonymous view
                 // console.log('Anonymous view');
@@ -651,6 +823,25 @@ esriLoader.loadModules([
             return outputUrl
         };
 
+        const setPortalUser = ()=>{
+
+            const portal = new Portal();
+
+            // Setting authMode to immediate signs the user in once loaded
+            portal.authMode = "immediate";
+
+            // Once loaded, user is signed in
+            portal.load().then(()=>{
+                console.log(portal);
+                console.log(portal.user);
+                poralUser = portal.user;
+            });
+        };
+
+        const getCustomBaseURL = ()=>{
+            return poralUser && poralUser.portal && poralUser.portal.urlKey ? `https://${poralUser.portal.urlKey}.maps.arcgis.com` : null;
+        };
+
         const checkIsAnonymous = ()=>{
             return isAnonymous;
         };
@@ -661,7 +852,8 @@ esriLoader.loadModules([
             signIn: signIn,
             signOut: signOut,
             getUserContentUrl: getUserContentUrl,
-            checkIsAnonymous: checkIsAnonymous
+            checkIsAnonymous: checkIsAnonymous,
+            getCustomBaseURL: getCustomBaseURL
         };
 
     };
@@ -757,6 +949,8 @@ esriLoader.loadModules([
                 appView.viewModel.toggleHighlightedItems();
             }
 
+            appView.uploadWebMapModal.show();
+
             reset();
         };
 
@@ -834,11 +1028,20 @@ esriLoader.loadModules([
 
             const imageUrl = this.getImageUrlByReleaseNumber(rNum);
             const topLeftPos = this.topLeftScreenPoint;
-            const date = app.dataModel.getReleaseDate(rNum);
+            const releaseDate = app.dataModel.getReleaseDate(rNum);
 
             if(topLeftPos && imageUrl){
                 delayForToggleVisibility = setTimeout(()=>{
-                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, date);
+                    // app.getMetaData({
+                    //     releaseNum: rNum
+                    // }).then(metadata=>{
+                    //     console.log('metadata for preview window', metadata);
+                    //     const imageAcquiredDate = metadata.date;
+                    //     appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate, imageAcquiredDate);
+                    // }).catch(error=>{
+                    //     appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
+                    // })
+                    appView.tilePreviewWindow.show(topLeftPos, imageUrl, releaseDate);
                 }, 50);
             }
         };
@@ -954,6 +1157,14 @@ esriLoader.loadModules([
             return isOutputInDateTimeFormat ? this.releasesDict[rNum].releaseDatetime : this.releasesDict[rNum].releaseDate;
         };
 
+        this.getItemAgolUrl = (rNum)=>{
+            return this.releasesDict[rNum].agolItemURL;
+        };
+
+        this.getIsSelected = (rNum)=>{
+            return this.releasesDict[rNum].isSelected; 
+        };
+
         this.getMostRecentReleaseNum = ()=>{
             return this.releases[0][KEY_RELEASE_NUM];
         };
@@ -1030,6 +1241,7 @@ esriLoader.loadModules([
         const $activeItemTitle = $('.val-holder-active-item-title');
         const $waybackLayerLoadingFailedAlert = $('.wayback-layer-loading-failed-alert');
         const $cboxToggleHighlightedItems = $('.cbox-toggle-highlighted-items');
+        const $referenceLayerToggleBtn = $('.reference-layer-toggle-btn');
 
         // app view properties
         let isInitallyHideItemsVisible = false;
@@ -1042,6 +1254,7 @@ esriLoader.loadModules([
         this.tilePreviewWindow = null;
         this.tooltip = null;
         this.uploadWebMapModal = null;
+        this.popupInfoWindow = null;
 
         this.init = ()=>{
             this.viewModel = new ViewModel(this);
@@ -1050,6 +1263,12 @@ esriLoader.loadModules([
             this.tilePreviewWindow = new TilePreviewWindow();
             this.tooltip = new CustomizedTooltip();
             this.uploadWebMapModal = new UploadWebMapModal(MODAL_ID_UPLAOD_WEBMAP);
+            this.popupInfoWindow = new PopupInfoWindow({
+                addToWebMapBtnOnClick: (data)=>{
+                    // console.log('.js-add-to-webmap clicked', data)
+                    appView.viewModel.setSelectedItem(data.releaseNum, data.isSelected);
+                }
+            });
 
             // init observers after all components are ready
             this.viewModel.initObservers(); 
@@ -1106,7 +1325,7 @@ esriLoader.loadModules([
             rNum = rNum || $activeItemTitle.attr('data-active-item-release-num');
 
             const rDate = app.dataModel.getReleaseDate(rNum);
-            const titleTxt = 'Wayback to ' + rDate;
+            const titleTxt = 'Wayback ' + rDate;
             $activeItemTitle.text(titleTxt);
 
             if(!isShowingAlternative){
@@ -1117,6 +1336,7 @@ esriLoader.loadModules([
         this.showTilePreviewWindow = (rNum)=>{
             if(app.selectedTile && app.isMapViewStationary){
                 app.selectedTile.showPreview(rNum);
+                this.popupInfoWindow.hide();
             }
         };
 
@@ -1146,6 +1366,24 @@ esriLoader.loadModules([
         this.toggleHighlightedItemsBtnStyle = ()=>{
             $cboxToggleHighlightedItems.toggleClass('is-checked');
         };
+
+        this.toggleReferecnceOverlayBtnStyle = ()=>{
+            $referenceLayerToggleBtn.toggleClass('is-checked');
+        };
+
+        // this.populateMetadata = (data)=>{
+        //     let metadataInfoHtml = '';
+        //     const dateFormat = d3.timeFormat("%Y-%m-%d");
+
+        //     if(data && data.date && data.provider){
+        //         metadataInfoHtml = `
+        //             <div class='trailer-1'>
+        //                 <span class='trailer-0 margin-right-half'>Imagery was acquired on <b>${dateFormat(new Date(data.date))}<b></span>
+        //             </div>
+        //         `;
+        //     }
+        //     $metadataInfo.html(metadataInfoHtml);
+        // };
 
         this.initEventHandlers = ()=>{
 
@@ -1179,25 +1417,6 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-open-save-web-map-modal.is-active', function(evt){
 
-                // if(window.isUsingOauthPopupWindow){
-
-                //     if(!app.portalUser){
-                //         app.signInViaPopUpWindow();
-                //     } else {
-                //         appView.uploadWebMapModal.show();
-                //     }
-
-                // } else {
-                //     appView.uploadWebMapModal.show(); 
-                // }
-
-                // if(!app.portalUser){
-                //     app.stateManager.save();
-                //     app.signIn();
-                // } else {
-                //     appView.uploadWebMapModal.show();
-                // }
-
                 if(app.oauthManager.checkIsAnonymous()){
                     // save current App/UI states so we can restore the app after direct back to the sign in page
                     app.stateManager.save();
@@ -1223,8 +1442,7 @@ esriLoader.loadModules([
                     // console.log(res);
                     if(res.success){
                         const webmapId = res.id
-                        // const webMapUrl = helper.getAgolUrlByItemID(webmapId, true);
-                        const webMapUrl = helper.getAgolOrgUrlByItemID(webmapId, true, true);
+                        const webMapUrl = helper.getAgolWebMapUrlByItemID(webmapId);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
@@ -1257,6 +1475,11 @@ esriLoader.loadModules([
 
             $body.on('click', '.js-clear-all-selected-items', function(evt){
                 appView.viewModel.setSelectedItem(null);
+            });
+
+            $body.on('click', '.js-toggle-reference-layer', (evt)=>{
+                appView.toggleReferecnceOverlayBtnStyle();
+                app.toggleReferenceOverlay();
             });
 
         };
@@ -1363,11 +1586,13 @@ esriLoader.loadModules([
             this.observerForActiveItem.subscribe(appView.barChart.setActiveItem);
             this.observerForActiveItem.subscribe(appView.itemList.setActiveItem);
             this.observerForActiveItem.subscribe(appView.setActiveItemTitleTxt);
+            this.observerForActiveItem.subscribe(app.hidePopupWindow);
 
             this.observerForSelectedItem = new Observable();
             this.observerForSelectedItem.subscribe(appView.itemList.toggleSelectedItem);
             this.observerForSelectedItem.subscribe(appView.toggleCreateWebmapBtnStatus);
             this.observerForSelectedItem.subscribe(appView.uploadWebMapModal.resetIsWebMapReady); // reset isWebMapReady flag to false so it would create a new web map when user make new selections
+            this.observerForSelectedItem.subscribe(appView.popupInfoWindow.toggleAddToWebMapBtnStatus);
             
             this.observerForToggleHighlightedItem = new Observable();
             this.observerForToggleHighlightedItem.subscribe(this.filterData);
@@ -1413,8 +1638,8 @@ esriLoader.loadModules([
                 const htmlStr = `
                     <div class='list-card trailer-half ${classesForActiveItem} ${classesForHighlightedItem} ${isSelected} js-show-selected-tile-on-map js-set-active-item' data-release-number='${rNum}'>
                         <a href='javascript:void();' class='margin-left-half ${linkColor}'>${rDate}</a>
-                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-tooltip-content='Add this update to an ArcGIS Online Map' data-tooltip-content-alt='Remove this update from your ArcGIS Online Map'></div>
-                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this update...'></div>
+                        <div class='js-set-selected-item js-show-customized-tooltip add-to-webmap-btn inline-block cursor-pointer right' data-release-number='${rNum}' data-tooltip-content='Add this release to an ArcGIS Online Map' data-tooltip-content-alt='Remove this release from your ArcGIS Online Map'></div>
+                        <div class='js-open-item-link open-item-btn js-show-customized-tooltip icon-ui-link-external margin-right-half inline-block cursor-pointer right ${linkColor}' data-href='${agolItemURL}' data-tooltip-content='Learn more about this release...'></div>
                     </div>
                 `;
 
@@ -1433,7 +1658,7 @@ esriLoader.loadModules([
         const container = d3.select("#"+containerID);
     
         const svg = container.append("svg").style("width", "100%").style("height", "100%");
-        const margin = {top: 10, right: 15, bottom: 30, left: 15};
+        const margin = {top: 10, right: 15, bottom: 20, left: 15};
         const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
         let width = 0;
@@ -1541,28 +1766,48 @@ esriLoader.loadModules([
         let $previewWindow = null;
         let $previewWindowImg = null; 
         let $releaseDateTxt = null; 
+        let $imageAcquireDateTxt = null;
 
         this.init = ()=>{
+            // const tilePreviewWindowHtml = `
+            //     <div class="tile-preview-window hide">
+            //         <img>
+            //         <div class='tile-preview-title text-right'>
+            //             <div class='trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
+            //             <div><span class='margin-right-half taken-on-date-text val-holder-acquire-date'></span></div>
+            //         </div>
+            //     </div>
+            // `;
             const tilePreviewWindowHtml = `
                 <div class="tile-preview-window hide">
                     <img>
-                    <div class='tile-preview-title fonr-size-2 avenir-demi text-right'>
-                        <span class='margin-right-half val-holder-release-date'></span>
+                    <div class='tile-preview-title'>
+                        <div class='margin-left-half trailer-0'><span class='margin-right-half release-date-text val-holder-release-date'></span></div>
                     </div>
                 </div>
             `;
+
             $previewWindow = $(tilePreviewWindowHtml);
             $body.append($previewWindow);
 
             $previewWindowImg = $previewWindow.find('img');
             $releaseDateTxt = $previewWindow.find('.val-holder-release-date');
+            $imageAcquireDateTxt = $previewWindow.find('.val-holder-acquire-date');
         };
 
-        this.show = (topLeftPos, imageUrl, date)=>{
+        this.show = (topLeftPos, imageUrl, releaseDate, acquireDate)=>{
+
+            const releaseDateTextStr = '<b>Wayback ' + releaseDate + '</b> preview';
+            // const acquireDateTextStr = acquireDate ? 'Photo taken on ' + helper.formatDate(acquireDate) : '';
+
             $previewWindow.css('top', topLeftPos.y);
             $previewWindow.css('left', topLeftPos.x);
+
             $previewWindowImg.attr('src', imageUrl);
-            $releaseDateTxt.text(date);
+
+            $releaseDateTxt.html(releaseDateTextStr);
+            // $imageAcquireDateTxt.text(acquireDateTextStr);
+
             this.toggleVisibility(true);
         };
 
@@ -1790,13 +2035,17 @@ esriLoader.loadModules([
             return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
 
-        this.getAgolOrgUrlByItemID = (itemID, isOrgDomain, isUrlForWebMap)=>{
-            const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
-            const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
-            const agolBaseUrl = isOrgDomain && customBaseUrl && urlKey ? 'https://' + urlKey + '.' + customBaseUrl : 'https://www.arcgis.com';
-            const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
+        this.getAgolWebMapUrlByItemID = (itemID)=>{
+            // const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
+            // const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
+            // console.log( app.oauthManager.getCustomBaseURL() );
+
+            const customBaseUrl = app.oauthManager.getCustomBaseURL();
+            const agolBaseUrl = customBaseUrl ? customBaseUrl : 'https://www.arcgis.com';
+            // const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
             const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
-            return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+            // return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
+            return agolWebmapUrl;
         };
 
         this.extractDateFromStr = (inputStr)=>{
@@ -1812,6 +2061,12 @@ esriLoader.loadModules([
             const mon = marginMonth ? ((dateParts[1] - 1) + marginMonth): dateParts[1] - 1;
             const day = marginMonth ? '1' : dateParts[2];
             return new Date(year, mon, day);
+        };
+
+        this.formatDate = (epochDate)=>{
+            // const dateFormat = d3.timeFormat("%Y-%m-%d");
+            const dateFormat = d3.timeFormat("%b %d, %Y");
+            return dateFormat(new Date(epochDate))
         };
 
         this.getSnippetStr = (items)=>{
@@ -1839,6 +2094,34 @@ esriLoader.loadModules([
         this.tile2lat = (y,z)=>{
             const n=Math.PI-2*Math.PI*y/Math.pow(2,z);
             return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
+        };
+
+        this.detectBrowserType = ()=>{
+            // // Opera 8.0+
+            // const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+            
+            // // Firefox 1.0+
+            // const isFirefox = typeof InstallTrigger !== 'undefined';
+            
+            // // Safari 3.0+ "[object HTMLElementConstructor]" 
+            // const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+            
+            // Internet Explorer 6-11
+            const isIE = /*@cc_on!@*/false || !!document.documentMode;
+            
+            // Edge 20+
+            const isEdge = !isIE && !!window.StyleMedia;
+            
+            // // Chrome 1+
+            // const isChrome = !!window.chrome && !!window.chrome.webstore;
+            
+            // // Blink engine detection
+            // const isBlink = (isChrome || isOpera) && !!window.CSS;
+
+            return {
+                isIE,
+                isEdge
+            };
         };
 
     };

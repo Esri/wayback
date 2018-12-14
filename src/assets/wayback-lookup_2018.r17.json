@@ -515,7 +515,7 @@
       "itemTitle": "World Imagery (Wayback 2018-12-14)",
       "itemURL": "http://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23448/{level}/{row}/{col}",
       "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r17/MapServer",
-      "metadataLayerItemID": ""
+      "metadataLayerItemID": "35cff056ecf549bd8ba2cc25574a8c56"
     },
     "23601": {
       "itemID": "db4f466b0a33403f99be46f36c2bf674",
