@@ -10,7 +10,7 @@ import PopupInfoWindow from './ui-components/PopupInfoWindow';
 import './style/index.scss';
 
 // import other files
-import waybackAgolItemIds from './assets/wayback-lookup_2019.r00.json';
+// import waybackAgolItemIds from './assets/wayback-lookup_2019.r00.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
@@ -21,7 +21,7 @@ const urlQueryParams = (function(){
 
     const outputData = {};
 
-    const isDevServer = window.location.hostname === 'localhost' || window.location.hostname === 'livingatlasdev.arcgis.com';
+    const isDevServer = window.location.hostname === 'localhost' || window.location.hostname === 'livingatlasdev.arcgis.com' ? true : false;
 
     if(window.location.search){
 
@@ -36,9 +36,9 @@ const urlQueryParams = (function(){
             outputData[key]=val;
         });
 
-        outputData.devMode = outputData.devMode === 'true' && isDevServer ? true : false;
-
     } 
+
+    outputData.devMode = outputData.devMode === 'true' || isDevServer ? true : false;
 
     return outputData;
 
@@ -55,6 +55,8 @@ const URL_WAYBACK_IMAGERY_BASE = urlQueryParams.devMode && urlQueryParams.baseUr
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
+const URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE = 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com';
+const URL_WAYBACK_AGOL_ITEMS_LOOKUP = urlQueryParams.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/prd/waybackconfig.json';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
@@ -106,6 +108,11 @@ esriLoader.loadModules([
     Search
 ])=>{
 
+    let app = null;
+    let appView = null;
+    let helper = null;
+    let waybackAgolItemIds = null;
+
     const WaybackApp = function(){
 
         this.dataModel = new AppDataModel();
@@ -122,7 +129,19 @@ esriLoader.loadModules([
             // if(!window.isUsingOauthPopupWindow){
             //     this.signIn();
             // }
-            this.initMap();
+            
+            this.fetchWaybackAgolItemsLookupTable((res)=>{
+                waybackAgolItemIds = res;
+
+                this.initMap();
+            });
+        };
+
+        this.fetchWaybackAgolItemsLookupTable = (callback)=>{
+            $.getJSON(URL_WAYBACK_AGOL_ITEMS_LOOKUP, response=>{
+                // this.waybackReleaseDataOnReadyHandler(response.Selection);
+                callback(response);
+            });
         };
 
         // get json file that will be used as a lookup table for all releases since 2014
@@ -654,7 +673,7 @@ esriLoader.loadModules([
             });
         };
 
-        this.init();
+        // this.init();
     };
 
     const WaybackMetadataManager =  function(options={}){
@@ -1483,7 +1502,7 @@ esriLoader.loadModules([
 
         };
 
-        this.init();
+        // this.init();
     };
 
     const ViewModel = function(appView){
@@ -2125,15 +2144,17 @@ esriLoader.loadModules([
 
     };
 
-    // init app and core components
-    const app = new WaybackApp();
-    const appView = new AppView();
-    const helper = new Helper();
+    const initApp = ()=>{
+        // init app and core components
+        app = new WaybackApp();
+        appView = new AppView();
+        helper = new Helper();
 
-    window.appDebugger = {
-        signOut: app.oauthManager.signOut
-    }
+        app.init();
+        appView.init();
+    };
 
+    initApp();
 
 }).catch(err => {
     // handle any errors

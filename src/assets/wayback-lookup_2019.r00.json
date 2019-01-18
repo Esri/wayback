@@ -172,7 +172,7 @@
       "itemTitle": "World Imagery (Wayback 2019-01-09)",
       "itemURL": "https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6036/{level}/{row}/{col}",
       "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r00/MapServer",
-      "metadataLayerItemID": "4ce0c51e25324a4382e7db2bb12a5947"
+      "metadataLayerItemID": "43bfc491e1dd4d219ddf92f1be0f7786"
     },
     "6354": {
       "itemID": "5e923c4065824360957da6fca901efa5",
