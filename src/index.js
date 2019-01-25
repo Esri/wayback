@@ -10,7 +10,7 @@ import PopupInfoWindow from './ui-components/PopupInfoWindow';
 import './style/index.scss';
 
 // import other files
-// import waybackAgolItemIds from './assets/wayback-lookup_2019.r00.json';
+import waybackAgolItemIds from './assets/wayback-lookup_2019.r00.json';
 
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
@@ -111,7 +111,7 @@ esriLoader.loadModules([
     let app = null;
     let appView = null;
     let helper = null;
-    let waybackAgolItemIds = null;
+    // let waybackAgolItemIds = null;
 
     const WaybackApp = function(){
 
@@ -126,15 +126,13 @@ esriLoader.loadModules([
         this.popupWindowAnchorMapPoint = null;
 
         this.init = ()=>{
-            // if(!window.isUsingOauthPopupWindow){
-            //     this.signIn();
-            // }
+            this.initMap();
             
-            this.fetchWaybackAgolItemsLookupTable((res)=>{
-                waybackAgolItemIds = res;
+            // this.fetchWaybackAgolItemsLookupTable((res)=>{
+            //     waybackAgolItemIds = res;
 
-                this.initMap();
-            });
+            //     this.initMap();
+            // });
         };
 
         this.fetchWaybackAgolItemsLookupTable = (callback)=>{
