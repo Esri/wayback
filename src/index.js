@@ -68,6 +68,9 @@ const MODAL_ID_UPLAOD_WEBMAP = 'web-map-loading-indicator';
 
 // before using esri-loader, tell it to use the promise library
 esriLoader.utils.Promise = Promise;
+const esriLoaderOptions = {
+    url: 'https://js.arcgis.com/4.10'
+};
 esriLoader.loadModules([
     'esri/views/MapView', 
     'esri/WebMap',
@@ -88,7 +91,7 @@ esriLoader.loadModules([
     "esri/widgets/Search",
 
     "dojo/domReady!"
-]).then(([
+], esriLoaderOptions).then(([
     MapView, 
     WebMap,
     // Extent,
