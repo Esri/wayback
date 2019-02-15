@@ -131,7 +131,8 @@ esriLoader.loadModules([
 
         this.init = ()=>{
             this.initMap();
-            
+            this.oauthManager.init();
+
             // this.fetchWaybackAgolItemsLookupTable((res)=>{
             //     waybackAgolItemIds = res;
 
@@ -799,16 +800,23 @@ esriLoader.loadModules([
         
         const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
 
-        const info = new OAuthInfo({
-            appId: oauth_appid,
-            popup: false,
-        });
+        // const info = new OAuthInfo({
+        //     appId: oauth_appid,
+        //     popup: false,
+        // });
+
+        // const oauth_appid = OAUTH_APPID_PROD; 
 
         let userCredential = null;
         let isAnonymous = true;
         let poralUser = null;
+        let info = null;
 
-        const init = ()=>{
+        const init = (options={
+            portalUrl: ''
+        })=>{
+            info = initOAuthInfo(options);
+
             esriId.useSignInPage = false;
             esriId.registerOAuthInfos([info]);
 
@@ -818,6 +826,14 @@ esriLoader.loadModules([
             }).catch(()=>{
                 // Anonymous view
                 // console.log('Anonymous view');
+            });
+        };
+
+        const initOAuthInfo = (options={})=>{
+            return new OAuthInfo({
+                appId: oauth_appid,
+                popup: false,
+                portalUrl: options.portalUrl || "https://www.arcgis.com"
             });
         };
 
@@ -852,8 +868,8 @@ esriLoader.loadModules([
 
             // Once loaded, user is signed in
             portal.load().then(()=>{
-                console.log(portal);
-                console.log(portal.user);
+                // console.log(portal);
+                // console.log(portal.user);
                 poralUser = portal.user;
             });
         };
@@ -866,14 +882,21 @@ esriLoader.loadModules([
             return isAnonymous;
         };
 
-        init();
+        const switcPortal = (portalUrl='')=>{
+            esriId.destroyCredentials();
+            init({ portalUrl });
+        }
+
+        // init();
 
         return {
-            signIn: signIn,
-            signOut: signOut,
-            getUserContentUrl: getUserContentUrl,
-            checkIsAnonymous: checkIsAnonymous,
-            getCustomBaseURL: getCustomBaseURL
+            init,
+            signIn,
+            signOut,
+            getUserContentUrl,
+            checkIsAnonymous,
+            getCustomBaseURL,
+            switcPortal
         };
 
     };
@@ -1462,7 +1485,7 @@ esriLoader.loadModules([
                     // console.log(res);
                     if(res.success){
                         const webmapId = res.id
-                        const webMapUrl = helper.getAgolWebMapUrlByItemID(webmapId);
+                        const webMapUrl = helper.getAgolWebMapUrlByItemID(app.oauthManager.getCustomBaseURL(), webmapId);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
@@ -2043,6 +2066,10 @@ esriLoader.loadModules([
 
         app.init();
         appView.init();
+
+        // window.debugger = {
+        //     oauthManager: app.oauthManager
+        // };
     };
 
     initApp();

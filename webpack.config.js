@@ -8,6 +8,9 @@ module.exports = (env, options)=> {
     console.log('devMode', devMode);
 
     return {
+        devServer: {
+            host: 'jzhang4.esri.com'
+        },
         output: {
             filename: 'bundle.[hash].js'
         },

@@ -20,12 +20,12 @@
             return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;
         };
 
-        this.getAgolWebMapUrlByItemID = (itemID)=>{
+        this.getAgolWebMapUrlByItemID = (customBaseUrl, itemID)=>{
             // const customBaseUrl = app.portalUser ? app.portalUser.portal.customBaseUrl : null;
             // const urlKey = app.portalUser ? app.portalUser.portal.urlKey : null;
             // console.log( app.oauthManager.getCustomBaseURL() );
 
-            const customBaseUrl = app.oauthManager.getCustomBaseURL();
+            // const customBaseUrl = app.oauthManager.getCustomBaseURL();
             const agolBaseUrl = customBaseUrl ? customBaseUrl : 'https://www.arcgis.com';
             // const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
             const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
