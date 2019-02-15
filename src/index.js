@@ -798,24 +798,29 @@ esriLoader.loadModules([
 
     const OAuthManager = function(){
         
-        const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
+        // const oauth_appid = window.location.hostname === 'localhost' ? OAUTH_APPID_DEV : OAUTH_APPID_PROD; 
 
         // const info = new OAuthInfo({
         //     appId: oauth_appid,
         //     popup: false,
         // });
 
-        // const oauth_appid = OAUTH_APPID_PROD; 
+        const oauth_appid = OAUTH_APPID_PROD; 
 
         let userCredential = null;
         let isAnonymous = true;
         let poralUser = null;
         let info = null;
 
-        const init = (options={
-            portalUrl: ''
-        })=>{
-            info = initOAuthInfo(options);
+        const init = ()=>{
+
+            // const prevDefinedPortalUrl = readPortalUrl();
+
+            info = initOAuthInfo({
+                // portalUrl: prevDefinedPortalUrl
+            });
+
+            // console.log(options)
 
             esriId.useSignInPage = false;
             esriId.registerOAuthInfos([info]);
@@ -825,11 +830,14 @@ esriLoader.loadModules([
                 setPortalUser();
             }).catch(()=>{
                 // Anonymous view
-                // console.log('Anonymous view');
+                console.log('Anonymous view');
             });
+
+            // resetPortalUrl();
         };
 
         const initOAuthInfo = (options={})=>{
+            console.log('initOAuthInfo', options);
             return new OAuthInfo({
                 appId: oauth_appid,
                 popup: false,
@@ -868,7 +876,7 @@ esriLoader.loadModules([
 
             // Once loaded, user is signed in
             portal.load().then(()=>{
-                // console.log(portal);
+                console.log('portal', portal);
                 // console.log(portal.user);
                 poralUser = portal.user;
             });
@@ -883,9 +891,26 @@ esriLoader.loadModules([
         };
 
         const switcPortal = (portalUrl='')=>{
+            // savePortalUrl(portalUrl);
             esriId.destroyCredentials();
-            init({ portalUrl });
-        }
+            init({ 
+                portalUrl,
+                signInImmediately: true
+            });
+        };
+
+        // const savePortalUrl = (portalUrl='')=>{
+        //     localStorage.setItem('portalUrl', portalUrl);
+        // };
+
+        // const readPortalUrl = ()=>{
+        //     const portalUrl = localStorage.getItem('portalUrl');
+        //     return portalUrl;
+        // };
+
+        // const resetPortalUrl = ()=>{
+        //     localStorage.removeItem('portalUrl');
+        // };
 
         // init();
 
@@ -2067,9 +2092,9 @@ esriLoader.loadModules([
         app.init();
         appView.init();
 
-        // window.debugger = {
-        //     oauthManager: app.oauthManager
-        // };
+        window.debugger = {
+            oauthManager: app.oauthManager
+        };
     };
 
     initApp();
