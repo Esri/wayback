@@ -348,15 +348,13 @@ esriLoader.loadModules([
                 metadata.itemAgolUrl = itemAgolUrl;
                 metadata.isSelected = isSelected;
 
-                // console.log('calling showPopupWindow', metadata);
-
                 this.setPopupWindowAnchorMapPoint(mapPoint);
 
                 appView.popupInfoWindow.show({
                     screenPoint,
                     metadata
                 });
-            });
+            }).catch(err=>console.error(err));
         };
 
         this.hidePopupWindow = ()=>{
@@ -482,7 +480,7 @@ esriLoader.loadModules([
                 this.waybackMetadataManager.getData(mapPoint, zoom, releaseNum).then(metadata=>{
                     resolve(metadata);
                 }).catch(errorMsg=>{
-                    console.error('cannot get metadata:', errorMsg);
+                    // console.error('cannot get metadata:', errorMsg);
                     reject({error: errorMsg});
                 });
             });
@@ -697,7 +695,6 @@ esriLoader.loadModules([
             
                 if(metadataLayerUrl){
                     queryData(metadataLayerUrl, mapPoint).then(res=>{
-                        // console.log(res);
                         if(res){
                             res.releaseNum = releaseNum;
                             resolve(res);
@@ -733,7 +730,6 @@ esriLoader.loadModules([
                     responseType: "json"
                 }).then(function(response){
                     // callback(response.data);
-                    // console.log(response);
                     const feature = response.data && response.data.features && response.data.features.length ? response.data.features[0] : null;
                     const date = feature.attributes[FIELD_NAME_SRC_DATE];
                     const dateFormatted = helper.formatDate(date);
@@ -771,8 +767,6 @@ esriLoader.loadModules([
 
             const metadataServiceUrl = getMetadataMapServiceUrl(releaseNum);
             const layerID = getMetaDataLayerId(zoom);
-
-            // console.log(layerID);
 
             if(!metadataServiceUrl){
                 // console.error('no Metadata Layer found for release >', releaseNum);
