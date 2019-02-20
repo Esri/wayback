@@ -1776,7 +1776,8 @@ esriLoader.loadModules([
             const releaseDatesDomian = app.dataModel.getFirstAndLastReleaseDates();
             xScale = d3.scaleTime()
                 .range([0, width])
-                .domain(releaseDatesDomian).nice();
+                .domain(releaseDatesDomian);
+                // .nice();
         };
 
         this.createAxis = ()=>{
