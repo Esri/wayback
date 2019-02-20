@@ -15,8 +15,8 @@ const Helper = function(){
         return true;
     };
 
-    this.getAgolUrlByItemID = (itemID, isUrlForWebMap)=>{
-        const agolBaseUrl = 'https://www.arcgis.com';
+    this.getAgolUrlByItemID = (itemID, isDevExt, isUrlForWebMap)=>{
+        const agolBaseUrl = isDevExt ? 'https://devext.arcgis.com/': 'https://www.arcgis.com';
         const agolItemUrl = agolBaseUrl + '/home/item.html?id=' + itemID;
         const agolWebmapUrl = agolBaseUrl + '/home/webmap/viewer.html?webmap=' + itemID;
         return isUrlForWebMap ? agolWebmapUrl : agolItemUrl;

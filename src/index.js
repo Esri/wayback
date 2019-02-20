@@ -16,13 +16,13 @@ import './style/index.scss';
 // import the polyfill for ES6-style Promises
 const Promise = require('es6-promise').Promise;
 
-const urlQueryParams = (function(){
+const tierInfo = (function(){
     // parse the devMode data from location search params
     // http://localhost:8080/?devMode=true&baseUrl=https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer
 
     const outputData = {};
 
-    const isDevServer = window.location.hostname === 'localhost' || window.location.hostname === 'livingatlasdev.arcgis.com' ? true : false;
+    const isDevServer = window.location.port || window.location.hostname === 'localhost' || window.location.hostname === 'livingatlasdev.arcgis.com' ? true : false;
 
     if(window.location.search){
 
@@ -52,12 +52,13 @@ const OAUTH_APPID_PROD = 'WaybackImagery';
 const ID_WEBMAP =  '86aa24cfcdf443109e3b7f2139ea6188';
 const ID_WAYBACK_IMAGERY_LAYER = 'waybackImaegryLayer';
 
-const URL_WAYBACK_IMAGERY_BASE = urlQueryParams.devMode && urlQueryParams.baseUrl ? urlQueryParams.baseUrl : 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
+const URL_WAYBACK_IMAGERY_BASE = tierInfo.devMode ? 'https://waybackdev.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer' : 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer';
 const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
 const URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE = 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com';
-const URL_WAYBACK_AGOL_ITEMS_LOOKUP = urlQueryParams.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/waybackconfig.json';
+const URL_WAYBACK_AGOL_ITEMS_LOOKUP = tierInfo.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/waybackconfig.json';
+const URL_PORTAL = tierInfo.devMode ? 'https://devext.arcgis.com' : 'https://www.arcgis.com';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
@@ -88,6 +89,7 @@ esriLoader.loadModules([
     "esri/identity/OAuthInfo",
     "esri/identity/IdentityManager",
     "esri/portal/Portal",
+    "esri/config",
 
     "esri/widgets/Search",
 
@@ -108,6 +110,7 @@ esriLoader.loadModules([
     OAuthInfo, 
     esriId,
     Portal,
+    esriConfig,
 
     Search
 ])=>{
@@ -131,7 +134,9 @@ esriLoader.loadModules([
 
         this.init = ()=>{
             // this.initMap();
-            this.oauthManager.init();
+            this.oauthManager.init({
+                portalUrl: URL_PORTAL
+            });
 
             this.fetchWaybackAgolItemsLookupTable((res)=>{
                 waybackAgolItemIds = res;
@@ -163,7 +168,8 @@ esriLoader.loadModules([
             // // then we load a web map from an id
             const webmap = new WebMap({
                 portalItem: { // autocasts as new PortalItem()
-                    id: ID_WEBMAP
+                    id: ID_WEBMAP,
+                    portal: 'https://www.arcgis.com'
                 }
             });
 
@@ -440,7 +446,7 @@ esriLoader.loadModules([
                 resolvedResults = resolvedResults.reverse(); //reverse the array so we can start the comparison from the oldest tile to the newest to only keep the identical ones
 
                 // remove duplicates only if the devMode is false
-                if(!urlQueryParams.devMode){
+                if(!tierInfo.devMode){
                     resolvedResults = this.removeReleasesWithDuplicates(resolvedResults);
                 }
 
@@ -803,24 +809,35 @@ esriLoader.loadModules([
         let userCredential = null;
         let isAnonymous = true;
         let poralUser = null;
+        let portal = null;
         let info = null;
 
-        const init = ()=>{
+        const init = (options={
+            portalUrl: ''
+        })=>{
 
             // const prevDefinedPortalUrl = readPortalUrl();
 
+            const customizedPortalUrl = options.portalUrl;
+
+            if(customizedPortalUrl){
+                esriConfig.portalUrl = customizedPortalUrl;
+            }
+
             info = initOAuthInfo({
-                // portalUrl: prevDefinedPortalUrl
+                portalUrl: customizedPortalUrl
             });
 
             // console.log(options)
 
             esriId.useSignInPage = false;
+
             esriId.registerOAuthInfos([info]);
 
             esriId.checkSignInStatus(info.portalUrl + "/sharing").then((res)=>{
+                console.log('signed in >>>', res);
                 setUserCredential(res);
-                setPortalUser();
+                setPortal();
             }).catch(()=>{
                 // Anonymous view
                 console.log('Anonymous view');
@@ -860,9 +877,9 @@ esriLoader.loadModules([
             return outputUrl
         };
 
-        const setPortalUser = ()=>{
+        const setPortal = ()=>{
 
-            const portal = new Portal();
+            portal = new Portal();
 
             // Setting authMode to immediate signs the user in once loaded
             portal.authMode = "immediate";
@@ -882,6 +899,10 @@ esriLoader.loadModules([
         const checkIsAnonymous = ()=>{
             return isAnonymous;
         };
+
+        const getPortalUrl = ()=>{
+            return portal.url
+        }
 
         const switcPortal = (portalUrl='')=>{
             // savePortalUrl(portalUrl);
@@ -914,6 +935,7 @@ esriLoader.loadModules([
             getUserContentUrl,
             checkIsAnonymous,
             getCustomBaseURL,
+            getPortalUrl,
             switcPortal
         };
 
@@ -1142,7 +1164,7 @@ esriLoader.loadModules([
                 const agolItemID = waybackAgolItemIds[rNum] ? waybackAgolItemIds[rNum].itemID : null;
                 const rDate = helper.extractDateFromStr(rName);
                 const rDatetime = helper.convertToDate(rDate);
-                const agolItemURL = helper.getAgolUrlByItemID(agolItemID); // ArcGIS Online item url
+                const agolItemURL = helper.getAgolUrlByItemID(agolItemID, tierInfo.devMode); // ArcGIS Online item url
                 const layerURL = waybackAgolItemIds[rNum] ? waybackAgolItemIds[rNum].itemURL :null; // the actual layer url that will needs to be used when create webmap
 
                 d.index = index;
@@ -1502,8 +1524,9 @@ esriLoader.loadModules([
                 app.saveAsWebMap(webMapData, res=>{
                     // console.log(res);
                     if(res.success){
-                        const webmapId = res.id
-                        const webMapUrl = helper.getAgolWebMapUrlByItemID(app.oauthManager.getCustomBaseURL(), webmapId);
+                        const webmapId = res.id;
+                        const baseURL = app.oauthManager.getCustomBaseURL() || app.oauthManager.getPortalUrl();
+                        const webMapUrl = helper.getAgolWebMapUrlByItemID(baseURL, webmapId);
                         appView.uploadWebMapModal.setWebMapUrl(webMapUrl);
                     }
                 });
