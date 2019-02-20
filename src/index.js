@@ -57,7 +57,7 @@ const URL_WAYBACK_IMAGERY_TILES = URL_WAYBACK_IMAGERY_BASE + '/tile/{m}/{l}/{r}/
 const URL_WAYBACK_IMAGERY_TILEMAP = URL_WAYBACK_IMAGERY_BASE + '/tilemap/{m}/{l}/{r}/{c}';
 const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
 const URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE = 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com';
-const URL_WAYBACK_AGOL_ITEMS_LOOKUP = urlQueryParams.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/prd/waybackconfig.json';
+const URL_WAYBACK_AGOL_ITEMS_LOOKUP = urlQueryParams.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/waybackconfig.json';
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
