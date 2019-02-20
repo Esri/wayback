@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development --open",
     "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "start-with-esri-host": "webpack-dev-server --mode development --open --host jzhang4.esri.com"
   },
   "repository": {
     "type": "git",

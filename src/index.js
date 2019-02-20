@@ -59,6 +59,7 @@ const URL_WAYBACK_IMAGERY_SELECT = URL_WAYBACK_IMAGERY_BASE + '?f=json';
 const URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE = 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com';
 const URL_WAYBACK_AGOL_ITEMS_LOOKUP = tierInfo.devMode ? URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/dev/waybackconfig.json' : URL_WAYBACK_AGOL_ITEMS_LOOKUP_BASE + '/waybackconfig.json';
 const URL_PORTAL = tierInfo.devMode ? 'https://devext.arcgis.com' : 'https://www.arcgis.com';
+const URL_CUSTOMIZED_PORTAL = tierInfo.portal || null;
 
 const KEY_RELEASE_NUM = 'M';
 const KEY_RELEASE_NAME = 'Name';
@@ -135,7 +136,7 @@ esriLoader.loadModules([
         this.init = ()=>{
             // this.initMap();
             this.oauthManager.init({
-                portalUrl: URL_PORTAL
+                portalUrl: URL_CUSTOMIZED_PORTAL || URL_PORTAL
             });
 
             this.fetchWaybackAgolItemsLookupTable((res)=>{
