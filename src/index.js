@@ -894,7 +894,8 @@ esriLoader.loadModules([
         };
 
         const getCustomBaseURL = ()=>{
-            return poralUser && poralUser.portal && poralUser.portal.urlKey ? `https://${poralUser.portal.urlKey}.maps.arcgis.com` : null;
+            const mapsUrl = tierInfo.devMode ? 'mapsdevext' : 'maps'
+            return poralUser && poralUser.portal && poralUser.portal.urlKey ? `https://${poralUser.portal.urlKey}.${mapsUrl}.arcgis.com` : null;
         };
 
         const checkIsAnonymous = ()=>{
