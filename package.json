@@ -38,7 +38,7 @@
     "url-loader": "^1.0.1",
     "webpack": "^4.11.1",
     "webpack-cli": "^3.0.3",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.11"
   },
   "dependencies": {
     "d3": "^5.4.0",
