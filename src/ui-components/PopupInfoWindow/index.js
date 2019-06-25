@@ -104,8 +104,8 @@ export default class PopupInfoWindow {
     }
 
     getPopupHtml(data, isReticleOnRight){
-        const resolution = data.resolution % 1 === 0 ? data.resolution : data.resolution.toFixed(2);
-        const accuracy = data.accuracy % 1 === 0 ? data.accuracy : data.accuracy.toFixed(2);
+        const resolution = data.resolution % 1 === 0 ? data.resolution : (+data.resolution.toFixed(3) * 100) / 100;
+        const accuracy = data.accuracy % 1 === 0 ? data.accuracy : (+data.accuracy.toFixed(3) * 100) / 100;
         // const isSelectedClass = data.isSelected ? 'is-selected' : '';
         const isReticleRightClass = isReticleOnRight ? 'is-right' : '';
         const provider = data.provider;
