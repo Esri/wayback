@@ -431,6 +431,8 @@ esriLoader.loadModules([
 
         this.serachWaybackOnSuccessHandler = (releasesNumbers, tileInfo)=>{
 
+            console.log('serachWaybackOnSuccessHandler', releasesNumbers)
+
             const level = tileInfo.level;
             const row = tileInfo.row;
             const column = tileInfo.col;
@@ -1273,6 +1275,8 @@ esriLoader.loadModules([
 
                 const mostRecentRelease = this.getMostRecentReleaseNum();
 
+                // console.log('mostRecentRelease', mostRecentRelease)
+
                 const results = [];
     
                 const tileRequest = (rNum)=>{
@@ -1283,12 +1287,19 @@ esriLoader.loadModules([
                         type: "GET",
                         url: requestUrl,
                         success: (res)=>{
+
+                            // console.log('tileRequest response', requestUrl, res)
     
                             // this release number indicates the last release with updated data for the selected area (defined by l, r, c),
                             // we will save it to the finalResults so it can be added to the timeline
                             const lastRelease = res.select && res.select[0] ? res.select[0] : rNum; 
     
                             if(res.data[0]){
+
+                                if(rNum === mostRecentRelease){
+                                    results.push(+mostRecentRelease);
+                                }
+
                                 results.push(+lastRelease);
                             }
 
