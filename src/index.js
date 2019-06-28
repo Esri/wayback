@@ -1295,11 +1295,6 @@ esriLoader.loadModules([
                             const lastRelease = res.select && res.select[0] ? res.select[0] : rNum; 
     
                             if(res.data[0]){
-
-                                if(rNum === mostRecentRelease){
-                                    results.push(+mostRecentRelease);
-                                }
-
                                 results.push(+lastRelease);
                             }
 
