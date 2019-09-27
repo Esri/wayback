@@ -65,3 +65,6 @@ dist
 
 # temp testing files
 *testing*
+
+# outdated files
+/src/old

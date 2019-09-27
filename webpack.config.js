@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (env, options)=> {
 
@@ -11,14 +12,15 @@ module.exports = (env, options)=> {
         output: {
             filename: 'bundle.[hash].js'
         },
+        devtool: 'source-map',
+        resolve: {
+            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+        },
         module: {
             rules: [
                 {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    use: {
-                        loader: "babel-loader"
-                    }
+                    test: /\.(ts|tsx)$/,
+                    loader: 'ts-loader'
                 },
                 {
                     test: /\.html$/,
@@ -53,12 +55,24 @@ module.exports = (env, options)=> {
         },
         plugins: [
             new HtmlWebPackPlugin({
-                template: "./src/index.html",
-                filename: "./index.html"
-            }),
-            new HtmlWebPackPlugin({ 
-                template: 'src/oauth-callback.html',
-                filename: './oauth-callback.html'
+                // inject: false,
+                // hash: true,
+                template: './src/index.template.html',
+                filename: 'index.html',
+                minify: {
+                    html5                          : true,
+                    collapseWhitespace             : true,
+                    minifyCSS                      : true,
+                    minifyJS                       : true,
+                    minifyURLs                     : false,
+                    removeComments                 : true,
+                    removeEmptyAttributes          : true,
+                    removeOptionalTags             : true,
+                    removeRedundantAttributes      : true,
+                    removeScriptTypeAttributes     : true,
+                    removeStyleLinkTypeAttributese : true,
+                    useShortDoctype                : true
+                }
             }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
@@ -69,13 +83,8 @@ module.exports = (env, options)=> {
         ],
         optimization: {
             minimizer: [
-                new UglifyJsPlugin({
-                    uglifyOptions: {
-                        compress: {
-                            drop_console: true,
-                        }
-                    }
-                })
+                new TerserPlugin({}), 
+                new OptimizeCSSAssets({})
             ]
         }
     }
