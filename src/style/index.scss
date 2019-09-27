@@ -1,1 +1,31 @@
 @import '~calcite-web/dist/css/calcite-web.min.css';
+@import './colors.scss';
+@import './config.scss';
+@import './customized-modal.scss';
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    color: $default-text-color
+}
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: $gutter-width;
+    width: $sidebar-width;
+    height: 100%;
+    background-color: $sidebar-bgColor;
+    overflow: hidden;
+}
+
+.map-container {
+    position: absolute;
+    top: 0;
+    left: $gutter-width + $sidebar-width;
+    bottom: 0;
+    right: 0;
+}

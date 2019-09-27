@@ -1,6 +1,10 @@
 import './style.scss';
 import * as React from 'react';
 
+import Gutter from '../Gutter';
+import Map from '../Map';
+import Modal from '../ModalAboutApp';
+
 interface IProps {
 
 }
@@ -17,7 +21,19 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
         return(
-            <div className='app-content'>I am the app</div>
+            <div className='app-content'>
+                <Gutter />
+
+                <div className='sidebar'>
+
+                </div>
+
+                <div className='map-container'>
+                    <Map />
+                </div>
+
+                <Modal/>
+            </div>
         );
     }
 

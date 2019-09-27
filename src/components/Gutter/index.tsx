@@ -17,7 +17,13 @@ class Gutter extends React.PureComponent<IProps, IState> {
 
     render(){
         return(
-            <div className='gutter-container'>Gutter</div>
+            <div className='gutter-container'>
+                
+                <div className='gutter-nav-btn text-center shadow-trailer font-size-3'>
+                    <span className='icon-ui-description js-modal-toggle' data-modal="about"></span>
+                </div>
+
+            </div>
         );
     }
 
