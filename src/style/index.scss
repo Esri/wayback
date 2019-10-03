@@ -20,6 +20,8 @@ html, body {
     height: 100%;
     background-color: $sidebar-bgColor;
     overflow: hidden;
+    box-sizing: border-box;
+    padding: 1rem;
 }
 
 .map-container {
