@@ -2,6 +2,7 @@
 @import './colors.scss';
 @import './config.scss';
 @import './customized-modal.scss';
+@import './fancy-scrollbar.scss';
 
 html, body {
     padding: 0;
@@ -21,7 +22,21 @@ html, body {
     background-color: $sidebar-bgColor;
     overflow: hidden;
     box-sizing: border-box;
-    padding: 1rem;
+    // padding: 1rem;
+
+    .content-wrap {
+        padding: 0 1rem;
+    }
+
+    .x-scroll-hide {
+        overflow-x: hidden;
+    }
+
+    .y-scroll-visible {
+        position: relative;
+        overflow-y: auto;
+        height: calc(100% - 260px);
+    }
 }
 
 .map-container {
@@ -30,4 +45,8 @@ html, body {
     left: $gutter-width + $sidebar-width;
     bottom: 0;
     right: 0;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

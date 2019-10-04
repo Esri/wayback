@@ -1,0 +1,107 @@
+@import '../../style/colors.scss';
+
+$list-card-height: 38px;
+$list-card-is-selected-bgColor: #555555;
+$add-to-webmap-btn-is-selected-bgColor: rgba(255,255,255,.2);
+
+.list-view-container{
+    height: calc(100% - 260px);
+
+    .list-card {
+        position: relative;
+        // padding: .5rem;
+        height: $list-card-height;
+        line-height: $list-card-height;
+        padding-left: .5rem;
+        background-color: #1C1C1C;
+        border-left: solid 4px #1C1C1C;
+    
+        .open-item-btn {
+            font-size: 1rem;
+        }
+    
+        .add-to-webmap-btn {
+            width: $list-card-height;
+            height: $list-card-height;
+            background: url('../../static/icons/QueueOff.png') center no-repeat;
+        }
+    
+        [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
+            padding-right: 0;
+        }
+    }
+    
+    .list-card.is-active {
+        position: relative;
+        background-color: $color-active-item;
+        border-left: solid 4px $color-active-item;
+    
+        a, .open-item-btn {
+            text-decoration: none;
+            color: #fff;
+        }
+    }
+    
+    .list-card.is-active:hover {
+        background-color: $color-active-item;
+        border-left-color: $color-active-item;
+    }
+    
+    .list-card.is-active:after{
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        pointer-events: none;
+        border-left-color: $color-active-item;
+        border-width: 12px;
+        margin-top: -12px;
+        z-index: 10;
+    }
+    
+    .list-card.is-selected {
+        .add-to-webmap-btn {
+            background: $add-to-webmap-btn-is-selected-bgColor url('../../static/icons/QueueOn.png') center no-repeat;
+            // background-color: rgba(255,255,255,.3);
+        }
+    }
+    
+    .list-card.is-highlighted {
+        opacity: 1;
+        border-left: solid 4px $color-highlight-item;
+    
+        .add-to-webmap-btn {
+            background: url('../../static/icons/QueueOffSelected.png') center no-repeat;
+        }
+    
+        a, .open-item-btn  {
+            text-decoration: none;
+            color: #fff;
+        }
+    }
+    
+    .list-card.is-active.is-highlighted {
+        background-color: $color-active-item;
+        border-left: solid 4px $color-highlight-item;
+    }
+    
+    .list-card.is-highlighted.is-selected {
+        .add-to-webmap-btn {
+            background: $add-to-webmap-btn-is-selected-bgColor url('../../static/icons/QueueOnSelected.png') center no-repeat;
+        }
+    }
+    
+    .list-card.is-highlighted:hover {
+        border-left: solid 4px $color-highlight-item;
+    }
+    
+    .list-card:hover {
+        background-color: $color-hover-item;
+        border-left: solid 4px $color-hover-item;
+    }
+
+}
+
