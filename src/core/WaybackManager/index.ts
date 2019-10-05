@@ -1,22 +1,17 @@
 import config from '../../config';
 import axios from 'axios';
 
-import { IWaybackItem } from '../../types/index';
+import { IWaybackItem, IWaybackConfig } from '../../types/index';
+import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
-
-interface IWaybackConfig {
-    [key:number]: {
-        itemID:string,
-        itemTitle:string,
-        itemURL:string,
-        metadataLayerItemID:string,
-        metadataLayerUrl:string
-    }
-}
+import MetadataManager from './Metadata';
 
 class WaybackManager {
 
     private isDev = false;
+
+    // module to query the wayback metadata
+    private metadataManager = new MetadataManager();
 
     // original wayback config JSON file
     private waybackconfig:IWaybackConfig;
@@ -31,6 +26,8 @@ class WaybackManager {
     async init(){
 
         this.waybackconfig = await this.fetchWaybackConfig();
+
+        this.metadataManager.setWaybackConfig(this.waybackconfig);
 
         this.waybackItems = this.getWaybackItems();
 
@@ -63,6 +60,17 @@ class WaybackManager {
         });
 
         return waybackItems;
+    }
+
+    async getMetadata(params:IParamsQueryMetadata){
+
+        try {
+            const metadataQueryRes = await this.metadataManager.queryData(params);
+            return metadataQueryRes;
+        } catch(err){
+            console.error(err);
+            return null;
+        }
     }
 
     private fetchWaybackConfig():Promise<IWaybackConfig>{

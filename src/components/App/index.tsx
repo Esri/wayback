@@ -8,7 +8,7 @@ import Map from '../Map';
 import Modal from '../ModalAboutApp';
 import ListView from '../ListView';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key:number]:number
@@ -21,7 +21,9 @@ interface IProps {
 interface IState {
     waybackItems:Array<IWaybackItem>
     waybackItemsReleaseNum2IndexLookup:IWaybackItemsReleaseNum2IndexLookup
-    activeWaybackItem:IWaybackItem
+    activeWaybackItem:IWaybackItem,
+    metadataQueryResult:IWaybackMetadataQueryResult,
+    metadataAnchorScreenPoint:IScreenPoint,
     shouldOnlyShowItemsWithLocalChange:boolean
 }
 
@@ -36,11 +38,15 @@ class App extends React.PureComponent<IProps, IState> {
             waybackItems: [],
             waybackItemsReleaseNum2IndexLookup: null,
             activeWaybackItem: null,
-            shouldOnlyShowItemsWithLocalChange:false
+            metadataQueryResult:null,
+            metadataAnchorScreenPoint:null,
+            shouldOnlyShowItemsWithLocalChange:false,
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
         this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
+        this.queryLocalChanges = this.queryLocalChanges.bind(this);
+        this.queryMetadata = this.queryMetadata.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -61,7 +67,7 @@ class App extends React.PureComponent<IProps, IState> {
             waybackItemsReleaseNum2IndexLookup,
             activeWaybackItem
         }, ()=>{
-            console.log('waybackItems is ready', waybackItemsReleaseNum2IndexLookup);
+            console.log('waybackItems is ready', activeWaybackItem);
         })
     }
 
@@ -76,6 +82,36 @@ class App extends React.PureComponent<IProps, IState> {
         this.setState({
             activeWaybackItem
         });
+    }
+
+    // get list of wayback items that do provide updated imagery for the given location
+    async queryLocalChanges(centerPoint:IMapPointInfo){
+        // console.log('queryLocalChanges', centerPoint);
+    }
+
+    async queryMetadata(pointInfo:IMapPointInfo, screenPoint:IScreenPoint){
+
+        const { activeWaybackItem } = this.state;
+
+        try {
+            const queryRes = await this.waybackManager.getMetadata({
+                releaseNum: activeWaybackItem.releaseNum,
+                pointGeometry: pointInfo.geometry,
+                zoom:pointInfo.zoom
+            });
+    
+            this.setState({
+                metadataQueryResult: queryRes,
+                metadataAnchorScreenPoint: screenPoint
+            }, ()=>{
+                console.log('queryMetadata result', queryRes);
+                console.log('metadataAnchorScreenPoint', screenPoint);
+            });
+
+        } catch(err){
+            console.error(err);
+        }
+
     }
 
     toggleSelectWaybackItem(releaseNum:number){
@@ -126,7 +162,12 @@ class App extends React.PureComponent<IProps, IState> {
                 </div>
 
                 <div className='map-container'>
-                    <Map />
+                    <Map
+                        activeWaybackItem={activeWaybackItem}
+
+                        onClick={this.queryMetadata}
+                        onUpdateEnd={this.queryLocalChanges}
+                    />
                 </div>
 
                 <Modal/>

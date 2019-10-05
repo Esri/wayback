@@ -1,6 +1,22 @@
 export default {
-    'wayback-config': {
-        'dev': 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com/dev/waybackconfig.json',
-        'prod': 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com/waybackconfig.json'
+    'metadata-layer': {
+        'fields': [
+            {
+                fieldname: 'SRC_DATE2'
+            },
+            {
+                fieldname: 'NICE_DESC'
+            },
+            {
+                fieldname: 'SRC_DESC'
+            },
+            {
+                fieldname: 'SRC_RES'
+            },
+            {
+                fieldname: 'SRC_ACC'
+            }
+        ] 
     }
+
 }
