@@ -7,6 +7,7 @@ import Gutter from '../Gutter';
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
 import ListView from '../ListView';
+import MetadataPopUp from '../PopUp';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
 
@@ -47,6 +48,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         this.queryLocalChanges = this.queryLocalChanges.bind(this);
         this.queryMetadata = this.queryMetadata.bind(this);
+        this.closePopup = this.closePopup.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -114,6 +116,13 @@ class App extends React.PureComponent<IProps, IState> {
 
     }
 
+    closePopup(){
+        this.setState({
+            metadataQueryResult: null,
+            metadataAnchorScreenPoint: null
+        });
+    }
+
     toggleSelectWaybackItem(releaseNum:number){
         console.log(releaseNum)
     }
@@ -132,7 +141,7 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { waybackItems, activeWaybackItem, shouldOnlyShowItemsWithLocalChange } = this.state;
+        const { waybackItems, activeWaybackItem, shouldOnlyShowItemsWithLocalChange, metadataQueryResult, metadataAnchorScreenPoint } = this.state;
 
         return(
             <div className='app-content'>
@@ -167,6 +176,13 @@ class App extends React.PureComponent<IProps, IState> {
 
                         onClick={this.queryMetadata}
                         onUpdateEnd={this.queryLocalChanges}
+                    />
+
+                    <MetadataPopUp 
+                        metadata={metadataQueryResult}
+                        anchorPoint={metadataAnchorScreenPoint}
+
+                        onClose={this.closePopup}
                     />
                 </div>
 

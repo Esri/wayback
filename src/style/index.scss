@@ -22,6 +22,7 @@ html, body {
     background-color: $sidebar-bgColor;
     overflow: hidden;
     box-sizing: border-box;
+    z-index: 5;
     // padding: 1rem;
 
     .content-wrap {
