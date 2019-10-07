@@ -19,6 +19,16 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
 
     constructor(props:IProps){
         super(props);
+
+        this.onClickHandler = this.onClickHandler.bind(this);
+    }
+
+    onClickHandler(){
+        const { selectedWaybackItems, onClick } = this.props;
+
+        if(selectedWaybackItems.length){
+            onClick();
+        }
     }
 
     render(){
@@ -37,7 +47,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
 
         return(
             <div className='save-as-webmap-btn-container'>
-                <div className={btnClass} onClick={onClick.bind(this)} data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
+                <div className={btnClass} onClick={this.onClickHandler} data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
                     <div className='overlay-label text-white text-center'>
                         <span className='val-holder-count-of-selected-items'>{selectedWaybackItems.length}</span>
                     </div>

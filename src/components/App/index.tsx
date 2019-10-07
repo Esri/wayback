@@ -9,6 +9,7 @@ import Modal from '../ModalAboutApp';
 import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
+import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
 
@@ -58,7 +59,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.setMetadataAnchorScreenPoint = this.setMetadataAnchorScreenPoint.bind(this);
         this.closePopup = this.closePopup.bind(this);
         this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
-        this.saveSelectedWaybackItemsAsWebmap = this.saveSelectedWaybackItemsAsWebmap.bind(this);
+        this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -167,8 +168,13 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    saveSelectedWaybackItemsAsWebmap(){
-        console.log('save as web map')
+    toggleSaveAsWebmapDialog(){
+        // console.log('save as web map')
+        const { isSaveAsWebmapDialogVisible } = this.state;
+
+        this.setState({
+            isSaveAsWebmapDialogVisible: !isSaveAsWebmapDialogVisible
+        });
     }
 
     async componentDidMount(){
@@ -185,7 +191,15 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { waybackItems, activeWaybackItem, shouldOnlyShowItemsWithLocalChange, metadataQueryResult, metadataAnchorScreenPoint, rNum4SelectedWaybackItems } = this.state;
+        const { 
+            waybackItems, 
+            activeWaybackItem, 
+            shouldOnlyShowItemsWithLocalChange, 
+            metadataQueryResult, 
+            metadataAnchorScreenPoint, 
+            rNum4SelectedWaybackItems,
+            isSaveAsWebmapDialogVisible
+        } = this.state;
 
         return(
             <div className='app-content'>
@@ -197,7 +211,7 @@ class App extends React.PureComponent<IProps, IState> {
 
                     <SaveAsWebmapBtn 
                         selectedWaybackItems={rNum4SelectedWaybackItems}
-                        onClick={this.saveSelectedWaybackItemsAsWebmap}
+                        onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
                     />
                 </div>
@@ -245,6 +259,12 @@ class App extends React.PureComponent<IProps, IState> {
                         onClose={this.closePopup}
                     />
                 </div>
+
+                <SaveAsWebMapDialog 
+                    isVisible={isSaveAsWebmapDialogVisible}
+
+                    onClose={this.toggleSaveAsWebmapDialog}
+                />
 
                 <Modal/>
             </div>
