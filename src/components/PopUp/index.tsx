@@ -1,11 +1,13 @@
 import './style.scss';
 import * as React from 'react';
 
-import { IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
+import { dateFns } from 'helper-toolkit-ts';
+import { IWaybackMetadataQueryResult, IScreenPoint, IWaybackItem } from '../../types';
 
 interface IProps {
     metadata: IWaybackMetadataQueryResult
     anchorPoint: IScreenPoint
+    activeWaybackItem:IWaybackItem,
 
     onClose:()=>void
 }
@@ -23,9 +25,22 @@ class PopUp extends React.PureComponent<IProps, IState> {
         super(props);
     }
 
+    formatMetadataDate(){
+        const { metadata } = this.props;
+        const { date } = metadata;
+
+        const metadataDate = new Date(date);
+
+        const year = metadataDate.getFullYear();
+        const month = dateFns.getMonthName(metadataDate.getMonth(), true);
+        const day = metadataDate.getDate();
+
+        return `${month} ${day}, ${year}`;
+    }
+
     render(){
 
-        const { anchorPoint, metadata, onClose } = this.props;
+        const { anchorPoint, metadata, activeWaybackItem, onClose } = this.props;
 
         if(!metadata || !anchorPoint){
             return null;
@@ -40,13 +55,16 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         const { provider, source, resolution, accuracy, date } = metadata;
 
+        const releaseData = activeWaybackItem.releaseDateLabel;
+        const formattedDate = this.formatMetadataDate();
+
         return(
             <div className='popup-container' style={containerStyle}>
                 <div className='reticle-wrap'></div>
 
                 <div className='content-wrap text-white'>
                     <div className='text-wrap'>
-                        <p className='trailer-half'>{provider} ({source}) image captured on <b>{date}</b> as shown in the <b>{'{RELEASE DATE}'}</b> version of the World Imagery map.</p>
+                        <p className='trailer-half'>{provider} ({source}) image captured on <b>{formattedDate}</b> as shown in the <b>{releaseData}</b> version of the World Imagery map.</p>
                         <p className='trailer-half'><b>Resolution</b>: Pixels in the source image<br/>represent a ground distance of <b>{resolution} meters</b>.</p>
                         <p className='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br/>are within <b>{accuracy} meters</b> of true location.</p>
                     </div>

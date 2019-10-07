@@ -48,6 +48,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         this.queryLocalChanges = this.queryLocalChanges.bind(this);
         this.queryMetadata = this.queryMetadata.bind(this);
+        this.setMetadataAnchorScreenPoint = this.setMetadataAnchorScreenPoint.bind(this);
         this.closePopup = this.closePopup.bind(this);
     }
 
@@ -116,6 +117,12 @@ class App extends React.PureComponent<IProps, IState> {
 
     }
 
+    setMetadataAnchorScreenPoint(screenPoint:IScreenPoint){
+        this.setState({
+            metadataAnchorScreenPoint: screenPoint
+        });
+    }
+
     closePopup(){
         this.setState({
             metadataQueryResult: null,
@@ -173,14 +180,18 @@ class App extends React.PureComponent<IProps, IState> {
                 <div className='map-container'>
                     <Map
                         activeWaybackItem={activeWaybackItem}
+                        isPopupVisible={ metadataQueryResult ? true : false}
 
                         onClick={this.queryMetadata}
+                        onZoom={this.closePopup}
                         onUpdateEnd={this.queryLocalChanges}
+                        popupScreenPointOnChange={this.setMetadataAnchorScreenPoint}
                     />
 
                     <MetadataPopUp 
                         metadata={metadataQueryResult}
                         anchorPoint={metadataAnchorScreenPoint}
+                        activeWaybackItem={activeWaybackItem}
 
                         onClose={this.closePopup}
                     />

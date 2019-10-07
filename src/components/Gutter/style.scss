@@ -11,6 +11,7 @@
     width: $gutter-width;
     background-color: $gutter-bgColor;
     padding: 0;
+    z-index: 5;
 
     [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
         padding-right: 0;

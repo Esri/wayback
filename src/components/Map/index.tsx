@@ -14,9 +14,12 @@ import IPoint from 'esri/geometry/Point';
 
 interface IProps {
     activeWaybackItem:IWaybackItem,
+    isPopupVisible:boolean,
 
     onClick?:(mapPoint:IMapPointInfo, screenPoint:IScreenPoint)=>void,
+    onZoom?:(zoom?:number)=>void
     onUpdateEnd?:(centerPoint:IMapPointInfo)=>void
+    popupScreenPointOnChange?:(screenPoint:IScreenPoint)=>void
 }
 
 interface IState {
@@ -85,6 +88,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     async mapViewOnReadyHandler(){
 
+        const { onZoom } = this.props;
         const { mapView } = this.state;
 
         try {
@@ -102,13 +106,15 @@ class Map extends React.PureComponent<IProps, IState> {
                 this.mapViewOnClickHandler(evt.mapPoint);
             });
 
-            watchUtils.watch(mapView, "zoom", (evt)=>{
-                // console.log('view zoom is on updating, should hide the popup');
-                // this.updatePopupPostion();
+            watchUtils.watch(mapView, "zoom", (zoom)=>{
+                // console.log('view zoom is on updating, should hide the popup', zoom);
+                onZoom(zoom);
             });
 
-            watchUtils.watch(mapView, "center", (evt)=>{
+            watchUtils.watch(mapView, "center", (center)=>{
                 // console.log('view center is on updating, should update the popup position');
+                // need to update the screen point for popup anchor since the map center has changed
+                this.updateScreenPoint4PopupAnchor();
             });
 
             watchUtils.whenTrue(mapView, "stationary", (val)=>{
@@ -160,6 +166,16 @@ class Map extends React.PureComponent<IProps, IState> {
         }
 
         onUpdateEnd(mapViewCenterPointInfo);
+    }
+
+    updateScreenPoint4PopupAnchor(){
+        const { popupScreenPointOnChange, isPopupVisible } = this.props;
+        const { mapView, popupAnchorPoint } = this.state;
+
+        if( popupAnchorPoint && isPopupVisible ){
+            const popupAnchorScreenPoint = mapView.toScreen(popupAnchorPoint);
+            popupScreenPointOnChange(popupAnchorScreenPoint);
+        }
     }
 
     async updateWaybackLayer(){
