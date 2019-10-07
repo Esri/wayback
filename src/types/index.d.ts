@@ -1,3 +1,6 @@
+import IPortal from "esri/portal/Portal";
+import ICredential from "esri/identity/Credential";
+
 interface IWaybackConfig {
     [key:number]: {
         itemID:string,
@@ -48,11 +51,17 @@ interface IScreenPoint {
     y:number
 }
 
+interface IUserSession {
+    portal:IPortal,
+    credential:ICredential
+}
+
 export {
     IWaybackConfig,
     IWaybackItem,
     IMapPointInfo,
     IPointGeomety,
     IWaybackMetadataQueryResult,
-    IScreenPoint
+    IScreenPoint,
+    IUserSession
 }

@@ -3,10 +3,16 @@ import * as React from 'react';
 import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import config from './config';
 
+import { IWaybackItem, IUserSession } from '../../types';
+import createWebmap from './createWebmap';
+
 interface IProps {
     isVisible:boolean
+    waybackItems:Array<IWaybackItem>
+    rNum4SelectedWaybackItems:Array<number>
+    userSession:IUserSession
 
-    onClose:()=>void
+    onClose:(val:boolean)=>void
 }
 
 interface IState {
@@ -34,6 +40,25 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         this.setTitle = this.setTitle.bind(this);
         this.setTags = this.setTags.bind(this);
         this.setDescription = this.setDescription.bind(this);
+        this.saveAsWebmap = this.saveAsWebmap.bind(this);
+    }
+
+    saveAsWebmap(){
+
+        const { userSession, waybackItems, rNum4SelectedWaybackItems } = this.props;
+        const { title, tags, description } = this.state;
+
+        const waybackItemsToSave = waybackItems.filter(d=>{
+            return rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1;
+        });
+
+        createWebmap({
+            title,
+            tags,
+            description,
+            userSession,
+            waybackItemsToSave
+        });
     }
 
     setTitle(event:React.ChangeEvent<HTMLInputElement>){
@@ -65,7 +90,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
         const creatWebMapBtn = !isCreatingWebmap 
             ? (
-                <div className="btn upload-webmap-btn">
+                <div className="btn upload-webmap-btn" onClick={this.saveAsWebmap}>
                     Create Wayback Map
                 </div>
             ) : null;
@@ -144,7 +169,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                     <div className="modal-content column-6" role="dialog" aria-labelledby="modal">
 
                         <div className='trailer-0 text-right'>
-                            <span className="cursor-pointer" aria-label="close-modal" onClick={onClose}>
+                            <span className="cursor-pointer" aria-label="close-modal" onClick={onClose.bind(this, false)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 32 32" className="svg-icon"><path d="M18.404 16l9.9 9.9-2.404 2.404-9.9-9.9-9.9 9.9L3.696 25.9l9.9-9.9-9.9-9.898L6.1 3.698l9.9 9.899 9.9-9.9 2.404 2.406-9.9 9.898z"/></svg>
                             </span>
                         </div>

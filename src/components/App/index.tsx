@@ -1,8 +1,9 @@
 import './style.scss';
 import * as React from 'react';
 
+import config from '../../config';
 import WaybackManager from '../../core/WaybackManager';
-
+import OAuthUtils from '../../utils/Esri-OAuth';
 
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
@@ -11,7 +12,7 @@ import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 
-import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
+import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IUserSession } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key:number]:number
@@ -32,11 +33,13 @@ interface IState {
 
     isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
+    userSession:IUserSession
 }
 
 class App extends React.PureComponent<IProps, IState> {
 
     private waybackManager = new WaybackManager();
+    private oauthUtils = new OAuthUtils();
 
     constructor(props:IProps){
         super(props);
@@ -50,6 +53,7 @@ class App extends React.PureComponent<IProps, IState> {
             metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
             shouldOnlyShowItemsWithLocalChange:false,
+            userSession:null
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -168,18 +172,37 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleSaveAsWebmapDialog(){
+    toggleSaveAsWebmapDialog(isVisible?:boolean){
         // console.log('save as web map')
-        const { isSaveAsWebmapDialogVisible } = this.state;
+        const { isSaveAsWebmapDialogVisible, userSession } = this.state;
 
+        isVisible = typeof isVisible === 'boolean' ? isVisible : !isSaveAsWebmapDialogVisible;
+
+        if( isVisible && !userSession){
+            // sign in first before opening the save as web map dialog because the userSession is required to create web map
+            this.oauthUtils.sigIn();
+        } else {
+            this.setState({
+                isSaveAsWebmapDialogVisible: isVisible
+            });
+        }
+    }
+
+    setUserSession(userSession:IUserSession){
         this.setState({
-            isSaveAsWebmapDialogVisible: !isSaveAsWebmapDialogVisible
+            userSession
         });
     }
 
     async componentDidMount(){
 
         try {
+
+            const userSession = await this.oauthUtils.init({
+                appId: config.appId
+            });
+            this.setUserSession(userSession);
+
             const waybackData2InitApp = await this.waybackManager.init();
             // console.log(waybackData2InitApp);
             this.setWaybackItems(waybackData2InitApp.waybackItems);
@@ -198,7 +221,8 @@ class App extends React.PureComponent<IProps, IState> {
             metadataQueryResult, 
             metadataAnchorScreenPoint, 
             rNum4SelectedWaybackItems,
-            isSaveAsWebmapDialogVisible
+            isSaveAsWebmapDialogVisible,
+            userSession
         } = this.state;
 
         return(
@@ -261,6 +285,9 @@ class App extends React.PureComponent<IProps, IState> {
                 </div>
 
                 <SaveAsWebMapDialog 
+                    waybackItems={waybackItems}
+                    rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+                    userSession={userSession}
                     isVisible={isSaveAsWebmapDialogVisible}
 
                     onClose={this.toggleSaveAsWebmapDialog}

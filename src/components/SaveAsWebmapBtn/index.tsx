@@ -7,7 +7,7 @@ import { IWaybackItem } from '../../types';
 interface IProps {
     selectedWaybackItems:Array<number>,
 
-    onClick?:()=>void
+    onClick?:(val:boolean)=>void
     clearAll?:()=>void
 }
 
@@ -27,13 +27,13 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
         const { selectedWaybackItems, onClick } = this.props;
 
         if(selectedWaybackItems.length){
-            onClick();
+            onClick(true);
         }
     }
 
     render(){
 
-        const { selectedWaybackItems, onClick, clearAll } = this.props;
+        const { selectedWaybackItems, clearAll } = this.props;
 
         const isActive = selectedWaybackItems.length ? true : false;
 
