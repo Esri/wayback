@@ -3,11 +3,12 @@ import * as React from 'react';
 
 import WaybackManager from '../../core/WaybackManager';
 
-import Gutter from '../Gutter';
+
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
 import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
+import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint } from '../../types';
 
@@ -22,9 +23,13 @@ interface IProps {
 interface IState {
     waybackItems:Array<IWaybackItem>
     waybackItemsReleaseNum2IndexLookup:IWaybackItemsReleaseNum2IndexLookup
+    rNum4SelectedWaybackItems:Array<number>
     activeWaybackItem:IWaybackItem,
+
     metadataQueryResult:IWaybackMetadataQueryResult,
     metadataAnchorScreenPoint:IScreenPoint,
+
+    isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
 }
 
@@ -38,9 +43,11 @@ class App extends React.PureComponent<IProps, IState> {
         this.state = {
             waybackItems: [],
             waybackItemsReleaseNum2IndexLookup: null,
+            rNum4SelectedWaybackItems: [],
             activeWaybackItem: null,
             metadataQueryResult:null,
             metadataAnchorScreenPoint:null,
+            isSaveAsWebmapDialogVisible: false,
             shouldOnlyShowItemsWithLocalChange:false,
         }
 
@@ -50,6 +57,8 @@ class App extends React.PureComponent<IProps, IState> {
         this.queryMetadata = this.queryMetadata.bind(this);
         this.setMetadataAnchorScreenPoint = this.setMetadataAnchorScreenPoint.bind(this);
         this.closePopup = this.closePopup.bind(this);
+        this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
+        this.saveSelectedWaybackItemsAsWebmap = this.saveSelectedWaybackItemsAsWebmap.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -131,7 +140,35 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     toggleSelectWaybackItem(releaseNum:number){
-        console.log(releaseNum)
+        // console.log(releaseNum);
+
+        const { rNum4SelectedWaybackItems } = this.state;
+
+        const idxForItemToToggle = rNum4SelectedWaybackItems.indexOf(releaseNum);
+
+        let newListOfRNum = [...rNum4SelectedWaybackItems];
+
+        if( idxForItemToToggle > -1){
+            // item already in the list, let's remove it
+            newListOfRNum.splice(idxForItemToToggle, 1);
+        } else {
+            // item not found in the list, add it to the selectedWaybackItems
+            newListOfRNum.push(releaseNum);
+        }
+
+        this.setState({
+            rNum4SelectedWaybackItems: newListOfRNum
+        });
+    }
+
+    unselectAllWaybackItems(){
+        this.setState({
+            rNum4SelectedWaybackItems: []
+        });
+    }
+
+    saveSelectedWaybackItemsAsWebmap(){
+        console.log('save as web map')
     }
 
     async componentDidMount(){
@@ -148,11 +185,22 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { waybackItems, activeWaybackItem, shouldOnlyShowItemsWithLocalChange, metadataQueryResult, metadataAnchorScreenPoint } = this.state;
+        const { waybackItems, activeWaybackItem, shouldOnlyShowItemsWithLocalChange, metadataQueryResult, metadataAnchorScreenPoint, rNum4SelectedWaybackItems } = this.state;
 
         return(
             <div className='app-content'>
-                <Gutter />
+
+                <div className='gutter-container'>
+                    <div className='gutter-nav-btn text-center shadow-trailer font-size-3'>
+                        <span className='icon-ui-description js-modal-toggle' data-modal="about"></span>
+                    </div>
+
+                    <SaveAsWebmapBtn 
+                        selectedWaybackItems={rNum4SelectedWaybackItems}
+                        onClick={this.saveSelectedWaybackItemsAsWebmap}
+                        clearAll={this.unselectAllWaybackItems}
+                    />
+                </div>
 
                 <div className='sidebar'>
 
@@ -168,6 +216,7 @@ class App extends React.PureComponent<IProps, IState> {
                                 waybackItems={waybackItems}
                                 activeWaybackItem={activeWaybackItem}
                                 shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
+                                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
 
                                 onClick={this.setActiveWaybackItem}
                                 toggleSelect={this.toggleSelectWaybackItem}

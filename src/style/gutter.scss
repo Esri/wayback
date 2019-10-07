@@ -1,0 +1,33 @@
+
+@import './config.scss';
+@import './colors.scss';
+
+.gutter-container {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: $gutter-width;
+    background-color: $gutter-bgColor;
+    padding: 0;
+    z-index: 5;
+
+    .gutter-nav-btn {
+        position: relative;
+        width: $gutter-width;
+        height: $gutter-width;
+        line-height: $gutter-width;
+        cursor: pointer;
+        cursor: pointer;
+    }
+
+    .shadow-trailer {
+        box-shadow: 0 0 12px 4px rgba(0,0,0,.3);
+    }
+
+    
+    [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
+        padding-right: 0;
+    }
+}
