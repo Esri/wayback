@@ -65,8 +65,8 @@ class PopUp extends React.PureComponent<IProps, IState> {
                 <div className='content-wrap text-white'>
                     <div className='text-wrap'>
                         <p className='trailer-half'>{provider} ({source}) image captured on <b>{formattedDate}</b> as shown in the <b>{releaseData}</b> version of the World Imagery map.</p>
-                        <p className='trailer-half'><b>Resolution</b>: Pixels in the source image<br/>represent a ground distance of <b>{resolution} meters</b>.</p>
-                        <p className='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br/>are within <b>{accuracy} meters</b> of true location.</p>
+                        <p className='trailer-half'><b>Resolution</b>: Pixels in the source image<br/>represent a ground distance of <b>{+resolution.toFixed(2)} meters</b>.</p>
+                        <p className='trailer-0'><b>Accuracy</b>: Objects displayed in this image<br/>are within <b>{+accuracy.toFixed(2)} meters</b> of true location.</p>
                     </div>
 
                     <div className='close-btn text-white text-center cursor-pointer' onClick={onClose}>

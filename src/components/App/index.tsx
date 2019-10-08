@@ -12,14 +12,14 @@ import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 
-import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IUserSession } from '../../types';
+import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key:number]:number
 };
 
 interface IProps {
-
+    isDev?:boolean
 }
 
 interface IState {
@@ -31,6 +31,8 @@ interface IState {
     metadataQueryResult:IWaybackMetadataQueryResult,
     metadataAnchorScreenPoint:IScreenPoint,
 
+    mapExtent:IExtentGeomety
+
     isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
     userSession:IUserSession
@@ -38,11 +40,17 @@ interface IState {
 
 class App extends React.PureComponent<IProps, IState> {
 
-    private waybackManager = new WaybackManager();
-    private oauthUtils = new OAuthUtils();
+    private waybackManager:WaybackManager;
+    private oauthUtils:OAuthUtils;
 
     constructor(props:IProps){
         super(props);
+
+        const { isDev } = props;
+
+        this.waybackManager = new WaybackManager({isDev});
+
+        this.oauthUtils = new OAuthUtils();
 
         this.state = {
             waybackItems: [],
@@ -53,7 +61,8 @@ class App extends React.PureComponent<IProps, IState> {
             metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
             shouldOnlyShowItemsWithLocalChange:false,
-            userSession:null
+            userSession:null,
+            mapExtent:null
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -64,6 +73,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.closePopup = this.closePopup.bind(this);
         this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
+        this.setMapExtent = this.setMapExtent.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -189,17 +199,28 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     setUserSession(userSession:IUserSession){
+        // console.log('setUserSession', userSession);
         this.setState({
             userSession
         });
     }
 
+    setMapExtent(mapExtent:IExtentGeomety){
+        // console.log('setMapExtent', mapExtent);
+        this.setState({
+            mapExtent
+        });
+    }
+
     async componentDidMount(){
+
+        const { isDev } = this.props;
 
         try {
 
             const userSession = await this.oauthUtils.init({
-                appId: config.appId
+                appId: config.appId,
+                portalUrl: isDev ? config.dev["portal-url"] : config.prod["portal-url"]
             });
             this.setUserSession(userSession);
 
@@ -222,7 +243,8 @@ class App extends React.PureComponent<IProps, IState> {
             metadataAnchorScreenPoint, 
             rNum4SelectedWaybackItems,
             isSaveAsWebmapDialogVisible,
-            userSession
+            userSession,
+            mapExtent
         } = this.state;
 
         return(
@@ -273,6 +295,7 @@ class App extends React.PureComponent<IProps, IState> {
                         onZoom={this.closePopup}
                         onUpdateEnd={this.queryLocalChanges}
                         popupScreenPointOnChange={this.setMetadataAnchorScreenPoint}
+                        onExtentChange={this.setMapExtent}
                     />
 
                     <MetadataPopUp 
@@ -289,6 +312,7 @@ class App extends React.PureComponent<IProps, IState> {
                     rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
                     userSession={userSession}
                     isVisible={isSaveAsWebmapDialogVisible}
+                    mapExtent={mapExtent}
 
                     onClose={this.toggleSaveAsWebmapDialog}
                 />

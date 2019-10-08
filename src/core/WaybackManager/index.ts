@@ -19,8 +19,10 @@ class WaybackManager {
     // array of wayback items with more attributes
     private waybackItems:Array<IWaybackItem>;
 
-    constructor(){
-
+    constructor({
+        isDev = false
+    }={}){
+        this.isDev = isDev;
     }
 
     async init(){
@@ -74,7 +76,7 @@ class WaybackManager {
     }
 
     private fetchWaybackConfig():Promise<IWaybackConfig>{
-        const requestUrl = this.isDev ? config["wayback-config"].dev : config["wayback-config"].prod;
+        const requestUrl = this.isDev ? config.dev["wayback-config"] : config.prod["wayback-config"];
 
         return new Promise((resolve, reject)=>{
 

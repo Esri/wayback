@@ -4,13 +4,14 @@ import * as React from 'react';
 import { loadCss, loadModules } from "esri-loader";
 import config from './config';
 
-import { IWaybackItem, IMapPointInfo, IScreenPoint } from '../../types';
+import { IWaybackItem, IMapPointInfo, IScreenPoint, IExtentGeomety } from '../../types';
 
 import IMapView from 'esri/views/MapView';
 import IWebMap from "esri/WebMap";
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
+import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils"
 
 interface IProps {
     activeWaybackItem:IWaybackItem,
@@ -20,6 +21,7 @@ interface IProps {
     onZoom?:(zoom?:number)=>void
     onUpdateEnd?:(centerPoint:IMapPointInfo)=>void
     popupScreenPointOnChange?:(screenPoint:IScreenPoint)=>void
+    onExtentChange?:(extent:IExtentGeomety)=>void
 }
 
 interface IState {
@@ -152,20 +154,39 @@ class Map extends React.PureComponent<IProps, IState> {
         });
     }
 
-    mapViewUpdateEndHandler(){
-        const { onUpdateEnd } = this.props;
+    async mapViewUpdateEndHandler(){
+        const { onUpdateEnd, onExtentChange } = this.props;
         const { mapView } = this.state;
 
-        const center = mapView.center;
+        try {
 
-        const mapViewCenterPointInfo:IMapPointInfo = {
-            latitude:center.latitude,
-            longitude:center.longitude,
-            zoom: mapView.zoom,
-            geometry: center.toJSON()
+            type Modules = [
+                typeof IWebMercatorUtils
+            ];
+    
+            const [ webMercatorUtils ] = await (loadModules([
+                "esri/geometry/support/webMercatorUtils"
+            ]) as Promise<Modules>);
+    
+            const center = mapView.center;
+            
+            const extent = webMercatorUtils.webMercatorToGeographic(mapView.extent);
+    
+            const mapViewCenterPointInfo:IMapPointInfo = {
+                latitude:center.latitude,
+                longitude:center.longitude,
+                zoom: mapView.zoom,
+                geometry: center.toJSON()
+            }
+    
+            onUpdateEnd(mapViewCenterPointInfo);
+    
+            onExtentChange(extent.toJSON());
+
+        } catch(err){
+            console.error(err);
         }
 
-        onUpdateEnd(mapViewCenterPointInfo);
     }
 
     updateScreenPoint4PopupAnchor(){

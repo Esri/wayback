@@ -16,7 +16,8 @@ export default class OAuthUtils {
     }
 
     async init({
-        appId=''
+        appId='',
+        portalUrl = 'https://www.arcgis.com'
     }={}):Promise<IUserSession>{
 
         try {
@@ -34,7 +35,8 @@ export default class OAuthUtils {
 
             this.oauthInfo = new OAuthInfo({
                 appId,
-                popup: false
+                popup: false,
+                portalUrl
             });
 
             IdentityManager.useSignInPage = false;
@@ -46,7 +48,7 @@ export default class OAuthUtils {
             const credential:ICredential = await this.esriId.checkSignInStatus(this.oauthInfo.portalUrl + "/sharing");
             
             // init paortal
-            const portal = new Portal();
+            const portal = new Portal({ url: portalUrl });
             // Setting authMode to immediate signs the user in once loaded
             portal.authMode = "immediate";
 

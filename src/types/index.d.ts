@@ -31,6 +31,17 @@ interface IPointGeomety {
     }
 }
 
+interface IExtentGeomety {
+    xmax:number,
+    xmin:number,
+    ymax:number,
+    ymin:number,
+    spatialReference:{
+        latestWkid: number, 
+        wkid: number
+    }
+}
+
 interface IMapPointInfo {
     longitude:number,
     latitude:number,
@@ -63,5 +74,6 @@ export {
     IPointGeomety,
     IWaybackMetadataQueryResult,
     IScreenPoint,
-    IUserSession
+    IUserSession,
+    IExtentGeomety
 }

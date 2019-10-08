@@ -1,12 +1,43 @@
-import { IWaybackItem, IUserSession } from '../../types';
+import axios from 'axios';
+import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import config from '../../config';
+import { isDevMode } from '../../utils/Tier';
 
 interface ICreateWebmapParams {
     title:string
     tags:string
     description:string
+    mapExtent:IExtentGeomety
 
     userSession:IUserSession
     waybackItemsToSave?:Array<IWaybackItem>
+}
+
+interface IWaybackLayerInfo {
+    templateUrl:string
+    wmtsInfo: {
+        url:string
+    }
+    visibility:boolean
+    title:string
+    type:string,
+    layerType:string,
+    itemId:string
+}
+
+interface IMetadataLayerInfo {
+    itemId:string
+    visibility:boolean
+    opacity:number
+    title:string
+    layerType:string
+    url:string
+}
+
+interface ICreateWebmapResponse {
+    success:boolean,
+    id:string,
+    folder?:string
 }
 
 const createWebmap = async({
@@ -14,57 +45,55 @@ const createWebmap = async({
     tags = '',
     description = '',
     userSession = null,
+    mapExtent = null,
     waybackItemsToSave = []
-}:ICreateWebmapParams)=>{
+}:ICreateWebmapParams):Promise<ICreateWebmapResponse>=>{
 
-    const snippet = getSnippetStr();
+    if(!waybackItemsToSave.length){
+        return null;
+    }
+
+    const requestUrl = getRequestUrl(userSession);
+
+    const formData = new FormData();
     
     const uploadRequestContent = {
         title,
-        snippet,
         description,
         tags,
-        // 'extent': [currentMapExtent.xmin, currentMapExtent.ymin, currentMapExtent.xmax, currentMapExtent.ymax].join(','),
+        extent: mapExtent ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax].join(',') : null,
+        snippet: getSnippetStr(waybackItemsToSave),
+        text: getRequestText(waybackItemsToSave),
         type: 'Web Map',
         overwrite: 'true',
-        f: 'json'
+        f: 'json',
+        token: userSession.credential.token
     };
 
-    const operationalLayersInfo = waybackItemsToSave.map((waybackItem, index)=>{
-
-        const isVisible = ( index === 0 ) ? true : false;
-
-        const waybackLayerInfo = {
-            "templateUrl": waybackItem.itemURL,
-            "wmtsInfo": {
-                // "url": URL_WAYBACK_IMAGERY_BASE
-            },
-            "visibility": isVisible,
-            "title": waybackItem.itemTitle,
-            "type": "WebTiledLayer",
-            "layerType": "WebTiledLayer",
-            "itemId": waybackItem.itemID
-        };
-
-        const metadataLayerTitle = "Metadata for " + waybackItem.itemTitle;
-
-        const metadataLayerInfo = {
-            "itemId": waybackItem.metadataLayerItemID,
-            "visibility": isVisible,
-            "opacity": 1,
-            "title": metadataLayerTitle,
-            "layerType": "ArcGISMapServiceLayer",
-            "url": waybackItem.metadataLayerUrl
-        };
-
-        return {
-            waybackLayerInfo, 
-            metadataLayerInfo
-        }
+    Object.keys(uploadRequestContent).map(key=>{
+        formData.append(key, uploadRequestContent[key]);
     });
 
+    try {
+        const createWebmapResponse = await axios.post(requestUrl, formData);
+        console.log(createWebmapResponse);
+
+        return createWebmapResponse.data && !createWebmapResponse.data.error ? createWebmapResponse.data : null;
+    } catch(err){
+        console.error(err)
+        return null;
+    }
+};
+
+const getRequestUrl = (userSession:IUserSession)=>{
+    const credential = userSession.credential;
+    return credential ? `${credential.server}/sharing/rest/content/users/${credential.userId}/addItem` : '';
+};
+
+const getRequestText = (waybackItems:Array<IWaybackItem>)=>{
+
     const requestText = {  
-        "operationalLayers": operationalLayersInfo,
+        "operationalLayers": getOperationalLayers(waybackItems),
         "baseMap":{  
             "baseMapLayers":[  
                 {  
@@ -90,10 +119,52 @@ const createWebmap = async({
         "spatialReference":{"wkid":102100,"latestWkid":3857}
     };
 
+    return JSON.stringify(requestText);
+}
+
+const getOperationalLayers = (waybackItems:Array<IWaybackItem>)=>{
+
+    const operationalLayers:Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];
+
+    waybackItems.forEach((waybackItem, index)=>{
+
+        const isVisible = ( index === 0 ) ? true : false;
+
+        const waybackLayerInfo:IWaybackLayerInfo = {
+            "templateUrl": waybackItem.itemURL,
+            "wmtsInfo": {
+                "url": isDevMode() ? config.dev["wayback-imagery-base"] : config.prod["wayback-imagery-base"]
+            },
+            "visibility": isVisible,
+            "title": waybackItem.itemTitle,
+            "type": "WebTiledLayer",
+            "layerType": "WebTiledLayer",
+            "itemId": waybackItem.itemID
+        };
+
+        const metadataLayerTitle = "Metadata for " + waybackItem.itemTitle;
+
+        const metadataLayerInfo:IMetadataLayerInfo = {
+            "itemId": waybackItem.metadataLayerItemID,
+            "visibility": isVisible,
+            "opacity": 1,
+            "title": metadataLayerTitle,
+            "layerType": "ArcGISMapServiceLayer",
+            "url": waybackItem.metadataLayerUrl
+        };
+
+        operationalLayers.push(waybackLayerInfo, metadataLayerInfo);
+    });
+
+    return operationalLayers;
 };
 
-const getSnippetStr = ()=>{
-    return 'I am snippet';
+const getSnippetStr = (waybackItems:Array<IWaybackItem>)=>{
+    const releaseDates = waybackItems.map(d=>d.releaseDateLabel);
+    let snippetStr = 'Wayback imagery from ';
+    snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
+    snippetStr += ' and ' + releaseDates[releaseDates.length - 1] // add last one to str with and in front, so we will have "a, b, c and d"
+    return snippetStr;
 }
 
 export default createWebmap;

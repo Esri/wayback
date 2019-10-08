@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import config from './config';
 
-import { IWaybackItem, IUserSession } from '../../types';
+import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import createWebmap from './createWebmap';
 
 interface IProps {
@@ -11,6 +11,7 @@ interface IProps {
     waybackItems:Array<IWaybackItem>
     rNum4SelectedWaybackItems:Array<number>
     userSession:IUserSession
+    mapExtent:IExtentGeomety
 
     onClose:(val:boolean)=>void
 }
@@ -22,6 +23,7 @@ interface IState {
 
     isCreatingWebmap:boolean
     isWebmapReady:boolean
+    webmapId:string
 }
 
 class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
@@ -34,30 +36,21 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             tags: config.tags,
             description: config.description,
             isCreatingWebmap:false,
-            isWebmapReady:false
+            isWebmapReady:false,
+            webmapId:''
         }
 
         this.setTitle = this.setTitle.bind(this);
         this.setTags = this.setTags.bind(this);
         this.setDescription = this.setDescription.bind(this);
         this.saveAsWebmap = this.saveAsWebmap.bind(this);
+        this.openWebmap = this.openWebmap.bind(this);
     }
 
-    saveAsWebmap(){
-
-        const { userSession, waybackItems, rNum4SelectedWaybackItems } = this.props;
-        const { title, tags, description } = this.state;
-
-        const waybackItemsToSave = waybackItems.filter(d=>{
-            return rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1;
-        });
-
-        createWebmap({
-            title,
-            tags,
-            description,
-            userSession,
-            waybackItemsToSave
+    setWebmapId(webmapId=''){
+        this.setState({
+            webmapId,
+            isWebmapReady: webmapId ? true : false
         });
     }
 
@@ -77,6 +70,55 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         this.setState({
             description: event.target.value
         });
+    }
+
+    toggleIsCreatingWebmap(val=false){
+        this.setState({
+            isCreatingWebmap: val
+        });
+    }
+
+    async saveAsWebmap(){
+
+        const { userSession, waybackItems, rNum4SelectedWaybackItems, mapExtent } = this.props;
+        const { title, tags, description } = this.state;
+
+        const waybackItemsToSave = waybackItems.filter(d=>{
+            return rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1;
+        });
+
+        try {
+            this.toggleIsCreatingWebmap(true);
+
+            const createWebmapResponse = await createWebmap({
+                title,
+                tags,
+                description,
+                userSession,
+                mapExtent,
+                waybackItemsToSave
+            });
+            // console.log('createWebmapResponse', createWebmapResponse);
+
+            if(createWebmapResponse.id){
+                this.setWebmapId(createWebmapResponse.id);
+            }
+
+        } catch(err){
+            console.error(err);
+        }
+
+        this.toggleIsCreatingWebmap(false);
+    }
+
+    openWebmap(){
+        const { userSession } = this.props;
+        const { webmapId } = this.state;
+        const itemUrl = userSession && webmapId ? `${userSession.portal.url}/home/item.html?id=${webmapId}` : null;
+
+        if(itemUrl){
+            window.open(itemUrl, '_blank');
+        }
     }
 
     getEditDialog(){
@@ -125,7 +167,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         return (
             <div>
                 <p className='message-webamap-is-ready'>Your Wayback Map is ready!</p>
-                <div className="btn btn-fill">
+                <div className="btn btn-fill" onClick={this.openWebmap}>
                     Open Wayback Map
                 </div>
             </div>
@@ -147,7 +189,10 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             this.toggleDialog();
         }
 
-        // if()
+        if(prevPros.rNum4SelectedWaybackItems !== this.props.rNum4SelectedWaybackItems){
+            // reset the webmap id since selected items have changed
+            this.setWebmapId();
+        }
     }
 
     componentDidMount(){
