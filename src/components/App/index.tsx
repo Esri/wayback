@@ -13,6 +13,7 @@ import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 import CheckboxToggle from '../CheckboxToggle';
+import BarChart from '../BarChart';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -271,9 +272,9 @@ class App extends React.PureComponent<IProps, IState> {
         } = this.state;
 
         const appTitle = (
-            <div className='content-wrap leader-half trailer-half'>
+            <div className='content-wrap leader-half trailer-quarter'>
                 <div className='app-title-text text-center'>
-                    <span className='font-size-2 avenir-light'>World Imagery <span className='text-white'>Wayback</span></span>
+                    <span className='font-size-2 avenir-light trailer-0'>World Imagery <span className='text-white'>Wayback</span></span>
                 </div>
             </div>
         );
@@ -281,6 +282,16 @@ class App extends React.PureComponent<IProps, IState> {
         const loadingIndicator = !activeWaybackItem ? (
             <div className="loader is-active padding-leader-1 padding-trailer-1">
                 <div className="loader-bars"></div>
+            </div>
+        ) : null;
+
+        const barChart = activeWaybackItem ? (
+            <div className='content-wrap trailer-quarter'>
+                <BarChart 
+                    waybackItems={waybackItems}
+                    activeWaybackItem={activeWaybackItem}
+                    shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
+                />
             </div>
         ) : null;
 
@@ -323,6 +334,7 @@ class App extends React.PureComponent<IProps, IState> {
             <div className='sidebar'>
                 { appTitle }
                 { loadingIndicator }
+                { barChart }
                 { titleForActiveItem }
                 { localChangeOnlyToggle }
                 { listView }

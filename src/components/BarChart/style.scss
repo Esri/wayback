@@ -1,0 +1,42 @@
+@import '../../style/colors.scss';
+
+.bar-chart-container {
+    .bar {
+        fill: $color-inactive-item;
+    }
+    
+    .bar:hover {
+        fill: #888;
+    }
+    
+    .bar.is-highlighted  {
+        fill: $color-highlight-item;
+    }
+    
+    .bar.is-highlighted:hover {
+        fill: $color-hover-item;
+    }
+    
+    .bar.is-active,
+    .bar.is-highlighted.is-active {
+        fill: $color-active-item;
+    }
+    
+    .axis--x {
+    
+        path {
+            /* display: none; */
+            stroke: $barchart-axis-color;
+        }
+    
+        .tick {
+            line {
+                stroke: $barchart-axis-color;
+            }
+    
+            text {
+                fill: $controls-text-color;
+            }
+        }
+    }
+}
