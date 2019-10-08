@@ -3,6 +3,8 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem } from '../../types';
+import { isDevMode } from '../../utils/Tier';
+import config from '../../config';
 
 interface IProps {
     data:IWaybackItem
@@ -21,6 +23,20 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
 
     constructor(props:IProps){
         super(props);
+
+        this.openItem = this.openItem.bind(this);
+    }
+
+    openItem(){
+        const { data } = this.props;
+
+        const itemId = data.itemID;
+
+        const agolHost = isDevMode() ? config.dev["portal-url"] : config.prod["portal-url"];
+
+        const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
+
+        window.open(itemUrl, '_blank');
     }
 
     render(){
@@ -42,7 +58,7 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
 
                 <div className='add-to-webmap-btn inline-block cursor-pointer right' onClick={toggleSelect.bind(this, data.releaseNum)} data-tooltip-content='Add this release to an ArcGIS Online Map' data-tooltip-content-alt='Remove this release from your ArcGIS Online Map'></div>
 
-                <div className='open-item-btn icon-ui-link-external margin-right-half inline-block cursor-pointer right link-light-gray' data-tooltip-content='Learn more about this release...'></div>
+                <div className='open-item-btn icon-ui-link-external margin-right-half inline-block cursor-pointer right link-light-gray' onClick={this.openItem} data-tooltip-content='Learn more about this release...'></div>
             </div>
         );
     }

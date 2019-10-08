@@ -114,7 +114,14 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     openWebmap(){
         const { userSession } = this.props;
         const { webmapId } = this.state;
-        const itemUrl = userSession && webmapId ? `${userSession.portal.url}/home/item.html?id=${webmapId}` : null;
+
+        const baseUrl = (
+            userSession && 
+            userSession.portal.url && 
+            userSession.portal.urlKey 
+        ) ? `https://${userSession.portal.urlKey}.maps.arcgis.com` : userSession.portal.url;
+
+        const itemUrl = userSession && webmapId ? `${baseUrl}/home/item.html?id=${webmapId}` : null;
 
         if(itemUrl){
             window.open(itemUrl, '_blank');

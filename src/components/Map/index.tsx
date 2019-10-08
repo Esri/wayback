@@ -14,6 +14,7 @@ import IPoint from 'esri/geometry/Point';
 import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils"
 
 interface IProps {
+    defaultExtent?:IExtentGeomety,
     activeWaybackItem:IWaybackItem,
     isPopupVisible:boolean,
 
@@ -47,6 +48,8 @@ class Map extends React.PureComponent<IProps, IState> {
 
         loadCss();
 
+        const { defaultExtent } = this.props;
+
         try {
 
             const container = this.mapDivRef.current;
@@ -72,7 +75,8 @@ class Map extends React.PureComponent<IProps, IState> {
     
             const view = new MapView({
                 container,
-                map: webmap
+                map: webmap,
+                extent: defaultExtent
             });
 
             this.setState({

@@ -4,6 +4,7 @@ import * as React from 'react';
 import config from '../../config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
+import { encodeSearchParam } from '../../utils/UrlSearchParam';
 
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
@@ -11,14 +12,16 @@ import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
+import CheckboxToggle from '../CheckboxToggle';
 
-import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession } from '../../types';
+import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key:number]:number
 };
 
 interface IProps {
+    data2InitApp?:ISearchParamData
     isDev?:boolean
 }
 
@@ -46,7 +49,7 @@ class App extends React.PureComponent<IProps, IState> {
     constructor(props:IProps){
         super(props);
 
-        const { isDev } = props;
+        const { isDev, data2InitApp } = props;
 
         this.waybackManager = new WaybackManager({isDev});
 
@@ -55,12 +58,12 @@ class App extends React.PureComponent<IProps, IState> {
         this.state = {
             waybackItems: [],
             waybackItemsReleaseNum2IndexLookup: null,
-            rNum4SelectedWaybackItems: [],
+            rNum4SelectedWaybackItems: data2InitApp && data2InitApp.rNum4SelectedWaybackItems ? data2InitApp.rNum4SelectedWaybackItems : [],
             activeWaybackItem: null,
             metadataQueryResult:null,
             metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
-            shouldOnlyShowItemsWithLocalChange:false,
+            shouldOnlyShowItemsWithLocalChange: data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange ? data2InitApp.shouldOnlyShowItemsWithLocalChange : false,
             userSession:null,
             mapExtent:null
         }
@@ -74,12 +77,10 @@ class App extends React.PureComponent<IProps, IState> {
         this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
         this.setMapExtent = this.setMapExtent.bind(this);
+        this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
-
-        // always show the most recent release by default
-        const activeWaybackItem = waybackItems[0];
 
         // use the lookup table to quickly locate the wayback item from waybackItems by looking up the release number
         const waybackItemsReleaseNum2IndexLookup = {};
@@ -87,14 +88,17 @@ class App extends React.PureComponent<IProps, IState> {
         waybackItems.forEach((d,i)=>{
             const key = d.releaseNum;
             waybackItemsReleaseNum2IndexLookup[key] = i;
-        })
+        });
+
+        // show the most recent release by default
+        const activeWaybackItem = waybackItems[0]
 
         this.setState({
             waybackItems,
             waybackItemsReleaseNum2IndexLookup,
             activeWaybackItem
         }, ()=>{
-            console.log('waybackItems is ready', activeWaybackItem);
+            // console.log('waybackItems is ready', activeWaybackItem);
         })
     }
 
@@ -212,6 +216,14 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
+    toggleShouldOnlyShowItemsWithLocalChange(){
+        const { shouldOnlyShowItemsWithLocalChange } = this.state;
+
+        this.setState({
+            shouldOnlyShowItemsWithLocalChange: !shouldOnlyShowItemsWithLocalChange
+        });
+    }
+
     async componentDidMount(){
 
         const { isDev } = this.props;
@@ -233,7 +245,96 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
+    componentDidUpdate(){
+        const { 
+            // activeWaybackItem, 
+            shouldOnlyShowItemsWithLocalChange,
+            rNum4SelectedWaybackItems,
+            mapExtent
+        } = this.state;
+
+        // let's igonre the activeWaybackItem for now
+        encodeSearchParam({
+            mapExtent,
+            rNum4SelectedWaybackItems,
+            // rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
+            shouldOnlyShowItemsWithLocalChange,
+        });
+    }
+
+    getSidebarContent(){
+        const { 
+            waybackItems, 
+            activeWaybackItem, 
+            shouldOnlyShowItemsWithLocalChange, 
+            rNum4SelectedWaybackItems,
+        } = this.state;
+
+        const appTitle = (
+            <div className='content-wrap leader-half trailer-half'>
+                <div className='app-title-text text-center'>
+                    <span className='font-size-2 avenir-light'>World Imagery <span className='text-white'>Wayback</span></span>
+                </div>
+            </div>
+        );
+
+        const loadingIndicator = !activeWaybackItem ? (
+            <div className="loader is-active padding-leader-1 padding-trailer-1">
+                <div className="loader-bars"></div>
+            </div>
+        ) : null;
+
+        const titleForActiveItem = activeWaybackItem ? (
+            <div className='content-wrap leader-quarter trailer-quarter'>
+                <div className='text-center text-blue'>
+                    <h4 className='font-size-2 avenir-light trailer-0'>Wayback {activeWaybackItem.releaseDateLabel}</h4>
+                    <span className='font-size--3'>Click map for imagery details</span>
+                </div>
+            </div>
+        ) : null;
+
+        const localChangeOnlyToggle = activeWaybackItem ? (
+            <div className='content-wrap trailer-half'>
+                <CheckboxToggle 
+                    isActive={shouldOnlyShowItemsWithLocalChange} 
+                    onChange={this.toggleShouldOnlyShowItemsWithLocalChange} 
+                />
+            </div>
+        ) : null
+
+        const listView = activeWaybackItem ? (
+            <div className='y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy'>
+                <div className='content-wrap'>
+                    <ListView 
+                        waybackItems={waybackItems}
+                        activeWaybackItem={activeWaybackItem}
+                        shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
+                        rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+
+                        onClick={this.setActiveWaybackItem}
+                        toggleSelect={this.toggleSelectWaybackItem}
+                    />
+                </div>
+            </div>
+
+        ) : null;
+
+        const sidebarContent = (
+            <div className='sidebar'>
+                { appTitle }
+                { loadingIndicator }
+                { titleForActiveItem }
+                { localChangeOnlyToggle }
+                { listView }
+            </div>
+        );
+
+        return sidebarContent;
+    }
+
     render(){
+
+        const { data2InitApp } = this.props;
 
         const { 
             waybackItems, 
@@ -246,6 +347,10 @@ class App extends React.PureComponent<IProps, IState> {
             userSession,
             mapExtent
         } = this.state;
+
+        const defaultExtent = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
+
+        const sidebar = this.getSidebarContent();
 
         return(
             <div className='app-content'>
@@ -262,32 +367,11 @@ class App extends React.PureComponent<IProps, IState> {
                     />
                 </div>
 
-                <div className='sidebar'>
-
-                    <div className='content-wrap leader-half trailer-half'>
-                        <div className='app-title-text text-center'>
-                            <span className='font-size-2 avenir-light'>World Imagery <span className='text-white'>Wayback</span></span>
-                        </div>
-                    </div>
-
-                    <div className='y-scroll-visible x-scroll-hide fancy-scrollbar'>
-                        <div className='content-wrap'>
-                            <ListView 
-                                waybackItems={waybackItems}
-                                activeWaybackItem={activeWaybackItem}
-                                shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
-                                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-
-                                onClick={this.setActiveWaybackItem}
-                                toggleSelect={this.toggleSelectWaybackItem}
-                            />
-                        </div>
-                    </div>
-
-                </div>
+                { sidebar }
 
                 <div className='map-container'>
                     <Map
+                        defaultExtent={defaultExtent}
                         activeWaybackItem={activeWaybackItem}
                         isPopupVisible={ metadataQueryResult ? true : false}
 

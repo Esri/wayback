@@ -37,7 +37,7 @@ interface IExtentGeomety {
     ymax:number,
     ymin:number,
     spatialReference:{
-        latestWkid: number, 
+        latestWkid?: number, 
         wkid: number
     }
 }
@@ -67,6 +67,13 @@ interface IUserSession {
     credential:ICredential
 }
 
+interface ISearchParamData {
+    mapExtent?:IExtentGeomety
+    rNum4SelectedWaybackItems?:Array<number>
+    shouldOnlyShowItemsWithLocalChange?:boolean
+    rNum4ActiveWaybackItem?:number
+}
+
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -75,5 +82,6 @@ export {
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IUserSession,
-    IExtentGeomety
+    IExtentGeomety,
+    ISearchParamData
 }
