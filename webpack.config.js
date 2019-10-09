@@ -56,8 +56,28 @@ module.exports = (env, options)=> {
                 { test: /\.woff$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
                 { test: /\.ttf$/,  loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
                 { test: /\.eot$/,  loader: "file-loader" },
-                { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
-                { test: /\.(png|jpg|gif)$/,  loader: "file-loader" },
+                // { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
+                { 
+                    test: /\.svg$/,  
+                    loader: "url-loader",
+                    options: {
+                        limit: 10000,
+                        fallback: {
+                            loader: "file-loader"
+                        }
+                    }
+                },
+                // { test: /\.(png|jpg|gif)$/,  loader: "file-loader" },
+                {   
+                    test: /\.(png|jpg|gif)$/,  
+                    loader: "url-loader",
+                    options: {
+                        limit: 10000,
+                        fallback: {
+                            loader: "file-loader"
+                        }
+                    }
+                },
             ]
         },
         plugins: [
@@ -90,7 +110,14 @@ module.exports = (env, options)=> {
         ],
         optimization: {
             minimizer: [
-                new TerserPlugin({}), 
+                new TerserPlugin({
+                    extractComments: true,
+                    terserOptions: {
+                        compress: {
+                            drop_console: true,
+                        }
+                    }
+                }), 
                 new OptimizeCSSAssets({})
             ]
         }

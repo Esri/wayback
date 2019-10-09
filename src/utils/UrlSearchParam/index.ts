@@ -2,7 +2,7 @@
 import { urlFns } from 'helper-toolkit-ts';
 import { ISearchParamData, IExtentGeomety } from '../../types'
 
-type searchParamKey = 'ext' | 'localChangeOnly' | 'selected' | 'active';
+type searchParamKey = 'ext' | 'localChangesOnly' | 'selected' | 'active';
 
 const encodeSearchParam = ({
     mapExtent = null,
@@ -14,8 +14,8 @@ const encodeSearchParam = ({
     // console.log(mapExtent, rNum4SelectedWaybackItems, shouldOnlyShowItemsWithLocalChange, rNum4ActiveWaybackItem);
 
     const searchParams:{ [key in searchParamKey]: string} = {
-        ext: mapExtent ? [ mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax ].join(',') : '',
-        localChangeOnly: shouldOnlyShowItemsWithLocalChange ? 'true' : '',
+        ext: mapExtent ? [ mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax ].map(d=>d.toFixed(5)).join(',') : '',
+        localChangesOnly: shouldOnlyShowItemsWithLocalChange ? 'true' : '',
         selected: rNum4SelectedWaybackItems.length ? rNum4SelectedWaybackItems.join(',') : '',
         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : ''
     };
@@ -36,7 +36,7 @@ const decodeSearchParam = ()=>{
         [key in searchParamKey]: string
     } = urlFns.parseQuery();
 
-    const localChangeOnly = urlQueryData.localChangeOnly === 'true' ? true : false;
+    const localChangesOnly = urlQueryData.localChangesOnly === 'true' ? true : false;
     const selected = urlQueryData.selected ? urlQueryData.selected.split(',').map(d=>+d) : null;
     const active = urlQueryData.active ? +urlQueryData.active: null; 
     const ext = urlQueryData.ext ? urlQueryData.ext.split(',') : null;
@@ -53,7 +53,7 @@ const decodeSearchParam = ()=>{
     const searchParams:ISearchParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
-        shouldOnlyShowItemsWithLocalChange: localChangeOnly,
+        shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active
     }
 

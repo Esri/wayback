@@ -14,6 +14,7 @@ import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 import CheckboxToggle from '../CheckboxToggle';
 import BarChart from '../BarChart';
+import Title4ActiveItem from '../Title4ActiveItem';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -31,6 +32,7 @@ interface IState {
     waybackItemsReleaseNum2IndexLookup:IWaybackItemsReleaseNum2IndexLookup
     rNum4SelectedWaybackItems:Array<number>
     activeWaybackItem:IWaybackItem,
+    previewWaybackItem:IWaybackItem,
 
     metadataQueryResult:IWaybackMetadataQueryResult,
     metadataAnchorScreenPoint:IScreenPoint,
@@ -39,6 +41,7 @@ interface IState {
 
     isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
+    shouldShowPreviewItemTitle:boolean
     userSession:IUserSession
 }
 
@@ -61,15 +64,19 @@ class App extends React.PureComponent<IProps, IState> {
             waybackItemsReleaseNum2IndexLookup: null,
             rNum4SelectedWaybackItems: data2InitApp && data2InitApp.rNum4SelectedWaybackItems ? data2InitApp.rNum4SelectedWaybackItems : [],
             activeWaybackItem: null,
+            previewWaybackItem: null,
             metadataQueryResult:null,
             metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
             shouldOnlyShowItemsWithLocalChange: data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange ? data2InitApp.shouldOnlyShowItemsWithLocalChange : false,
+            // we want to show the release date in wayback title only when hover over the bar chart
+            shouldShowPreviewItemTitle:false,
             userSession:null,
             mapExtent:null
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
+        this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
         this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         this.queryLocalChanges = this.queryLocalChanges.bind(this);
         this.queryMetadata = this.queryMetadata.bind(this);
@@ -105,14 +112,21 @@ class App extends React.PureComponent<IProps, IState> {
 
     setActiveWaybackItem(releaseNum:number){
 
-        const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
-
-        const activeWaybackItemIndex = waybackItemsReleaseNum2IndexLookup[releaseNum];
-
-        const activeWaybackItem = waybackItems[activeWaybackItemIndex];
+        const activeWaybackItem = this.getWaybackItemByReleaseNumber(releaseNum);
 
         this.setState({
             activeWaybackItem
+        });
+    }
+
+    setPreviewWaybackItem(releaseNum?:number, shouldShowPreviewItemTitle?:boolean){
+        const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
+
+        shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
+
+        this.setState({
+            previewWaybackItem,
+            shouldShowPreviewItemTitle
         });
     }
 
@@ -225,6 +239,13 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
+    
+    getWaybackItemByReleaseNumber(releaseNum:number){
+        const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
+        const index = waybackItemsReleaseNum2IndexLookup[releaseNum];
+        return waybackItems[index];
+    }
+
     async componentDidMount(){
 
         const { isDev } = this.props;
@@ -267,8 +288,11 @@ class App extends React.PureComponent<IProps, IState> {
         const { 
             waybackItems, 
             activeWaybackItem, 
+            previewWaybackItem,
+            shouldShowPreviewItemTitle,
             shouldOnlyShowItemsWithLocalChange, 
             rNum4SelectedWaybackItems,
+
         } = this.state;
 
         const appTitle = (
@@ -291,16 +315,20 @@ class App extends React.PureComponent<IProps, IState> {
                     waybackItems={waybackItems}
                     activeWaybackItem={activeWaybackItem}
                     shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
+                    onClick={this.setActiveWaybackItem}
+                    onMouseEnter={this.setPreviewWaybackItem}
+                    onMouseOut={this.setPreviewWaybackItem}
                 />
             </div>
         ) : null;
 
         const titleForActiveItem = activeWaybackItem ? (
             <div className='content-wrap leader-quarter trailer-quarter'>
-                <div className='text-center text-blue'>
-                    <h4 className='font-size-2 avenir-light trailer-0'>Wayback {activeWaybackItem.releaseDateLabel}</h4>
-                    <span className='font-size--3'>Click map for imagery details</span>
-                </div>
+                <Title4ActiveItem 
+                    activeWaybackItem={activeWaybackItem}
+                    previewWaybackItem={previewWaybackItem}
+                    shouldShowPreviewItemTitle={shouldShowPreviewItemTitle}
+                />
             </div>
         ) : null;
 
@@ -351,7 +379,7 @@ class App extends React.PureComponent<IProps, IState> {
         const { 
             waybackItems, 
             activeWaybackItem, 
-            shouldOnlyShowItemsWithLocalChange, 
+            // shouldOnlyShowItemsWithLocalChange, 
             metadataQueryResult, 
             metadataAnchorScreenPoint, 
             rNum4SelectedWaybackItems,

@@ -3,15 +3,19 @@ import * as React from 'react';
 
 import { loadCss, loadModules } from "esri-loader";
 import config from './config';
+import ReferenceLayerToggle from './ReferenceLayerToggle';
 
 import { IWaybackItem, IMapPointInfo, IScreenPoint, IExtentGeomety } from '../../types';
 
 import IMapView from 'esri/views/MapView';
 import IWebMap from "esri/WebMap";
+import IMap from "esri/Map";
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
-import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils"
+import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils";
+import ISearchWidget from "esri/widgets/Search";
+import IVectorTileLayer from "esri/layers/VectorTileLayer"
 
 interface IProps {
     defaultExtent?:IExtentGeomety,
@@ -28,11 +32,13 @@ interface IProps {
 interface IState {
     mapView:IMapView,
     popupAnchorPoint:IPoint
+    isReferenceLayerVisible:boolean
 }
 
 class Map extends React.PureComponent<IProps, IState> {
 
     private readonly WaybackLayerId = 'waybackTileLayer'
+    private readonly ReferenceLayerId = 'HybridRefLayer'
     private mapDivRef = React.createRef<HTMLDivElement>()
 
     constructor(props:IProps){
@@ -40,8 +46,11 @@ class Map extends React.PureComponent<IProps, IState> {
 
         this.state = {
             mapView: null,
-            popupAnchorPoint: null
+            popupAnchorPoint: null,
+            isReferenceLayerVisible:true
         }
+
+        this.toggleIsReferenceLayerVisible = this.toggleIsReferenceLayerVisible.bind(this);
     }
 
     async initMap(){
@@ -56,27 +65,35 @@ class Map extends React.PureComponent<IProps, IState> {
 
             type Modules = [
                 typeof IMapView,
-                typeof IWebMap
+                typeof IMap,
+                typeof IVectorTileLayer
             ];
     
-            const [ MapView, WebMap ] = await (loadModules([
+            const [ MapView, Map, VectorTileLayer ] = await (loadModules([
                 'esri/views/MapView',
-                'esri/WebMap'
+                'esri/Map',
+                "esri/layers/VectorTileLayer"
             ]) as Promise<Modules>);
 
             const waybackLayer = await this.getWaybackLayer();
-    
-            const webmap = new WebMap({
+
+            const referenceLayer = new VectorTileLayer({
+                id: this.ReferenceLayerId,
                 portalItem: {
-                    id: config['web-map-id']
-                },
-                layers: [waybackLayer]
+                    id: config["Hybrid-Reference-Layer"]
+                }
             });
+    
+            const map = new Map({
+                layers: [waybackLayer, referenceLayer]
+            });
+
+            const extent = defaultExtent || config.extents.default
     
             const view = new MapView({
                 container,
-                map: webmap,
-                extent: defaultExtent
+                map: map,
+                extent
             });
 
             this.setState({
@@ -85,10 +102,38 @@ class Map extends React.PureComponent<IProps, IState> {
 
             view.when(()=>{
                 this.mapViewOnReadyHandler();
+                this.initSearchWidget();
             });
 
         } catch(err){
             console.error(err)
+        }
+    }
+
+    async initSearchWidget(){
+
+        const { mapView } = this.state;
+
+        type Modules = [
+            typeof ISearchWidget,
+        ];
+
+        try {
+            const [ Search ] = await (loadModules([
+                "esri/widgets/Search"
+            ]) as Promise<Modules>);
+
+            const searchWidget = new Search({
+                view: mapView
+            });
+
+            mapView.ui.add(searchWidget, {
+                position: "top-right",
+                index: 2
+            });
+
+        } catch(err){
+            console.error(err);
         }
     }
 
@@ -246,6 +291,20 @@ class Map extends React.PureComponent<IProps, IState> {
         }
     }
 
+    toggleIsReferenceLayerVisible(){
+
+        const { isReferenceLayerVisible, mapView } = this.state;
+
+        const newVal = !isReferenceLayerVisible;
+
+        this.setState({
+            isReferenceLayerVisible: newVal
+        }, ()=>{
+            const referenceLayer = mapView.map.findLayerById(this.ReferenceLayerId);
+            referenceLayer.visible = newVal;
+        });
+    }
+
     componentDidUpdate(prevProps:IProps, prevState:IState){
 
         const { activeWaybackItem } = this.props;
@@ -268,14 +327,24 @@ class Map extends React.PureComponent<IProps, IState> {
     }
 
     render(){
+
+        const { isReferenceLayerVisible } = this.state;
+
         return(
-            <div id='mapDiv' ref={this.mapDivRef}>
-                <div className='loading-indicator'>
-                    <div className="loader is-active padding-leader-3 padding-trailer-3">
-                        <div className="loader-bars"></div>
+            <div className='map-div-wrap'>
+                <div id='mapDiv' ref={this.mapDivRef}>
+                    <div className='loading-indicator'>
+                        <div className="loader is-active padding-leader-3 padding-trailer-3">
+                            <div className="loader-bars"></div>
+                        </div>
                     </div>
                 </div>
+                <ReferenceLayerToggle 
+                    isActive={isReferenceLayerVisible}
+                    onClick={this.toggleIsReferenceLayerVisible}
+                />
             </div>
+
         );
     }
 

@@ -10,6 +10,8 @@ interface IProps {
     shouldOnlyShowItemsWithLocalChange:boolean,
 
     onClick?:(releaseNum:number)=>void
+    onMouseEnter?:(releaseNum:number, shouldShowPreviewItemTitle:boolean)=>void
+    onMouseOut?:()=>void
 }
 
 interface IState {
@@ -80,7 +82,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
     drawBars(){
         const { svg, xScale, height, width } = this.state;
-        const { waybackItems } = this.props;
+        const { waybackItems, activeWaybackItem, onClick, onMouseEnter, onMouseOut } = this.props;
 
         const BarWidth = width/waybackItems.length;
 
@@ -102,9 +104,9 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 //     classes.push('is-highlighted');
                 // }
 
-                // if(d.isActive){
-                //     classes.push('is-active');
-                // } 
+                if(d.releaseNum === activeWaybackItem.releaseNum){
+                    classes.push('is-active');
+                } 
                 
                 return classes.join(' ');
             })
@@ -117,6 +119,30 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 return BarWidth;
             })
             .attr("height", height)
+            .on("click", (d:IWaybackItem)=>{
+                onClick(d.releaseNum);
+            })
+            .on('mouseover', (d:IWaybackItem)=>{
+                onMouseEnter(d.releaseNum, true);
+            })
+            .on('mouseout', (d:IWaybackItem)=>{
+                onMouseOut();
+            });
+    }
+
+    setActiveBar(){
+        const { activeWaybackItem } = this.props;
+        const { svg } = this.state;
+
+        const bars = svg.selectAll('.' + this.BarRectClassName);
+
+        if(bars){
+            bars.classed("is-active", false);
+
+            bars.filter((d:IWaybackItem)=>{
+                return d.releaseNum === activeWaybackItem.releaseNum;
+            }).classed("is-active", true);
+        }
     }
 
     componentDidMount(){
@@ -131,13 +157,16 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
     componentDidUpdate(prevProps:IProps, prevState:IState){
 
+        if(prevProps.activeWaybackItem !== this.props.activeWaybackItem){
+            this.setActiveBar();
+        }
     }
 
     render(){
         return(
             <div className={this.ContainerClassName} ref={this.containerRef} style={{
                 width: '100%',
-                height: '100px'
+                height: '90px'
             }}></div>
         );
     }
