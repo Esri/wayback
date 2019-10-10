@@ -176,8 +176,8 @@ class App extends React.PureComponent<IProps, IState> {
                 metadataQueryResult: queryRes,
                 metadataAnchorScreenPoint: screenPoint
             }, ()=>{
-                console.log('queryMetadata result', queryRes);
-                console.log('metadataAnchorScreenPoint', screenPoint);
+                // console.log('queryMetadata result', queryRes);
+                // console.log('metadataAnchorScreenPoint', screenPoint);
             });
 
         } catch(err){
@@ -340,6 +340,7 @@ class App extends React.PureComponent<IProps, IState> {
                 <BarChart 
                     waybackItems={waybackItems}
                     activeWaybackItem={activeWaybackItem}
+                    rNum4WaybackItemsWithLocalChanges={rNum4WaybackItemsWithLocalChanges}
                     shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
                     onClick={this.setActiveWaybackItem}
                     onMouseEnter={this.setPreviewWaybackItem}

@@ -21,6 +21,10 @@
     .bar.is-highlighted.is-active {
         fill: $color-active-item;
     }
+
+    .bar.is-hide {
+        display: none;
+    }
     
     .axis--x {
     

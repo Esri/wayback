@@ -7,6 +7,7 @@ import { IWaybackItem } from '../../types';
 interface IProps {
     waybackItems:Array<IWaybackItem>,
     activeWaybackItem:IWaybackItem,
+    rNum4WaybackItemsWithLocalChanges:Array<number>
     shouldOnlyShowItemsWithLocalChange:boolean,
 
     onClick?:(releaseNum:number)=>void
@@ -82,7 +83,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
     drawBars(){
         const { svg, xScale, height, width } = this.state;
-        const { waybackItems, activeWaybackItem, onClick, onMouseEnter, onMouseOut } = this.props;
+        const { waybackItems, activeWaybackItem, rNum4WaybackItemsWithLocalChanges, shouldOnlyShowItemsWithLocalChange, onClick, onMouseEnter, onMouseOut } = this.props;
 
         const BarWidth = width/waybackItems.length;
 
@@ -98,11 +99,17 @@ class BarChart extends React.PureComponent<IProps, IState> {
             .data(waybackItems)		
             .enter().append("rect")
             .attr('class', (d:IWaybackItem)=>{
-                let classes = [this.BarRectClassName];
+                const classes = [this.BarRectClassName];
 
-                // if(d.isHighlighted){
-                //     classes.push('is-highlighted');
-                // }
+                const hasLocalChange = rNum4WaybackItemsWithLocalChanges.includes(d.releaseNum);
+
+                if(shouldOnlyShowItemsWithLocalChange && !hasLocalChange){
+                    classes.push('is-hide');
+                }
+
+                if(hasLocalChange){
+                    classes.push('is-highlighted');
+                }
 
                 if(d.releaseNum === activeWaybackItem.releaseNum){
                     classes.push('is-active');
@@ -130,11 +137,16 @@ class BarChart extends React.PureComponent<IProps, IState> {
             });
     }
 
+    getBars(){
+        const { svg } = this.state;
+        const bars = svg.selectAll('.' + this.BarRectClassName);
+        return bars || null;
+    }
+
     setActiveBar(){
         const { activeWaybackItem } = this.props;
-        const { svg } = this.state;
 
-        const bars = svg.selectAll('.' + this.BarRectClassName);
+        const bars = this.getBars();
 
         if(bars){
             bars.classed("is-active", false);
@@ -142,6 +154,41 @@ class BarChart extends React.PureComponent<IProps, IState> {
             bars.filter((d:IWaybackItem)=>{
                 return d.releaseNum === activeWaybackItem.releaseNum;
             }).classed("is-active", true);
+        }
+    }
+
+    setHighlightedBars(){
+        const { rNum4WaybackItemsWithLocalChanges, shouldOnlyShowItemsWithLocalChange } = this.props;
+        const bars = this.getBars();
+
+        if(bars){
+            bars.classed("is-highlighted", false);
+
+            bars.filter((d:IWaybackItem)=>{
+                return rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1;
+            }).classed("is-highlighted", true).classed("is-hide", false);
+
+            if(shouldOnlyShowItemsWithLocalChange){
+                bars.filter((d:IWaybackItem)=>{
+                    return rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) === -1;
+                }).classed("is-hide", true);
+            }
+        }
+    }
+
+    toggleDisplayItemsWithLocalChange(){
+        const { shouldOnlyShowItemsWithLocalChange, rNum4WaybackItemsWithLocalChanges } = this.props;
+
+        const bars = this.getBars();
+
+        if(bars){
+            bars.classed("is-hide", false);
+
+            if(shouldOnlyShowItemsWithLocalChange){
+                bars.filter((d:IWaybackItem)=>{
+                    return rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) === -1;
+                }).classed("is-hide", true);
+            }
         }
     }
 
@@ -159,6 +206,14 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
         if(prevProps.activeWaybackItem !== this.props.activeWaybackItem){
             this.setActiveBar();
+        }
+
+        if(prevProps.rNum4WaybackItemsWithLocalChanges !== this.props.rNum4WaybackItemsWithLocalChanges){
+            this.setHighlightedBars();
+        }
+
+        if(prevProps.shouldOnlyShowItemsWithLocalChange !== this.props.shouldOnlyShowItemsWithLocalChange){
+            this.toggleDisplayItemsWithLocalChange()
         }
     }
 
