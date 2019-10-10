@@ -4,11 +4,13 @@ import * as React from 'react';
 import { loadCss, loadModules } from "esri-loader";
 import config from './config';
 import ReferenceLayerToggle from './ReferenceLayerToggle';
+import TilePreviewWindow from '../PreviewWindow';
+import { geometryFns } from 'helper-toolkit-ts';
 
 import { IWaybackItem, IMapPointInfo, IScreenPoint, IExtentGeomety } from '../../types';
 
 import IMapView from 'esri/views/MapView';
-import IWebMap from "esri/WebMap";
+// import IWebMap from "esri/WebMap";
 import IMap from "esri/Map";
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
@@ -20,6 +22,7 @@ import IVectorTileLayer from "esri/layers/VectorTileLayer"
 interface IProps {
     defaultExtent?:IExtentGeomety,
     activeWaybackItem:IWaybackItem,
+    previewWaybackItem:IWaybackItem,
     isPopupVisible:boolean,
 
     onClick?:(mapPoint:IMapPointInfo, screenPoint:IScreenPoint)=>void,
@@ -33,6 +36,10 @@ interface IState {
     mapView:IMapView,
     popupAnchorPoint:IPoint
     isReferenceLayerVisible:boolean
+    previewWindowPosition:{
+        top:number
+        left:number
+    }
 }
 
 class Map extends React.PureComponent<IProps, IState> {
@@ -47,7 +54,11 @@ class Map extends React.PureComponent<IProps, IState> {
         this.state = {
             mapView: null,
             popupAnchorPoint: null,
-            isReferenceLayerVisible:true
+            isReferenceLayerVisible:true,
+            previewWindowPosition: {
+                top:0,
+                left:0
+            }
         }
 
         this.toggleIsReferenceLayerVisible = this.toggleIsReferenceLayerVisible.bind(this);
@@ -238,6 +249,38 @@ class Map extends React.PureComponent<IProps, IState> {
 
     }
 
+    toggleDisplayPreviewWindow(){
+        const { previewWaybackItem } = this.props;
+
+        console.log(previewWaybackItem);
+    }
+
+    // async updatePreviewWindowPosition(){
+        
+    //     const { mapView } = this.state;
+
+    //     try {
+
+    //         type Modules = [
+    //             typeof IWebMercatorUtils
+    //         ];
+    
+    //         const [ webMercatorUtils ] = await (loadModules([
+    //             "esri/geometry/support/webMercatorUtils"
+    //         ]) as Promise<Modules>);
+    
+    //         const center = mapView.center;
+    //         const level = 
+            
+    //         const row = geometryFns.lat2tile(center.latitude, level);
+    //         const col = geometryFns.long2tile(center.longitude, level);
+            
+
+    //     } catch(err){
+    //         console.error(err);
+    //     }
+    // }
+
     updateScreenPoint4PopupAnchor(){
         const { popupScreenPointOnChange, isPopupVisible } = this.props;
         const { mapView, popupAnchorPoint } = this.state;
@@ -307,7 +350,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     componentDidUpdate(prevProps:IProps, prevState:IState){
 
-        const { activeWaybackItem } = this.props;
+        const { activeWaybackItem, previewWaybackItem } = this.props;
         const { mapView } = this.state;
 
         if(activeWaybackItem && (activeWaybackItem !== prevProps.activeWaybackItem)){
@@ -320,6 +363,10 @@ class Map extends React.PureComponent<IProps, IState> {
             }
         }
 
+        if( previewWaybackItem !== prevProps.previewWaybackItem ){
+            this.toggleDisplayPreviewWindow();
+        }
+
     }
 
     componentDidMount(){
@@ -328,7 +375,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { isReferenceLayerVisible } = this.state;
+        const { isReferenceLayerVisible, previewWindowPosition } = this.state;
 
         return(
             <div className='map-div-wrap'>
@@ -342,6 +389,10 @@ class Map extends React.PureComponent<IProps, IState> {
                 <ReferenceLayerToggle 
                     isActive={isReferenceLayerVisible}
                     onClick={this.toggleIsReferenceLayerVisible}
+                />
+                <TilePreviewWindow
+                    topPos={previewWindowPosition.top}
+                    leftPos={previewWindowPosition.left}
                 />
             </div>
 

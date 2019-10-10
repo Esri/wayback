@@ -14,6 +14,8 @@ interface IProps {
 
     toggleSelect?:(releaseNum:number)=>void
     onClick?:(releaseNum:number)=>void
+    onMouseEnter?:(releaseNum:number, shouldShowPreviewItemTitle:boolean)=>void
+    onMouseOut?:()=>void
 }
 
 interface IState {
@@ -42,7 +44,7 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { data, isActive, isSelected, isHighlighted, onClick, toggleSelect } = this.props;
+        const { data, isActive, isSelected, isHighlighted, onClick, onMouseEnter, onMouseOut, toggleSelect } = this.props;
 
         const cardClass = classnames('list-card trailer-half', {
             // 'is-active' indicates if is viewing this release on map
@@ -54,7 +56,7 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
         });
 
         return (
-            <div className={cardClass}>
+            <div className={cardClass} onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)} onMouseLeave={onMouseOut}>
                 <a className='margin-left-half link-light-gray cursor-pointer' onClick={onClick.bind(this, data.releaseNum)}>{data.releaseDateLabel}</a>
 
                 <div className='add-to-webmap-btn inline-block cursor-pointer right' onClick={toggleSelect.bind(this, data.releaseNum)} data-tooltip-content='Add this release to an ArcGIS Online Map' data-tooltip-content-alt='Remove this release from your ArcGIS Online Map'></div>

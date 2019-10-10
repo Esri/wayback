@@ -14,6 +14,8 @@ interface IProps {
     
     toggleSelect?:(releaseNum:number)=>void
     onClick?:(releaseNum:number)=>void
+    onMouseEnter?:(releaseNum:number)=>void
+    onMouseOut?:()=>void
 }
 
 interface IState {
@@ -34,7 +36,9 @@ class ListView extends React.PureComponent<IProps, IState> {
             rNum4WaybackItemsWithLocalChanges, 
             shouldOnlyShowItemsWithLocalChange, 
             toggleSelect, 
-            onClick 
+            onClick,
+            onMouseEnter,
+            onMouseOut
         } = this.props;
 
         const cardData = shouldOnlyShowItemsWithLocalChange 
@@ -58,6 +62,8 @@ class ListView extends React.PureComponent<IProps, IState> {
                     isHighlighted={isHighlighted}
                     toggleSelect={toggleSelect}
                     onClick={onClick}
+                    onMouseEnter={onMouseEnter}
+                    onMouseOut={onMouseOut}
                 />
             );
         });

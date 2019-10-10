@@ -128,6 +128,8 @@ class App extends React.PureComponent<IProps, IState> {
     setPreviewWaybackItem(releaseNum?:number, shouldShowPreviewItemTitle?:boolean){
         const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
 
+        // const alternativeRNum4 = releaseNum ? this.getAlternativeReleaseNumber
+
         shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
 
         this.setState({
@@ -379,6 +381,8 @@ class App extends React.PureComponent<IProps, IState> {
                         rNum4WaybackItemsWithLocalChanges={rNum4WaybackItemsWithLocalChanges}
 
                         onClick={this.setActiveWaybackItem}
+                        onMouseEnter={this.setPreviewWaybackItem}
+                        onMouseOut={this.setPreviewWaybackItem}
                         toggleSelect={this.toggleSelectWaybackItem}
                     />
                 </div>
@@ -407,6 +411,7 @@ class App extends React.PureComponent<IProps, IState> {
         const { 
             waybackItems, 
             activeWaybackItem, 
+            previewWaybackItem,
             // shouldOnlyShowItemsWithLocalChange, 
             metadataQueryResult, 
             metadataAnchorScreenPoint, 
@@ -441,6 +446,7 @@ class App extends React.PureComponent<IProps, IState> {
                     <Map
                         defaultExtent={defaultExtent}
                         activeWaybackItem={activeWaybackItem}
+                        previewWaybackItem={previewWaybackItem}
                         isPopupVisible={ metadataQueryResult ? true : false}
 
                         onClick={this.queryMetadata}
