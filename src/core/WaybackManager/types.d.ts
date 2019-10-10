@@ -1,4 +1,4 @@
-import { IPointGeomety } from '../../types/index';
+import { IPointGeomety, IMapPointInfo } from '../../types/index';
 
 interface IParamsQueryMetadata {
     pointGeometry:IPointGeomety
@@ -6,12 +6,10 @@ interface IParamsQueryMetadata {
     releaseNum:number
 }
 
-interface IParamsFindChanges {
-    pointGeometry:IPointGeomety
-    zoom:number
-}
+// interface IParamsFindChanges {
+//     pointInfo:IMapPointInfo
+// }
 
 export {
-    IParamsQueryMetadata,
-    IParamsFindChanges
+    IParamsQueryMetadata
 }

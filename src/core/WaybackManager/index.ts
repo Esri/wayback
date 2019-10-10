@@ -1,8 +1,8 @@
 import config from '../../config';
 import axios from 'axios';
 
-import { IWaybackItem, IWaybackConfig } from '../../types/index';
-import { IParamsQueryMetadata, IParamsFindChanges } from './types';
+import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '../../types/index';
+import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
@@ -12,8 +12,7 @@ class WaybackManager {
     private isDev = false;
 
     // module to query the wayback metadata
-    private metadataManager = new MetadataManager();
-
+    private metadataManager:MetadataManager;
     private changeDetector:ChangeDetector;
 
     // original wayback config JSON file
@@ -26,17 +25,19 @@ class WaybackManager {
         isDev = false
     }={}){
         this.isDev = isDev;
-
-        this.changeDetector = new ChangeDetector({
-            url: this.isDev ? config.dev["wayback-change-detector-layer"] : config.dev["wayback-change-detector-layer"]
-        });
     }
 
     async init(){
 
         this.waybackconfig = await this.fetchWaybackConfig();
+        // console.log(this.waybackconfig);
 
-        this.metadataManager.setWaybackConfig(this.waybackconfig);
+        this.metadataManager = new MetadataManager(this.waybackconfig);
+
+        this.changeDetector = new ChangeDetector({
+            url: this.isDev ? config.dev["wayback-change-detector-layer"] : config.dev["wayback-change-detector-layer"],
+            waybackconfig: this.waybackconfig
+        });
 
         this.waybackItems = this.getWaybackItems();
 
@@ -71,9 +72,9 @@ class WaybackManager {
         return waybackItems;
     }
 
-    async getLocalChanges(params:IParamsFindChanges){
+    async getLocalChanges(pointInfo:IMapPointInfo){
         try {
-            const localChangeQueryRes = await this.changeDetector.findChanges(params);
+            const localChangeQueryRes = await this.changeDetector.findChanges(pointInfo);
             return localChangeQueryRes;
         } catch(err){
             console.error(err);

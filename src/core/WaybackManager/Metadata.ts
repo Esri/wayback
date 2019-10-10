@@ -12,14 +12,14 @@ class MetadataManager {
     private readonly MAX_ZOOM = 23;
     private readonly MIN_ZOOM = 10;
 
-    constructor(){
-
-    }
-
-    setWaybackConfig(waybackconfig:IWaybackConfig){
+    constructor(waybackconfig:IWaybackConfig){
         this.waybackconfig = waybackconfig;
-        // console.log('set waybackconfig for metadata manager', waybackconfig);
     }
+
+    // setWaybackConfig(waybackconfig:IWaybackConfig){
+    //     this.waybackconfig = waybackconfig;
+    //     // console.log('set waybackconfig for metadata manager', waybackconfig);
+    // }
 
     async queryData(params:IParamsQueryMetadata):Promise<IWaybackMetadataQueryResult>{
 

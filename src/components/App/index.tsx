@@ -25,6 +25,10 @@ interface IWaybackItemsReleaseNum2IndexLookup {
 interface IProps {
     data2InitApp?:ISearchParamData
     isDev?:boolean
+    waybackManager:WaybackManager
+    waybackData2InitApp: {
+        waybackItems:Array<IWaybackItem>
+    }
 }
 
 interface IState {
@@ -48,15 +52,15 @@ interface IState {
 
 class App extends React.PureComponent<IProps, IState> {
 
-    private waybackManager:WaybackManager;
+    // private waybackManager:WaybackManager;
     private oauthUtils:OAuthUtils;
 
     constructor(props:IProps){
         super(props);
 
-        const { isDev, data2InitApp } = props;
+        const { data2InitApp } = props;
 
-        this.waybackManager = new WaybackManager({isDev});
+        // this.waybackManager = new WaybackManager({isDev});
 
         this.oauthUtils = new OAuthUtils();
 
@@ -142,11 +146,10 @@ class App extends React.PureComponent<IProps, IState> {
     async queryLocalChanges(centerPointInfo:IMapPointInfo){
         // console.log('queryLocalChanges', centerPointInfo);
 
+        const { waybackManager } = this.props;
+
         try { 
-            const rNums = await this.waybackManager.getLocalChanges({
-                pointGeometry: centerPointInfo.geometry,
-                zoom:centerPointInfo.zoom
-            });
+            const rNums = await waybackManager.getLocalChanges(centerPointInfo);
             // console.log(rNums);
 
             this.setRNum4WaybackItemsWithLocalChanges(rNums);
@@ -159,10 +162,11 @@ class App extends React.PureComponent<IProps, IState> {
 
     async queryMetadata(pointInfo:IMapPointInfo, screenPoint:IScreenPoint){
 
+        const { waybackManager } = this.props;
         const { activeWaybackItem } = this.state;
 
         try {
-            const queryRes = await this.waybackManager.getMetadata({
+            const queryRes = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,
                 pointGeometry: pointInfo.geometry,
                 zoom:pointInfo.zoom
@@ -270,7 +274,7 @@ class App extends React.PureComponent<IProps, IState> {
 
     async componentDidMount(){
 
-        const { isDev } = this.props;
+        const { isDev, waybackData2InitApp } = this.props;
 
         try {
 
@@ -280,7 +284,7 @@ class App extends React.PureComponent<IProps, IState> {
             });
             this.setUserSession(userSession);
 
-            const waybackData2InitApp = await this.waybackManager.init();
+            // const waybackData2InitApp = await this.waybackManager.init();
             // console.log(waybackData2InitApp);
             this.setWaybackItems(waybackData2InitApp.waybackItems);
             
