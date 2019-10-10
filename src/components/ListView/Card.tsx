@@ -10,6 +10,7 @@ interface IProps {
     data:IWaybackItem
     isActive:boolean
     isSelected:boolean
+    isHighlighted:boolean
 
     toggleSelect?:(releaseNum:number)=>void
     onClick?:(releaseNum:number)=>void
@@ -41,13 +42,13 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { data, isActive, isSelected, onClick, toggleSelect } = this.props;
+        const { data, isActive, isSelected, isHighlighted, onClick, toggleSelect } = this.props;
 
         const cardClass = classnames('list-card trailer-half', {
             // 'is-active' indicates if is viewing this release on map
             'is-active': isActive,
             // 'is-highlighted' indicates if this release has local change
-            'is-highlighted': false,
+            'is-highlighted': isHighlighted,
             // 'is-selected' indicates if this release is being selected
             'is-selected': isSelected
         });

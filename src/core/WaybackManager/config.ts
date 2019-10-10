@@ -17,6 +17,16 @@ export default {
                 fieldname: 'SRC_ACC'
             }
         ] 
+    },
+    'change-detection-layer': {
+        'fields': [
+            {
+                fieldname: 'MapLevel'
+            },
+            {
+                fieldname: 'ClumpID'
+            },
+        ]
     }
 
 }

@@ -10,6 +10,7 @@ interface IProps {
     activeWaybackItem:IWaybackItem,
     shouldOnlyShowItemsWithLocalChange:boolean,
     rNum4SelectedWaybackItems:Array<number>,
+    rNum4WaybackItemsWithLocalChanges:Array<number>,
     
     toggleSelect?:(releaseNum:number)=>void
     onClick?:(releaseNum:number)=>void
@@ -26,12 +27,27 @@ class ListView extends React.PureComponent<IProps, IState> {
     }
 
     getListViewCards(){
-        const { waybackItems, activeWaybackItem, rNum4SelectedWaybackItems, toggleSelect, onClick } = this.props;
+        const { 
+            waybackItems, 
+            activeWaybackItem, 
+            rNum4SelectedWaybackItems, 
+            rNum4WaybackItemsWithLocalChanges, 
+            shouldOnlyShowItemsWithLocalChange, 
+            toggleSelect, 
+            onClick 
+        } = this.props;
+
+        const cardData = shouldOnlyShowItemsWithLocalChange 
+            ? waybackItems.filter(d=>{
+                return rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1
+            })
+            : waybackItems;
         
-        const cards = waybackItems.map((d, i)=>{
+        const cards = cardData.map((d, i)=>{
 
             const isActive = ( activeWaybackItem.releaseNum === d.releaseNum ) ? true : false;
             const isSelected = rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1 ? true : false;
+            const isHighlighted = rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1 ? true : false;
 
             return (
                 <Card 
@@ -39,6 +55,7 @@ class ListView extends React.PureComponent<IProps, IState> {
                     data={d} 
                     isActive={isActive}
                     isSelected={isSelected}
+                    isHighlighted={isHighlighted}
                     toggleSelect={toggleSelect}
                     onClick={onClick}
                 />

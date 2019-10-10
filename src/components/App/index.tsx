@@ -31,6 +31,7 @@ interface IState {
     waybackItems:Array<IWaybackItem>
     waybackItemsReleaseNum2IndexLookup:IWaybackItemsReleaseNum2IndexLookup
     rNum4SelectedWaybackItems:Array<number>
+    rNum4WaybackItemsWithLocalChanges:Array<number>
     activeWaybackItem:IWaybackItem,
     previewWaybackItem:IWaybackItem,
 
@@ -63,6 +64,7 @@ class App extends React.PureComponent<IProps, IState> {
             waybackItems: [],
             waybackItemsReleaseNum2IndexLookup: null,
             rNum4SelectedWaybackItems: data2InitApp && data2InitApp.rNum4SelectedWaybackItems ? data2InitApp.rNum4SelectedWaybackItems : [],
+            rNum4WaybackItemsWithLocalChanges: [],
             activeWaybackItem: null,
             previewWaybackItem: null,
             metadataQueryResult:null,
@@ -130,9 +132,29 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
+    setRNum4WaybackItemsWithLocalChanges(rNum4WaybackItemsWithLocalChanges?:number[]){
+        this.setState({
+            rNum4WaybackItemsWithLocalChanges: rNum4WaybackItemsWithLocalChanges || []
+        });
+    }
+
     // get list of wayback items that do provide updated imagery for the given location
-    async queryLocalChanges(centerPoint:IMapPointInfo){
-        // console.log('queryLocalChanges', centerPoint);
+    async queryLocalChanges(centerPointInfo:IMapPointInfo){
+        // console.log('queryLocalChanges', centerPointInfo);
+
+        try { 
+            const rNums = await this.waybackManager.getLocalChanges({
+                pointGeometry: centerPointInfo.geometry,
+                zoom:centerPointInfo.zoom
+            });
+            // console.log(rNums);
+
+            this.setRNum4WaybackItemsWithLocalChanges(rNums);
+
+        } catch(err){
+            console.error('failed to query local changes', err);
+            this.setRNum4WaybackItemsWithLocalChanges();
+        }
     }
 
     async queryMetadata(pointInfo:IMapPointInfo, screenPoint:IScreenPoint){
@@ -292,7 +314,7 @@ class App extends React.PureComponent<IProps, IState> {
             shouldShowPreviewItemTitle,
             shouldOnlyShowItemsWithLocalChange, 
             rNum4SelectedWaybackItems,
-
+            rNum4WaybackItemsWithLocalChanges
         } = this.state;
 
         const appTitle = (
@@ -349,6 +371,7 @@ class App extends React.PureComponent<IProps, IState> {
                         activeWaybackItem={activeWaybackItem}
                         shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
                         rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+                        rNum4WaybackItemsWithLocalChanges={rNum4WaybackItemsWithLocalChanges}
 
                         onClick={this.setActiveWaybackItem}
                         toggleSelect={this.toggleSelectWaybackItem}

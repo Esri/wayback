@@ -2,9 +2,10 @@ import config from '../../config';
 import axios from 'axios';
 
 import { IWaybackItem, IWaybackConfig } from '../../types/index';
-import { IParamsQueryMetadata } from './types';
+import { IParamsQueryMetadata, IParamsFindChanges } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
 import MetadataManager from './Metadata';
+import ChangeDetector from './ChangeDetector';
 
 class WaybackManager {
 
@@ -12,6 +13,8 @@ class WaybackManager {
 
     // module to query the wayback metadata
     private metadataManager = new MetadataManager();
+
+    private changeDetector:ChangeDetector;
 
     // original wayback config JSON file
     private waybackconfig:IWaybackConfig;
@@ -23,6 +26,10 @@ class WaybackManager {
         isDev = false
     }={}){
         this.isDev = isDev;
+
+        this.changeDetector = new ChangeDetector({
+            url: this.isDev ? config.dev["wayback-change-detector-layer"] : config.dev["wayback-change-detector-layer"]
+        });
     }
 
     async init(){
@@ -62,6 +69,16 @@ class WaybackManager {
         });
 
         return waybackItems;
+    }
+
+    async getLocalChanges(params:IParamsFindChanges){
+        try {
+            const localChangeQueryRes = await this.changeDetector.findChanges(params);
+            return localChangeQueryRes;
+        } catch(err){
+            console.error(err);
+            return null;
+        }
     }
 
     async getMetadata(params:IParamsQueryMetadata){
