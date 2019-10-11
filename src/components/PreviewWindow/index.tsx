@@ -21,17 +21,25 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { previewWaybackItem, imageUrl } = this.props;
+        const { previewWaybackItem, imageUrl, topPos, leftPos } = this.props;
 
-        // if( !previewWaybackItem || !imageUrl ){
-        //     return null;
-        // }
+        if( !previewWaybackItem || !imageUrl ){
+            return null;
+        }
+
+        const style = {
+            position: 'absolute',
+            top: topPos,
+            left: leftPos
+        } as React.CSSProperties
 
         return (
-            <div className="tile-preview-window">
-                <img />
+            <div className="tile-preview-window" style={style}>
+                <img src={imageUrl}/>
                 <div className='tile-preview-title'>
-                    <div className='margin-left-half trailer-0'><span className='release-date-text val-holder-release-date'></span></div>
+                    <div className='margin-left-half trailer-0'>
+                        <span className='release-date-text'>{previewWaybackItem.releaseDateLabel}</span>
+                    </div>
                 </div>
             </div>
         );

@@ -38,6 +38,7 @@ interface IState {
     rNum4WaybackItemsWithLocalChanges:Array<number>
     activeWaybackItem:IWaybackItem,
     previewWaybackItem:IWaybackItem,
+    alternativeRNum4RreviewWaybackItem:number
 
     metadataQueryResult:IWaybackMetadataQueryResult,
     metadataAnchorScreenPoint:IScreenPoint,
@@ -55,6 +56,8 @@ class App extends React.PureComponent<IProps, IState> {
     // private waybackManager:WaybackManager;
     private oauthUtils:OAuthUtils;
 
+    private delay4TogglePreviewWaybackItem:NodeJS.Timeout
+
     constructor(props:IProps){
         super(props);
 
@@ -71,6 +74,7 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4WaybackItemsWithLocalChanges: [],
             activeWaybackItem: null,
             previewWaybackItem: null,
+            alternativeRNum4RreviewWaybackItem:null,
             metadataQueryResult:null,
             metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
@@ -126,16 +130,50 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     setPreviewWaybackItem(releaseNum?:number, shouldShowPreviewItemTitle?:boolean){
-        const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
 
-        // const alternativeRNum4 = releaseNum ? this.getAlternativeReleaseNumber
+        clearTimeout(this.delay4TogglePreviewWaybackItem);
 
-        shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
+        this.delay4TogglePreviewWaybackItem = global.setTimeout(()=>{
 
-        this.setState({
-            previewWaybackItem,
-            shouldShowPreviewItemTitle
-        });
+            const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
+
+            const alternativeRNum4RreviewWaybackItem = releaseNum ? this.getAlternativeReleaseNumber(releaseNum) : null;
+    
+            shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
+    
+            this.setState({
+                previewWaybackItem,
+                shouldShowPreviewItemTitle,
+                alternativeRNum4RreviewWaybackItem
+            });
+
+        }, 200);
+
+        this.closePopup();
+
+    }
+
+    // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead
+    // therefore we need to find the alternative release number to make sure we have the tile image to display in the preview window for each release
+    getAlternativeReleaseNumber(rNum:number){
+        const { waybackItems, rNum4WaybackItemsWithLocalChanges } = this.state;
+
+        if(rNum4WaybackItemsWithLocalChanges.indexOf(rNum) > -1){
+            return rNum;
+        }
+
+        // getting a list of release numbers ordered by release dates (desc) that only includes release has changes for the given area and the input release number,
+        // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
+        const rNums = waybackItems
+            .filter(d=>{
+                const hasLocalChange = rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1;
+                return hasLocalChange || d.releaseNum === rNum;
+            })
+            .map(d=>d.releaseNum);
+
+        const indexOfInputRNum = rNums.indexOf(rNum);
+
+        return rNums[indexOfInputRNum + 1] || rNum;
     }
 
     setRNum4WaybackItemsWithLocalChanges(rNum4WaybackItemsWithLocalChanges?:number[]){
@@ -418,7 +456,8 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             isSaveAsWebmapDialogVisible,
             userSession,
-            mapExtent
+            mapExtent,
+            alternativeRNum4RreviewWaybackItem
         } = this.state;
 
         const defaultExtent = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
@@ -447,6 +486,7 @@ class App extends React.PureComponent<IProps, IState> {
                         defaultExtent={defaultExtent}
                         activeWaybackItem={activeWaybackItem}
                         previewWaybackItem={previewWaybackItem}
+                        alternativeRNum4RreviewWaybackItem={alternativeRNum4RreviewWaybackItem}
                         isPopupVisible={ metadataQueryResult ? true : false}
 
                         onClick={this.queryMetadata}
