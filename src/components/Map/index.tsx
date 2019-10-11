@@ -4,8 +4,6 @@ import * as React from 'react';
 import { loadCss, loadModules } from "esri-loader";
 import config from './config';
 import ReferenceLayerToggle from './ReferenceLayerToggle';
-import TilePreviewWindow from '../PreviewWindow';
-import { geometryFns } from 'helper-toolkit-ts';
 
 import { IWaybackItem, IMapPointInfo, IScreenPoint, IExtentGeomety } from '../../types';
 
@@ -22,8 +20,6 @@ import IVectorTileLayer from "esri/layers/VectorTileLayer"
 interface IProps {
     defaultExtent?:IExtentGeomety,
     activeWaybackItem:IWaybackItem,
-    previewWaybackItem:IWaybackItem,
-    alternativeRNum4RreviewWaybackItem:number,
     isPopupVisible:boolean,
 
     onClick?:(mapPoint:IMapPointInfo, screenPoint:IScreenPoint)=>void,
@@ -341,11 +337,15 @@ class Map extends React.PureComponent<IProps, IState> {
     }
 
     render(){
-        const { previewWaybackItem, alternativeRNum4RreviewWaybackItem } = this.props;
-        const { mapView, isReferenceLayerVisible, previewWindowPosition, previewWindowImageUrl } = this.state;
+
+        const { mapView, isReferenceLayerVisible } = this.state;
+
+        const childrenElements = React.Children.map(this.props.children, (child)=>{
+            return React.cloneElement(child as React.ReactElement<any>, { mapView });
+        }); 
 
         return(
-            <div className='map-div-wrap'>
+            <div className='map-container'>
                 <div id='mapDiv' ref={this.mapDivRef}>
                     <div className='loading-indicator'>
                         <div className="loader is-active padding-leader-3 padding-trailer-3">
@@ -357,11 +357,7 @@ class Map extends React.PureComponent<IProps, IState> {
                     isActive={isReferenceLayerVisible}
                     onClick={this.toggleIsReferenceLayerVisible}
                 />
-                <TilePreviewWindow
-                    mapView={mapView}
-                    previewWaybackItem={previewWaybackItem}
-                    alternativeRNum4RreviewWaybackItem={alternativeRNum4RreviewWaybackItem}
-                />
+                {childrenElements}
             </div>
 
         );

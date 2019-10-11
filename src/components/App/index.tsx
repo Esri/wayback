@@ -15,6 +15,7 @@ import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 import CheckboxToggle from '../CheckboxToggle';
 import BarChart from '../BarChart';
 import Title4ActiveItem from '../Title4ActiveItem';
+import TilePreviewWindow from '../PreviewWindow';
 
 import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -481,19 +482,20 @@ class App extends React.PureComponent<IProps, IState> {
 
                 { sidebar }
 
-                <div className='map-container'>
-                    <Map
-                        defaultExtent={defaultExtent}
-                        activeWaybackItem={activeWaybackItem}
+                <Map
+                    defaultExtent={defaultExtent}
+                    activeWaybackItem={activeWaybackItem}
+                    isPopupVisible={ metadataQueryResult ? true : false}
+
+                    onClick={this.queryMetadata}
+                    onZoom={this.closePopup}
+                    onUpdateEnd={this.queryLocalChanges}
+                    popupScreenPointOnChange={this.setMetadataAnchorScreenPoint}
+                    onExtentChange={this.setMapExtent}
+                >
+                    <TilePreviewWindow
                         previewWaybackItem={previewWaybackItem}
                         alternativeRNum4RreviewWaybackItem={alternativeRNum4RreviewWaybackItem}
-                        isPopupVisible={ metadataQueryResult ? true : false}
-
-                        onClick={this.queryMetadata}
-                        onZoom={this.closePopup}
-                        onUpdateEnd={this.queryLocalChanges}
-                        popupScreenPointOnChange={this.setMetadataAnchorScreenPoint}
-                        onExtentChange={this.setMapExtent}
                     />
 
                     <MetadataPopUp 
@@ -503,7 +505,7 @@ class App extends React.PureComponent<IProps, IState> {
 
                         onClose={this.closePopup}
                     />
-                </div>
+                </Map>
 
                 <SaveAsWebMapDialog 
                     waybackItems={waybackItems}

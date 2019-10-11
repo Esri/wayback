@@ -11,7 +11,7 @@ import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils";
 import IPoint from "esri/geometry/Point"
 
 interface IProps {
-    mapView:IMapView
+    mapView?:IMapView
     previewWaybackItem:IWaybackItem
     alternativeRNum4RreviewWaybackItem:number
 }
