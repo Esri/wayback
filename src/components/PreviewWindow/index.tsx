@@ -38,7 +38,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 <img src={imageUrl}/>
                 <div className='tile-preview-title'>
                     <div className='margin-left-half trailer-0'>
-                        <span className='release-date-text'>{previewWaybackItem.releaseDateLabel}</span>
+                        <span className='release-date-text'><b>Wayback {previewWaybackItem.releaseDateLabel}</b> preview</span>
                     </div>
                 </div>
             </div>
