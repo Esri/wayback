@@ -18,7 +18,6 @@ import IPoint from 'esri/geometry/Point';
 import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils";
 import ISearchWidget from "esri/widgets/Search";
 import IVectorTileLayer from "esri/layers/VectorTileLayer"
-import { tile2Long } from 'helper-toolkit-ts/dist/geometry';
 
 interface IProps {
     defaultExtent?:IExtentGeomety,
@@ -253,78 +252,6 @@ class Map extends React.PureComponent<IProps, IState> {
 
     }
 
-    async toggleDisplayPreviewWindow(){
-        const { mapView } = this.state;
-        const { previewWaybackItem, alternativeRNum4RreviewWaybackItem } = this.props;
-
-        if(previewWaybackItem){
-
-            try {
-
-                type Modules = [
-                    typeof IPoint,
-                    typeof IWebMercatorUtils
-                ];
-        
-                const [ Point, webMercatorUtils ] = await (loadModules([
-                    "esri/geometry/Point",
-                    "esri/geometry/support/webMercatorUtils",
-                ]) as Promise<Modules>);
-        
-                const center = mapView.center;
-                const level = mapView.zoom;
-                
-                // get the tile row, col num from the map center point 
-                const tileRow = geometryFns.lat2tile(center.latitude, level);
-                const tileCol = geometryFns.long2tile(center.longitude, level);
-                
-                // convert the row and col number into the lat, lon, which is the coordinate of the top left corner of the map tile in center of map
-                const tileLat =  geometryFns.tile2lat(tileRow, level);
-                const tileLon =  geometryFns.tile2Long(tileCol, level);
-
-                // convert lat lon to x y and create a point object
-                const tileXY = webMercatorUtils.lngLatToXY(tileLon, tileLat);
-
-                const point = new Point({
-                    x:tileXY[0],
-                    y:tileXY[1],
-                    spatialReference: { wkid: 3857 }
-                });
-
-                // convert to screen point and we will use this val to position the preview window
-                const tileTopLeftXY = mapView.toScreen(point);
-
-                const previewWindowImageUrl = previewWaybackItem.itemURL
-                    .replace(`/${previewWaybackItem.releaseNum}/`, `/${alternativeRNum4RreviewWaybackItem}/`)
-                    .replace("{level}", level.toString())
-                    .replace("{row}", tileRow.toString())
-                    .replace("{col}", tileCol.toString());
-
-                const previewWindowPosition = {
-                    top: tileTopLeftXY.y,
-                    left: tileTopLeftXY.x
-                }
-    
-                this.setState({
-                    previewWindowImageUrl,
-                    previewWindowPosition
-                });
-    
-            } catch(err){
-                console.error(err);
-            }
-
-        } else {
-            this.setState({
-                previewWindowImageUrl: '',
-                previewWindowPosition: {
-                    top:0,
-                    left:0
-                }
-            });
-        }
-    }
-
     updateScreenPoint4PopupAnchor(){
         const { popupScreenPointOnChange, isPopupVisible } = this.props;
         const { mapView, popupAnchorPoint } = this.state;
@@ -394,7 +321,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     componentDidUpdate(prevProps:IProps, prevState:IState){
 
-        const { activeWaybackItem, previewWaybackItem } = this.props;
+        const { activeWaybackItem } = this.props;
         const { mapView } = this.state;
 
         if(activeWaybackItem && (activeWaybackItem !== prevProps.activeWaybackItem)){
@@ -407,10 +334,6 @@ class Map extends React.PureComponent<IProps, IState> {
             }
         }
 
-        if( previewWaybackItem !== prevProps.previewWaybackItem ){
-            this.toggleDisplayPreviewWindow();
-        }
-
     }
 
     componentDidMount(){
@@ -418,8 +341,8 @@ class Map extends React.PureComponent<IProps, IState> {
     }
 
     render(){
-        const { previewWaybackItem } = this.props;
-        const { isReferenceLayerVisible, previewWindowPosition, previewWindowImageUrl } = this.state;
+        const { previewWaybackItem, alternativeRNum4RreviewWaybackItem } = this.props;
+        const { mapView, isReferenceLayerVisible, previewWindowPosition, previewWindowImageUrl } = this.state;
 
         return(
             <div className='map-div-wrap'>
@@ -435,10 +358,9 @@ class Map extends React.PureComponent<IProps, IState> {
                     onClick={this.toggleIsReferenceLayerVisible}
                 />
                 <TilePreviewWindow
+                    mapView={mapView}
                     previewWaybackItem={previewWaybackItem}
-                    imageUrl={previewWindowImageUrl}
-                    topPos={previewWindowPosition.top}
-                    leftPos={previewWindowPosition.left}
+                    alternativeRNum4RreviewWaybackItem={alternativeRNum4RreviewWaybackItem}
                 />
             </div>
 
