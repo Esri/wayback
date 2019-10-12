@@ -17,7 +17,7 @@ import BarChart from '../BarChart';
 import Title4ActiveItem from '../Title4ActiveItem';
 import TilePreviewWindow from '../PreviewWindow';
 
-import { IWaybackItem, IMapPointInfo, IWaybackMetadataQueryResult, IScreenPoint, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
+import { IWaybackItem, IMapPointInfo, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key:number]:number
@@ -40,9 +40,6 @@ interface IState {
     activeWaybackItem:IWaybackItem,
     previewWaybackItem:IWaybackItem,
     alternativeRNum4RreviewWaybackItem:number
-
-    metadataQueryResult:IWaybackMetadataQueryResult,
-    metadataAnchorScreenPoint:IScreenPoint,
 
     mapExtent:IExtentGeomety
 
@@ -76,8 +73,6 @@ class App extends React.PureComponent<IProps, IState> {
             activeWaybackItem: null,
             previewWaybackItem: null,
             alternativeRNum4RreviewWaybackItem:null,
-            metadataQueryResult:null,
-            metadataAnchorScreenPoint:null,
             isSaveAsWebmapDialogVisible: false,
             shouldOnlyShowItemsWithLocalChange: data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange ? data2InitApp.shouldOnlyShowItemsWithLocalChange : false,
             // we want to show the release date in wayback title only when hover over the bar chart
@@ -90,9 +85,6 @@ class App extends React.PureComponent<IProps, IState> {
         this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
         this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         this.queryLocalChanges = this.queryLocalChanges.bind(this);
-        this.queryMetadata = this.queryMetadata.bind(this);
-        this.setMetadataAnchorScreenPoint = this.setMetadataAnchorScreenPoint.bind(this);
-        this.closePopup = this.closePopup.bind(this);
         this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
         this.setMapExtent = this.setMapExtent.bind(this);
@@ -150,8 +142,6 @@ class App extends React.PureComponent<IProps, IState> {
 
         }, 200);
 
-        this.closePopup();
-
     }
 
     // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead
@@ -199,45 +189,6 @@ class App extends React.PureComponent<IProps, IState> {
             console.error('failed to query local changes', err);
             this.setRNum4WaybackItemsWithLocalChanges();
         }
-    }
-
-    async queryMetadata(pointInfo:IMapPointInfo, screenPoint:IScreenPoint){
-
-        const { waybackManager } = this.props;
-        const { activeWaybackItem } = this.state;
-
-        try {
-            const queryRes = await waybackManager.getMetadata({
-                releaseNum: activeWaybackItem.releaseNum,
-                pointGeometry: pointInfo.geometry,
-                zoom:pointInfo.zoom
-            });
-    
-            this.setState({
-                metadataQueryResult: queryRes,
-                metadataAnchorScreenPoint: screenPoint
-            }, ()=>{
-                // console.log('queryMetadata result', queryRes);
-                // console.log('metadataAnchorScreenPoint', screenPoint);
-            });
-
-        } catch(err){
-            console.error(err);
-        }
-
-    }
-
-    setMetadataAnchorScreenPoint(screenPoint:IScreenPoint){
-        this.setState({
-            metadataAnchorScreenPoint: screenPoint
-        });
-    }
-
-    closePopup(){
-        this.setState({
-            metadataQueryResult: null,
-            metadataAnchorScreenPoint: null
-        });
     }
 
     toggleSelectWaybackItem(releaseNum:number){
@@ -445,15 +396,12 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { data2InitApp } = this.props;
+        const { data2InitApp, waybackManager } = this.props;
 
         const { 
             waybackItems, 
             activeWaybackItem, 
             previewWaybackItem,
-            // shouldOnlyShowItemsWithLocalChange, 
-            metadataQueryResult, 
-            metadataAnchorScreenPoint, 
             rNum4SelectedWaybackItems,
             isSaveAsWebmapDialogVisible,
             userSession,
@@ -485,12 +433,8 @@ class App extends React.PureComponent<IProps, IState> {
                 <Map
                     defaultExtent={defaultExtent}
                     activeWaybackItem={activeWaybackItem}
-                    isPopupVisible={ metadataQueryResult ? true : false}
 
-                    onClick={this.queryMetadata}
-                    onZoom={this.closePopup}
                     onUpdateEnd={this.queryLocalChanges}
-                    popupScreenPointOnChange={this.setMetadataAnchorScreenPoint}
                     onExtentChange={this.setMapExtent}
                 >
                     <TilePreviewWindow
@@ -499,11 +443,9 @@ class App extends React.PureComponent<IProps, IState> {
                     />
 
                     <MetadataPopUp 
-                        metadata={metadataQueryResult}
-                        anchorPoint={metadataAnchorScreenPoint}
+                        waybackManager={waybackManager}
                         activeWaybackItem={activeWaybackItem}
-
-                        onClose={this.closePopup}
+                        previewWaybackItem={previewWaybackItem}
                     />
                 </Map>
 

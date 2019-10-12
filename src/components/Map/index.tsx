@@ -5,7 +5,7 @@ import { loadCss, loadModules } from "esri-loader";
 import config from './config';
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 
-import { IWaybackItem, IMapPointInfo, IScreenPoint, IExtentGeomety } from '../../types';
+import { IWaybackItem, IMapPointInfo, IExtentGeomety } from '../../types';
 
 import IMapView from 'esri/views/MapView';
 // import IWebMap from "esri/WebMap";
@@ -20,12 +20,8 @@ import IVectorTileLayer from "esri/layers/VectorTileLayer"
 interface IProps {
     defaultExtent?:IExtentGeomety,
     activeWaybackItem:IWaybackItem,
-    isPopupVisible:boolean,
 
-    onClick?:(mapPoint:IMapPointInfo, screenPoint:IScreenPoint)=>void,
-    onZoom?:(zoom?:number)=>void
     onUpdateEnd?:(centerPoint:IMapPointInfo)=>void
-    popupScreenPointOnChange?:(screenPoint:IScreenPoint)=>void
     onExtentChange?:(extent:IExtentGeomety)=>void
 }
 
@@ -149,7 +145,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     async mapViewOnReadyHandler(){
 
-        const { onZoom } = this.props;
+        // const { onZoom } = this.props;
         const { mapView } = this.state;
 
         try {
@@ -162,55 +158,14 @@ class Map extends React.PureComponent<IProps, IState> {
                 'esri/core/watchUtils'
             ]) as Promise<Modules>);
 
-            mapView.on('click', (evt)=>{
-                // console.log('view on click, should show popup', evt.mapPoint);
-                this.mapViewOnClickHandler(evt.mapPoint);
-            });
-
-            watchUtils.watch(mapView, "zoom", (zoom)=>{
-                // console.log('view zoom is on updating, should hide the popup', zoom);
-                onZoom(zoom);
-            });
-
-            watchUtils.watch(mapView, "center", (center)=>{
-                // console.log('view center is on updating, should update the popup position');
-                // need to update the screen point for popup anchor since the map center has changed
-                this.updateScreenPoint4PopupAnchor();
-            });
-
             watchUtils.whenTrue(mapView, "stationary", (val)=>{
                 // console.log('view is stationary');
                 this.mapViewUpdateEndHandler();
             });
 
-            // watchUtils.whenFalse(mapView, "stationary", (evt)=>{
-            //     // console.log('view is moving', evt);
-            // });
-
         } catch(err){
             console.error(err);
         }
-    }
-
-    mapViewOnClickHandler(mapPoint:IPoint){
-        const { onClick } = this.props;
-        const { mapView } = this.state;
-
-        this.setState({
-            popupAnchorPoint:mapPoint
-        }, ()=>{
-
-            const popupAnchorPointInfo:IMapPointInfo = {
-                latitude:mapPoint.latitude,
-                longitude:mapPoint.longitude,
-                zoom: mapView.zoom,
-                geometry: mapPoint.toJSON()
-            };
-
-            const popupAnchorScreenPoint = mapView.toScreen(mapPoint);
-    
-            onClick(popupAnchorPointInfo, popupAnchorScreenPoint);
-        });
     }
 
     async mapViewUpdateEndHandler(){
@@ -246,16 +201,6 @@ class Map extends React.PureComponent<IProps, IState> {
             console.error(err);
         }
 
-    }
-
-    updateScreenPoint4PopupAnchor(){
-        const { popupScreenPointOnChange, isPopupVisible } = this.props;
-        const { mapView, popupAnchorPoint } = this.state;
-
-        if( popupAnchorPoint && isPopupVisible ){
-            const popupAnchorScreenPoint = mapView.toScreen(popupAnchorPoint);
-            popupScreenPointOnChange(popupAnchorScreenPoint);
-        }
     }
 
     async updateWaybackLayer(){
