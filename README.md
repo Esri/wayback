@@ -35,7 +35,7 @@ npm run build
 ```
 
 ## External Libraries:
-- [ArcGIS API for JavaScript (4.7)](https://developers.arcgis.com/javascript/index.html)
+- [ArcGIS API for JavaScript (4.12)](https://developers.arcgis.com/javascript/index.html)
 - [D3.js v4](https://d3js.org/)
 
 ## Resources
