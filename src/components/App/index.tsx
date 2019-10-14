@@ -274,7 +274,8 @@ class App extends React.PureComponent<IProps, IState> {
         const { isDev, waybackData2InitApp } = this.props;
 
         try {
-
+            // please note the appId used here only works for apps hosted under *.arcgis.com domain
+            // need to switch to using appropriate appId if the app will be hosted under different domain
             const userSession = await this.oauthUtils.init({
                 appId: config.appId,
                 portalUrl: isDev ? config.dev["portal-url"] : config.prod["portal-url"]

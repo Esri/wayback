@@ -6,6 +6,12 @@ const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 
 const computerName = os.hostname();
 
+// need to use the *.arcgis.com hostname to test the esri oauth module
+// because the appId used by this app only works under the *.arcgis.com domain
+const hostname = computerName.includes('jzhang') 
+    ? `${computerName}.arcgis.com` 
+    : 'localhost';
+
 module.exports = (env, options)=> {
 
     const devMode = options.mode === 'development' ? true : false;
@@ -14,7 +20,7 @@ module.exports = (env, options)=> {
     return {
         devServer: {
             https: true,
-            host: `${computerName}.arcgis.com`
+            host: hostname
         },
         output: {
             filename: 'bundle.[hash].js'
