@@ -2,8 +2,6 @@ import './style.scss';
 import * as React from 'react';
 import classNames from 'classnames'
 
-import { IWaybackItem } from '../../types';
-
 interface IProps {
     selectedWaybackItems:Array<number>,
 
@@ -37,7 +35,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
 
         const isActive = selectedWaybackItems.length ? true : false;
 
-        const btnClass = classNames('gutter-nav-btn create-agol-webmap', {
+        const btnClass = classNames('gutter-nav-btn create-agol-webmap tooltip tooltip-multiline tooltip-right', {
             'is-active': isActive
         });
 
@@ -45,9 +43,11 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
             ? ( <div className='font-size--4 text-center cursor-pointer leader-quarter' onClick={clearAll.bind(this)}>clear all</div> ) 
             : null;
 
+        const tooltipContent = isActive ? 'Open these updates in a new Web Map' : 'Choose updates from the list to build a set of Wayback layers for use in a new Web Map';
+
         return(
-            <div className='save-as-webmap-btn-container'>
-                <div className={btnClass} onClick={this.onClickHandler} data-tooltip-content='Choose updates from the list to build a set of Wayback layers for use in a new Web Map' data-tooltip-content-alt='Open these updates in a new Web Map'>
+            <div className='save-as-webmap-btn-container customized-tooltip'>
+                <div className={btnClass} onClick={this.onClickHandler} aria-label={tooltipContent}>
                     <div className='overlay-label text-white text-center'>
                         <span className='val-holder-count-of-selected-items'>{selectedWaybackItems.length}</span>
                     </div>

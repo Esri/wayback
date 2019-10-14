@@ -3,6 +3,7 @@
 @import './config.scss';
 @import './gutter.scss';
 @import './customized-modal.scss';
+@import './customized-tooltip.scss';
 @import './fancy-scrollbar.scss';
 
 html, body {
@@ -21,9 +22,9 @@ html, body {
     width: $sidebar-width;
     height: 100%;
     background-color: $sidebar-bgColor;
-    overflow: hidden;
+    // overflow: hidden;
     box-sizing: border-box;
-    z-index: 5;
+    z-index: 1;
     // padding: 1rem;
 
     display: flex;

@@ -1,0 +1,15 @@
+
+.customized-tooltip {
+
+    .tooltip:before {
+        display: none;
+    }
+    
+    .tooltip:after {
+        color: #333;
+        background: rgba(255,255,255,1);
+        max-width: 190px;
+        text-align: left;
+        font-size:.8rem;
+    }
+}

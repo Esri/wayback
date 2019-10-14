@@ -362,7 +362,7 @@ class App extends React.PureComponent<IProps, IState> {
 
         const listView = activeWaybackItem ? (
             <div className='y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy'>
-                <div className='content-wrap'>
+                <div className='content-wrap'>                    
                     <ListView 
                         waybackItems={waybackItems}
                         activeWaybackItem={activeWaybackItem}
