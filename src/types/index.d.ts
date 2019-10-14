@@ -74,6 +74,13 @@ interface ISearchParamData {
     rNum4ActiveWaybackItem?:number
 }
 
+
+interface IStaticTooltipData {
+    content: string
+    top:number
+    left:number
+}
+
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -83,5 +90,6 @@ export {
     IScreenPoint,
     IUserSession,
     IExtentGeomety,
-    ISearchParamData
+    ISearchParamData,
+    IStaticTooltipData
 }

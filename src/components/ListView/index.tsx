@@ -1,9 +1,10 @@
 import './style.scss';
 import * as React from 'react';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem, IStaticTooltipData } from '../../types';
 
 import Card from './Card';
+import StaticTooltip from '../StaticTooltip';
 
 interface IProps {
     waybackItems:Array<IWaybackItem>,
@@ -19,13 +20,36 @@ interface IProps {
 }
 
 interface IState {
-
+    tooltipData: IStaticTooltipData 
 }
 
 class ListView extends React.PureComponent<IProps, IState> {
 
     constructor(props:IProps){
         super(props);
+
+        this.state = {
+            tooltipData: {
+                content: '',
+                top: 0,
+                left:0,
+            }
+        }
+
+        this.setTooltipData = this.setTooltipData.bind(this)
+    }
+
+    setTooltipData(data?:IStaticTooltipData){
+
+        const tooltipData = data ? data : {
+            content: '',
+            top: 0,
+            left:0,
+        }
+
+        this.setState({
+            tooltipData
+        })
     }
 
     getListViewCards(){
@@ -64,6 +88,7 @@ class ListView extends React.PureComponent<IProps, IState> {
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}
+                    toggleTooltip={this.setTooltipData}
                 />
             );
         });
@@ -75,8 +100,20 @@ class ListView extends React.PureComponent<IProps, IState> {
 
         const cards = this.getListViewCards();
 
+        // need to use a static tooltip that has the position relative to the window because the list view wrap has the "overflow-y: auto"
+        // css property, which make the default tooltip hide by the container. 
+        const { tooltipData } = this.state;
+
         return(
-            <div className='list-view-container'>{cards}</div>
+            <div>
+                <div className='list-view-container'>{cards}</div>
+                <StaticTooltip 
+                    top={tooltipData.top}
+                    left={tooltipData.left}
+                    content={tooltipData.content}
+                />
+            </div>
+            
         );
     }
 

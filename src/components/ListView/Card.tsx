@@ -2,7 +2,7 @@ import './style.scss';
 import * as React from 'react';
 import classnames from 'classnames';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem, IStaticTooltipData } from '../../types';
 import { isDevMode } from '../../utils/Tier';
 import config from '../../config';
 
@@ -16,6 +16,7 @@ interface IProps {
     onClick?:(releaseNum:number)=>void
     onMouseEnter?:(releaseNum:number, shouldShowPreviewItemTitle:boolean)=>void
     onMouseOut?:()=>void
+    toggleTooltip?:(data?:IStaticTooltipData)=>void
 }
 
 interface IState {
@@ -28,6 +29,8 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
         super(props);
 
         this.openItem = this.openItem.bind(this);
+        this.showTooltip = this.showTooltip.bind(this);
+        this.hideTooltip = this.hideTooltip.bind(this);
     }
 
     openItem(){
@@ -40,6 +43,22 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
         const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
 
         window.open(itemUrl, '_blank');
+    }
+
+    showTooltip(evt:React.MouseEvent){
+        const { toggleTooltip } = this.props;
+        const boundingRect = evt.currentTarget.getBoundingClientRect();
+
+        toggleTooltip({
+            content: evt.currentTarget.getAttribute('data-tooltip-content'),
+            left: boundingRect.left + evt.currentTarget.clientWidth + 5,
+            top: boundingRect.top + 3
+        });
+    }
+
+    hideTooltip(){
+        const { toggleTooltip } = this.props;
+        toggleTooltip();
     }
 
     render(){
@@ -55,13 +74,17 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
             'is-selected': isSelected
         });
 
+        const tooltipContentAdd2WebmapBtn = isSelected 
+            ? 'Remove this release from your ArcGIS Online Map'
+            : 'Add this release to an ArcGIS Online Map'; 
+
         return (
             <div className={cardClass} onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)} onMouseLeave={onMouseOut}>
                 <a className='margin-left-half link-light-gray cursor-pointer' onClick={onClick.bind(this, data.releaseNum)}>{data.releaseDateLabel}</a>
 
-                <div className='add-to-webmap-btn inline-block cursor-pointer right' onClick={toggleSelect.bind(this, data.releaseNum)} data-tooltip-content='Add this release to an ArcGIS Online Map' data-tooltip-content-alt='Remove this release from your ArcGIS Online Map'></div>
+                <div className='add-to-webmap-btn inline-block cursor-pointer right' onMouseOver={this.showTooltip} onMouseOut={this.hideTooltip} onClick={toggleSelect.bind(this, data.releaseNum)} data-tooltip-content={tooltipContentAdd2WebmapBtn}></div>
 
-                <div className='open-item-btn icon-ui-link-external margin-right-half inline-block cursor-pointer right link-light-gray' onClick={this.openItem} data-tooltip-content='Learn more about this release...'></div>
+                <div className='open-item-btn icon-ui-link-external margin-right-half inline-block cursor-pointer right link-light-gray' onMouseOver={this.showTooltip} onMouseOut={this.hideTooltip} onClick={this.openItem} data-tooltip-content='Learn more about this release...'></div>
             </div>
         );
     }
