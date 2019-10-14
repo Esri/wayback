@@ -124,24 +124,29 @@ class App extends React.PureComponent<IProps, IState> {
 
     setPreviewWaybackItem(releaseNum?:number, shouldShowPreviewItemTitle?:boolean){
 
+        const { mapExtent } = this.state;
+
         clearTimeout(this.delay4TogglePreviewWaybackItem);
 
-        this.delay4TogglePreviewWaybackItem = global.setTimeout(()=>{
+        if(mapExtent){
 
-            const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
+            this.delay4TogglePreviewWaybackItem = global.setTimeout(()=>{
 
-            const alternativeRNum4RreviewWaybackItem = releaseNum ? this.getAlternativeReleaseNumber(releaseNum) : null;
+                const previewWaybackItem = releaseNum ? this.getWaybackItemByReleaseNumber(releaseNum) : null;
     
-            shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
+                const alternativeRNum4RreviewWaybackItem = releaseNum ? this.getAlternativeReleaseNumber(releaseNum) : null;
+        
+                shouldShowPreviewItemTitle = shouldShowPreviewItemTitle || false;
+        
+                this.setState({
+                    previewWaybackItem,
+                    shouldShowPreviewItemTitle,
+                    alternativeRNum4RreviewWaybackItem
+                });
     
-            this.setState({
-                previewWaybackItem,
-                shouldShowPreviewItemTitle,
-                alternativeRNum4RreviewWaybackItem
-            });
+            }, 200);
 
-        }, 200);
-
+        }
     }
 
     // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead
