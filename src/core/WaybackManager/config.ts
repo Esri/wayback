@@ -26,6 +26,9 @@ export default {
             {
                 fieldname: 'ClumpID'
             },
+            {
+                fieldname: 'Clump'
+            },
         ]
     }
 

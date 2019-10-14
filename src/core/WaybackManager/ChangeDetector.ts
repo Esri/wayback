@@ -54,6 +54,7 @@ class WaybackChangeDetector {
 
             const FIELD_NAME_ZOOM = fields[0].fieldname;
             const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
+            const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
 
             const level = pointInfo.zoom;
             const column = geometryFns.long2tile(pointInfo.longitude, level);
@@ -66,6 +67,7 @@ class WaybackChangeDetector {
                 spatialRel: 'esriSpatialRelIntersects',
                 where: `${FIELD_NAME_ZOOM} = ${level}`,
                 outFields: [FIELD_NAME_RELEASE_NUM],
+                orderByFields: FIELD_NAME_RELEASE_NAME,
                 returnGeometry: false,
                 f: 'json'
             }) as IQueryFeaturesResponse;
