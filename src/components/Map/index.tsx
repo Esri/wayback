@@ -130,7 +130,9 @@ class Map extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             const searchWidget = new Search({
-                view: mapView
+                view: mapView,
+                popupEnabled: false,
+                resultGraphicEnabled: false
             });
 
             mapView.ui.add(searchWidget, {
