@@ -63,6 +63,24 @@ html, body {
     right: 0;
 }
 
+.is-mobile {
+
+    .sidebar { 
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: $gutter-width;
+        width: calc(100% - 50px);
+        max-height: $sidebar-height-mobile;
+        padding-top: .5rem;
+    }
+
+    .map-container {
+        left: 0;
+    }
+
+}
+
 .cursor-pointer {
     cursor: pointer;
 }

@@ -31,3 +31,11 @@
         padding-right: 0;
     }
 }
+
+.is-mobile {
+    .gutter-container { 
+        top: auto;
+        bottom: 0;
+        height: $sidebar-height-mobile;
+    }
+}

@@ -1,6 +1,7 @@
 import './style.scss';
 import * as React from 'react';
 
+import classnames from 'classnames';
 import config from '../../config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
@@ -16,6 +17,7 @@ import CheckboxToggle from '../CheckboxToggle';
 import BarChart from '../BarChart';
 import Title4ActiveItem from '../Title4ActiveItem';
 import TilePreviewWindow from '../PreviewWindow';
+import AppTitleText from '../TitleText';
 
 import { IWaybackItem, IMapPointInfo, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -26,6 +28,7 @@ interface IWaybackItemsReleaseNum2IndexLookup {
 interface IProps {
     data2InitApp?:ISearchParamData
     isDev?:boolean
+    isMobile?:boolean
     waybackManager:WaybackManager
     waybackData2InitApp: {
         waybackItems:Array<IWaybackItem>
@@ -125,10 +128,11 @@ class App extends React.PureComponent<IProps, IState> {
     setPreviewWaybackItem(releaseNum?:number, shouldShowPreviewItemTitle?:boolean){
 
         const { mapExtent } = this.state;
+        const { isMobile } = this.props;
 
-        clearTimeout(this.delay4TogglePreviewWaybackItem);
+        if(mapExtent && !isMobile){
 
-        if(mapExtent){
+            clearTimeout(this.delay4TogglePreviewWaybackItem);
 
             this.delay4TogglePreviewWaybackItem = global.setTimeout(()=>{
 
@@ -309,6 +313,9 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     getSidebarContent(){
+
+        const { isMobile } = this.props;
+
         const { 
             waybackItems, 
             activeWaybackItem, 
@@ -319,13 +326,11 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4WaybackItemsWithLocalChanges
         } = this.state;
 
-        const appTitle = (
+        const appTitle = !isMobile ? (
             <div className='content-wrap leader-half trailer-quarter'>
-                <div className='app-title-text text-center'>
-                    <span className='font-size-2 avenir-light trailer-0'>World Imagery <span className='text-white'>Wayback</span></span>
-                </div>
+                <AppTitleText/>
             </div>
-        );
+        ) : null
 
         const loadingIndicator = !activeWaybackItem ? (
             <div className="loader is-active padding-leader-1 padding-trailer-1">
@@ -333,7 +338,7 @@ class App extends React.PureComponent<IProps, IState> {
             </div>
         ) : null;
 
-        const barChart = activeWaybackItem ? (
+        const barChart = !isMobile && activeWaybackItem ? (
             <div className='content-wrap trailer-quarter'>
                 <BarChart 
                     waybackItems={waybackItems}
@@ -402,7 +407,7 @@ class App extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { data2InitApp, waybackManager } = this.props;
+        const { data2InitApp, waybackManager, isMobile } = this.props;
 
         const { 
             waybackItems, 
@@ -419,8 +424,12 @@ class App extends React.PureComponent<IProps, IState> {
 
         const sidebar = this.getSidebarContent();
 
+        const appContentClasses = classnames('app-content', {
+            'is-mobile': isMobile
+        });
+
         return(
-            <div className='app-content'>
+            <div className={appContentClasses}>
 
                 <div className='gutter-container'>
                     <div className='gutter-nav-btn text-center shadow-trailer font-size-3'>
@@ -444,7 +453,8 @@ class App extends React.PureComponent<IProps, IState> {
                     onExtentChange={this.setMapExtent}
                 >
                     <TilePreviewWindow
-                        previewWaybackItem={previewWaybackItem}
+                        // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
+                        previewWaybackItem={!isMobile ? previewWaybackItem : null}
                         alternativeRNum4RreviewWaybackItem={alternativeRNum4RreviewWaybackItem}
                     />
 
