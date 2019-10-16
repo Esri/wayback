@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IWaybackItem } from '../../types';
 
 interface IProps {
+    isMobile:boolean
     activeWaybackItem:IWaybackItem
     previewWaybackItem:IWaybackItem
     shouldShowPreviewItemTitle:boolean
@@ -20,14 +21,16 @@ class Title4ActiveItem extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { activeWaybackItem, previewWaybackItem, shouldShowPreviewItemTitle } = this.props;
+        const { activeWaybackItem, previewWaybackItem, shouldShowPreviewItemTitle, isMobile } = this.props;
 
         const releaseDate = shouldShowPreviewItemTitle ? previewWaybackItem.releaseDateLabel : activeWaybackItem.releaseDateLabel;
 
+        const subtitle = !isMobile ? <span className='font-size--3'>Click map for imagery details</span> : null;
+
         return(
-            <div className='text-center text-blue'>
+            <div className='title-for-active-item text-center text-blue'>
                 <h4 className='font-size-2 avenir-light trailer-0'>Wayback {releaseDate}</h4>
-                <span className='font-size--3'>Click map for imagery details</span>
+                {subtitle}
             </div>
         );
     }

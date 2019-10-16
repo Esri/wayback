@@ -33,13 +33,13 @@
 
 .is-mobile {
     .gutter-container { 
-        display: none;
+        display: block;
+        top: 45px;
     }
 }
 
-.is-mobile.is-gutter-visible  {
+.is-gutter-hide  {
     .gutter-container { 
-        display: block;
-        top: 45px;
+        display: none;
     }
 }

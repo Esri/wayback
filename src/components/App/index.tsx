@@ -19,6 +19,7 @@ import Title4ActiveItem from '../Title4ActiveItem';
 import TilePreviewWindow from '../PreviewWindow';
 import AppTitleText from '../TitleText';
 import MobileHeader from '../MobileHeader';
+import SidebarToggleBtn from '../SidebarToggleBtn';
 
 import { IWaybackItem, IMapPointInfo, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -51,7 +52,8 @@ interface IState {
     shouldOnlyShowItemsWithLocalChange:boolean
     shouldShowPreviewItemTitle:boolean
     userSession:IUserSession,
-    isGutterVisible:boolean
+    isGutterHide:boolean,
+    isSideBarHide:boolean
 }
 
 class App extends React.PureComponent<IProps, IState> {
@@ -64,7 +66,7 @@ class App extends React.PureComponent<IProps, IState> {
     constructor(props:IProps){
         super(props);
 
-        const { data2InitApp } = props;
+        const { data2InitApp, isMobile } = props;
 
         // this.waybackManager = new WaybackManager({isDev});
 
@@ -84,7 +86,8 @@ class App extends React.PureComponent<IProps, IState> {
             shouldShowPreviewItemTitle:false,
             userSession:null,
             mapExtent:null,
-            isGutterVisible:false
+            isGutterHide: isMobile ? true : false,
+            isSideBarHide:false
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -95,7 +98,8 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
         this.setMapExtent = this.setMapExtent.bind(this);
         this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(this);
-        this.toggleIsGutterVisible = this.toggleIsGutterVisible.bind(this);
+        this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
+        this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -270,11 +274,19 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleIsGutterVisible(){
-        const { isGutterVisible } = this.state;
+    toggleIsGutterHide(){
+        const { isGutterHide } = this.state;
 
         this.setState({
-            isGutterVisible: !isGutterVisible
+            isGutterHide: !isGutterHide
+        });
+    }
+
+    toggleIsSideBarHide(){
+        const { isSideBarHide } = this.state;
+
+        this.setState({
+            isSideBarHide: !isSideBarHide
         });
     }
     
@@ -334,8 +346,13 @@ class App extends React.PureComponent<IProps, IState> {
             shouldShowPreviewItemTitle,
             shouldOnlyShowItemsWithLocalChange, 
             rNum4SelectedWaybackItems,
-            rNum4WaybackItemsWithLocalChanges
+            rNum4WaybackItemsWithLocalChanges,
+            isSideBarHide
         } = this.state;
+
+        const sidebarClasses = classnames('sidebar', {
+            'is-hide': isSideBarHide
+        })
 
         const appTitle = !isMobile ? (
             <div className='content-wrap leader-half trailer-quarter'>
@@ -343,13 +360,20 @@ class App extends React.PureComponent<IProps, IState> {
             </div>
         ) : null
 
-        const loadingIndicator = !activeWaybackItem ? (
+        const sidebarToggleBtn = isMobile ? (
+            <SidebarToggleBtn 
+                isSideBarHide={isSideBarHide}
+                onClick={this.toggleIsSideBarHide}
+            />
+        ) : null;
+
+        const loadingIndicator = !activeWaybackItem && !isSideBarHide? (
             <div className="loader is-active padding-leader-1 padding-trailer-1">
                 <div className="loader-bars"></div>
             </div>
         ) : null;
 
-        const barChart = !isMobile && activeWaybackItem ? (
+        const barChart = !isMobile && activeWaybackItem && !isSideBarHide ? (
             <div className='content-wrap trailer-quarter'>
                 <BarChart 
                     waybackItems={waybackItems}
@@ -366,6 +390,7 @@ class App extends React.PureComponent<IProps, IState> {
         const titleForActiveItem = activeWaybackItem ? (
             <div className='content-wrap leader-quarter trailer-quarter'>
                 <Title4ActiveItem 
+                    isMobile={isMobile}
                     activeWaybackItem={activeWaybackItem}
                     previewWaybackItem={previewWaybackItem}
                     shouldShowPreviewItemTitle={shouldShowPreviewItemTitle}
@@ -373,7 +398,7 @@ class App extends React.PureComponent<IProps, IState> {
             </div>
         ) : null;
 
-        const localChangeOnlyToggle = activeWaybackItem ? (
+        const localChangeOnlyToggle = activeWaybackItem && !isSideBarHide ? (
             <div className='content-wrap trailer-half'>
                 <CheckboxToggle 
                     isActive={shouldOnlyShowItemsWithLocalChange} 
@@ -382,7 +407,7 @@ class App extends React.PureComponent<IProps, IState> {
             </div>
         ) : null
 
-        const listView = activeWaybackItem ? (
+        const listView = activeWaybackItem && !isSideBarHide ? (
             <div className='y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy'>
                 <div className='content-wrap'>                    
                     <ListView 
@@ -404,7 +429,8 @@ class App extends React.PureComponent<IProps, IState> {
         ) : null;
 
         const sidebarContent = (
-            <div className='sidebar'>
+            <div className={sidebarClasses}>
+                { sidebarToggleBtn }
                 { appTitle }
                 { loadingIndicator }
                 { barChart }
@@ -430,7 +456,7 @@ class App extends React.PureComponent<IProps, IState> {
             userSession,
             mapExtent,
             alternativeRNum4RreviewWaybackItem,
-            isGutterVisible
+            isGutterHide
         } = this.state;
 
         const defaultExtent = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
@@ -439,15 +465,16 @@ class App extends React.PureComponent<IProps, IState> {
 
         const appContentClasses = classnames('app-content', {
             'is-mobile': isMobile,
-            'is-gutter-visible': isGutterVisible
+            'is-gutter-hide': isGutterHide
         });
 
         const mobileHeader = isMobile 
-        ? <MobileHeader
-            isGutterVisible={isGutterVisible}
-            leftNavBtnOnClick={this.toggleIsGutterVisible}
-        /> 
-        : null;
+            ? (
+                <MobileHeader
+                    isGutterHide={isGutterHide}
+                    leftNavBtnOnClick={this.toggleIsGutterHide}
+                /> 
+            ) : null;
 
         return(
             <div className={appContentClasses}>

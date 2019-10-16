@@ -1,18 +1,52 @@
-.map-div-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
+
+@import '../../style/config.scss';
+@import '../../style/colors.scss';
+
+.map-container {
+    position: absolute;
+    top: 0;
+    left: $gutter-width + $sidebar-width;
+    bottom: 0;
+    right: 0;
+
+    #mapDiv {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .loading-indicator{
+        width: 100%;
+        height: 100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
 }
 
-#mapDiv {
-    width: 100%;
-    height: 100%;
+.is-mobile {
+
+    .map-container {
+        top: 45px;
+        left: $gutter-width;
+
+        .loading-indicator{
+            width: 100%;
+            height: 300px;
+        }
+    }
 }
 
-.loading-indicator{
-    width: 100%;
-    height: 100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+.is-gutter-hide {
+
+    .map-container { 
+        left: 0;
+    }
 }
+
+// .is-mobile.is-gutter-visible {
+
+//     .map-container { 
+//         left: $gutter-width;
+//     }
+// }

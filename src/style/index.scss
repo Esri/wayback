@@ -2,6 +2,7 @@
 @import './colors.scss';
 @import './config.scss';
 @import './gutter.scss';
+@import './sidebar.scss';
 @import './customized-modal.scss';
 @import './customized-tooltip.scss';
 @import './fancy-scrollbar.scss';
@@ -13,86 +14,6 @@ html, body {
     width: 100%;
     overflow: hidden;
     color: $default-text-color
-}
-
-.sidebar {
-    position: absolute;
-    top: 0;
-    left: $gutter-width;
-    width: $sidebar-width;
-    height: 100%;
-    background-color: $default-ui-bgColor;
-    // overflow: hidden;
-    box-sizing: border-box;
-    z-index: 1;
-    // padding: 1rem;
-
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;
-
-    .is-flexy {
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: 200px;
-    }
-
-    .content-wrap {
-        padding: 0 1rem;
-    }
-
-    .x-scroll-hide {
-        overflow-x: hidden;
-    }
-
-    .y-scroll-visible {
-        position: relative;
-        overflow-y: auto;
-        // max-height: 665px;
-    }
-}
-
-.map-container {
-    position: absolute;
-    top: 0;
-    left: $gutter-width + $sidebar-width;
-    bottom: 0;
-    right: 0;
-}
-
-.is-mobile {
-
-    .sidebar { 
-        position: absolute;
-        top: auto;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        width: 100%;
-        max-height: $sidebar-height-mobile;
-        padding-top: .5rem;
-    }
-
-    .map-container {
-        top: 45px;
-        left: 0;
-    }
-
-}
-
-.is-mobile.is-gutter-visible {
-
-    .sidebar {
-        width: calc(100% - 50px);
-    }
-
-    .sidebar,
-    .map-container { 
-        left: $gutter-width;
-    }
 }
 
 .cursor-pointer {
