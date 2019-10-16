@@ -7,6 +7,7 @@ import Card from './Card';
 import StaticTooltip from '../StaticTooltip';
 
 interface IProps {
+    isMobile:boolean
     waybackItems:Array<IWaybackItem>,
     activeWaybackItem:IWaybackItem,
     shouldOnlyShowItemsWithLocalChange:boolean,
@@ -103,15 +104,20 @@ class ListView extends React.PureComponent<IProps, IState> {
         // need to use a static tooltip that has the position relative to the window because the list view wrap has the "overflow-y: auto"
         // css property, which make the default tooltip hide by the container. 
         const { tooltipData } = this.state;
+        const { isMobile } = this.props;
+
+        const staticTooltip = !isMobile 
+            ? <StaticTooltip 
+                top={tooltipData.top}
+                left={tooltipData.left}
+                content={tooltipData.content}
+            /> 
+            : null;
 
         return(
             <div>
                 <div className='list-view-container'>{cards}</div>
-                <StaticTooltip 
-                    top={tooltipData.top}
-                    left={tooltipData.left}
-                    content={tooltipData.content}
-                />
+                { staticTooltip }
             </div>
             
         );

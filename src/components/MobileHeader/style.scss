@@ -1,0 +1,29 @@
+@import '../../style/config.scss';
+@import '../../style/colors.scss';
+
+.mobile-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding: .5rem;
+    background: $default-ui-bgColor;
+
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: center;
+
+    .header-nav-btn {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        fill: #fff;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+}

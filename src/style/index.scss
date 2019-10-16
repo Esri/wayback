@@ -21,7 +21,7 @@ html, body {
     left: $gutter-width;
     width: $sidebar-width;
     height: 100%;
-    background-color: $sidebar-bgColor;
+    background-color: $default-ui-bgColor;
     // overflow: hidden;
     box-sizing: border-box;
     z-index: 1;
@@ -66,19 +66,33 @@ html, body {
 .is-mobile {
 
     .sidebar { 
+        position: absolute;
         top: auto;
         bottom: 0;
         right: 0;
-        left: $gutter-width;
-        width: calc(100% - 50px);
+        left: 0;
+        width: 100%;
         max-height: $sidebar-height-mobile;
         padding-top: .5rem;
     }
 
     .map-container {
+        top: 45px;
         left: 0;
     }
 
+}
+
+.is-mobile.is-gutter-visible {
+
+    .sidebar {
+        width: calc(100% - 50px);
+    }
+
+    .sidebar,
+    .map-container { 
+        left: $gutter-width;
+    }
 }
 
 .cursor-pointer {

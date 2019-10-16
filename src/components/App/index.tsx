@@ -18,6 +18,7 @@ import BarChart from '../BarChart';
 import Title4ActiveItem from '../Title4ActiveItem';
 import TilePreviewWindow from '../PreviewWindow';
 import AppTitleText from '../TitleText';
+import MobileHeader from '../MobileHeader';
 
 import { IWaybackItem, IMapPointInfo, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -49,7 +50,8 @@ interface IState {
     isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
     shouldShowPreviewItemTitle:boolean
-    userSession:IUserSession
+    userSession:IUserSession,
+    isGutterVisible:boolean
 }
 
 class App extends React.PureComponent<IProps, IState> {
@@ -81,7 +83,8 @@ class App extends React.PureComponent<IProps, IState> {
             // we want to show the release date in wayback title only when hover over the bar chart
             shouldShowPreviewItemTitle:false,
             userSession:null,
-            mapExtent:null
+            mapExtent:null,
+            isGutterVisible:false
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -92,6 +95,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(this);
         this.setMapExtent = this.setMapExtent.bind(this);
         this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(this);
+        this.toggleIsGutterVisible = this.toggleIsGutterVisible.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -266,6 +270,13 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
+    toggleIsGutterVisible(){
+        const { isGutterVisible } = this.state;
+
+        this.setState({
+            isGutterVisible: !isGutterVisible
+        });
+    }
     
     getWaybackItemByReleaseNumber(releaseNum:number){
         const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
@@ -375,6 +386,7 @@ class App extends React.PureComponent<IProps, IState> {
             <div className='y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy'>
                 <div className='content-wrap'>                    
                     <ListView 
+                        isMobile={isMobile}
                         waybackItems={waybackItems}
                         activeWaybackItem={activeWaybackItem}
                         shouldOnlyShowItemsWithLocalChange={shouldOnlyShowItemsWithLocalChange}
@@ -417,7 +429,8 @@ class App extends React.PureComponent<IProps, IState> {
             isSaveAsWebmapDialogVisible,
             userSession,
             mapExtent,
-            alternativeRNum4RreviewWaybackItem
+            alternativeRNum4RreviewWaybackItem,
+            isGutterVisible
         } = this.state;
 
         const defaultExtent = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
@@ -425,14 +438,25 @@ class App extends React.PureComponent<IProps, IState> {
         const sidebar = this.getSidebarContent();
 
         const appContentClasses = classnames('app-content', {
-            'is-mobile': isMobile
+            'is-mobile': isMobile,
+            'is-gutter-visible': isGutterVisible
         });
+
+        const mobileHeader = isMobile 
+        ? <MobileHeader
+            isGutterVisible={isGutterVisible}
+            leftNavBtnOnClick={this.toggleIsGutterVisible}
+        /> 
+        : null;
 
         return(
             <div className={appContentClasses}>
 
+                { mobileHeader }
+
                 <div className='gutter-container'>
-                    <div className='gutter-nav-btn text-center shadow-trailer font-size-3'>
+
+                    <div className='gutter-nav-btn shadow-trailer text-center font-size-3'>
                         <span className='icon-ui-description js-modal-toggle' data-modal="about"></span>
                     </div>
 
@@ -441,6 +465,7 @@ class App extends React.PureComponent<IProps, IState> {
                         onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
                     />
+
                 </div>
 
                 { sidebar }

@@ -19,7 +19,6 @@
         height: $gutter-width;
         line-height: $gutter-width;
         cursor: pointer;
-        cursor: pointer;
     }
 
     .shadow-trailer {
@@ -34,8 +33,13 @@
 
 .is-mobile {
     .gutter-container { 
-        top: auto;
-        bottom: 0;
-        height: $sidebar-height-mobile;
+        display: none;
+    }
+}
+
+.is-mobile.is-gutter-visible  {
+    .gutter-container { 
+        display: block;
+        top: 45px;
     }
 }
