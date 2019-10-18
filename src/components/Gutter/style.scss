@@ -10,23 +10,46 @@
     height: 100%;
     width: $gutter-width;
     background-color: $gutter-bgColor;
-    padding: 0;
+    padding: .4rem 0;
     z-index: 5;
+    box-sizing: border-box;
 
-    [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
-        padding-right: 0;
-    }
 
     .gutter-nav-btn {
         position: relative;
         width: $gutter-width;
-        height: $gutter-width;
-        line-height: $gutter-width;
         cursor: pointer;
-        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        box-sizing: border-box;
+        padding: .5rem 0;
+
+        svg {
+            fill: #ccc;
+        }
     }
 
     .shadow-trailer {
         box-shadow: 0 0 12px 4px rgba(0,0,0,.3);
+    }
+
+    
+    [class^="icon-ui-"]:before, [class*=" icon-ui-"]:before {
+        padding-right: 0;
+    }
+}
+
+.is-mobile {
+    .gutter-container { 
+        display: block;
+        top: 45px;
+    }
+}
+
+.is-gutter-hide  {
+    .gutter-container { 
+        display: none;
     }
 }

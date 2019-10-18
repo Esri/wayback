@@ -35,7 +35,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps, IState> {
 
         const isActive = selectedWaybackItems.length ? true : false;
 
-        const btnClass = classNames('gutter-nav-btn create-agol-webmap tooltip tooltip-multiline tooltip-right', {
+        const btnClass = classNames('create-agol-webmap tooltip tooltip-multiline tooltip-right', {
             'is-active': isActive
         });
 

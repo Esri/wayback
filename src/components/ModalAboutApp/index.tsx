@@ -22,7 +22,7 @@ class AboutThisApp extends React.PureComponent<IProps, IState> {
 
     render(){
         return(
-            <div className="js-modal modal-overlay initally-hide customized-modal" data-modal="about">
+            <div className="js-modal modal-overlay customized-modal" data-modal="about">
                 <div className="modal-content column-12" role="dialog" aria-labelledby="modal">
                 
                     <span className="js-modal-toggle cursor-pointer right" aria-label="close-modal">
