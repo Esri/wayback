@@ -2,7 +2,7 @@
 import { urlFns } from 'helper-toolkit-ts';
 import { ISearchParamData, IExtentGeomety } from '../../types'
 
-type searchParamKey = 'ext' | 'localChangesOnly' | 'selected' | 'active';
+type searchParamKey = 'ext' | 'localChangesOnly' | 'selected' | 'active' | 'portal';
 
 const encodeSearchParam = ({
     mapExtent = null,
@@ -17,7 +17,8 @@ const encodeSearchParam = ({
         ext: mapExtent ? [ mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax ].map(d=>d.toFixed(5)).join(',') : '',
         localChangesOnly: shouldOnlyShowItemsWithLocalChange ? 'true' : '',
         selected: rNum4SelectedWaybackItems.length ? rNum4SelectedWaybackItems.join(',') : '',
-        active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : ''
+        active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
+        portal: ''
     };
 
     const searchParamsString = Object.keys(searchParams)
@@ -61,7 +62,29 @@ const decodeSearchParam = ()=>{
 
 };
 
+const savePortalUrlInSearchParam = (portalUrl='')=>{
+    const key:searchParamKey = 'portal';
+    if(portalUrl){
+        urlFns.updateQueryParam({
+            key,
+            value: portalUrl
+        })
+    }
+};
+
+const getPortalUrlInSearchParam = ()=>{
+
+    const urlQueryData:{
+        [key in searchParamKey]: string
+    } = urlFns.parseQuery();
+
+    return urlQueryData.portal || '';
+
+};
+
 export {
     encodeSearchParam,
-    decodeSearchParam
+    decodeSearchParam,
+    savePortalUrlInSearchParam,
+    getPortalUrlInSearchParam
 }

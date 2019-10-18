@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
+import { savePortalUrlInSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
 
 
 interface IProps {
@@ -8,13 +9,37 @@ interface IProps {
 }
 
 interface IState {
-
+    portalUrl:string
 }
 
 class Drawer extends React.PureComponent<IProps, IState> {
 
     constructor(props:IProps){
         super(props);
+
+        this.state = {
+            portalUrl: getPortalUrlInSearchParam()
+        }
+
+        this.saveSettings = this.saveSettings.bind(this);
+        this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
+    }
+
+    portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
+        const portalUrl = evt.currentTarget.value;
+
+        this.setState({
+            portalUrl
+        });
+    }
+
+    saveSettings(){
+        const { portalUrl } = this.state;
+
+        if(portalUrl){
+            savePortalUrlInSearchParam(portalUrl);
+            window.location.reload();
+        }
     }
 
     componentDidMount(){
@@ -22,6 +47,9 @@ class Drawer extends React.PureComponent<IProps, IState> {
     }
 
     render(){
+
+        const { portalUrl } = this.state;
+
         return(
             <div className="js-modal modal-overlay customized-modal" data-modal="setting">
                 <div className="modal-content column-8" role="dialog" aria-labelledby="modal">
@@ -35,13 +63,13 @@ class Drawer extends React.PureComponent<IProps, IState> {
                     <div>
                         <label>
                             Portal URL:
-                            <input type="text" placeholder="ArcGIS Enterprise Portal URL"/>
+                            <input type="text" placeholder="ArcGIS Enterprise Portal URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
                         </label>
                     </div>
 
 
                     <div className='text-right'>
-                        <span className='btn'>Save</span>
+                        <span className='btn' onClick={this.saveSettings}>Save</span>
                     </div>
                 </div>
             </div>
