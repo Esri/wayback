@@ -56,7 +56,7 @@ class WaybackChangeDetector {
             const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
             const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
 
-            const level = pointInfo.zoom;
+            const level = +pointInfo.zoom.toFixed(0);
             const column = geometryFns.long2tile(pointInfo.longitude, level);
             const row = geometryFns.lat2tile(pointInfo.latitude, level);
             

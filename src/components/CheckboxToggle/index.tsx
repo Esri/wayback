@@ -26,8 +26,8 @@ class CheckboxToggle extends React.PureComponent<IProps, IState> {
             : <span className='icon-ui-checkbox-unchecked text-dark-gray'></span>
 
         return(
-            <div className='checkbox-toggle-control'>
-                <span className={`checkbox-icon text-dark-gray`} onClick={onChange}>
+            <div className='checkbox-toggle-control' onClick={onChange}>
+                <span className={`checkbox-icon text-dark-gray`}>
                     {iconSvg}
                 </span>
                 <span className='font-size--2'>
