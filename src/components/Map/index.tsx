@@ -16,6 +16,7 @@ import IPoint from 'esri/geometry/Point';
 import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils";
 import ISearchWidget from "esri/widgets/Search";
 import IVectorTileLayer from "esri/layers/VectorTileLayer"
+import ILocate from "esri/widgets/Locate"
 
 interface IProps {
     defaultExtent?:IExtentGeomety,
@@ -109,6 +110,7 @@ class Map extends React.PureComponent<IProps, IState> {
             view.when(()=>{
                 this.mapViewOnReadyHandler();
                 this.initSearchWidget();
+                this.initLocateWidget();
             });
 
         } catch(err){
@@ -137,6 +139,33 @@ class Map extends React.PureComponent<IProps, IState> {
 
             mapView.ui.add(searchWidget, {
                 position: "top-right",
+                index: 2
+            });
+
+        } catch(err){
+            console.error(err);
+        }
+    }
+
+    async initLocateWidget(){
+
+        const { mapView } = this.state;
+
+        type Modules = [
+            typeof ILocate,
+        ];
+
+        try {
+            const [ Locate ] = await (loadModules([
+                "esri/widgets/Locate"
+            ]) as Promise<Modules>);
+
+            const locateWidget = new Locate({
+                view: mapView
+            });
+
+            mapView.ui.add(locateWidget, {
+                position: "top-left",
                 index: 2
             });
 
