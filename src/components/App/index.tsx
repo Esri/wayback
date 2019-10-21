@@ -6,6 +6,7 @@ import config from '../../config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
 import { encodeSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
+import { getDefaultExtent } from '../../utils/LocalStorage'
 
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
@@ -465,7 +466,8 @@ class App extends React.PureComponent<IProps, IState> {
             isGutterHide
         } = this.state;
 
-        const defaultExtent = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
+        const defaultExtentFromUrl = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
+        const defaultExtentFromLocalStorage = getDefaultExtent();
 
         const sidebar = this.getSidebarContent();
 
@@ -498,7 +500,7 @@ class App extends React.PureComponent<IProps, IState> {
                 { sidebar }
 
                 <Map
-                    defaultExtent={defaultExtent}
+                    defaultExtent={defaultExtentFromUrl || defaultExtentFromLocalStorage}
                     activeWaybackItem={activeWaybackItem}
 
                     onUpdateEnd={this.queryLocalChanges}
@@ -527,7 +529,9 @@ class App extends React.PureComponent<IProps, IState> {
                     onClose={this.toggleSaveAsWebmapDialog}
                 />
 
-                <SettingDialog />
+                <SettingDialog 
+                    mapExtent={mapExtent}
+                />
 
                 <Modal/>
 

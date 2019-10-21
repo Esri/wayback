@@ -1,28 +1,36 @@
 import * as React from 'react';
-
+import classnames from 'classnames'
 import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
-import { savePortalUrlInSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
+import { savePortalUrlInSearchParam, getPortalUrlInSearchParam, getMapExtent } from '../../utils/UrlSearchParam';
+import { saveDefaultExtent } from '../../utils/LocalStorage'
+import { IExtentGeomety } from '../../types';
 
+type SaveBtnLabelValue = 'Save' | 'Saved';
 
 interface IProps {
-
+    mapExtent?:IExtentGeomety
 }
 
 interface IState {
     portalUrl:string
+    shouldSaveAsDefaultExtent:boolean,
+    saveBtnLable:SaveBtnLabelValue
 }
 
-class Drawer extends React.PureComponent<IProps, IState> {
+class SettingDialog extends React.PureComponent<IProps, IState> {
 
     constructor(props:IProps){
         super(props);
 
         this.state = {
-            portalUrl: getPortalUrlInSearchParam()
+            portalUrl: getPortalUrlInSearchParam(),
+            shouldSaveAsDefaultExtent: false,
+            saveBtnLable: 'Save'
         }
 
         this.saveSettings = this.saveSettings.bind(this);
         this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
+        this.shouldSaveAsDefaultExtentOnChange = this.shouldSaveAsDefaultExtentOnChange.bind(this);
     }
 
     portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
@@ -33,12 +41,56 @@ class Drawer extends React.PureComponent<IProps, IState> {
         });
     }
 
+    shouldSaveAsDefaultExtentOnChange(){
+        const { shouldSaveAsDefaultExtent } = this.state;
+        const newVal = !shouldSaveAsDefaultExtent;
+
+        this.setState({
+            shouldSaveAsDefaultExtent: newVal
+        }, ()=>{
+            console.log('shouldSaveAsDefaultExtent', newVal);
+        })
+    }
+
     saveSettings(){
-        const { portalUrl } = this.state;
+        const { portalUrl, shouldSaveAsDefaultExtent } = this.state;
+
+        if(shouldSaveAsDefaultExtent){
+            const mapExt = getMapExtent();
+            saveDefaultExtent(mapExt);
+        }
 
         if(portalUrl){
             savePortalUrlInSearchParam(portalUrl);
             window.location.reload();
+        }
+
+        this.toggleSaveBtnLabel(true);
+    }
+
+    toggleSaveBtnLabel(isSaved=false){
+        const newVal = isSaved ? 'Saved' : 'Save';
+
+        this.setState({
+            saveBtnLable: newVal
+        }, ()=>{
+
+            if(newVal === 'Saved'){
+                setTimeout(()=>{
+                    this.toggleSaveBtnLabel();
+                }, 2000);
+            }
+        });
+    }
+
+    componentDidUpdate(prevProps:IProps){
+        const { mapExtent } = this.props;
+        
+        // turn off shouldSaveAsDefaultExtent every time the map extent changes
+        if(mapExtent !== prevProps.mapExtent){
+            this.setState({
+                shouldSaveAsDefaultExtent: false
+            })
         }
     }
 
@@ -48,7 +100,11 @@ class Drawer extends React.PureComponent<IProps, IState> {
 
     render(){
 
-        const { portalUrl } = this.state;
+        const { portalUrl, shouldSaveAsDefaultExtent, saveBtnLable } = this.state;
+
+        const saveBtnClasses = classnames('btn', {
+            'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent ? true : false
+        })
 
         return(
             <div className="js-modal modal-overlay customized-modal" data-modal="setting">
@@ -60,16 +116,23 @@ class Drawer extends React.PureComponent<IProps, IState> {
                 
                     <h2 className='trailer-half text-center trailer-1'>Settings</h2>
 
-                    <div>
+                    <div className='trailer-1'>
                         <label>
                             Portal URL:
                             <input type="text" placeholder="ArcGIS Enterprise Portal URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
                         </label>
                     </div>
 
+                    <div className='leader-half'>
+                        <label className="toggle-switch modifier-class">
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldSaveAsDefaultExtent ? true : false} onChange={this.shouldSaveAsDefaultExtentOnChange}/>
+                            <span className="toggle-switch-track margin-right-1"></span>
+                            <span className="toggle-switch-label font-size--1">Save current map extent as default</span>
+                        </label>
+                    </div>
 
                     <div className='text-right'>
-                        <span className='btn' onClick={this.saveSettings}>Save</span>
+                        <span className={saveBtnClasses} onClick={this.saveSettings}>{saveBtnLable}</span>
                     </div>
                 </div>
             </div>
@@ -78,4 +141,4 @@ class Drawer extends React.PureComponent<IProps, IState> {
 
 };
 
-export default Drawer;
+export default SettingDialog;
