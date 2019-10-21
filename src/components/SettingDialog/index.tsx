@@ -113,9 +113,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent ? true : false
         });
 
-        const signInBtn = (
-            <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, true)}>Sign In</span> 
-        );
+        // const signInBtn = (
+        //     <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, true)}>Sign In</span> 
+        // );
 
         const signOutBtn = (
             <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, false)}>Sign Out</span> 
@@ -148,7 +148,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='text-right'>
                         <span className='margin-right-1'>
-                            { userSession  ? signOutBtn  : signInBtn  }
+                            { userSession  ? signOutBtn  : null  }
                         </span>
                         
                         <span className={saveBtnClasses} onClick={this.saveSettings}>{saveBtnLable}</span>
