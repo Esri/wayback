@@ -1,14 +1,20 @@
+import './style.scss';
 import * as React from 'react';
 import classnames from 'classnames'
 import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import { savePortalUrlInSearchParam, getPortalUrlInSearchParam, getMapExtent } from '../../utils/UrlSearchParam';
 import { saveDefaultExtent } from '../../utils/LocalStorage'
-import { IExtentGeomety } from '../../types';
+// import OAuthUtils from '../../utils/Esri-OAuth';
+import { IExtentGeomety, IUserSession } from '../../types';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
 interface IProps {
     mapExtent?:IExtentGeomety
+    userSession?:IUserSession
+
+    toggleSignInBtnOnClick:(shouldSignIn:boolean)=>void
+    // oauthUtils?:OAuthUtils
 }
 
 interface IState {
@@ -31,6 +37,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         this.saveSettings = this.saveSettings.bind(this);
         this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
         this.shouldSaveAsDefaultExtentOnChange = this.shouldSaveAsDefaultExtentOnChange.bind(this);
+        // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
     }
 
     portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
@@ -99,15 +106,23 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
     }
 
     render(){
-
+        const { userSession, toggleSignInBtnOnClick } = this.props;
         const { portalUrl, shouldSaveAsDefaultExtent, saveBtnLable } = this.state;
 
         const saveBtnClasses = classnames('btn', {
             'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent ? true : false
-        })
+        });
+
+        const signInBtn = (
+            <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, true)}>Sign In</span> 
+        );
+
+        const signOutBtn = (
+            <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, false)}>Sign Out</span> 
+        );
 
         return(
-            <div className="js-modal modal-overlay customized-modal" data-modal="setting">
+            <div className="js-modal modal-overlay customized-modal setting-dialog" data-modal="setting">
                 <div className="modal-content column-8" role="dialog" aria-labelledby="modal">
                 
                     <span className="js-modal-toggle cursor-pointer right" aria-label="close-modal">
@@ -132,6 +147,10 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                     </div>
 
                     <div className='text-right'>
+                        <span className='margin-right-1'>
+                            { userSession  ? signOutBtn  : signInBtn  }
+                        </span>
+                        
                         <span className={saveBtnClasses} onClick={this.saveSettings}>{saveBtnLable}</span>
                     </div>
                 </div>

@@ -103,6 +103,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(this);
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
+        this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
     }
 
     async setWaybackItems(waybackItems:Array<IWaybackItem>){
@@ -239,22 +240,6 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleSaveAsWebmapDialog(isVisible?:boolean){
-        // console.log('save as web map')
-        const { isSaveAsWebmapDialogVisible, userSession } = this.state;
-
-        isVisible = typeof isVisible === 'boolean' ? isVisible : !isSaveAsWebmapDialogVisible;
-
-        if( isVisible && !userSession){
-            // sign in first before opening the save as web map dialog because the userSession is required to create web map
-            this.oauthUtils.sigIn();
-        } else {
-            this.setState({
-                isSaveAsWebmapDialogVisible: isVisible
-            });
-        }
-    }
-
     setUserSession(userSession:IUserSession){
         // console.log('setUserSession', userSession);
         this.setState({
@@ -297,6 +282,33 @@ class App extends React.PureComponent<IProps, IState> {
         const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
         const index = waybackItemsReleaseNum2IndexLookup[releaseNum];
         return waybackItems[index];
+    }
+
+    toggleSaveAsWebmapDialog(isVisible?:boolean){
+        // console.log('save as web map')
+        const { isSaveAsWebmapDialogVisible, userSession } = this.state;
+
+        isVisible = typeof isVisible === 'boolean' ? isVisible : !isSaveAsWebmapDialogVisible;
+
+        if( isVisible && !userSession){
+            // sign in first before opening the save as web map dialog because the userSession is required to create web map
+            this.oauthUtils.sigIn();
+        } else {
+            this.setState({
+                isSaveAsWebmapDialogVisible: isVisible
+            });
+        }
+    }
+
+    toggleSignInBtnOnClick(shouldSignIn?:boolean){
+
+        const { oauthUtils } = this;
+
+        if(shouldSignIn){
+            oauthUtils.sigIn();
+        } else {
+            oauthUtils.signOut();
+        }
     }
 
     async componentDidMount(){
@@ -531,6 +543,8 @@ class App extends React.PureComponent<IProps, IState> {
 
                 <SettingDialog 
                     mapExtent={mapExtent}
+                    userSession={userSession}
+                    toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
                 />
 
                 <Modal/>
