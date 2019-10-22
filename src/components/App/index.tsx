@@ -318,6 +318,7 @@ class App extends React.PureComponent<IProps, IState> {
         const arcgisPortal = isDev ? config.dev["portal-url"] : config.prod["portal-url"];
 
         const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
+        console.log(customizedPortal)
 
         try {
             // please note the appId used here only works for apps hosted under *.arcgis.com domain

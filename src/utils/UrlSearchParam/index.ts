@@ -18,7 +18,7 @@ const encodeSearchParam = ({
         localChangesOnly: shouldOnlyShowItemsWithLocalChange ? 'true' : '',
         selected: rNum4SelectedWaybackItems.length ? rNum4SelectedWaybackItems.join(',') : '',
         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
-        portal: ''
+        portal: getPortalUrlInSearchParam()
     };
 
     const searchParamsString = Object.keys(searchParams)
