@@ -1,7 +1,8 @@
 import { IExtentGeomety } from "../../types";
 
 const KEYS = {
-    defaultExtent: 'WaybackAppDefaultExtent'
+    defaultExtent: 'WaybackAppDefaultExtent',
+    showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges'
 }
 
 const saveDefaultExtent = (extent:IExtentGeomety)=>{
@@ -17,6 +18,14 @@ const getDefaultExtent = ():IExtentGeomety=>{
     return defaultExtent ? JSON.parse(defaultExtent) : null;
 };
 
+const setShouldShowUpdatesWithLocalChanges = (val=false)=>{
+    setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
+};
+
+const getShouldShowUpdatesWithLocalChanges = ()=>{
+    return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
+};
+
 const setItem = (key?:string, value='')=>{
     if(key){
         localStorage.setItem(key, value);
@@ -29,5 +38,7 @@ const getItem = (key?:string)=>{
 
 export {
     saveDefaultExtent,
-    getDefaultExtent
+    getDefaultExtent,
+    setShouldShowUpdatesWithLocalChanges,
+    getShouldShowUpdatesWithLocalChanges
 };

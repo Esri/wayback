@@ -6,7 +6,7 @@ import config from '../../config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
 import { encodeSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
-import { getDefaultExtent } from '../../utils/LocalStorage'
+import { getDefaultExtent, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
 
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
@@ -84,7 +84,7 @@ class App extends React.PureComponent<IProps, IState> {
             previewWaybackItem: null,
             alternativeRNum4RreviewWaybackItem:null,
             isSaveAsWebmapDialogVisible: false,
-            shouldOnlyShowItemsWithLocalChange: data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange ? data2InitApp.shouldOnlyShowItemsWithLocalChange : false,
+            shouldOnlyShowItemsWithLocalChange: data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange ? data2InitApp.shouldOnlyShowItemsWithLocalChange : getShouldShowUpdatesWithLocalChanges(),
             // we want to show the release date in wayback title only when hover over the bar chart
             shouldShowPreviewItemTitle:false,
             userSession:null,

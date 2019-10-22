@@ -3,7 +3,7 @@ import * as React from 'react';
 import classnames from 'classnames'
 import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import { savePortalUrlInSearchParam, getPortalUrlInSearchParam, getMapExtent } from '../../utils/UrlSearchParam';
-import { saveDefaultExtent } from '../../utils/LocalStorage'
+import { saveDefaultExtent, setShouldShowUpdatesWithLocalChanges, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
 // import OAuthUtils from '../../utils/Esri-OAuth';
 import { IExtentGeomety, IUserSession } from '../../types';
 
@@ -20,6 +20,7 @@ interface IProps {
 interface IState {
     portalUrl:string
     shouldSaveAsDefaultExtent:boolean,
+    shouldShowLocalChangesByDefault:boolean,
     saveBtnLable:SaveBtnLabelValue
 }
 
@@ -31,13 +32,14 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         this.state = {
             portalUrl: getPortalUrlInSearchParam(),
             shouldSaveAsDefaultExtent: false,
+            shouldShowLocalChangesByDefault: getShouldShowUpdatesWithLocalChanges(),
             saveBtnLable: 'Save'
         }
 
         this.saveSettings = this.saveSettings.bind(this);
         this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
         this.shouldSaveAsDefaultExtentOnChange = this.shouldSaveAsDefaultExtentOnChange.bind(this);
-        // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
+        this.shouldShowLocalChangesByDefaultOnChange = this.shouldShowLocalChangesByDefaultOnChange.bind(this);
     }
 
     portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
@@ -55,12 +57,23 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         this.setState({
             shouldSaveAsDefaultExtent: newVal
         }, ()=>{
-            console.log('shouldSaveAsDefaultExtent', newVal);
+            // console.log('shouldSaveAsDefaultExtent', newVal);
+        })
+    }
+
+    shouldShowLocalChangesByDefaultOnChange(){
+        const { shouldShowLocalChangesByDefault } = this.state;
+        const newVal = !shouldShowLocalChangesByDefault;
+
+        this.setState({
+            shouldShowLocalChangesByDefault: newVal
+        }, ()=>{
+            // console.log('shouldShowLocalChangesByDefault', newVal);
         })
     }
 
     saveSettings(){
-        const { portalUrl, shouldSaveAsDefaultExtent } = this.state;
+        const { portalUrl, shouldSaveAsDefaultExtent, shouldShowLocalChangesByDefault } = this.state;
 
         if(shouldSaveAsDefaultExtent){
             const mapExt = getMapExtent();
@@ -70,6 +83,10 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         if(portalUrl){
             savePortalUrlInSearchParam(portalUrl);
             window.location.reload();
+        }
+
+        if(shouldShowLocalChangesByDefault !== getShouldShowUpdatesWithLocalChanges()){
+            setShouldShowUpdatesWithLocalChanges(shouldShowLocalChangesByDefault)
         }
 
         this.toggleSaveBtnLabel(true);
@@ -107,10 +124,12 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
     render(){
         const { userSession, toggleSignInBtnOnClick } = this.props;
-        const { portalUrl, shouldSaveAsDefaultExtent, saveBtnLable } = this.state;
+        const { portalUrl, shouldSaveAsDefaultExtent, shouldShowLocalChangesByDefault, saveBtnLable } = this.state;
+
+        const isShouldShowLocalChangesByDefaultChanged = shouldShowLocalChangesByDefault !== getShouldShowUpdatesWithLocalChanges()
 
         const saveBtnClasses = classnames('btn', {
-            'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent ? true : false
+            'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent && !isShouldShowLocalChangesByDefaultChanged ? true : false
         });
 
         // const signInBtn = (
@@ -138,11 +157,19 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         </label>
                     </div>
 
-                    <div className='leader-half'>
-                        <label className="toggle-switch modifier-class">
+                    <div className='leader-half trailer-1'>
+                        <label className="toggle-switch">
                             <input type="checkbox" className="toggle-switch-input" checked={shouldSaveAsDefaultExtent ? true : false} onChange={this.shouldSaveAsDefaultExtentOnChange}/>
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">Save current map extent as default</span>
+                        </label>
+                    </div>
+
+                    <div className='leader-half trailer-1'>
+                        <label className="toggle-switch">
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldShowLocalChangesByDefault ? true : false} onChange={this.shouldShowLocalChangesByDefaultOnChange}/>
+                            <span className="toggle-switch-track margin-right-1"></span>
+                            <span className="toggle-switch-label font-size--1">Show updates with local changes by default</span>
                         </label>
                     </div>
 
