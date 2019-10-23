@@ -20,6 +20,15 @@ const config:IAppConfig = {
             'wayback-config': 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com/dev/waybackconfig.json',
             'wayback-change-detector-layer': 'https://metadatadev.maptiles.arcgis.com/arcgis/rest/services/Wayback_Footprints/MapServer/0'
         }
+    },
+    defaultMapExtent:{
+        xmin: -115.332,
+        ymin: 36.048,
+        xmax: -115.265,
+        ymax: 36.080,
+        spatialReference: {
+            wkid: 4326
+        }
     }
 };
 

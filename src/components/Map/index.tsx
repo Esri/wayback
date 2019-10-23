@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { loadCss, loadModules } from "esri-loader";
 import config from './config';
+import appConfig from '../../app-config';
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 
 import { IWaybackItem, IMapPointInfo, IExtentGeomety } from '../../types';
@@ -95,7 +96,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 layers: [waybackLayer, referenceLayer]
             });
 
-            const extent = defaultExtent || config.extents.default
+            const extent = defaultExtent || appConfig.defaultMapExtent || config.extents.default
     
             const view = new MapView({
                 container,

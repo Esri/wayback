@@ -96,6 +96,15 @@ interface IAppConfig {
             [name in ValidServiceUrlNames]:string
         }
     }
+    defaultMapExtent?:{
+        xmin: number,
+        ymin: number,
+        xmax: number,
+        ymax: number,
+        spatialReference: {
+            wkid: 4326
+        }
+    }
 } 
 
 export {
