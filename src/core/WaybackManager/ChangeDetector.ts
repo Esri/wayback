@@ -19,8 +19,10 @@ interface IParamGetTileUrl{
 }
 
 interface IOptionsWaybackChangeDetector {
-    url:string,
+    waybackMapServerBaseUrl?:string
+    changeDetectionLayerUrl?:string
     waybackconfig:IWaybackConfig
+    shouldUseChangdeDetectorLayer?:boolean
 }
 
 interface IResponseGetImageBlob {
@@ -32,50 +34,71 @@ class WaybackChangeDetector {
 
     // original wayback config JSON file
     private waybackconfig:IWaybackConfig;
-
-    private url:string
+    private waybackMapServerBaseUrl:string
+    private changeDetectionLayerUrl:string
+    private shouldUseChangdeDetectorLayer:boolean
 
     constructor({
-        url = '',
-        waybackconfig = null
+        waybackMapServerBaseUrl = '',
+        changeDetectionLayerUrl = '',
+        waybackconfig = null,
+        shouldUseChangdeDetectorLayer = false
     }:IOptionsWaybackChangeDetector){
-        this.url = url;
+        this.waybackMapServerBaseUrl = waybackMapServerBaseUrl;
+        this.changeDetectionLayerUrl = changeDetectionLayerUrl;
         this.waybackconfig = waybackconfig;
+        this.shouldUseChangdeDetectorLayer = shouldUseChangdeDetectorLayer;
+
+        console.log('waybackconfig', this.waybackconfig);
     }
 
-    // get array of release numbers for wayback items that come with changes for input area
-    async findChanges(pointInfo:IMapPointInfo):Promise<Array<number>>{
+    async queryChangeDetectionLayer(pointInfo:IMapPointInfo, zoomLevel:number):Promise<Array<number>>{
+
+        const queryUrl = this.changeDetectionLayerUrl + '/query';
+
+        const fields = config["change-detection-layer"].fields
+
+        const FIELD_NAME_ZOOM = fields[0].fieldname;
+        const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
+        const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
 
         try {
-
-            const queryUrl = this.url + '/query';
-
-            const fields = config["change-detection-layer"].fields
-
-            const FIELD_NAME_ZOOM = fields[0].fieldname;
-            const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
-            const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
-
-            const level = +pointInfo.zoom.toFixed(0);
-            const column = geometryFns.long2tile(pointInfo.longitude, level);
-            const row = geometryFns.lat2tile(pointInfo.latitude, level);
-            
             const queryResponse = await queryFeatures({
                 url: queryUrl,
                 geometry: pointInfo.geometry,
                 geometryType: 'esriGeometryPoint',
                 spatialRel: 'esriSpatialRelIntersects',
-                where: `${FIELD_NAME_ZOOM} = ${level}`,
+                where: `${FIELD_NAME_ZOOM} = ${zoomLevel}`,
                 outFields: [FIELD_NAME_RELEASE_NUM],
                 orderByFields: FIELD_NAME_RELEASE_NAME,
                 returnGeometry: false,
                 f: 'json'
             }) as IQueryFeaturesResponse;
     
-            const features:Array<IFeature> = queryResponse.features || [];
+            const rNums:Array<number> = ( queryResponse.features && queryResponse.features.length ) 
+            ? queryResponse.features.map(feature=>{
+                return feature.attributes[FIELD_NAME_RELEASE_NUM]
+            }) : [];
+    
+            return rNums;
 
-            const candidates = features.map(feature=>{
-                const rNum = feature.attributes[FIELD_NAME_RELEASE_NUM];
+        } catch(err){
+            console.error(err);
+            return [];
+        }
+    }
+
+    // get array of release numbers for wayback items that come with changes for input area
+    async findChanges(pointInfo:IMapPointInfo):Promise<Array<number>>{
+
+        try {
+            const level = +pointInfo.zoom.toFixed(0);
+            const column = geometryFns.long2tile(pointInfo.longitude, level);
+            const row = geometryFns.lat2tile(pointInfo.latitude, level);
+
+            const candidatesRNums = await this.queryChangeDetectionLayer(pointInfo, level);
+            
+            const candidates = candidatesRNums.map(rNum=>{
                 return {
                     rNum,
                     url: this.getTileImageUrl({column, row, level, rNum})

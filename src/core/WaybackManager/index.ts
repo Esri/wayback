@@ -35,8 +35,10 @@ class WaybackManager {
         this.metadataManager = new MetadataManager(this.waybackconfig);
 
         this.changeDetector = new ChangeDetector({
-            url: this.isDev ? config.dev["wayback-change-detector-layer"] : config.prod["wayback-change-detector-layer"],
-            waybackconfig: this.waybackconfig
+            waybackMapServerBaseUrl: this.isDev ? config.dev["wayback-imagery-base"] : config.prod["wayback-imagery-base"],
+            changeDetectionLayerUrl: this.isDev ? config.dev["wayback-change-detector-layer"] : config.prod["wayback-change-detector-layer"],
+            waybackconfig: this.waybackconfig,
+            shouldUseChangdeDetectorLayer: true
         });
 
         this.waybackItems = this.getWaybackItems();
