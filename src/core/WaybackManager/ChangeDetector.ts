@@ -1,8 +1,7 @@
+import axios from 'axios';
 import { queryFeatures, IQueryFeaturesResponse, IFeature  } from '@esri/arcgis-rest-feature-layer';
-
 import { geometryFns } from 'helper-toolkit-ts';
-
-import { IWaybackConfig, IMapPointInfo } from '../../types/index';
+import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
 // import { } from './types';
 import config from './config';
 
@@ -12,7 +11,7 @@ interface ICandidates {
 }
 
 interface IParamGetTileUrl{
-    rNum:number
+    rNum?:number
     column:number,
     row:number,
     level:number,
@@ -23,11 +22,24 @@ interface IOptionsWaybackChangeDetector {
     changeDetectionLayerUrl?:string
     waybackconfig:IWaybackConfig
     shouldUseChangdeDetectorLayer?:boolean
+    waybackItems:Array<IWaybackItem>
 }
 
 interface IResponseGetImageBlob {
     rNum:number,
     dataUri:string
+}
+
+interface IResponseWaybackTilemap {
+    data:Array<number>
+    select:Array<number>
+    valid:boolean
+    location: {
+        left:number, 
+        top:number, 
+        width:number, 
+        height:number
+    }
 }
 
 class WaybackChangeDetector {
@@ -37,22 +49,119 @@ class WaybackChangeDetector {
     private waybackMapServerBaseUrl:string
     private changeDetectionLayerUrl:string
     private shouldUseChangdeDetectorLayer:boolean
+    private waybackItems:Array<IWaybackItem>
+    private rNum2IndexLookup:{ [key:number]: number }
 
     constructor({
         waybackMapServerBaseUrl = '',
         changeDetectionLayerUrl = '',
         waybackconfig = null,
-        shouldUseChangdeDetectorLayer = false
+        shouldUseChangdeDetectorLayer = false,
+        waybackItems = []
     }:IOptionsWaybackChangeDetector){
+
         this.waybackMapServerBaseUrl = waybackMapServerBaseUrl;
         this.changeDetectionLayerUrl = changeDetectionLayerUrl;
         this.waybackconfig = waybackconfig;
+        this.waybackItems = waybackItems;
         this.shouldUseChangdeDetectorLayer = shouldUseChangdeDetectorLayer;
 
-        console.log('waybackconfig', this.waybackconfig);
+        console.log('waybackItems', this.waybackItems);
     }
 
-    async queryChangeDetectionLayer(pointInfo:IMapPointInfo, zoomLevel:number):Promise<Array<number>>{
+    // get array of release numbers for wayback items that come with changes for input area
+    async findChanges(pointInfo:IMapPointInfo):Promise<Array<number>>{
+
+        try {
+            const level = +pointInfo.zoom.toFixed(0);
+            const column = geometryFns.long2tile(pointInfo.longitude, level);
+            const row = geometryFns.lat2tile(pointInfo.latitude, level);
+
+            const candidatesRNums = this.shouldUseChangdeDetectorLayer 
+                ? await this.getRNumsFromDetectionLayer(pointInfo, level)
+                : await this.getRNumsFromTilemap({column, row, level});
+
+            const candidates = candidatesRNums.map(rNum=>{
+                return {
+                    rNum,
+                    url: this.getTileImageUrl({column, row, level, rNum})
+                }
+            });
+
+            const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+
+            return rNumsNoDuplicates;
+
+        } catch(err){
+            console.error('failed to find changes', err);
+            return null;
+        }
+    }
+
+    getPreviousReleaseNum(rNum:number){
+
+        if(!this.rNum2IndexLookup){
+            const lookup = {};
+
+            this.waybackItems.forEach((item, index)=>{
+                lookup[item.releaseNum] = index;
+            });
+
+            this.rNum2IndexLookup = lookup;
+        }
+
+        const index4InputRNum = this.rNum2IndexLookup[rNum];
+
+        const previousReleaseNum = this.waybackItems[index4InputRNum + 1] ? this.waybackItems[index4InputRNum + 1].releaseNum : null;
+
+        return previousReleaseNum;
+    }
+
+    async getRNumsFromTilemap({
+        column=null,
+        row=null,
+        level=null
+    }:IParamGetTileUrl):Promise<Array<number>>{
+
+        return new Promise((resolve, reject) => {
+
+            const results:Array<number> = [];
+
+            const mostRecentRelease = this.waybackItems[0].releaseNum;
+
+            const tilemapRequest = async(rNum:number)=>{
+
+                try {
+                    const requestUrl =  `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
+
+                    const response = await axios.get(requestUrl);
+    
+                    const tilemapResponse:IResponseWaybackTilemap = response.data || null;
+    
+                    const lastRelease = tilemapResponse.select && tilemapResponse.select[0] ? +tilemapResponse.select[0] : rNum; 
+    
+                    if(tilemapResponse.data[0]){
+                        results.push(lastRelease);
+                    }
+    
+                    const nextReleaseToCheck = tilemapResponse.data[0] ? this.getPreviousReleaseNum(lastRelease) : null; 
+            
+                    if(nextReleaseToCheck){
+                        tilemapRequest(nextReleaseToCheck);
+                    } else {
+                        resolve(results);
+                    }
+                } catch(err){
+                    console.error(err);
+                    reject(null);
+                }
+            };
+
+            tilemapRequest(mostRecentRelease);
+        });
+    }
+
+    async getRNumsFromDetectionLayer(pointInfo:IMapPointInfo, zoomLevel:number):Promise<Array<number>>{
 
         const queryUrl = this.changeDetectionLayerUrl + '/query';
 
@@ -76,7 +185,7 @@ class WaybackChangeDetector {
             }) as IQueryFeaturesResponse;
     
             const rNums:Array<number> = ( queryResponse.features && queryResponse.features.length ) 
-            ? queryResponse.features.map(feature=>{
+            ? queryResponse.features.map((feature:IFeature)=>{
                 return feature.attributes[FIELD_NAME_RELEASE_NUM]
             }) : [];
     
@@ -85,33 +194,6 @@ class WaybackChangeDetector {
         } catch(err){
             console.error(err);
             return [];
-        }
-    }
-
-    // get array of release numbers for wayback items that come with changes for input area
-    async findChanges(pointInfo:IMapPointInfo):Promise<Array<number>>{
-
-        try {
-            const level = +pointInfo.zoom.toFixed(0);
-            const column = geometryFns.long2tile(pointInfo.longitude, level);
-            const row = geometryFns.lat2tile(pointInfo.latitude, level);
-
-            const candidatesRNums = await this.queryChangeDetectionLayer(pointInfo, level);
-            
-            const candidates = candidatesRNums.map(rNum=>{
-                return {
-                    rNum,
-                    url: this.getTileImageUrl({column, row, level, rNum})
-                }
-            });
-
-            const rNumsNoDuplicates = await this.removeDuplicates(candidates);
-
-            return rNumsNoDuplicates;
-
-        } catch(err){
-            console.error('failed to find changes', err);
-            return null;
         }
     }
 

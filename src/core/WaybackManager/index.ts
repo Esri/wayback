@@ -32,16 +32,17 @@ class WaybackManager {
         this.waybackconfig = await this.fetchWaybackConfig();
         // console.log(this.waybackconfig);
 
+        this.waybackItems = this.getWaybackItems();
+
         this.metadataManager = new MetadataManager(this.waybackconfig);
 
         this.changeDetector = new ChangeDetector({
             waybackMapServerBaseUrl: this.isDev ? config.dev["wayback-imagery-base"] : config.prod["wayback-imagery-base"],
             changeDetectionLayerUrl: this.isDev ? config.dev["wayback-change-detector-layer"] : config.prod["wayback-change-detector-layer"],
             waybackconfig: this.waybackconfig,
-            shouldUseChangdeDetectorLayer: true
+            waybackItems: this.waybackItems,
+            shouldUseChangdeDetectorLayer: config.shouldUseWaybackFootprintsLayer
         });
-
-        this.waybackItems = this.getWaybackItems();
 
         return {
             waybackItems: this.waybackItems

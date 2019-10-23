@@ -1,6 +1,7 @@
 export default {
     // The registered application id used for authentication
     'appId': 'WaybackImagery',
+    'shouldUseWaybackFootprintsLayer': false,
     'dev': {
         'portal-url': 'https://devext.arcgis.com',
         'wayback-imagery-base': 'https://waybackdev.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer',
