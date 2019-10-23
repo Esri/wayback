@@ -2,11 +2,12 @@ import './style.scss';
 import * as React from 'react';
 
 import classnames from 'classnames';
-import config from '../../config';
+import config from '../../app-config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
 import { encodeSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
 import { getDefaultExtent, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
+import { getServiceUrl } from '../../utils/Tier'
 
 import Map from '../Map';
 import Modal from '../ModalAboutApp';
@@ -32,7 +33,7 @@ interface IWaybackItemsReleaseNum2IndexLookup {
 
 interface IProps {
     data2InitApp?:ISearchParamData
-    isDev?:boolean
+    // isDev?:boolean
     isMobile?:boolean
     waybackManager:WaybackManager
     waybackData2InitApp: {
@@ -70,8 +71,6 @@ class App extends React.PureComponent<IProps, IState> {
         super(props);
 
         const { data2InitApp, isMobile } = props;
-
-        // this.waybackManager = new WaybackManager({isDev});
 
         this.oauthUtils = new OAuthUtils();
 
@@ -313,12 +312,12 @@ class App extends React.PureComponent<IProps, IState> {
 
     async componentDidMount(){
 
-        const { isDev, waybackData2InitApp } = this.props;
+        const { waybackData2InitApp } = this.props;
 
-        const arcgisPortal = isDev ? config.dev["portal-url"] : config.prod["portal-url"];
+        const arcgisPortal = getServiceUrl('portal-url');
 
         const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
-        console.log(customizedPortal)
+        // console.log(customizedPortal)
 
         try {
             // please note the appId used here only works for apps hosted under *.arcgis.com domain

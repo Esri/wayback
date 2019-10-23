@@ -11,25 +11,22 @@ import * as ReactDOM from 'react-dom';
 
 import WaybackManager from './core/WaybackManager';
 import App from './components/App';
-import { isDevMode } from './utils/Tier';
 import { decodeSearchParam } from './utils/UrlSearchParam';
 import { miscFns } from 'helper-toolkit-ts'
 
 const initApp = async()=>{
 
-    const isDev = isDevMode();
     const isMobileDevice = miscFns.isMobileDevice();
 
     const data2InitApp = decodeSearchParam();
 
-    const waybackManager = new WaybackManager({isDev});
+    const waybackManager = new WaybackManager();
     const waybackData2InitApp = await waybackManager.init();
 
     try {
         ReactDOM.render(
             <App
                 data2InitApp={data2InitApp}
-                isDev={isDev}
                 isMobile={isMobileDevice}
                 waybackManager={waybackManager}
                 waybackData2InitApp={waybackData2InitApp}

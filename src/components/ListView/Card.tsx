@@ -3,8 +3,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem, IStaticTooltipData } from '../../types';
-import { isDevMode } from '../../utils/Tier';
-import config from '../../config';
+import { getServiceUrl } from '../../utils/Tier';
 
 interface IProps {
     data:IWaybackItem
@@ -38,7 +37,7 @@ class ListViewCard extends React.PureComponent<IProps, IState> {
 
         const itemId = data.itemID;
 
-        const agolHost = isDevMode() ? config.dev["portal-url"] : config.prod["portal-url"];
+        const agolHost = getServiceUrl("portal-url")
 
         const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
 

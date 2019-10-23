@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
-import config from '../../config';
-import { isDevMode } from '../../utils/Tier';
+import { getServiceUrl } from '../../utils/Tier';
 
 interface ICreateWebmapParams {
     title:string
@@ -133,7 +132,7 @@ const getOperationalLayers = (waybackItems:Array<IWaybackItem>)=>{
         const waybackLayerInfo:IWaybackLayerInfo = {
             "templateUrl": waybackItem.itemURL,
             "wmtsInfo": {
-                "url": isDevMode() ? config.dev["wayback-imagery-base"] : config.prod["wayback-imagery-base"]
+                "url": getServiceUrl("wayback-imagery-base")
             },
             "visibility": isVisible,
             "title": waybackItem.itemTitle,

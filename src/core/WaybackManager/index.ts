@@ -1,15 +1,16 @@
-import config from '../../config';
+import config from '../../app-config';
 import axios from 'axios';
 
+import { getServiceUrl } from '../../utils/Tier'
 import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '../../types/index';
 import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
 
+
 class WaybackManager {
 
-    private isDev = false;
 
     // module to query the wayback metadata
     private metadataManager:MetadataManager;
@@ -21,10 +22,7 @@ class WaybackManager {
     // array of wayback items with more attributes
     private waybackItems:Array<IWaybackItem>;
 
-    constructor({
-        isDev = false
-    }={}){
-        this.isDev = isDev;
+    constructor(){
     }
 
     async init(){
@@ -37,8 +35,8 @@ class WaybackManager {
         this.metadataManager = new MetadataManager(this.waybackconfig);
 
         this.changeDetector = new ChangeDetector({
-            waybackMapServerBaseUrl: this.isDev ? config.dev["wayback-imagery-base"] : config.prod["wayback-imagery-base"],
-            changeDetectionLayerUrl: this.isDev ? config.dev["wayback-change-detector-layer"] : config.prod["wayback-change-detector-layer"],
+            waybackMapServerBaseUrl: getServiceUrl("wayback-imagery-base"),
+            changeDetectionLayerUrl: getServiceUrl("wayback-change-detector-layer"),
             waybackconfig: this.waybackconfig,
             waybackItems: this.waybackItems,
             shouldUseChangdeDetectorLayer: config.shouldUseWaybackFootprintsLayer
@@ -97,7 +95,7 @@ class WaybackManager {
     }
 
     private fetchWaybackConfig():Promise<IWaybackConfig>{
-        const requestUrl = this.isDev ? config.dev["wayback-config"] : config.prod["wayback-config"];
+        const requestUrl = getServiceUrl("wayback-config")
 
         return new Promise((resolve, reject)=>{
 

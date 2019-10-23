@@ -2,7 +2,6 @@ import axios from 'axios';
 import { queryFeatures, IQueryFeaturesResponse, IFeature  } from '@esri/arcgis-rest-feature-layer';
 import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
-// import { } from './types';
 import config from './config';
 
 interface ICandidates {
@@ -66,7 +65,7 @@ class WaybackChangeDetector {
         this.waybackItems = waybackItems;
         this.shouldUseChangdeDetectorLayer = shouldUseChangdeDetectorLayer;
 
-        console.log('waybackItems', this.waybackItems);
+        // console.log('waybackItems', this.waybackItems);
     }
 
     // get array of release numbers for wayback items that come with changes for input area

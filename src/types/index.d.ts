@@ -81,6 +81,23 @@ interface IStaticTooltipData {
     left:number
 }
 
+type ValidServiceUrlNames = 'portal-url' | 'wayback-imagery-base' | 'wayback-config' | 'wayback-change-detector-layer';
+
+interface IAppConfig {
+    appId:string
+    shouldUseWaybackFootprintsLayer:boolean
+    productionEnv: {
+        serviceUrls:{
+            [name in ValidServiceUrlNames]:string
+        }
+    }
+    developmentEnv?: {
+        serviceUrls:{
+            [name in ValidServiceUrlNames]:string
+        }
+    }
+} 
+
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -91,5 +108,7 @@ export {
     IUserSession,
     IExtentGeomety,
     ISearchParamData,
-    IStaticTooltipData
+    IStaticTooltipData,
+    ValidServiceUrlNames,
+    IAppConfig
 }
