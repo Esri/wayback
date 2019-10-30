@@ -29,6 +29,8 @@ const encodeSearchParam = ({
         .join('&');
     
     urlFns.updateQueryParamInUrl(searchParamsString);
+
+    return location.href;
 };
 
 const decodeSearchParam = ()=>{

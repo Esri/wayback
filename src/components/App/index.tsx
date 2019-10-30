@@ -56,9 +56,11 @@ interface IState {
     isSaveAsWebmapDialogVisible:boolean
     shouldOnlyShowItemsWithLocalChange:boolean
     shouldShowPreviewItemTitle:boolean
-    userSession:IUserSession,
-    isGutterHide:boolean,
+    userSession:IUserSession
+    isGutterHide:boolean
     isSideBarHide:boolean
+
+    currentUrl:string
 }
 
 class App extends React.PureComponent<IProps, IState> {
@@ -90,7 +92,8 @@ class App extends React.PureComponent<IProps, IState> {
             userSession:null,
             mapExtent:null,
             isGutterHide: isMobile ? true : false,
-            isSideBarHide:false
+            isSideBarHide:false,
+            currentUrl: location.href
         }
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -338,7 +341,7 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(){
+    updateUrlSearchParams(){
         const { 
             // activeWaybackItem, 
             shouldOnlyShowItemsWithLocalChange,
@@ -353,6 +356,14 @@ class App extends React.PureComponent<IProps, IState> {
             // rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
             shouldOnlyShowItemsWithLocalChange,
         });
+
+        this.setState({
+            currentUrl: location.href
+        });
+    }
+
+    componentDidUpdate(){
+        this.updateUrlSearchParams();
     }
 
     getSidebarContent(){
@@ -476,7 +487,8 @@ class App extends React.PureComponent<IProps, IState> {
             userSession,
             mapExtent,
             alternativeRNum4RreviewWaybackItem,
-            isGutterHide
+            isGutterHide,
+            currentUrl
         } = this.state;
 
         const defaultExtentFromUrl = data2InitApp && data2InitApp.mapExtent ? data2InitApp.mapExtent : null;
@@ -548,7 +560,9 @@ class App extends React.PureComponent<IProps, IState> {
                     toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
                 />
 
-                <ShareDialog />
+                <ShareDialog 
+                    currentUrl={currentUrl}
+                />
 
                 <AboutThisApp />
 

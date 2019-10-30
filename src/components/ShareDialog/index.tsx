@@ -4,17 +4,45 @@ import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import config from './config';
 
 interface IProps {
-
+    currentUrl:string
 }
 
 interface IState {
-
+    copyBtnLabel:string
 }
 
 class ShareDialog extends React.PureComponent<IProps, IState> {
 
+    private textInputRef = React.createRef<HTMLInputElement>();
+
     constructor(props:IProps){
         super(props);
+
+        this.state = {
+            copyBtnLabel: 'Copy'
+        }
+
+        this.copyToClipboard = this.copyToClipboard.bind(this);
+    }
+
+    copyToClipboard(){
+        const textInput = this.textInputRef.current;
+        textInput.select();
+        document.execCommand('copy');
+
+        this.updateCopyBtnLabel('Copied');
+    }
+
+    updateCopyBtnLabel(label='Copy'){
+        this.setState({
+            copyBtnLabel: label
+        });
+
+        if( label === 'Copied' ){
+            setTimeout(()=>{
+                this.updateCopyBtnLabel('Copy');
+            }, 1500)
+        }
     }
 
     componentDidMount(){
@@ -22,6 +50,11 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
     }
 
     render(){
+
+        const { currentUrl } = this.props;
+
+        const { copyBtnLabel } = this.state;
+
         return(
             <div className="js-modal modal-overlay customized-modal" data-modal="share">
                 <div className="modal-content column-7" role="dialog" aria-labelledby="modal">
@@ -36,9 +69,9 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='input-2-copy-url trailer-half'>
                         <div className="input-group">
-                            <input className="input-group-input" type="text" />
+                            <input className="input-group-input" ref={this.textInputRef} type="text" defaultValue={currentUrl}/>
                             <span className="input-group-button">
-                                <button className="btn">Copy</button>
+                                <button className="btn" onClick={this.copyToClipboard}>{copyBtnLabel}</button>
                             </span>
                         </div>
                     </div>
