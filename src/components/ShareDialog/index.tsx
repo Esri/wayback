@@ -55,6 +55,10 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
 
         const { copyBtnLabel } = this.state;
 
+        const share2TwitterLink = `https://arcgis.com/home/socialnetwork.html?t=${config.title}&n=tw&u=${currentUrl}`;
+        const share2facebookLink = `https://arcgis.com/home/socialnetwork.html?t=${config.title}&n=fb&u=${currentUrl}`;
+        const share2LinkedInLink = `https://www.linkedin.com/shareArticle?url=${currentUrl}&title=${config.title}&summary=${config.description}?mini=true&source=livingatlas.arcgis.com`;
+
         return(
             <div className="js-modal modal-overlay customized-modal" data-modal="share">
                 <div className="modal-content column-7" role="dialog" aria-labelledby="modal">
@@ -69,7 +73,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='input-2-copy-url trailer-half'>
                         <div className="input-group">
-                            <input className="input-group-input" ref={this.textInputRef} type="text" defaultValue={currentUrl}/>
+                            <input className="input-group-input" ref={this.textInputRef} readOnly type="text" value={currentUrl}/>
                             <span className="input-group-button">
                                 <button className="btn" onClick={this.copyToClipboard}>{copyBtnLabel}</button>
                             </span>
@@ -77,9 +81,9 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                     </div>
 
                     <div className='trailer-half social-media-icons'>
-                        <span className="icon-social-twitter cursor-pointer font-size-2" aria-label="Twitter"></span>
-                        <span className="icon-social-linkedin cursor-pointer" aria-label="LinkedIn"></span>
-                        <span className="icon-social-facebook cursor-pointer" aria-label="Facebook"></span>
+                        <a className="icon-social-twitter cursor-pointer" href={share2TwitterLink} target='_blank' aria-label="Twitter"></a>
+                        <a className="icon-social-linkedin cursor-pointer" href={share2LinkedInLink} target='_blank' aria-label="LinkedIn"></a>
+                        <a className="icon-social-facebook cursor-pointer" href={share2facebookLink} target='_blank' aria-label="Facebook"></a>
                         <a className="icon-social-github cursor-pointer" href={config["github-repo-url"]} target='_blank' aria-label="github"></a>
                     </div>
                 
