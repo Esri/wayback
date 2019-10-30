@@ -10,7 +10,7 @@ import { getDefaultExtent, getShouldShowUpdatesWithLocalChanges } from '../../ut
 import { getServiceUrl } from '../../utils/Tier'
 
 import Map from '../Map';
-import Modal from '../ModalAboutApp';
+import AboutThisApp from '../ModalAboutApp';
 import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
@@ -24,6 +24,7 @@ import MobileHeader from '../MobileHeader';
 import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog';
 import Gutter from '../Gutter';
+import ShareDialog from '../ShareDialog';
 
 import { IWaybackItem, IMapPointInfo, IExtentGeomety, IUserSession, ISearchParamData } from '../../types';
 
@@ -547,9 +548,10 @@ class App extends React.PureComponent<IProps, IState> {
                     toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
                 />
 
-                <Modal/>
+                <ShareDialog />
 
-                
+                <AboutThisApp />
+
             </div>
         );
     }
