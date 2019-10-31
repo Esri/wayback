@@ -152,7 +152,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         <label className="toggle-switch">
                             <input type="checkbox" className="toggle-switch-input" checked={shouldShowLocalChangesByDefault ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldShowLocalChangesByDefault')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
-                            <span className="toggle-switch-label font-size--1">Show updates with local changes by default</span>
+                            <span className="toggle-switch-label font-size--1">Show only updates with local changes by default</span>
                         </label>
                     </div>
 
@@ -160,13 +160,13 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         <label className="toggle-switch">
                             <input type="checkbox" className="toggle-switch-input" checked={shouldUseCustomPortalUrl ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldUseCustomPortalUrl')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
-                            <span className="toggle-switch-label font-size--1">Use Custom Portal URL</span>
+                            <span className="toggle-switch-label font-size--1">Use Custom Enterprise URL for map export</span>
                         </label>
 
                         {
                             shouldUseCustomPortalUrl 
                             ? <label>
-                                <input type="text" placeholder="ArcGIS Enterprise Portal URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
+                                <input type="text" placeholder="ArcGIS Enterprise URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
                             </label>
                             : null
                         }
