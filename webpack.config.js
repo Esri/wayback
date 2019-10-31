@@ -1,3 +1,4 @@
+const path = require('path');
 const os = require('os');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -22,8 +23,10 @@ module.exports = (env, options)=> {
             https: true,
             host: hostname
         },
+        entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
-            filename: 'bundle.[hash].js'
+            path: path.resolve(__dirname, './dist'),
+            filename: '[name].[contenthash].js'
         },
         devtool: 'source-map',
         resolve: {

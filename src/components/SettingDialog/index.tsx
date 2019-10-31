@@ -4,7 +4,6 @@ import classnames from 'classnames'
 import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import { savePortalUrlInSearchParam, getPortalUrlInSearchParam, getMapExtent } from '../../utils/UrlSearchParam';
 import { saveDefaultExtent, setShouldShowUpdatesWithLocalChanges, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
-// import OAuthUtils from '../../utils/Esri-OAuth';
 import { IExtentGeomety, IUserSession } from '../../types';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
@@ -14,7 +13,6 @@ interface IProps {
     userSession?:IUserSession
 
     toggleSignInBtnOnClick:(shouldSignIn:boolean)=>void
-    // oauthUtils?:OAuthUtils
 }
 
 interface IState {
@@ -25,6 +23,8 @@ interface IState {
     shouldShowLocalChangesByDefault:boolean
     saveBtnLable:SaveBtnLabelValue
 }
+
+type StateKeys = keyof IState;
 
 class SettingDialog extends React.PureComponent<IProps, IState> {
 
@@ -41,9 +41,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
         this.saveSettings = this.saveSettings.bind(this);
         this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
-        this.shouldSaveAsDefaultExtentOnChange = this.shouldSaveAsDefaultExtentOnChange.bind(this);
-        this.shouldShowLocalChangesByDefaultOnChange = this.shouldShowLocalChangesByDefaultOnChange.bind(this);
-        this.shouldUseCustomPortalUrlOnChange = this.shouldUseCustomPortalUrlOnChange.bind(this);
+        this.toggleBooleanStateVal = this.toggleBooleanStateVal.bind(this);
     }
 
     portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
@@ -54,37 +52,18 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         });
     }
 
-    shouldUseCustomPortalUrlOnChange(){
-        const { shouldUseCustomPortalUrl } = this.state;
-        const newVal = !shouldUseCustomPortalUrl;
+    toggleBooleanStateVal(stateKey:StateKeys){
 
-        this.setState({
-            shouldUseCustomPortalUrl: newVal
-        }, ()=>{
-            // console.log('shouldSaveAsDefaultExtent', newVal);
-        })
-    }
+        if(typeof this.state[stateKey] === 'boolean'){
 
-    shouldSaveAsDefaultExtentOnChange(){
-        const { shouldSaveAsDefaultExtent } = this.state;
-        const newVal = !shouldSaveAsDefaultExtent;
+            const newVal =  !this.state[stateKey];
 
-        this.setState({
-            shouldSaveAsDefaultExtent: newVal
-        }, ()=>{
-            // console.log('shouldSaveAsDefaultExtent', newVal);
-        })
-    }
+            this.setState(prevState=>({
+                ...prevState,
+                [stateKey]: newVal
+            }));
+        }
 
-    shouldShowLocalChangesByDefaultOnChange(){
-        const { shouldShowLocalChangesByDefault } = this.state;
-        const newVal = !shouldShowLocalChangesByDefault;
-
-        this.setState({
-            shouldShowLocalChangesByDefault: newVal
-        }, ()=>{
-            // console.log('shouldShowLocalChangesByDefault', newVal);
-        })
     }
 
     saveSettings(){
@@ -163,7 +142,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='leader-half trailer-1'>
                         <label className="toggle-switch">
-                            <input type="checkbox" className="toggle-switch-input" checked={shouldSaveAsDefaultExtent ? true : false} onChange={this.shouldSaveAsDefaultExtentOnChange}/>
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldSaveAsDefaultExtent ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldSaveAsDefaultExtent')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">Save current map extent as default</span>
                         </label>
@@ -171,7 +150,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='leader-half trailer-1'>
                         <label className="toggle-switch">
-                            <input type="checkbox" className="toggle-switch-input" checked={shouldShowLocalChangesByDefault ? true : false} onChange={this.shouldShowLocalChangesByDefaultOnChange}/>
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldShowLocalChangesByDefault ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldShowLocalChangesByDefault')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">Show updates with local changes by default</span>
                         </label>
@@ -179,7 +158,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
                     <div className='leader-half trailer-1'>
                         <label className="toggle-switch">
-                            <input type="checkbox" className="toggle-switch-input" checked={shouldUseCustomPortalUrl ? true : false} onChange={this.shouldUseCustomPortalUrlOnChange}/>
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldUseCustomPortalUrl ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldUseCustomPortalUrl')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">Use Custom Portal URL</span>
                         </label>
