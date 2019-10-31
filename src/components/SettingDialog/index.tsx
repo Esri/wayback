@@ -18,9 +18,11 @@ interface IProps {
 }
 
 interface IState {
+
     portalUrl:string
-    shouldSaveAsDefaultExtent:boolean,
-    shouldShowLocalChangesByDefault:boolean,
+    shouldUseCustomPortalUrl:boolean
+    shouldSaveAsDefaultExtent:boolean
+    shouldShowLocalChangesByDefault:boolean
     saveBtnLable:SaveBtnLabelValue
 }
 
@@ -31,6 +33,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
         this.state = {
             portalUrl: getPortalUrlInSearchParam(),
+            shouldUseCustomPortalUrl: false,
             shouldSaveAsDefaultExtent: false,
             shouldShowLocalChangesByDefault: getShouldShowUpdatesWithLocalChanges(),
             saveBtnLable: 'Save'
@@ -40,6 +43,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
         this.shouldSaveAsDefaultExtentOnChange = this.shouldSaveAsDefaultExtentOnChange.bind(this);
         this.shouldShowLocalChangesByDefaultOnChange = this.shouldShowLocalChangesByDefaultOnChange.bind(this);
+        this.shouldUseCustomPortalUrlOnChange = this.shouldUseCustomPortalUrlOnChange.bind(this);
     }
 
     portalUrlInputOnChange(evt:React.ChangeEvent<HTMLInputElement>){
@@ -48,6 +52,17 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         this.setState({
             portalUrl
         });
+    }
+
+    shouldUseCustomPortalUrlOnChange(){
+        const { shouldUseCustomPortalUrl } = this.state;
+        const newVal = !shouldUseCustomPortalUrl;
+
+        this.setState({
+            shouldUseCustomPortalUrl: newVal
+        }, ()=>{
+            // console.log('shouldSaveAsDefaultExtent', newVal);
+        })
     }
 
     shouldSaveAsDefaultExtentOnChange(){
@@ -80,13 +95,13 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             saveDefaultExtent(mapExt);
         }
 
+        if(shouldShowLocalChangesByDefault !== getShouldShowUpdatesWithLocalChanges()){
+            setShouldShowUpdatesWithLocalChanges(shouldShowLocalChangesByDefault)
+        }
+
         if(portalUrl){
             savePortalUrlInSearchParam(portalUrl);
             window.location.reload();
-        }
-
-        if(shouldShowLocalChangesByDefault !== getShouldShowUpdatesWithLocalChanges()){
-            setShouldShowUpdatesWithLocalChanges(shouldShowLocalChangesByDefault)
         }
 
         this.toggleSaveBtnLabel(true);
@@ -124,17 +139,13 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
     render(){
         const { userSession, toggleSignInBtnOnClick } = this.props;
-        const { portalUrl, shouldSaveAsDefaultExtent, shouldShowLocalChangesByDefault, saveBtnLable } = this.state;
+        const { portalUrl, shouldUseCustomPortalUrl, shouldSaveAsDefaultExtent, shouldShowLocalChangesByDefault, saveBtnLable } = this.state;
 
         const isShouldShowLocalChangesByDefaultChanged = shouldShowLocalChangesByDefault !== getShouldShowUpdatesWithLocalChanges()
 
         const saveBtnClasses = classnames('btn', {
             'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent && !isShouldShowLocalChangesByDefaultChanged ? true : false
         });
-
-        // const signInBtn = (
-        //     <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, true)}>Sign In</span> 
-        // );
 
         const signOutBtn = (
             <span className='btn btn-transparent' onClick={toggleSignInBtnOnClick.bind(this, false)}>Sign Out</span> 
@@ -150,13 +161,6 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                 
                     <h2 className='text-center trailer-1'>Settings</h2>
 
-                    <div className='trailer-1'>
-                        <label>
-                            Portal URL:
-                            <input type="text" placeholder="ArcGIS Enterprise Portal URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
-                        </label>
-                    </div>
-
                     <div className='leader-half trailer-1'>
                         <label className="toggle-switch">
                             <input type="checkbox" className="toggle-switch-input" checked={shouldSaveAsDefaultExtent ? true : false} onChange={this.shouldSaveAsDefaultExtentOnChange}/>
@@ -171,6 +175,23 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">Show updates with local changes by default</span>
                         </label>
+                    </div>
+
+                    <div className='leader-half trailer-1'>
+                        <label className="toggle-switch">
+                            <input type="checkbox" className="toggle-switch-input" checked={shouldUseCustomPortalUrl ? true : false} onChange={this.shouldUseCustomPortalUrlOnChange}/>
+                            <span className="toggle-switch-track margin-right-1"></span>
+                            <span className="toggle-switch-label font-size--1">Use Custom Portal URL</span>
+                        </label>
+
+                        {
+                            shouldUseCustomPortalUrl 
+                            ? <label>
+                                <input type="text" placeholder="ArcGIS Enterprise Portal URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
+                            </label>
+                            : null
+                        }
+
                     </div>
 
                     <div className='text-right'>
