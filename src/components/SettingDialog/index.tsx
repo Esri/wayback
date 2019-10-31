@@ -160,7 +160,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         <label className="toggle-switch">
                             <input type="checkbox" className="toggle-switch-input" checked={shouldUseCustomPortalUrl ? true : false} onChange={this.toggleBooleanStateVal.bind(this, 'shouldUseCustomPortalUrl')}/>
                             <span className="toggle-switch-track margin-right-1"></span>
-                            <span className="toggle-switch-label font-size--1">Use custom Enterprise URL for map export</span>
+                            <span className="toggle-switch-label font-size--1">Use ArcGIS Enterprise URL to save map</span>
                         </label>
 
                         {
