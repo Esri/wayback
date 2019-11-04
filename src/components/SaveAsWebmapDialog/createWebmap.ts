@@ -116,7 +116,9 @@ const getRequestText = (waybackItems:Array<IWaybackItem>)=>{
             "title":"Imagery with Labels"
         },
         "spatialReference":{"wkid":102100,"latestWkid":3857},
-        "version": "2.15"
+        "version": "2.15",
+        "authoringApp": "Wayback",
+        "authoringAppVersion": "1.0.0"
     };
 
     return JSON.stringify(requestText);
