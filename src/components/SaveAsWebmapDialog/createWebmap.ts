@@ -103,17 +103,18 @@ const getRequestText = (waybackItems:Array<IWaybackItem>)=>{
                     "opacity": 1,
                     "title": "World Imagery"
                 },
-                {
-                    "id": "World_Boundaries_and_Places",
-                    "layerType": "ArcGISTiledMapServiceLayer",
-                    "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer",
-                    "visibility": true,
-                    "opacity": 1,
-                    "title": "World Boundaries and Places",
-                    "isReference": true
+                { 
+                    "type":"VectorTileLayer",
+                    "layerType":"VectorTileLayer",
+                    "title":"Hybrid Reference Layer (Local Language)",
+                    "styleUrl":"https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json",
+                    "itemId":"2a2e806e6e654ea78ecb705149ceae9f",
+                    "visibility":true,
+                    "isReference":true,
+                    "opacity":1
                 }
             ],
-            "title":"Imagery with Labels"
+            "title":"Imagery Hybrid"
         },
         "spatialReference":{"wkid":102100,"latestWkid":3857},
         "version": "2.15",
