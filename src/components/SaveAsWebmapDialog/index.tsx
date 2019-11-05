@@ -141,8 +141,9 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         const baseUrl = (
             userSession && 
             userSession.portal.url && 
-            userSession.portal.urlKey 
-        ) ? `https://${userSession.portal.urlKey}.maps.arcgis.com` : userSession.portal.url;
+            userSession.portal.urlKey &&
+            userSession.portal.customBaseUrl
+        ) ? `https://${userSession.portal.urlKey}.${userSession.portal.customBaseUrl}` : userSession.portal.url;
 
         const itemUrl = userSession && webmapId ? `${baseUrl}/home/item.html?id=${webmapId}` : null;
 

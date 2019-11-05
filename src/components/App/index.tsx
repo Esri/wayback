@@ -564,6 +564,7 @@ class App extends React.PureComponent<IProps, IState> {
                 portalUrl: customizedPortal || arcgisPortal
             });
             this.setUserSession(userSession);
+            console.log(userSession);
 
             // const waybackData2InitApp = await this.waybackManager.init();
             // console.log(waybackData2InitApp);
