@@ -6,8 +6,13 @@ import config from '../../app-config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
 import { encodeSearchParam, getPortalUrlInSearchParam } from '../../utils/UrlSearchParam';
-import { getDefaultExtent, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
-import { getServiceUrl } from '../../utils/Tier'
+import { getServiceUrl } from '../../utils/Tier';
+import { 
+    getDefaultExtent, 
+    getShouldShowUpdatesWithLocalChanges, 
+    setShouldOpenSaveWebMapDialog, 
+    getShouldOpenSaveWebMapDialog 
+} from '../../utils/LocalStorage'
 
 import Map from '../Map';
 import AboutThisApp from '../ModalAboutApp';
@@ -294,6 +299,9 @@ class App extends React.PureComponent<IProps, IState> {
         isVisible = typeof isVisible === 'boolean' ? isVisible : !isSaveAsWebmapDialogVisible;
 
         if( isVisible && !userSession){
+            // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
+            setShouldOpenSaveWebMapDialog();
+
             // sign in first before opening the save as web map dialog because the userSession is required to create web map
             this.oauthUtils.sigIn();
         } else {
@@ -311,33 +319,6 @@ class App extends React.PureComponent<IProps, IState> {
             oauthUtils.sigIn();
         } else {
             oauthUtils.signOut();
-        }
-    }
-
-    async componentDidMount(){
-
-        const { waybackData2InitApp } = this.props;
-
-        const arcgisPortal = getServiceUrl('portal-url');
-
-        const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
-        // console.log(customizedPortal)
-
-        try {
-            // please note the appId used here only works for apps hosted under *.arcgis.com domain
-            // need to switch to using appropriate appId if the app will be hosted under different domain
-            const userSession = await this.oauthUtils.init({
-                appId: config.appId,
-                portalUrl: customizedPortal || arcgisPortal
-            });
-            this.setUserSession(userSession);
-
-            // const waybackData2InitApp = await this.waybackManager.init();
-            // console.log(waybackData2InitApp);
-            this.setWaybackItems(waybackData2InitApp.waybackItems);
-            
-        } catch(err){
-            console.error('failed to get waybackData2InitApp');
         }
     }
 
@@ -360,10 +341,6 @@ class App extends React.PureComponent<IProps, IState> {
         this.setState({
             currentUrl: location.href
         });
-    }
-
-    componentDidUpdate(){
-        this.updateUrlSearchParams();
     }
 
     getSidebarContent(){
@@ -568,6 +545,41 @@ class App extends React.PureComponent<IProps, IState> {
 
             </div>
         );
+    }
+
+    async componentDidMount(){
+
+        const { waybackData2InitApp } = this.props;
+
+        const arcgisPortal = getServiceUrl('portal-url');
+
+        const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
+        // console.log(customizedPortal)
+
+        try {
+            // please note the appId used here only works for apps hosted under *.arcgis.com domain
+            // need to switch to using appropriate appId if the app will be hosted under different domain
+            const userSession = await this.oauthUtils.init({
+                appId: config.appId,
+                portalUrl: customizedPortal || arcgisPortal
+            });
+            this.setUserSession(userSession);
+
+            // const waybackData2InitApp = await this.waybackManager.init();
+            // console.log(waybackData2InitApp);
+            this.setWaybackItems(waybackData2InitApp.waybackItems);
+
+            if(getShouldOpenSaveWebMapDialog()){
+                this.toggleSaveAsWebmapDialog(true);
+            }
+            
+        } catch(err){
+            console.error('failed to get waybackData2InitApp');
+        }
+    }
+
+    componentDidUpdate(){
+        this.updateUrlSearchParams();
     }
 
 };

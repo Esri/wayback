@@ -2,7 +2,8 @@ import { IExtentGeomety } from "../../types";
 
 const KEYS = {
     defaultExtent: 'WaybackAppDefaultExtent',
-    showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges'
+    showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges',
+    shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog'
 }
 
 const saveDefaultExtent = (extent:IExtentGeomety)=>{
@@ -26,6 +27,20 @@ const getShouldShowUpdatesWithLocalChanges = ()=>{
     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
 };
 
+const setShouldOpenSaveWebMapDialog = ()=>{
+    setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
+};
+
+const getShouldOpenSaveWebMapDialog = ()=>{
+    const val = getItem(KEYS.shouldOpenSaveWebMapDialog) === 'true';
+
+    if(val){
+        removeItem(KEYS.shouldOpenSaveWebMapDialog);
+    }
+
+    return val;
+};
+
 const setItem = (key?:string, value='')=>{
     if(key){
         localStorage.setItem(key, value);
@@ -36,9 +51,17 @@ const getItem = (key?:string)=>{
     return key ? localStorage.getItem(key) : null;
 };
 
+const removeItem = (key?:string)=>{
+    if(key){
+        localStorage.removeItem(key);
+    }
+}
+
 export {
     saveDefaultExtent,
     getDefaultExtent,
     setShouldShowUpdatesWithLocalChanges,
-    getShouldShowUpdatesWithLocalChanges
+    getShouldShowUpdatesWithLocalChanges,
+    setShouldOpenSaveWebMapDialog,
+    getShouldOpenSaveWebMapDialog
 };
