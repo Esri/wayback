@@ -1,6 +1,7 @@
 import './style.scss';
 import * as React from 'react';
 import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
+import classnames from 'classnames'
 import config from './config';
 
 import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
@@ -23,7 +24,9 @@ interface IState {
 
     isCreatingWebmap:boolean
     isWebmapReady:boolean
-    webmapId:string
+    webmapId:string,
+
+    isRequiredFieldMissing:boolean
 }
 
 class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
@@ -37,7 +40,8 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             description: config.description,
             isCreatingWebmap:false,
             isWebmapReady:false,
-            webmapId:''
+            webmapId:'',
+            isRequiredFieldMissing:false
         }
 
         this.setTitle = this.setTitle.bind(this);
@@ -54,15 +58,34 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         });
     }
 
-    setTitle(event:React.ChangeEvent<HTMLInputElement>){
+    checkIsRequiredFieldMissing(){
+
+        const { title, tags } = this.state;
+
+        const isRequiredFieldMissing = !title || !tags ? true : false;
+
         this.setState({
-            title: event.target.value
+            isRequiredFieldMissing
+        })
+    }
+
+    setTitle(event:React.ChangeEvent<HTMLInputElement>){
+        const title = event.target.value;
+
+        this.setState({
+            title
+        }, ()=>{
+            this.checkIsRequiredFieldMissing();
         });
     }
 
     setTags(event:React.ChangeEvent<HTMLInputElement>){
+        const tags = event.target.value;
+
         this.setState({
-            tags: event.target.value
+            tags
+        }, ()=>{
+            this.checkIsRequiredFieldMissing();
         });
     }
 
@@ -130,16 +153,20 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
     getEditDialog(){
 
-        const { title, tags, description, isCreatingWebmap } = this.state;
+        const { title, tags, description, isCreatingWebmap, isRequiredFieldMissing } = this.state;
 
         const creatingIndicator = isCreatingWebmap 
             ? (
                 <span className='font-size--2 margin-right-quarter web-map-on-creating-indicator'>Creating Web Map...</span>
             ) : null;
 
+        const creatWebMapBtnClasses = classnames('btn upload-webmap-btn', {
+            'btn-disabled': isRequiredFieldMissing
+        });
+
         const creatWebMapBtn = !isCreatingWebmap 
             ? (
-                <div className="btn upload-webmap-btn" onClick={this.saveAsWebmap}>
+                <div className={creatWebMapBtnClasses} onClick={this.saveAsWebmap}>
                     Create Wayback Map
                 </div>
             ) : null;
