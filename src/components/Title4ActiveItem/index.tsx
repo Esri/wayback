@@ -3,38 +3,44 @@ import * as React from 'react';
 import { IWaybackItem } from '../../types';
 
 interface IProps {
-    isMobile:boolean
-    activeWaybackItem:IWaybackItem
-    previewWaybackItem:IWaybackItem
-    shouldShowPreviewItemTitle:boolean
+    isMobile: boolean;
+    activeWaybackItem: IWaybackItem;
+    previewWaybackItem: IWaybackItem;
+    shouldShowPreviewItemTitle: boolean;
 }
 
-interface IState {
+// interface IState {}
 
-}
-
-class Title4ActiveItem extends React.PureComponent<IProps, IState> {
-
-    constructor(props:IProps){
+class Title4ActiveItem extends React.PureComponent<IProps> {
+    constructor(props: IProps) {
         super(props);
     }
 
-    render(){
+    render() {
+        const {
+            activeWaybackItem,
+            previewWaybackItem,
+            shouldShowPreviewItemTitle,
+            isMobile,
+        } = this.props;
 
-        const { activeWaybackItem, previewWaybackItem, shouldShowPreviewItemTitle, isMobile } = this.props;
+        const releaseDate = shouldShowPreviewItemTitle
+            ? previewWaybackItem.releaseDateLabel
+            : activeWaybackItem.releaseDateLabel;
 
-        const releaseDate = shouldShowPreviewItemTitle ? previewWaybackItem.releaseDateLabel : activeWaybackItem.releaseDateLabel;
+        const subtitle = !isMobile ? (
+            <span className="font-size--3">Click map for imagery details</span>
+        ) : null;
 
-        const subtitle = !isMobile ? <span className='font-size--3'>Click map for imagery details</span> : null;
-
-        return(
-            <div className='title-for-active-item text-center text-blue'>
-                <h4 className='font-size-2 avenir-light trailer-0'>Wayback {releaseDate}</h4>
+        return (
+            <div className="title-for-active-item text-center text-blue">
+                <h4 className="font-size-2 avenir-light trailer-0">
+                    Wayback {releaseDate}
+                </h4>
                 {subtitle}
             </div>
         );
     }
-
-};
+}
 
 export default Title4ActiveItem;

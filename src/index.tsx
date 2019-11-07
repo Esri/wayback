@@ -1,10 +1,10 @@
-import "./style/index.scss";
+import './style/index.scss';
 
-import "@babel/polyfill";
+import '@babel/polyfill';
 
-// required by ArcGIS REST JS 
-import "isomorphic-fetch";
-import "es6-promise";
+// required by ArcGIS REST JS
+import 'isomorphic-fetch';
+import 'es6-promise';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -12,10 +12,9 @@ import * as ReactDOM from 'react-dom';
 import WaybackManager from './core/WaybackManager';
 import App from './components/App';
 import { decodeSearchParam } from './utils/UrlSearchParam';
-import { miscFns } from 'helper-toolkit-ts'
+import { miscFns } from 'helper-toolkit-ts';
 
-const initApp = async()=>{
-
+const initApp = async () => {
     const isMobileDevice = miscFns.isMobileDevice();
 
     const data2InitApp = decodeSearchParam();
@@ -30,14 +29,12 @@ const initApp = async()=>{
                 isMobile={isMobileDevice}
                 waybackManager={waybackManager}
                 waybackData2InitApp={waybackData2InitApp}
-            />, 
+            />,
             document.getElementById('appRootDiv')
         );
-
-    } catch(err){
+    } catch (err) {
         console.error(err);
     }
-
 };
 
 initApp();

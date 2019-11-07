@@ -2,41 +2,39 @@ import './style.scss';
 import * as React from 'react';
 
 interface IProps {
-    isActive:boolean,
+    isActive: boolean;
     // label:string,
-    onChange:()=>void
+    onChange: () => void;
 }
 
-interface IState {
+// interface IState {}
 
-}
-
-class CheckboxToggle extends React.PureComponent<IProps, IState> {
-
-    constructor(props:IProps){
+class CheckboxToggle extends React.PureComponent<IProps> {
+    constructor(props: IProps) {
         super(props);
     }
 
-    render(){
-
+    render() {
         const { isActive, onChange } = this.props;
 
-        const iconSvg = isActive 
-            ? <span className='icon-ui-checkbox-checked'></span>
-            : <span className='icon-ui-checkbox-unchecked text-dark-gray'></span>
+        const iconSvg = isActive ? (
+            <span className="icon-ui-checkbox-checked"></span>
+        ) : (
+            <span className="icon-ui-checkbox-unchecked text-dark-gray"></span>
+        );
 
-        return(
-            <div className='checkbox-toggle-control' onClick={onChange}>
+        return (
+            <div className="checkbox-toggle-control" onClick={onChange}>
                 <span className={`checkbox-icon text-dark-gray`}>
                     {iconSvg}
                 </span>
-                <span className='font-size--2'>
-                    Only updates with <span className='text-white'>local changes</span>
+                <span className="font-size--2">
+                    Only updates with{' '}
+                    <span className="text-white">local changes</span>
                 </span>
             </div>
         );
     }
-
-};
+}
 
 export default CheckboxToggle;
