@@ -261,7 +261,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                             <label>
                                 <input
                                     type="text"
-                                    placeholder="https://<my-enterprise>/portal"
+                                    placeholder="https://<my-enterprise-url>/portal"
                                     onChange={this.portalUrlInputOnChange}
                                     value={portalUrl}
                                 />
