@@ -173,7 +173,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         {
                             shouldUseCustomPortalUrl 
                             ? <label>
-                                <input type="text" placeholder="ArcGIS Enterprise URL" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
+                                <input type="text" placeholder="https://<my-enterprise>/portal" onChange={this.portalUrlInputOnChange} value={portalUrl}/>
                             </label>
                             : null
                         }
