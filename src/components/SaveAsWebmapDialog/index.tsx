@@ -213,7 +213,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         const { isVisible } = this.props;
 
         if(isVisible){
-            calcite.bus.emit('modal:open', {id: "save-as-webmap-dialog"})
+            calcite.bus.emit('modal:open', {id: config["modal-id"]})
         } else {
             calcite.bus.emit('modal:close')
         }
@@ -245,7 +245,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
         return(
             <div className='save-as-webmap-dialog-container'>
-                <div className="js-modal modal-overlay customized-modal" data-modal="save-as-webmap-dialog">
+                <div className="js-modal modal-overlay customized-modal" data-modal={config["modal-id"]}>
                     <div className="modal-content column-6" role="dialog" aria-labelledby="modal">
 
                         <div className='trailer-0 text-right'>

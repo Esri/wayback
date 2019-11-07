@@ -60,7 +60,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
         const share2LinkedInLink = `https://www.linkedin.com/shareArticle?url=${currentUrl}&title=${config.title}&summary=${config.description}?mini=true&source=livingatlas.arcgis.com`;
 
         return(
-            <div className="js-modal modal-overlay customized-modal" data-modal="share">
+            <div className="js-modal modal-overlay customized-modal" data-modal={config["modal-id"]}>
                 <div className="modal-content column-7" role="dialog" aria-labelledby="modal">
 
                     <div className='trailer-1'>

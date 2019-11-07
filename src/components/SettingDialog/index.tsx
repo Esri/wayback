@@ -1,10 +1,11 @@
 import './style.scss';
 import * as React from 'react';
 import classnames from 'classnames'
-import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
+import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import { savePortalUrlInSearchParam, getPortalUrlInSearchParam, getMapExtent } from '../../utils/UrlSearchParam';
 import { saveDefaultExtent, setShouldShowUpdatesWithLocalChanges, getShouldShowUpdatesWithLocalChanges } from '../../utils/LocalStorage'
 import { IExtentGeomety, IUserSession } from '../../types';
+import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
@@ -84,6 +85,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         }
 
         this.toggleSaveBtnLabel(true);
+
+        this.close();
     }
 
     toggleSaveBtnLabel(isSaved=false){
@@ -101,6 +104,10 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         });
     }
 
+    close(){
+        calcite.bus.emit('modal:close');
+    }
+
     componentDidUpdate(prevProps:IProps){
         const { mapExtent } = this.props;
         
@@ -113,7 +120,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
     }
 
     componentDidMount(){
-        modal();
+        calcite.modal();
     }
 
     render(){
@@ -131,7 +138,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         );
 
         return(
-            <div className="js-modal modal-overlay customized-modal setting-dialog" data-modal="setting">
+            <div className="js-modal modal-overlay customized-modal setting-dialog" data-modal={config["modal-id"]}>
                 <div className="modal-content column-8" role="dialog" aria-labelledby="modal">
                 
                     <span className="js-modal-toggle cursor-pointer right" aria-label="close-modal">
