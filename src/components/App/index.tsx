@@ -292,10 +292,13 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleShouldOnlyShowItemsWithLocalChange(val?:boolean) {
+    toggleShouldOnlyShowItemsWithLocalChange(val?: boolean) {
         const { shouldOnlyShowItemsWithLocalChange } = this.state;
 
-        const newVal = typeof val === 'boolean' ? val : !shouldOnlyShowItemsWithLocalChange
+        const newVal =
+            typeof val === 'boolean'
+                ? val
+                : !shouldOnlyShowItemsWithLocalChange;
 
         this.setState({
             shouldOnlyShowItemsWithLocalChange: newVal,
@@ -584,7 +587,9 @@ class App extends React.PureComponent<IProps, IState> {
                     mapExtent={mapExtent}
                     userSession={userSession}
                     toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
-                    shouldShowLocalChangesByDefaultOnClick={this.toggleShouldOnlyShowItemsWithLocalChange}
+                    shouldShowLocalChangesByDefaultOnClick={
+                        this.toggleShouldOnlyShowItemsWithLocalChange
+                    }
                 />
 
                 <ShareDialog currentUrl={currentUrl} />

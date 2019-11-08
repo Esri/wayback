@@ -22,7 +22,9 @@ interface IProps {
     userSession?: IUserSession;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
-    shouldShowLocalChangesByDefaultOnClick: (shouldShowLocalChangesByDefault:boolean) => void;
+    shouldShowLocalChangesByDefaultOnClick: (
+        shouldShowLocalChangesByDefault: boolean
+    ) => void;
 }
 
 interface IState {
@@ -93,7 +95,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                 shouldShowLocalChangesByDefault
             );
 
-            shouldShowLocalChangesByDefaultOnClick(shouldShowLocalChangesByDefault);
+            shouldShowLocalChangesByDefaultOnClick(
+                shouldShowLocalChangesByDefault
+            );
         }
 
         if (portalUrl) {
