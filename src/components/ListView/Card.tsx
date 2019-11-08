@@ -91,28 +91,31 @@ class ListViewCard extends React.PureComponent<IProps> {
                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
                 onMouseLeave={onMouseOut}
             >
-                <a
-                    className="margin-left-half link-light-gray cursor-pointer"
-                    onClick={onClick.bind(this, data.releaseNum)}
-                >
-                    {data.releaseDateLabel}
-                </a>
+                <div className='is-flexy cursor-pointer' onClick={onClick.bind(this, data.releaseNum)}>
+                    <a
+                        className="margin-left-half link-light-gray cursor-pointer"
+                        // onClick={onClick.bind(this, data.releaseNum)}
+                    >
+                        {data.releaseDateLabel}
+                    </a>
+                </div>
 
                 <div
-                    className="add-to-webmap-btn inline-block cursor-pointer right"
+                    className="open-item-btn icon-ui-link-external margin-right-half cursor-pointer link-light-gray"
+                    onMouseOver={this.showTooltip}
+                    onMouseOut={this.hideTooltip}
+                    onClick={this.openItem}
+                    data-tooltip-content="Learn more about this release..."
+                ></div>
+
+                <div
+                    className="add-to-webmap-btn cursor-pointer"
                     onMouseOver={this.showTooltip}
                     onMouseOut={this.hideTooltip}
                     onClick={toggleSelect.bind(this, data.releaseNum)}
                     data-tooltip-content={tooltipContentAdd2WebmapBtn}
                 ></div>
 
-                <div
-                    className="open-item-btn icon-ui-link-external margin-right-half inline-block cursor-pointer right link-light-gray"
-                    onMouseOver={this.showTooltip}
-                    onMouseOut={this.hideTooltip}
-                    onClick={this.openItem}
-                    data-tooltip-content="Learn more about this release..."
-                ></div>
             </div>
         );
     }
