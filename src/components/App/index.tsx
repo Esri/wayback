@@ -582,6 +582,7 @@ class App extends React.PureComponent<IProps, IState> {
                     mapExtent={mapExtent}
                     userSession={userSession}
                     toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
+                    shouldShowLocalChangesByDefaultOnClick={this.toggleShouldOnlyShowItemsWithLocalChange}
                 />
 
                 <ShareDialog currentUrl={currentUrl} />

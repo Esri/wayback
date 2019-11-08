@@ -48,8 +48,8 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
         ) : null;
 
         const tooltipContent = isActive
-            ? 'Open these updates in a new Web Map'
-            : 'Choose updates from the list to build a set of Wayback layers for use in a new Web Map';
+            ? 'Open these versions in a new Web Map'
+            : 'Choose versions from the list to build a set of Wayback layers for use in a new Web Map';
 
         return (
             <div className="save-as-webmap-btn-container customized-tooltip">

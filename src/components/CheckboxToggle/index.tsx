@@ -29,7 +29,7 @@ class CheckboxToggle extends React.PureComponent<IProps> {
                     {iconSvg}
                 </span>
                 <span className="font-size--2">
-                    Only updates with{' '}
+                    Only versions with{' '}
                     <span className="text-white">local changes</span>
                 </span>
             </div>

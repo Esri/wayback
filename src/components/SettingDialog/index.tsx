@@ -22,6 +22,7 @@ interface IProps {
     userSession?: IUserSession;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
+    shouldShowLocalChangesByDefaultOnClick: (shouldShowLocalChangesByDefault:boolean) => void;
 }
 
 interface IState {
@@ -77,6 +78,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             shouldShowLocalChangesByDefault,
         } = this.state;
 
+        const { shouldShowLocalChangesByDefaultOnClick } = this.props;
+
         if (shouldSaveAsDefaultExtent) {
             const mapExt = getMapExtent();
             saveDefaultExtent(mapExt);
@@ -89,6 +92,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             setShouldShowUpdatesWithLocalChanges(
                 shouldShowLocalChangesByDefault
             );
+
+            shouldShowLocalChangesByDefaultOnClick(shouldShowLocalChangesByDefault);
         }
 
         if (portalUrl) {
@@ -233,7 +238,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                             />
                             <span className="toggle-switch-track margin-right-1"></span>
                             <span className="toggle-switch-label font-size--1">
-                                Show only updates with local changes by default
+                                Show only versions with local changes by default
                             </span>
                         </label>
                     </div>
