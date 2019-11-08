@@ -292,11 +292,13 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleShouldOnlyShowItemsWithLocalChange() {
+    toggleShouldOnlyShowItemsWithLocalChange(val?:boolean) {
         const { shouldOnlyShowItemsWithLocalChange } = this.state;
 
+        const newVal = typeof val === 'boolean' ? val : !shouldOnlyShowItemsWithLocalChange
+
         this.setState({
-            shouldOnlyShowItemsWithLocalChange: !shouldOnlyShowItemsWithLocalChange,
+            shouldOnlyShowItemsWithLocalChange: newVal,
         });
     }
 
@@ -323,7 +325,7 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     toggleSaveAsWebmapDialog(isVisible?: boolean) {
-        // console.log('save as web map')
+        // console.log('toggleSaveAsWebmapDialog', isVisible);
         const { isSaveAsWebmapDialogVisible, userSession } = this.state;
 
         isVisible =
@@ -614,7 +616,7 @@ class App extends React.PureComponent<IProps, IState> {
             // console.log(waybackData2InitApp);
             this.setWaybackItems(waybackData2InitApp.waybackItems);
 
-            if (getShouldOpenSaveWebMapDialog()) {
+            if (getShouldOpenSaveWebMapDialog() && userSession) {
                 this.toggleSaveAsWebmapDialog(true);
             }
         } catch (err) {

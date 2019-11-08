@@ -48,13 +48,13 @@ const setShouldOpenSaveWebMapDialog = () => {
 };
 
 const getShouldOpenSaveWebMapDialog = () => {
-    const val = getItem(KEYS.shouldOpenSaveWebMapDialog) === 'true';
+    const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
 
     if (val) {
         removeItem(KEYS.shouldOpenSaveWebMapDialog);
     }
 
-    return val;
+    return val === 'true' ? true : false;
 };
 
 export {
