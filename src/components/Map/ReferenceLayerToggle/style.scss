@@ -8,4 +8,16 @@
     background: rgba(0,0,0,.8);
     z-index: 0;
     font-size: 0.8125rem;
+
+    display:flex;
+    align-items:center;
+
+    div {
+        display:flex;
+        align-items:center;
+    }
+
+    svg {
+        fill: #fff;
+    }
 }
