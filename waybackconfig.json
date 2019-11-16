@@ -1,0 +1,16 @@
+{
+  "10": {
+    "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
+    "itemTitle": "World Imagery (Wayback 2014-02-20)",
+    "itemURL": "WB_2014_R01",
+    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r01/MapServer",
+    "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
+  },
+  "4230": {
+    "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
+    "itemTitle": "World Imagery (Wayback 2014-03-26)",
+    "itemURL": "WB_2014_R03",
+    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r01/MapServer",
+    "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
+  }
+}

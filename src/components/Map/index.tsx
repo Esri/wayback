@@ -11,7 +11,8 @@ import { IWaybackItem, IMapPointInfo, IExtentGeomety } from '../../types';
 import IMapView from 'esri/views/MapView';
 // import IWebMap from "esri/WebMap";
 import IMap from 'esri/Map';
-import IWebTileLayer from 'esri/layers/WebTileLayer';
+import IWMTSLayer from 'esri/layers/WMTSLayer';
+// import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
 import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
@@ -241,15 +242,30 @@ class Map extends React.PureComponent<IProps, IState> {
         const { activeWaybackItem } = this.props;
 
         try {
-            type Modules = [typeof IWebTileLayer];
+            // type Modules = [typeof IWebTileLayer];
 
-            const [WebTileLayer] = await (loadModules([
-                'esri/layers/WebTileLayer',
+            // const [WebTileLayer] = await (loadModules([
+            //     'esri/layers/WebTileLayer',
+            // ]) as Promise<Modules>);
+
+            // const waybackLayer = new WebTileLayer({
+            //     id: this.WaybackLayerId,
+            //     urlTemplate: activeWaybackItem.itemURL,
+            // });
+
+            type Modules = [typeof IWMTSLayer];
+
+            const [WMTSLayer] = await (loadModules([
+                'esri/layers/WMTSLayer',
             ]) as Promise<Modules>);
 
-            const waybackLayer = new WebTileLayer({
-                id: this.WaybackLayerId,
-                urlTemplate: activeWaybackItem.itemURL,
+            const waybackLayer = new WMTSLayer ({
+                
+                // url: activeWaybackItem.itemURL,
+                url: 'https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
+                activeLayer: {
+                    id: activeWaybackItem.itemURL,
+                }
             });
 
             return waybackLayer;
