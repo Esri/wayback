@@ -1,12 +1,14 @@
 .checkbox-toggle-control {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     .checkbox-icon {
-        cursor: pointer;
+        display:flex;
+        align-items:center;
     }
 
-    // svg {
-    //     fill: #999;
-    // }
+    svg {
+        fill: #999;
+    }
 }

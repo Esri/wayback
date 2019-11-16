@@ -1,3 +1,4 @@
+const path = require('path');
 const os = require('os');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -22,8 +23,11 @@ module.exports = (env, options)=> {
             https: true,
             host: hostname
         },
+        entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
-            filename: 'bundle.[hash].js'
+            path: path.resolve(__dirname, './dist'),
+            filename: '[name].[contenthash].js',
+            chunkFilename: '[name].[contenthash].js',
         },
         devtool: 'source-map',
         resolve: {
@@ -110,11 +114,25 @@ module.exports = (env, options)=> {
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
-                filename: devMode ? '[name].css' : '[name].[hash].css',
-                chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+                filename: devMode ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
             })
         ],
         optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    default: false,
+                    vendors: false,
+                    // vendor chunk
+                    vendor: {
+                        // sync + async chunks
+                        chunks: 'all',
+                        name: 'vendor',
+                        // import file path containing node_modules
+                        test: /node_modules/
+                    }
+                }
+            },
             minimizer: [
                 new TerserPlugin({
                     extractComments: true,

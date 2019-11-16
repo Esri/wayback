@@ -1,35 +1,34 @@
 export default {
     'metadata-layer': {
-        'fields': [
+        fields: [
             {
-                fieldname: 'SRC_DATE2'
+                fieldname: 'SRC_DATE2',
             },
             {
-                fieldname: 'NICE_DESC'
+                fieldname: 'NICE_DESC',
             },
             {
-                fieldname: 'SRC_DESC'
+                fieldname: 'SRC_DESC',
             },
             {
-                fieldname: 'SRC_RES'
+                fieldname: 'SRC_RES',
             },
             {
-                fieldname: 'SRC_ACC'
-            }
-        ] 
+                fieldname: 'SRC_ACC',
+            },
+        ],
     },
     'change-detection-layer': {
-        'fields': [
+        fields: [
             {
-                fieldname: 'MapLevel'
+                fieldname: 'MapLevel',
             },
             {
-                fieldname: 'ClumpID'
+                fieldname: 'ClumpID',
             },
             {
-                fieldname: 'Clump'
+                fieldname: 'Clump',
             },
-        ]
-    }
-
-}
+        ],
+    },
+};

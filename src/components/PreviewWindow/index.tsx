@@ -1,5 +1,5 @@
 // preview the tile image that interscets with the center of the map view
-import { loadModules } from "esri-loader";
+import { loadModules } from 'esri-loader';
 
 import './style.scss';
 import * as React from 'react';
@@ -7,98 +7,97 @@ import { IWaybackItem } from '../../types';
 import { geometryFns } from 'helper-toolkit-ts';
 
 import IMapView from 'esri/views/MapView';
-import IWebMercatorUtils from "esri/geometry/support/webMercatorUtils";
-import IPoint from "esri/geometry/Point"
+import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+import IPoint from 'esri/geometry/Point';
 
 interface IProps {
-    mapView?:IMapView
-    previewWaybackItem:IWaybackItem
-    alternativeRNum4RreviewWaybackItem:number
+    mapView?: IMapView;
+    previewWaybackItem: IWaybackItem;
+    alternativeRNum4RreviewWaybackItem: number;
 }
 
 interface IState {
-    top:number
-    left:number
-    imageUrl:string
+    top: number;
+    left: number;
+    imageUrl: string;
 }
 
 interface IParamGetImageUrl {
-    level:number
-    row:number
-    column:number
+    level: number;
+    row: number;
+    column: number;
 }
 
 class PreviewWindow extends React.PureComponent<IProps, IState> {
-
-    constructor(props:IProps){
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
-            top:0,
-            left:0,
-            imageUrl:''
-        }
+            top: 0,
+            left: 0,
+            imageUrl: '',
+        };
     }
 
-    getTileInfo(){
+    getTileInfo() {
         const { mapView } = this.props;
 
         const center = mapView.center;
         const level = mapView.zoom;
-        
-        // get the tile row, col num from the map center point 
+
+        // get the tile row, col num from the map center point
         const tileRow = geometryFns.lat2tile(center.latitude, level);
         const tileCol = geometryFns.long2tile(center.longitude, level);
 
         // convert the row and col number into the lat, lon, which is the coordinate of the top left corner of the map tile in center of map
-        const tileLat =  geometryFns.tile2lat(tileRow, level);
-        const tileLon =  geometryFns.tile2Long(tileCol, level);
+        const tileLat = geometryFns.tile2lat(tileRow, level);
+        const tileLon = geometryFns.tile2Long(tileCol, level);
 
         return {
             level,
             column: tileCol,
             row: tileRow,
             tileLat,
-            tileLon
-        }
+            tileLon,
+        };
     }
 
-    getImageUrl({ level, row, column }:IParamGetImageUrl){
-
-        const { previewWaybackItem, alternativeRNum4RreviewWaybackItem } = this.props;
+    getImageUrl({ level, row, column }: IParamGetImageUrl) {
+        const {
+            previewWaybackItem,
+            alternativeRNum4RreviewWaybackItem,
+        } = this.props;
 
         const previewWindowImageUrl = previewWaybackItem.itemURL
-            .replace(`/${previewWaybackItem.releaseNum}/`, `/${alternativeRNum4RreviewWaybackItem}/`)
-            .replace("{level}", level.toString())
-            .replace("{row}", row.toString())
-            .replace("{col}", column.toString());
-        
+            .replace(
+                `/${previewWaybackItem.releaseNum}/`,
+                `/${alternativeRNum4RreviewWaybackItem}/`
+            )
+            .replace('{level}', level.toString())
+            .replace('{row}', row.toString())
+            .replace('{col}', column.toString());
+
         return previewWindowImageUrl;
     }
 
-    async getTilePosition(tileLon:number, tileLat:number){
-
+    async getTilePosition(tileLon: number, tileLat: number) {
         const { mapView } = this.props;
 
         try {
+            type Modules = [typeof IPoint, typeof IWebMercatorUtils];
 
-            type Modules = [
-                typeof IPoint,
-                typeof IWebMercatorUtils
-            ];
-    
-            const [ Point, webMercatorUtils ] = await (loadModules([
-                "esri/geometry/Point",
-                "esri/geometry/support/webMercatorUtils",
+            const [Point, webMercatorUtils] = await (loadModules([
+                'esri/geometry/Point',
+                'esri/geometry/support/webMercatorUtils',
             ]) as Promise<Modules>);
 
             // convert lat lon to x y and create a point object
             const tileXY = webMercatorUtils.lngLatToXY(tileLon, tileLat);
 
             const point = new Point({
-                x:tileXY[0],
-                y:tileXY[1],
-                spatialReference: { wkid: 3857 }
+                x: tileXY[0],
+                y: tileXY[1],
+                spatialReference: { wkid: 3857 },
             });
 
             // convert to screen point and we will use this val to position the preview window
@@ -106,17 +105,14 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
 
             return {
                 top: tileTopLeftXY.y,
-                left: tileTopLeftXY.x
-            }
-
-        } catch(err){
+                left: tileTopLeftXY.x,
+            };
+        } catch (err) {
             return null;
         }
-
     }
 
-    async updatePreviewWindowState(){
-
+    async updatePreviewWindowState() {
         try {
             const tileInfo = this.getTileInfo();
 
@@ -125,32 +121,30 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 row: tileInfo.row,
                 column: tileInfo.column,
             });
-    
-            const { top, left } = await this.getTilePosition(tileInfo.tileLon, tileInfo.tileLat);
+
+            const { top, left } = await this.getTilePosition(
+                tileInfo.tileLon,
+                tileInfo.tileLat
+            );
 
             this.setState({
                 imageUrl,
                 top,
-                left
+                left,
             });
-
-        } catch(err){
-
-        }
+        } catch (err) {}
     }
 
-    componentDidUpdate(prevProps:IProps){
-
-        if(prevProps.previewWaybackItem !== this.props.previewWaybackItem){
+    componentDidUpdate(prevProps: IProps) {
+        if (prevProps.previewWaybackItem !== this.props.previewWaybackItem) {
             this.updatePreviewWindowState();
         }
     }
 
-    render(){
-
+    render() {
         const { previewWaybackItem } = this.props;
 
-        if( !previewWaybackItem ){
+        if (!previewWaybackItem) {
             return null;
         }
 
@@ -159,21 +153,23 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const style = {
             position: 'absolute',
             top,
-            left
-        } as React.CSSProperties
+            left,
+        } as React.CSSProperties;
 
         return (
             <div className="tile-preview-window" style={style}>
-                <img src={imageUrl}/>
-                <div className='tile-preview-title'>
-                    <div className='margin-left-half trailer-0'>
-                        <span className='release-date-text'><b>Wayback {previewWaybackItem.releaseDateLabel}</b> preview</span>
+                <img src={imageUrl} />
+                <div className="tile-preview-title">
+                    <div className="margin-left-half trailer-0">
+                        <span className="release-date-text">
+                            <b>Wayback {previewWaybackItem.releaseDateLabel}</b>{' '}
+                            preview
+                        </span>
                     </div>
                 </div>
             </div>
         );
     }
-
-};
+}
 
 export default PreviewWindow;

@@ -1,64 +1,66 @@
 import axios from 'axios';
-import { queryFeatures, IQueryFeaturesResponse, IFeature  } from '@esri/arcgis-rest-feature-layer';
+import {
+    queryFeatures,
+    IQueryFeaturesResponse,
+    IFeature,
+} from '@esri/arcgis-rest-feature-layer';
 import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
 import config from './config';
 
 interface ICandidates {
-    rNum:number
-    url:string
+    rNum: number;
+    url: string;
 }
 
-interface IParamGetTileUrl{
-    rNum?:number
-    column:number,
-    row:number,
-    level:number,
+interface IParamGetTileUrl {
+    rNum?: number;
+    column: number;
+    row: number;
+    level: number;
 }
 
 interface IOptionsWaybackChangeDetector {
-    waybackMapServerBaseUrl?:string
-    changeDetectionLayerUrl?:string
-    waybackconfig:IWaybackConfig
-    shouldUseChangdeDetectorLayer?:boolean
-    waybackItems:Array<IWaybackItem>
+    waybackMapServerBaseUrl?: string;
+    changeDetectionLayerUrl?: string;
+    waybackconfig: IWaybackConfig;
+    shouldUseChangdeDetectorLayer?: boolean;
+    waybackItems: Array<IWaybackItem>;
 }
 
 interface IResponseGetImageBlob {
-    rNum:number,
-    dataUri:string
+    rNum: number;
+    dataUri: string;
 }
 
 interface IResponseWaybackTilemap {
-    data:Array<number>
-    select:Array<number>
-    valid:boolean
+    data: Array<number>;
+    select: Array<number>;
+    valid: boolean;
     location: {
-        left:number, 
-        top:number, 
-        width:number, 
-        height:number
-    }
+        left: number;
+        top: number;
+        width: number;
+        height: number;
+    };
 }
 
 class WaybackChangeDetector {
-
     // original wayback config JSON file
-    private waybackconfig:IWaybackConfig;
-    private waybackMapServerBaseUrl:string
-    private changeDetectionLayerUrl:string
-    private shouldUseChangdeDetectorLayer:boolean
-    private waybackItems:Array<IWaybackItem>
-    private rNum2IndexLookup:{ [key:number]: number }
+    private waybackconfig: IWaybackConfig;
+    private waybackMapServerBaseUrl: string;
+    private changeDetectionLayerUrl: string;
+    private shouldUseChangdeDetectorLayer: boolean;
+    private waybackItems: Array<IWaybackItem>;
+    private rNum2IndexLookup: { [key: number]: number };
 
     constructor({
         waybackMapServerBaseUrl = '',
         changeDetectionLayerUrl = '',
         waybackconfig = null,
         shouldUseChangdeDetectorLayer = false,
-        waybackItems = []
-    }:IOptionsWaybackChangeDetector){
-
+        waybackItems = [],
+    }: IOptionsWaybackChangeDetector) {
         this.waybackMapServerBaseUrl = waybackMapServerBaseUrl;
         this.changeDetectionLayerUrl = changeDetectionLayerUrl;
         this.waybackconfig = waybackconfig;
@@ -69,40 +71,37 @@ class WaybackChangeDetector {
     }
 
     // get array of release numbers for wayback items that come with changes for input area
-    async findChanges(pointInfo:IMapPointInfo):Promise<Array<number>>{
-
+    async findChanges(pointInfo: IMapPointInfo): Promise<Array<number>> {
         try {
             const level = +pointInfo.zoom.toFixed(0);
             const column = geometryFns.long2tile(pointInfo.longitude, level);
             const row = geometryFns.lat2tile(pointInfo.latitude, level);
 
-            const candidatesRNums = this.shouldUseChangdeDetectorLayer 
+            const candidatesRNums = this.shouldUseChangdeDetectorLayer
                 ? await this.getRNumsFromDetectionLayer(pointInfo, level)
-                : await this.getRNumsFromTilemap({column, row, level});
+                : await this.getRNumsFromTilemap({ column, row, level });
 
-            const candidates = candidatesRNums.map(rNum=>{
+            const candidates = candidatesRNums.map((rNum) => {
                 return {
                     rNum,
-                    url: this.getTileImageUrl({column, row, level, rNum})
-                }
+                    url: this.getTileImageUrl({ column, row, level, rNum }),
+                };
             });
 
             const rNumsNoDuplicates = await this.removeDuplicates(candidates);
 
             return rNumsNoDuplicates;
-
-        } catch(err){
+        } catch (err) {
             console.error('failed to find changes', err);
             return null;
         }
     }
 
-    getPreviousReleaseNum(rNum:number){
-
-        if(!this.rNum2IndexLookup){
+    getPreviousReleaseNum(rNum: number) {
+        if (!this.rNum2IndexLookup) {
             const lookup = {};
 
-            this.waybackItems.forEach((item, index)=>{
+            this.waybackItems.forEach((item, index) => {
                 lookup[item.releaseNum] = index;
             });
 
@@ -111,46 +110,51 @@ class WaybackChangeDetector {
 
         const index4InputRNum = this.rNum2IndexLookup[rNum];
 
-        const previousReleaseNum = this.waybackItems[index4InputRNum + 1] ? this.waybackItems[index4InputRNum + 1].releaseNum : null;
+        const previousReleaseNum = this.waybackItems[index4InputRNum + 1]
+            ? this.waybackItems[index4InputRNum + 1].releaseNum
+            : null;
 
         return previousReleaseNum;
     }
 
     async getRNumsFromTilemap({
-        column=null,
-        row=null,
-        level=null
-    }:IParamGetTileUrl):Promise<Array<number>>{
-
+        column = null,
+        row = null,
+        level = null,
+    }: IParamGetTileUrl): Promise<Array<number>> {
         return new Promise((resolve, reject) => {
-
-            const results:Array<number> = [];
+            const results: Array<number> = [];
 
             const mostRecentRelease = this.waybackItems[0].releaseNum;
 
-            const tilemapRequest = async(rNum:number)=>{
-
+            const tilemapRequest = async (rNum: number) => {
                 try {
-                    const requestUrl =  `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
+                    const requestUrl = `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
 
                     const response = await axios.get(requestUrl);
-    
-                    const tilemapResponse:IResponseWaybackTilemap = response.data || null;
-    
-                    const lastRelease = tilemapResponse.select && tilemapResponse.select[0] ? +tilemapResponse.select[0] : rNum; 
-    
-                    if(tilemapResponse.data[0]){
+
+                    const tilemapResponse: IResponseWaybackTilemap =
+                        response.data || null;
+
+                    const lastRelease =
+                        tilemapResponse.select && tilemapResponse.select[0]
+                            ? +tilemapResponse.select[0]
+                            : rNum;
+
+                    if (tilemapResponse.data[0]) {
                         results.push(lastRelease);
                     }
-    
-                    const nextReleaseToCheck = tilemapResponse.data[0] ? this.getPreviousReleaseNum(lastRelease) : null; 
-            
-                    if(nextReleaseToCheck){
+
+                    const nextReleaseToCheck = tilemapResponse.data[0]
+                        ? this.getPreviousReleaseNum(lastRelease)
+                        : null;
+
+                    if (nextReleaseToCheck) {
                         tilemapRequest(nextReleaseToCheck);
                     } else {
                         resolve(results);
                     }
-                } catch(err){
+                } catch (err) {
                     console.error(err);
                     reject(null);
                 }
@@ -160,18 +164,20 @@ class WaybackChangeDetector {
         });
     }
 
-    async getRNumsFromDetectionLayer(pointInfo:IMapPointInfo, zoomLevel:number):Promise<Array<number>>{
-
+    async getRNumsFromDetectionLayer(
+        pointInfo: IMapPointInfo,
+        zoomLevel: number
+    ): Promise<Array<number>> {
         const queryUrl = this.changeDetectionLayerUrl + '/query';
 
-        const fields = config["change-detection-layer"].fields
+        const fields = config['change-detection-layer'].fields;
 
         const FIELD_NAME_ZOOM = fields[0].fieldname;
         const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
         const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
 
         try {
-            const queryResponse = await queryFeatures({
+            const queryResponse = (await queryFeatures({
                 url: queryUrl,
                 geometry: pointInfo.geometry,
                 geometryType: 'esriGeometryPoint',
@@ -180,41 +186,46 @@ class WaybackChangeDetector {
                 outFields: [FIELD_NAME_RELEASE_NUM],
                 orderByFields: FIELD_NAME_RELEASE_NAME,
                 returnGeometry: false,
-                f: 'json'
-            }) as IQueryFeaturesResponse;
-    
-            const rNums:Array<number> = ( queryResponse.features && queryResponse.features.length ) 
-            ? queryResponse.features.map((feature:IFeature)=>{
-                return feature.attributes[FIELD_NAME_RELEASE_NUM]
-            }) : [];
-    
-            return rNums;
+                f: 'json',
+            })) as IQueryFeaturesResponse;
 
-        } catch(err){
+            const rNums: Array<number> =
+                queryResponse.features && queryResponse.features.length
+                    ? queryResponse.features.map((feature: IFeature) => {
+                          return feature.attributes[FIELD_NAME_RELEASE_NUM];
+                      })
+                    : [];
+
+            return rNums;
+        } catch (err) {
             console.error(err);
             return [];
         }
     }
 
     getTileImageUrl({
-        column=null,
-        row=null,
-        level=null,
-        rNum=null
-    }:IParamGetTileUrl){
+        column = null,
+        row = null,
+        level = null,
+        rNum = null,
+    }: IParamGetTileUrl) {
         const urlTemplate = this.waybackconfig[rNum].itemURL;
-        return urlTemplate.replace("{level}", level.toString()).replace("{row}", row.toString()).replace("{col}", column.toString());
+        return urlTemplate
+            .replace('{level}', level.toString())
+            .replace('{row}', row.toString())
+            .replace('{col}', column.toString());
     }
 
-    async removeDuplicates(candidates?:Array<ICandidates>):Promise<Array<number>>{
-
-        if(!candidates.length){
+    async removeDuplicates(
+        candidates?: Array<ICandidates>
+    ): Promise<Array<number>> {
+        if (!candidates.length) {
             return [];
         }
 
-        const finalResults:Array<number> = [];
+        const finalResults: Array<number> = [];
 
-        const imageDataUriRequests = candidates.map(candidate=>{
+        const imageDataUriRequests = candidates.map((candidate) => {
             return this.getImagedDataUri(candidate.url, candidate.rNum);
         });
 
@@ -222,24 +233,25 @@ class WaybackChangeDetector {
             const imageDataUriResults = await Promise.all(imageDataUriRequests);
             // console.log(imageBlobResults);
 
-            imageDataUriResults.reduce((accu, curr)=>{
-                if(!accu.includes(curr.dataUri)){
+            imageDataUriResults.reduce((accu, curr) => {
+                if (!accu.includes(curr.dataUri)) {
                     accu.push(curr.dataUri);
                     finalResults.push(curr.rNum);
                 }
                 return accu;
             }, []);
-
-        } catch(err){
+        } catch (err) {
             console.error('failed to fetch all image data uri', err);
         }
 
         return finalResults;
     }
 
-    async getImagedDataUri(imageUrl:string, rNum:number):Promise<IResponseGetImageBlob>{
+    async getImagedDataUri(
+        imageUrl: string,
+        rNum: number
+    ): Promise<IResponseGetImageBlob> {
         return new Promise((resolve, reject) => {
-    
             const xhr = new XMLHttpRequest();
             xhr.open('GET', imageUrl, true);
             xhr.responseType = 'arraybuffer';
@@ -249,20 +261,20 @@ class WaybackChangeDetector {
                     const uInt8Array = new Uint8Array(this.response);
                     let i = uInt8Array.length;
                     const binaryString = new Array(i);
-                    while (i--){
+                    while (i--) {
                         binaryString[i] = String.fromCharCode(uInt8Array[i]);
                     }
                     const data = binaryString.join('');
                     const base64 = window.btoa(data);
-                    const dataUri = base64.substr(512,5000); 
+                    const dataUri = base64.substr(512, 5000);
                     // console.log(tileImageDataUri);
 
                     resolve({
                         rNum,
-                        dataUri
+                        dataUri,
                     });
                 } else {
-                    reject(null)
+                    reject(null);
                 }
             };
 

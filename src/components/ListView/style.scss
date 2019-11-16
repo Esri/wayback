@@ -10,12 +10,26 @@ $add-to-webmap-btn-is-selected-bgColor: rgba(255,255,255,.2);
 
     .list-card {
         position: relative;
+
+        display:flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: stretch;
+        align-items: stretch;
+
         // padding: .5rem;
         height: $list-card-height;
         line-height: $list-card-height;
         padding-left: .5rem;
         background-color: #1C1C1C;
         border-left: solid 4px #1C1C1C;
+
+        .is-flexy {
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: 100px;
+        }
     
         .open-item-btn {
             font-size: 1rem;
