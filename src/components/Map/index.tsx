@@ -223,7 +223,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     async updateWaybackLayer() {
         const { mapView } = this.state;
-
+        // TODO: fix findLayerById ...not finding a layer
         const existingWaybackLayer = mapView.map.findLayerById(
             this.WaybackLayerId
         );
@@ -235,7 +235,7 @@ class Map extends React.PureComponent<IProps, IState> {
         const activeWaybackLayer = await this.getWaybackLayer();
 
         // always add as the bottom most layer
-        mapView.map.add(activeWaybackLayer, 0);
+        mapView.map.add(activeWaybackLayer, 1);
     }
 
     async getWaybackLayer() {
