@@ -21,6 +21,7 @@ class WaybackManager {
 
     // constructor() {}
 
+
     async init() {
         this.waybackconfig = await this.fetchWaybackConfig();
         // console.log(this.waybackconfig);
@@ -45,6 +46,7 @@ class WaybackManager {
         };
     }
 
+    
     getWaybackItems() {
         const waybackItems = Object.keys(this.waybackconfig).map(
             (key: string) => {
@@ -73,11 +75,15 @@ class WaybackManager {
         return waybackItems;
     }
 
+
     async getLocalChanges(pointInfo: IMapPointInfo) {
         try {
+            // NOTE: console.log() to see what pointInfo is passed to changeDetector.findChanges()
+            console.log(pointInfo)
             const localChangeQueryRes = await this.changeDetector.findChanges(
                 pointInfo
             );
+
             return localChangeQueryRes;
         } catch (err) {
             console.error(err);
@@ -87,10 +93,14 @@ class WaybackManager {
 
     async getMetadata(params: IParamsQueryMetadata) {
         try {
+            // NOTE console.log() to see what 'params' 
+            //  are passed into queryData() 
+            console.log(params)
             const metadataQueryRes = await this.metadataManager.queryData(
                 params
             );
             return metadataQueryRes;
+        // catch any errors
         } catch (err) {
             console.error(err);
             return null;
@@ -104,11 +114,13 @@ class WaybackManager {
             axios
                 .get(requestUrl)
                 .then((response) => {
-                    // handle success
-                    // console.log(response);
 
+                    // handle success
                     if (response.data) {
+                        // NOTE: using console.log() to test new waybackconfig.json
+                        console.log(response.data)
                         resolve(response.data);
+
                     } else {
                         reject({
                             error: 'failed to fetch wayback config data',

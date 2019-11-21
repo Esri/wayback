@@ -116,6 +116,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 this.initSearchWidget();
                 this.initLocateWidget();
             });
+
         } catch (err) {
             console.error(err);
         }
@@ -200,8 +201,9 @@ class Map extends React.PureComponent<IProps, IState> {
                 'esri/geometry/support/webMercatorUtils',
             ]) as Promise<Modules>);
 
+            // cneter the map
+            // convert Mercator-coords to GCS-coords
             const center = mapView.center;
-
             const extent = webMercatorUtils.webMercatorToGeographic(
                 mapView.extent
             );
@@ -223,6 +225,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     async updateWaybackLayer() {
         const { mapView } = this.state;
+
         // TODO: fix findLayerById ...not finding a layer
         const existingWaybackLayer = mapView.map.findLayerById(
             this.WaybackLayerId
@@ -235,24 +238,13 @@ class Map extends React.PureComponent<IProps, IState> {
         const activeWaybackLayer = await this.getWaybackLayer();
 
         // always add as the bottom most layer
-        mapView.map.add(activeWaybackLayer, 1);
+        mapView.map.add(activeWaybackLayer, 0);
     }
 
     async getWaybackLayer() {
         const { activeWaybackItem } = this.props;
 
         try {
-            // type Modules = [typeof IWebTileLayer];
-
-            // const [WebTileLayer] = await (loadModules([
-            //     'esri/layers/WebTileLayer',
-            // ]) as Promise<Modules>);
-
-            // const waybackLayer = new WebTileLayer({
-            //     id: this.WaybackLayerId,
-            //     urlTemplate: activeWaybackItem.itemURL,
-            // });
-
             type Modules = [typeof IWMTSLayer];
 
             const [WMTSLayer] = await (loadModules([
@@ -260,8 +252,8 @@ class Map extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             const waybackLayer = new WMTSLayer ({
-                
                 // url: activeWaybackItem.itemURL,
+                id: this.WaybackLayerId,
                 url: 'https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
                 activeLayer: {
                     id: activeWaybackItem.itemURL,
@@ -269,6 +261,7 @@ class Map extends React.PureComponent<IProps, IState> {
             });
 
             return waybackLayer;
+
         } catch (err) {
             return null;
         }

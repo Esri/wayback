@@ -100,6 +100,9 @@ class PopUp extends React.PureComponent<IProps, IState> {
         const { anchorPoint } = this.state;
 
         try {
+            // NOTE console.log() to see what is passed to waybackManager.getMetadata() by mapView.zoom
+            console.log(mapView.zoom)
+            // waybackManager.getMetadata() is a promise
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,
                 pointGeometry: anchorPoint.toJSON(),
