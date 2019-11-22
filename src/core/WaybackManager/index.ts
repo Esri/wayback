@@ -46,7 +46,7 @@ class WaybackManager {
         };
     }
 
-    
+
     getWaybackItems() {
         const waybackItems = Object.keys(this.waybackconfig).map(
             (key: string) => {
@@ -79,7 +79,7 @@ class WaybackManager {
     async getLocalChanges(pointInfo: IMapPointInfo) {
         try {
             // NOTE: console.log() to see what pointInfo is passed to changeDetector.findChanges()
-            console.log(pointInfo)
+            // console.log(pointInfo)
             const localChangeQueryRes = await this.changeDetector.findChanges(
                 pointInfo
             );

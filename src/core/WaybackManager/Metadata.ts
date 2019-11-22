@@ -86,14 +86,15 @@ class MetadataManager {
         zoom = +zoom;
         
         const layerID = this.MAX_ZOOM - zoom;
+        
         // the service has 14 sub layers that provide metadata up to zoom level 10 (layer ID 14), if the zoom level is small that (e.g. 5), there are no metadata
         const layerIdForMinZoom = this.MAX_ZOOM - this.MIN_ZOOM;
 
         // what is going on here? ...console.log() since this code has little to no comments on what (the heck) is going on
-        console.log(this.MAX_ZOOM, this.MIN_ZOOM)
-        console.log(zoom)
-        console.log(layerIdForMinZoom)
-        console.log(layerID)
+        // console.log(this.MAX_ZOOM, this.MIN_ZOOM)
+        // console.log(zoom)
+        // console.log(layerIdForMinZoom)
+        // console.log(layerID)
 
         return layerID <= layerIdForMinZoom ? layerID : layerIdForMinZoom;
     }

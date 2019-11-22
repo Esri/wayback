@@ -226,7 +226,6 @@ class Map extends React.PureComponent<IProps, IState> {
     async updateWaybackLayer() {
         const { mapView } = this.state;
 
-        // TODO: fix findLayerById ...not finding a layer
         const existingWaybackLayer = mapView.map.findLayerById(
             this.WaybackLayerId
         );

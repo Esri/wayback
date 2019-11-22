@@ -13,6 +13,7 @@ import {
 import IMapView from 'esri/views/MapView';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
+import { scaleSqrt } from 'd3';
 
 interface IProps {
     mapView?: IMapView;
@@ -99,14 +100,46 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         const { anchorPoint } = this.state;
 
+        const scale = mapView.scale
+
+        console.log(scale)
+
+        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
+        console.log(currentActiveLayer)
+
+        let currentActiveLayerScale = mapView.layerViews.getItemAt(0)
+        console.log(currentActiveLayerScale)
+
+        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        console.log(currentWMTSTileSet)
+
+        let currentZoomLevel: any
+        
+        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
+
+           
+            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
+                console.log(level.level, level.scale)
+                currentZoomLevel = level.level;
+                
+            } else {
+                console.log('level scales did not match\n', level.level, level.scale, level.resolution)
+            }
+            return currentZoomLevel || ''
+        });
+
+        console.log(currentZoomLevel)
+
         try {
             // NOTE console.log() to see what is passed to waybackManager.getMetadata() by mapView.zoom
-            console.log(mapView.zoom)
+            // console.log(mapView.scale)
+            // console.log(currentZoomLevel)
             // waybackManager.getMetadata() is a promise
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,
                 pointGeometry: anchorPoint.toJSON(),
-                zoom: mapView.zoom,
+                // zoom: mapView.zoom,
+                zoom: currentZoomLevel
             });
 
             return {
