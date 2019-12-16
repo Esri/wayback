@@ -26,6 +26,24 @@ Now you can start the webpack dev server to test the app on your local machine:
 npm run start
 ```
 
+## Debugging
+
+To debug React aspects of this app React Developer npm tools come in handy.
+
+Install a global npm package (source: https://www.npmjs.com/package/react-devtools)
+
+# Yarn 
+yarn global add react-devtools
+ 
+# NPM 
+npm install -g react-devtools
+If you prefer to avoid global installations, you can add react-devtools as a project dependency. With Yarn, you can do this by running:
+
+yarn add --dev react-devtools
+With NPM you can just use NPX:
+
+npx react-devtools
+
 ## Deployment
 To build/deploye the app, you can simply run:
 
