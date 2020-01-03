@@ -37,7 +37,7 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "calcite-web": "github:Esri/calcite-web#v1.2.5",
-    "css-loader": "^0.28.11",
+    "css-loader": "^3.4.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",

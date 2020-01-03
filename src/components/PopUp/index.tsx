@@ -66,6 +66,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     async initMapViewEventHandlers() {
+
         const { mapView } = this.props;
 
         try {
@@ -95,53 +96,36 @@ class PopUp extends React.PureComponent<IProps, IState> {
         }
     }
 
+
     async queryMetadata() {
+
         const { waybackManager, activeWaybackItem, mapView } = this.props;
-
         const { anchorPoint } = this.state;
-
         const scale = mapView.scale
 
-        console.log(scale)
-
-        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
-        console.log(currentActiveLayer)
-
-        let currentActiveLayerScale = mapView.layerViews.getItemAt(0)
-        console.log(currentActiveLayerScale)
-
-        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
-        console.log(currentWMTSTileSet)
-
         let currentZoomLevel: any
-        
+        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
+        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+       
+        // 'for-each' loop checks zoom level of MapView against level in Tiles that laod into MapView
         currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
-
-           
+            // match scale to Level that MapView-scale is closest to
             if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
                 console.log(level.level, level.scale)
                 currentZoomLevel = level.level;
-                
             } else {
-                console.log('level scales did not match\n', level.level, level.scale, level.resolution)
+                // console.log('level scales did not match\n', level.level, level.scale)
             }
             return currentZoomLevel || ''
         });
-
-        console.log(currentZoomLevel)
-
+        // note: logging of level is useful for de-bugging ies in different projections
+        // console.log(currentZoomLevel)
         try {
-            // NOTE console.log() to see what is passed to waybackManager.getMetadata() by mapView.zoom
-            // console.log(mapView.scale)
-            // console.log(currentZoomLevel)
-            // waybackManager.getMetadata() is a promise
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,
                 pointGeometry: anchorPoint.toJSON(),
-                // zoom: mapView.zoom,
                 zoom: currentZoomLevel
             });
-
             return {
                 metadata,
             };
@@ -153,6 +137,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
             };
         }
     }
+
 
     updateScreenPoint4PopupAnchor() {
         const { mapView } = this.props;
@@ -167,9 +152,11 @@ class PopUp extends React.PureComponent<IProps, IState> {
         }
     }
 
+
     onClose() {
         this.setMetaData();
     }
+
 
     formatMetadataDate() {
         const { metadata } = this.state;
@@ -184,6 +171,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
         return `${month} ${day}, ${year}`;
     }
 
+
     componentDidUpdate(prevProps: IProps) {
         const { mapView, previewWaybackItem } = this.props;
 
@@ -195,6 +183,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
             this.onClose();
         }
     }
+
 
     render() {
         const { activeWaybackItem } = this.props;
@@ -213,7 +202,6 @@ class PopUp extends React.PureComponent<IProps, IState> {
         } as React.CSSProperties;
 
         const { provider, source, resolution, accuracy } = metadata;
-
         const releaseData = activeWaybackItem.releaseDateLabel;
         const formattedDate = this.formatMetadataDate();
 

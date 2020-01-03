@@ -12,8 +12,8 @@ class MetadataManager {
     private waybackconfig: IWaybackConfig;
 
     // can only get metadata when the map is between the min and max zoom level (10 <= mapZoom <= 23)
-    private readonly MAX_ZOOM = 23;
-    private readonly MIN_ZOOM = 10;
+    private readonly MAX_ZOOM = 22;
+    private readonly MIN_ZOOM = 9;
 
     constructor(waybackconfig: IWaybackConfig) {
         this.waybackconfig = waybackconfig;
