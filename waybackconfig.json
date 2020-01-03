@@ -10,7 +10,21 @@
     "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
     "itemTitle": "World Imagery (Wayback 2014-03-26)",
     "itemURL": "WB_2014_R03",
-    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r01/MapServer",
+    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r03/MapServer",
+    "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
+  },
+  "28163": {
+    "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
+    "itemTitle": "World Imagery (Wayback 2015-12-16)",
+    "itemURL": "WB_2015_R23",
+    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r23/MapServer",
+    "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
+  },
+  "11351": {
+    "itemID": "903f0abe9c3b452dafe1ca5b8dd858b9",
+    "itemTitle": "World Imagery (Wayback 2019-10-09)",
+    "itemURL": "WB_2019_R13",
+    "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r13/MapServer",
     "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
   }
 }

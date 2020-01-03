@@ -12,8 +12,8 @@ class MetadataManager {
     private waybackconfig: IWaybackConfig;
 
     // can only get metadata when the map is between the min and max zoom level (10 <= mapZoom <= 23)
-    private readonly MAX_ZOOM = 23;
-    private readonly MIN_ZOOM = 10;
+    private readonly MAX_ZOOM = 22;
+    private readonly MIN_ZOOM = 9;
 
     constructor(waybackconfig: IWaybackConfig) {
         this.waybackconfig = waybackconfig;
@@ -27,6 +27,7 @@ class MetadataManager {
     async queryData(
         params: IParamsQueryMetadata
     ): Promise<IWaybackMetadataQueryResult> {
+
         const fields = config['metadata-layer'].fields;
 
         const FIELD_NAME_SRC_DATE = fields[0].fieldname;
@@ -77,14 +78,24 @@ class MetadataManager {
         const metadataLayerUrl = this.waybackconfig[releaseNum]
             .metadataLayerUrl;
         const layerId = this.getLayerId(zoom);
+
         return `${metadataLayerUrl}/${layerId}/query`;
     }
 
     private getLayerId(zoom: number) {
         zoom = +zoom;
+        
         const layerID = this.MAX_ZOOM - zoom;
+        
         // the service has 14 sub layers that provide metadata up to zoom level 10 (layer ID 14), if the zoom level is small that (e.g. 5), there are no metadata
         const layerIdForMinZoom = this.MAX_ZOOM - this.MIN_ZOOM;
+
+        // what is going on here? ...console.log() since this code has little to no comments on what (the heck) is going on
+        // console.log(this.MAX_ZOOM, this.MIN_ZOOM)
+        // console.log(zoom)
+        // console.log(layerIdForMinZoom)
+        // console.log(layerID)
+
         return layerID <= layerIdForMinZoom ? layerID : layerIdForMinZoom;
     }
 }
