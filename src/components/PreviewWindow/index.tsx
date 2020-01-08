@@ -43,6 +43,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const { mapView } = this.props;
 
         const center = mapView.center;
+        // change to match zoom id algorithm used in getmetadata query
         const level = mapView.zoom;
 
         // get the tile row, col num from the map center point

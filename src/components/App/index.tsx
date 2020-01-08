@@ -235,6 +235,8 @@ class App extends React.PureComponent<IProps, IState> {
     async queryLocalChanges(centerPointInfo: IMapPointInfo) {
         // console.log('queryLocalChanges', centerPointInfo);
 
+        console.log("centerPointInfo", centerPointInfo.latitude)
+
         const { waybackManager } = this.props;
 
         try {

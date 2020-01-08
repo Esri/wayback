@@ -211,6 +211,7 @@ class Map extends React.PureComponent<IProps, IState> {
             const mapViewCenterPointInfo: IMapPointInfo = {
                 latitude: center.latitude,
                 longitude: center.longitude,
+                // change to match zoom id algorithm used in getmetadata query
                 zoom: mapView.zoom,
                 geometry: center.toJSON(),
             };

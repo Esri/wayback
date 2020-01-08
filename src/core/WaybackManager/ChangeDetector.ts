@@ -81,14 +81,27 @@ class WaybackChangeDetector {
                 ? await this.getRNumsFromDetectionLayer(pointInfo, level)
                 : await this.getRNumsFromTilemap({ column, row, level });
 
-            const candidates = candidatesRNums.map((rNum) => {
-                return {
-                    rNum,
-                    url: this.getTileImageUrl({ column, row, level, rNum }),
-                };
-            });
+            console.log("candidatesRNums = ", candidatesRNums)
 
-            const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+            // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
+
+            // const candidates = candidatesRNums.map((rNum) => {
+            //     return {
+            //         rNum,
+            //         url: this.getTileImageUrl({ column, row, level, rNum }),
+            //     };
+            // });
+
+            // console.log("candidates = ", candidates)
+
+            //const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+            const rNumsNoDuplicates: Array<number> = [];
+            var i;
+            for(i=0;i<candidatesRNums.length;i++){
+                rNumsNoDuplicates[i]=candidatesRNums[i]
+            }
+
+            console.log("rNumsNoDuplicates = ", rNumsNoDuplicates)
 
             return rNumsNoDuplicates;
         } catch (err) {
@@ -181,8 +194,11 @@ class WaybackChangeDetector {
                 url: queryUrl,
                 geometry: pointInfo.geometry,
                 geometryType: 'esriGeometryPoint',
+                inSR: '4326',
                 spatialRel: 'esriSpatialRelIntersects',
-                where: `${FIELD_NAME_ZOOM} = ${zoomLevel}`,
+                // hard code zoom level until proper zoom identification is inserted
+                // where: `${FIELD_NAME_ZOOM} = ${zoomLevel}`,
+                where: `${FIELD_NAME_ZOOM} = ${15}`,
                 outFields: [FIELD_NAME_RELEASE_NUM],
                 orderByFields: FIELD_NAME_RELEASE_NAME,
                 returnGeometry: false,
@@ -194,7 +210,7 @@ class WaybackChangeDetector {
                     ? queryResponse.features.map((feature: IFeature) => {
                           return feature.attributes[FIELD_NAME_RELEASE_NUM];
                       })
-                    : [];
+                    : []; 
 
             return rNums;
         } catch (err) {
