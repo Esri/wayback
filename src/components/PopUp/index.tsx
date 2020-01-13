@@ -77,17 +77,17 @@ class PopUp extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             mapView.on('click', (evt) => {
-                // console.log('view on click, should show popup', evt.mapPoint);
+                console.log('view on click, should show popup', evt.mapPoint);
                 this.setAnchorPoint(evt.mapPoint);
             });
 
             watchUtils.watch(mapView, 'zoom', () => {
-                // console.log('view zoom is on updating, should hide the popup', zoom);
+                console.log('view zoom is on updating, should hide the popup', mapView.zoom);
                 this.onClose();
             });
 
             watchUtils.watch(mapView, 'center', () => {
-                // console.log('view center is on updating, should update the popup position');
+                console.log('view center is on updating, should update the popup position');
                 // need to update the screen point for popup anchor since the map center has changed
                 this.updateScreenPoint4PopupAnchor();
             });
@@ -119,7 +119,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
             return currentZoomLevel || ''
         });
         // note: logging of level is useful for de-bugging ies in different projections
-        // console.log(currentZoomLevel)
+        console.log(currentZoomLevel)
         try {
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,

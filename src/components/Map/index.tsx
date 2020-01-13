@@ -23,8 +23,7 @@ import ILocate from 'esri/widgets/Locate';
 interface IProps {
     defaultExtent?: IExtentGeomety;
     activeWaybackItem: IWaybackItem;
-
-    onUpdateEnd?: (centerPoint: IMapPointInfo) => void;
+    onUpdateEnd?: (centerPoint: IMapPointInfo, currentZoomLevel: number) => void;
     onExtentChange?: (extent: IExtentGeomety) => void;
 }
 
@@ -190,9 +189,30 @@ class Map extends React.PureComponent<IProps, IState> {
         }
     }
 
+    getZoomLevel() {
+
+        const { mapView } = this.state;
+
+        let currentZoomLevel: any
+        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
+        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
+            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
+                console.log(level.level, level.scale)
+                currentZoomLevel = level.level;
+            }
+            return currentZoomLevel || ''
+        });
+        return currentZoomLevel
+    }
+
+    // NOTE: needs getZoom()
     async mapViewUpdateEndHandler() {
         const { onUpdateEnd, onExtentChange } = this.props;
         const { mapView } = this.state;
+
+        let currentZoomLevel: number
+        currentZoomLevel = this.getZoomLevel()
 
         try {
             type Modules = [typeof IWebMercatorUtils];
@@ -212,11 +232,13 @@ class Map extends React.PureComponent<IProps, IState> {
                 latitude: center.latitude,
                 longitude: center.longitude,
                 // change to match zoom id algorithm used in getmetadata query
-                zoom: mapView.zoom,
+                // zoom: mapView.zoom,
+                zoom: currentZoomLevel,
                 geometry: center.toJSON(),
             };
 
-            onUpdateEnd(mapViewCenterPointInfo);
+
+            onUpdateEnd(mapViewCenterPointInfo, currentZoomLevel);
 
             onExtentChange(extent.toJSON());
         } catch (err) {
@@ -338,3 +360,8 @@ class Map extends React.PureComponent<IProps, IState> {
 }
 
 export default Map;
+function newFunction() {
+    let currentZoomLevel: any;
+    return currentZoomLevel;
+}
+

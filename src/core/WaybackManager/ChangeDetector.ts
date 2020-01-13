@@ -7,6 +7,7 @@ import {
 import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
 import config from './config';
+import IMapView from 'esri/views/MapView';
 
 interface ICandidates {
     rNum: number;
@@ -18,6 +19,12 @@ interface IParamGetTileUrl {
     column: number;
     row: number;
     level: number;
+}
+
+interface IProps {
+    mapView?: IMapView;
+    activeWaybackItem: IWaybackItem;
+    previewWaybackItem: IWaybackItem;
 }
 
 interface IOptionsWaybackChangeDetector {
@@ -71,9 +78,11 @@ class WaybackChangeDetector {
     }
 
     // get array of release numbers for wayback items that come with changes for input area
-    async findChanges(pointInfo: IMapPointInfo): Promise<Array<number>> {
+    async findChanges(pointInfo: IMapPointInfo, currentZoomLevel: number): Promise<Array<number>> {
+
         try {
-            const level = +pointInfo.zoom.toFixed(0);
+            // const level = +pointInfo.zoom.toFixed(0);
+            const level = currentZoomLevel
             const column = geometryFns.long2tile(pointInfo.longitude, level);
             const row = geometryFns.lat2tile(pointInfo.latitude, level);
 
@@ -81,7 +90,7 @@ class WaybackChangeDetector {
                 ? await this.getRNumsFromDetectionLayer(pointInfo, level)
                 : await this.getRNumsFromTilemap({ column, row, level });
 
-            console.log("candidatesRNums = ", candidatesRNums)
+            console.log("candidatesRNums = ", candidatesRNums, 'at zoom level\t', level)
 
             // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
 

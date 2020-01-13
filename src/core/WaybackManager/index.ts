@@ -5,8 +5,16 @@ import { getServiceUrl } from '../../utils/Tier';
 import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '../../types/index';
 import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
+import IMapView from 'esri/views/MapView';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
+
+
+    
+interface IProps {
+    mapView?: IMapView; 
+}
+
 
 class WaybackManager {
     // module to query the wayback metadata
@@ -20,7 +28,6 @@ class WaybackManager {
     private waybackItems: Array<IWaybackItem>;
 
     // constructor() {}
-
 
     async init() {
         this.waybackconfig = await this.fetchWaybackConfig();
@@ -76,12 +83,13 @@ class WaybackManager {
     }
 
 
-    async getLocalChanges(pointInfo: IMapPointInfo) {
+    async getLocalChanges(pointInfo: IMapPointInfo, currentZoomLevel: number) {
         try {
             // NOTE: console.log() to see what pointInfo is passed to changeDetector.findChanges()
             // console.log(pointInfo)
             const localChangeQueryRes = await this.changeDetector.findChanges(
-                pointInfo
+                pointInfo,
+                currentZoomLevel
             );
 
             return localChangeQueryRes;

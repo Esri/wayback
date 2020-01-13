@@ -33,6 +33,7 @@ import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog';
 import Gutter from '../Gutter';
 import ShareDialog from '../ShareDialog';
+import IMapView from 'esri/views/MapView';
 
 import {
     IWaybackItem,
@@ -53,6 +54,7 @@ interface IProps {
     waybackManager: WaybackManager;
     waybackData2InitApp: {
         waybackItems: Array<IWaybackItem>;
+    mapView?: IMapView;
     };
 }
 
@@ -232,7 +234,7 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     // get list of wayback items that do provide updated imagery for the given location
-    async queryLocalChanges(centerPointInfo: IMapPointInfo) {
+    async queryLocalChanges(centerPointInfo: IMapPointInfo, currentZoomLevel: number) {
         // console.log('queryLocalChanges', centerPointInfo);
 
         console.log("centerPointInfo", centerPointInfo.latitude)
@@ -240,7 +242,7 @@ class App extends React.PureComponent<IProps, IState> {
         const { waybackManager } = this.props;
 
         try {
-            const rNums = await waybackManager.getLocalChanges(centerPointInfo);
+            const rNums = await waybackManager.getLocalChanges(centerPointInfo, currentZoomLevel);
             // console.log(rNums);
 
             this.setRNum4WaybackItemsWithLocalChanges(rNums);
@@ -502,7 +504,7 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { data2InitApp, waybackManager, isMobile } = this.props;
+        const { data2InitApp, waybackManager, isMobile, } = this.props;
 
         const {
             waybackItems,
