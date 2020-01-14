@@ -225,7 +225,8 @@ class WaybackChangeDetector {
 
         const finalResults: Array<number> = [];
 
-        const imageDataUriRequests = candidates.map((candidate) => {
+        // reverse the candidates list so the wayback items will be sorted by release dates in ascending order (oldest >>> latest)
+        const imageDataUriRequests = candidates.reverse().map((candidate) => {
             return this.getImagedDataUri(candidate.url, candidate.rNum);
         });
 
