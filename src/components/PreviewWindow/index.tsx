@@ -39,12 +39,32 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         };
     }
 
+    getZoomLevel() {
+
+        const { mapView } = this.props;
+
+        let currentZoomLevel: any
+        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
+        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
+            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
+            
+                currentZoomLevel = level.level;
+            }
+            return currentZoomLevel || ''
+        });
+        return currentZoomLevel
+    }
+
     getTileInfo() {
         const { mapView } = this.props;
 
+        let currentZoomLevel: any
+        currentZoomLevel = this.getZoomLevel()
+
         const center = mapView.center;
         // change to match zoom id algorithm used in getmetadata query
-        const level = mapView.zoom;
+        const level = currentZoomLevel;
 
         // get the tile row, col num from the map center point
         const tileRow = geometryFns.lat2tile(center.latitude, level);
@@ -116,7 +136,8 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     async updatePreviewWindowState() {
         try {
             const tileInfo = this.getTileInfo();
-
+            console.log(tileInfo.level)
+            
             const imageUrl = this.getImageUrl({
                 level: tileInfo.level,
                 row: tileInfo.row,
