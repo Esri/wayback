@@ -92,7 +92,7 @@ class WaybackChangeDetector {
 
             console.log("candidatesRNums = ", candidatesRNums, 'at zoom level\t', level)
 
-            // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
+            // // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
 
             // const candidates = candidatesRNums.map((rNum) => {
             //     return {
@@ -102,8 +102,7 @@ class WaybackChangeDetector {
             // });
 
             // console.log("candidates = ", candidates)
-
-            //const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+            // const rNumsNoDuplicates = await this.removeDuplicates(candidates);
             const rNumsNoDuplicates: Array<number> = [];
             var i;
             for(i=0;i<candidatesRNums.length;i++){
@@ -190,13 +189,13 @@ class WaybackChangeDetector {
         pointInfo: IMapPointInfo,
         zoomLevel: number
     ): Promise<Array<number>> {
+
         const queryUrl = this.changeDetectionLayerUrl + '/query';
-
         const fields = config['change-detection-layer'].fields;
-
         const FIELD_NAME_ZOOM = fields[0].fieldname;
         const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
         const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
+        console.log(zoomLevel)
 
         try {
             const queryResponse = (await queryFeatures({
@@ -206,8 +205,8 @@ class WaybackChangeDetector {
                 inSR: '4326',
                 spatialRel: 'esriSpatialRelIntersects',
                 // hard code zoom level until proper zoom identification is inserted
-                // where: `${FIELD_NAME_ZOOM} = ${zoomLevel}`,
-                where: `${FIELD_NAME_ZOOM} = ${15}`,
+                where: `${FIELD_NAME_ZOOM} = ${zoomLevel}`,
+                // where: `${FIELD_NAME_ZOOM} = ${15}`,
                 outFields: [FIELD_NAME_RELEASE_NUM],
                 orderByFields: FIELD_NAME_RELEASE_NAME,
                 returnGeometry: false,
@@ -234,7 +233,7 @@ class WaybackChangeDetector {
         level = null,
         rNum = null,
     }: IParamGetTileUrl) {
-        const urlTemplate = this.waybackconfig[rNum].itemURL;
+        const urlTemplate = this.waybackconfig[rNum].itemReleaseName;
         return urlTemplate
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())

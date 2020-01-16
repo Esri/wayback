@@ -189,7 +189,7 @@ class Map extends React.PureComponent<IProps, IState> {
         }
     }
 
-    getZoomLevel() {
+    getCurrentZoomLevel() {
 
         const { mapView } = this.state;
 
@@ -211,8 +211,7 @@ class Map extends React.PureComponent<IProps, IState> {
         const { onUpdateEnd, onExtentChange } = this.props;
         const { mapView } = this.state;
 
-        let currentZoomLevel: number
-        currentZoomLevel = this.getZoomLevel()
+        let currentZoomLevel = this.getCurrentZoomLevel()
 
         try {
             type Modules = [typeof IWebMercatorUtils];
@@ -237,9 +236,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 geometry: center.toJSON(),
             };
 
-
             onUpdateEnd(mapViewCenterPointInfo, currentZoomLevel);
-
             onExtentChange(extent.toJSON());
         } catch (err) {
             console.error(err);
@@ -278,7 +275,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 id: this.WaybackLayerId,
                 url: 'https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
                 activeLayer: {
-                    id: activeWaybackItem.itemURL,
+                    id: activeWaybackItem.itemReleaseName,
                 }
             });
 

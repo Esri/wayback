@@ -6,10 +6,12 @@ interface IWaybackConfig {
         itemID: string;
         itemTitle: string;
         itemURL: string;
+        itemReleaseName: string;
         metadataLayerItemID: string;
         metadataLayerUrl: string;
     };
 }
+
 
 interface IWaybackItem {
     releaseNum: number;
@@ -17,6 +19,7 @@ interface IWaybackItem {
     releaseDatetime: Date;
     itemID: string;
     itemTitle: string;
+    itemReleaseName: string;
     itemURL: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;

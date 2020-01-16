@@ -53,7 +53,7 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
         const isVisible = index === 0 ? true : false;
 
         const waybackLayerInfo: IWaybackLayerInfo = {
-            templateUrl: waybackItem.itemURL,
+            templateUrl: waybackItem.itemReleaseName,
             wmtsInfo: {
                 url: getServiceUrl('wayback-imagery-base'),
             },

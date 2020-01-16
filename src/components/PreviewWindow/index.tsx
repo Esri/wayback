@@ -39,13 +39,12 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         };
     }
 
-    getZoomLevel() {
-
+    getCurrentZoomLevel() {
         const { mapView } = this.props;
-
         let currentZoomLevel: any
         let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
         let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        
         currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
             if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
             
@@ -60,7 +59,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const { mapView } = this.props;
 
         let currentZoomLevel: any
-        currentZoomLevel = this.getZoomLevel()
+        currentZoomLevel = this.getCurrentZoomLevel()
 
         const center = mapView.center;
         // change to match zoom id algorithm used in getmetadata query
@@ -89,7 +88,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             alternativeRNum4RreviewWaybackItem,
         } = this.props;
 
-        const previewWindowImageUrl = previewWaybackItem.itemURL
+        const previewWindowImageUrl = previewWaybackItem.itemReleaseName
             .replace(
                 `/${previewWaybackItem.releaseNum}/`,
                 `/${alternativeRNum4RreviewWaybackItem}/`
@@ -137,7 +136,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         try {
             const tileInfo = this.getTileInfo();
             console.log(tileInfo.level)
-            
+
             const imageUrl = this.getImageUrl({
                 level: tileInfo.level,
                 row: tileInfo.row,
