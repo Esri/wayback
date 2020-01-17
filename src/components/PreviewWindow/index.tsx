@@ -44,10 +44,8 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         let currentZoomLevel: any
         let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
         let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
-        
         currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
             if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
-            
                 currentZoomLevel = level.level;
             }
             return currentZoomLevel || ''
@@ -96,7 +94,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
             .replace('{col}', column.toString());
-
+        console.log(previewWindowImageUrl)
         return previewWindowImageUrl;
     }
 
@@ -135,7 +133,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     async updatePreviewWindowState() {
         try {
             const tileInfo = this.getTileInfo();
-            console.log(tileInfo.level)
+            // console.log(tileInfo.level)
 
             const imageUrl = this.getImageUrl({
                 level: tileInfo.level,

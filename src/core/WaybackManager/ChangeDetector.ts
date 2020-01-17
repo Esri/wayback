@@ -147,11 +147,11 @@ class WaybackChangeDetector {
             const results: Array<number> = [];
 
             const mostRecentRelease = this.waybackItems[0].releaseNum;
-
+            console.log(mostRecentRelease)
             const tilemapRequest = async (rNum: number) => {
                 try {
                     const requestUrl = `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
-
+                    
                     const response = await axios.get(requestUrl);
 
                     const tilemapResponse: IResponseWaybackTilemap =
@@ -195,7 +195,7 @@ class WaybackChangeDetector {
         const FIELD_NAME_ZOOM = fields[0].fieldname;
         const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
         const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
-        console.log(zoomLevel)
+        // console.log(zoomLevel)
 
         try {
             const queryResponse = (await queryFeatures({
@@ -212,6 +212,7 @@ class WaybackChangeDetector {
                 returnGeometry: false,
                 f: 'json',
             })) as IQueryFeaturesResponse;
+            // console.log(queryResponse)
 
             const rNums: Array<number> =
                 queryResponse.features && queryResponse.features.length
