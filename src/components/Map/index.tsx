@@ -137,8 +137,8 @@ class Map extends React.PureComponent<IProps, IState> {
             });
 
             mapView.ui.add(searchWidget, {
-                position: 'top-right',
-                index: 2,
+                position: 'top-left',
+                index: 0,
             });
         } catch (err) {
             console.error(err);
