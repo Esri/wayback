@@ -99,10 +99,16 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         const { anchorPoint } = this.state;
 
+        if(!anchorPoint && !mapView){
+            return;
+        }
+
+        const pointGeometry = anchorPoint || mapView.center;
+
         try {
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.releaseNum,
-                pointGeometry: anchorPoint.toJSON(),
+                pointGeometry: pointGeometry.toJSON(),
                 zoom: mapView.zoom,
             });
 
@@ -149,7 +155,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        const { mapView, previewWaybackItem } = this.props;
+        const { mapView, previewWaybackItem, activeWaybackItem } = this.props;
 
         if (prevProps.mapView !== mapView) {
             this.initMapViewEventHandlers();
@@ -157,6 +163,12 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         if (prevProps.previewWaybackItem !== previewWaybackItem) {
             this.onClose();
+        }
+
+        // call queryMetadata once the active wayback item is updated to warm up the metadata service,
+        // because the first query always takes much longer time
+        if( prevProps.activeWaybackItem !== activeWaybackItem) {
+            this.queryMetadata();
         }
     }
 
