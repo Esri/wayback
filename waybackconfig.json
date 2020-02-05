@@ -5,7 +5,7 @@
     "itemReleaseNum": 11351,
     "itemReleaseDate": "2019-10-09",
     "itemReleaseName": "WB_2019_R13",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11351/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r13/MapServer",
     "metadataLayerItemID": "6c0287364c0548d0a281f5c5bb55269d"
   },
@@ -15,7 +15,7 @@
     "itemReleaseNum": 9892,
     "itemReleaseDate": "2019-09-18",
     "itemReleaseName": "WB_2019_R12",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9892/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r12/MapServer",
     "metadataLayerItemID": "fd0df159d90345dd84884aba1c34fc00"
   },
@@ -25,7 +25,7 @@
     "itemReleaseNum": 30442,
     "itemReleaseDate": "2019-08-28",
     "itemReleaseName": "WB_2019_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/30442/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r11/MapServer",
     "metadataLayerItemID": "9790b71d66794919856159034125b3be"
   },
@@ -35,7 +35,7 @@
     "itemReleaseNum": 17216,
     "itemReleaseDate": "2019-08-07",
     "itemReleaseName": "WB_2019_R10",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/17216/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r10/MapServer",
     "metadataLayerItemID": "3a7067fb2830473bb31d335bf4b9813a"
   },
@@ -45,7 +45,7 @@
     "itemReleaseNum": 16681,
     "itemReleaseDate": "2019-07-17",
     "itemReleaseName": "WB_2019_R09",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/16681/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r09/MapServer",
     "metadataLayerItemID": "2358815e9a5a4e4191a5e4450038e75d"
   },
@@ -55,7 +55,7 @@
     "itemReleaseNum": 645,
     "itemReleaseDate": "2019-06-26",
     "itemReleaseName": "WB_2019_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/645/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r08/MapServer",
     "metadataLayerItemID": "ef41000442ce45959e77ba11ce6c383d"
   },
@@ -65,7 +65,7 @@
     "itemReleaseNum": 12576,
     "itemReleaseDate": "2019-06-05",
     "itemReleaseName": "WB_2019_R07",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/12576/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r07/MapServer",
     "metadataLayerItemID": "a6eea03922ef4e58a5c3d7265a02bb47"
   },
@@ -75,7 +75,7 @@
     "itemReleaseNum": 9598,
     "itemReleaseDate": "2019-05-15",
     "itemReleaseName": "WB_2019_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9598/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r06/MapServer",
     "metadataLayerItemID": "5b5620f3aaca467ba4f5415b7915e3a7"
   },
@@ -85,7 +85,7 @@
     "itemReleaseNum": 18063,
     "itemReleaseDate": "2019-04-24",
     "itemReleaseName": "WB_2019_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18063/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r05/MapServer",
     "metadataLayerItemID": "5b47d2bd3b5f4e81b97a94b0ac516850"
   },
@@ -95,7 +95,7 @@
     "itemReleaseNum": 18691,
     "itemReleaseDate": "2019-04-03",
     "itemReleaseName": "WB_2019_R04",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18691/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r04/MapServer",
     "metadataLayerItemID": "83656c77d4474136ae842ee9deecd91f"
   },
@@ -105,7 +105,7 @@
     "itemReleaseNum": 4383,
     "itemReleaseDate": "2019-03-13",
     "itemReleaseName": "WB_2019_R03",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4383/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r03/MapServer",
     "metadataLayerItemID": "9a8a80827b7945b283583c0a93a9e321"
   },
@@ -115,7 +115,7 @@
     "itemReleaseNum": 17677,
     "itemReleaseDate": "2019-02-21",
     "itemReleaseName": "WB_2019_R02",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/17677/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r02/MapServer",
     "metadataLayerItemID": "b567ee1218894f7a821f61d76981f431"
   },
@@ -125,7 +125,7 @@
     "itemReleaseNum": 10,
     "itemReleaseDate": "2014-02-20",
     "itemReleaseName": "WB_2014_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r01/MapServer",
     "metadataLayerItemID": "78e801fab4d24ab9a6053c7a461479be"
   },
@@ -135,7 +135,7 @@
     "itemReleaseNum": 239,
     "itemReleaseDate": "2018-11-29",
     "itemReleaseName": "WB_2018_R16",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/239/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r16/MapServer",
     "metadataLayerItemID": "98d3d0fa245248788e0987e8a007901f"
   },
@@ -145,7 +145,7 @@
     "itemReleaseNum": 388,
     "itemReleaseDate": "2016-04-20",
     "itemReleaseName": "WB_2016_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/388/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r08/MapServer",
     "metadataLayerItemID": "5174ea4fd9ac4c36b84bc2a9061b0072"
   },
@@ -155,7 +155,7 @@
     "itemReleaseNum": 577,
     "itemReleaseDate": "2017-01-11",
     "itemReleaseName": "WB_2017_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/577/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r01/MapServer",
     "metadataLayerItemID": "37ba23a63e0040ea8cfa91ed81fbf405"
   },
@@ -165,7 +165,7 @@
     "itemReleaseNum": 784,
     "itemReleaseDate": "2017-05-03",
     "itemReleaseName": "WB_2017_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/784/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r08/MapServer",
     "metadataLayerItemID": "596f276e627943afbb0108bb070b7251"
   },
@@ -175,7 +175,7 @@
     "itemReleaseNum": 1052,
     "itemReleaseDate": "2017-04-19",
     "itemReleaseName": "WB_2017_R07",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1052/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r07/MapServer",
     "metadataLayerItemID": "683ba8d85d0b4ed985c90eba3aba34d8"
   },
@@ -185,7 +185,7 @@
     "itemReleaseNum": 1296,
     "itemReleaseDate": "2018-04-25",
     "itemReleaseName": "WB_2018_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1296/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r06/MapServer",
     "metadataLayerItemID": "f6bc1d0cff914f62ab7228eeb17e36e5"
   },
@@ -195,7 +195,7 @@
     "itemReleaseNum": 1431,
     "itemReleaseDate": "2015-09-16",
     "itemReleaseName": "WB_2015_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1431/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r15/MapServer",
     "metadataLayerItemID": "535b4f4238ec40de8b2d7932bfdf7236"
   },
@@ -205,7 +205,7 @@
     "itemReleaseNum": 1858,
     "itemReleaseDate": "2018-08-15",
     "itemReleaseName": "WB_2018_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/1858/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r11/MapServer",
     "metadataLayerItemID": "0a9c85cdcaa9493685f09e44a5b6a9b4"
   },
@@ -215,7 +215,7 @@
     "itemReleaseNum": 2168,
     "itemReleaseDate": "2018-09-06",
     "itemReleaseName": "WB_2018_R12",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/2168/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r12/MapServer",
     "metadataLayerItemID": "d2a6b92d80484fbe8fb27f3e00826a26"
   },
@@ -225,7 +225,7 @@
     "itemReleaseNum": 2730,
     "itemReleaseDate": "2015-03-25",
     "itemReleaseName": "WB_2015_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/2730/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r05/MapServer",
     "metadataLayerItemID": "10ef8915488549a593a5fc6bc89e16b5"
   },
@@ -235,7 +235,7 @@
     "itemReleaseNum": 3026,
     "itemReleaseDate": "2014-07-02",
     "itemReleaseName": "WB_2014_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3026/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r10/MapServer",
     "metadataLayerItemID": "bdd3092dd3594a13b9fb877a55449d48"
   },
@@ -245,7 +245,7 @@
     "itemReleaseNum": 3201,
     "itemReleaseDate": "2018-11-07",
     "itemReleaseName": "WB_2018_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3201/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r15/MapServer",
     "metadataLayerItemID": "6f3b3d80c3f14f4388c544393f31b927"
   },
@@ -255,7 +255,7 @@
     "itemReleaseNum": 3319,
     "itemReleaseDate": "2017-07-14",
     "itemReleaseName": "WB_2017_R13",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3319/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r13/MapServer",
     "metadataLayerItemID": "0bd0a98b790945b2b974e566fd534a81"
   },
@@ -265,7 +265,7 @@
     "itemReleaseNum": 3515,
     "itemReleaseDate": "2016-01-13",
     "itemReleaseName": "WB_2016_R02",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3515/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r02/MapServer",
     "metadataLayerItemID": "2d0e4c9540624a639ab43e4e379aa53f"
   },
@@ -275,7 +275,7 @@
     "itemReleaseNum": 3630,
     "itemReleaseDate": "2015-09-30",
     "itemReleaseName": "WB_2015_R16",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/3630/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r16/MapServer",
     "metadataLayerItemID": "0337461082474c90b851c14d2349e5f3"
   },
@@ -285,7 +285,7 @@
     "itemReleaseNum": 4073,
     "itemReleaseDate": "2017-06-27",
     "itemReleaseName": "WB_2017_R12",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4073/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r12/MapServer",
     "metadataLayerItemID": "779f21743c93436faba51dac7681b86f"
   },
@@ -295,7 +295,7 @@
     "itemReleaseNum": 4222,
     "itemReleaseDate": "2016-10-25",
     "itemReleaseName": "WB_2016_R19",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4222/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r19/MapServer",
     "metadataLayerItemID": "8ddaa7b3b57944db90988ca0781292fe"
   },
@@ -305,7 +305,7 @@
     "itemReleaseNum": 4230,
     "itemReleaseDate": "2014-03-26",
     "itemReleaseName": "WB_2014_R03",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/4230/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r03/MapServer",
     "metadataLayerItemID": "cd1dc8a7491344448efcad8032ad994d"
   },
@@ -315,7 +315,7 @@
     "itemReleaseNum": 5097,
     "itemReleaseDate": "2016-07-20",
     "itemReleaseName": "WB_2016_R13",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5097/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r13/MapServer",
     "metadataLayerItemID": "d5fec7bb1090452bb215aaf248e38133"
   },
@@ -325,7 +325,7 @@
     "itemReleaseNum": 5205,
     "itemReleaseDate": "2017-03-29",
     "itemReleaseName": "WB_2017_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5205/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r06/MapServer",
     "metadataLayerItemID": "b504c062129a45cf8b610e79ac71238f"
   },
@@ -335,7 +335,7 @@
     "itemReleaseNum": 5232,
     "itemReleaseDate": "2014-07-30",
     "itemReleaseName": "WB_2014_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5232/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r11/MapServer",
     "metadataLayerItemID": "76c120b3108c41febdb6885614f62045"
   },
@@ -345,7 +345,7 @@
     "itemReleaseNum": 5769,
     "itemReleaseDate": "2016-04-28",
     "itemReleaseName": "WB_2016_R09",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5769/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r09/MapServer",
     "metadataLayerItemID": "849b247d319c4971a3a6303073523946"
   },
@@ -355,7 +355,7 @@
     "itemReleaseNum": 5844,
     "itemReleaseDate": "2014-12-30",
     "itemReleaseName": "WB_2014_R21",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/5844/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r21/MapServer",
     "metadataLayerItemID": "62c71f4937f746b5a70fd59320fbc370"
   },
@@ -365,7 +365,7 @@
     "itemReleaseNum": 6036,
     "itemReleaseDate": "2019-01-09",
     "itemReleaseName": "WB_2019_R00",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6036/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r00/MapServer",
     "metadataLayerItemID": "43bfc491e1dd4d219ddf92f1be0f7786"
   },
@@ -375,7 +375,7 @@
     "itemReleaseNum": 6354,
     "itemReleaseDate": "2016-02-04",
     "itemReleaseName": "WB_2016_R03",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6354/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r03/MapServer",
     "metadataLayerItemID": "f6a23e021f044a2da02e66f6eb1acbac"
   },
@@ -385,7 +385,7 @@
     "itemReleaseNum": 6678,
     "itemReleaseDate": "2016-12-07",
     "itemReleaseName": "WB_2016_R21",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6678/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r21/MapServer",
     "metadataLayerItemID": "bfa7b682d3e842cdbb687e492b6723db"
   },
@@ -395,7 +395,7 @@
     "itemReleaseNum": 6984,
     "itemReleaseDate": "2016-09-14",
     "itemReleaseName": "WB_2016_R16",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/6984/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r16/MapServer",
     "metadataLayerItemID": "234abc4a86394cc1b85c20eb1dad20c1"
   },
@@ -405,7 +405,7 @@
     "itemReleaseNum": 7072,
     "itemReleaseDate": "2018-03-28",
     "itemReleaseName": "WB_2018_R04",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/7072/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r04/MapServer",
     "metadataLayerItemID": "73c3467a0574448498c70c1eb8b9b133"
   },
@@ -415,7 +415,7 @@
     "itemReleaseNum": 8249,
     "itemReleaseDate": "2018-06-06",
     "itemReleaseName": "WB_2018_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8249/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r08/MapServer",
     "metadataLayerItemID": "fd9cbf1a96004dfab26d3f449637f128"
   },
@@ -425,7 +425,7 @@
     "itemReleaseNum": 8255,
     "itemReleaseDate": "2018-03-14",
     "itemReleaseName": "WB_2018_R03",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8255/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r03/MapServer",
     "metadataLayerItemID": "f97d079bb1124df5a59be515453396b0"
   },
@@ -435,7 +435,7 @@
     "itemReleaseNum": 8551,
     "itemReleaseDate": "2016-05-11",
     "itemReleaseName": "WB_2016_R10",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8551/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r10/MapServer",
     "metadataLayerItemID": "b90cba400efd48a787e5a302d9a5bca8"
   },
@@ -445,7 +445,7 @@
     "itemReleaseNum": 8781,
     "itemReleaseDate": "2015-11-18",
     "itemReleaseName": "WB_2015_R20",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/8781/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r20/MapServer",
     "metadataLayerItemID": "61e35d9c4c1f4a1eafe36ef9044fc12f"
   },
@@ -455,7 +455,7 @@
     "itemReleaseNum": 9175,
     "itemReleaseDate": "2016-08-31",
     "itemReleaseName": "WB_2016_R15",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9175/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r15/MapServer",
     "metadataLayerItemID": "f0d980c63a6c452eafdc9da99af67777"
   },
@@ -465,7 +465,7 @@
     "itemReleaseNum": 9203,
     "itemReleaseDate": "2015-04-15",
     "itemReleaseName": "WB_2015_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9203/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r06/MapServer",
     "metadataLayerItemID": "944d68755057498c8e63d127d29a27cb"
   },
@@ -475,7 +475,7 @@
     "itemReleaseNum": 9486,
     "itemReleaseDate": "2017-01-25",
     "itemReleaseName": "WB_2017_R02",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/9486/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r02/MapServer",
     "metadataLayerItemID": "891b60661e6f4c09ac7e420537cb7f88"
   },
@@ -485,7 +485,7 @@
     "itemReleaseNum": 10443,
     "itemReleaseDate": "2015-02-18",
     "itemReleaseName": "WB_2015_R02",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10443/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r02/MapServer",
     "metadataLayerItemID": "95023287d4834895bc13313da8022b41"
   },
@@ -495,7 +495,7 @@
     "itemReleaseNum": 10768,
     "itemReleaseDate": "2018-01-31",
     "itemReleaseName": "WB_2018_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10768/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r01/MapServer",
     "metadataLayerItemID": "6f10a2cd161240f5a12d6b32410416c1"
   },
@@ -505,7 +505,7 @@
     "itemReleaseNum": 10850,
     "itemReleaseDate": "2015-10-14",
     "itemReleaseName": "WB_2015_R17",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/10850/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r17/MapServer",
     "metadataLayerItemID": "e6c39b5f473b4a5da58e155da3997dd3"
   },
@@ -515,7 +515,7 @@
     "itemReleaseNum": 11019,
     "itemReleaseDate": "2014-10-29",
     "itemReleaseName": "WB_2014_R17",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11019/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r17/MapServer",
     "metadataLayerItemID": "b3f13d5debcc4d3b83e828130b9d3c45"
   },
@@ -525,7 +525,7 @@
     "itemReleaseNum": 11033,
     "itemReleaseDate": "2014-06-25",
     "itemReleaseName": "WB_2014_R09",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11033/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r09/MapServer",
     "metadataLayerItemID": "0b5236f2b71a4a49b1ed16b30a62f4d7"
   },
@@ -535,7 +535,7 @@
     "itemReleaseNum": 11092,
     "itemReleaseDate": "2015-10-28",
     "itemReleaseName": "WB_2015_R18",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11092/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r18/MapServer",
     "metadataLayerItemID": "47fefdc05b82441297e60dc0ac11b03c"
   },
@@ -545,7 +545,7 @@
     "itemReleaseNum": 11262,
     "itemReleaseDate": "2016-02-17",
     "itemReleaseName": "WB_2016_R04",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11262/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r04/MapServer",
     "metadataLayerItemID": "33548f6952e346328e7c3475be2cf3ac"
   },
@@ -555,7 +555,7 @@
     "itemReleaseNum": 11334,
     "itemReleaseDate": "2018-06-27",
     "itemReleaseName": "WB_2018_R09",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11334/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r09/MapServer",
     "metadataLayerItemID": "2fb0e37e7fff491f811afb3cb45c8bf6"
   },
@@ -565,7 +565,7 @@
     "itemReleaseNum": 11509,
     "itemReleaseDate": "2016-06-13",
     "itemReleaseName": "WB_2016_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11509/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r11/MapServer",
     "metadataLayerItemID": "9b2e9058b67c4803bcf023cf3afb2dbc"
   },
@@ -575,7 +575,7 @@
     "itemReleaseNum": 11952,
     "itemReleaseDate": "2015-06-24",
     "itemReleaseName": "WB_2015_R10",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/11952/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r10/MapServer",
     "metadataLayerItemID": "f065c285304a41bc85b9afb571846fae"
   },
@@ -585,7 +585,7 @@
     "itemReleaseNum": 13045,
     "itemReleaseDate": "2018-01-18",
     "itemReleaseName": "WB_2018_R00",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13045/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r00/MapServer",
     "metadataLayerItemID": "4a8fea00d7fc4eda8e238bfb6921df12"
   },
@@ -595,7 +595,7 @@
     "itemReleaseNum": 13067,
     "itemReleaseDate": "2018-02-23",
     "itemReleaseName": "WB_2018_R02",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13067/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r02/MapServer",
     "metadataLayerItemID": "72fcd0bee7b14f03a23c795c261ff511"
   },
@@ -605,7 +605,7 @@
     "itemReleaseNum": 13161,
     "itemReleaseDate": "2018-01-08",
     "itemReleaseName": "WB_2017_R21",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13161/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r21/MapServer",
     "metadataLayerItemID": "c3fe9d9926454757b79710159519772f"
   },
@@ -615,7 +615,7 @@
     "itemReleaseNum": 13240,
     "itemReleaseDate": "2016-07-06",
     "itemReleaseName": "WB_2016_R12",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13240/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r12/MapServer",
     "metadataLayerItemID": "a9a96986fc7742378297f6581adc1028"
   },
@@ -625,7 +625,7 @@
     "itemReleaseNum": 13770,
     "itemReleaseDate": "2016-10-12",
     "itemReleaseName": "WB_2016_R18",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/13770/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r18/MapServer",
     "metadataLayerItemID": "be547629f0ae486c8f5784e7d41389f6"
   },
@@ -635,7 +635,7 @@
     "itemReleaseNum": 14035,
     "itemReleaseDate": "2017-08-10",
     "itemReleaseName": "WB_2017_R14",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14035/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r14/MapServer",
     "metadataLayerItemID": "f8f446f2d1f34df0826c1eaf66daedb2"
   },
@@ -645,7 +645,7 @@
     "itemReleaseNum": 14342,
     "itemReleaseDate": "2017-05-31",
     "itemReleaseName": "WB_2017_R10",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14342/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r10/MapServer",
     "metadataLayerItemID": "9b4d424e37934adab36cdb5b500e7cb8"
   },
@@ -655,7 +655,7 @@
     "itemReleaseNum": 14426,
     "itemReleaseDate": "2018-09-26",
     "itemReleaseName": "WB_2018_R13",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14426/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r13/MapServer",
     "metadataLayerItemID": "3b5305c60d654b0e8747b454673a6414"
   },
@@ -665,7 +665,7 @@
     "itemReleaseNum": 14720,
     "itemReleaseDate": "2014-12-18",
     "itemReleaseName": "WB_2014_R20",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14720/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r20/MapServer",
     "metadataLayerItemID": "0c856c2460284b53b77568e8c6277ade"
   },
@@ -675,7 +675,7 @@
     "itemReleaseNum": 14765,
     "itemReleaseDate": "2017-06-14",
     "itemReleaseName": "WB_2017_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14765/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r11/MapServer",
     "metadataLayerItemID": "8673474d256440a7b173c46f56c0cb23"
   },
@@ -685,7 +685,7 @@
     "itemReleaseNum": 14829,
     "itemReleaseDate": "2018-07-25",
     "itemReleaseName": "WB_2018_R10",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/14829/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r10/MapServer",
     "metadataLayerItemID": "df00c16165f94da0a305c2bf139605bc"
   },
@@ -695,7 +695,7 @@
     "itemReleaseNum": 15084,
     "itemReleaseDate": "2015-03-18",
     "itemReleaseName": "WB_2015_R04",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/15084/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r04/MapServer",
     "metadataLayerItemID": "4ce6e6d420594cd6889d421acf05f517"
   },
@@ -705,7 +705,7 @@
     "itemReleaseNum": 15212,
     "itemReleaseDate": "2017-10-04",
     "itemReleaseName": "WB_2017_R17",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/15212/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r17/MapServer",
     "metadataLayerItemID": "558f4a885f4d43bf8c59525ba6f429d1"
   },
@@ -715,7 +715,7 @@
     "itemReleaseNum": 16513,
     "itemReleaseDate": "2014-05-14",
     "itemReleaseName": "WB_2014_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/16513/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r06/MapServer",
     "metadataLayerItemID": "e3e63ac9557742598e81d19dbce56741"
   },
@@ -725,7 +725,7 @@
     "itemReleaseNum": 18358,
     "itemReleaseDate": "2017-09-13",
     "itemReleaseName": "WB_2017_R16",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18358/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r16/MapServer",
     "metadataLayerItemID": "b058e83839dc4fc09b0d3b626e28f105"
   },
@@ -735,7 +735,7 @@
     "itemReleaseNum": 18820,
     "itemReleaseDate": "2018-10-17",
     "itemReleaseName": "WB_2018_R14",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18820/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r14/MapServer",
     "metadataLayerItemID": "e0231a759ec844ef96dd1c680564046f"
   },
@@ -745,7 +745,7 @@
     "itemReleaseNum": 18966,
     "itemReleaseDate": "2016-12-20",
     "itemReleaseName": "WB_2016_R22",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/18966/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r22/MapServer",
     "metadataLayerItemID": "bf48492111ae4ba4b5de004435ad5709"
   },
@@ -755,7 +755,7 @@
     "itemReleaseNum": 19085,
     "itemReleaseDate": "2016-03-16",
     "itemReleaseName": "WB_2016_R06",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19085/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r06/MapServer",
     "metadataLayerItemID": "54d3327f34f54d40a79ee5902a765e87"
   },
@@ -765,7 +765,7 @@
     "itemReleaseNum": 19819,
     "itemReleaseDate": "2014-04-30",
     "itemReleaseName": "WB_2014_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19819/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r05/MapServer",
     "metadataLayerItemID": "01567d806dae4ff691b8ece20fb7b161"
   },
@@ -775,7 +775,7 @@
     "itemReleaseNum": 19930,
     "itemReleaseDate": "2015-05-13",
     "itemReleaseName": "WB_2015_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/19930/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r08/MapServer",
     "metadataLayerItemID": "147392cf3a6b452a9edaafe27be4dfd9"
   },
@@ -785,7 +785,7 @@
     "itemReleaseNum": 20222,
     "itemReleaseDate": "2015-01-21",
     "itemReleaseName": "WB_2015_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20222/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r01/MapServer",
     "metadataLayerItemID": "782698f12921482f8ff9c8d549f95f70"
   },
@@ -795,7 +795,7 @@
     "itemReleaseNum": 20365,
     "itemReleaseDate": "2017-05-17",
     "itemReleaseName": "WB_2017_R09",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20365/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r09/MapServer",
     "metadataLayerItemID": "7b70d1e21798410383f6db6efdaadad7"
   },
@@ -805,7 +805,7 @@
     "itemReleaseNum": 20399,
     "itemReleaseDate": "2018-04-11",
     "itemReleaseName": "WB_2018_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20399/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r05/MapServer",
     "metadataLayerItemID": "69be066e024b4bcda0a99d09692caacb"
   },
@@ -815,7 +815,7 @@
     "itemReleaseNum": 20443,
     "itemReleaseDate": "2016-03-02",
     "itemReleaseName": "WB_2016_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/20443/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r05/MapServer",
     "metadataLayerItemID": "3b11a50cfd334369b727235d1ab1e852"
   },
@@ -825,7 +825,7 @@
     "itemReleaseNum": 21750,
     "itemReleaseDate": "2016-11-16",
     "itemReleaseName": "WB_2016_R20",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/21750/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r20/MapServer",
     "metadataLayerItemID": "23574da8bb654caf81abb433ab0a7406"
   },
@@ -835,7 +835,7 @@
     "itemReleaseNum": 22692,
     "itemReleaseDate": "2014-10-01",
     "itemReleaseName": "WB_2014_R15",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/22692/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r15/MapServer",
     "metadataLayerItemID": "261559547b144801abb96f5e777506b2"
   },
@@ -845,7 +845,7 @@
     "itemReleaseNum": 23264,
     "itemReleaseDate": "2017-10-25",
     "itemReleaseName": "WB_2017_R18",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23264/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r18/MapServer",
     "metadataLayerItemID": "f672a5e8779f4f8fbf9a487f1534c262"
   },
@@ -855,7 +855,7 @@
     "itemReleaseNum": 23383,
     "itemReleaseDate": "2014-12-03",
     "itemReleaseName": "WB_2014_R19",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23383/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r19/MapServer",
     "metadataLayerItemID": "ff7d8be6b25043469feeb7a3b958ef84"
   },
@@ -865,7 +865,7 @@
     "itemReleaseNum": 23448,
     "itemReleaseDate": "2018-12-14",
     "itemReleaseName": "WB_2018_R17",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23448/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r17/MapServer",
     "metadataLayerItemID": "35cff056ecf549bd8ba2cc25574a8c56"
   },
@@ -875,7 +875,7 @@
     "itemReleaseNum": 23601,
     "itemReleaseDate": "2016-08-11",
     "itemReleaseName": "WB_2016_R14",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23601/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2016_r14/MapServer",
     "metadataLayerItemID": "621d5e5fc63a428e9ac6af1e4f215bfb"
   },
@@ -885,7 +885,7 @@
     "itemReleaseNum": 23880,
     "itemReleaseDate": "2015-04-30",
     "itemReleaseName": "WB_2015_R07",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/23880/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r07/MapServer",
     "metadataLayerItemID": "1f64db2f11b74b198e4f75fe8c0a5903"
   },
@@ -895,7 +895,7 @@
     "itemReleaseNum": 24007,
     "itemReleaseDate": "2015-07-08",
     "itemReleaseName": "WB_2015_R11",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/24007/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r11/MapServer",
     "metadataLayerItemID": "25205586f7f64de3adb12ca9ca162a86"
   },
@@ -905,7 +905,7 @@
     "itemReleaseNum": 25379,
     "itemReleaseDate": "2017-08-30",
     "itemReleaseName": "WB_2017_R15",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25379/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r15/MapServer",
     "metadataLayerItemID": "9318898a502c42a3af98ff9515ad9779"
   },
@@ -915,7 +915,7 @@
     "itemReleaseNum": 25521,
     "itemReleaseDate": "2017-11-16",
     "itemReleaseName": "WB_2017_R19",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25521/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r19/MapServer",
     "metadataLayerItemID": "0a3015f583d24de19373159cdbb68abc"
   },
@@ -925,7 +925,7 @@
     "itemReleaseNum": 25586,
     "itemReleaseDate": "2014-09-17",
     "itemReleaseName": "WB_2014_R14",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25586/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r14/MapServer",
     "metadataLayerItemID": "325273e5704f4fbd9d04abbd4edbfdac"
   },
@@ -935,7 +935,7 @@
     "itemReleaseNum": 25944,
     "itemReleaseDate": "2019-01-31",
     "itemReleaseName": "WB_2019_R01",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/25944/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2019_r01/MapServer",
     "metadataLayerItemID": "0edc90bd9a2a4e37a24870b7e2dc288a"
   },
@@ -945,7 +945,7 @@
     "itemReleaseNum": 27946,
     "itemReleaseDate": "2017-02-08",
     "itemReleaseName": "WB_2017_R03",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/27946/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r03/MapServer",
     "metadataLayerItemID": "7346fb75d50b44dabea3c54cdaa757a1"
   },
@@ -955,7 +955,7 @@
     "itemReleaseNum": 28163,
     "itemReleaseDate": "2015-12-16",
     "itemReleaseName": "WB_2015_R23",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/28163/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r23/MapServer",
     "metadataLayerItemID": "bbabdfdaf9344183a5fe7cbd16540d78"
   },
@@ -965,7 +965,7 @@
     "itemReleaseNum": 28219,
     "itemReleaseDate": "2015-08-19",
     "itemReleaseName": "WB_2015_R13",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/28219/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r13/MapServer",
     "metadataLayerItemID": "9842a352714c4331b26881da7991b1d8"
   },
@@ -975,7 +975,7 @@
     "itemReleaseNum": 29387,
     "itemReleaseDate": "2017-03-15",
     "itemReleaseName": "WB_2017_R05",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/29387/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r05/MapServer",
     "metadataLayerItemID": "51546fae7e3d4632a6423dc06bd2b6ed"
   },
@@ -985,7 +985,7 @@
     "itemReleaseNum": 30195,
     "itemReleaseDate": "2014-11-12",
     "itemReleaseName": "WB_2014_R18",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/30195/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r18/MapServer",
     "metadataLayerItemID": "deb84ece94fb4a6ab70a5d627fb2afb2"
   },
@@ -995,7 +995,7 @@
     "itemReleaseNum": 30584,
     "itemReleaseDate": "2015-09-02",
     "itemReleaseName": "WB_2015_R14",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/30584/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2015_r14/MapServer",
     "metadataLayerItemID": "56dc5b51c3bf48529b2761c6a491d4c2"
   },
@@ -1005,7 +1005,7 @@
     "itemReleaseNum": 31026,
     "itemReleaseDate": "2017-02-27",
     "itemReleaseName": "WB_2017_R04",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/31026/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2017_r04/MapServer",
     "metadataLayerItemID": "943951144c2b4480bc37327e727ef375"
   },
@@ -1015,7 +1015,7 @@
     "itemReleaseNum": 31144,
     "itemReleaseDate": "2014-06-11",
     "itemReleaseName": "WB_2014_R08",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/31144/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2014_r08/MapServer",
     "metadataLayerItemID": "2617aa47bdc94388ac866267fa8b4b04"
   },
@@ -1025,7 +1025,7 @@
     "itemReleaseNum": 32337,
     "itemReleaseDate": "2018-05-16",
     "itemReleaseName": "WB_2018_R07",
-    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/{rNum}/{level}/{row}/{column}",
+    "itemUrl": "https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/32337/{level}/{row}/{column}",
     "metadataLayerUrl": "https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_2018_r07/MapServer",
     "metadataLayerItemID": "dba9ecf3b0d54a8a824f6a1d993c6ad8"
   }

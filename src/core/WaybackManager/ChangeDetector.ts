@@ -269,7 +269,6 @@ class WaybackChangeDetector {
         const urlTemplate = this.waybackconfig[rNum].itemUrl;
 
         return urlTemplate
-            .replace('{rNum}', rNum.toString())
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
             .replace('{column}', column.toString());

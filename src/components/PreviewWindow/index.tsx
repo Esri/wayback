@@ -104,24 +104,24 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         };
     }
 
-    getImageUrl({ level, row, column }: IParamGetImageUrl) {
+    getImageUrl({ level, row, column }: IParamGetImageUrl, props: any) {
+
+        console.log(this.props)
 
         const {
             previewWaybackItem,
             alternativeRNum4RreviewWaybackItem,
         } = this.props;
 
-        console.log('rNums from Preview\t', alternativeRNum4RreviewWaybackItem)
+        console.log('rNums from Preview\t', this.props, alternativeRNum4RreviewWaybackItem)
 
         const previewWindowImageUrl = previewWaybackItem.itemUrl
-            // .replace('{rNum}', `${alternativeRNum4RreviewWaybackItem}`)
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
             .replace('{column}', column.toString())
-            .replace('{rNum}',
-                `${previewWaybackItem.itemReleaseNum}`);
+            .replace(`${previewWaybackItem.itemReleaseNum}`, `${alternativeRNum4RreviewWaybackItem}`);
             // .replace(`${previewWaybackItem.releaseNum}`,
-            //     `${alternativeRNum4RreviewWaybackItem}`);
+            //     );
         
         console.log(previewWindowImageUrl)
 
@@ -143,18 +143,18 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             // convert lat lon to x y and create a point object
-            let latLon = new Point()
-            latLon.latitude = tileLat
-            latLon.longitude = tileLon
-            let latLonString = latLon.toString()
-            const tileXY = coordinateFormatter.fromLatitudeLongitude(latLonString);
+            // let latLon = new Point()
+            // latLon.latitude = tileLat
+            // latLon.longitude = tileLon
+            // let latLonString = latLon.toString()
+            // const tileXY = coordinateFormatter.fromLatitudeLongitude(latLonString);
 
-            console.log('lat long string, converted: x , y,', latLonString, tileXY[0], tileXY[1])
+            // console.log('lat long string, converted: x , y,', latLonString, tileXY[0], tileXY[1])
 
 
             const point = new Point({
-                x: tileXY[0],
-                y: tileXY[1],
+                x: tileLon,
+                y: tileLat,
                 spatialReference: { wkid: 4326 },
             });
 
@@ -171,9 +171,9 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    async updatePreviewWindowState() {
+    async updatePreviewWindowState(previewWaybackItem: IProps) {
 
-        console.log(this.props)
+        console.log(previewWaybackItem)
 
         try {
             const tileInfo = this.getTileInfo();
@@ -182,7 +182,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 level: tileInfo.level,
                 row: tileInfo.row,
                 column: tileInfo.column,
-            });
+            }, this.props.previewWaybackItem);
 
             const { top, left } = await this.getTilePosition(
                 tileInfo.tileLat,
@@ -202,7 +202,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
 
     componentDidUpdate(prevProps: IProps) {
         if (prevProps.previewWaybackItem !== this.props.previewWaybackItem) {
-            this.updatePreviewWindowState();
+            this.updatePreviewWindowState(this.props);
         }
     }
 
