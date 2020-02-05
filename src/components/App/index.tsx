@@ -139,7 +139,7 @@ class App extends React.PureComponent<IProps, IState> {
         const waybackItemsReleaseNum2IndexLookup = {};
 
         waybackItems.forEach((d, i) => {
-            const key = d.releaseNum;
+            const key = d.itemReleaseNum;
             waybackItemsReleaseNum2IndexLookup[key] = i;
         });
 
@@ -213,11 +213,11 @@ class App extends React.PureComponent<IProps, IState> {
         const rNums = waybackItems
             .filter((d) => {
                 const hasLocalChange =
-                    rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) >
+                    rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) >
                     -1;
-                return hasLocalChange || d.releaseNum === rNum;
+                return hasLocalChange || d.itemReleaseNum === rNum;
             })
-            .map((d) => d.releaseNum);
+            .map((d) => d.itemReleaseNum);
 
         const indexOfInputRNum = rNums.indexOf(rNum);
 

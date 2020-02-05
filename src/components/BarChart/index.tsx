@@ -122,7 +122,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 const classes = [this.BarRectClassName];
 
                 const hasLocalChange = rNum4WaybackItemsWithLocalChanges.includes(
-                    d.releaseNum
+                    d.itemReleaseNum
                 );
 
                 if (shouldOnlyShowItemsWithLocalChange && !hasLocalChange) {
@@ -133,7 +133,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                     classes.push('is-highlighted');
                 }
 
-                if (d.releaseNum === activeWaybackItem.releaseNum) {
+                if (d.itemReleaseNum === activeWaybackItem.itemReleaseNum) {
                     classes.push('is-active');
                 }
 
@@ -149,10 +149,10 @@ class BarChart extends React.PureComponent<IProps, IState> {
             })
             .attr('height', height)
             .on('click', (d: IWaybackItem) => {
-                onClick(d.releaseNum);
+                onClick(d.itemReleaseNum);
             })
             .on('mouseover', (d: IWaybackItem) => {
-                onMouseEnter(d.releaseNum, true);
+                onMouseEnter(d.itemReleaseNum, true);
             })
             .on('mouseout', (d: IWaybackItem) => {
                 onMouseOut();
@@ -174,7 +174,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
             bars.classed('is-active', false);
 
             bars.filter((d: IWaybackItem) => {
-                return d.releaseNum === activeWaybackItem.releaseNum;
+                return d.itemReleaseNum === activeWaybackItem.itemReleaseNum;
             }).classed('is-active', true);
         }
     }
@@ -191,7 +191,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
             bars.filter((d: IWaybackItem) => {
                 return (
-                    rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1
+                    rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) > -1
                 );
             })
                 .classed('is-highlighted', true)
@@ -201,7 +201,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 bars.filter((d: IWaybackItem) => {
                     return (
                         rNum4WaybackItemsWithLocalChanges.indexOf(
-                            d.releaseNum
+                            d.itemReleaseNum
                         ) === -1
                     );
                 }).classed('is-hide', true);
@@ -224,7 +224,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 bars.filter((d: IWaybackItem) => {
                     return (
                         rNum4WaybackItemsWithLocalChanges.indexOf(
-                            d.releaseNum
+                            d.itemReleaseNum
                         ) === -1
                     );
                 }).classed('is-hide', true);

@@ -95,7 +95,6 @@ class WaybackChangeDetector {
         this.waybackItems = waybackItems;
         this.shouldUseChangdeDetectorLayer = shouldUseChangdeDetectorLayer;
 
-        // console.log('waybackItems', this.waybackItems);
     }
 
 
@@ -111,7 +110,7 @@ class WaybackChangeDetector {
                 ? await this.getRNumsFromDetectionLayer(pointInfo, level)
                 : await this.getRNumsFromTilemap({ level, row, column });
 
-            console.log("candidatesRNums = ", candidatesRNums, 'at zoom level\t', level)
+            // console.log("candidatesRNums = ", candidatesRNums, 'at zoom level\t', level)
 
             // // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
 
@@ -123,12 +122,13 @@ class WaybackChangeDetector {
             });
 
             console.log("candidates = ", candidates)
-            // const rNumsNoDuplicates = await this.removeDuplicates(candidates);
-            const rNumsNoDuplicates: Array<number> = [];
-            var i;
-            for(i=0;i<candidatesRNums.length;i++){
-                rNumsNoDuplicates[i]=candidatesRNums[i]
-            }
+
+            const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+            // const rNumsNoDuplicates: Array<number> = [];
+            // var i;
+            // for(i=0;i<candidatesRNums.length;i++){
+            //     rNumsNoDuplicates[i]=candidatesRNums[i]
+            // }
 
             console.log("rNumsNoDuplicates = ", rNumsNoDuplicates)
 
@@ -144,7 +144,7 @@ class WaybackChangeDetector {
             const lookup = {};
 
             this.waybackItems.forEach((item, index) => {
-                lookup[item.releaseNum] = index;
+                lookup[item.itemReleaseNum] = index;
             });
 
             this.rNum2IndexLookup = lookup;
@@ -153,8 +153,10 @@ class WaybackChangeDetector {
         const index4InputRNum = this.rNum2IndexLookup[rNum];
 
         const previousReleaseNum = this.waybackItems[index4InputRNum + 1]
-            ? this.waybackItems[index4InputRNum + 1].releaseNum
+            ? this.waybackItems[index4InputRNum + 1].itemReleaseNum
             : null;
+
+        console.log(previousReleaseNum)
 
         return previousReleaseNum;
     }
@@ -164,15 +166,20 @@ class WaybackChangeDetector {
         level = null,
         column = null,
     }: IParamGetTileUrl): Promise<Array<number>> {
+
         return new Promise((resolve, reject) => {
             const results: Array<number> = [];
 
-            const mostRecentRelease = this.waybackItems[0].releaseNum;
+            const mostRecentRelease = this.waybackItems[0].itemReleaseNum;
+            
             console.log(mostRecentRelease)
+
             const tilemapRequest = async (rNum: number) => {
                 try {
                     const requestUrl = `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
+                    
                     console.log(requestUrl)
+
                     const response = await axios.get(requestUrl);
 
                     const tilemapResponse: IResponseWaybackTilemap =
@@ -216,7 +223,6 @@ class WaybackChangeDetector {
         const FIELD_NAME_ZOOM = fields[0].fieldname;
         const FIELD_NAME_RELEASE_NUM = fields[1].fieldname;
         const FIELD_NAME_RELEASE_NAME = fields[2].fieldname;
-        // console.log(zoomLevel)
 
         try {
             const queryResponse = (await queryFeatures({
@@ -233,6 +239,7 @@ class WaybackChangeDetector {
                 returnGeometry: false,
                 f: 'json',
             })) as IQueryFeaturesResponse;
+
             // console.log(queryResponse)
 
             const rNums: Array<number> =
@@ -242,8 +249,11 @@ class WaybackChangeDetector {
                       })
                     : []; 
 
+                    console.log(rNums);
             return rNums;
+           
         } catch (err) {
+
             console.error(err);
             return [];
         }
@@ -280,8 +290,7 @@ class WaybackChangeDetector {
 
         try {
             const imageDataUriResults = await Promise.all(imageDataUriRequests);
-            // console.log(imageBlobResults);
-
+         
             imageDataUriResults.reduce((accu, curr) => {
                 if (!accu.includes(curr.dataUri)) {
                     accu.push(curr.dataUri);
@@ -289,6 +298,7 @@ class WaybackChangeDetector {
                 }
                 return accu;
             }, []);
+
         } catch (err) {
             console.error('failed to fetch all image data uri', err);
         }
@@ -305,6 +315,8 @@ class WaybackChangeDetector {
             xhr.open('GET', imageUrl, true);
             xhr.responseType = 'arraybuffer';
 
+            console.log(imageUrl)
+
             xhr.onload = function(e) {
                 if (this.status == 200) {
                     const uInt8Array = new Uint8Array(this.response);
@@ -316,7 +328,7 @@ class WaybackChangeDetector {
                     const data = binaryString.join('');
                     const base64 = window.btoa(data);
                     const dataUri = base64.substr(512, 5000);
-                    // console.log(tileImageDataUri);
+                    
 
                     resolve({
                         rNum,

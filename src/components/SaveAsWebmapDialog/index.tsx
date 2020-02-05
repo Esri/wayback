@@ -115,7 +115,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         const { title, tags, description } = this.state;
 
         const waybackItemsToSave = waybackItems.filter((d) => {
-            return rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1;
+            return rNum4SelectedWaybackItems.indexOf(d.itemReleaseNum) > -1;
         });
 
         try {

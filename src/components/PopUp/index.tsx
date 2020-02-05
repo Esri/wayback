@@ -122,7 +122,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
         console.log(currentZoomLevel)
         try {
             const metadata = await waybackManager.getMetadata({
-                releaseNum: activeWaybackItem.releaseNum,
+                releaseNum: activeWaybackItem.itemReleaseNum,
                 pointGeometry: anchorPoint.toJSON(),
                 zoom: currentZoomLevel
             });

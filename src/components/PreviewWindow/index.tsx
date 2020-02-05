@@ -4,11 +4,13 @@ import { loadModules } from 'esri-loader';
 import './style.scss';
 import * as React from 'react';
 import { IWaybackItem } from '../../types';
-import { geometryFns } from 'helper-toolkit-ts';
+// import { geometryFns } from 'helper-toolkit-ts';
 
 import IMapView from 'esri/views/MapView';
-import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+import ICoordinateFormatter from 'esri/geometry/coordinateFormatter';
+// import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import IPoint from 'esri/geometry/Point';
+import { formatDefaultLocale } from 'd3';
 
 interface IProps {
     mapView?: IMapView;
@@ -103,41 +105,53 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     }
 
     getImageUrl({ level, row, column }: IParamGetImageUrl) {
+
         const {
             previewWaybackItem,
             alternativeRNum4RreviewWaybackItem,
         } = this.props;
 
-        console.log('rNums from Preview\t', previewWaybackItem.releaseNum, alternativeRNum4RreviewWaybackItem)
+        console.log('rNums from Preview\t', alternativeRNum4RreviewWaybackItem)
 
         const previewWindowImageUrl = previewWaybackItem.itemUrl
-            // .replace(
-            //     `/${previewWaybackItem.releaseNum}/`,
-            //     `/${alternativeRNum4RreviewWaybackItem}/`)
-            .replace('{rNum}', `${alternativeRNum4RreviewWaybackItem}`)
+            // .replace('{rNum}', `${alternativeRNum4RreviewWaybackItem}`)
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
-            .replace('{column}', column.toString());
+            .replace('{column}', column.toString())
+            .replace('{rNum}',
+                `${previewWaybackItem.itemReleaseNum}`);
+            // .replace(`${previewWaybackItem.releaseNum}`,
+            //     `${alternativeRNum4RreviewWaybackItem}`);
         
         console.log(previewWindowImageUrl)
 
         return previewWindowImageUrl;
     }
 
-    async getTilePosition(tileLon: number, tileLat: number) {
+
+    // level
+    async getTilePosition(tileLat: number, tileLon: number) {
+
         const { mapView } = this.props;
 
         try {
-            type Modules = [typeof IPoint, typeof IWebMercatorUtils];
+            type Modules = [typeof IPoint, typeof ICoordinateFormatter];
 
-            const [Point, webMercatorUtils] = await (loadModules([
+            const [Point, coordinateFormatter] = await (loadModules([
                 'esri/geometry/Point',
-                'esri/geometry/support/webMercatorUtils',
+                'esri/geometry/coordinateFormatter',
             ]) as Promise<Modules>);
 
             // convert lat lon to x y and create a point object
-            const tileXY = (tileLon, tileLat);
-            
+            let latLon = new Point()
+            latLon.latitude = tileLat
+            latLon.longitude = tileLon
+            let latLonString = latLon.toString()
+            const tileXY = coordinateFormatter.fromLatitudeLongitude(latLonString);
+
+            console.log('lat long string, converted: x , y,', latLonString, tileXY[0], tileXY[1])
+
+
             const point = new Point({
                 x: tileXY[0],
                 y: tileXY[1],
@@ -151,15 +165,18 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 top: tileTopLeftXY.y,
                 left: tileTopLeftXY.x,
             };
+
         } catch (err) {
             return null;
         }
     }
 
     async updatePreviewWindowState() {
+
+        console.log(this.props)
+
         try {
             const tileInfo = this.getTileInfo();
-            console.log(tileInfo.level)
 
             const imageUrl = this.getImageUrl({
                 level: tileInfo.level,
@@ -167,20 +184,19 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 column: tileInfo.column,
             });
 
-
             const { top, left } = await this.getTilePosition(
-                tileInfo.tileLon,
-                tileInfo.tileLat
+                tileInfo.tileLat,
+                tileInfo.tileLon
             );
             
-            console.log(tileInfo.tileLon,
-                tileInfo.tileLat)
+            console.log(top, left)
             
             this.setState({
                 imageUrl,
                 top,
                 left,
             });
+
         } catch (err) {}
     }
 
@@ -198,6 +214,8 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         }
 
         const { top, left, imageUrl } = this.state;
+        
+        console.log(this.state)
 
         const style = {
             position: 'absolute',

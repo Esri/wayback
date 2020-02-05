@@ -14,9 +14,9 @@ interface IProps {
     rNum4SelectedWaybackItems: Array<number>;
     rNum4WaybackItemsWithLocalChanges: Array<number>;
 
-    toggleSelect?: (releaseNum: number) => void;
-    onClick?: (releaseNum: number) => void;
-    onMouseEnter?: (releaseNum: number) => void;
+    toggleSelect?: (itemReleaseNum: number) => void;
+    onClick?: (itemReleaseNum: number) => void;
+    onMouseEnter?: (itemReleaseNum: number) => void;
     onMouseOut?: () => void;
 }
 
@@ -46,7 +46,9 @@ class ListView extends React.PureComponent<IProps, IState> {
                   content: '',
                   top: 0,
                   left: 0,
-              };
+            };
+        
+        console.log(data)
 
         this.setState({
             tooltipData,
@@ -69,7 +71,7 @@ class ListView extends React.PureComponent<IProps, IState> {
         const cardData = shouldOnlyShowItemsWithLocalChange
             ? waybackItems.filter((d) => {
                   return (
-                      rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) >
+                      rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) >
                       -1
                   );
               })
@@ -77,13 +79,13 @@ class ListView extends React.PureComponent<IProps, IState> {
 
         const cards = cardData.map((d, i) => {
             const isActive =
-                activeWaybackItem.releaseNum === d.releaseNum ? true : false;
+                activeWaybackItem.itemReleaseNum === d.itemReleaseNum ? true : false;
             const isSelected =
-                rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1
+                rNum4SelectedWaybackItems.indexOf(d.itemReleaseNum) > -1
                     ? true
                     : false;
             const isHighlighted =
-                rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1
+                rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) > -1
                     ? true
                     : false;
 

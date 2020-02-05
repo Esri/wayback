@@ -88,12 +88,12 @@ class ListViewCard extends React.PureComponent<IProps> {
         return (
             <div
                 className={cardClass}
-                onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
+                onMouseEnter={onMouseEnter.bind(this, data.itemReleaseNum, false)}
                 onMouseLeave={onMouseOut}
             >
                 <div
                     className="is-flexy cursor-pointer"
-                    onClick={onClick.bind(this, data.releaseNum)}
+                    onClick={onClick.bind(this, data.itemReleaseNum)}
                 >
                     <a
                         className="margin-left-half link-light-gray cursor-pointer"
@@ -117,7 +117,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                     className="add-to-webmap-btn cursor-pointer"
                     onMouseOver={this.showTooltip}
                     onMouseOut={this.hideTooltip}
-                    onClick={toggleSelect.bind(this, data.releaseNum)}
+                    onClick={toggleSelect.bind(this, data.itemReleaseNum)}
                     data-tooltip-content={tooltipContentAdd2WebmapBtn}
                 ></div>
             </div>
