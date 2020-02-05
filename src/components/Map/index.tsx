@@ -62,6 +62,22 @@ class Map extends React.PureComponent<IProps, IState> {
         );
     }
 
+    GCStile2long(x: number, z: number) {
+        return ((x / Math.pow(2, z) - 1) * 180);
+    }
+
+    GCStile2lat(y: number, z: number) {
+        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+    }
+
+    long2GCStile(lon: number, z: number) {
+        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+    }
+
+    lat2GCStile(lat: number, z: number) {
+        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+    }
+
     async initMap() {
         loadCss();
 
@@ -196,13 +212,16 @@ class Map extends React.PureComponent<IProps, IState> {
         let currentZoomLevel: any
         let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
         let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        
         currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
             if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
-                console.log(level.level, level.scale)
+                // console.log(level.level, level.scale)
                 currentZoomLevel = level.level;
             }
+            
             return currentZoomLevel || ''
         });
+
         return currentZoomLevel
     }
 
@@ -220,7 +239,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 'esri/geometry/support/webMercatorUtils',
             ]) as Promise<Modules>);
 
-            // cneter the map
+            // center the map
             // convert Mercator-coords to GCS-coords
             const center = mapView.center;
             const extent = webMercatorUtils.webMercatorToGeographic(
@@ -238,6 +257,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
             onUpdateEnd(mapViewCenterPointInfo, currentZoomLevel);
             onExtentChange(extent.toJSON());
+
         } catch (err) {
             console.error(err);
         }
@@ -271,7 +291,7 @@ class Map extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             const waybackLayer = new WMTSLayer ({
-                // url: activeWaybackItem.itemURL,
+                // url: activeWaybackItem.itemUrl,
                 id: this.WaybackLayerId,
                 url: 'https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
                 activeLayer: {
@@ -279,6 +299,8 @@ class Map extends React.PureComponent<IProps, IState> {
                 }
             });
 
+            console.log(activeWaybackItem.itemReleaseName)
+            
             return waybackLayer;
 
         } catch (err) {

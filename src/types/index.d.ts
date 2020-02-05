@@ -2,11 +2,12 @@ import IPortal from 'esri/portal/Portal';
 import ICredential from 'esri/identity/Credential';
 
 interface IWaybackConfig {
-    [key: number]: {
+    [key: string]: {
         itemID: string;
         itemTitle: string;
-        itemURL: string;
+        itemUrl: string;
         itemReleaseName: string;
+        itemReleaseDate: string;
         metadataLayerItemID: string;
         metadataLayerUrl: string;
     };
@@ -19,8 +20,9 @@ interface IWaybackItem {
     releaseDatetime: Date;
     itemID: string;
     itemTitle: string;
+    itemReleaseDate: string;
     itemReleaseName: string;
-    itemURL: string;
+    itemUrl: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;
 }

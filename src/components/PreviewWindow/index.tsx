@@ -38,12 +38,31 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             imageUrl: '',
         };
     }
+    
+    GCStile2long(x: number, z: number) {
+        return ((x / Math.pow(2, z) - 1) * 180);
+    }
+
+    GCStile2lat(y: number, z: number) {
+        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+    }
+
+    long2GCStile(lon: number, z: number) {
+        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+    }
+
+    lat2GCStile(lat: number, z: number) {
+        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+    }
+      
 
     getCurrentZoomLevel() {
         const { mapView } = this.props;
+
         let currentZoomLevel: any
         let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
         let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
+        
         currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
             if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
                 currentZoomLevel = level.level;
@@ -60,16 +79,19 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         currentZoomLevel = this.getCurrentZoomLevel()
 
         const center = mapView.center;
+
         // change to match zoom id algorithm used in getmetadata query
         const level = currentZoomLevel;
 
         // get the tile row, col num from the map center point
-        const tileRow = geometryFns.lat2tile(center.latitude, level);
-        const tileCol = geometryFns.long2tile(center.longitude, level);
+        const tileRow = this.lat2GCStile(center.latitude, level);
+        const tileCol = this.long2GCStile(center.longitude, level);
 
         // convert the row and col number into the lat, lon, which is the coordinate of the top left corner of the map tile in center of map
-        const tileLat = geometryFns.tile2lat(tileRow, level);
-        const tileLon = geometryFns.tile2Long(tileCol, level);
+        const tileLat = this.GCStile2lat(tileRow, level);
+        const tileLon = this.GCStile2long(tileCol, level);
+
+        console.log('converted GCS coordinates and level:\t', tileLat, tileLon, level)
 
         return {
             level,
@@ -86,15 +108,19 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             alternativeRNum4RreviewWaybackItem,
         } = this.props;
 
-        const previewWindowImageUrl = previewWaybackItem.itemReleaseName
-            .replace(
-                `/${previewWaybackItem.releaseNum}/`,
-                `/${alternativeRNum4RreviewWaybackItem}/`
-            )
+        console.log('rNums from Preview\t', previewWaybackItem.releaseNum, alternativeRNum4RreviewWaybackItem)
+
+        const previewWindowImageUrl = previewWaybackItem.itemUrl
+            // .replace(
+            //     `/${previewWaybackItem.releaseNum}/`,
+            //     `/${alternativeRNum4RreviewWaybackItem}/`)
+            .replace('{rNum}', `${alternativeRNum4RreviewWaybackItem}`)
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
-            .replace('{col}', column.toString());
+            .replace('{column}', column.toString());
+        
         console.log(previewWindowImageUrl)
+
         return previewWindowImageUrl;
     }
 
@@ -110,12 +136,12 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             ]) as Promise<Modules>);
 
             // convert lat lon to x y and create a point object
-            const tileXY = webMercatorUtils.lngLatToXY(tileLon, tileLat);
-
+            const tileXY = (tileLon, tileLat);
+            
             const point = new Point({
                 x: tileXY[0],
                 y: tileXY[1],
-                spatialReference: { wkid: 3857 },
+                spatialReference: { wkid: 4326 },
             });
 
             // convert to screen point and we will use this val to position the preview window
@@ -133,7 +159,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     async updatePreviewWindowState() {
         try {
             const tileInfo = this.getTileInfo();
-            // console.log(tileInfo.level)
+            console.log(tileInfo.level)
 
             const imageUrl = this.getImageUrl({
                 level: tileInfo.level,
@@ -141,11 +167,15 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 column: tileInfo.column,
             });
 
+
             const { top, left } = await this.getTilePosition(
                 tileInfo.tileLon,
                 tileInfo.tileLat
             );
-
+            
+            console.log(tileInfo.tileLon,
+                tileInfo.tileLat)
+            
             this.setState({
                 imageUrl,
                 top,

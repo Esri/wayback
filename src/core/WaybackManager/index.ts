@@ -4,7 +4,7 @@ import axios from 'axios';
 import { getServiceUrl } from '../../utils/Tier';
 import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '../../types/index';
 import { IParamsQueryMetadata } from './types';
-import { extractDateFromWaybackItemTitle } from './helpers';
+import { extractDateFromWaybackItemReleaseDate } from './helpers';
 import IMapView from 'esri/views/MapView';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
@@ -31,7 +31,6 @@ class WaybackManager {
 
     async init() {
         this.waybackconfig = await this.fetchWaybackConfig();
-        // console.log(this.waybackconfig);
 
         this.waybackItems = this.getWaybackItems();
 
@@ -55,22 +54,25 @@ class WaybackManager {
 
 
     getWaybackItems() {
+        const waybackItemKeys = Object.keys(this.waybackconfig)
+    
         const waybackItems = Object.keys(this.waybackconfig).map(
             (key: string) => {
-                const releaseNum = +key;
 
+                const releaseNum = +key;
+                
                 const waybackconfigItem = this.waybackconfig[+releaseNum];
 
-                const releaseDate = extractDateFromWaybackItemTitle(
-                    waybackconfigItem.itemTitle
+                const releaseDate = extractDateFromWaybackItemReleaseDate(
+                    waybackconfigItem.itemReleaseDate
                 );
-
+                
                 const waybackItem = {
                     releaseNum,
                     ...releaseDate,
                     ...waybackconfigItem,
                 };
-
+                
                 return waybackItem;
             }
         );
@@ -86,7 +88,8 @@ class WaybackManager {
     async getLocalChanges(pointInfo: IMapPointInfo, currentZoomLevel: number) {
         try {
             // NOTE: console.log() to see what pointInfo is passed to changeDetector.findChanges()
-            // console.log(pointInfo)
+            console.log(pointInfo.latitude, pointInfo.longitude, currentZoomLevel)
+
             const localChangeQueryRes = await this.changeDetector.findChanges(
                 pointInfo,
                 currentZoomLevel
@@ -116,6 +119,7 @@ class WaybackManager {
     }
 
     private fetchWaybackConfig(): Promise<IWaybackConfig> {
+
         const requestUrl = getServiceUrl('wayback-config');
 
         return new Promise((resolve, reject) => {
@@ -126,7 +130,6 @@ class WaybackManager {
                     // handle success
                     if (response.data) {
                         // NOTE: using console.log() to test new waybackconfig.json
-                        console.log(response.data)
                         resolve(response.data);
 
                     } else {

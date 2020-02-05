@@ -19,10 +19,10 @@ class MetadataManager {
         this.waybackconfig = waybackconfig;
     }
 
-    // setWaybackConfig(waybackconfig:IWaybackConfig){
-    //     this.waybackconfig = waybackconfig;
-    //     // console.log('set waybackconfig for metadata manager', waybackconfig);
-    // }
+    setWaybackConfig(waybackconfig:IWaybackConfig){
+        this.waybackconfig = waybackconfig;
+        console.log('set waybackconfig for metadata manager', waybackconfig);
+    }
 
     async queryData(
         params: IParamsQueryMetadata

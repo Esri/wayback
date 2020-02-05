@@ -4,7 +4,7 @@ import {
     IQueryFeaturesResponse,
     IFeature,
 } from '@esri/arcgis-rest-feature-layer';
-import { geometryFns } from 'helper-toolkit-ts';
+// import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
 import config from './config';
 import IMapView from 'esri/views/MapView';
@@ -61,6 +61,27 @@ class WaybackChangeDetector {
     private waybackItems: Array<IWaybackItem>;
     private rNum2IndexLookup: { [key: number]: number };
 
+    // NOTE: GCS conversion functions
+    GCStile2long(x: number, z: number) {
+        return ((x / Math.pow(2, z) - 1) * 180);
+    }
+
+    
+    GCStile2lat(y: number, z: number) {
+        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+    }
+      
+
+    long2GCStile(lon: number, z: number) {
+        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+    }
+
+    
+    lat2GCStile(lat: number, z: number) {
+        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+    }
+      
+
     constructor({
         waybackMapServerBaseUrl = '',
         changeDetectionLayerUrl = '',
@@ -77,31 +98,31 @@ class WaybackChangeDetector {
         // console.log('waybackItems', this.waybackItems);
     }
 
+
     // get array of release numbers for wayback items that come with changes for input area
     async findChanges(pointInfo: IMapPointInfo, currentZoomLevel: number): Promise<Array<number>> {
 
         try {
-            // const level = +pointInfo.zoom.toFixed(0);
             const level = currentZoomLevel
-            const column = geometryFns.long2tile(pointInfo.longitude, level);
-            const row = geometryFns.lat2tile(pointInfo.latitude, level);
+            const column = this.long2GCStile(pointInfo.longitude, level);
+            const row = this.lat2GCStile(pointInfo.latitude, level);
 
             const candidatesRNums = this.shouldUseChangdeDetectorLayer
                 ? await this.getRNumsFromDetectionLayer(pointInfo, level)
-                : await this.getRNumsFromTilemap({ column, row, level });
+                : await this.getRNumsFromTilemap({ level, row, column });
 
             console.log("candidatesRNums = ", candidatesRNums, 'at zoom level\t', level)
 
             // // ** Bypass removeDuplicates code until it can be fixed using the WMTS URL. **
 
-            // const candidates = candidatesRNums.map((rNum) => {
-            //     return {
-            //         rNum,
-            //         url: this.getTileImageUrl({ column, row, level, rNum }),
-            //     };
-            // });
+            const candidates = candidatesRNums.map((rNum) => {
+                return {
+                    rNum,
+                    url: this.getTileImageUrl({ level, row, column, rNum }),
+                };
+            });
 
-            // console.log("candidates = ", candidates)
+            console.log("candidates = ", candidates)
             // const rNumsNoDuplicates = await this.removeDuplicates(candidates);
             const rNumsNoDuplicates: Array<number> = [];
             var i;
@@ -139,9 +160,9 @@ class WaybackChangeDetector {
     }
 
     async getRNumsFromTilemap({
-        column = null,
         row = null,
         level = null,
+        column = null,
     }: IParamGetTileUrl): Promise<Array<number>> {
         return new Promise((resolve, reject) => {
             const results: Array<number> = [];
@@ -151,7 +172,7 @@ class WaybackChangeDetector {
             const tilemapRequest = async (rNum: number) => {
                 try {
                     const requestUrl = `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
-                    
+                    console.log(requestUrl)
                     const response = await axios.get(requestUrl);
 
                     const tilemapResponse: IResponseWaybackTilemap =
@@ -234,11 +255,14 @@ class WaybackChangeDetector {
         level = null,
         rNum = null,
     }: IParamGetTileUrl) {
-        const urlTemplate = this.waybackconfig[rNum].itemReleaseName;
+        
+        const urlTemplate = this.waybackconfig[rNum].itemUrl;
+
         return urlTemplate
+            .replace('{rNum}', rNum.toString())
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
-            .replace('{col}', column.toString());
+            .replace('{column}', column.toString());
     }
 
     async removeDuplicates(

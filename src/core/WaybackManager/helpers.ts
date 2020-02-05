@@ -1,4 +1,4 @@
-const convertDateFromWaybackItemTitle = (dateString = '') => {
+const convertDateFromWaybackItemReleaseDate = (dateString = '') => {
     const dateParts = dateString.split('-');
     const year = +dateParts[0];
     const mon = +dateParts[1] - 1;
@@ -8,17 +8,18 @@ const convertDateFromWaybackItemTitle = (dateString = '') => {
 
 // the title of wayback item is like "World Imagery (Wayback 2014-02-20)",
 // therefore need to call this method to extract "2014-02-20" from string
-const extractDateFromWaybackItemTitle = (waybackItemTitle = '') => {
+const extractDateFromWaybackItemReleaseDate = (waybackItemReleaseDate = '') => {
+    
     const regexpYYYYMMDD = /\d{4}-\d{2}-\d{2}/g;
-    const results = waybackItemTitle.match(regexpYYYYMMDD);
+    const results = waybackItemReleaseDate.match(regexpYYYYMMDD);
 
-    const dateString = results.length ? results[0] : waybackItemTitle;
-    const datetime = convertDateFromWaybackItemTitle(dateString);
-
+    const dateString = results.length ? results[0] : waybackItemReleaseDate;
+    const datetime = convertDateFromWaybackItemReleaseDate(dateString);
+    
     return {
         releaseDateLabel: dateString,
         releaseDatetime: datetime,
     };
 };
 
-export { extractDateFromWaybackItemTitle };
+export { extractDateFromWaybackItemReleaseDate };
