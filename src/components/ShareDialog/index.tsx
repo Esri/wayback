@@ -49,6 +49,8 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
     }
 
     render() {
+    
+        // TODO: consider rendering without share options external to intranet (basically all current Urls)
         const { currentUrl } = this.props;
 
         const { copyBtnLabel } = this.state;
