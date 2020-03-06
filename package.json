@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --mode development --open",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "start-with-esri-host": "webpack-dev-server --mode development --open --host jzhang4.esri.com",
+    "start-with-esri-host": "webpack-dev-server --mode development --open --host nico9996.esri.com",
     "lint": "eslint src/**/*.{ts,tsx} --fix",
     "format": "prettier --write src/**/*.{ts,tsx,json}",
     "precommit": "npm run lint && npm run format"
@@ -46,7 +46,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.5",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^1.18.2",
     "sass-loader": "^7.3.1",

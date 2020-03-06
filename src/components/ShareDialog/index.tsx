@@ -28,7 +28,6 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
         const textInput = this.textInputRef.current;
         textInput.select();
         document.execCommand('copy');
-
         this.updateCopyBtnLabel('Copied');
     }
 
@@ -110,7 +109,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                         </div>
                     </div>
 
-                    <div className="trailer-half social-media-icons">
+                    {/* <div className="trailer-half social-media-icons">
                         <a
                             className="icon-social-twitter cursor-pointer"
                             href={share2TwitterLink}
@@ -139,7 +138,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                             aria-label="github"
                             rel="noopener noreferrer"
                         ></a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );
