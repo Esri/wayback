@@ -293,7 +293,7 @@ class Map extends React.PureComponent<IProps, IState> {
             const waybackLayer = new WMTSLayer ({
                 // url: activeWaybackItem.itemUrl,
                 id: this.WaybackLayerId,
-                url: 'https://wayback.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
+                url: 'https://waybacknga.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
                 activeLayer: {
                     id: activeWaybackItem.itemReleaseName,
                 }
