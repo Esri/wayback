@@ -1,30 +1,35 @@
+import '../../config';
+
 import './style.scss';
 import * as React from 'react';
 
-import { loadCss, loadModules } from 'esri-loader';
+// import { loadCss, loadModules } from 'esri-loader';
 import config from './config';
 import appConfig from '../../app-config';
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 
-import { IWaybackItem, IMapPointInfo, IExtentGeomety } from '../../types';
+import { IWaybackItem, IMapPointInfo, IExtentGeometry } from '../../types';
 
 import IMapView from 'esri/views/MapView';
 // import IWebMap from "esri/WebMap";
 import IMap from 'esri/Map';
 import IWMTSLayer from 'esri/layers/WMTSLayer';
 // import IWebTileLayer from 'esri/layers/WebTileLayer';
-import IWatchUtils from 'esri/core/watchUtils';
+import WatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
-import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+import WebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import ISearchWidget from 'esri/widgets/Search';
 import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 import ILocate from 'esri/widgets/Locate';
 
 interface IProps {
-    defaultExtent?: IExtentGeomety;
+    defaultExtent?: IExtentGeometry;
     activeWaybackItem: IWaybackItem;
-    onUpdateEnd?: (centerPoint: IMapPointInfo, currentZoomLevel: number) => void;
-    onExtentChange?: (extent: IExtentGeomety) => void;
+    onUpdateEnd?: (
+        centerPoint: IMapPointInfo,
+        currentZoomLevel: number
+    ) => void;
+    onExtentChange?: (extent: IExtentGeometry) => void;
 }
 
 interface IState {
@@ -63,23 +68,23 @@ class Map extends React.PureComponent<IProps, IState> {
     }
 
     GCStile2long(x: number, z: number) {
-        return ((x / Math.pow(2, z) - 1) * 180);
+        return (x / Math.pow(2, z) - 1) * 180;
     }
 
     GCStile2lat(y: number, z: number) {
-        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+        return (1 - y / Math.pow(2, z - 1)) * 90;
     }
 
     long2GCStile(lon: number, z: number) {
-        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+        return Math.floor(Math.pow(2, z) * (lon / 180 + 1));
     }
 
     lat2GCStile(lat: number, z: number) {
-        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+        return Math.floor(Math.pow(2, z - 1) * (1 - lat / 90));
     }
 
     async initMap() {
-        loadCss();
+        // loadCss();
 
         const { defaultExtent } = this.props;
 
@@ -92,22 +97,22 @@ class Map extends React.PureComponent<IProps, IState> {
                 typeof IVectorTileLayer
             ];
 
-            const [MapView, Map, VectorTileLayer] = await (loadModules([
-                'esri/views/MapView',
-                'esri/Map',
-                'esri/layers/VectorTileLayer',
-            ]) as Promise<Modules>);
+            // const [MapView, Map, VectorTileLayer] = await (loadModules([
+            //     'esri/views/MapView',
+            //     'esri/Map',
+            //     'esri/layers/VectorTileLayer',
+            // ]) as Promise<Modules>);
 
             const waybackLayer = await this.getWaybackLayer();
 
-            const referenceLayer = new VectorTileLayer({
+            const referenceLayer = new IVectorTileLayer({
                 id: this.ReferenceLayerId,
                 portalItem: {
                     id: config['Hybrid-Reference-Layer'],
                 },
             });
 
-            const map = new Map({
+            const map = new IMap({
                 layers: [waybackLayer, referenceLayer],
             });
 
@@ -116,7 +121,7 @@ class Map extends React.PureComponent<IProps, IState> {
                 appConfig.defaultMapExtent ||
                 config.extents.default;
 
-            const view = new MapView({
+            const view = new IMapView({
                 container,
                 map: map,
                 extent,
@@ -131,7 +136,6 @@ class Map extends React.PureComponent<IProps, IState> {
                 this.initSearchWidget();
                 this.initLocateWidget();
             });
-
         } catch (err) {
             console.error(err);
         }
@@ -143,11 +147,11 @@ class Map extends React.PureComponent<IProps, IState> {
         type Modules = [typeof ISearchWidget];
 
         try {
-            const [Search] = await (loadModules([
-                'esri/widgets/Search',
-            ]) as Promise<Modules>);
+            // const [Search] = await (loadModules([
+            //     'esri/widgets/Search',
+            // ]) as Promise<Modules>);
 
-            const searchWidget = new Search({
+            const searchWidget = new ISearchWidget({
                 view: mapView,
                 popupEnabled: false,
                 resultGraphicEnabled: false,
@@ -168,11 +172,11 @@ class Map extends React.PureComponent<IProps, IState> {
         type Modules = [typeof ILocate];
 
         try {
-            const [Locate] = await (loadModules([
-                'esri/widgets/Locate',
-            ]) as Promise<Modules>);
+            // const [Locate] = await (loadModules([
+            //     'esri/widgets/Locate',
+            // ]) as Promise<Modules>);
 
-            const locateWidget = new Locate({
+            const locateWidget = new ILocate({
                 view: mapView,
             });
 
@@ -190,13 +194,13 @@ class Map extends React.PureComponent<IProps, IState> {
         const { mapView } = this.state;
 
         try {
-            type Modules = [typeof IWatchUtils];
+            type Modules = [typeof WatchUtils];
 
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+            // const [watchUtils] = await (loadModules([
+            //     'esri/core/watchUtils',
+            // ]) as Promise<Modules>);
 
-            watchUtils.whenTrue(mapView, 'stationary', () => {
+            WatchUtils.whenTrue(mapView, 'stationary', () => {
                 // console.log('view is stationary');
                 this.mapViewUpdateEndHandler();
             });
@@ -206,23 +210,31 @@ class Map extends React.PureComponent<IProps, IState> {
     }
 
     getCurrentZoomLevel() {
-
         const { mapView } = this.state;
 
-        let currentZoomLevel: any
-        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
-        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
-        
-        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
-            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
-                // console.log(level.level, level.scale)
-                currentZoomLevel = level.level;
-            }
-            
-            return currentZoomLevel || ''
-        });
+        let currentZoomLevel: any;
+        const currentActiveLayer: any = mapView.layerViews
+            .getItemAt(0)
+            .layer.get('activeLayer');
+        const currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(
+            0
+        ).tileInfo.lods;
 
-        return currentZoomLevel
+        currentWMTSTileSet.forEach(
+            (level: { scale: number; level: number; resolution: number }) => {
+                if (
+                    level.scale < mapView.scale * Math.sqrt(2) &&
+                    level.scale > mapView.scale / Math.sqrt(2)
+                ) {
+                    // console.log(level.level, level.scale)
+                    currentZoomLevel = level.level;
+                }
+
+                return currentZoomLevel || '';
+            }
+        );
+
+        return currentZoomLevel;
     }
 
     // NOTE: needs getZoom()
@@ -230,19 +242,19 @@ class Map extends React.PureComponent<IProps, IState> {
         const { onUpdateEnd, onExtentChange } = this.props;
         const { mapView } = this.state;
 
-        let currentZoomLevel = this.getCurrentZoomLevel()
+        const currentZoomLevel = this.getCurrentZoomLevel();
 
         try {
-            type Modules = [typeof IWebMercatorUtils];
+            // type Modules = [typeof WebMercatorUtils];
 
-            const [webMercatorUtils] = await (loadModules([
-                'esri/geometry/support/webMercatorUtils',
-            ]) as Promise<Modules>);
+            // const [webMercatorUtils] = await (loadModules([
+            //     'esri/geometry/support/webMercatorUtils',
+            // ]) as Promise<Modules>);
 
             // center the map
             // convert Mercator-coords to GCS-coords
             const center = mapView.center;
-            const extent = webMercatorUtils.webMercatorToGeographic(
+            const extent = WebMercatorUtils.webMercatorToGeographic(
                 mapView.extent
             );
 
@@ -257,7 +269,6 @@ class Map extends React.PureComponent<IProps, IState> {
 
             onUpdateEnd(mapViewCenterPointInfo, currentZoomLevel);
             onExtentChange(extent.toJSON());
-
         } catch (err) {
             console.error(err);
         }
@@ -286,23 +297,23 @@ class Map extends React.PureComponent<IProps, IState> {
         try {
             type Modules = [typeof IWMTSLayer];
 
-            const [WMTSLayer] = await (loadModules([
-                'esri/layers/WMTSLayer',
-            ]) as Promise<Modules>);
+            // const [WMTSLayer] = await (loadModules([
+            //     'esri/layers/WMTSLayer',
+            // ]) as Promise<Modules>);
 
-            const waybackLayer = new WMTSLayer ({
+            const waybackLayer = new IWMTSLayer({
                 // url: activeWaybackItem.itemUrl,
                 id: this.WaybackLayerId,
-                url: 'https://waybacknga.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
+                url:
+                    'https://waybacknga.maptiles.arcgis.com/GCS/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
                 activeLayer: {
                     id: activeWaybackItem.itemReleaseName,
-                }
+                },
             });
 
-            console.log(activeWaybackItem.itemReleaseName)
-            
-            return waybackLayer;
+            console.log(activeWaybackItem.itemReleaseName);
 
+            return waybackLayer;
         } catch (err) {
             return null;
         }
@@ -383,4 +394,3 @@ function newFunction() {
     let currentZoomLevel: any;
     return currentZoomLevel;
 }
-

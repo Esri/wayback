@@ -14,7 +14,6 @@ interface IWaybackConfig {
     };
 }
 
-
 interface IWaybackItem {
     itemReleaseNum: number;
     releaseDateLabel: string;
@@ -28,7 +27,7 @@ interface IWaybackItem {
     metadataLayerUrl: string;
 }
 
-interface IPointGeomety {
+interface IPointGeometry {
     x: number;
     y: number;
     spatialReference: {
@@ -37,7 +36,7 @@ interface IPointGeomety {
     };
 }
 
-interface IExtentGeomety {
+interface IExtentGeometry {
     xmax: number;
     xmin: number;
     ymax: number;
@@ -52,7 +51,7 @@ interface IMapPointInfo {
     longitude: number;
     latitude: number;
     zoom: number;
-    geometry: IPointGeomety;
+    geometry: IPointGeometry;
 }
 
 interface IWaybackMetadataQueryResult {
@@ -74,7 +73,7 @@ interface IUserSession {
 }
 
 interface ISearchParamData {
-    mapExtent?: IExtentGeomety;
+    mapExtent?: IExtentGeometry;
     rNum4SelectedWaybackItems?: Array<number>;
     shouldOnlyShowItemsWithLocalChange?: boolean;
     rNum4ActiveWaybackItem?: number;
@@ -120,11 +119,11 @@ export {
     IWaybackConfig,
     IWaybackItem,
     IMapPointInfo,
-    IPointGeomety,
+    IPointGeometry,
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IUserSession,
-    IExtentGeomety,
+    IExtentGeometry,
     ISearchParamData,
     IStaticTooltipData,
     ValidServiceUrlNames,

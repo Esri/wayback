@@ -1,5 +1,5 @@
 // preview the tile image that interscets with the center of the map view
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 
 import './style.scss';
 import * as React from 'react';
@@ -9,7 +9,7 @@ import { IWaybackItem } from '../../types';
 import IMapView from 'esri/views/MapView';
 import ICoordinateFormatter from 'esri/geometry/coordinateFormatter';
 // import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import IPoint from 'esri/geometry/Point';
+import Point from 'esri/geometry/Point';
 import { formatDefaultLocale } from 'd3';
 
 interface IProps {
@@ -40,45 +40,53 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             imageUrl: '',
         };
     }
-    
+
     GCStile2long(x: number, z: number) {
-        return ((x / Math.pow(2, z) - 1) * 180);
+        return (x / Math.pow(2, z) - 1) * 180;
     }
 
     GCStile2lat(y: number, z: number) {
-        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+        return (1 - y / Math.pow(2, z - 1)) * 90;
     }
 
     long2GCStile(lon: number, z: number) {
-        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+        return Math.floor(Math.pow(2, z) * (lon / 180 + 1));
     }
 
     lat2GCStile(lat: number, z: number) {
-        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+        return Math.floor(Math.pow(2, z - 1) * (1 - lat / 90));
     }
-      
 
     getCurrentZoomLevel() {
         const { mapView } = this.props;
 
-        let currentZoomLevel: any
-        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
-        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
-        
-        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
-            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
-                currentZoomLevel = level.level;
+        let currentZoomLevel: any;
+        const currentActiveLayer: any = mapView.layerViews
+            .getItemAt(0)
+            .layer.get('activeLayer');
+        const currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(
+            0
+        ).tileInfo.lods;
+
+        currentWMTSTileSet.forEach(
+            (level: { scale: number; level: number; resolution: number }) => {
+                if (
+                    level.scale < mapView.scale * Math.sqrt(2) &&
+                    level.scale > mapView.scale / Math.sqrt(2)
+                ) {
+                    currentZoomLevel = level.level;
+                }
+                return currentZoomLevel || '';
             }
-            return currentZoomLevel || ''
-        });
-        return currentZoomLevel
+        );
+        return currentZoomLevel;
     }
 
     getTileInfo() {
         const { mapView } = this.props;
 
-        let currentZoomLevel: any
-        currentZoomLevel = this.getCurrentZoomLevel()
+        let currentZoomLevel: any;
+        currentZoomLevel = this.getCurrentZoomLevel();
 
         const center = mapView.center;
 
@@ -93,7 +101,12 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const tileLat = this.GCStile2lat(tileRow, level);
         const tileLon = this.GCStile2long(tileCol, level);
 
-        console.log('converted GCS coordinates and level:\t', tileLat, tileLon, level)
+        console.log(
+            'converted GCS coordinates and level:\t',
+            tileLat,
+            tileLon,
+            level
+        );
 
         return {
             level,
@@ -105,42 +118,46 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     }
 
     getImageUrl({ level, row, column }: IParamGetImageUrl, props: any) {
-
-        console.log(this.props)
+        console.log(this.props);
 
         const {
             previewWaybackItem,
             alternativeRNum4RreviewWaybackItem,
         } = this.props;
 
-        console.log('rNums from Preview\t', this.props, alternativeRNum4RreviewWaybackItem)
+        console.log(
+            'rNums from Preview\t',
+            this.props,
+            alternativeRNum4RreviewWaybackItem
+        );
 
         const previewWindowImageUrl = previewWaybackItem.itemUrl
             .replace('{level}', level.toString())
             .replace('{row}', row.toString())
             .replace('{column}', column.toString())
-            .replace(`${previewWaybackItem.itemReleaseNum}`, `${alternativeRNum4RreviewWaybackItem}`);
-            // .replace(`${previewWaybackItem.releaseNum}`,
-            //     );
-        
-        console.log(previewWindowImageUrl)
+            .replace(
+                `${previewWaybackItem.itemReleaseNum}`,
+                `${alternativeRNum4RreviewWaybackItem}`
+            );
+        // .replace(`${previewWaybackItem.releaseNum}`,
+        //     );
+
+        console.log(previewWindowImageUrl);
 
         return previewWindowImageUrl;
     }
 
-
     // level
     async getTilePosition(tileLat: number, tileLon: number) {
-
         const { mapView } = this.props;
 
         try {
-            type Modules = [typeof IPoint, typeof ICoordinateFormatter];
+            type Modules = [typeof Point, typeof ICoordinateFormatter];
 
-            const [Point, coordinateFormatter] = await (loadModules([
-                'esri/geometry/Point',
-                'esri/geometry/coordinateFormatter',
-            ]) as Promise<Modules>);
+            // const [Point, coordinateFormatter] = await (loadModules([
+            //     'esri/geometry/Point',
+            //     'esri/geometry/coordinateFormatter',
+            // ]) as Promise<Modules>);
 
             // convert lat lon to x y and create a point object
             // let latLon = new Point()
@@ -150,7 +167,6 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
             // const tileXY = coordinateFormatter.fromLatitudeLongitude(latLonString);
 
             // console.log('lat long string, converted: x , y,', latLonString, tileXY[0], tileXY[1])
-
 
             const point = new Point({
                 x: tileLon,
@@ -165,38 +181,38 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 top: tileTopLeftXY.y,
                 left: tileTopLeftXY.x,
             };
-
         } catch (err) {
             return null;
         }
     }
 
     async updatePreviewWindowState(previewWaybackItem: IProps) {
-
-        console.log(previewWaybackItem)
+        console.log(previewWaybackItem);
 
         try {
             const tileInfo = this.getTileInfo();
 
-            const imageUrl = this.getImageUrl({
-                level: tileInfo.level,
-                row: tileInfo.row,
-                column: tileInfo.column,
-            }, this.props.previewWaybackItem);
+            const imageUrl = this.getImageUrl(
+                {
+                    level: tileInfo.level,
+                    row: tileInfo.row,
+                    column: tileInfo.column,
+                },
+                this.props.previewWaybackItem
+            );
 
             const { top, left } = await this.getTilePosition(
                 tileInfo.tileLat,
                 tileInfo.tileLon
             );
-            
-            console.log(top, left)
-            
+
+            console.log(top, left);
+
             this.setState({
                 imageUrl,
                 top,
                 left,
             });
-
         } catch (err) {}
     }
 
@@ -214,8 +230,8 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         }
 
         const { top, left, imageUrl } = this.state;
-        
-        console.log(this.state)
+
+        console.log(this.state);
 
         const style = {
             position: 'absolute',

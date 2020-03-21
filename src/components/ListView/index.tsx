@@ -46,9 +46,9 @@ class ListView extends React.PureComponent<IProps, IState> {
                   content: '',
                   top: 0,
                   left: 0,
-            };
-        
-        console.log(data)
+              };
+
+        console.log(data);
 
         this.setState({
             tooltipData,
@@ -71,15 +71,18 @@ class ListView extends React.PureComponent<IProps, IState> {
         const cardData = shouldOnlyShowItemsWithLocalChange
             ? waybackItems.filter((d) => {
                   return (
-                      rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) >
-                      -1
+                      rNum4WaybackItemsWithLocalChanges.indexOf(
+                          d.itemReleaseNum
+                      ) > -1
                   );
               })
             : waybackItems;
 
         const cards = cardData.map((d, i) => {
             const isActive =
-                activeWaybackItem.itemReleaseNum === d.itemReleaseNum ? true : false;
+                activeWaybackItem.itemReleaseNum === d.itemReleaseNum
+                    ? true
+                    : false;
             const isSelected =
                 rNum4SelectedWaybackItems.indexOf(d.itemReleaseNum) > -1
                     ? true

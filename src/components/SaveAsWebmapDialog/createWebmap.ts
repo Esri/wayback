@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import { IWaybackItem, IUserSession, IExtentGeometry } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
 
 interface ICreateWebmapParams {
     title: string;
     tags: string;
     description: string;
-    mapExtent: IExtentGeomety;
+    mapExtent: IExtentGeometry;
 
     userSession: IUserSession;
     waybackItemsToSave?: Array<IWaybackItem>;

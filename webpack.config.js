@@ -1,3 +1,5 @@
+const ArcGISPlugin = require('@arcgis/webpack-plugin')
+
 const path = require('path');
 const os = require('os');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
@@ -26,15 +28,21 @@ module.exports = (env, options)=> {
         entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
             path: path.resolve(__dirname, './dist'),
+            publicPath: '',
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].[contenthash].js',
         },
         devtool: 'source-map',
         resolve: {
+            modules: [path.resolve(__dirname, './src'), 'node_modules'],
             extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
         },
         module: {
             rules: [
+                {
+                    test: /\.(js|jsx)$/,
+                    loader: 'babel-loader'
+                },
                 {
                     test: /\.(ts|tsx)$/,
                     loader: 'ts-loader'
@@ -91,6 +99,7 @@ module.exports = (env, options)=> {
             ]
         },
         plugins: [
+            new ArcGISPlugin(),
             new HtmlWebPackPlugin({
                 // inject: false,
                 // hash: true,
@@ -118,6 +127,20 @@ module.exports = (env, options)=> {
                 chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
             })
         ],
+        externals: [
+            (context, request, callback) => {
+                if (/pe-wasm$/.test(request)) {
+                    return callback(null, 'amd ' + request);
+                }
+                callback()
+            }
+        ],
+        node: {
+            process: false,
+            global: false,
+            fs: false,
+            Buffer: false
+        },
         optimization: {
             splitChunks: {
                 cacheGroups: {

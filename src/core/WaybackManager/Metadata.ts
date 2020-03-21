@@ -19,7 +19,7 @@ class MetadataManager {
         this.waybackconfig = waybackconfig;
     }
 
-    setWaybackConfig(waybackconfig:IWaybackConfig){
+    setWaybackConfig(waybackconfig: IWaybackConfig) {
         this.waybackconfig = waybackconfig;
         console.log('set waybackconfig for metadata manager', waybackconfig);
     }
@@ -27,7 +27,6 @@ class MetadataManager {
     async queryData(
         params: IParamsQueryMetadata
     ): Promise<IWaybackMetadataQueryResult> {
-
         const fields = config['metadata-layer'].fields;
 
         const FIELD_NAME_SRC_DATE = fields[0].fieldname;
@@ -84,9 +83,9 @@ class MetadataManager {
 
     private getLayerId(zoom: number) {
         zoom = +zoom;
-        
+
         const layerID = this.MAX_ZOOM - zoom;
-        
+
         // the service has 14 sub layers that provide metadata up to zoom level 10 (layer ID 14), if the zoom level is small that (e.g. 5), there are no metadata
         const layerIdForMinZoom = this.MAX_ZOOM - this.MIN_ZOOM;
 

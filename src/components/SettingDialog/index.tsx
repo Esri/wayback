@@ -12,13 +12,13 @@ import {
     setShouldShowUpdatesWithLocalChanges,
     getShouldShowUpdatesWithLocalChanges,
 } from '../../utils/LocalStorage';
-import { IExtentGeomety, IUserSession } from '../../types';
+import { IExtentGeometry, IUserSession } from '../../types';
 import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
 interface IProps {
-    mapExtent?: IExtentGeomety;
+    mapExtent?: IExtentGeometry;
     userSession?: IUserSession;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;

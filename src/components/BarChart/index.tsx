@@ -191,7 +191,9 @@ class BarChart extends React.PureComponent<IProps, IState> {
 
             bars.filter((d: IWaybackItem) => {
                 return (
-                    rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) > -1
+                    rNum4WaybackItemsWithLocalChanges.indexOf(
+                        d.itemReleaseNum
+                    ) > -1
                 );
             })
                 .classed('is-highlighted', true)

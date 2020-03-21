@@ -63,24 +63,20 @@ class WaybackChangeDetector {
 
     // NOTE: GCS conversion functions
     GCStile2long(x: number, z: number) {
-        return ((x / Math.pow(2, z) - 1) * 180);
+        return (x / Math.pow(2, z) - 1) * 180;
     }
 
-    
     GCStile2lat(y: number, z: number) {
-        return (( 1 - y / Math.pow(2, z - 1)) * 90);
+        return (1 - y / Math.pow(2, z - 1)) * 90;
     }
-      
 
     long2GCStile(lon: number, z: number) {
-        return Math.floor(Math.pow(2, z) *(lon/180 + 1));
+        return Math.floor(Math.pow(2, z) * (lon / 180 + 1));
     }
 
-    
     lat2GCStile(lat: number, z: number) {
-        return Math.floor(Math.pow(2, z - 1) *(1 - lat/90));
+        return Math.floor(Math.pow(2, z - 1) * (1 - lat / 90));
     }
-      
 
     constructor({
         waybackMapServerBaseUrl = '',
@@ -94,15 +90,15 @@ class WaybackChangeDetector {
         this.waybackconfig = waybackconfig;
         this.waybackItems = waybackItems;
         this.shouldUseChangdeDetectorLayer = shouldUseChangdeDetectorLayer;
-
     }
 
-
     // get array of release numbers for wayback items that come with changes for input area
-    async findChanges(pointInfo: IMapPointInfo, currentZoomLevel: number): Promise<Array<number>> {
-
+    async findChanges(
+        pointInfo: IMapPointInfo,
+        currentZoomLevel: number
+    ): Promise<Array<number>> {
         try {
-            const level = currentZoomLevel
+            const level = currentZoomLevel;
             const column = this.long2GCStile(pointInfo.longitude, level);
             const row = this.lat2GCStile(pointInfo.latitude, level);
 
@@ -121,7 +117,7 @@ class WaybackChangeDetector {
                 };
             });
 
-            console.log("candidates = ", candidates)
+            console.log('candidates = ', candidates);
 
             const rNumsNoDuplicates = await this.removeDuplicates(candidates);
             // const rNumsNoDuplicates: Array<number> = [];
@@ -130,7 +126,7 @@ class WaybackChangeDetector {
             //     rNumsNoDuplicates[i]=candidatesRNums[i]
             // }
 
-            console.log("rNumsNoDuplicates = ", rNumsNoDuplicates)
+            console.log('rNumsNoDuplicates = ', rNumsNoDuplicates);
 
             return rNumsNoDuplicates;
         } catch (err) {
@@ -156,7 +152,7 @@ class WaybackChangeDetector {
             ? this.waybackItems[index4InputRNum + 1].itemReleaseNum
             : null;
 
-        console.log(previousReleaseNum)
+        console.log(previousReleaseNum);
 
         return previousReleaseNum;
     }
@@ -166,19 +162,18 @@ class WaybackChangeDetector {
         level = null,
         column = null,
     }: IParamGetTileUrl): Promise<Array<number>> {
-
         return new Promise((resolve, reject) => {
             const results: Array<number> = [];
 
             const mostRecentRelease = this.waybackItems[0].itemReleaseNum;
-            
-            console.log(mostRecentRelease)
+
+            console.log(mostRecentRelease);
 
             const tilemapRequest = async (rNum: number) => {
                 try {
                     const requestUrl = `${this.waybackMapServerBaseUrl}/tilemap/${rNum}/${level}/${row}/${column}`;
-                    
-                    console.log(requestUrl)
+
+                    console.log(requestUrl);
 
                     const response = await axios.get(requestUrl);
 
@@ -217,7 +212,6 @@ class WaybackChangeDetector {
         pointInfo: IMapPointInfo,
         zoomLevel: number
     ): Promise<Array<number>> {
-
         const queryUrl = this.changeDetectionLayerUrl + '/query';
         const fields = config['change-detection-layer'].fields;
         const FIELD_NAME_ZOOM = fields[0].fieldname;
@@ -247,13 +241,11 @@ class WaybackChangeDetector {
                     ? queryResponse.features.map((feature: IFeature) => {
                           return feature.attributes[FIELD_NAME_RELEASE_NUM];
                       })
-                    : []; 
+                    : [];
 
-                    console.log(rNums);
+            console.log(rNums);
             return rNums;
-           
         } catch (err) {
-
             console.error(err);
             return [];
         }
@@ -265,7 +257,6 @@ class WaybackChangeDetector {
         level = null,
         rNum = null,
     }: IParamGetTileUrl) {
-        
         const urlTemplate = this.waybackconfig[rNum].itemUrl;
 
         return urlTemplate
@@ -289,7 +280,7 @@ class WaybackChangeDetector {
 
         try {
             const imageDataUriResults = await Promise.all(imageDataUriRequests);
-         
+
             imageDataUriResults.reduce((accu, curr) => {
                 if (!accu.includes(curr.dataUri)) {
                     accu.push(curr.dataUri);
@@ -297,7 +288,6 @@ class WaybackChangeDetector {
                 }
                 return accu;
             }, []);
-
         } catch (err) {
             console.error('failed to fetch all image data uri', err);
         }
@@ -314,7 +304,7 @@ class WaybackChangeDetector {
             xhr.open('GET', imageUrl, true);
             xhr.responseType = 'arraybuffer';
 
-            console.log(imageUrl)
+            console.log(imageUrl);
 
             xhr.onload = function(e) {
                 if (this.status == 200) {
@@ -327,7 +317,6 @@ class WaybackChangeDetector {
                     const data = binaryString.join('');
                     const base64 = window.btoa(data);
                     const dataUri = base64.substr(512, 5000);
-                    
 
                     resolve({
                         rNum,

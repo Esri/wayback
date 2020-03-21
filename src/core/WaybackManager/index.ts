@@ -9,12 +9,9 @@ import IMapView from 'esri/views/MapView';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
 
-
-    
 interface IProps {
-    mapView?: IMapView; 
+    mapView?: IMapView;
 }
-
 
 class WaybackManager {
     // module to query the wayback metadata
@@ -52,27 +49,25 @@ class WaybackManager {
         };
     }
 
-
     getWaybackItems() {
-        const waybackItemKeys = Object.keys(this.waybackconfig)
-    
+        const waybackItemKeys = Object.keys(this.waybackconfig);
+
         const waybackItems = Object.keys(this.waybackconfig).map(
             (key: string) => {
-
                 const releaseNum = +key;
-                
+
                 const waybackconfigItem = this.waybackconfig[+releaseNum];
 
                 const releaseDate = extractDateFromWaybackItemReleaseDate(
                     waybackconfigItem.itemReleaseDate
                 );
-                
+
                 const waybackItem = {
                     releaseNum,
                     ...releaseDate,
                     ...waybackconfigItem,
                 };
-                
+
                 return waybackItem;
             }
         );
@@ -84,11 +79,14 @@ class WaybackManager {
         return waybackItems;
     }
 
-
     async getLocalChanges(pointInfo: IMapPointInfo, currentZoomLevel: number) {
         try {
             // NOTE: console.log() to see what pointInfo is passed to changeDetector.findChanges()
-            console.log(pointInfo.latitude, pointInfo.longitude, currentZoomLevel)
+            console.log(
+                pointInfo.latitude,
+                pointInfo.longitude,
+                currentZoomLevel
+            );
 
             const localChangeQueryRes = await this.changeDetector.findChanges(
                 pointInfo,
@@ -104,14 +102,14 @@ class WaybackManager {
 
     async getMetadata(params: IParamsQueryMetadata) {
         try {
-            // NOTE console.log() to see what 'params' 
-            //  are passed into queryData() 
-            console.log(params)
+            // NOTE console.log() to see what 'params'
+            //  are passed into queryData()
+            console.log(params);
             const metadataQueryRes = await this.metadataManager.queryData(
                 params
             );
             return metadataQueryRes;
-        // catch any errors
+            // catch any errors
         } catch (err) {
             console.error(err);
             return null;
@@ -119,19 +117,16 @@ class WaybackManager {
     }
 
     private fetchWaybackConfig(): Promise<IWaybackConfig> {
-
         const requestUrl = getServiceUrl('wayback-config');
 
         return new Promise((resolve, reject) => {
             axios
                 .get(requestUrl)
                 .then((response) => {
-
                     // handle success
                     if (response.data) {
                         // NOTE: using console.log() to test new waybackconfig.json
                         resolve(response.data);
-
                     } else {
                         reject({
                             error: 'failed to fetch wayback config data',

@@ -4,7 +4,7 @@ import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import classnames from 'classnames';
 import config from './config';
 
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import { IWaybackItem, IUserSession, IExtentGeometry } from '../../types';
 import createWebmap from './createWebmap';
 
 interface IProps {
@@ -12,7 +12,7 @@ interface IProps {
     waybackItems: Array<IWaybackItem>;
     rNum4SelectedWaybackItems: Array<number>;
     userSession: IUserSession;
-    mapExtent: IExtentGeomety;
+    mapExtent: IExtentGeometry;
 
     onClose: (val: boolean) => void;
 }

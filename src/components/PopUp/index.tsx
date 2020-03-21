@@ -1,4 +1,4 @@
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 import './style.scss';
 import * as React from 'react';
 
@@ -11,7 +11,7 @@ import {
     IWaybackItem,
 } from '../../types';
 import IMapView from 'esri/views/MapView';
-import IWatchUtils from 'esri/core/watchUtils';
+import WatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
 import { scaleSqrt } from 'd3';
 
@@ -66,27 +66,26 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     async initMapViewEventHandlers() {
-
         const { mapView } = this.props;
 
         try {
-            type Modules = [typeof IWatchUtils];
+            // type Modules = [typeof IWatchUtils];
 
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+            // const [watchUtils] = await (loadModules([
+            //     'esri/core/watchUtils',
+            // ]) as Promise<Modules>);
 
             mapView.on('click', (evt) => {
                 // console.log('view on click, should show popup', evt.mapPoint);
                 this.setAnchorPoint(evt.mapPoint);
             });
 
-            watchUtils.watch(mapView, 'zoom', () => {
+            WatchUtils.watch(mapView, 'zoom', () => {
                 // console.log('view zoom is on updating, should hide the popup', mapView.zoom);
                 this.onClose();
             });
 
-            watchUtils.watch(mapView, 'center', () => {
+            WatchUtils.watch(mapView, 'center', () => {
                 // console.log('view center is on updating, should update the popup position');
                 // need to update the screen point for popup anchor since the map center has changed
                 this.updateScreenPoint4PopupAnchor();
@@ -96,35 +95,42 @@ class PopUp extends React.PureComponent<IProps, IState> {
         }
     }
 
-
     async queryMetadata() {
-
         const { waybackManager, activeWaybackItem, mapView } = this.props;
         const { anchorPoint } = this.state;
         // const scale = mapView.scale
 
-        let currentZoomLevel: any
-        let currentActiveLayer: any = mapView.layerViews.getItemAt(0).layer.get('activeLayer')
-        let currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(0).tileInfo.lods
-       
+        let currentZoomLevel: any;
+        const currentActiveLayer: any = mapView.layerViews
+            .getItemAt(0)
+            .layer.get('activeLayer');
+        const currentWMTSTileSet = currentActiveLayer.tileMatrixSets.getItemAt(
+            0
+        ).tileInfo.lods;
+
         // 'for-each' loop checks zoom level of MapView against level in Tiles that laod into MapView
-        currentWMTSTileSet.forEach((level: { scale: number; level: number; resolution: number}) => {
-            // match scale to Level that MapView-scale is closest to
-            if (level.scale < (mapView.scale * Math.sqrt(2)) && level.scale > (mapView.scale / Math.sqrt(2))) {
-                console.log(level.level, level.scale, mapView.scale)
-                currentZoomLevel = level.level;
-            } else {
-                // console.log('level scales did not match\n', level.level, level.scale)
+        currentWMTSTileSet.forEach(
+            (level: { scale: number; level: number; resolution: number }) => {
+                // match scale to Level that MapView-scale is closest to
+                if (
+                    level.scale < mapView.scale * Math.sqrt(2) &&
+                    level.scale > mapView.scale / Math.sqrt(2)
+                ) {
+                    console.log(level.level, level.scale, mapView.scale);
+                    currentZoomLevel = level.level;
+                } else {
+                    // console.log('level scales did not match\n', level.level, level.scale)
+                }
+                return currentZoomLevel || '';
             }
-            return currentZoomLevel || ''
-        });
+        );
         // note: logging of level is useful for de-bugging ies in different projections
-        console.log(currentZoomLevel)
+        console.log(currentZoomLevel);
         try {
             const metadata = await waybackManager.getMetadata({
                 releaseNum: activeWaybackItem.itemReleaseNum,
                 pointGeometry: anchorPoint.toJSON(),
-                zoom: currentZoomLevel
+                zoom: currentZoomLevel,
             });
             return {
                 metadata,
@@ -137,7 +143,6 @@ class PopUp extends React.PureComponent<IProps, IState> {
             };
         }
     }
-
 
     updateScreenPoint4PopupAnchor() {
         const { mapView } = this.props;
@@ -152,11 +157,9 @@ class PopUp extends React.PureComponent<IProps, IState> {
         }
     }
 
-
     onClose() {
         this.setMetaData();
     }
-
 
     formatMetadataDate() {
         const { metadata } = this.state;
@@ -171,7 +174,6 @@ class PopUp extends React.PureComponent<IProps, IState> {
         return `${month} ${day}, ${year}`;
     }
 
-
     componentDidUpdate(prevProps: IProps) {
         const { mapView, previewWaybackItem } = this.props;
 
@@ -183,7 +185,6 @@ class PopUp extends React.PureComponent<IProps, IState> {
             this.onClose();
         }
     }
-
 
     render() {
         const { activeWaybackItem } = this.props;

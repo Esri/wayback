@@ -1,8 +1,9 @@
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
+import '../../config';
 
 import { IUserSession } from '../../types';
 import IOAuthInfo from 'esri/identity/OAuthInfo';
-import IIdentityManager from 'esri/identity/IdentityManager';
+import IdentityManager from 'esri/identity/IdentityManager';
 import IPortal from 'esri/portal/Portal';
 import ICredential from 'esri/identity/Credential';
 
@@ -19,17 +20,18 @@ export default class OAuthUtils {
         try {
             type Modules = [
                 typeof IOAuthInfo,
-                typeof IIdentityManager,
+                typeof IdentityManager,
                 typeof IPortal
             ];
 
-            const [OAuthInfo, IdentityManager, Portal] = await (loadModules([
-                'esri/identity/OAuthInfo',
-                'esri/identity/IdentityManager',
-                'esri/portal/Portal',
-            ]) as Promise<Modules>);
+            // const [OAuthInfo, IdentityManager, Portal] = await Promise.all(
+            //      [
+            //     'esri/identity/OAuthInfo',
+            //     'esri/identity/IdentityManager',
+            //     'esri/portal/Portal',
+            // ]) as Promise<Modules>;
 
-            this.oauthInfo = new OAuthInfo({
+            this.oauthInfo = new IOAuthInfo({
                 appId,
                 popup: false,
                 portalUrl,
@@ -46,7 +48,7 @@ export default class OAuthUtils {
             );
 
             // init paortal
-            const portal = new Portal({ url: portalUrl });
+            const portal = new IPortal({ url: portalUrl });
             // Setting authMode to immediate signs the user in once loaded
             portal.authMode = 'immediate';
 

@@ -1,5 +1,5 @@
 import { urlFns } from 'helper-toolkit-ts';
-import { ISearchParamData, IExtentGeomety } from '../../types';
+import { ISearchParamData, IExtentGeometry } from '../../types';
 
 type searchParamKey =
     | 'ext'
@@ -23,7 +23,7 @@ const getMapExtent = () => {
 
     const ext = urlQueryData.ext ? urlQueryData.ext.split(',') : null;
 
-    const mapExtent: IExtentGeomety = ext
+    const mapExtent: IExtentGeometry = ext
         ? {
               xmin: +ext[0],
               ymin: +ext[1],
@@ -44,6 +44,7 @@ const encodeSearchParam = ({
     shouldOnlyShowItemsWithLocalChange = false,
     rNum4ActiveWaybackItem = null,
 }: ISearchParamData) => {
+    
     // console.log(mapExtent, rNum4SelectedWaybackItems, shouldOnlyShowItemsWithLocalChange, rNum4ActiveWaybackItem);
 
     const searchParams: { [key in searchParamKey]: string } = {

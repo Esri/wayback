@@ -1,4 +1,4 @@
-import { IExtentGeomety } from '../../types';
+import { IExtentGeometry } from '../../types';
 
 const KEYS = {
     defaultExtent: 'WaybackAppDefaultExtent',
@@ -22,7 +22,7 @@ const removeItem = (key?: string) => {
     }
 };
 
-const saveDefaultExtent = (extent: IExtentGeomety) => {
+const saveDefaultExtent = (extent: IExtentGeometry) => {
     if (!extent) {
         console.error('default extent is missing');
         return;
@@ -30,7 +30,7 @@ const saveDefaultExtent = (extent: IExtentGeomety) => {
     setItem(KEYS.defaultExtent, JSON.stringify(extent));
 };
 
-const getDefaultExtent = (): IExtentGeomety => {
+const getDefaultExtent = (): IExtentGeometry => {
     const defaultExtent = getItem(KEYS.defaultExtent);
     return defaultExtent ? JSON.parse(defaultExtent) : null;
 };

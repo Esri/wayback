@@ -1,3 +1,4 @@
+import '../../config';
 import './style.scss';
 import * as React from 'react';
 
@@ -38,7 +39,7 @@ import IMapView from 'esri/views/MapView';
 import {
     IWaybackItem,
     IMapPointInfo,
-    IExtentGeomety,
+    IExtentGeometry,
     IUserSession,
     ISearchParamData,
 } from '../../types';
@@ -54,7 +55,7 @@ interface IProps {
     waybackManager: WaybackManager;
     waybackData2InitApp: {
         waybackItems: Array<IWaybackItem>;
-    mapView?: IMapView;
+        mapView?: IMapView;
     };
 }
 
@@ -67,7 +68,7 @@ interface IState {
     previewWaybackItem: IWaybackItem;
     alternativeRNum4RreviewWaybackItem: number;
 
-    mapExtent: IExtentGeomety;
+    mapExtent: IExtentGeometry;
 
     isSaveAsWebmapDialogVisible: boolean;
     shouldOnlyShowItemsWithLocalChange: boolean;
@@ -213,8 +214,9 @@ class App extends React.PureComponent<IProps, IState> {
         const rNums = waybackItems
             .filter((d) => {
                 const hasLocalChange =
-                    rNum4WaybackItemsWithLocalChanges.indexOf(d.itemReleaseNum) >
-                    -1;
+                    rNum4WaybackItemsWithLocalChanges.indexOf(
+                        d.itemReleaseNum
+                    ) > -1;
                 return hasLocalChange || d.itemReleaseNum === rNum;
             })
             .map((d) => d.itemReleaseNum);
@@ -234,15 +236,21 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     // get list of wayback items that do provide updated imagery for the given location
-    async queryLocalChanges(centerPointInfo: IMapPointInfo, currentZoomLevel: number) {
+    async queryLocalChanges(
+        centerPointInfo: IMapPointInfo,
+        currentZoomLevel: number
+    ) {
         // console.log('queryLocalChanges', centerPointInfo);
 
-        console.log("centerPointInfo", centerPointInfo.latitude)
+        console.log('centerPointInfo', centerPointInfo.latitude);
 
         const { waybackManager } = this.props;
 
         try {
-            const rNums = await waybackManager.getLocalChanges(centerPointInfo, currentZoomLevel);
+            const rNums = await waybackManager.getLocalChanges(
+                centerPointInfo,
+                currentZoomLevel
+            );
             // console.log(rNums);
 
             this.setRNum4WaybackItemsWithLocalChanges(rNums);
@@ -289,7 +297,7 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    setMapExtent(mapExtent: IExtentGeomety) {
+    setMapExtent(mapExtent: IExtentGeometry) {
         // console.log('setMapExtent', mapExtent);
         this.setState({
             mapExtent,
@@ -504,7 +512,7 @@ class App extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { data2InitApp, waybackManager, isMobile, } = this.props;
+        const { data2InitApp, waybackManager, isMobile } = this.props;
 
         const {
             waybackItems,
