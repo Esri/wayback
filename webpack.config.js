@@ -4,6 +4,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const computerName = os.hostname();
 
@@ -116,7 +117,8 @@ module.exports = (env, options)=> {
                 // both options are optional
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
                 chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
-            })
+            }),
+            new CleanWebpackPlugin()
         ],
         optimization: {
             splitChunks: {
