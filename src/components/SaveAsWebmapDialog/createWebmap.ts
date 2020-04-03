@@ -16,6 +16,8 @@ interface IWaybackLayerInfo {
     templateUrl: string;
     wmtsInfo: {
         url: string;
+        layerIdentifier: string;
+        tileMatrixSet: string;
     };
     visibility: boolean;
     title: string;
@@ -56,6 +58,8 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
             templateUrl: waybackItem.itemURL,
             wmtsInfo: {
                 url: getServiceUrl('wayback-imagery-base'),
+                layerIdentifier: `WB-${waybackItem.releaseDateLabel}`,
+                tileMatrixSet: 'default028mm'
             },
             visibility: isVisible,
             title: waybackItem.itemTitle,
