@@ -38,6 +38,7 @@
     "babel-preset-env": "^1.7.0",
     "calcite-web": "github:Esri/calcite-web#v1.2.5",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^0.28.11",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",

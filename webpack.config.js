@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const computerName = os.hostname();
 
@@ -118,8 +119,14 @@ module.exports = (env, options)=> {
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
                 chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
             }),
-            new CleanWebpackPlugin()
-        ],
+            new CleanWebpackPlugin(),
+            // devMode ? new CopyPlugin([
+            //     { 
+            //         from: './src/static/waybackdevconfig.json', 
+            //         to: 'waybackdevconfig.json'
+            //     }
+            // ]) : false,
+        ].filter(Boolean),
         optimization: {
             splitChunks: {
                 cacheGroups: {
