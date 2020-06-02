@@ -1,6 +1,8 @@
-import axios from 'axios';
+import IEsriConfig from 'esri/config';
+import { loadModules } from 'esri-loader';
 import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
+import EsriRquest from 'esri/request';
 
 interface ICreateWebmapParams {
     title: string;
@@ -142,6 +144,20 @@ const createWebmap = async ({
         return null;
     }
 
+    type Modules = [
+        typeof IEsriConfig,
+        typeof EsriRquest
+    ];
+
+    const [ esriConfig, esriRequest ] = await (loadModules([
+        'esri/config',
+        'esri/request'
+    ]) as Promise<Modules>);
+
+    if(userSession.credential.server !== 'https://www.arcgis.com'){
+        esriConfig.request.trustedServers.push(userSession.credential.server);
+    }
+    
     const requestUrl = getRequestUrl(userSession);
 
     const formData = new FormData();
@@ -171,7 +187,10 @@ const createWebmap = async ({
     });
 
     try {
-        const createWebmapResponse = await axios.post(requestUrl, formData);
+        const createWebmapResponse = await esriRequest(requestUrl, {
+            method: 'post',
+            body: formData,
+        });
         console.log(createWebmapResponse);
 
         return createWebmapResponse.data && !createWebmapResponse.data.error
