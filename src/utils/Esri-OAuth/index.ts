@@ -5,6 +5,7 @@ import IOAuthInfo from 'esri/identity/OAuthInfo';
 import IIdentityManager from 'esri/identity/IdentityManager';
 import IPortal from 'esri/portal/Portal';
 import ICredential from 'esri/identity/Credential';
+import IEsriConfig from 'esri/config';
 
 export default class OAuthUtils {
     private oauthInfo: IOAuthInfo;
@@ -20,14 +21,20 @@ export default class OAuthUtils {
             type Modules = [
                 typeof IOAuthInfo,
                 typeof IIdentityManager,
-                typeof IPortal
+                typeof IPortal,
+                typeof IEsriConfig
             ];
 
-            const [OAuthInfo, IdentityManager, Portal] = await (loadModules([
+            const [ OAuthInfo, IdentityManager, Portal, esriConfig ] = await (loadModules([
                 'esri/identity/OAuthInfo',
                 'esri/identity/IdentityManager',
                 'esri/portal/Portal',
+                'esri/config'
             ]) as Promise<Modules>);
+
+            if(portalUrl !== 'https://www.arcgis.com'){
+                esriConfig.request.trustedServers.push(portalUrl);
+            }
 
             this.oauthInfo = new OAuthInfo({
                 appId,
