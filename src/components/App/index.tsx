@@ -12,6 +12,7 @@ import {
 import { getServiceUrl } from '../../utils/Tier';
 import {
     getDefaultExtent,
+    getCustomPortalUrl,
     getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
@@ -604,7 +605,8 @@ class App extends React.PureComponent<IProps, IState> {
 
         const arcgisPortal = getServiceUrl('portal-url');
 
-        const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
+        // const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
+        const customizedPortal = getCustomPortalUrl();
         // console.log(customizedPortal)
 
         try {

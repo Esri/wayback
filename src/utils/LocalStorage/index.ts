@@ -4,6 +4,7 @@ const KEYS = {
     defaultExtent: 'WaybackAppDefaultExtent',
     showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges',
     shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog',
+    customPortalUrl: 'WaybackAppCustomPortalUrl'
 };
 
 const setItem = (key?: string, value = '') => {
@@ -47,6 +48,14 @@ const setShouldOpenSaveWebMapDialog = () => {
     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
 };
 
+const getCustomPortalUrl = ()=>{
+    return getItem(KEYS.customPortalUrl)
+};
+
+const setCustomPortalUrl = (portalUrl='')=>{
+    portalUrl ? setItem(KEYS.customPortalUrl, portalUrl) : removeItem(KEYS.customPortalUrl)
+};
+
 const getShouldOpenSaveWebMapDialog = () => {
     const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
 
@@ -60,8 +69,10 @@ const getShouldOpenSaveWebMapDialog = () => {
 export {
     saveDefaultExtent,
     getDefaultExtent,
+    getCustomPortalUrl,
+    setCustomPortalUrl,
     setShouldShowUpdatesWithLocalChanges,
     getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
-    getShouldOpenSaveWebMapDialog,
+    getShouldOpenSaveWebMapDialog
 };

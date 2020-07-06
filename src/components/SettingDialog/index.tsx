@@ -3,12 +3,14 @@ import * as React from 'react';
 import classnames from 'classnames';
 import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import {
-    savePortalUrlInSearchParam,
-    getPortalUrlInSearchParam,
+    // savePortalUrlInSearchParam,
+    // getPortalUrlInSearchParam,
     getMapExtent,
 } from '../../utils/UrlSearchParam';
 import {
     saveDefaultExtent,
+    getCustomPortalUrl,
+    setCustomPortalUrl,
     setShouldShowUpdatesWithLocalChanges,
     getShouldShowUpdatesWithLocalChanges,
 } from '../../utils/LocalStorage';
@@ -37,13 +39,16 @@ interface IState {
 
 type StateKeys = keyof IState;
 
+const CustomUrlFromLocalStorage = getCustomPortalUrl();
+
 class SettingDialog extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
         this.state = {
-            portalUrl: getPortalUrlInSearchParam(),
-            shouldUseCustomPortalUrl: false,
+            // portalUrl: getPortalUrlInSearchParam(),
+            portalUrl: CustomUrlFromLocalStorage,
+            shouldUseCustomPortalUrl: CustomUrlFromLocalStorage ? true : false,
             shouldSaveAsDefaultExtent: false,
             shouldShowLocalChangesByDefault: getShouldShowUpdatesWithLocalChanges(),
             saveBtnLable: 'Save',
@@ -76,6 +81,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
     saveSettings() {
         const {
             portalUrl,
+            shouldUseCustomPortalUrl,
             shouldSaveAsDefaultExtent,
             shouldShowLocalChangesByDefault,
         } = this.state;
@@ -100,8 +106,14 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             );
         }
 
-        if (portalUrl) {
-            savePortalUrlInSearchParam(portalUrl);
+        const customPortalUrl = shouldUseCustomPortalUrl && portalUrl 
+            ? portalUrl 
+            : null;
+            
+        setCustomPortalUrl(customPortalUrl);
+
+        if (customPortalUrl !== CustomUrlFromLocalStorage) {
+            // savePortalUrlInSearchParam(portalUrl);
             window.location.reload();
         }
 
