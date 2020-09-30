@@ -34,6 +34,8 @@ import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog';
 import Gutter from '../Gutter';
 import ShareDialog from '../ShareDialog';
+import SwipeWidget from '../SwipeWidget/SwipeWidget';
+import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
 
 import {
     IWaybackItem,
@@ -74,6 +76,7 @@ interface IState {
     userSession: IUserSession;
     isGutterHide: boolean;
     isSideBarHide: boolean;
+    isSwipeWidgetOpen: boolean;
 
     currentUrl: string;
 }
@@ -113,6 +116,7 @@ class App extends React.PureComponent<IProps, IState> {
             mapExtent: null,
             isGutterHide: isMobile ? true : false,
             isSideBarHide: false,
+            isSwipeWidgetOpen: false,
             currentUrl: location.href,
         };
 
@@ -131,6 +135,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
         this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
+        this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
     }
 
     async setWaybackItems(waybackItems: Array<IWaybackItem>) {
@@ -350,6 +355,15 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
+    toggleSwipeWidget(){
+
+        const { isSwipeWidgetOpen } = this.state;
+
+        this.setState({
+            isSwipeWidgetOpen: !isSwipeWidgetOpen
+        });
+    }
+
     toggleSignInBtnOnClick(shouldSignIn?: boolean) {
         const { oauthUtils } = this;
 
@@ -393,7 +407,12 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             rNum4WaybackItemsWithLocalChanges,
             isSideBarHide,
+            isSwipeWidgetOpen
         } = this.state;
+
+        if(isSwipeWidgetOpen){
+            return null;
+        }
 
         const sidebarClasses = classnames('sidebar', {
             'is-hide': isSideBarHide,
@@ -514,6 +533,7 @@ class App extends React.PureComponent<IProps, IState> {
             alternativeRNum4RreviewWaybackItem,
             isGutterHide,
             currentUrl,
+            isSwipeWidgetOpen
         } = this.state;
 
         const defaultExtentFromUrl =
@@ -546,6 +566,11 @@ class App extends React.PureComponent<IProps, IState> {
                         onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
                     />
+
+                    <SwipeWidgetToggleBtn 
+                        isOpen={isSwipeWidgetOpen}
+                        onClickHandler={this.toggleSwipeWidget}
+                    />
                 </Gutter>
 
                 {sidebar}
@@ -555,6 +580,7 @@ class App extends React.PureComponent<IProps, IState> {
                         defaultExtentFromUrl || defaultExtentFromLocalStorage
                     }
                     activeWaybackItem={activeWaybackItem}
+                    isSwipeWidgetOpen={isSwipeWidgetOpen}
                     onUpdateEnd={this.queryLocalChanges}
                     onExtentChange={this.setMapExtent}
                 >
@@ -572,6 +598,10 @@ class App extends React.PureComponent<IProps, IState> {
                         waybackManager={waybackManager}
                         activeWaybackItem={activeWaybackItem}
                         previewWaybackItem={previewWaybackItem}
+                    />
+
+                    <SwipeWidget 
+                        isOpen={isSwipeWidgetOpen}
                     />
                 </Map>
 

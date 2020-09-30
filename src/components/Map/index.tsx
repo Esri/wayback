@@ -1,5 +1,6 @@
 import './style.scss';
 import * as React from 'react';
+import classnames from 'classnames';
 
 import { loadCss, loadModules } from 'esri-loader';
 import config from './config';
@@ -20,6 +21,7 @@ import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 import ILocate from 'esri/widgets/Locate';
 
 interface IProps {
+    isSwipeWidgetOpen: boolean;
     defaultExtent?: IExtentGeomety;
     activeWaybackItem: IWaybackItem;
 
@@ -299,6 +301,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     render() {
         const { mapView, isReferenceLayerVisible } = this.state;
+        const { isSwipeWidgetOpen } = this.props;
 
         const childrenElements = React.Children.map(
             this.props.children,
@@ -309,20 +312,42 @@ class Map extends React.PureComponent<IProps, IState> {
             }
         );
 
+        const containerClassnames = classnames('map-container', {
+            'is-swipe-layer-selectors-open': isSwipeWidgetOpen
+        });
+
+        const mapDivWrapStyle:React.CSSProperties = isSwipeWidgetOpen 
+            ? {
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 200,
+                right: 200
+            } 
+            : {
+                position: 'relative',
+                width: '100%',
+                height: '100%'
+            }
+
         return (
-            <div className="map-container">
-                <div id="mapDiv" ref={this.mapDivRef}>
-                    <div className="loading-indicator">
-                        <div className="loader is-active padding-leader-3 padding-trailer-3">
-                            <div className="loader-bars"></div>
-                        </div>
-                    </div>
+            <div className={containerClassnames}>
+
+                <div style={mapDivWrapStyle} >
+                    <div 
+                        id="mapDiv" 
+                        ref={this.mapDivRef
+                    }></div>
+
+                    <ReferenceLayerToggle
+                        isActive={isReferenceLayerVisible}
+                        onClick={this.toggleIsReferenceLayerVisible}
+                    />
+
+                    {childrenElements}
+
                 </div>
-                <ReferenceLayerToggle
-                    isActive={isReferenceLayerVisible}
-                    onClick={this.toggleIsReferenceLayerVisible}
-                />
-                {childrenElements}
+
             </div>
         );
     }
