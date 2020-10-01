@@ -37,7 +37,7 @@ import ShareDialog from '../ShareDialog';
 import SwipeWidget from '../SwipeWidget/SwipeWidget';
 import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
 import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
-import MetadataQueryLayer from '../MetadataQueryLayer/MetadataQueryLayer';
+import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTask';
 
 import {
     IWaybackItem,
@@ -647,7 +647,7 @@ class App extends React.PureComponent<IProps, IState> {
                             }}
                         />
 
-                        <MetadataQueryLayer 
+                        <MetadataQueryTask 
                             waybackManager={waybackManager}
                             targetLayer={activeWaybackItem}
                             metadataOnChange={metadata=>{
