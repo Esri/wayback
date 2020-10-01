@@ -79,6 +79,9 @@ interface IState {
     isSideBarHide: boolean;
     isSwipeWidgetOpen: boolean;
 
+    swipeWidgetLeadingLayer: IWaybackItem;
+    swipeWidgetTrailingLayer: IWaybackItem;
+
     currentUrl: string;
 }
 
@@ -118,6 +121,8 @@ class App extends React.PureComponent<IProps, IState> {
             isGutterHide: isMobile ? true : false,
             isSideBarHide: false,
             isSwipeWidgetOpen: false,
+            swipeWidgetLeadingLayer: null,
+            swipeWidgetTrailingLayer: null,
             currentUrl: location.href,
         };
 
@@ -609,6 +614,8 @@ class App extends React.PureComponent<IProps, IState> {
                         />
 
                         <SwipeWidget 
+                            waybackItem4LeadingLayer={this.state.swipeWidgetLeadingLayer}
+                            waybackItem4TrailingLayer={this.state.swipeWidgetTrailingLayer}
                             isOpen={isSwipeWidgetOpen}
                         />
                     </Map>
@@ -617,19 +624,31 @@ class App extends React.PureComponent<IProps, IState> {
                         isSwipeWidgetOpen ? (
                             <>
                                 <SwipeWidgetLayerSelector 
+                                    key='leading'
                                     targetLayerType='leading' 
                                     waybackItems={waybackItems}
                                     rNum4WaybackItemsWithLocalChanges={
                                         rNum4WaybackItemsWithLocalChanges
                                     }
+                                    onSelect={(waybackItem)=>{
+                                        this.setState({
+                                            swipeWidgetLeadingLayer: waybackItem
+                                        })
+                                    }}
                                 />
 
                                 <SwipeWidgetLayerSelector 
+                                    key='trailing'
                                     targetLayerType='trailing' 
                                     waybackItems={waybackItems}
                                     rNum4WaybackItemsWithLocalChanges={
                                         rNum4WaybackItemsWithLocalChanges
                                     }
+                                    onSelect={(waybackItem)=>{
+                                        this.setState({
+                                            swipeWidgetTrailingLayer: waybackItem
+                                        })
+                                    }}
                                 />
                             </>
                         ) : null
