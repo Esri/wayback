@@ -630,6 +630,7 @@ class App extends React.PureComponent<IProps, IState> {
                                     rNum4WaybackItemsWithLocalChanges={
                                         rNum4WaybackItemsWithLocalChanges
                                     }
+                                    selectedItem={this.state.swipeWidgetLeadingLayer}
                                     onSelect={(waybackItem)=>{
                                         this.setState({
                                             swipeWidgetLeadingLayer: waybackItem
@@ -644,6 +645,7 @@ class App extends React.PureComponent<IProps, IState> {
                                     rNum4WaybackItemsWithLocalChanges={
                                         rNum4WaybackItemsWithLocalChanges
                                     }
+                                    selectedItem={this.state.swipeWidgetTrailingLayer}
                                     onSelect={(waybackItem)=>{
                                         this.setState({
                                             swipeWidgetTrailingLayer: waybackItem
