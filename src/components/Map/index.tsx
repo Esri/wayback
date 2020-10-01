@@ -20,6 +20,10 @@ import ISearchWidget from 'esri/widgets/Search';
 import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 import ILocate from 'esri/widgets/Locate';
 
+import {
+    SwipeWidgetLayerSelectorWidth
+} from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector'
+
 interface IProps {
     isSwipeWidgetOpen: boolean;
     defaultExtent?: IExtentGeomety;
@@ -312,17 +316,13 @@ class Map extends React.PureComponent<IProps, IState> {
             }
         );
 
-        const containerClassnames = classnames('map-container', {
-            'is-swipe-layer-selectors-open': isSwipeWidgetOpen
-        });
-
         const mapDivWrapStyle:React.CSSProperties = isSwipeWidgetOpen 
             ? {
                 position: 'absolute',
                 top: 0,
                 bottom: 0,
-                left: 200,
-                right: 200
+                left: SwipeWidgetLayerSelectorWidth,
+                right: SwipeWidgetLayerSelectorWidth
             } 
             : {
                 position: 'relative',
@@ -331,22 +331,18 @@ class Map extends React.PureComponent<IProps, IState> {
             }
 
         return (
-            <div className={containerClassnames}>
+            <div style={mapDivWrapStyle} >
+                <div 
+                    id="mapDiv" 
+                    ref={this.mapDivRef
+                }></div>
 
-                <div style={mapDivWrapStyle} >
-                    <div 
-                        id="mapDiv" 
-                        ref={this.mapDivRef
-                    }></div>
+                <ReferenceLayerToggle
+                    isActive={isReferenceLayerVisible}
+                    onClick={this.toggleIsReferenceLayerVisible}
+                />
 
-                    <ReferenceLayerToggle
-                        isActive={isReferenceLayerVisible}
-                        onClick={this.toggleIsReferenceLayerVisible}
-                    />
-
-                    {childrenElements}
-
-                </div>
+                {childrenElements}
 
             </div>
         );

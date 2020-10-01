@@ -36,6 +36,7 @@ import Gutter from '../Gutter';
 import ShareDialog from '../ShareDialog';
 import SwipeWidget from '../SwipeWidget/SwipeWidget';
 import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
+import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector'
 
 import {
     IWaybackItem,
@@ -527,6 +528,7 @@ class App extends React.PureComponent<IProps, IState> {
             activeWaybackItem,
             previewWaybackItem,
             rNum4SelectedWaybackItems,
+            rNum4WaybackItemsWithLocalChanges,
             isSaveAsWebmapDialogVisible,
             userSession,
             mapExtent,
@@ -575,35 +577,66 @@ class App extends React.PureComponent<IProps, IState> {
 
                 {sidebar}
 
-                <Map
-                    defaultExtent={
-                        defaultExtentFromUrl || defaultExtentFromLocalStorage
-                    }
-                    activeWaybackItem={activeWaybackItem}
-                    isSwipeWidgetOpen={isSwipeWidgetOpen}
-                    onUpdateEnd={this.queryLocalChanges}
-                    onExtentChange={this.setMapExtent}
+                <div 
+                    className={classnames('map-container', {
+                        'is-swipe-layer-selectors-open': isSwipeWidgetOpen
+                    })}
                 >
-                    <TilePreviewWindow
-                        // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
-                        previewWaybackItem={
-                            !isMobile ? previewWaybackItem : null
+  
+                    <Map
+                        defaultExtent={
+                            defaultExtentFromUrl || defaultExtentFromLocalStorage
                         }
-                        alternativeRNum4RreviewWaybackItem={
-                            alternativeRNum4RreviewWaybackItem
-                        }
-                    />
-
-                    <MetadataPopUp
-                        waybackManager={waybackManager}
                         activeWaybackItem={activeWaybackItem}
-                        previewWaybackItem={previewWaybackItem}
-                    />
+                        isSwipeWidgetOpen={isSwipeWidgetOpen}
+                        onUpdateEnd={this.queryLocalChanges}
+                        onExtentChange={this.setMapExtent}
+                    >
+                        <TilePreviewWindow
+                            // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
+                            previewWaybackItem={
+                                !isMobile ? previewWaybackItem : null
+                            }
+                            alternativeRNum4RreviewWaybackItem={
+                                alternativeRNum4RreviewWaybackItem
+                            }
+                        />
 
-                    <SwipeWidget 
-                        isOpen={isSwipeWidgetOpen}
-                    />
-                </Map>
+                        <MetadataPopUp
+                            waybackManager={waybackManager}
+                            activeWaybackItem={activeWaybackItem}
+                            previewWaybackItem={previewWaybackItem}
+                        />
+
+                        <SwipeWidget 
+                            isOpen={isSwipeWidgetOpen}
+                        />
+                    </Map>
+
+                    { 
+                        isSwipeWidgetOpen ? (
+                            <>
+                                <SwipeWidgetLayerSelector 
+                                    targetLayerType='leading' 
+                                    waybackItems={waybackItems}
+                                    rNum4WaybackItemsWithLocalChanges={
+                                        rNum4WaybackItemsWithLocalChanges
+                                    }
+                                />
+
+                                <SwipeWidgetLayerSelector 
+                                    targetLayerType='trailing' 
+                                    waybackItems={waybackItems}
+                                    rNum4WaybackItemsWithLocalChanges={
+                                        rNum4WaybackItemsWithLocalChanges
+                                    }
+                                />
+                            </>
+                        ) : null
+                    }
+
+                </div>
+
 
                 <SaveAsWebMapDialog
                     waybackItems={waybackItems}
