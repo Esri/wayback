@@ -17,9 +17,9 @@ import IPoint from 'esri/geometry/Point';
 interface IProps {
     mapView?: IMapView;
     waybackManager?: WaybackManager;
-    activeWaybackItem: IWaybackItem;
+    targetLayer: IWaybackItem;
     previewWaybackItem: IWaybackItem;
-    disabled: boolean;
+    // disabled: boolean;
 }
 
 interface IState {
@@ -96,7 +96,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     async queryMetadata() {
-        const { waybackManager, activeWaybackItem, mapView } = this.props;
+        const { waybackManager, targetLayer, mapView } = this.props;
 
         const { anchorPoint } = this.state;
 
@@ -108,7 +108,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         try {
             const metadata = await waybackManager.getMetadata({
-                releaseNum: activeWaybackItem.releaseNum,
+                releaseNum: targetLayer.releaseNum,
                 pointGeometry: pointGeometry.toJSON(),
                 zoom: mapView.zoom,
             });
@@ -156,7 +156,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        const { mapView, previewWaybackItem, activeWaybackItem } = this.props;
+        const { mapView, previewWaybackItem, targetLayer } = this.props;
 
         if (prevProps.mapView !== mapView) {
             this.initMapViewEventHandlers();
@@ -168,17 +168,17 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         // call queryMetadata once the active wayback item is updated to warm up the metadata service,
         // because the first query always takes much longer time
-        if( prevProps.activeWaybackItem !== activeWaybackItem) {
+        if( prevProps.targetLayer !== targetLayer) {
             this.queryMetadata();
         }
     }
 
     render() {
-        const { activeWaybackItem, disabled } = this.props;
+        const { targetLayer } = this.props;
 
         const { metadata, metadataAnchorScreenPoint } = this.state;
 
-        if (!metadata || !metadataAnchorScreenPoint || disabled) {
+        if (!metadata || !metadataAnchorScreenPoint || !targetLayer) {
             return null;
         }
 
@@ -191,7 +191,7 @@ class PopUp extends React.PureComponent<IProps, IState> {
 
         const { provider, source, resolution, accuracy } = metadata;
 
-        const releaseData = activeWaybackItem.releaseDateLabel;
+        const releaseData = targetLayer.releaseDateLabel;
         const formattedDate = this.formatMetadataDate();
 
         return (

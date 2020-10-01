@@ -16,6 +16,8 @@ type Props = {
     mapView?: IMapView;
 }
 
+type SwipeWidgetLayer = 'leading' | 'trailing'
+
 const SwipeWidget:React.FC<Props> = ({
     waybackItem4LeadingLayer,
     waybackItem4TrailingLayer,
@@ -24,46 +26,31 @@ const SwipeWidget:React.FC<Props> = ({
 }) => {
 
     const swipeWidgetRef = useRef<ISwipe>();
-    const leadeingLayerRef = useRef<IWebTileLayer>();
-    const trailingLayerRef = useRef<IWebTileLayer>();
+    const layers = useRef<IWebTileLayer[]>([]);
 
     const init = async()=>{
+
+        type Modules = [
+            typeof ISwipe,
+        ];
+
+        const [ Swipe ] = await (loadModules([
+            'esri/widgets/Swipe',
+        ]) as Promise<Modules>);
 
         if(swipeWidgetRef.current){
             show();
         } else {
             
-            type Modules = [
-                typeof ISwipe,
-            ];
-    
-            const [ Swipe ] = await (loadModules([
-                'esri/widgets/Swipe',
-            ]) as Promise<Modules>);
-
-            const leadingLayer = waybackItem4LeadingLayer ? await getWaybackLayer(waybackItem4LeadingLayer) : null;
-            const trailingLayer = waybackItem4TrailingLayer ? await getWaybackLayer(waybackItem4TrailingLayer) : null;
-
-            if(leadingLayer){
-                mapView.map.add(leadingLayer)
-            }
-
-            if(trailingLayer){
-                mapView.map.add(trailingLayer)
-            }
-
             const swipe = new Swipe({
                 view: mapView,
-                leadingLayers: leadingLayer ? [leadingLayer] : [],
-                trailingLayers: trailingLayer ? [trailingLayer]: [],
+                leadingLayers: [],
+                trailingLayers: [],
                 direction: "horizontal",
                 position: 50 // position set to middle of the view (50%)
             });
     
-            // console.log(swipe)
-    
             swipeWidgetRef.current = swipe;
-    
             mapView.ui.add(swipe);
         }
 
@@ -72,13 +59,9 @@ const SwipeWidget:React.FC<Props> = ({
     const show = ()=>{
         mapView.ui.add(swipeWidgetRef.current);
 
-        if(leadeingLayerRef.current){
-            leadeingLayerRef.current.visible = true;
-        }
-
-        if(trailingLayerRef.current){
-            trailingLayerRef.current.visible = true;
-        }
+        layers.current.forEach(layer=>{
+            layer.visible = true;
+        })
     }
 
     const hide = ()=>{
@@ -86,41 +69,35 @@ const SwipeWidget:React.FC<Props> = ({
             mapView.ui.remove(swipeWidgetRef.current);
         }
 
-        if(leadeingLayerRef.current){
-            leadeingLayerRef.current.visible = false;
-        }
-
-        if(trailingLayerRef.current){
-            trailingLayerRef.current.visible = false;
-        }
+        layers.current.forEach(layer=>{
+            layer.visible = false;
+        })
     };
 
-    const setLeadingLayer = async()=>{
+    const setLayer = async(layerItem:IWaybackItem, layerType:SwipeWidgetLayer)=>{
 
-        if(leadeingLayerRef.current){
-            mapView.map.remove(leadeingLayerRef.current)
+        const layerIndex = layerType === 'leading' 
+            ? 0 
+            : 1;
+
+        const existingLayer = layers.current[layerIndex];
+
+        if(existingLayer){
+            mapView.map.remove(existingLayer);
         }
 
-        const leadingLayer = await getWaybackLayer(waybackItem4LeadingLayer);
-        leadeingLayerRef.current = leadingLayer;
-        mapView.map.add(leadingLayer, 1)
+        const newLayer = await getWaybackLayer(layerItem);
+        layers.current[layerIndex] = newLayer;
+        mapView.map.add(newLayer, 1);
 
-        swipeWidgetRef.current.leadingLayers.removeAll()
-        swipeWidgetRef.current.leadingLayers.add(leadingLayer);
-    }
-
-    const setTrailingLayer = async()=>{
-
-        if(trailingLayerRef.current){
-            mapView.map.remove(trailingLayerRef.current)
+        if(layerType === 'leading'){
+            swipeWidgetRef.current.leadingLayers.removeAll();
+            swipeWidgetRef.current.leadingLayers.add(newLayer);
+        } else {
+            swipeWidgetRef.current.trailingLayers.removeAll();
+            swipeWidgetRef.current.trailingLayers.add(newLayer);
         }
 
-        const trailingLayer = await getWaybackLayer(waybackItem4TrailingLayer);
-        trailingLayerRef.current = trailingLayer;
-        mapView.map.add(trailingLayer, 1)
-
-        swipeWidgetRef.current.trailingLayers.removeAll()
-        swipeWidgetRef.current.trailingLayers.add(trailingLayer);
     }
 
     const getWaybackLayer=async(data:IWaybackItem)=>{
@@ -156,15 +133,14 @@ const SwipeWidget:React.FC<Props> = ({
 
     useEffect(()=>{
         if(waybackItem4LeadingLayer){
-            setLeadingLayer();
+            setLayer(waybackItem4LeadingLayer, 'leading');
         }
     }, [waybackItem4LeadingLayer]);
 
     useEffect(()=>{
         if(waybackItem4TrailingLayer){
-            setTrailingLayer();
+            setLayer(waybackItem4TrailingLayer, 'trailing');
         }
-        
     }, [waybackItem4TrailingLayer])
 
     return null;

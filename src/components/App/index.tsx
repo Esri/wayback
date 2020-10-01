@@ -401,6 +401,21 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
+    // getTargetLayerForMetadataPopup(){
+    //     const { 
+    //         isSwipeWidgetOpen, 
+    //         activeWaybackItem,
+    //         swipeWidgetLeadingLayer,
+    //         swipeWidgetTrailingLayer
+    //     } = this.state;
+
+    //     if(!isSwipeWidgetOpen){
+    //         return activeWaybackItem
+    //     }
+
+    //     return swipeWidgetLeadingLayer
+    // }
+
     getSidebarContent() {
         const { isMobile } = this.props;
 
@@ -612,9 +627,9 @@ class App extends React.PureComponent<IProps, IState> {
                         />
 
                         <MetadataPopUp
-                            disabled={isSwipeWidgetOpen}
+                            // disabled={isSwipeWidgetOpen}
                             waybackManager={waybackManager}
-                            activeWaybackItem={activeWaybackItem}
+                            targetLayer={activeWaybackItem}
                             previewWaybackItem={previewWaybackItem}
                         />
 
