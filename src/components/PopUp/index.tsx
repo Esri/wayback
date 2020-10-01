@@ -19,6 +19,7 @@ interface IProps {
     waybackManager?: WaybackManager;
     activeWaybackItem: IWaybackItem;
     previewWaybackItem: IWaybackItem;
+    disabled: boolean;
 }
 
 interface IState {
@@ -173,11 +174,11 @@ class PopUp extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { activeWaybackItem } = this.props;
+        const { activeWaybackItem, disabled } = this.props;
 
         const { metadata, metadataAnchorScreenPoint } = this.state;
 
-        if (!metadata || !metadataAnchorScreenPoint) {
+        if (!metadata || !metadataAnchorScreenPoint || disabled) {
             return null;
         }
 

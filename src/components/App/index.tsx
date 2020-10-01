@@ -612,6 +612,7 @@ class App extends React.PureComponent<IProps, IState> {
                         />
 
                         <MetadataPopUp
+                            disabled={isSwipeWidgetOpen}
                             waybackManager={waybackManager}
                             activeWaybackItem={activeWaybackItem}
                             previewWaybackItem={previewWaybackItem}
