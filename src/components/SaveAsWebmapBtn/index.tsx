@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 interface IProps {
     selectedWaybackItems: Array<number>;
-
+    disabled: boolean;
     onClick?: (val: boolean) => void;
     clearAll?: () => void;
 }
@@ -27,9 +27,13 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
     }
 
     render() {
-        const { selectedWaybackItems, clearAll } = this.props;
+        const { selectedWaybackItems, disabled, clearAll } = this.props;
 
         const isActive = selectedWaybackItems.length ? true : false;
+
+        const containerClass = classNames('save-as-webmap-btn-container customized-tooltip', {
+            'is-disabled': disabled
+        })
 
         const btnClass = classNames(
             'create-agol-webmap tooltip tooltip-multiline tooltip-right',
@@ -52,7 +56,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
             : 'Choose versions from the list to build a set of Wayback layers for use in a new Web Map';
 
         return (
-            <div className="save-as-webmap-btn-container customized-tooltip">
+            <div className={containerClass}>
                 <div
                     className={btnClass}
                     onClick={this.onClickHandler}

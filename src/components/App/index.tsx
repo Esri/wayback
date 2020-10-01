@@ -567,15 +567,19 @@ class App extends React.PureComponent<IProps, IState> {
             <div className={appContentClasses}>
                 {mobileHeader}
 
-                <Gutter>
+                <Gutter
+                    settingsBtnDisabled={isSwipeWidgetOpen}
+                >
                     <SaveAsWebmapBtn
                         selectedWaybackItems={rNum4SelectedWaybackItems}
+                        disabled={isSwipeWidgetOpen}
                         onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
                     />
 
                     <SwipeWidgetToggleBtn 
                         isOpen={isSwipeWidgetOpen}
+                        marginTop={rNum4SelectedWaybackItems.length ? '1rem' : 'unset'}
                         onClickHandler={this.toggleSwipeWidget}
                     />
                 </Gutter>

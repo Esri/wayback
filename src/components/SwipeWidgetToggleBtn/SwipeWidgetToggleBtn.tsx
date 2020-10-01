@@ -5,11 +5,13 @@ import classnames from 'classnames';
 
 type Props = {
     isOpen: boolean;
+    marginTop: string;
     onClickHandler:()=>void;
 }
 
 const SwipeWidgetToggleBtn:React.FC<Props> = ({
     isOpen,
+    marginTop,
     onClickHandler
 }) => {
 
@@ -19,8 +21,12 @@ const SwipeWidgetToggleBtn:React.FC<Props> = ({
 
     return (
         <div
+            style={{
+                marginTop: marginTop
+            }}
             className={classNames}
             onClick={onClickHandler}
+            title="Toggle Swipe Widget"
         >
         </div>
     )

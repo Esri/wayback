@@ -103,7 +103,7 @@ const SwipeWidget:React.FC<Props> = ({
 
         const leadingLayer = await getWaybackLayer(waybackItem4LeadingLayer);
         leadeingLayerRef.current = leadingLayer;
-        mapView.map.add(leadingLayer)
+        mapView.map.add(leadingLayer, 1)
 
         swipeWidgetRef.current.leadingLayers.removeAll()
         swipeWidgetRef.current.leadingLayers.add(leadingLayer);
@@ -117,7 +117,7 @@ const SwipeWidget:React.FC<Props> = ({
 
         const trailingLayer = await getWaybackLayer(waybackItem4TrailingLayer);
         trailingLayerRef.current = trailingLayer;
-        mapView.map.add(trailingLayer)
+        mapView.map.add(trailingLayer, 1)
 
         swipeWidgetRef.current.trailingLayers.removeAll()
         swipeWidgetRef.current.trailingLayers.add(trailingLayer);
