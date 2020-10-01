@@ -26,7 +26,7 @@ const SwipeWidget:React.FC<Props> = ({
 }) => {
 
     const swipeWidgetRef = useRef<ISwipe>();
-    const layers = useRef<IWebTileLayer[]>([]);
+    const layersRef = useRef<IWebTileLayer[]>([]);
 
     const init = async()=>{
 
@@ -59,7 +59,7 @@ const SwipeWidget:React.FC<Props> = ({
     const show = ()=>{
         mapView.ui.add(swipeWidgetRef.current);
 
-        layers.current.forEach(layer=>{
+        layersRef.current.forEach(layer=>{
             layer.visible = true;
         })
     }
@@ -69,7 +69,7 @@ const SwipeWidget:React.FC<Props> = ({
             mapView.ui.remove(swipeWidgetRef.current);
         }
 
-        layers.current.forEach(layer=>{
+        layersRef.current.forEach(layer=>{
             layer.visible = false;
         })
     };
@@ -80,14 +80,14 @@ const SwipeWidget:React.FC<Props> = ({
             ? 0 
             : 1;
 
-        const existingLayer = layers.current[layerIndex];
+        const existingLayer = layersRef.current[layerIndex];
 
         if(existingLayer){
             mapView.map.remove(existingLayer);
         }
 
         const newLayer = await getWaybackLayer(layerItem);
-        layers.current[layerIndex] = newLayer;
+        layersRef.current[layerIndex] = newLayer;
         mapView.map.add(newLayer, 1);
 
         if(layerType === 'leading'){

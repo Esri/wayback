@@ -57,6 +57,7 @@ interface IWaybackMetadataQueryResult {
     source: string;
     resolution: number;
     accuracy: number;
+    releaseDate?: string;
 }
 
 interface IScreenPoint {

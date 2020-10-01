@@ -36,14 +36,17 @@ import Gutter from '../Gutter';
 import ShareDialog from '../ShareDialog';
 import SwipeWidget from '../SwipeWidget/SwipeWidget';
 import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
-import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector'
+import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
+import MetadataQueryLayer from '../MetadataQueryLayer/MetadataQueryLayer';
 
 import {
     IWaybackItem,
     IMapPointInfo,
     IExtentGeomety,
     IUserSession,
-    ISearchParamData,
+    ISearchParamData, 
+    IWaybackMetadataQueryResult, 
+    IScreenPoint
 } from '../../types';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
@@ -81,6 +84,9 @@ interface IState {
 
     swipeWidgetLeadingLayer: IWaybackItem;
     swipeWidgetTrailingLayer: IWaybackItem;
+
+    metadataQueryResult:IWaybackMetadataQueryResult;
+    metadataPopupAnchor:IScreenPoint;
 
     currentUrl: string;
 }
@@ -123,6 +129,10 @@ class App extends React.PureComponent<IProps, IState> {
             isSwipeWidgetOpen: false,
             swipeWidgetLeadingLayer: null,
             swipeWidgetTrailingLayer: null,
+
+            metadataQueryResult:null,
+            metadataPopupAnchor: null,
+
             currentUrl: location.href,
         };
 
@@ -627,10 +637,31 @@ class App extends React.PureComponent<IProps, IState> {
                         />
 
                         <MetadataPopUp
-                            // disabled={isSwipeWidgetOpen}
+                            metadata={this.state.metadataQueryResult}
+                            metadataAnchorScreenPoint={this.state.metadataPopupAnchor}
+
+                            onClose={()=>{
+                                this.setState({
+                                    metadataQueryResult: null
+                                })
+                            }}
+                        />
+
+                        <MetadataQueryLayer 
                             waybackManager={waybackManager}
                             targetLayer={activeWaybackItem}
-                            previewWaybackItem={previewWaybackItem}
+                            metadataOnChange={metadata=>{
+                                // console.log(metadata)
+                                this.setState({
+                                    metadataQueryResult: metadata
+                                })
+                            }}
+                            anchorPointOnChange={anchorPoint=>{
+                                // console.log(anchorPoint)
+                                this.setState({
+                                    metadataPopupAnchor: anchorPoint
+                                })
+                            }}
                         />
 
                         <SwipeWidget 
