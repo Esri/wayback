@@ -381,7 +381,8 @@ class App extends React.PureComponent<IProps, IState> {
         const { isSwipeWidgetOpen } = this.state;
 
         this.setState({
-            isSwipeWidgetOpen: !isSwipeWidgetOpen
+            isSwipeWidgetOpen: !isSwipeWidgetOpen,
+            metadataQueryResult: null
         });
     }
 
@@ -679,7 +680,8 @@ class App extends React.PureComponent<IProps, IState> {
                             isOpen={isSwipeWidgetOpen}
                             positionOnChange={(position)=>{
                                 this.setState({
-                                    swipePosition: position
+                                    swipePosition: position,
+                                    metadataQueryResult: null
                                 });
                             }}
                         />
@@ -699,6 +701,7 @@ class App extends React.PureComponent<IProps, IState> {
                                     onSelect={(waybackItem)=>{
                                         this.setState({
                                             swipeWidgetLeadingLayer: waybackItem,
+                                            metadataQueryResult: null
                                         })
                                     }}
                                 />
@@ -713,7 +716,8 @@ class App extends React.PureComponent<IProps, IState> {
                                     selectedItem={this.state.swipeWidgetTrailingLayer}
                                     onSelect={(waybackItem)=>{
                                         this.setState({
-                                            swipeWidgetTrailingLayer: waybackItem
+                                            swipeWidgetTrailingLayer: waybackItem,
+                                            metadataQueryResult: null
                                         })
                                     }}
                                 />
