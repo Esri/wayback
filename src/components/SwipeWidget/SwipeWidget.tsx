@@ -77,7 +77,7 @@ const SwipeWidget:React.FC<Props> = ({
             ]) as Promise<Modules>);
 
             watchUtils.watch(swipeWidget, 'position', (position:number) => {
-                console.log('position changes for swipe widget', position);
+                // console.log('position changes for swipe widget', position);
                 positionOnChange(position);
             });
 
