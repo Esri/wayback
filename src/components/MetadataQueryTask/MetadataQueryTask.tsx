@@ -17,6 +17,8 @@ type Props = {
     activeWaybackItem: IWaybackItem;
     swipeWidgetLeadingLayer: IWaybackItem;
     swipeWidgetTrailingLayer: IWaybackItem;
+    isSwipeWidgetOpen: boolean;
+    swipeWidgetPosition: number;
     mapView?:IMapView,
 
     metadataOnChange: (data:IWaybackMetadataQueryResult)=>void;
@@ -28,24 +30,41 @@ const MetadataQueryLayer:React.FC<Props> = ({
     activeWaybackItem,
     swipeWidgetLeadingLayer,
     swipeWidgetTrailingLayer,
+    isSwipeWidgetOpen,
+    swipeWidgetPosition,
     mapView,
     metadataOnChange,
     anchorPointOnChange
 }) => {
 
     const anchorPointRef = React.useRef<IPoint>();
-    const targetLayerRef= React.useRef<IWaybackItem>();
+
+    const activeWaybackItemRef= React.useRef<IWaybackItem>();
+    const swipeWidgetLeadingLayerRef = React.useRef<IWaybackItem>();
+    const swipeWidgetTrailingLayerRef = React.useRef<IWaybackItem>();
+    const isSwipeWidgetOpenRef = React.useRef<boolean>();
+    const swipeWidgetPositionRef = React.useRef<number>();
+
+    const getTargetWaybackItem = (mapPoint:IPoint):IWaybackItem=>{
+
+        if(!isSwipeWidgetOpenRef.current){
+            return activeWaybackItemRef.current
+        }
+
+        const anchorScreenPoint = mapView.toScreen(mapPoint);
+        const swipePositionX = (swipeWidgetPositionRef.current / 100) * mapView.width;
+        
+        return anchorScreenPoint.x <= swipePositionX
+            ? swipeWidgetLeadingLayerRef.current
+            : swipeWidgetTrailingLayerRef.current;
+    }
 
     const queryMetadata = async(mapPoint:IPoint)=>{
-
-        if(!targetLayerRef.current){
-            return;
-        }
 
         try {
             anchorPointRef.current = mapPoint;
 
-            const { releaseNum, releaseDateLabel } = targetLayerRef.current
+            const { releaseNum, releaseDateLabel } = getTargetWaybackItem(mapPoint)
 
             const res = await waybackManager.getMetadata({
                 releaseNum,
@@ -98,9 +117,10 @@ const MetadataQueryLayer:React.FC<Props> = ({
             });
 
             watchUtils.watch(mapView, 'center', () => {
-                // console.log('view center is on updating, should update the popup position');
-                // need to update the screen point for popup anchor since the map center has changed
-                updateScreenPoint4PopupAnchor();
+                // // console.log('view center is on updating, should update the popup position');
+                // // need to update the screen point for popup anchor since the map center has changed
+                // updateScreenPoint4PopupAnchor();
+                metadataOnChange(null);
             });
         } catch (err) {
             console.error(err);
@@ -108,22 +128,30 @@ const MetadataQueryLayer:React.FC<Props> = ({
     }
 
     React.useEffect(()=>{
-
         if(mapView){
             initMapViewEventHandlers()
         }
-
     }, [mapView])
 
     React.useEffect(()=>{
+        activeWaybackItemRef.current = activeWaybackItem;
+    }, [activeWaybackItem]);
 
-        targetLayerRef.current = activeWaybackItem;
+    React.useEffect(()=>{
+        swipeWidgetLeadingLayerRef.current = swipeWidgetLeadingLayer;
+    }, [swipeWidgetLeadingLayer]);
 
-    }, [
-        activeWaybackItem, 
-        swipeWidgetLeadingLayer,
-        swipeWidgetTrailingLayer
-    ]);
+    React.useEffect(()=>{
+        swipeWidgetTrailingLayerRef.current = swipeWidgetTrailingLayer;
+    }, [swipeWidgetTrailingLayer]);
+
+    React.useEffect(()=>{
+        isSwipeWidgetOpenRef.current = isSwipeWidgetOpen;
+    }, [isSwipeWidgetOpen]);
+
+    React.useEffect(()=>{
+        swipeWidgetPositionRef.current = swipeWidgetPosition;
+    }, [swipeWidgetPosition]);
 
     return null
 }

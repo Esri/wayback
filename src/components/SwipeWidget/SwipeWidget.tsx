@@ -7,6 +7,7 @@ import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import ISwipe from 'esri/widgets/Swipe';
 import IWebTileLayer from 'esri/layers/WebTileLayer';
+import IWatchUtils from 'esri/core/watchUtils';
 import { IWaybackItem } from '../../types';
 
 type Props = {
@@ -14,6 +15,8 @@ type Props = {
     waybackItem4TrailingLayer: IWaybackItem;
     isOpen: boolean;
     mapView?: IMapView;
+
+    positionOnChange: (position:number)=>void;
 }
 
 type SwipeWidgetLayer = 'leading' | 'trailing'
@@ -23,6 +26,7 @@ const SwipeWidget:React.FC<Props> = ({
     waybackItem4TrailingLayer,
     isOpen,
     mapView,
+    positionOnChange
 }) => {
 
     const swipeWidgetRef = useRef<ISwipe>();
@@ -34,28 +38,53 @@ const SwipeWidget:React.FC<Props> = ({
             typeof ISwipe,
         ];
 
-        const [ Swipe ] = await (loadModules([
-            'esri/widgets/Swipe',
-        ]) as Promise<Modules>);
-
-        if(swipeWidgetRef.current){
-            show();
-        } else {
-            
-            const swipe = new Swipe({
-                view: mapView,
-                leadingLayers: [],
-                trailingLayers: [],
-                direction: "horizontal",
-                position: 50 // position set to middle of the view (50%)
-            });
+        try {
+            const [ Swipe ] = await (loadModules([
+                'esri/widgets/Swipe',
+            ]) as Promise<Modules>);
     
-            swipeWidgetRef.current = swipe;
-            
-            mapView.ui.add(swipe);
+            if(swipeWidgetRef.current){
+                show();
+            } else {
+                
+                const swipe = new Swipe({
+                    view: mapView,
+                    leadingLayers: [],
+                    trailingLayers: [],
+                    direction: "horizontal",
+                    position: 50 // position set to middle of the view (50%)
+                });
+        
+                swipeWidgetRef.current = swipe;
+    
+                mapView.ui.add(swipe);
+
+                addEventHandlers(swipe);
+            }
+
+        } catch(err){
+            console.error(err);
         }
 
     };
+
+    const addEventHandlers = async(swipeWidget:ISwipe)=>{
+        try {
+            type Modules = [typeof IWatchUtils];
+
+            const [watchUtils] = await (loadModules([
+                'esri/core/watchUtils',
+            ]) as Promise<Modules>);
+
+            watchUtils.watch(swipeWidget, 'position', (position:number) => {
+                console.log('position changes for swipe widget', position);
+                positionOnChange(position);
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const show = ()=>{
         mapView.ui.add(swipeWidgetRef.current);

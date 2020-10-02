@@ -48,6 +48,7 @@ import {
     IWaybackMetadataQueryResult, 
     IScreenPoint
 } from '../../types';
+import { position } from 'esri/widgets/CoordinateConversion/support/Conversion';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key: number]: number;
@@ -84,6 +85,7 @@ interface IState {
 
     swipeWidgetLeadingLayer: IWaybackItem;
     swipeWidgetTrailingLayer: IWaybackItem;
+    swipePosition: number;
 
     metadataQueryResult:IWaybackMetadataQueryResult;
     metadataPopupAnchor:IScreenPoint;
@@ -129,6 +131,7 @@ class App extends React.PureComponent<IProps, IState> {
             isSwipeWidgetOpen: false,
             swipeWidgetLeadingLayer: null,
             swipeWidgetTrailingLayer: null,
+            swipePosition: 50,
 
             metadataQueryResult:null,
             metadataPopupAnchor: null,
@@ -654,6 +657,8 @@ class App extends React.PureComponent<IProps, IState> {
                             activeWaybackItem={activeWaybackItem}
                             swipeWidgetLeadingLayer={this.state.swipeWidgetLeadingLayer}
                             swipeWidgetTrailingLayer={this.state.swipeWidgetTrailingLayer}
+                            isSwipeWidgetOpen={isSwipeWidgetOpen}
+                            swipeWidgetPosition={this.state.swipePosition}
                             metadataOnChange={metadata=>{
                                 // console.log(metadata)
                                 this.setState({
@@ -672,6 +677,11 @@ class App extends React.PureComponent<IProps, IState> {
                             waybackItem4LeadingLayer={this.state.swipeWidgetLeadingLayer}
                             waybackItem4TrailingLayer={this.state.swipeWidgetTrailingLayer}
                             isOpen={isSwipeWidgetOpen}
+                            positionOnChange={(position)=>{
+                                this.setState({
+                                    swipePosition: position
+                                });
+                            }}
                         />
                     </Map>
 
@@ -688,7 +698,7 @@ class App extends React.PureComponent<IProps, IState> {
                                     selectedItem={this.state.swipeWidgetLeadingLayer}
                                     onSelect={(waybackItem)=>{
                                         this.setState({
-                                            swipeWidgetLeadingLayer: waybackItem
+                                            swipeWidgetLeadingLayer: waybackItem,
                                         })
                                     }}
                                 />
