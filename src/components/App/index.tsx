@@ -185,6 +185,8 @@ class App extends React.PureComponent<IProps, IState> {
 
         this.setState({
             activeWaybackItem,
+            // reset metadata query result when active wayback item changes
+            metadataQueryResult: null
         });
     }
 
@@ -649,7 +651,9 @@ class App extends React.PureComponent<IProps, IState> {
 
                         <MetadataQueryTask 
                             waybackManager={waybackManager}
-                            targetLayer={activeWaybackItem}
+                            activeWaybackItem={activeWaybackItem}
+                            swipeWidgetLeadingLayer={this.state.swipeWidgetLeadingLayer}
+                            swipeWidgetTrailingLayer={this.state.swipeWidgetTrailingLayer}
                             metadataOnChange={metadata=>{
                                 // console.log(metadata)
                                 this.setState({

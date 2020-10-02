@@ -14,7 +14,9 @@ import WaybackManager from '../../core/WaybackManager';
 
 type Props = {
     waybackManager: WaybackManager
-    targetLayer: IWaybackItem;
+    activeWaybackItem: IWaybackItem;
+    swipeWidgetLeadingLayer: IWaybackItem;
+    swipeWidgetTrailingLayer: IWaybackItem;
     mapView?:IMapView,
 
     metadataOnChange: (data:IWaybackMetadataQueryResult)=>void;
@@ -23,28 +25,37 @@ type Props = {
 
 const MetadataQueryLayer:React.FC<Props> = ({
     waybackManager,
-    targetLayer,
+    activeWaybackItem,
+    swipeWidgetLeadingLayer,
+    swipeWidgetTrailingLayer,
     mapView,
     metadataOnChange,
     anchorPointOnChange
 }) => {
 
     const anchorPointRef = React.useRef<IPoint>();
+    const targetLayerRef= React.useRef<IWaybackItem>();
 
     const queryMetadata = async(mapPoint:IPoint)=>{
+
+        if(!targetLayerRef.current){
+            return;
+        }
 
         try {
             anchorPointRef.current = mapPoint;
 
+            const { releaseNum, releaseDateLabel } = targetLayerRef.current
+
             const res = await waybackManager.getMetadata({
-                releaseNum: targetLayer.releaseNum,
+                releaseNum,
                 pointGeometry: mapPoint.toJSON(),
                 zoom: mapView.zoom,
             });
 
             const metadata:IWaybackMetadataQueryResult = {
                 ...res,
-                releaseDate: targetLayer.releaseDateLabel
+                releaseDate: releaseDateLabel
             }
 
             updateScreenPoint4PopupAnchor();
@@ -77,7 +88,7 @@ const MetadataQueryLayer:React.FC<Props> = ({
             ]) as Promise<Modules>);
 
             mapView.on('click', (evt) => {
-                // console.log('view on click, should show popup', evt.mapPoint);
+                console.log('view on click, should show popup', evt.mapPoint);
                 queryMetadata(evt.mapPoint);
             });
 
@@ -103,6 +114,16 @@ const MetadataQueryLayer:React.FC<Props> = ({
         }
 
     }, [mapView])
+
+    React.useEffect(()=>{
+
+        targetLayerRef.current = activeWaybackItem;
+
+    }, [
+        activeWaybackItem, 
+        swipeWidgetLeadingLayer,
+        swipeWidgetTrailingLayer
+    ]);
 
     return null
 }

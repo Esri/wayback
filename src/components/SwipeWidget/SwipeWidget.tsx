@@ -51,6 +51,7 @@ const SwipeWidget:React.FC<Props> = ({
             });
     
             swipeWidgetRef.current = swipe;
+            
             mapView.ui.add(swipe);
         }
 
