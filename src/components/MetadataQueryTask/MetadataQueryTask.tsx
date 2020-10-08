@@ -72,10 +72,12 @@ const MetadataQueryLayer:React.FC<Props> = ({
                 zoom: mapView.zoom,
             });
 
-            const metadata:IWaybackMetadataQueryResult = {
-                ...res,
-                releaseDate: releaseDateLabel
-            }
+            const metadata:IWaybackMetadataQueryResult = res 
+                ? {
+                    ...res,
+                    releaseDate: releaseDateLabel
+                } 
+                : null;
 
             updateScreenPoint4PopupAnchor();
 
