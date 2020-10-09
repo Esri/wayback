@@ -128,7 +128,7 @@ class App extends React.PureComponent<IProps, IState> {
             mapExtent: null,
             isGutterHide: isMobile ? true : false,
             isSideBarHide: false,
-            isSwipeWidgetOpen: false,
+            isSwipeWidgetOpen: data2InitApp && data2InitApp.isSwipeWidgetOpen,
             swipeWidgetLeadingLayer: null,
             swipeWidgetTrailingLayer: null,
             swipePosition: 50,
@@ -402,6 +402,7 @@ class App extends React.PureComponent<IProps, IState> {
             shouldOnlyShowItemsWithLocalChange,
             rNum4SelectedWaybackItems,
             mapExtent,
+            isSwipeWidgetOpen
         } = this.state;
 
         // let's igonre the activeWaybackItem for now
@@ -410,6 +411,7 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             // rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
             shouldOnlyShowItemsWithLocalChange,
+            isSwipeWidgetOpen
         });
 
         this.setState({

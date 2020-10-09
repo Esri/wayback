@@ -6,7 +6,8 @@ type searchParamKey =
     | 'localChangesOnly'
     | 'selected'
     | 'active'
-    | 'portal';
+    | 'portal'
+    | 'swipeWidget'
 
 const getPortalUrlInSearchParam = () => {
     const urlQueryData: {
@@ -43,6 +44,7 @@ const encodeSearchParam = ({
     rNum4SelectedWaybackItems = [],
     shouldOnlyShowItemsWithLocalChange = false,
     rNum4ActiveWaybackItem = null,
+    isSwipeWidgetOpen=false
 }: ISearchParamData) => {
     // console.log(mapExtent, rNum4SelectedWaybackItems, shouldOnlyShowItemsWithLocalChange, rNum4ActiveWaybackItem);
 
@@ -58,6 +60,7 @@ const encodeSearchParam = ({
             : '',
         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
         portal: getPortalUrlInSearchParam(),
+        swipeWidget: isSwipeWidgetOpen ? '1' : ''
     };
 
     const searchParamsString = Object.keys(searchParams)
@@ -84,6 +87,7 @@ const decodeSearchParam = () => {
         : null;
     const active = urlQueryData.active ? +urlQueryData.active : null;
     const mapExtent = getMapExtent();
+    const isSwipeWidgetOpen = urlQueryData.swipeWidget === '1';
     // const ext = urlQueryData.ext ? urlQueryData.ext.split(',') : null;
     // const mapExtent:IExtentGeomety = ext ? {
     //     xmin: +ext[0],
@@ -100,6 +104,7 @@ const decodeSearchParam = () => {
         rNum4SelectedWaybackItems: selected,
         shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active,
+        isSwipeWidgetOpen
     };
 
     return searchParams;

@@ -75,6 +75,7 @@ interface ISearchParamData {
     rNum4SelectedWaybackItems?: Array<number>;
     shouldOnlyShowItemsWithLocalChange?: boolean;
     rNum4ActiveWaybackItem?: number;
+    isSwipeWidgetOpen?:boolean;
 }
 
 interface IStaticTooltipData {

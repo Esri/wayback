@@ -155,11 +155,11 @@ const SwipeWidget:React.FC<Props> = ({
     }
 
     useEffect(()=>{
-        isOpen 
+        isOpen && mapView
         ? init() 
         : hide();
 
-    }, [isOpen])
+    }, [isOpen, mapView])
 
     useEffect(()=>{
         if(waybackItem4LeadingLayer){
