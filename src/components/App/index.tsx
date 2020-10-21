@@ -725,6 +725,11 @@ class App extends React.PureComponent<IProps, IState> {
                                             metadataQueryResult: null
                                         })
                                     }}
+                                    onClose={()=>{
+                                        this.setState({
+                                            isSwipeWidgetOpen: false
+                                        })
+                                    }}
                                 />
                             </>
                         ) : null
