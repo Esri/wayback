@@ -102,7 +102,7 @@ class App extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const { data2InitApp, isMobile } = props;
+        const { data2InitApp, isMobile, waybackData2InitApp } = props;
 
         this.oauthUtils = new OAuthUtils();
 
@@ -161,13 +161,17 @@ class App extends React.PureComponent<IProps, IState> {
         // use the lookup table to quickly locate the wayback item from waybackItems by looking up the release number
         const waybackItemsReleaseNum2IndexLookup = {};
 
+        const { data2InitApp } = this.props;
+
         waybackItems.forEach((d, i) => {
             const key = d.releaseNum;
             waybackItemsReleaseNum2IndexLookup[key] = i;
         });
 
         // show the most recent release by default
-        const activeWaybackItem = waybackItems[0];
+        const activeWaybackItem = data2InitApp && data2InitApp.rNum4ActiveWaybackItem 
+            ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4ActiveWaybackItem)[0]
+            : waybackItems[0];
 
         this.setState(
             {
@@ -398,18 +402,17 @@ class App extends React.PureComponent<IProps, IState> {
 
     updateUrlSearchParams() {
         const {
-            // activeWaybackItem,
+            activeWaybackItem,
             shouldOnlyShowItemsWithLocalChange,
             rNum4SelectedWaybackItems,
             mapExtent,
             isSwipeWidgetOpen
         } = this.state;
 
-        // let's igonre the activeWaybackItem for now
         encodeSearchParam({
             mapExtent,
             rNum4SelectedWaybackItems,
-            // rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
+            rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
             shouldOnlyShowItemsWithLocalChange,
             isSwipeWidgetOpen
         });
