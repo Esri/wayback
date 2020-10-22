@@ -17,6 +17,7 @@ type Props = {
     mapView?: IMapView;
 
     positionOnChange: (position:number)=>void;
+    onLoaded:()=>void;
 }
 
 type SwipeWidgetLayer = 'leading' | 'trailing'
@@ -26,7 +27,8 @@ const SwipeWidget:React.FC<Props> = ({
     waybackItem4TrailingLayer,
     isOpen,
     mapView,
-    positionOnChange
+    positionOnChange,
+    onLoaded
 }) => {
 
     const swipeWidgetRef = useRef<ISwipe>();
@@ -46,7 +48,7 @@ const SwipeWidget:React.FC<Props> = ({
             if(swipeWidgetRef.current){
                 show();
             } else {
-                
+
                 const swipe = new Swipe({
                     view: mapView,
                     leadingLayers: [],
@@ -60,6 +62,8 @@ const SwipeWidget:React.FC<Props> = ({
                 mapView.ui.add(swipe);
 
                 addEventHandlers(swipe);
+
+                onLoaded();
             }
 
         } catch(err){
@@ -105,6 +109,10 @@ const SwipeWidget:React.FC<Props> = ({
     };
 
     const setLayer = async(layerItem:IWaybackItem, layerType:SwipeWidgetLayer)=>{
+
+        if(!mapView){
+            return;
+        }
 
         const layerIndex = layerType === 'leading' 
             ? 0 

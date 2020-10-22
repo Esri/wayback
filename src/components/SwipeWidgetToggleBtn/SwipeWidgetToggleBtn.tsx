@@ -26,7 +26,7 @@ const SwipeWidgetToggleBtn:React.FC<Props> = ({
             }}
             className={classNames}
             onClick={onClickHandler}
-            title="Toggle Swipe Widget"
+            title="Toggle Swipe Mode"
         >
         </div>
     )

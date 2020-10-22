@@ -689,6 +689,26 @@ class App extends React.PureComponent<IProps, IState> {
                                     metadataQueryResult: null
                                 });
                             }}
+                            onLoaded={()=>{
+                                const { 
+                                    swipeWidgetLeadingLayer, 
+                                    swipeWidgetTrailingLayer, 
+                                    activeWaybackItem, 
+                                    waybackItems 
+                                } = this.state;
+
+                                if(!swipeWidgetLeadingLayer){
+                                    this.setState({
+                                        swipeWidgetLeadingLayer: activeWaybackItem
+                                    })
+                                }
+
+                                if(!swipeWidgetTrailingLayer){
+                                    this.setState({
+                                        swipeWidgetTrailingLayer: waybackItems[waybackItems.length - 1]
+                                    })
+                                }
+                            }}
                         />
                     </Map>
 
