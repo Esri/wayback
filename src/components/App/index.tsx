@@ -172,6 +172,14 @@ class App extends React.PureComponent<IProps, IState> {
         const activeWaybackItem = data2InitApp && data2InitApp.rNum4ActiveWaybackItem 
             ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4ActiveWaybackItem)[0]
             : waybackItems[0];
+        
+        // const swipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
+        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
+        //     : null;
+
+        // const swipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
+        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
+        //     : null;
 
         this.setState(
             {
@@ -406,7 +414,9 @@ class App extends React.PureComponent<IProps, IState> {
             shouldOnlyShowItemsWithLocalChange,
             rNum4SelectedWaybackItems,
             mapExtent,
-            isSwipeWidgetOpen
+            isSwipeWidgetOpen,
+            swipeWidgetLeadingLayer,
+            swipeWidgetTrailingLayer
         } = this.state;
 
         encodeSearchParam({
@@ -414,7 +424,9 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
             shouldOnlyShowItemsWithLocalChange,
-            isSwipeWidgetOpen
+            isSwipeWidgetOpen,
+            rNum4SwipeWidgetLeadingLayer: swipeWidgetLeadingLayer ? swipeWidgetLeadingLayer.releaseNum : null,
+            rNum4SwipeWidgetTrailingLayer: swipeWidgetTrailingLayer? swipeWidgetTrailingLayer.releaseNum : null
         });
 
         this.setState({
@@ -698,14 +710,24 @@ class App extends React.PureComponent<IProps, IState> {
                                 } = this.state;
 
                                 if(!swipeWidgetLeadingLayer){
+
+                                    const waybackItems4SwipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
+                                        ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
+                                        : activeWaybackItem;
+
                                     this.setState({
-                                        swipeWidgetLeadingLayer: activeWaybackItem
+                                        swipeWidgetLeadingLayer: waybackItems4SwipeWidgetLeadingLayer
                                     })
                                 }
 
                                 if(!swipeWidgetTrailingLayer){
+
+                                    const waybackItems4SwipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
+                                        ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
+                                        : waybackItems[waybackItems.length - 1];
+
                                     this.setState({
-                                        swipeWidgetTrailingLayer: waybackItems[waybackItems.length - 1]
+                                        swipeWidgetTrailingLayer: waybackItems4SwipeWidgetTrailingLayer
                                     })
                                 }
                             }}

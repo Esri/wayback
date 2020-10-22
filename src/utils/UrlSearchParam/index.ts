@@ -44,7 +44,9 @@ const encodeSearchParam = ({
     rNum4SelectedWaybackItems = [],
     shouldOnlyShowItemsWithLocalChange = false,
     rNum4ActiveWaybackItem = null,
-    isSwipeWidgetOpen=false
+    isSwipeWidgetOpen=false,
+    rNum4SwipeWidgetLeadingLayer=null,
+    rNum4SwipeWidgetTrailingLayer=null
 }: ISearchParamData) => {
     // console.log(mapExtent, rNum4SelectedWaybackItems, shouldOnlyShowItemsWithLocalChange, rNum4ActiveWaybackItem);
 
@@ -60,7 +62,10 @@ const encodeSearchParam = ({
             : '',
         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
         portal: getPortalUrlInSearchParam(),
-        swipeWidget: isSwipeWidgetOpen ? '1' : ''
+        // concat release numbers for leading and trailing layers into comma separated string
+        swipeWidget: isSwipeWidgetOpen 
+            ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}` 
+            : ''
     };
 
     const searchParamsString = Object.keys(searchParams)
@@ -87,7 +92,7 @@ const decodeSearchParam = () => {
         : null;
     const active = urlQueryData.active ? +urlQueryData.active : null;
     const mapExtent = getMapExtent();
-    const isSwipeWidgetOpen = urlQueryData.swipeWidget === '1';
+    const isSwipeWidgetOpen = urlQueryData.swipeWidget ? true : false;
     // const ext = urlQueryData.ext ? urlQueryData.ext.split(',') : null;
     // const mapExtent:IExtentGeomety = ext ? {
     //     xmin: +ext[0],
@@ -99,12 +104,18 @@ const decodeSearchParam = () => {
     //     }
     // } : null;
 
+    const swipeWidgetLayers = urlQueryData.swipeWidget 
+        ? urlQueryData.swipeWidget.split(',').map((d) => +d)
+        : []
+
     const searchParams: ISearchParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
         shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active,
-        isSwipeWidgetOpen
+        isSwipeWidgetOpen,
+        rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0],
+        rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1]
     };
 
     return searchParams;

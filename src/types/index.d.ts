@@ -76,6 +76,8 @@ interface ISearchParamData {
     shouldOnlyShowItemsWithLocalChange?: boolean;
     rNum4ActiveWaybackItem?: number;
     isSwipeWidgetOpen?:boolean;
+    rNum4SwipeWidgetLeadingLayer?:number;
+    rNum4SwipeWidgetTrailingLayer?:number;
 }
 
 interface IStaticTooltipData {
