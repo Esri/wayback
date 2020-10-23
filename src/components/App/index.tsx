@@ -200,6 +200,7 @@ class App extends React.PureComponent<IProps, IState> {
 
         this.setState({
             activeWaybackItem,
+            swipeWidgetLeadingLayer: activeWaybackItem,
             // reset metadata query result when active wayback item changes
             metadataQueryResult: null
         });
