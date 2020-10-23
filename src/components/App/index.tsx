@@ -747,6 +747,7 @@ class App extends React.PureComponent<IProps, IState> {
                                     selectedItem={this.state.swipeWidgetLeadingLayer}
                                     onSelect={(waybackItem)=>{
                                         this.setState({
+                                            activeWaybackItem: waybackItem,
                                             swipeWidgetLeadingLayer: waybackItem,
                                             metadataQueryResult: null
                                         })
