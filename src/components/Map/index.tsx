@@ -15,6 +15,7 @@ import IMap from 'esri/Map';
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
+import IExtent from 'esri/geometry/Extent';
 import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import ISearchWidget from 'esri/widgets/Search';
 import IVectorTileLayer from 'esri/layers/VectorTileLayer';
@@ -101,10 +102,12 @@ class Map extends React.PureComponent<IProps, IState> {
                 layers: [waybackLayer, referenceLayer],
             });
 
-            const extent =
+            const extentData =
                 defaultExtent ||
                 appConfig.defaultMapExtent ||
                 config.extents.default;
+
+            const extent = await this.getExtent(extentData);
 
             const view = new MapView({
                 container,
@@ -121,6 +124,25 @@ class Map extends React.PureComponent<IProps, IState> {
                 this.initSearchWidget();
                 this.initLocateWidget();
             });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async getExtent(data:IExtentGeomety){
+        type Modules = [typeof IExtent];
+
+        try {
+            const [Extent] = await (loadModules([
+                'esri/geometry/Extent',
+            ]) as Promise<Modules>);
+
+            const extent = new Extent({
+                ...data
+            });
+
+            return extent;
+
         } catch (err) {
             console.error(err);
         }

@@ -170,13 +170,13 @@ const SwipeWidget:React.FC<Props> = ({
     }, [isOpen, mapView])
 
     useEffect(()=>{
-        if(waybackItem4LeadingLayer){
+        if(waybackItem4LeadingLayer && swipeWidgetRef.current){
             setLayer(waybackItem4LeadingLayer, 'leading');
         }
     }, [waybackItem4LeadingLayer]);
 
     useEffect(()=>{
-        if(waybackItem4TrailingLayer){
+        if(waybackItem4TrailingLayer && swipeWidgetRef.current){
             setLayer(waybackItem4TrailingLayer, 'trailing');
         }
     }, [waybackItem4TrailingLayer])

@@ -273,7 +273,7 @@ class App extends React.PureComponent<IProps, IState> {
 
     // get list of wayback items that do provide updated imagery for the given location
     async queryLocalChanges(centerPointInfo: IMapPointInfo) {
-        // console.log('queryLocalChanges', centerPointInfo);
+        console.log('queryLocalChanges', centerPointInfo);
 
         const { waybackManager } = this.props;
 

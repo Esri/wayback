@@ -15,7 +15,7 @@ import { decodeSearchParam } from './utils/UrlSearchParam';
 import { miscFns } from 'helper-toolkit-ts';
 import { setDefaultOptions } from 'esri-loader';
 
-setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
+// setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
 
 const initApp = async () => {
     const isMobileDevice = miscFns.isMobileDevice();
