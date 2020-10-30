@@ -20,6 +20,7 @@ import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import ISearchWidget from 'esri/widgets/Search';
 import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 import ILocate from 'esri/widgets/Locate';
+import ISwipe from 'esri/widgets/Swipe';
 
 import {
     SwipeWidgetLayerSelectorWidth
@@ -80,13 +81,15 @@ class Map extends React.PureComponent<IProps, IState> {
             type Modules = [
                 typeof IMapView,
                 typeof IMap,
-                typeof IVectorTileLayer
+                typeof IVectorTileLayer,
+                typeof ISwipe
             ];
 
-            const [MapView, Map, VectorTileLayer] = await (loadModules([
+            const [MapView, Map, VectorTileLayer, Swipe] = await (loadModules([
                 'esri/views/MapView',
                 'esri/Map',
                 'esri/layers/VectorTileLayer',
+                'esri/widgets/Swipe'
             ]) as Promise<Modules>);
 
             const waybackLayer = await this.getWaybackLayer();
