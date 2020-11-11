@@ -68,6 +68,7 @@ const SwipeWidget:React.FC<Props> = ({
 
         } catch(err){
             console.error(err);
+            init();
         }
 
     };

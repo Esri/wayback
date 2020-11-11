@@ -40,4 +40,8 @@ const initApp = async () => {
     }
 };
 
-initApp();
+window.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
+
+

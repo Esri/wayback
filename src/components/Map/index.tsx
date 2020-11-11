@@ -129,6 +129,7 @@ class Map extends React.PureComponent<IProps, IState> {
             });
         } catch (err) {
             console.error(err);
+            this.initMap();
         }
     }
 
@@ -285,6 +286,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
             return waybackLayer;
         } catch (err) {
+            console.error(err)
             return null;
         }
     }
