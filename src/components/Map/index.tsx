@@ -118,14 +118,10 @@ class Map extends React.PureComponent<IProps, IState> {
                 extent,
             });
 
-            this.setState({
-                mapView: view,
-            });
-
             view.when(() => {
-                this.mapViewOnReadyHandler();
-                this.initSearchWidget();
-                this.initLocateWidget();
+                this.setState({
+                    mapView: view,
+                });
             });
         } catch (err) {
             console.error(err);
@@ -309,7 +305,7 @@ class Map extends React.PureComponent<IProps, IState> {
         );
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    componentDidUpdate(prevProps: IProps, prevState:IState) {
         const { activeWaybackItem } = this.props;
         const { mapView } = this.state;
 
@@ -323,6 +319,12 @@ class Map extends React.PureComponent<IProps, IState> {
                 // switch active wayback item
                 this.updateWaybackLayer();
             }
+        }
+
+        if(mapView && mapView !== prevState.mapView){
+            this.mapViewOnReadyHandler();
+            this.initSearchWidget();
+            this.initLocateWidget();
         }
     }
 
