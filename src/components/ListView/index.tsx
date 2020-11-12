@@ -89,7 +89,7 @@ class ListView extends React.PureComponent<IProps, IState> {
 
             return (
                 <Card
-                    key={`list-view-card-${i}`}
+                    key={`list-view-card-${d.releaseNum}`}
                     data={d}
                     isActive={isActive}
                     isSelected={isSelected}
