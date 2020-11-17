@@ -57,6 +57,7 @@ interface IWaybackMetadataQueryResult {
     source: string;
     resolution: number;
     accuracy: number;
+    releaseDate?: string;
 }
 
 interface IScreenPoint {
@@ -74,6 +75,9 @@ interface ISearchParamData {
     rNum4SelectedWaybackItems?: Array<number>;
     shouldOnlyShowItemsWithLocalChange?: boolean;
     rNum4ActiveWaybackItem?: number;
+    isSwipeWidgetOpen?:boolean;
+    rNum4SwipeWidgetLeadingLayer?:number;
+    rNum4SwipeWidgetTrailingLayer?:number;
 }
 
 interface IStaticTooltipData {

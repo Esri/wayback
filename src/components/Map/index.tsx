@@ -1,5 +1,6 @@
 import './style.scss';
 import * as React from 'react';
+import classnames from 'classnames';
 
 import { loadCss, loadModules } from 'esri-loader';
 import config from './config';
@@ -14,12 +15,19 @@ import IMap from 'esri/Map';
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import IPoint from 'esri/geometry/Point';
+import IExtent from 'esri/geometry/Extent';
 import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import ISearchWidget from 'esri/widgets/Search';
 import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 import ILocate from 'esri/widgets/Locate';
+import ISwipe from 'esri/widgets/Swipe';
+
+import {
+    SwipeWidgetLayerSelectorWidth
+} from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector'
 
 interface IProps {
+    isSwipeWidgetOpen: boolean;
     defaultExtent?: IExtentGeomety;
     activeWaybackItem: IWaybackItem;
 
@@ -73,13 +81,15 @@ class Map extends React.PureComponent<IProps, IState> {
             type Modules = [
                 typeof IMapView,
                 typeof IMap,
-                typeof IVectorTileLayer
+                typeof IVectorTileLayer,
+                typeof ISwipe
             ];
 
-            const [MapView, Map, VectorTileLayer] = await (loadModules([
+            const [MapView, Map, VectorTileLayer, Swipe] = await (loadModules([
                 'esri/views/MapView',
                 'esri/Map',
                 'esri/layers/VectorTileLayer',
+                'esri/widgets/Swipe'
             ]) as Promise<Modules>);
 
             const waybackLayer = await this.getWaybackLayer();
@@ -95,10 +105,12 @@ class Map extends React.PureComponent<IProps, IState> {
                 layers: [waybackLayer, referenceLayer],
             });
 
-            const extent =
+            const extentData =
                 defaultExtent ||
                 appConfig.defaultMapExtent ||
                 config.extents.default;
+
+            const extent = await this.getExtent(extentData);
 
             const view = new MapView({
                 container,
@@ -106,15 +118,31 @@ class Map extends React.PureComponent<IProps, IState> {
                 extent,
             });
 
-            this.setState({
-                mapView: view,
+            view.when(() => {
+                this.setState({
+                    mapView: view,
+                });
+            });
+        } catch (err) {
+            console.error(err);
+            this.initMap();
+        }
+    }
+
+    async getExtent(data:IExtentGeomety){
+        type Modules = [typeof IExtent];
+
+        try {
+            const [Extent] = await (loadModules([
+                'esri/geometry/Extent',
+            ]) as Promise<Modules>);
+
+            const extent = new Extent({
+                ...data
             });
 
-            view.when(() => {
-                this.mapViewOnReadyHandler();
-                this.initSearchWidget();
-                this.initLocateWidget();
-            });
+            return extent;
+
         } catch (err) {
             console.error(err);
         }
@@ -254,6 +282,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
             return waybackLayer;
         } catch (err) {
+            console.error(err)
             return null;
         }
     }
@@ -276,7 +305,7 @@ class Map extends React.PureComponent<IProps, IState> {
         );
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    componentDidUpdate(prevProps: IProps, prevState:IState) {
         const { activeWaybackItem } = this.props;
         const { mapView } = this.state;
 
@@ -291,6 +320,12 @@ class Map extends React.PureComponent<IProps, IState> {
                 this.updateWaybackLayer();
             }
         }
+
+        if(mapView && mapView !== prevState.mapView){
+            this.mapViewOnReadyHandler();
+            this.initSearchWidget();
+            this.initLocateWidget();
+        }
     }
 
     componentDidMount() {
@@ -299,6 +334,7 @@ class Map extends React.PureComponent<IProps, IState> {
 
     render() {
         const { mapView, isReferenceLayerVisible } = this.state;
+        const { isSwipeWidgetOpen } = this.props;
 
         const childrenElements = React.Children.map(
             this.props.children,
@@ -309,20 +345,34 @@ class Map extends React.PureComponent<IProps, IState> {
             }
         );
 
+        const mapDivWrapStyle:React.CSSProperties = isSwipeWidgetOpen 
+            ? {
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: SwipeWidgetLayerSelectorWidth,
+                right: SwipeWidgetLayerSelectorWidth
+            } 
+            : {
+                position: 'relative',
+                width: '100%',
+                height: '100%'
+            }
+
         return (
-            <div className="map-container">
-                <div id="mapDiv" ref={this.mapDivRef}>
-                    <div className="loading-indicator">
-                        <div className="loader is-active padding-leader-3 padding-trailer-3">
-                            <div className="loader-bars"></div>
-                        </div>
-                    </div>
-                </div>
+            <div style={mapDivWrapStyle} >
+                <div 
+                    id="mapDiv" 
+                    ref={this.mapDivRef
+                }></div>
+
                 <ReferenceLayerToggle
                     isActive={isReferenceLayerVisible}
                     onClick={this.toggleIsReferenceLayerVisible}
                 />
+
                 {childrenElements}
+
             </div>
         );
     }

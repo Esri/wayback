@@ -34,14 +34,21 @@ import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog';
 import Gutter from '../Gutter';
 import ShareDialog from '../ShareDialog';
+import SwipeWidget from '../SwipeWidget/SwipeWidget';
+import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
+import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
+import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTask';
 
 import {
     IWaybackItem,
     IMapPointInfo,
     IExtentGeomety,
     IUserSession,
-    ISearchParamData,
+    ISearchParamData, 
+    IWaybackMetadataQueryResult, 
+    IScreenPoint
 } from '../../types';
+import { position } from 'esri/widgets/CoordinateConversion/support/Conversion';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key: number]: number;
@@ -74,6 +81,14 @@ interface IState {
     userSession: IUserSession;
     isGutterHide: boolean;
     isSideBarHide: boolean;
+    isSwipeWidgetOpen: boolean;
+
+    swipeWidgetLeadingLayer: IWaybackItem;
+    swipeWidgetTrailingLayer: IWaybackItem;
+    swipePosition: number;
+
+    metadataQueryResult:IWaybackMetadataQueryResult;
+    metadataPopupAnchor:IScreenPoint;
 
     currentUrl: string;
 }
@@ -87,7 +102,7 @@ class App extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const { data2InitApp, isMobile } = props;
+        const { data2InitApp, isMobile, waybackData2InitApp } = props;
 
         this.oauthUtils = new OAuthUtils();
 
@@ -113,6 +128,14 @@ class App extends React.PureComponent<IProps, IState> {
             mapExtent: null,
             isGutterHide: isMobile ? true : false,
             isSideBarHide: false,
+            isSwipeWidgetOpen: !isMobile && data2InitApp && data2InitApp.isSwipeWidgetOpen,
+            swipeWidgetLeadingLayer: null,
+            swipeWidgetTrailingLayer: null,
+            swipePosition: 50,
+
+            metadataQueryResult:null,
+            metadataPopupAnchor: null,
+
             currentUrl: location.href,
         };
 
@@ -131,11 +154,14 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
         this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
+        this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
     }
 
     async setWaybackItems(waybackItems: Array<IWaybackItem>) {
         // use the lookup table to quickly locate the wayback item from waybackItems by looking up the release number
         const waybackItemsReleaseNum2IndexLookup = {};
+
+        const { data2InitApp } = this.props;
 
         waybackItems.forEach((d, i) => {
             const key = d.releaseNum;
@@ -143,7 +169,17 @@ class App extends React.PureComponent<IProps, IState> {
         });
 
         // show the most recent release by default
-        const activeWaybackItem = waybackItems[0];
+        const activeWaybackItem = data2InitApp && data2InitApp.rNum4ActiveWaybackItem 
+            ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4ActiveWaybackItem)[0]
+            : waybackItems[0];
+        
+        // const swipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
+        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
+        //     : null;
+
+        // const swipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
+        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
+        //     : null;
 
         this.setState(
             {
@@ -164,6 +200,9 @@ class App extends React.PureComponent<IProps, IState> {
 
         this.setState({
             activeWaybackItem,
+            swipeWidgetLeadingLayer: activeWaybackItem,
+            // reset metadata query result when active wayback item changes
+            metadataQueryResult: null
         });
     }
 
@@ -234,7 +273,7 @@ class App extends React.PureComponent<IProps, IState> {
 
     // get list of wayback items that do provide updated imagery for the given location
     async queryLocalChanges(centerPointInfo: IMapPointInfo) {
-        // console.log('queryLocalChanges', centerPointInfo);
+        console.log('queryLocalChanges', centerPointInfo);
 
         const { waybackManager } = this.props;
 
@@ -350,6 +389,16 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
+    toggleSwipeWidget(){
+
+        const { isSwipeWidgetOpen } = this.state;
+
+        this.setState({
+            isSwipeWidgetOpen: !isSwipeWidgetOpen,
+            metadataQueryResult: null
+        });
+    }
+
     toggleSignInBtnOnClick(shouldSignIn?: boolean) {
         const { oauthUtils } = this;
 
@@ -362,24 +411,44 @@ class App extends React.PureComponent<IProps, IState> {
 
     updateUrlSearchParams() {
         const {
-            // activeWaybackItem,
+            activeWaybackItem,
             shouldOnlyShowItemsWithLocalChange,
             rNum4SelectedWaybackItems,
             mapExtent,
+            isSwipeWidgetOpen,
+            swipeWidgetLeadingLayer,
+            swipeWidgetTrailingLayer
         } = this.state;
 
-        // let's igonre the activeWaybackItem for now
         encodeSearchParam({
             mapExtent,
             rNum4SelectedWaybackItems,
-            // rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
+            rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
             shouldOnlyShowItemsWithLocalChange,
+            isSwipeWidgetOpen,
+            rNum4SwipeWidgetLeadingLayer: swipeWidgetLeadingLayer ? swipeWidgetLeadingLayer.releaseNum : null,
+            rNum4SwipeWidgetTrailingLayer: swipeWidgetTrailingLayer? swipeWidgetTrailingLayer.releaseNum : null
         });
 
         this.setState({
             currentUrl: location.href,
         });
     }
+
+    // getTargetLayerForMetadataPopup(){
+    //     const { 
+    //         isSwipeWidgetOpen, 
+    //         activeWaybackItem,
+    //         swipeWidgetLeadingLayer,
+    //         swipeWidgetTrailingLayer
+    //     } = this.state;
+
+    //     if(!isSwipeWidgetOpen){
+    //         return activeWaybackItem
+    //     }
+
+    //     return swipeWidgetLeadingLayer
+    // }
 
     getSidebarContent() {
         const { isMobile } = this.props;
@@ -393,7 +462,12 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             rNum4WaybackItemsWithLocalChanges,
             isSideBarHide,
+            isSwipeWidgetOpen
         } = this.state;
+
+        if(isSwipeWidgetOpen){
+            return null;
+        }
 
         const sidebarClasses = classnames('sidebar', {
             'is-hide': isSideBarHide,
@@ -508,12 +582,14 @@ class App extends React.PureComponent<IProps, IState> {
             activeWaybackItem,
             previewWaybackItem,
             rNum4SelectedWaybackItems,
+            rNum4WaybackItemsWithLocalChanges,
             isSaveAsWebmapDialogVisible,
             userSession,
             mapExtent,
             alternativeRNum4RreviewWaybackItem,
             isGutterHide,
             currentUrl,
+            isSwipeWidgetOpen
         } = this.state;
 
         const defaultExtentFromUrl =
@@ -540,40 +616,182 @@ class App extends React.PureComponent<IProps, IState> {
             <div className={appContentClasses}>
                 {mobileHeader}
 
-                <Gutter>
+                <Gutter
+                    settingsBtnDisabled={isSwipeWidgetOpen}
+                >
                     <SaveAsWebmapBtn
                         selectedWaybackItems={rNum4SelectedWaybackItems}
+                        disabled={isSwipeWidgetOpen}
                         onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
                     />
+
+                    {
+                        !isMobile ? (
+                            <SwipeWidgetToggleBtn 
+                                isOpen={isSwipeWidgetOpen}
+                                marginTop={rNum4SelectedWaybackItems.length ? '1rem' : 'unset'}
+                                onClickHandler={this.toggleSwipeWidget}
+                            />
+                        ) : null
+                    }
+
                 </Gutter>
 
                 {sidebar}
 
-                <Map
-                    defaultExtent={
-                        defaultExtentFromUrl || defaultExtentFromLocalStorage
-                    }
-                    activeWaybackItem={activeWaybackItem}
-                    onUpdateEnd={this.queryLocalChanges}
-                    onExtentChange={this.setMapExtent}
+                <div 
+                    className={classnames('map-container', {
+                        'is-swipe-layer-selectors-open': isSwipeWidgetOpen
+                    })}
                 >
-                    <TilePreviewWindow
-                        // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
-                        previewWaybackItem={
-                            !isMobile ? previewWaybackItem : null
+  
+                    <Map
+                        defaultExtent={
+                            defaultExtentFromUrl || defaultExtentFromLocalStorage
                         }
-                        alternativeRNum4RreviewWaybackItem={
-                            alternativeRNum4RreviewWaybackItem
-                        }
-                    />
-
-                    <MetadataPopUp
-                        waybackManager={waybackManager}
                         activeWaybackItem={activeWaybackItem}
-                        previewWaybackItem={previewWaybackItem}
-                    />
-                </Map>
+                        isSwipeWidgetOpen={isSwipeWidgetOpen}
+                        onUpdateEnd={this.queryLocalChanges}
+                        onExtentChange={this.setMapExtent}
+                    >
+                        <TilePreviewWindow
+                            // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
+                            previewWaybackItem={
+                                !isMobile ? previewWaybackItem : null
+                            }
+                            alternativeRNum4RreviewWaybackItem={
+                                alternativeRNum4RreviewWaybackItem
+                            }
+                        />
+
+                        <MetadataPopUp
+                            metadata={this.state.metadataQueryResult}
+                            metadataAnchorScreenPoint={this.state.metadataPopupAnchor}
+
+                            onClose={()=>{
+                                this.setState({
+                                    metadataQueryResult: null
+                                })
+                            }}
+                        />
+
+                        <MetadataQueryTask 
+                            waybackManager={waybackManager}
+                            activeWaybackItem={activeWaybackItem}
+                            swipeWidgetLeadingLayer={this.state.swipeWidgetLeadingLayer}
+                            swipeWidgetTrailingLayer={this.state.swipeWidgetTrailingLayer}
+                            isSwipeWidgetOpen={isSwipeWidgetOpen}
+                            swipeWidgetPosition={this.state.swipePosition}
+                            metadataOnChange={metadata=>{
+                                // console.log(metadata)
+                                this.setState({
+                                    metadataQueryResult: metadata
+                                })
+                            }}
+                            anchorPointOnChange={anchorPoint=>{
+                                // console.log(anchorPoint)
+                                this.setState({
+                                    metadataPopupAnchor: anchorPoint
+                                })
+                            }}
+                        />
+
+                        {
+                            !isMobile ? (
+
+                                <SwipeWidget 
+                                    waybackItem4LeadingLayer={this.state.swipeWidgetLeadingLayer}
+                                    waybackItem4TrailingLayer={this.state.swipeWidgetTrailingLayer}
+                                    isOpen={isSwipeWidgetOpen}
+                                    positionOnChange={(position)=>{
+                                        this.setState({
+                                            swipePosition: position,
+                                            metadataQueryResult: null
+                                        });
+                                    }}
+                                    onLoaded={()=>{
+                                        const { 
+                                            swipeWidgetLeadingLayer, 
+                                            swipeWidgetTrailingLayer, 
+                                            activeWaybackItem, 
+                                            waybackItems 
+                                        } = this.state;
+        
+                                        if(!swipeWidgetLeadingLayer){
+        
+                                            const waybackItems4SwipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
+                                                ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
+                                                : activeWaybackItem;
+        
+                                            this.setState({
+                                                swipeWidgetLeadingLayer: waybackItems4SwipeWidgetLeadingLayer
+                                            })
+                                        }
+        
+                                        if(!swipeWidgetTrailingLayer){
+        
+                                            const waybackItems4SwipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
+                                                ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
+                                                : waybackItems[waybackItems.length - 1];
+        
+                                            this.setState({
+                                                swipeWidgetTrailingLayer: waybackItems4SwipeWidgetTrailingLayer
+                                            })
+                                        }
+                                    }}
+                                />
+                            ) : <></>
+                        }
+
+                    </Map>
+
+                    { 
+                        isSwipeWidgetOpen && !isMobile ? (
+                            <>
+                                <SwipeWidgetLayerSelector 
+                                    key='leading'
+                                    targetLayerType='leading' 
+                                    waybackItems={waybackItems}
+                                    rNum4WaybackItemsWithLocalChanges={
+                                        rNum4WaybackItemsWithLocalChanges
+                                    }
+                                    selectedItem={this.state.swipeWidgetLeadingLayer}
+                                    onSelect={(waybackItem)=>{
+                                        this.setState({
+                                            activeWaybackItem: waybackItem,
+                                            swipeWidgetLeadingLayer: waybackItem,
+                                            metadataQueryResult: null
+                                        })
+                                    }}
+                                />
+
+                                <SwipeWidgetLayerSelector 
+                                    key='trailing'
+                                    targetLayerType='trailing' 
+                                    waybackItems={waybackItems}
+                                    rNum4WaybackItemsWithLocalChanges={
+                                        rNum4WaybackItemsWithLocalChanges
+                                    }
+                                    selectedItem={this.state.swipeWidgetTrailingLayer}
+                                    onSelect={(waybackItem)=>{
+                                        this.setState({
+                                            swipeWidgetTrailingLayer: waybackItem,
+                                            metadataQueryResult: null
+                                        })
+                                    }}
+                                    onClose={()=>{
+                                        this.setState({
+                                            isSwipeWidgetOpen: false
+                                        })
+                                    }}
+                                />
+                            </>
+                        ) : null
+                    }
+
+                </div>
+
 
                 <SaveAsWebMapDialog
                     waybackItems={waybackItems}

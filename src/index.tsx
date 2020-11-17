@@ -13,6 +13,9 @@ import WaybackManager from './core/WaybackManager';
 import App from './components/App';
 import { decodeSearchParam } from './utils/UrlSearchParam';
 import { miscFns } from 'helper-toolkit-ts';
+import { setDefaultOptions } from 'esri-loader';
+
+// setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
 
 const initApp = async () => {
     const isMobileDevice = miscFns.isMobileDevice();
@@ -37,4 +40,8 @@ const initApp = async () => {
     }
 };
 
-initApp();
+window.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
+
+

@@ -23,6 +23,10 @@
     }
 }
 
+.map-container.is-swipe-layer-selectors-open {
+    left: $gutter-width
+}
+
 .is-mobile {
 
     .map-container {

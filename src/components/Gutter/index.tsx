@@ -5,10 +5,11 @@ import ShareModalConfig from '../ShareDialog/config';
 import SettingModalConfig from '../SettingDialog/config';
 
 interface IProps {
+    settingsBtnDisabled:boolean;
     children: JSX.Element[] | JSX.Element;
 }
 
-class Gutter extends React.PureComponent {
+class Gutter extends React.PureComponent<IProps> {
     constructor(props: IProps) {
         super(props);
     }
@@ -48,7 +49,7 @@ class Gutter extends React.PureComponent {
                     </div>
 
                     <div
-                        className="gutter-nav-btn js-modal-toggle"
+                        className={`gutter-nav-btn js-modal-toggle ${this.props.settingsBtnDisabled ? 'btn-disabled' : ''}`}
                         data-modal={SettingModalConfig['modal-id']}
                         title="Settings"
                     >
