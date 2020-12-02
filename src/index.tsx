@@ -6,8 +6,10 @@ import '@babel/polyfill';
 import 'isomorphic-fetch';
 import 'es6-promise';
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import configureAppStore, { getPreloadedState } from './store/configureStore';
 
 import WaybackManager from './core/WaybackManager';
 import App from './components/App';
@@ -25,14 +27,21 @@ const initApp = async () => {
     const waybackManager = new WaybackManager();
     const waybackData2InitApp = await waybackManager.init();
 
+    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems);
+    console.log(waybackData2InitApp)
+
     try {
         ReactDOM.render(
-            <App
-                data2InitApp={data2InitApp}
-                isMobile={isMobileDevice}
-                waybackManager={waybackManager}
-                waybackData2InitApp={waybackData2InitApp}
-            />,
+            <React.StrictMode>
+                <ReduxProvider store={configureAppStore(preloadedState)}>
+                    <App
+                        data2InitApp={data2InitApp}
+                        isMobile={isMobileDevice}
+                        waybackManager={waybackManager}
+                        waybackData2InitApp={waybackData2InitApp}
+                    />
+                </ReduxProvider>
+            </React.StrictMode>,
             document.getElementById('appRootDiv')
         );
     } catch (err) {
