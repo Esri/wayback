@@ -3,7 +3,7 @@ This app provides a dynamic browsing experience where previous World Imagery ver
 
 [View it live](https://livingatlas.arcgis.com/wayback/)
 
-![App](screenshot.png)
+![App](./public/screenshot.png)
 
 ## Installing 
 To begin, clone this repository to your computer:

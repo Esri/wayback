@@ -1,5 +1,6 @@
 const path = require('path');
 const os = require('os');
+const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
@@ -15,10 +16,17 @@ const hostname = computerName.includes('jzhang')
     ? `${computerName}.arcgis.com` 
     : 'localhost';
 
+const {
+    title,
+    author,
+    keywords,
+    description,
+    homepage
+} = package;
+
 module.exports = (env, options)=> {
 
     const devMode = options.mode === 'development' ? true : false;
-    console.log('devMode', devMode);
 
     return {
         devServer: {
@@ -30,6 +38,7 @@ module.exports = (env, options)=> {
             path: path.resolve(__dirname, './dist'),
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].[contenthash].js',
+            publicPath: '',
         },
         devtool: 'source-map',
         resolve: {
@@ -39,14 +48,16 @@ module.exports = (env, options)=> {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    loader: 'ts-loader'
+                    loader: 'babel-loader'
                 },
                 {
                     test: /\.html$/,
                     use: [ 
                         {
                             loader: "html-loader",
-                            options: { minimize: true }
+                            options: { 
+                                minimize: true
+                            }
                         }
                     ]
                 },
@@ -65,9 +76,26 @@ module.exports = (env, options)=> {
                         }
                     ]
                 },
-                { test: /\.woff$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-                { test: /\.ttf$/,  loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
-                { test: /\.eot$/,  loader: "file-loader" },
+                { 
+                    test: /\.woff$/, 
+                    loader: "url-loader",
+                    options: {
+                        limit: 10000,
+                        mimetype: 'application/font-woff'
+                    }
+                },
+                { 
+                    test: /\.ttf$/,  
+                    loader: "url-loader",
+                    options: {
+                        limit: 10000,
+                        mimetype: 'application/octet-stream'
+                    }
+                },
+                { 
+                    test: /\.eot$/,  
+                    loader: "file-loader" 
+                },
                 // { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
                 { 
                     test: /\.svg$/,  
@@ -93,11 +121,33 @@ module.exports = (env, options)=> {
             ]
         },
         plugins: [
+            // copy static files from public folder to build directory
+            new CopyPlugin({
+                patterns: [
+                    { 
+                        from: "public/**/*", 
+                        globOptions: {
+                            ignore: ["**/index.html"],
+                        },
+                    }
+                ],
+            }),
             new HtmlWebPackPlugin({
                 // inject: false,
                 // hash: true,
-                template: './src/index.template.html',
+                template: './public/index.html',
                 filename: 'index.html',
+                meta: {
+                    title,
+                    description,
+                    author,
+                    keywords: Array.isArray(keywords) 
+                        ? package.keywords.join(',') 
+                        : undefined,
+                    'og:title': title,
+                    'og:description': description,
+                    'og:url': homepage,
+                },
                 minify: {
                     html5                          : true,
                     collapseWhitespace             : true,
@@ -119,13 +169,7 @@ module.exports = (env, options)=> {
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
                 chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
             }),
-            new CleanWebpackPlugin(),
-            // devMode ? new CopyPlugin([
-            //     { 
-            //         from: './src/static/waybackdevconfig.json', 
-            //         to: 'waybackdevconfig.json'
-            //     }
-            // ]) : false,
+            new CleanWebpackPlugin()
         ].filter(Boolean),
         optimization: {
             splitChunks: {

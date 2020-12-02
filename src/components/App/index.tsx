@@ -48,7 +48,6 @@ import {
     IWaybackMetadataQueryResult, 
     IScreenPoint
 } from '../../types';
-import { position } from 'esri/widgets/CoordinateConversion/support/Conversion';
 
 interface IWaybackItemsReleaseNum2IndexLookup {
     [key: number]: number;
