@@ -114,8 +114,8 @@ const decodeSearchParam = () => {
         shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active,
         isSwipeWidgetOpen,
-        rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0],
-        rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1]
+        rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
+        rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null
     };
 
     return searchParams;

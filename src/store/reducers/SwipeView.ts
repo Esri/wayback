@@ -9,15 +9,15 @@ import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
 export type SwipeViewState = {
     isSwipeWidgetOpen: boolean;
-    swipeWidgetLeadingLayer: IWaybackItem;
-    swipeWidgetTrailingLayer: IWaybackItem;
+    releaseNum4LeadingLayer: number;
+    releaseNum4TrailingLayer: number;
     swipePosition: number;
 };
 
 export const initialSwipeViewState = {
     isSwipeWidgetOpen: false,
-    swipeWidgetLeadingLayer: null,
-    swipeWidgetTrailingLayer: null,
+    releaseNum4LeadingLayer: null,
+    releaseNum4TrailingLayer: null,
     swipePosition: 50
 } as SwipeViewState;
 
@@ -28,11 +28,11 @@ const slice = createSlice({
         isSwipeWidgetOpenToggled: (state:SwipeViewState) => {
             state.isSwipeWidgetOpen = !state.isSwipeWidgetOpen;
         },
-        swipeWidgetLeadingLayerUpdated: (state:SwipeViewState, action:PayloadAction<IWaybackItem>)=>{
-            state.swipeWidgetLeadingLayer = action.payload;
+        releaseNum4LeadingLayerUpdated: (state:SwipeViewState, action:PayloadAction<number>)=>{
+            state.releaseNum4LeadingLayer = action.payload;
         },
-        swipeWidgetTrailingLayerUpdated: (state:SwipeViewState, action:PayloadAction<IWaybackItem>)=>{
-            state.swipeWidgetTrailingLayer = action.payload;
+        releaseNum4TrailingLayerUpdated: (state:SwipeViewState, action:PayloadAction<number>)=>{
+            state.releaseNum4TrailingLayer = action.payload;
         },
         swipePositionUpdated: (state:SwipeViewState, action:PayloadAction<number>)=>{
             state.swipePosition = action.payload;
@@ -44,8 +44,8 @@ const { reducer } = slice;
 
 export const { 
     isSwipeWidgetOpenToggled,
-    swipeWidgetLeadingLayerUpdated,
-    swipeWidgetTrailingLayerUpdated
+    releaseNum4LeadingLayerUpdated,
+    releaseNum4TrailingLayerUpdated
 } = slice.actions;
 
 export const isSwipeWidgetOpenSelector = createSelector(
@@ -53,14 +53,14 @@ export const isSwipeWidgetOpenSelector = createSelector(
     (isSwipeWidgetOpen) => isSwipeWidgetOpen
 );
 
-export const swipeWidgetLeadingLayerSelector = createSelector(
-    (state: RootState) => state.SwipeView.swipeWidgetLeadingLayer,
-    (swipeWidgetLeadingLayer) => swipeWidgetLeadingLayer
+export const releaseNum4LeadingLayerSelector = createSelector(
+    (state: RootState) => state.SwipeView.releaseNum4LeadingLayer,
+    (releaseNum4LeadingLayer) => releaseNum4LeadingLayer
 );
 
-export const swipeWidgetTrailingLayerSelector = createSelector(
-    (state: RootState) => state.SwipeView.swipeWidgetTrailingLayer,
-    (swipeWidgetTrailingLayer) => swipeWidgetTrailingLayer
+export const releaseNum4TrailingLayerSelector = createSelector(
+    (state: RootState) => state.SwipeView.releaseNum4TrailingLayer,
+    (releaseNum4TrailingLayer) => releaseNum4TrailingLayer
 );
 
 export const swipePositionSelector = createSelector(

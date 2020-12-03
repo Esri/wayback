@@ -27,8 +27,8 @@ const initApp = async () => {
     const waybackManager = new WaybackManager();
     const waybackData2InitApp = await waybackManager.init();
 
-    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems);
-    console.log(waybackData2InitApp)
+    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems, data2InitApp);
+    console.log(preloadedState)
 
     try {
         ReactDOM.render(
