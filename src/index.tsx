@@ -10,13 +10,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import configureAppStore, { getPreloadedState } from './store/configureStore';
+import AppContextProvider from './contexts/AppContextProvider';
 
 import WaybackManager from './core/WaybackManager';
 import App from './components/App';
 import { decodeSearchParam } from './utils/UrlSearchParam';
 import { miscFns } from 'helper-toolkit-ts';
-import { setDefaultOptions } from 'esri-loader';
-
+// import { setDefaultOptions } from 'esri-loader';
 // setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
 
 const initApp = async () => {
@@ -28,18 +28,22 @@ const initApp = async () => {
     const waybackData2InitApp = await waybackManager.init();
 
     const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems, data2InitApp);
-    console.log(preloadedState)
+    // console.log(preloadedState)
 
     try {
         ReactDOM.render(
             <React.StrictMode>
                 <ReduxProvider store={configureAppStore(preloadedState)}>
-                    <App
-                        data2InitApp={data2InitApp}
-                        isMobile={isMobileDevice}
+                    <AppContextProvider
                         waybackManager={waybackManager}
-                        waybackData2InitApp={waybackData2InitApp}
-                    />
+                    >
+                        <App
+                            data2InitApp={data2InitApp}
+                            isMobile={isMobileDevice}
+                            waybackManager={waybackManager}
+                            waybackData2InitApp={waybackData2InitApp}
+                        />
+                    </AppContextProvider>
                 </ReduxProvider>
             </React.StrictMode>,
             document.getElementById('appRootDiv')
