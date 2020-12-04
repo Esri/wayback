@@ -11,6 +11,10 @@ import { IWaybackItem } from '../../types';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
+// import {
+//     shouldShowPreviewItemTitleToggled
+// } from './UI';
+
 export type WaybackItemsState = {
     byReleaseNumber: {
         [key: number]: IWaybackItem
@@ -89,7 +93,10 @@ export const {
 
 let delay4SetPreviewWaybackItem:NodeJS.Timeout;
 
-export const setPreviewWaybackItem = (releaseNumber?:number)=>(
+export const setPreviewWaybackItem = (
+    releaseNumber?:number,
+    shouldShowPreviewItemTitle = false
+)=>(
     dispatch: StoreDispatch, 
     getState: StoreGetState
 )=>{
@@ -123,6 +130,7 @@ export const setPreviewWaybackItem = (releaseNumber?:number)=>(
         batch(()=>{
             dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
             dispatch(releaseNum4AlternativePreviewWaybackItemUpdated(releaseNum4AlternativePreviewWaybackItem));
+            // dispatch(shouldShowPreviewItemTitleToggled(shouldShowPreviewItemTitle))
         });
 
     }, 200);

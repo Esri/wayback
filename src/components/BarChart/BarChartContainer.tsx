@@ -17,7 +17,7 @@ import {
 
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
-    shouldShowPreviewItemTitleToggled
+    // shouldShowPreviewItemTitleToggled
 } from '../../store/reducers/UI';
 
 import BarChart from './index';
@@ -42,17 +42,11 @@ const BarChartContainer:React.FC = () => {
     const onMouseEnterHandler = (        
         releaseNum: number
     )=>{
-        batch(()=>{
-            dispatch(setPreviewWaybackItem(releaseNum));
-            dispatch(shouldShowPreviewItemTitleToggled(true));
-        });
+        dispatch(setPreviewWaybackItem(releaseNum));
     }
 
     const onMouseOutHandler = ()=>{
-        batch(()=>{
-            dispatch(setPreviewWaybackItem());
-            dispatch(shouldShowPreviewItemTitleToggled(false));
-        })
+        dispatch(setPreviewWaybackItem());
     }
 
     return (
