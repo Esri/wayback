@@ -17,7 +17,7 @@ const extractDateFromWaybackItemTitle = (waybackItemTitle = '') => {
 
     return {
         releaseDateLabel: dateString,
-        releaseDatetime: datetime,
+        releaseDatetime: datetime.getTime(),
     };
 };
 

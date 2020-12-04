@@ -67,7 +67,7 @@ class WaybackManager {
         );
 
         waybackItems.sort((a, b) => {
-            return b.releaseDatetime.getTime() - a.releaseDatetime.getTime();
+            return b.releaseDatetime - a.releaseDatetime;
         });
 
         return waybackItems;

@@ -15,7 +15,7 @@ interface IWaybackConfig {
 interface IWaybackItem {
     releaseNum: number;
     releaseDateLabel: string;
-    releaseDatetime: Date;
+    releaseDatetime: number;
     itemReleaseName: string;
     itemID: string;
     itemTitle: string;

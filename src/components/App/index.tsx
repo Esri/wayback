@@ -25,7 +25,8 @@ import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
 import CheckboxToggle from '../CheckboxToggle';
-import BarChart from '../BarChart';
+// import BarChart from '../BarChart';
+import BarChart from '../BarChart/BarChartContainer';
 import Title4ActiveItem from '../Title4ActiveItem';
 import TilePreviewWindow from '../PreviewWindow';
 import AppTitleText from '../TitleText';
@@ -495,7 +496,7 @@ class App extends React.PureComponent<IProps, IState> {
         const barChart =
             !isMobile && activeWaybackItem && !isSideBarHide ? (
                 <div className="content-wrap trailer-quarter">
-                    <BarChart
+                    {/* <BarChart
                         waybackItems={waybackItems}
                         activeWaybackItem={activeWaybackItem}
                         rNum4WaybackItemsWithLocalChanges={
@@ -507,7 +508,9 @@ class App extends React.PureComponent<IProps, IState> {
                         onClick={this.setActiveWaybackItem}
                         onMouseEnter={this.setPreviewWaybackItem}
                         onMouseOut={this.setPreviewWaybackItem}
-                    />
+                    /> */}
+
+                    <BarChart />
                 </div>
             ) : null;
 

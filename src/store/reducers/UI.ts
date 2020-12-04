@@ -33,8 +33,8 @@ const slice = createSlice({
         shouldOnlyShowItemsWithLocalChangeToggled: (state) => {
             state.shouldOnlyShowItemsWithLocalChange = !state.shouldOnlyShowItemsWithLocalChange;
         },
-        shouldShowPreviewItemTitleToggled: (state) => {
-            state.shouldShowPreviewItemTitle = !state.shouldShowPreviewItemTitle;
+        shouldShowPreviewItemTitleToggled: (state, action:PayloadAction<boolean>) => {
+            state.shouldShowPreviewItemTitle = action.payload;
         },
         isGutterHideToggled: (state) => {
             state.isGutterHide = !state.isGutterHide;
