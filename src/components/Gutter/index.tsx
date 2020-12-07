@@ -1,12 +1,16 @@
 import './style.scss';
-import * as React from 'react';
-import AboutThisAppModalConfig from '../ModalAboutApp/config';
-import ShareModalConfig from '../ShareDialog/config';
+import React from 'react';
+// import AboutThisAppModalConfig from '../ModalAboutApp/config';
+// import ShareModalConfig from '../ShareDialog/config';
 import SettingModalConfig from '../SettingDialog/config';
 
 interface IProps {
     settingsBtnDisabled:boolean;
-    children: JSX.Element[] | JSX.Element;
+    // children: JSX.Element[] | JSX.Element;
+
+    aboutButtonOnClick:()=>void;
+    shareButtonOnClick:()=>void;
+    settingButtonOnClick:()=>void;
 }
 
 class Gutter extends React.PureComponent<IProps> {
@@ -15,13 +19,20 @@ class Gutter extends React.PureComponent<IProps> {
     }
 
     render() {
+        const {
+            shareButtonOnClick,
+            aboutButtonOnClick,
+            settingButtonOnClick
+        } = this.props;
+
         return (
             <div className="gutter-container">
                 <div className="shadow-trailer padding-leader-quarter padding-trailer-quarter trailer-quarter">
                     <div
-                        className="gutter-nav-btn js-modal-toggle"
-                        data-modal={AboutThisAppModalConfig['modal-id']}
+                        className="gutter-nav-btn"
+                        // data-modal={AboutThisAppModalConfig['modal-id']}
                         title="About this app"
+                        onClick={aboutButtonOnClick}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -34,9 +45,10 @@ class Gutter extends React.PureComponent<IProps> {
                     </div>
 
                     <div
-                        className="gutter-nav-btn js-modal-toggle"
-                        data-modal={ShareModalConfig['modal-id']}
+                        className="gutter-nav-btn"
+                        // data-modal={ShareModalConfig['modal-id']}
                         title="Share"
+                        onClick={shareButtonOnClick}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -49,9 +61,10 @@ class Gutter extends React.PureComponent<IProps> {
                     </div>
 
                     <div
-                        className={`gutter-nav-btn js-modal-toggle ${this.props.settingsBtnDisabled ? 'btn-disabled' : ''}`}
-                        data-modal={SettingModalConfig['modal-id']}
+                        className={`gutter-nav-btn ${this.props.settingsBtnDisabled ? 'btn-disabled' : ''}`}
+                        // data-modal={SettingModalConfig['modal-id']}
                         title="Settings"
+                        onClick={settingButtonOnClick}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

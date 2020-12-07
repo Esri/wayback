@@ -42,7 +42,7 @@ const getPreloadedState4WaybackItems = async(waybackItems:IWaybackItem[], search
         byReleaseNumber,
         allReleaseNumbers,
         releaseNum4SelectedItems: rNum4SelectedWaybackItems,
-        releaseNum4ActiveWaybackItem: rNum4ActiveWaybackItem
+        releaseNum4ActiveWaybackItem: rNum4ActiveWaybackItem || allReleaseNumbers[0]
     };
 
     return state;

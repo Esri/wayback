@@ -1,25 +1,28 @@
 import './style.scss';
-import * as React from 'react';
-import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
-import config from './config';
+import React from 'react';
+// import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
+// import config from './config';
 
-// interface IProps {}
+interface IProps {
+    onClose: ()=>void;
+}
 // interface IState {}
 
-class AboutThisApp extends React.PureComponent {
+class AboutThisApp extends React.PureComponent<IProps> {
     // constructor(props: IProps) {
     //     super(props);
     // }
 
-    componentDidMount() {
-        modal();
-    }
+    // componentDidMount() {
+    //     modal();
+    // }
 
     render() {
+        const { onClose } = this.props;
         return (
             <div
-                className="js-modal modal-overlay customized-modal"
-                data-modal={config['modal-id']}
+                className="modal-overlay customized-modal is-active"
+                // data-modal={config['modal-id']}
             >
                 <div
                     className="modal-content column-12"
@@ -27,8 +30,9 @@ class AboutThisApp extends React.PureComponent {
                     aria-labelledby="modal"
                 >
                     <span
-                        className="js-modal-toggle cursor-pointer right"
+                        className="cursor-pointer right"
                         aria-label="close-modal"
+                        onClick={onClose}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

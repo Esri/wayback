@@ -7,7 +7,7 @@ import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
 import {
     encodeSearchParam,
-    getPortalUrlInSearchParam,
+    // getPortalUrlInSearchParam,
 } from '../../utils/UrlSearchParam';
 import { getServiceUrl } from '../../utils/Tier';
 import {
@@ -19,7 +19,7 @@ import {
 } from '../../utils/LocalStorage';
 
 import Map from '../Map';
-import AboutThisApp from '../ModalAboutApp';
+import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
 import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
@@ -32,9 +32,9 @@ import TilePreviewWindow from '../PreviewWindow';
 import AppTitleText from '../TitleText';
 import MobileHeader from '../MobileHeader';
 import SidebarToggleBtn from '../SidebarToggleBtn';
-import SettingDialog from '../SettingDialog';
-import Gutter from '../Gutter';
-import ShareDialog from '../ShareDialog';
+import SettingDialog from '../SettingDialog/SettingDialogContainer';
+import Gutter from '../Gutter/GutterContainer';
+import ShareDialog from '../ShareDialog/ShareDialogContainer';
 import SwipeWidget from '../SwipeWidget/SwipeWidget';
 import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
 import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
@@ -90,7 +90,7 @@ interface IState {
     metadataQueryResult:IWaybackMetadataQueryResult;
     metadataPopupAnchor:IScreenPoint;
 
-    currentUrl: string;
+    // currentUrl: string;
 }
 
 class App extends React.PureComponent<IProps, IState> {
@@ -136,7 +136,7 @@ class App extends React.PureComponent<IProps, IState> {
             metadataQueryResult:null,
             metadataPopupAnchor: null,
 
-            currentUrl: location.href,
+            // currentUrl: location.href,
         };
 
         this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
@@ -430,9 +430,9 @@ class App extends React.PureComponent<IProps, IState> {
             rNum4SwipeWidgetTrailingLayer: swipeWidgetTrailingLayer? swipeWidgetTrailingLayer.releaseNum : null
         });
 
-        this.setState({
-            currentUrl: location.href,
-        });
+        // this.setState({
+        //     currentUrl: location.href,
+        // });
     }
 
     // getTargetLayerForMetadataPopup(){
@@ -590,7 +590,7 @@ class App extends React.PureComponent<IProps, IState> {
             mapExtent,
             alternativeRNum4RreviewWaybackItem,
             isGutterHide,
-            currentUrl,
+            // currentUrl,
             isSwipeWidgetOpen
         } = this.state;
 
@@ -619,7 +619,7 @@ class App extends React.PureComponent<IProps, IState> {
                 {mobileHeader}
 
                 <Gutter
-                    settingsBtnDisabled={isSwipeWidgetOpen}
+                    // settingsBtnDisabled={isSwipeWidgetOpen}
                 >
                     <SaveAsWebmapBtn
                         selectedWaybackItems={rNum4SelectedWaybackItems}
@@ -804,16 +804,18 @@ class App extends React.PureComponent<IProps, IState> {
                     onClose={this.toggleSaveAsWebmapDialog}
                 />
 
-                <SettingDialog
+                {/* <SettingDialog
                     mapExtent={mapExtent}
                     userSession={userSession}
                     toggleSignInBtnOnClick={this.toggleSignInBtnOnClick}
                     shouldShowLocalChangesByDefaultOnClick={
                         this.toggleShouldOnlyShowItemsWithLocalChange
                     }
-                />
+                /> */}
+                
+                <SettingDialog />
 
-                <ShareDialog currentUrl={currentUrl} />
+                <ShareDialog />
 
                 <AboutThisApp />
             </div>

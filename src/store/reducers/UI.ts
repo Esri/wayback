@@ -13,6 +13,9 @@ export type UIState = {
     shouldShowPreviewItemTitle: boolean;
     isGutterHide: boolean;
     isSideBarHide: boolean;
+    isShareModalOpen: boolean;
+    isAboutThisAppModalOpen: boolean;
+    isSettingModalOpen: boolean;
 };
 
 export const initialUIState = {
@@ -20,7 +23,10 @@ export const initialUIState = {
     shouldOnlyShowItemsWithLocalChange: false,
     shouldShowPreviewItemTitle: false,
     isGutterHide: false,
-    isSideBarHide: false
+    isSideBarHide: false,
+    isShareModalOpen: false,
+    isAboutThisAppModalOpen: false,
+    isSettingModalOpen: false
 } as UIState;
 
 const slice = createSlice({
@@ -30,8 +36,12 @@ const slice = createSlice({
         isSaveAsWebmapDialogVisibleToggled: (state) => {
             state.isSaveAsWebmapDialogVisible = !state.isSaveAsWebmapDialogVisible;
         },
-        shouldOnlyShowItemsWithLocalChangeToggled: (state) => {
-            state.shouldOnlyShowItemsWithLocalChange = !state.shouldOnlyShowItemsWithLocalChange;
+        shouldOnlyShowItemsWithLocalChangeToggled: (state, action:PayloadAction<boolean>) => {
+            const newVal =  typeof action.payload === 'boolean' 
+                ? action.payload
+                : !state.shouldOnlyShowItemsWithLocalChange
+
+            state.shouldOnlyShowItemsWithLocalChange = newVal;
         },
         shouldShowPreviewItemTitleToggled: (state, action:PayloadAction<boolean>) => {
             state.shouldShowPreviewItemTitle = action.payload;
@@ -42,6 +52,15 @@ const slice = createSlice({
         isSideBarHideToggled: (state) => {
             state.isSideBarHide = !state.isSideBarHide;
         },
+        isShareModalOpenToggled: (state) => {
+            state.isShareModalOpen = !state.isShareModalOpen;
+        },
+        isAboutThisAppModalOpenToggled: (state) => {
+            state.isAboutThisAppModalOpen = !state.isAboutThisAppModalOpen;
+        },
+        isSettingModalOpenToggled: (state)=>{
+            state.isSettingModalOpen = !state.isSettingModalOpen;
+        }
     },
 });
 
@@ -52,7 +71,10 @@ export const {
     shouldOnlyShowItemsWithLocalChangeToggled,
     shouldShowPreviewItemTitleToggled,
     isGutterHideToggled,
-    isSideBarHideToggled
+    isSideBarHideToggled,
+    isShareModalOpenToggled,
+    isAboutThisAppModalOpenToggled,
+    isSettingModalOpenToggled
 } = slice.actions;
 
 export const isSaveAsWebmapDialogVisibleSelector = createSelector(
@@ -78,6 +100,21 @@ export const isGutterHideSelector = createSelector(
 export const isSideBarHideSelector = createSelector(
     (state: RootState) => state.UI.isSideBarHide,
     (isSideBarHide) => isSideBarHide
+);
+
+export const isShareModalOpenSelector = createSelector(
+    (state: RootState) => state.UI.isShareModalOpen,
+    (isShareModalOpen) => isShareModalOpen
+);
+
+export const isAboutThisAppModalOpenSelector = createSelector(
+    (state: RootState) => state.UI.isAboutThisAppModalOpen,
+    (isAboutThisAppModalOpen) => isAboutThisAppModalOpen
+);
+
+export const isSettingModalOpenSelector = createSelector(
+    (state: RootState) => state.UI.isSettingModalOpen,
+    (isSettingModalOpen) => isSettingModalOpen
 );
 
 export default reducer;

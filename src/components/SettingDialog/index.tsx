@@ -1,7 +1,7 @@
 import './style.scss';
 import * as React from 'react';
 import classnames from 'classnames';
-import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
+// import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import {
     // savePortalUrlInSearchParam,
     // getPortalUrlInSearchParam,
@@ -15,7 +15,7 @@ import {
     getShouldShowUpdatesWithLocalChanges,
 } from '../../utils/LocalStorage';
 import { IExtentGeomety, IUserSession } from '../../types';
-import config from './config';
+// import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
@@ -27,6 +27,8 @@ interface IProps {
     shouldShowLocalChangesByDefaultOnClick: (
         shouldShowLocalChangesByDefault: boolean
     ) => void;
+
+    onClose: ()=>void;
 }
 
 interface IState {
@@ -86,7 +88,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             shouldShowLocalChangesByDefault,
         } = this.state;
 
-        const { shouldShowLocalChangesByDefaultOnClick } = this.props;
+        const { shouldShowLocalChangesByDefaultOnClick, onClose } = this.props;
 
         if (shouldSaveAsDefaultExtent) {
             const mapExt = getMapExtent();
@@ -119,7 +121,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
         this.toggleSaveBtnLabel(true);
 
-        this.close();
+        // this.close();
+
+        onClose();
     }
 
     toggleSaveBtnLabel(isSaved = false) {
@@ -139,9 +143,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         );
     }
 
-    close() {
-        calcite.bus.emit('modal:close');
-    }
+    // close() {
+    //     calcite.bus.emit('modal:close');
+    // }
 
     componentDidUpdate(prevProps: IProps) {
         const { mapExtent } = this.props;
@@ -154,12 +158,12 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidMount() {
-        calcite.modal();
-    }
+    // componentDidMount() {
+    //     calcite.modal();
+    // }
 
     render() {
-        const { userSession, toggleSignInBtnOnClick } = this.props;
+        const { userSession, toggleSignInBtnOnClick, onClose } = this.props;
         const {
             portalUrl,
             shouldUseCustomPortalUrl,
@@ -192,8 +196,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
         return (
             <div
-                className="js-modal modal-overlay customized-modal setting-dialog"
-                data-modal={config['modal-id']}
+                className="modal-overlay customized-modal setting-dialog is-active"
+                // data-modal={config['modal-id']}
             >
                 <div
                     className="modal-content column-8"
@@ -201,8 +205,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                     aria-labelledby="modal"
                 >
                     <span
-                        className="js-modal-toggle cursor-pointer right"
+                        className="cursor-pointer right"
                         aria-label="close-modal"
+                        onClick={onClose}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

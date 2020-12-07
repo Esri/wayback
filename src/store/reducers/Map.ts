@@ -44,4 +44,9 @@ export const {
     metadataPopupAnchorUpdated
 } = slice.actions;
 
+export const mapExtentSelector = createSelector(
+    (state: RootState) => state.Map.mapExtent,
+    mapExtent=>mapExtent
+)
+
 export default reducer;
