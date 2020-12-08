@@ -163,4 +163,9 @@ export const releaseNum4ItemsWithLocalChangesSelector = createSelector(
     (releaseNum4ItemsWithLocalChanges) => releaseNum4ItemsWithLocalChanges
 )
 
+export const releaseNum4SelectedItemsSelector = createSelector(
+    (state: RootState) => state.WaybackItems.releaseNum4SelectedItems,
+    (releaseNum4SelectedItems) => releaseNum4SelectedItems
+)
+
 export default reducer;

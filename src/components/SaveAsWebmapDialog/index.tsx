@@ -1,6 +1,6 @@
 import './style.scss';
-import * as React from 'react';
-import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
+import React from 'react';
+// import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import classnames from 'classnames';
 import config from './config';
 
@@ -8,7 +8,7 @@ import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import createWebmap from './createWebmap';
 
 interface IProps {
-    isVisible: boolean;
+    // isVisible?: boolean;
     waybackItems: Array<IWaybackItem>;
     rNum4SelectedWaybackItems: Array<number>;
     userSession: IUserSession;
@@ -247,21 +247,8 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         );
     }
 
-    toggleDialog() {
-        const { isVisible } = this.props;
-
-        if (isVisible) {
-            calcite.bus.emit('modal:open', { id: config['modal-id'] });
-        } else {
-            calcite.bus.emit('modal:close');
-        }
-    }
-
     componentDidUpdate(prevPros: IProps) {
-        if (prevPros.isVisible !== this.props.isVisible) {
-            this.toggleDialog();
-        }
-
+        // TODO: this logic is broken after wrapping this component in the container component
         if (
             prevPros.rNum4SelectedWaybackItems !==
             this.props.rNum4SelectedWaybackItems
@@ -271,12 +258,9 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidMount() {
-        calcite.modal();
-    }
-
     render() {
         const { onClose } = this.props;
+        
         const { isWebmapReady } = this.state;
 
         const editDialogContent = !isWebmapReady ? this.getEditDialog() : null;
@@ -286,38 +270,35 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             : null;
 
         return (
-            <div className="save-as-webmap-dialog-container">
+            <div
+                className="modal-overlay customized-modal is-active"
+            >
                 <div
-                    className="js-modal modal-overlay customized-modal"
-                    data-modal={config['modal-id']}
+                    className="modal-content column-6"
+                    role="dialog"
+                    aria-labelledby="modal"
                 >
-                    <div
-                        className="modal-content column-6"
-                        role="dialog"
-                        aria-labelledby="modal"
-                    >
-                        <div className="trailer-0 text-right">
-                            <span
-                                className="cursor-pointer"
-                                aria-label="close-modal"
-                                onClick={onClose.bind(this, false)}
+                    <div className="trailer-0 text-right">
+                        <span
+                            className="cursor-pointer"
+                            aria-label="close-modal"
+                            onClick={onClose.bind(this, false)}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="21"
+                                height="21"
+                                viewBox="0 0 32 32"
+                                className="svg-icon"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="21"
-                                    height="21"
-                                    viewBox="0 0 32 32"
-                                    className="svg-icon"
-                                >
-                                    <path d="M18.404 16l9.9 9.9-2.404 2.404-9.9-9.9-9.9 9.9L3.696 25.9l9.9-9.9-9.9-9.898L6.1 3.698l9.9 9.899 9.9-9.9 2.404 2.406-9.9 9.898z" />
-                                </svg>
-                            </span>
-                        </div>
-
-                        {editDialogContent}
-
-                        {openWebmapContent}
+                                <path d="M18.404 16l9.9 9.9-2.404 2.404-9.9-9.9-9.9 9.9L3.696 25.9l9.9-9.9-9.9-9.898L6.1 3.698l9.9 9.899 9.9-9.9 2.404 2.406-9.9 9.898z" />
+                            </svg>
+                        </span>
                     </div>
+
+                    {editDialogContent}
+
+                    {openWebmapContent}
                 </div>
             </div>
         );

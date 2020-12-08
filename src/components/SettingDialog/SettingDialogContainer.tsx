@@ -25,6 +25,8 @@ import {
 
 const SettingDialogContainer = () => {
 
+    const dispatch = useDispatch();
+
     const {
         userSession,
         oauthUtils
@@ -33,8 +35,6 @@ const SettingDialogContainer = () => {
     const mapExtent = useSelector(mapExtentSelector);
 
     const isOpen = useSelector(isSettingModalOpenSelector);
-
-    const dispatch = useDispatch();
 
     const onCloseHandler = ()=>{
         dispatch(isSettingModalOpenToggled())

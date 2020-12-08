@@ -8,7 +8,7 @@ import {
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
 export type UIState = {
-    isSaveAsWebmapDialogVisible: boolean;
+    isSaveAsWebmapDialogOpen: boolean;
     shouldOnlyShowItemsWithLocalChange: boolean;
     shouldShowPreviewItemTitle: boolean;
     isGutterHide: boolean;
@@ -19,7 +19,7 @@ export type UIState = {
 };
 
 export const initialUIState = {
-    isSaveAsWebmapDialogVisible: false,
+    isSaveAsWebmapDialogOpen: false,
     shouldOnlyShowItemsWithLocalChange: false,
     shouldShowPreviewItemTitle: false,
     isGutterHide: false,
@@ -33,8 +33,8 @@ const slice = createSlice({
     name: 'UI',
     initialState: initialUIState,
     reducers: {
-        isSaveAsWebmapDialogVisibleToggled: (state) => {
-            state.isSaveAsWebmapDialogVisible = !state.isSaveAsWebmapDialogVisible;
+        isSaveAsWebmapDialogOpenToggled: (state) => {
+            state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
         },
         shouldOnlyShowItemsWithLocalChangeToggled: (state, action:PayloadAction<boolean>) => {
             const newVal =  typeof action.payload === 'boolean' 
@@ -67,7 +67,7 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const { 
-    isSaveAsWebmapDialogVisibleToggled,
+    isSaveAsWebmapDialogOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
     shouldShowPreviewItemTitleToggled,
     isGutterHideToggled,
@@ -77,9 +77,9 @@ export const {
     isSettingModalOpenToggled
 } = slice.actions;
 
-export const isSaveAsWebmapDialogVisibleSelector = createSelector(
-    (state: RootState) => state.UI.isSaveAsWebmapDialogVisible,
-    (isSaveAsWebmapDialogVisible) => isSaveAsWebmapDialogVisible
+export const isSaveAsWebmapDialogOpenSelector = createSelector(
+    (state: RootState) => state.UI.isSaveAsWebmapDialogOpen,
+    (isSaveAsWebmapDialogOpen) => isSaveAsWebmapDialogOpen
 );
 
 export const shouldOnlyShowItemsWithLocalChangeSelector = createSelector(

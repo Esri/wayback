@@ -22,8 +22,8 @@ import Map from '../Map';
 import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
 import ListView from '../ListView';
 import MetadataPopUp from '../PopUp';
-import SaveAsWebmapBtn from '../SaveAsWebmapBtn';
-import SaveAsWebMapDialog from '../SaveAsWebmapDialog';
+import SaveAsWebmapBtn from '../SaveAsWebmapBtn/SaveAsWebmapBtnContainer';
+import SaveAsWebMapDialog from '../SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
 import CheckboxToggle from '../CheckboxToggle';
 // import BarChart from '../BarChart';
 import BarChart from '../BarChart/BarChartContainer';
@@ -153,7 +153,7 @@ class App extends React.PureComponent<IProps, IState> {
         );
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
-        this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
+        // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
         this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
     }
 
@@ -399,15 +399,15 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleSignInBtnOnClick(shouldSignIn?: boolean) {
-        const { oauthUtils } = this;
+    // toggleSignInBtnOnClick(shouldSignIn?: boolean) {
+    //     const { oauthUtils } = this;
 
-        if (shouldSignIn) {
-            oauthUtils.sigIn();
-        } else {
-            oauthUtils.signOut();
-        }
-    }
+    //     if (shouldSignIn) {
+    //         oauthUtils.sigIn();
+    //     } else {
+    //         oauthUtils.signOut();
+    //     }
+    // }
 
     updateUrlSearchParams() {
         const {
@@ -621,12 +621,14 @@ class App extends React.PureComponent<IProps, IState> {
                 <Gutter
                     // settingsBtnDisabled={isSwipeWidgetOpen}
                 >
-                    <SaveAsWebmapBtn
+                    {/* <SaveAsWebmapBtn
                         selectedWaybackItems={rNum4SelectedWaybackItems}
                         disabled={isSwipeWidgetOpen}
                         onClick={this.toggleSaveAsWebmapDialog}
                         clearAll={this.unselectAllWaybackItems}
-                    />
+                    /> */}
+
+                    <SaveAsWebmapBtn />
 
                     {
                         !isMobile ? (
@@ -795,14 +797,14 @@ class App extends React.PureComponent<IProps, IState> {
                 </div>
 
 
-                <SaveAsWebMapDialog
+                {/* <SaveAsWebMapDialog
                     waybackItems={waybackItems}
                     rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
                     userSession={userSession}
                     isVisible={isSaveAsWebmapDialogVisible}
                     mapExtent={mapExtent}
                     onClose={this.toggleSaveAsWebmapDialog}
-                />
+                /> */}
 
                 {/* <SettingDialog
                     mapExtent={mapExtent}
@@ -812,7 +814,9 @@ class App extends React.PureComponent<IProps, IState> {
                         this.toggleShouldOnlyShowItemsWithLocalChange
                     }
                 /> */}
-                
+
+                <SaveAsWebMapDialog />
+
                 <SettingDialog />
 
                 <ShareDialog />
