@@ -36,7 +36,7 @@ import SettingDialog from '../SettingDialog/SettingDialogContainer';
 import Gutter from '../Gutter/GutterContainer';
 import ShareDialog from '../ShareDialog/ShareDialogContainer';
 import SwipeWidget from '../SwipeWidget/SwipeWidget';
-import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtn';
+import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtnContainer';
 import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
 import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTask';
 
@@ -630,7 +630,9 @@ class App extends React.PureComponent<IProps, IState> {
 
                     <SaveAsWebmapBtn />
 
-                    {
+                    <SwipeWidgetToggleBtn />
+                    
+                    {/* {
                         !isMobile ? (
                             <SwipeWidgetToggleBtn 
                                 isOpen={isSwipeWidgetOpen}
@@ -638,7 +640,7 @@ class App extends React.PureComponent<IProps, IState> {
                                 onClickHandler={this.toggleSwipeWidget}
                             />
                         ) : null
-                    }
+                    } */}
 
                 </Gutter>
 
