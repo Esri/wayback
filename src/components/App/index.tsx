@@ -20,7 +20,7 @@ import {
 
 import Map from '../Map';
 import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
-import ListView from '../ListView';
+import ListView from '../ListView/ListViewContainer';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn/SaveAsWebmapBtnContainer';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
@@ -539,7 +539,7 @@ class App extends React.PureComponent<IProps, IState> {
             activeWaybackItem && !isSideBarHide ? (
                 <div className="y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy">
                     <div className="content-wrap">
-                        <ListView
+                        {/* <ListView
                             isMobile={isMobile}
                             waybackItems={waybackItems}
                             activeWaybackItem={activeWaybackItem}
@@ -556,7 +556,8 @@ class App extends React.PureComponent<IProps, IState> {
                             onMouseEnter={this.setPreviewWaybackItem}
                             onMouseOut={this.setPreviewWaybackItem}
                             toggleSelect={this.toggleSelectWaybackItem}
-                        />
+                        /> */}
+                        <ListView />
                     </div>
                 </div>
             ) : null;
@@ -631,7 +632,7 @@ class App extends React.PureComponent<IProps, IState> {
                     <SaveAsWebmapBtn />
 
                     <SwipeWidgetToggleBtn />
-                    
+
                     {/* {
                         !isMobile ? (
                             <SwipeWidgetToggleBtn 

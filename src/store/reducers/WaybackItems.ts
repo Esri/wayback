@@ -93,6 +93,21 @@ export const {
 
 let delay4SetPreviewWaybackItem:NodeJS.Timeout;
 
+export const toggleSelectWaybackItem = (releaseNumber: number)=>(
+    dispatch: StoreDispatch, 
+    getState: StoreGetState
+)=>{
+    const { 
+        releaseNum4SelectedItems 
+    } = getState().WaybackItems;
+
+    const isSelected = releaseNum4SelectedItems.indexOf(releaseNumber) > -1;
+
+    isSelected 
+        ? dispatch(releaseNum4SelectedItemsRemoved(releaseNumber))
+        : dispatch(releaseNum4SelectedItemsAdded(releaseNumber));
+}
+
 export const setPreviewWaybackItem = (
     releaseNumber?:number,
     shouldShowPreviewItemTitle = false

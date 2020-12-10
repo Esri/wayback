@@ -6,12 +6,17 @@ import { getServiceUrl } from '../utils/Tier';
 import {
     getCustomPortalUrl,
 } from '../utils/LocalStorage';
+import {
+    miscFns
+} from 'helper-toolkit-ts';
+
 import config from '../app-config';
 
 type AppContextValue = {
     waybackManager: WaybackManager;
     oauthUtils: OAuthUtils;
-    userSession: IUserSession
+    userSession: IUserSession;
+    isMobile: boolean;
 };
 
 type AppContextProviderProps = {
@@ -38,7 +43,8 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
         const contextValue: AppContextValue = {
             oauthUtils,
             userSession,
-            waybackManager
+            waybackManager,
+            isMobile: miscFns.isMobileDevice()
         };
 
         setValue(contextValue);
