@@ -18,7 +18,8 @@ import {
     getShouldOpenSaveWebMapDialog,
 } from '../../utils/LocalStorage';
 
-import Map from '../Map';
+// import Map from '../Map';
+import MapView from '../MapView/MapViewConatiner';
 import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
 import ListView from '../ListView/ListViewContainer';
 import MetadataPopUp from '../PopUp';
@@ -651,9 +652,17 @@ class App extends React.PureComponent<IProps, IState> {
                     className={classnames('map-container', {
                         'is-swipe-layer-selectors-open': isSwipeWidgetOpen
                     })}
+
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        bottom: 0,
+                        right: 0,
+                        left: 350
+                    }}
                 >
-  
-                    <Map
+                    <MapView />
+                    {/* <Map
                         defaultExtent={
                             defaultExtentFromUrl || defaultExtentFromLocalStorage
                         }
@@ -751,7 +760,7 @@ class App extends React.PureComponent<IProps, IState> {
                             ) : <></>
                         }
 
-                    </Map>
+                    </Map> */}
 
                     { 
                         isSwipeWidgetOpen && !isMobile ? (
