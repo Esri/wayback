@@ -17,7 +17,7 @@ import {
 import {
     activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
-    previewWaybackItemSelector
+    // previewWaybackItemSelector
 } from '../../store/reducers/WaybackItems';
 
 import MapView from './MapView';
@@ -26,6 +26,7 @@ import SearchWidget from '../SearchWidget/SearchWidget';
 import WaybackLayer from '../WaybackLayer/WaybackLayer';
 import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer';
 import MetadataPopup from '../PopUp/MetadataPopupContainer';
+import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTaskContainer';
 
 import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
@@ -90,6 +91,8 @@ const MapViewConatiner = () => {
             <TilePreviewWindow />
 
             <MetadataPopup />
+
+            <MetadataQueryTask />
 
         </MapView>
     )

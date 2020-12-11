@@ -53,14 +53,16 @@ export const isSwipeWidgetOpenSelector = createSelector(
     (isSwipeWidgetOpen) => isSwipeWidgetOpen
 );
 
-export const releaseNum4LeadingLayerSelector = createSelector(
+export const swipeWidgetLeadingLayerSelector = createSelector(
+    (state: RootState) => state.WaybackItems.byReleaseNumber,
     (state: RootState) => state.SwipeView.releaseNum4LeadingLayer,
-    (releaseNum4LeadingLayer) => releaseNum4LeadingLayer
+    (byReleaseNumber, releaseNum4LeadingLayer) => byReleaseNumber[releaseNum4LeadingLayer]
 );
 
-export const releaseNum4TrailingLayerSelector = createSelector(
+export const swipeWidgetTrailingLayerSelector = createSelector(
+    (state: RootState) => state.WaybackItems.byReleaseNumber,
     (state: RootState) => state.SwipeView.releaseNum4TrailingLayer,
-    (releaseNum4TrailingLayer) => releaseNum4TrailingLayer
+    (byReleaseNumber, releaseNum4TrailingLayer) => byReleaseNumber[releaseNum4TrailingLayer]
 );
 
 export const swipePositionSelector = createSelector(
