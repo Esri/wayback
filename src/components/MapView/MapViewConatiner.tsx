@@ -16,13 +16,15 @@ import {
 
 import {
     activeWaybackItemSelector,
-    releaseNum4ItemsWithLocalChangesUpdated
+    releaseNum4ItemsWithLocalChangesUpdated,
+    previewWaybackItemSelector
 } from '../../store/reducers/WaybackItems';
 
 import MapView from './MapView';
 import ReferenceLayer from '../ReferenceLayer/ReferenceLayer';
 import SearchWidget from '../SearchWidget/SearchWidget';
 import WaybackLayer from '../WaybackLayer/WaybackLayer';
+import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer'
 
 import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
@@ -83,6 +85,8 @@ const MapViewConatiner = () => {
             <SearchWidget 
                 position={'top-left'}
             />
+
+            <TilePreviewWindow />
 
         </MapView>
     )

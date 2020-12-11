@@ -202,4 +202,16 @@ export const releaseNum4SelectedItemsSelector = createSelector(
     (releaseNum4SelectedItems) => releaseNum4SelectedItems
 )
 
+export const previewWaybackItemSelector = createSelector(
+    (state: RootState) => state.WaybackItems.byReleaseNumber,
+    (state: RootState) => state.WaybackItems.releaseNum4PreviewWaybackItem,
+    (byReleaseNumber, releaseNum4PreviewWaybackItem) => byReleaseNumber[releaseNum4PreviewWaybackItem]
+)
+
+export const releaseNum4AlternativePreviewWaybackItemSelector = createSelector(
+    (state: RootState) => state.WaybackItems.releaseNum4AlternativePreviewWaybackItem,
+    (releaseNum4AlternativePreviewWaybackItem) => releaseNum4AlternativePreviewWaybackItem
+)
+
+
 export default reducer;
