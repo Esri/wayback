@@ -14,7 +14,7 @@ import {
     activeWaybackItemSelector,
     allWaybackItemsSelector,
     setPreviewWaybackItem,
-    releaseNum4ActiveWaybackItemUpdated,
+    setActiveWaybackItem,
     toggleSelectWaybackItem
 } from '../../store/reducers/WaybackItems';
 
@@ -55,7 +55,7 @@ const ListViewContainer = () => {
                 rNum4WaybackItemsWithLocalChanges
             }
             onClick={(releaseNum:number)=>{
-                dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum))
+                dispatch(setActiveWaybackItem(releaseNum))
             }}
             onMouseEnter={(releaseNum:number)=>{
                 dispatch(setPreviewWaybackItem(releaseNum))

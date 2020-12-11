@@ -11,7 +11,7 @@ import {
     allWaybackItemsSelector,
     activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesSelector,
-    releaseNum4ActiveWaybackItemUpdated,
+    setActiveWaybackItem,
     setPreviewWaybackItem
 } from '../../store/reducers/WaybackItems';
 
@@ -36,7 +36,7 @@ const BarChartContainer:React.FC = () => {
     const shouldOnlyShowItemsWithLocalChange: boolean = useSelector(shouldOnlyShowItemsWithLocalChangeSelector);
 
     const onClickHandler = (releaseNum: number)=>{
-        dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum));
+        dispatch(setActiveWaybackItem(releaseNum));
     }
 
     const onMouseEnterHandler = (        

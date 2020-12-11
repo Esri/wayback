@@ -25,7 +25,7 @@ import ListView from '../ListView/ListViewContainer';
 import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn/SaveAsWebmapBtnContainer';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
-import CheckboxToggle from '../CheckboxToggle';
+import ShowLocalChangesCheckboxToggle from '../ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
 // import BarChart from '../BarChart';
 import BarChart from '../BarChart/BarChartContainer';
 import Title4ActiveItem from '../Title4ActiveItem';
@@ -140,15 +140,15 @@ class App extends React.PureComponent<IProps, IState> {
             // currentUrl: location.href,
         };
 
-        this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
-        this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
-        this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
-        this.queryLocalChanges = this.queryLocalChanges.bind(this);
+        // this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
+        // this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
+        // this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
+        // this.queryLocalChanges = this.queryLocalChanges.bind(this);
         this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(
             this
         );
-        this.setMapExtent = this.setMapExtent.bind(this);
+        // this.setMapExtent = this.setMapExtent.bind(this);
         this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(
             this
         );
@@ -194,124 +194,124 @@ class App extends React.PureComponent<IProps, IState> {
         );
     }
 
-    setActiveWaybackItem(releaseNum: number) {
-        const activeWaybackItem = this.getWaybackItemByReleaseNumber(
-            releaseNum
-        );
+    // setActiveWaybackItem(releaseNum: number) {
+    //     const activeWaybackItem = this.getWaybackItemByReleaseNumber(
+    //         releaseNum
+    //     );
 
-        this.setState({
-            activeWaybackItem,
-            swipeWidgetLeadingLayer: activeWaybackItem,
-            // reset metadata query result when active wayback item changes
-            metadataQueryResult: null
-        });
-    }
+    //     this.setState({
+    //         activeWaybackItem,
+    //         swipeWidgetLeadingLayer: activeWaybackItem,
+    //         // reset metadata query result when active wayback item changes
+    //         metadataQueryResult: null
+    //     });
+    // }
 
-    setPreviewWaybackItem(
-        releaseNum?: number,
-        shouldShowPreviewItemTitle?: boolean
-    ) {
-        const { mapExtent } = this.state;
-        const { isMobile } = this.props;
+    // setPreviewWaybackItem(
+    //     releaseNum?: number,
+    //     shouldShowPreviewItemTitle?: boolean
+    // ) {
+    //     const { mapExtent } = this.state;
+    //     const { isMobile } = this.props;
 
-        if (mapExtent && !isMobile) {
-            clearTimeout(this.delay4TogglePreviewWaybackItem);
+    //     if (mapExtent && !isMobile) {
+    //         clearTimeout(this.delay4TogglePreviewWaybackItem);
 
-            this.delay4TogglePreviewWaybackItem = global.setTimeout(() => {
-                const previewWaybackItem = releaseNum
-                    ? this.getWaybackItemByReleaseNumber(releaseNum)
-                    : null;
+    //         this.delay4TogglePreviewWaybackItem = global.setTimeout(() => {
+    //             const previewWaybackItem = releaseNum
+    //                 ? this.getWaybackItemByReleaseNumber(releaseNum)
+    //                 : null;
 
-                const alternativeRNum4RreviewWaybackItem = releaseNum
-                    ? this.getAlternativeReleaseNumber(releaseNum)
-                    : null;
+    //             const alternativeRNum4RreviewWaybackItem = releaseNum
+    //                 ? this.getAlternativeReleaseNumber(releaseNum)
+    //                 : null;
 
-                shouldShowPreviewItemTitle =
-                    shouldShowPreviewItemTitle || false;
+    //             shouldShowPreviewItemTitle =
+    //                 shouldShowPreviewItemTitle || false;
 
-                this.setState({
-                    previewWaybackItem,
-                    shouldShowPreviewItemTitle,
-                    alternativeRNum4RreviewWaybackItem,
-                });
-            }, 200);
-        }
-    }
+    //             this.setState({
+    //                 previewWaybackItem,
+    //                 shouldShowPreviewItemTitle,
+    //                 alternativeRNum4RreviewWaybackItem,
+    //             });
+    //         }, 200);
+    //     }
+    // }
 
-    // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead
-    // therefore we need to find the alternative release number to make sure we have the tile image to display in the preview window for each release
-    getAlternativeReleaseNumber(rNum: number) {
-        const { waybackItems, rNum4WaybackItemsWithLocalChanges } = this.state;
+    // // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead
+    // // therefore we need to find the alternative release number to make sure we have the tile image to display in the preview window for each release
+    // getAlternativeReleaseNumber(rNum: number) {
+    //     const { waybackItems, rNum4WaybackItemsWithLocalChanges } = this.state;
 
-        if (rNum4WaybackItemsWithLocalChanges.indexOf(rNum) > -1) {
-            return rNum;
-        }
+    //     if (rNum4WaybackItemsWithLocalChanges.indexOf(rNum) > -1) {
+    //         return rNum;
+    //     }
 
-        // getting a list of release numbers ordered by release dates (desc) that only includes release has changes for the given area and the input release number,
-        // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
-        const rNums = waybackItems
-            .filter((d) => {
-                const hasLocalChange =
-                    rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) >
-                    -1;
-                return hasLocalChange || d.releaseNum === rNum;
-            })
-            .map((d) => d.releaseNum);
+    //     // getting a list of release numbers ordered by release dates (desc) that only includes release has changes for the given area and the input release number,
+    //     // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
+    //     const rNums = waybackItems
+    //         .filter((d) => {
+    //             const hasLocalChange =
+    //                 rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) >
+    //                 -1;
+    //             return hasLocalChange || d.releaseNum === rNum;
+    //         })
+    //         .map((d) => d.releaseNum);
 
-        const indexOfInputRNum = rNums.indexOf(rNum);
+    //     const indexOfInputRNum = rNums.indexOf(rNum);
 
-        return rNums[indexOfInputRNum + 1] || rNum;
-    }
+    //     return rNums[indexOfInputRNum + 1] || rNum;
+    // }
 
-    setRNum4WaybackItemsWithLocalChanges(
-        rNum4WaybackItemsWithLocalChanges?: number[]
-    ) {
-        this.setState({
-            rNum4WaybackItemsWithLocalChanges:
-                rNum4WaybackItemsWithLocalChanges || [],
-        });
-    }
+    // setRNum4WaybackItemsWithLocalChanges(
+    //     rNum4WaybackItemsWithLocalChanges?: number[]
+    // ) {
+    //     this.setState({
+    //         rNum4WaybackItemsWithLocalChanges:
+    //             rNum4WaybackItemsWithLocalChanges || [],
+    //     });
+    // }
 
-    // get list of wayback items that do provide updated imagery for the given location
-    async queryLocalChanges(centerPointInfo: IMapPointInfo) {
-        console.log('queryLocalChanges', centerPointInfo);
+    // // get list of wayback items that do provide updated imagery for the given location
+    // async queryLocalChanges(centerPointInfo: IMapPointInfo) {
+    //     console.log('queryLocalChanges', centerPointInfo);
 
-        const { waybackManager } = this.props;
+    //     const { waybackManager } = this.props;
 
-        try {
-            const rNums = await waybackManager.getLocalChanges(centerPointInfo);
-            // console.log(rNums);
+    //     try {
+    //         const rNums = await waybackManager.getLocalChanges(centerPointInfo);
+    //         // console.log(rNums);
 
-            this.setRNum4WaybackItemsWithLocalChanges(rNums);
-        } catch (err) {
-            console.error('failed to query local changes', err);
-            this.setRNum4WaybackItemsWithLocalChanges();
-        }
-    }
+    //         this.setRNum4WaybackItemsWithLocalChanges(rNums);
+    //     } catch (err) {
+    //         console.error('failed to query local changes', err);
+    //         this.setRNum4WaybackItemsWithLocalChanges();
+    //     }
+    // }
 
-    toggleSelectWaybackItem(releaseNum: number) {
-        // console.log(releaseNum);
+    // toggleSelectWaybackItem(releaseNum: number) {
+    //     // console.log(releaseNum);
 
-        const { rNum4SelectedWaybackItems } = this.state;
+    //     const { rNum4SelectedWaybackItems } = this.state;
 
-        const idxForItemToToggle = rNum4SelectedWaybackItems.indexOf(
-            releaseNum
-        );
+    //     const idxForItemToToggle = rNum4SelectedWaybackItems.indexOf(
+    //         releaseNum
+    //     );
 
-        const newListOfRNum = [...rNum4SelectedWaybackItems];
+    //     const newListOfRNum = [...rNum4SelectedWaybackItems];
 
-        if (idxForItemToToggle > -1) {
-            // item already in the list, let's remove it
-            newListOfRNum.splice(idxForItemToToggle, 1);
-        } else {
-            // item not found in the list, add it to the selectedWaybackItems
-            newListOfRNum.push(releaseNum);
-        }
+    //     if (idxForItemToToggle > -1) {
+    //         // item already in the list, let's remove it
+    //         newListOfRNum.splice(idxForItemToToggle, 1);
+    //     } else {
+    //         // item not found in the list, add it to the selectedWaybackItems
+    //         newListOfRNum.push(releaseNum);
+    //     }
 
-        this.setState({
-            rNum4SelectedWaybackItems: newListOfRNum,
-        });
-    }
+    //     this.setState({
+    //         rNum4SelectedWaybackItems: newListOfRNum,
+    //     });
+    // }
 
     unselectAllWaybackItems() {
         this.setState({
@@ -326,12 +326,12 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    setMapExtent(mapExtent: IExtentGeomety) {
-        // console.log('setMapExtent', mapExtent);
-        this.setState({
-            mapExtent,
-        });
-    }
+    // setMapExtent(mapExtent: IExtentGeomety) {
+    //     // console.log('setMapExtent', mapExtent);
+    //     this.setState({
+    //         mapExtent,
+    //     });
+    // }
 
     toggleShouldOnlyShowItemsWithLocalChange(val?: boolean) {
         const { shouldOnlyShowItemsWithLocalChange } = this.state;
@@ -529,10 +529,11 @@ class App extends React.PureComponent<IProps, IState> {
         const localChangeOnlyToggle =
             activeWaybackItem && !isSideBarHide ? (
                 <div className="content-wrap trailer-half">
-                    <CheckboxToggle
+                    {/* <CheckboxToggle
                         isActive={shouldOnlyShowItemsWithLocalChange}
                         onChange={this.toggleShouldOnlyShowItemsWithLocalChange}
-                    />
+                    /> */}
+                    <ShowLocalChangesCheckboxToggle />
                 </div>
             ) : null;
 

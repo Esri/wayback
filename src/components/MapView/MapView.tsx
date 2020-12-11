@@ -8,15 +8,19 @@ import IMap from 'esri/Map';
 import IWatchUtils from 'esri/core/watchUtils';
 import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import IExtent from 'esri/geometry/Extent';
-import { IExtentGeomety } from '../../types';
+import { IExtentGeomety, IMapPointInfo } from '../../types';
 
 interface Props {
     initialExtent: IExtentGeomety;
+    onUpdateEnd: (centerPoint: IMapPointInfo) => void;
+    onExtentChange: (extent: IExtentGeomety) => void;
     children?: React.ReactNode;
 }
 
 const MapView: React.FC<Props> = ({ 
     initialExtent,
+    onUpdateEnd,
+    onExtentChange,
     children 
 }: Props) => {
 
@@ -78,18 +82,19 @@ const MapView: React.FC<Props> = ({
                 mapView.extent
             );
 
-            console.log('mapview update ended', center);
+            // console.log('mapview update ended', center);
 
-            // const mapViewCenterPointInfo: IMapPointInfo = {
-            //     latitude: center.latitude,
-            //     longitude: center.longitude,
-            //     zoom: mapView.zoom,
-            //     geometry: center.toJSON(),
-            // };
+            const mapViewCenterPointInfo: IMapPointInfo = {
+                latitude: center.latitude,
+                longitude: center.longitude,
+                zoom: mapView.zoom,
+                geometry: center.toJSON(),
+            };
 
-            // onUpdateEnd(mapViewCenterPointInfo);
+            onUpdateEnd(mapViewCenterPointInfo);
 
-            // onExtentChange(extent.toJSON());
+            onExtentChange(extent.toJSON());
+
         } catch (err) {
             console.error(err);
         }

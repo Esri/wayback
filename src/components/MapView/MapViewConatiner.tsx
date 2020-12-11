@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+    useContext
+} from 'react';
 
 import {
     useSelector,
@@ -8,11 +10,13 @@ import {
 
 import {
     isReferenceLayerVisibleSelector,
-    mapExtentSelector
+    mapExtentSelector,
+    mapExtentUpdated
 } from '../../store/reducers/Map';
 
 import {
-    activeWaybackItemSelector
+    activeWaybackItemSelector,
+    releaseNum4ItemsWithLocalChangesUpdated
 } from '../../store/reducers/WaybackItems';
 
 import MapView from './MapView';
@@ -21,13 +25,18 @@ import SearchWidget from '../SearchWidget/SearchWidget';
 import WaybackLayer from '../WaybackLayer/WaybackLayer';
 
 import AppConfig from '../../app-config'
-import { IExtentGeomety } from '../../types';
+import { IExtentGeomety, IMapPointInfo } from '../../types';
 import { getDefaultExtent } from '../../utils/LocalStorage';
+import { AppContext } from '../../contexts/AppContextProvider';
 
 const MapViewConatiner = () => {
 
+    const dispatch = useDispatch();
+
+    const { waybackManager } = useContext(AppContext)
+
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
-    
+
     const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
 
     const mapExtentFromURL = useSelector(mapExtentSelector);
@@ -41,11 +50,27 @@ const MapViewConatiner = () => {
             defaultExtentFromLocalStorage || 
             AppConfig.defaultMapExtent 
         );
+    };
+
+    const queryVersionsWithLocalChanges = async(mapCenterPoint: IMapPointInfo)=>{
+        try {
+            const rNums = await waybackManager.getLocalChanges(mapCenterPoint);
+            // console.log(rNums);
+            dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
+        } catch (err) {
+            console.error('failed to query local changes', err);
+        }
+    };
+
+    const onExtentChange = (extent:IExtentGeomety)=>{
+        dispatch(mapExtentUpdated(extent));
     }
 
     return (
         <MapView
             initialExtent={getInitialExtent()}
+            onUpdateEnd={queryVersionsWithLocalChanges}
+            onExtentChange={onExtentChange}
         >
             <WaybackLayer 
                 activeWaybackItem={activeWaybackItem}

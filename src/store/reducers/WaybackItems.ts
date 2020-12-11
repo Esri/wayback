@@ -11,9 +11,17 @@ import { IWaybackItem } from '../../types';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-// import {
-//     shouldShowPreviewItemTitleToggled
-// } from './UI';
+import {
+    shouldShowPreviewItemTitleToggled
+} from './UI';
+
+import {
+    releaseNum4LeadingLayerUpdated
+} from './SwipeView';
+
+import {
+    metadataQueryResultUpdated
+} from './Map';
 
 export type WaybackItemsState = {
     byReleaseNumber: {
@@ -93,6 +101,17 @@ export const {
 
 let delay4SetPreviewWaybackItem:NodeJS.Timeout;
 
+export const setActiveWaybackItem = (releaseNumber: number)=>(
+    dispatch: StoreDispatch, 
+    getState: StoreGetState
+)=>{
+    batch(()=>{
+        dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNumber));
+        dispatch(releaseNum4LeadingLayerUpdated(releaseNumber));
+        dispatch(metadataQueryResultUpdated(null));
+    });
+}
+
 export const toggleSelectWaybackItem = (releaseNumber: number)=>(
     dispatch: StoreDispatch, 
     getState: StoreGetState
@@ -145,7 +164,7 @@ export const setPreviewWaybackItem = (
         batch(()=>{
             dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
             dispatch(releaseNum4AlternativePreviewWaybackItemUpdated(releaseNum4AlternativePreviewWaybackItem));
-            // dispatch(shouldShowPreviewItemTitleToggled(shouldShowPreviewItemTitle))
+            dispatch(shouldShowPreviewItemTitleToggled(shouldShowPreviewItemTitle))
         });
 
     }, 200);
