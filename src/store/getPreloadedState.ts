@@ -4,6 +4,7 @@ import { initialUIState, UIState } from '../store/reducers/UI';
 import { initialWaybackItemsState, WaybackItemsState } from '../store/reducers/WaybackItems';
 import { initialSwipeViewState, SwipeViewState } from '../store/reducers/SwipeView';
 import { ISearchParamData, IWaybackItem } from '../types';
+import { initialMapState, MapState } from './reducers/Map';
 
 const getPreloadedState4UI = (searchParams:ISearchParamData): UIState => {
     const {
@@ -18,7 +19,7 @@ const getPreloadedState4UI = (searchParams:ISearchParamData): UIState => {
     return state;
 };
 
-const getPreloadedState4WaybackItems = async(waybackItems:IWaybackItem[], searchParams:ISearchParamData): Promise<WaybackItemsState> => {
+const getPreloadedState4WaybackItems = (waybackItems:IWaybackItem[], searchParams:ISearchParamData): WaybackItemsState => {
 
     const {
         rNum4SelectedWaybackItems,
@@ -48,7 +49,7 @@ const getPreloadedState4WaybackItems = async(waybackItems:IWaybackItem[], search
     return state;
 };
 
-const getPreloadedState4SwipeView = async(searchParams:ISearchParamData): Promise<SwipeViewState> => {
+const getPreloadedState4SwipeView = (searchParams:ISearchParamData): SwipeViewState => {
 
     const {
         isSwipeWidgetOpen,
@@ -66,16 +67,32 @@ const getPreloadedState4SwipeView = async(searchParams:ISearchParamData): Promis
     return state;
 };
 
+const getPreloadedState4Map = (searchParams:ISearchParamData): MapState => {
+
+    const {
+        mapExtent
+    } = searchParams;
+
+    const state:MapState = {
+        ...initialMapState,
+        mapExtent
+    };
+
+    return state;
+};
+
 const getPreloadedState = async(waybackItems:IWaybackItem[], searchParams:ISearchParamData): Promise<PartialRootState> => {
 
     const uiState:UIState = getPreloadedState4UI(searchParams);
-    const waybackItemsState:WaybackItemsState = await getPreloadedState4WaybackItems(waybackItems, searchParams);
-    const swipeViewState:SwipeViewState = await getPreloadedState4SwipeView(searchParams)
+    const waybackItemsState:WaybackItemsState = getPreloadedState4WaybackItems(waybackItems, searchParams);
+    const swipeViewState:SwipeViewState = getPreloadedState4SwipeView(searchParams);
+    const mapState:MapState = getPreloadedState4Map(searchParams);
 
     const preloadedState = {
         UI: uiState,
         WaybackItems: waybackItemsState,
-        SwipeView: swipeViewState
+        SwipeView: swipeViewState,
+        Map: mapState
     } as PartialRootState;
 
     return preloadedState;

@@ -20,7 +20,7 @@ import {
 } from '../../store/reducers/Map';
 
 import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
-import MobileHide from '../UI/MobileHide';
+import MobileHide from '../Shared/MobileHide';
 
 const SwipeWidgetToggleBtnContainer = () => {
 

@@ -7,7 +7,8 @@ import {
 } from 'react-redux';
 
 import {
-    isReferenceLayerVisibleSelector
+    isReferenceLayerVisibleSelector,
+    mapExtentSelector
 } from '../../store/reducers/Map';
 
 import {
@@ -21,14 +22,25 @@ import WaybackLayer from '../WaybackLayer/WaybackLayer';
 
 import AppConfig from '../../app-config'
 import { IExtentGeomety } from '../../types';
+import { getDefaultExtent } from '../../utils/LocalStorage';
 
 const MapViewConatiner = () => {
 
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
+    
     const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
 
+    const mapExtentFromURL = useSelector(mapExtentSelector);
+
     const getInitialExtent = ():IExtentGeomety=>{
-        return AppConfig.defaultMapExtent
+
+        const defaultExtentFromLocalStorage = getDefaultExtent() //getDefaultExtent();
+
+        return (
+            mapExtentFromURL || 
+            defaultExtentFromLocalStorage || 
+            AppConfig.defaultMapExtent 
+        );
     }
 
     return (
