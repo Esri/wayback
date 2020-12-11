@@ -60,4 +60,14 @@ export const isReferenceLayerVisibleSelector = createSelector(
     isReferenceLayerVisible=>isReferenceLayerVisible
 )
 
+export const metadataQueryResultSelector = createSelector(
+    (state: RootState) => state.Map.metadataQueryResult,
+    metadataQueryResult=>metadataQueryResult
+)
+
+export const metadataPopupAnchorSelector = createSelector(
+    (state: RootState) => state.Map.metadataPopupAnchor,
+    metadataPopupAnchor=>metadataPopupAnchor
+)
+
 export default reducer;

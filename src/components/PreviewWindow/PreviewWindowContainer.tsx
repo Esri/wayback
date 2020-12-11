@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+    useContext
+} from 'react';
 
 import {
     useSelector,
@@ -14,6 +16,7 @@ import {
 import TilePreviewWindow from './index';
 
 import IMapView from 'esri/views/MapView';
+import { AppContext } from '../../contexts/AppContextProvider';
 
 type Props = {
     mapView?: IMapView;
@@ -23,11 +26,13 @@ const PreviewWindowContainer:React.FC<Props> = ({
     mapView
 }) => {
 
+    const { isMobile } = useContext(AppContext)
+
     const previewWaybackItem = useSelector(previewWaybackItemSelector);
 
     const releaseNum4AlternativePreviewWaybackItem = useSelector(releaseNum4AlternativePreviewWaybackItemSelector);
 
-    return (
+    return !isMobile ? (
         <TilePreviewWindow
             // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
             previewWaybackItem={previewWaybackItem}
@@ -36,7 +41,7 @@ const PreviewWindowContainer:React.FC<Props> = ({
             }
             mapView={mapView}
         />
-    )
+    ) : <></>
 }
 
 export default PreviewWindowContainer

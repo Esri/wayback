@@ -24,7 +24,8 @@ import MapView from './MapView';
 import ReferenceLayer from '../ReferenceLayer/ReferenceLayer';
 import SearchWidget from '../SearchWidget/SearchWidget';
 import WaybackLayer from '../WaybackLayer/WaybackLayer';
-import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer'
+import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer';
+import MetadataPopup from '../PopUp/MetadataPopupContainer';
 
 import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
@@ -87,6 +88,8 @@ const MapViewConatiner = () => {
             />
 
             <TilePreviewWindow />
+
+            <MetadataPopup />
 
         </MapView>
     )
