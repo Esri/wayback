@@ -17,7 +17,7 @@ const MobileHide:React.FC<Props> = ({
         <>
            { children } 
         </>
-    ) : null;
+    ) : <></>;
 }
 
-export default MobileHide
+export default MobileHide;

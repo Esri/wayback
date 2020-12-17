@@ -49,19 +49,20 @@ const getPreloadedState4WaybackItems = (waybackItems:IWaybackItem[], searchParam
     return state;
 };
 
-const getPreloadedState4SwipeView = (searchParams:ISearchParamData): SwipeViewState => {
+const getPreloadedState4SwipeView = (searchParams:ISearchParamData, waybackItems:IWaybackItem[]): SwipeViewState => {
 
     const {
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer,
-        rNum4SwipeWidgetTrailingLayer
+        rNum4SwipeWidgetTrailingLayer,
+        rNum4ActiveWaybackItem
     } = searchParams;
 
     const state:SwipeViewState = {
         ...initialSwipeViewState,
         isSwipeWidgetOpen,
-        releaseNum4LeadingLayer: rNum4SwipeWidgetLeadingLayer,
-        releaseNum4TrailingLayer: rNum4SwipeWidgetTrailingLayer
+        releaseNum4LeadingLayer: rNum4SwipeWidgetLeadingLayer || rNum4ActiveWaybackItem || waybackItems[0].releaseNum,
+        releaseNum4TrailingLayer: rNum4SwipeWidgetTrailingLayer || waybackItems[waybackItems.length - 1].releaseNum
     };
 
     return state;
@@ -85,7 +86,7 @@ const getPreloadedState = async(waybackItems:IWaybackItem[], searchParams:ISearc
 
     const uiState:UIState = getPreloadedState4UI(searchParams);
     const waybackItemsState:WaybackItemsState = getPreloadedState4WaybackItems(waybackItems, searchParams);
-    const swipeViewState:SwipeViewState = getPreloadedState4SwipeView(searchParams);
+    const swipeViewState:SwipeViewState = getPreloadedState4SwipeView(searchParams, waybackItems);
     const mapState:MapState = getPreloadedState4Map(searchParams);
 
     const preloadedState = {

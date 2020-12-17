@@ -27,6 +27,7 @@ import WaybackLayer from '../WaybackLayer/WaybackLayer';
 import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer';
 import MetadataPopup from '../PopUp/MetadataPopupContainer';
 import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTaskContainer';
+import SwipeWidget from '../SwipeWidget/SwipeWidgetContainer';
 
 import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
@@ -93,6 +94,8 @@ const MapViewConatiner = () => {
             <MetadataPopup />
 
             <MetadataQueryTask />
+
+            <SwipeWidget />
 
         </MapView>
     )

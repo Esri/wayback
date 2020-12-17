@@ -28,7 +28,7 @@ const SwipeWidget:React.FC<Props> = ({
     isOpen,
     mapView,
     positionOnChange,
-    onLoaded
+    // onLoaded
 }) => {
 
     const swipeWidgetRef = useRef<ISwipe>();
@@ -49,10 +49,17 @@ const SwipeWidget:React.FC<Props> = ({
                 show();
             } else {
 
+                const leadingLayer = await getWaybackLayer(waybackItem4LeadingLayer);
+                const trailingLayer = await getWaybackLayer(waybackItem4TrailingLayer);
+
+                layersRef.current = [leadingLayer, trailingLayer];
+
+                mapView.map.addMany(layersRef.current, 1);
+
                 const swipe = new Swipe({
                     view: mapView,
-                    leadingLayers: [],
-                    trailingLayers: [],
+                    leadingLayers: [leadingLayer],
+                    trailingLayers: [trailingLayer],
                     direction: "horizontal",
                     position: 50 // position set to middle of the view (50%)
                 });
@@ -63,7 +70,7 @@ const SwipeWidget:React.FC<Props> = ({
 
                 addEventHandlers(swipe);
 
-                onLoaded();
+                // onLoaded();
             }
 
         } catch(err){

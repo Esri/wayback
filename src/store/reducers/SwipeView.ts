@@ -45,7 +45,8 @@ const { reducer } = slice;
 export const { 
     isSwipeWidgetOpenToggled,
     releaseNum4LeadingLayerUpdated,
-    releaseNum4TrailingLayerUpdated
+    releaseNum4TrailingLayerUpdated,
+    swipePositionUpdated
 } = slice.actions;
 
 export const isSwipeWidgetOpenSelector = createSelector(
