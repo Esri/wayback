@@ -19,7 +19,8 @@ import {
 } from '../../utils/LocalStorage';
 
 // import Map from '../Map';
-import MapView from '../MapView/MapViewConatiner';
+// import MapView from '../MapView/MapViewConatiner';
+import MapViewWrapper from '../MapViewWrapper/MapViewWrapper';
 import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
 import ListView from '../ListView/ListViewContainer';
 import MetadataPopUp from '../PopUp';
@@ -144,7 +145,7 @@ class App extends React.PureComponent<IProps, IState> {
         // this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
         // this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         // this.queryLocalChanges = this.queryLocalChanges.bind(this);
-        this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
+        // this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
         this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(
             this
         );
@@ -155,7 +156,7 @@ class App extends React.PureComponent<IProps, IState> {
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
         // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
-        this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
+        // this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
     }
 
     async setWaybackItems(waybackItems: Array<IWaybackItem>) {
@@ -313,11 +314,11 @@ class App extends React.PureComponent<IProps, IState> {
     //     });
     // }
 
-    unselectAllWaybackItems() {
-        this.setState({
-            rNum4SelectedWaybackItems: [],
-        });
-    }
+    // unselectAllWaybackItems() {
+    //     this.setState({
+    //         rNum4SelectedWaybackItems: [],
+    //     });
+    // }
 
     setUserSession(userSession: IUserSession) {
         // console.log('setUserSession', userSession);
@@ -390,15 +391,15 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
-    toggleSwipeWidget(){
+    // toggleSwipeWidget(){
 
-        const { isSwipeWidgetOpen } = this.state;
+    //     const { isSwipeWidgetOpen } = this.state;
 
-        this.setState({
-            isSwipeWidgetOpen: !isSwipeWidgetOpen,
-            metadataQueryResult: null
-        });
-    }
+    //     this.setState({
+    //         isSwipeWidgetOpen: !isSwipeWidgetOpen,
+    //         metadataQueryResult: null
+    //     });
+    // }
 
     // toggleSignInBtnOnClick(shouldSignIn?: boolean) {
     //     const { oauthUtils } = this;
@@ -455,13 +456,13 @@ class App extends React.PureComponent<IProps, IState> {
         const { isMobile } = this.props;
 
         const {
-            waybackItems,
+            // waybackItems,
             activeWaybackItem,
             previewWaybackItem,
             shouldShowPreviewItemTitle,
-            shouldOnlyShowItemsWithLocalChange,
-            rNum4SelectedWaybackItems,
-            rNum4WaybackItemsWithLocalChanges,
+            // shouldOnlyShowItemsWithLocalChange,
+            // rNum4SelectedWaybackItems,
+            // rNum4WaybackItemsWithLocalChanges,
             isSideBarHide,
             isSwipeWidgetOpen
         } = this.state;
@@ -583,18 +584,18 @@ class App extends React.PureComponent<IProps, IState> {
         const { data2InitApp, waybackManager, isMobile } = this.props;
 
         const {
-            waybackItems,
-            activeWaybackItem,
-            previewWaybackItem,
-            rNum4SelectedWaybackItems,
-            rNum4WaybackItemsWithLocalChanges,
-            isSaveAsWebmapDialogVisible,
-            userSession,
-            mapExtent,
-            alternativeRNum4RreviewWaybackItem,
+            // waybackItems,
+            // activeWaybackItem,
+            // previewWaybackItem,
+            // rNum4SelectedWaybackItems,
+            // rNum4WaybackItemsWithLocalChanges,
+            // isSaveAsWebmapDialogVisible,
+            // userSession,
+            // mapExtent,
+            // alternativeRNum4RreviewWaybackItem,
             isGutterHide,
             // currentUrl,
-            isSwipeWidgetOpen
+            // isSwipeWidgetOpen
         } = this.state;
 
         const defaultExtentFromUrl =
@@ -649,7 +650,10 @@ class App extends React.PureComponent<IProps, IState> {
 
                 {sidebar}
 
-                <div 
+                <MapViewWrapper />
+
+
+                {/* <div 
                     className={classnames('map-container', {
                         'is-swipe-layer-selectors-open': isSwipeWidgetOpen
                     })}
@@ -662,8 +666,8 @@ class App extends React.PureComponent<IProps, IState> {
                         left: 350
                     }}
                 >
-                    <MapView />
-                    {/* <Map
+
+                    <Map
                         defaultExtent={
                             defaultExtentFromUrl || defaultExtentFromLocalStorage
                         }
@@ -761,7 +765,7 @@ class App extends React.PureComponent<IProps, IState> {
                             ) : <></>
                         }
 
-                    </Map> */}
+                    </Map>
 
                     { 
                         isSwipeWidgetOpen && !isMobile ? (
@@ -807,7 +811,7 @@ class App extends React.PureComponent<IProps, IState> {
                         ) : null
                     }
 
-                </div>
+                </div> */}
 
 
                 {/* <SaveAsWebMapDialog

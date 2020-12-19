@@ -58,36 +58,6 @@ const SwipeWidgetContainer:React.FC<Props> = ({
                 waybackItem4TrailingLayer={waybackItem4TrailingLayer}
                 isOpen={isOpen}
                 positionOnChange={positionOnChangeHandler}
-                onLoaded={()=>{
-                    // const { 
-                    //     swipeWidgetLeadingLayer, 
-                    //     swipeWidgetTrailingLayer, 
-                    //     activeWaybackItem, 
-                    //     waybackItems 
-                    // } = this.state;
-
-                    // if(!swipeWidgetLeadingLayer){
-
-                    //     const waybackItems4SwipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
-                    //         ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
-                    //         : activeWaybackItem;
-
-                    //     this.setState({
-                    //         swipeWidgetLeadingLayer: waybackItems4SwipeWidgetLeadingLayer
-                    //     })
-                    // }
-
-                    // if(!swipeWidgetTrailingLayer){
-
-                    //     const waybackItems4SwipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
-                    //         ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
-                    //         : waybackItems[waybackItems.length - 1];
-
-                    //     this.setState({
-                    //         swipeWidgetTrailingLayer: waybackItems4SwipeWidgetTrailingLayer
-                    //     })
-                    // }
-                }}
             />
         </MobileHide>
     )

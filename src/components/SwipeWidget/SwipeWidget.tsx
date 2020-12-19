@@ -17,7 +17,7 @@ type Props = {
     mapView?: IMapView;
 
     positionOnChange: (position:number)=>void;
-    onLoaded:()=>void;
+    // onLoaded:()=>void;
 }
 
 type SwipeWidgetLayer = 'leading' | 'trailing'

@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 export const SwipeWidgetLayerSelectorWidth = 210;
 
-type SwipeWidgetLayer = 'leading' | 'trailing'
+export type SwipeWidgetLayer = 'leading' | 'trailing'
 
 type Props = {
     targetLayerType: SwipeWidgetLayer;
