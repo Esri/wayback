@@ -23,6 +23,10 @@ import {
 import BarChart from './index';
 import { IWaybackItem } from '../../types';
 
+import {
+    MobileHide
+} from '../SharedUI'
+
 const BarChartContainer:React.FC = () => {
 
     const dispatch = useDispatch();
@@ -42,7 +46,7 @@ const BarChartContainer:React.FC = () => {
     const onMouseEnterHandler = (        
         releaseNum: number
     )=>{
-        dispatch(setPreviewWaybackItem(releaseNum));
+        dispatch(setPreviewWaybackItem(releaseNum, true));
     }
 
     const onMouseOutHandler = ()=>{
@@ -50,19 +54,21 @@ const BarChartContainer:React.FC = () => {
     }
 
     return (
-        <BarChart
-            waybackItems={waybackItems}
-            activeWaybackItem={activeWaybackItem}
-            rNum4WaybackItemsWithLocalChanges={
-                rNum4WaybackItemsWithLocalChanges
-            }
-            shouldOnlyShowItemsWithLocalChange={
-                shouldOnlyShowItemsWithLocalChange
-            }
-            onClick={onClickHandler}
-            onMouseEnter={onMouseEnterHandler}
-            onMouseOut={onMouseOutHandler}
-        />
+        <MobileHide>
+            <BarChart
+                waybackItems={waybackItems}
+                activeWaybackItem={activeWaybackItem}
+                rNum4WaybackItemsWithLocalChanges={
+                    rNum4WaybackItemsWithLocalChanges
+                }
+                shouldOnlyShowItemsWithLocalChange={
+                    shouldOnlyShowItemsWithLocalChange
+                }
+                onClick={onClickHandler}
+                onMouseEnter={onMouseEnterHandler}
+                onMouseOut={onMouseOutHandler}
+            />
+        </MobileHide>
     )
 }
 

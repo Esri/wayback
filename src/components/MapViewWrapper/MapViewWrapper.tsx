@@ -43,6 +43,9 @@ const MapViewWrapper = () => {
                 display: 'flex'
             }}
         >
+            <SwipeWidgetLayerSelector 
+                targetLayer='leading'
+            />
 
             <div 
                 style={{
@@ -51,17 +54,12 @@ const MapViewWrapper = () => {
                     flexShrink: 0
                 }}
             >
-                <SwipeWidgetLayerSelector 
-                    targetLayer='leading'
-                />
-
                 <MapView />
-
-                <SwipeWidgetLayerSelector 
-                    targetLayer='trailing'
-                />
             </div>
             
+            <SwipeWidgetLayerSelector 
+                targetLayer='trailing'
+            />
             
         </div>
     )

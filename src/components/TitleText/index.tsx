@@ -1,22 +1,22 @@
-import * as React from 'react';
+import React from 'react';
+
+import { 
+    MobileHide
+} from '../SharedUI'
 
 // interface IProps {}
 // interface IState {}
 
-class TitleText extends React.PureComponent {
-    // constructor(props: IProps) {
-    //     super(props);
-    // }
-
-    render() {
-        return (
-            <div className="app-title-text text-center">
+const TitleText = ()=> {
+    return (
+        <MobileHide>
+            <div className="text-center trailer-quarter">
                 <span className="font-size-2 avenir-light trailer-0">
                     World Imagery <span className="text-white">Wayback</span>
                 </span>
             </div>
-        );
-    }
+        </MobileHide>
+    );
 }
 
 export default TitleText;

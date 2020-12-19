@@ -132,7 +132,7 @@ const SwipeWidgetLayerSelector:React.FC<Props> = ({
     return (
         <div
             style={{
-                position: 'absolute',
+                // position: 'absolute',
                 height: '100%',
                 width: SwipeWidgetLayerSelectorWidth,
                 top: 0,

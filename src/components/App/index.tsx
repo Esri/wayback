@@ -21,26 +21,27 @@ import {
 // import Map from '../Map';
 // import MapView from '../MapView/MapViewConatiner';
 import MapViewWrapper from '../MapViewWrapper/MapViewWrapper';
+import Sidebar from '../Sidebar/SidebarContainer';
 import AboutThisApp from '../ModalAboutApp/AboutThisAppContainer';
-import ListView from '../ListView/ListViewContainer';
-import MetadataPopUp from '../PopUp';
+// import ListView from '../ListView/ListViewContainer';
+// import MetadataPopUp from '../PopUp';
 import SaveAsWebmapBtn from '../SaveAsWebmapBtn/SaveAsWebmapBtnContainer';
 import SaveAsWebMapDialog from '../SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
-import ShowLocalChangesCheckboxToggle from '../ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
+// import ShowLocalChangesCheckboxToggle from '../ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
 // import BarChart from '../BarChart';
-import BarChart from '../BarChart/BarChartContainer';
-import Title4ActiveItem from '../Title4ActiveItem';
-import TilePreviewWindow from '../PreviewWindow';
-import AppTitleText from '../TitleText';
+// import BarChart from '../BarChart/BarChartContainer';
+// import Title4ActiveItem from '../Title4ActiveItem';
+// import TilePreviewWindow from '../PreviewWindow';
+// import AppTitleText from '../TitleText';
 import MobileHeader from '../MobileHeader';
-import SidebarToggleBtn from '../SidebarToggleBtn';
+// import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog/SettingDialogContainer';
 import Gutter from '../Gutter/GutterContainer';
 import ShareDialog from '../ShareDialog/ShareDialogContainer';
-import SwipeWidget from '../SwipeWidget/SwipeWidget';
+// import SwipeWidget from '../SwipeWidget/SwipeWidget';
 import SwipeWidgetToggleBtn from '../SwipeWidgetToggleBtn/SwipeWidgetToggleBtnContainer';
-import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
-import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTask';
+// import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelector';
+// import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTask';
 
 import {
     IWaybackItem,
@@ -150,50 +151,50 @@ class App extends React.PureComponent<IProps, IState> {
             this
         );
         // this.setMapExtent = this.setMapExtent.bind(this);
-        this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(
-            this
-        );
+        // this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(
+        //     this
+        // );
         this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
-        this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
+        // this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
         // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
         // this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
     }
 
-    async setWaybackItems(waybackItems: Array<IWaybackItem>) {
-        // use the lookup table to quickly locate the wayback item from waybackItems by looking up the release number
-        const waybackItemsReleaseNum2IndexLookup = {};
+    // async setWaybackItems(waybackItems: Array<IWaybackItem>) {
+    //     // use the lookup table to quickly locate the wayback item from waybackItems by looking up the release number
+    //     const waybackItemsReleaseNum2IndexLookup = {};
 
-        const { data2InitApp } = this.props;
+    //     const { data2InitApp } = this.props;
 
-        waybackItems.forEach((d, i) => {
-            const key = d.releaseNum;
-            waybackItemsReleaseNum2IndexLookup[key] = i;
-        });
+    //     waybackItems.forEach((d, i) => {
+    //         const key = d.releaseNum;
+    //         waybackItemsReleaseNum2IndexLookup[key] = i;
+    //     });
 
-        // show the most recent release by default
-        const activeWaybackItem = data2InitApp && data2InitApp.rNum4ActiveWaybackItem 
-            ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4ActiveWaybackItem)[0]
-            : waybackItems[0];
+    //     // show the most recent release by default
+    //     const activeWaybackItem = data2InitApp && data2InitApp.rNum4ActiveWaybackItem 
+    //         ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4ActiveWaybackItem)[0]
+    //         : waybackItems[0];
         
-        // const swipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
-        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
-        //     : null;
+    //     // const swipeWidgetLeadingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetLeadingLayer
+    //     //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetLeadingLayer)[0]
+    //     //     : null;
 
-        // const swipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
-        //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
-        //     : null;
+    //     // const swipeWidgetTrailingLayer = data2InitApp && data2InitApp.rNum4SwipeWidgetTrailingLayer
+    //     //     ? waybackItems.filter(d=>d.releaseNum === data2InitApp.rNum4SwipeWidgetTrailingLayer)[0]
+    //     //     : null;
 
-        this.setState(
-            {
-                waybackItems,
-                waybackItemsReleaseNum2IndexLookup,
-                activeWaybackItem,
-            },
-            () => {
-                // console.log('waybackItems is ready', activeWaybackItem);
-            }
-        );
-    }
+    //     this.setState(
+    //         {
+    //             waybackItems,
+    //             waybackItemsReleaseNum2IndexLookup,
+    //             activeWaybackItem,
+    //         },
+    //         () => {
+    //             // console.log('waybackItems is ready', activeWaybackItem);
+    //         }
+    //     );
+    // }
 
     // setActiveWaybackItem(releaseNum: number) {
     //     const activeWaybackItem = this.getWaybackItemByReleaseNumber(
@@ -334,18 +335,18 @@ class App extends React.PureComponent<IProps, IState> {
     //     });
     // }
 
-    toggleShouldOnlyShowItemsWithLocalChange(val?: boolean) {
-        const { shouldOnlyShowItemsWithLocalChange } = this.state;
+    // toggleShouldOnlyShowItemsWithLocalChange(val?: boolean) {
+    //     const { shouldOnlyShowItemsWithLocalChange } = this.state;
 
-        const newVal =
-            typeof val === 'boolean'
-                ? val
-                : !shouldOnlyShowItemsWithLocalChange;
+    //     const newVal =
+    //         typeof val === 'boolean'
+    //             ? val
+    //             : !shouldOnlyShowItemsWithLocalChange;
 
-        this.setState({
-            shouldOnlyShowItemsWithLocalChange: newVal,
-        });
-    }
+    //     this.setState({
+    //         shouldOnlyShowItemsWithLocalChange: newVal,
+    //     });
+    // }
 
     toggleIsGutterHide() {
         const { isGutterHide } = this.state;
@@ -355,19 +356,19 @@ class App extends React.PureComponent<IProps, IState> {
         });
     }
 
-    toggleIsSideBarHide() {
-        const { isSideBarHide } = this.state;
+    // toggleIsSideBarHide() {
+    //     const { isSideBarHide } = this.state;
 
-        this.setState({
-            isSideBarHide: !isSideBarHide,
-        });
-    }
+    //     this.setState({
+    //         isSideBarHide: !isSideBarHide,
+    //     });
+    // }
 
-    getWaybackItemByReleaseNumber(releaseNum: number) {
-        const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
-        const index = waybackItemsReleaseNum2IndexLookup[releaseNum];
-        return waybackItems[index];
-    }
+    // getWaybackItemByReleaseNumber(releaseNum: number) {
+    //     const { waybackItems, waybackItemsReleaseNum2IndexLookup } = this.state;
+    //     const index = waybackItemsReleaseNum2IndexLookup[releaseNum];
+    //     return waybackItems[index];
+    // }
 
     toggleSaveAsWebmapDialog(isVisible?: boolean) {
         // console.log('toggleSaveAsWebmapDialog', isVisible);
@@ -452,136 +453,140 @@ class App extends React.PureComponent<IProps, IState> {
     //     return swipeWidgetLeadingLayer
     // }
 
-    getSidebarContent() {
-        const { isMobile } = this.props;
+    // getSidebarContent() {
+    //     const { isMobile } = this.props;
 
-        const {
-            // waybackItems,
-            activeWaybackItem,
-            previewWaybackItem,
-            shouldShowPreviewItemTitle,
-            // shouldOnlyShowItemsWithLocalChange,
-            // rNum4SelectedWaybackItems,
-            // rNum4WaybackItemsWithLocalChanges,
-            isSideBarHide,
-            isSwipeWidgetOpen
-        } = this.state;
+    //     const {
+    //         // waybackItems,
+    //         activeWaybackItem,
+    //         previewWaybackItem,
+    //         shouldShowPreviewItemTitle,
+    //         // shouldOnlyShowItemsWithLocalChange,
+    //         // rNum4SelectedWaybackItems,
+    //         // rNum4WaybackItemsWithLocalChanges,
+    //         isSideBarHide,
+    //         isSwipeWidgetOpen
+    //     } = this.state;
 
-        if(isSwipeWidgetOpen){
-            return null;
-        }
+    //     if(isSwipeWidgetOpen){
+    //         return null;
+    //     }
 
-        const sidebarClasses = classnames('sidebar', {
-            'is-hide': isSideBarHide,
-        });
+    //     const sidebarClasses = classnames('sidebar', {
+    //         'is-hide': isSideBarHide,
+    //     });
 
-        const appTitle = !isMobile ? (
-            <div className="content-wrap leader-half trailer-quarter">
-                <AppTitleText />
-            </div>
-        ) : null;
+    //     const appTitle = !isMobile ? (
+    //         <div className="content-wrap leader-half trailer-quarter">
+    //             <AppTitleText />
+    //         </div>
+    //     ) : null;
 
-        const sidebarToggleBtn = isMobile ? (
-            <SidebarToggleBtn
-                isSideBarHide={isSideBarHide}
-                onClick={this.toggleIsSideBarHide}
-            />
-        ) : null;
+    //     const sidebarToggleBtn = isMobile ? (
+    //         <SidebarToggleBtn
+    //             isSideBarHide={isSideBarHide}
+    //             onClick={this.toggleIsSideBarHide}
+    //         />
+    //     ) : null;
 
-        const loadingIndicator =
-            !activeWaybackItem && !isSideBarHide ? (
-                <div className="loader is-active padding-leader-1 padding-trailer-1">
-                    <div className="loader-bars"></div>
-                </div>
-            ) : null;
+    //     const loadingIndicator =
+    //         !activeWaybackItem && !isSideBarHide ? (
+    //             <div className="loader is-active padding-leader-1 padding-trailer-1">
+    //                 <div className="loader-bars"></div>
+    //             </div>
+    //         ) : null;
 
-        const barChart =
-            !isMobile && activeWaybackItem && !isSideBarHide ? (
-                <div className="content-wrap trailer-quarter">
-                    {/* <BarChart
-                        waybackItems={waybackItems}
-                        activeWaybackItem={activeWaybackItem}
-                        rNum4WaybackItemsWithLocalChanges={
-                            rNum4WaybackItemsWithLocalChanges
-                        }
-                        shouldOnlyShowItemsWithLocalChange={
-                            shouldOnlyShowItemsWithLocalChange
-                        }
-                        onClick={this.setActiveWaybackItem}
-                        onMouseEnter={this.setPreviewWaybackItem}
-                        onMouseOut={this.setPreviewWaybackItem}
-                    /> */}
+    //     const barChart =
+    //         !isMobile && activeWaybackItem && !isSideBarHide ? (
+    //             <div className="content-wrap trailer-quarter">
+    //                 {/* <BarChart
+    //                     waybackItems={waybackItems}
+    //                     activeWaybackItem={activeWaybackItem}
+    //                     rNum4WaybackItemsWithLocalChanges={
+    //                         rNum4WaybackItemsWithLocalChanges
+    //                     }
+    //                     shouldOnlyShowItemsWithLocalChange={
+    //                         shouldOnlyShowItemsWithLocalChange
+    //                     }
+    //                     onClick={this.setActiveWaybackItem}
+    //                     onMouseEnter={this.setPreviewWaybackItem}
+    //                     onMouseOut={this.setPreviewWaybackItem}
+    //                 /> */}
 
-                    <BarChart />
-                </div>
-            ) : null;
+    //                 <BarChart />
+    //             </div>
+    //         ) : null;
 
-        const titleForActiveItem = activeWaybackItem ? (
-            <div className="content-wrap leader-quarter trailer-quarter">
-                <Title4ActiveItem
-                    isMobile={isMobile}
-                    activeWaybackItem={activeWaybackItem}
-                    previewWaybackItem={previewWaybackItem}
-                    shouldShowPreviewItemTitle={shouldShowPreviewItemTitle}
-                />
-            </div>
-        ) : null;
+    //     const titleForActiveItem = activeWaybackItem ? (
+    //         <div className="content-wrap leader-quarter trailer-quarter">
+    //             <Title4ActiveItem
+    //                 isMobile={isMobile}
+    //                 activeWaybackItem={activeWaybackItem}
+    //                 previewWaybackItem={previewWaybackItem}
+    //                 shouldShowPreviewItemTitle={shouldShowPreviewItemTitle}
+    //             />
+    //         </div>
+    //     ) : null;
 
-        const localChangeOnlyToggle =
-            activeWaybackItem && !isSideBarHide ? (
-                <div className="content-wrap trailer-half">
-                    {/* <CheckboxToggle
-                        isActive={shouldOnlyShowItemsWithLocalChange}
-                        onChange={this.toggleShouldOnlyShowItemsWithLocalChange}
-                    /> */}
-                    <ShowLocalChangesCheckboxToggle />
-                </div>
-            ) : null;
+    //     const localChangeOnlyToggle =
+    //         activeWaybackItem && !isSideBarHide ? (
+    //             <div className="content-wrap trailer-half">
+    //                 {/* <CheckboxToggle
+    //                     isActive={shouldOnlyShowItemsWithLocalChange}
+    //                     onChange={this.toggleShouldOnlyShowItemsWithLocalChange}
+    //                 /> */}
+    //                 <ShowLocalChangesCheckboxToggle />
+    //             </div>
+    //         ) : null;
 
-        const listView =
-            activeWaybackItem && !isSideBarHide ? (
-                <div className="y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy">
-                    <div className="content-wrap">
-                        {/* <ListView
-                            isMobile={isMobile}
-                            waybackItems={waybackItems}
-                            activeWaybackItem={activeWaybackItem}
-                            shouldOnlyShowItemsWithLocalChange={
-                                shouldOnlyShowItemsWithLocalChange
-                            }
-                            rNum4SelectedWaybackItems={
-                                rNum4SelectedWaybackItems
-                            }
-                            rNum4WaybackItemsWithLocalChanges={
-                                rNum4WaybackItemsWithLocalChanges
-                            }
-                            onClick={this.setActiveWaybackItem}
-                            onMouseEnter={this.setPreviewWaybackItem}
-                            onMouseOut={this.setPreviewWaybackItem}
-                            toggleSelect={this.toggleSelectWaybackItem}
-                        /> */}
-                        <ListView />
-                    </div>
-                </div>
-            ) : null;
+    //     const listView =
+    //         activeWaybackItem && !isSideBarHide ? (
+    //             <div className="y-scroll-visible x-scroll-hide fancy-scrollbar is-flexy">
+    //                 <div className="content-wrap">
+    //                     {/* <ListView
+    //                         isMobile={isMobile}
+    //                         waybackItems={waybackItems}
+    //                         activeWaybackItem={activeWaybackItem}
+    //                         shouldOnlyShowItemsWithLocalChange={
+    //                             shouldOnlyShowItemsWithLocalChange
+    //                         }
+    //                         rNum4SelectedWaybackItems={
+    //                             rNum4SelectedWaybackItems
+    //                         }
+    //                         rNum4WaybackItemsWithLocalChanges={
+    //                             rNum4WaybackItemsWithLocalChanges
+    //                         }
+    //                         onClick={this.setActiveWaybackItem}
+    //                         onMouseEnter={this.setPreviewWaybackItem}
+    //                         onMouseOut={this.setPreviewWaybackItem}
+    //                         toggleSelect={this.toggleSelectWaybackItem}
+    //                     /> */}
+    //                     <ListView />
+    //                 </div>
+    //             </div>
+    //         ) : null;
 
-        const sidebarContent = (
-            <div className={sidebarClasses}>
-                {sidebarToggleBtn}
-                {appTitle}
-                {loadingIndicator}
-                {barChart}
-                {titleForActiveItem}
-                {localChangeOnlyToggle}
-                {listView}
-            </div>
-        );
+    //     const sidebarContent = (
+    //         <div className={sidebarClasses}>
+    //             {sidebarToggleBtn}
+    //             {appTitle}
+    //             {loadingIndicator}
+    //             {barChart}
+    //             {titleForActiveItem}
+    //             {localChangeOnlyToggle}
+    //             {listView}
+    //         </div>
+    //     );
 
-        return sidebarContent;
-    }
+    //     return sidebarContent;
+    // }
 
     render() {
-        const { data2InitApp, waybackManager, isMobile } = this.props;
+        const { 
+            // data2InitApp, 
+            // waybackManager, 
+            isMobile 
+        } = this.props;
 
         const {
             // waybackItems,
@@ -598,13 +603,13 @@ class App extends React.PureComponent<IProps, IState> {
             // isSwipeWidgetOpen
         } = this.state;
 
-        const defaultExtentFromUrl =
-            data2InitApp && data2InitApp.mapExtent
-                ? data2InitApp.mapExtent
-                : null;
-        const defaultExtentFromLocalStorage = getDefaultExtent();
+        // const defaultExtentFromUrl =
+        //     data2InitApp && data2InitApp.mapExtent
+        //         ? data2InitApp.mapExtent
+        //         : null;
+        // const defaultExtentFromLocalStorage = getDefaultExtent();
 
-        const sidebar = this.getSidebarContent();
+        // const sidebar = this.getSidebarContent();
 
         const appContentClasses = classnames('app-content', {
             'is-mobile': isMobile,
@@ -648,7 +653,9 @@ class App extends React.PureComponent<IProps, IState> {
 
                 </Gutter>
 
-                {sidebar}
+                {/* {sidebar} */}
+
+                <Sidebar />
 
                 <MapViewWrapper />
 
@@ -864,7 +871,7 @@ class App extends React.PureComponent<IProps, IState> {
 
             // const waybackData2InitApp = await this.waybackManager.init();
             // console.log(waybackData2InitApp);
-            this.setWaybackItems(waybackData2InitApp.waybackItems);
+            // this.setWaybackItems(waybackData2InitApp.waybackItems);
 
             if (getShouldOpenSaveWebMapDialog() && userSession) {
                 this.toggleSaveAsWebmapDialog(true);

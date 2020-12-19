@@ -1,5 +1,5 @@
 import './style.scss';
-import * as React from 'react';
+import React from 'react';
 
 interface IProps {
     isActive: boolean;
@@ -24,7 +24,7 @@ class CheckboxToggle extends React.PureComponent<IProps> {
         );
 
         return (
-            <div className="checkbox-toggle-control" onClick={onChange}>
+            <div className="checkbox-toggle-control leader-quarter" onClick={onChange}>
                 <span className={`checkbox-icon margin-right-quarter text-dark-gray`}>
                     {iconSvg}
                 </span>

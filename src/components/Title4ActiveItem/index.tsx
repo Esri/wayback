@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { IWaybackItem } from '../../types';
 
@@ -33,7 +33,7 @@ class Title4ActiveItem extends React.PureComponent<IProps> {
         ) : null;
 
         return (
-            <div className="title-for-active-item text-center text-blue">
+            <div className="title-for-active-item text-center text-blue leader-half">
                 <h4 className="font-size-2 avenir-light trailer-0">
                     Wayback {releaseDate}
                 </h4>
