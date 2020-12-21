@@ -33,7 +33,8 @@ import SaveAsWebMapDialog from '../SaveAsWebmapDialog/SaveAsWebmapDialogContaine
 // import Title4ActiveItem from '../Title4ActiveItem';
 // import TilePreviewWindow from '../PreviewWindow';
 // import AppTitleText from '../TitleText';
-import MobileHeader from '../MobileHeader';
+import MobileHeader from '../MobileHeader/MobileHeaderContainer';
+import MobileFooter from '../MobileFooter/MobileFooterContainer';
 // import SidebarToggleBtn from '../SidebarToggleBtn';
 import SettingDialog from '../SettingDialog/SettingDialogContainer';
 import Gutter from '../Gutter/GutterContainer';
@@ -582,26 +583,26 @@ class App extends React.PureComponent<IProps, IState> {
     // }
 
     render() {
-        const { 
-            // data2InitApp, 
-            // waybackManager, 
-            isMobile 
-        } = this.props;
+        // const { 
+        //     // data2InitApp, 
+        //     // waybackManager, 
+        //     isMobile 
+        // } = this.props;
 
-        const {
-            // waybackItems,
-            // activeWaybackItem,
-            // previewWaybackItem,
-            // rNum4SelectedWaybackItems,
-            // rNum4WaybackItemsWithLocalChanges,
-            // isSaveAsWebmapDialogVisible,
-            // userSession,
-            // mapExtent,
-            // alternativeRNum4RreviewWaybackItem,
-            isGutterHide,
-            // currentUrl,
-            // isSwipeWidgetOpen
-        } = this.state;
+        // const {
+        //     // waybackItems,
+        //     // activeWaybackItem,
+        //     // previewWaybackItem,
+        //     // rNum4SelectedWaybackItems,
+        //     // rNum4WaybackItemsWithLocalChanges,
+        //     // isSaveAsWebmapDialogVisible,
+        //     // userSession,
+        //     // mapExtent,
+        //     // alternativeRNum4RreviewWaybackItem,
+        //     isGutterHide,
+        //     // currentUrl,
+        //     // isSwipeWidgetOpen
+        // } = this.state;
 
         // const defaultExtentFromUrl =
         //     data2InitApp && data2InitApp.mapExtent
@@ -611,21 +612,23 @@ class App extends React.PureComponent<IProps, IState> {
 
         // const sidebar = this.getSidebarContent();
 
-        const appContentClasses = classnames('app-content', {
-            'is-mobile': isMobile,
-            'is-gutter-hide': isGutterHide,
-        });
+        // const appContentClasses = classnames('app-content', {
+        //     'is-mobile': isMobile,
+        //     'is-gutter-hide': isGutterHide,
+        // });
 
-        const mobileHeader = isMobile ? (
-            <MobileHeader
-                isGutterHide={isGutterHide}
-                leftNavBtnOnClick={this.toggleIsGutterHide}
-            />
-        ) : null;
+        // const mobileHeader = isMobile ? (
+        //     <MobileHeader
+        //         isGutterHide={isGutterHide}
+        //         leftNavBtnOnClick={this.toggleIsGutterHide}
+        //     />
+        // ) : null;
 
         return (
-            <div className={appContentClasses}>
-                {mobileHeader}
+            <div>
+                {/* {mobileHeader} */}
+
+                <MobileHeader />
 
                 <Gutter
                     // settingsBtnDisabled={isSwipeWidgetOpen}
@@ -846,6 +849,8 @@ class App extends React.PureComponent<IProps, IState> {
                 <ShareDialog />
 
                 <AboutThisApp />
+
+                <MobileFooter />
             </div>
         );
     }

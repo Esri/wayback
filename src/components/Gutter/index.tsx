@@ -1,10 +1,12 @@
 import './style.scss';
 import React from 'react';
+import { MOBILE_HEADER_HEIGHT } from '../../constants/UI';
 // import AboutThisAppModalConfig from '../ModalAboutApp/config';
 // import ShareModalConfig from '../ShareDialog/config';
-import SettingModalConfig from '../SettingDialog/config';
+// import SettingModalConfig from '../SettingDialog/config';
 
 interface IProps {
+    isMobile:boolean;
     settingsBtnDisabled:boolean;
     // children: JSX.Element[] | JSX.Element;
 
@@ -20,13 +22,18 @@ class Gutter extends React.PureComponent<IProps> {
 
     render() {
         const {
+            isMobile,
             shareButtonOnClick,
             aboutButtonOnClick,
             settingButtonOnClick
         } = this.props;
 
         return (
-            <div className="gutter-container">
+            <div className="gutter-container"
+                style={{
+                    top: isMobile ? MOBILE_HEADER_HEIGHT : 0
+                }}
+            >
                 <div className="shadow-trailer padding-leader-quarter padding-trailer-quarter trailer-quarter">
                     <div
                         className="gutter-nav-btn"

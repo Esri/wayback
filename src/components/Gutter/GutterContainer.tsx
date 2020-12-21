@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Gutter from './index';
 
@@ -14,8 +14,10 @@ import {
 import {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
-    isSettingModalOpenToggled
+    isSettingModalOpenToggled,
+    isGutterHideSelector
 } from '../../store/reducers/UI'
+import { AppContext } from '../../contexts/AppContextProvider';
 
 type Props = {
     children: React.ReactNode
@@ -29,6 +31,10 @@ const GutterContainer:React.FC<Props> = ({
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
+    const isHide = useSelector(isGutterHideSelector)
+
+    const { isMobile } = useContext(AppContext)
+
     const aboutButtonOnClick = ()=>{
         dispatch(isAboutThisAppModalOpenToggled());
     }
@@ -41,8 +47,9 @@ const GutterContainer:React.FC<Props> = ({
         dispatch(isSettingModalOpenToggled());
     }
 
-    return (
+    return !isHide ? (
         <Gutter
+            isMobile={isMobile}
             settingsBtnDisabled={isSwipeWidgetOpen}
             aboutButtonOnClick={aboutButtonOnClick}
             shareButtonOnClick={shareButtonOnClick}
@@ -50,7 +57,7 @@ const GutterContainer:React.FC<Props> = ({
         >
             { children }
         </Gutter>
-    )
+    ) : null;
 }
 
 export default GutterContainer

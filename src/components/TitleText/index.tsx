@@ -1,21 +1,19 @@
 import React from 'react';
 
-import { 
-    MobileHide
-} from '../SharedUI'
+// import { 
+//     MobileHide
+// } from '../SharedUI'
 
 // interface IProps {}
 // interface IState {}
 
 const TitleText = ()=> {
     return (
-        <MobileHide>
-            <div className="text-center trailer-quarter">
-                <span className="font-size-2 avenir-light trailer-0">
-                    World Imagery <span className="text-white">Wayback</span>
-                </span>
-            </div>
-        </MobileHide>
+        <div className="text-center trailer-quarter">
+            <span className="font-size-2 avenir-light trailer-0">
+                World Imagery <span className="text-white">Wayback</span>
+            </span>
+        </div>
     );
 }
 

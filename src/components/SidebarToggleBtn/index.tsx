@@ -44,7 +44,7 @@ class SidebarToggleBtn extends React.PureComponent<IProps> {
                 onClick={onClick}
                 style={{
                     position: 'absolute',
-                    top: '.5rem',
+                    top: '.75rem',
                     right: '.5rem',
                 }}
             >

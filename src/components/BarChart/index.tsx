@@ -269,6 +269,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 style={{
                     width: '100%',
                     height: '90px',
+                    marginBottom: '.5rem'
                 }}
             ></div>
         );

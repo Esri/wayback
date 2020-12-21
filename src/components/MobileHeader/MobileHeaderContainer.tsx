@@ -1,0 +1,36 @@
+import React from 'react';
+
+import {
+    useSelector,
+    useDispatch,
+    batch
+} from 'react-redux';
+
+import{
+    isGutterHideSelector,
+    isGutterHideToggled
+} from '../../store/reducers/UI';
+
+import { MobileShow } from '../SharedUI';
+import MobileHeader from './index'
+
+const MobileHeaderContainer = () => {
+
+    const isGutterHide = useSelector(isGutterHideSelector);
+
+    const dispatch = useDispatch();
+
+    return (
+        <MobileShow>
+            <MobileHeader
+                isGutterHide={isGutterHide}
+                leftNavBtnOnClick={()=>{
+                    dispatch(isGutterHideToggled())
+                }}
+            />
+        </MobileShow>
+
+    )
+}
+
+export default MobileHeaderContainer
