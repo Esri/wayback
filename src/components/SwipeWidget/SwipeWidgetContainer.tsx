@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import {
     useSelector,
@@ -25,6 +25,7 @@ import {
 
 import IMapView from 'esri/views/MapView';
 import { IWaybackItem } from '../../types';
+import { saveSwipeWidgetInfoInURLQueryParam } from '../../utils/UrlSearchParam';
 
 type Props = {
     mapView?: IMapView;
@@ -49,6 +50,14 @@ const SwipeWidgetContainer:React.FC<Props> = ({
         })
 
     }, []);
+
+    useEffect(()=>{
+        saveSwipeWidgetInfoInURLQueryParam({
+            isOpen,
+            rNum4SwipeWidgetLeadingLayer: waybackItem4LeadingLayer.releaseNum,
+            rNum4SwipeWidgetTrailingLayer: waybackItem4TrailingLayer.releaseNum
+        })
+    }, [isOpen, waybackItem4LeadingLayer, waybackItem4TrailingLayer])
 
     return (
         <MobileHide>

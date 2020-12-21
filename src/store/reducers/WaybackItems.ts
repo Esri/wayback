@@ -22,6 +22,7 @@ import {
 import {
     metadataQueryResultUpdated
 } from './Map';
+import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
 
 export type WaybackItemsState = {
     byReleaseNumber: {

@@ -1,12 +1,12 @@
 import './style.scss';
-import * as React from 'react';
+import React from 'react';
 import classnames from 'classnames';
 // import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
-import {
-    // savePortalUrlInSearchParam,
-    // getPortalUrlInSearchParam,
-    getMapExtent,
-} from '../../utils/UrlSearchParam';
+// import {
+//     // savePortalUrlInSearchParam,
+//     // getPortalUrlInSearchParam,
+//     getMapExtent,
+// } from '../../utils/UrlSearchParam';
 import {
     saveDefaultExtent,
     getCustomPortalUrl,
@@ -88,11 +88,11 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             shouldShowLocalChangesByDefault,
         } = this.state;
 
-        const { shouldShowLocalChangesByDefaultOnClick, onClose } = this.props;
+        const { shouldShowLocalChangesByDefaultOnClick, onClose, mapExtent } = this.props;
 
         if (shouldSaveAsDefaultExtent) {
-            const mapExt = getMapExtent();
-            saveDefaultExtent(mapExt);
+            // const mapExt = getMapExtent();
+            saveDefaultExtent(mapExtent);
         }
 
         if (

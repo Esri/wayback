@@ -2,11 +2,15 @@ import React, {
     useEffect, useRef
 } from 'react';
 
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 
 import IMapView from 'esri/views/MapView';
 import IWebTileLayer from 'esri/layers/WebTileLayer';
 import { IWaybackItem } from '../../types';
+
+import {
+    getWaybackLayer
+} from './getWaybackLayer';
 
 type Props = {
     activeWaybackItem: IWaybackItem;
@@ -26,32 +30,32 @@ const WaybackLayer:React.FC<Props> = ({
             mapView.map.remove(waybackLayerRef.current);
         }
 
-        waybackLayerRef.current = await getWaybackLayer();
+        waybackLayerRef.current = await getWaybackLayer(activeWaybackItem);
 
         // always add as the bottom most layer
         mapView.map.add(waybackLayerRef.current, 0);
     }
 
-    const getWaybackLayer = async()=>{
+    // const getWaybackLayer = async()=>{
 
-        try {
-            type Modules = [typeof IWebTileLayer];
+    //     try {
+    //         type Modules = [typeof IWebTileLayer];
 
-            const [WebTileLayer] = await (loadModules([
-                'esri/layers/WebTileLayer',
-            ]) as Promise<Modules>);
+    //         const [WebTileLayer] = await (loadModules([
+    //             'esri/layers/WebTileLayer',
+    //         ]) as Promise<Modules>);
 
-            const waybackLayer = new WebTileLayer({
-                urlTemplate: activeWaybackItem.itemURL,
-            });
+    //         const waybackLayer = new WebTileLayer({
+    //             urlTemplate: activeWaybackItem.itemURL,
+    //         });
 
-            return waybackLayer;
+    //         return waybackLayer;
 
-        } catch (err) {
-            console.error(err)
-            return null;
-        }
-    }
+    //     } catch (err) {
+    //         console.error(err)
+    //         return null;
+    //     }
+    // }
 
     useEffect(()=>{
         if(mapView && activeWaybackItem){

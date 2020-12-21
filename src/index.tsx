@@ -1,10 +1,10 @@
 import './style/index.scss';
 
-import '@babel/polyfill';
+// import '@babel/polyfill';
 
-// required by ArcGIS REST JS
-import 'isomorphic-fetch';
-import 'es6-promise';
+// // required by ArcGIS REST JS
+// import 'isomorphic-fetch';
+// import 'es6-promise';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -14,20 +14,17 @@ import AppContextProvider from './contexts/AppContextProvider';
 
 import WaybackManager from './core/WaybackManager';
 import App from './components/App';
-import { decodeSearchParam } from './utils/UrlSearchParam';
-import { miscFns } from 'helper-toolkit-ts';
+// import { decodeSearchParam } from './utils/UrlSearchParam';
+
 // import { setDefaultOptions } from 'esri-loader';
 // setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
 
 const initApp = async () => {
-    const isMobileDevice = miscFns.isMobileDevice();
-
-    const data2InitApp = decodeSearchParam();
 
     const waybackManager = new WaybackManager();
     const waybackData2InitApp = await waybackManager.init();
 
-    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems, data2InitApp);
+    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems);
     // console.log(preloadedState)
 
     try {
@@ -37,12 +34,7 @@ const initApp = async () => {
                     <AppContextProvider
                         waybackManager={waybackManager}
                     >
-                        <App
-                            data2InitApp={data2InitApp}
-                            isMobile={isMobileDevice}
-                            waybackManager={waybackManager}
-                            waybackData2InitApp={waybackData2InitApp}
-                        />
+                        <App/>
                     </AppContextProvider>
                 </ReduxProvider>
             </React.StrictMode>,

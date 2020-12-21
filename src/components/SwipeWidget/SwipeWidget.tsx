@@ -10,6 +10,10 @@ import IWebTileLayer from 'esri/layers/WebTileLayer';
 import IWatchUtils from 'esri/core/watchUtils';
 import { IWaybackItem } from '../../types';
 
+import {
+    getWaybackLayer
+} from '../WaybackLayer/getWaybackLayer';
+
 type Props = {
     waybackItem4LeadingLayer: IWaybackItem;
     waybackItem4TrailingLayer: IWaybackItem;
@@ -146,29 +150,29 @@ const SwipeWidget:React.FC<Props> = ({
 
     }
 
-    const getWaybackLayer=async(data:IWaybackItem)=>{
+    // const getWaybackLayer=async(data:IWaybackItem)=>{
 
-        if(!data){
-            return null;
-        }
+    //     if(!data){
+    //         return null;
+    //     }
 
-        try {
-            type Modules = [typeof IWebTileLayer];
+    //     try {
+    //         type Modules = [typeof IWebTileLayer];
 
-            const [WebTileLayer] = await (loadModules([
-                'esri/layers/WebTileLayer',
-            ]) as Promise<Modules>);
+    //         const [WebTileLayer] = await (loadModules([
+    //             'esri/layers/WebTileLayer',
+    //         ]) as Promise<Modules>);
 
-            const waybackLayer = new WebTileLayer({
-                urlTemplate: data.itemURL,
-            });
+    //         const waybackLayer = new WebTileLayer({
+    //             urlTemplate: data.itemURL,
+    //         });
 
-            return waybackLayer;
+    //         return waybackLayer;
 
-        } catch (err) {
-            return null;
-        }
-    }
+    //     } catch (err) {
+    //         return null;
+    //     }
+    // }
 
     useEffect(()=>{
         isOpen && mapView

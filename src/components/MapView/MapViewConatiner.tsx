@@ -1,5 +1,6 @@
 import React, {
-    useContext
+    useContext,
+    useEffect
 } from 'react';
 
 import {
@@ -33,6 +34,7 @@ import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
 import { getDefaultExtent } from '../../utils/LocalStorage';
 import { AppContext } from '../../contexts/AppContextProvider';
+import { saveMapExtentInURLQueryParam, saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
 
 const MapViewConatiner = () => {
 
@@ -69,7 +71,12 @@ const MapViewConatiner = () => {
 
     const onExtentChange = (extent:IExtentGeomety)=>{
         dispatch(mapExtentUpdated(extent));
+        saveMapExtentInURLQueryParam(extent)
     }
+
+    useEffect(() => {
+        saveReleaseNum4ActiveWaybackItemInURLQueryParam(activeWaybackItem.releaseNum)
+    }, [activeWaybackItem])
 
     return (
         <MapView

@@ -1,14 +1,14 @@
 import './style.scss';
-import * as React from 'react';
+import React from 'react';
 
-import classnames from 'classnames';
+// import classnames from 'classnames';
 import config from '../../app-config';
 import WaybackManager from '../../core/WaybackManager';
 import OAuthUtils from '../../utils/Esri-OAuth';
-import {
-    encodeSearchParam,
-    // getPortalUrlInSearchParam,
-} from '../../utils/UrlSearchParam';
+// import {
+//     // encodeSearchParam,
+//     // getPortalUrlInSearchParam,
+// } from '../../utils/UrlSearchParam';
 import { getServiceUrl } from '../../utils/Tier';
 import {
     getDefaultExtent,
@@ -62,37 +62,37 @@ interface IProps {
     data2InitApp?: ISearchParamData;
     // isDev?:boolean
     isMobile?: boolean;
-    waybackManager: WaybackManager;
-    waybackData2InitApp: {
+    waybackManager?: WaybackManager;
+    waybackData2InitApp?: {
         waybackItems: Array<IWaybackItem>;
     };
 }
 
 interface IState {
-    waybackItems: Array<IWaybackItem>;
-    waybackItemsReleaseNum2IndexLookup: IWaybackItemsReleaseNum2IndexLookup;
-    rNum4SelectedWaybackItems: Array<number>;
-    rNum4WaybackItemsWithLocalChanges: Array<number>;
-    activeWaybackItem: IWaybackItem;
-    previewWaybackItem: IWaybackItem;
-    alternativeRNum4RreviewWaybackItem: number;
+    // waybackItems: Array<IWaybackItem>;
+    // waybackItemsReleaseNum2IndexLookup: IWaybackItemsReleaseNum2IndexLookup;
+    // rNum4SelectedWaybackItems: Array<number>;
+    // rNum4WaybackItemsWithLocalChanges: Array<number>;
+    // activeWaybackItem: IWaybackItem;
+    // previewWaybackItem: IWaybackItem;
+    // alternativeRNum4RreviewWaybackItem: number;
 
-    mapExtent: IExtentGeomety;
+    // mapExtent: IExtentGeomety;
 
     isSaveAsWebmapDialogVisible: boolean;
-    shouldOnlyShowItemsWithLocalChange: boolean;
-    shouldShowPreviewItemTitle: boolean;
+    // shouldOnlyShowItemsWithLocalChange: boolean;
+    // shouldShowPreviewItemTitle: boolean;
     userSession: IUserSession;
-    isGutterHide: boolean;
-    isSideBarHide: boolean;
-    isSwipeWidgetOpen: boolean;
+    // isGutterHide: boolean;
+    // isSideBarHide: boolean;
+    // isSwipeWidgetOpen: boolean;
 
-    swipeWidgetLeadingLayer: IWaybackItem;
-    swipeWidgetTrailingLayer: IWaybackItem;
-    swipePosition: number;
+    // swipeWidgetLeadingLayer: IWaybackItem;
+    // swipeWidgetTrailingLayer: IWaybackItem;
+    // swipePosition: number;
 
-    metadataQueryResult:IWaybackMetadataQueryResult;
-    metadataPopupAnchor:IScreenPoint;
+    // metadataQueryResult:IWaybackMetadataQueryResult;
+    // metadataPopupAnchor:IScreenPoint;
 
     // currentUrl: string;
 }
@@ -101,44 +101,44 @@ class App extends React.PureComponent<IProps, IState> {
     // private waybackManager:WaybackManager;
     private oauthUtils: OAuthUtils;
 
-    private delay4TogglePreviewWaybackItem: NodeJS.Timeout;
+    // private delay4TogglePreviewWaybackItem: NodeJS.Timeout;
 
     constructor(props: IProps) {
         super(props);
 
-        const { data2InitApp, isMobile, waybackData2InitApp } = props;
+        // const { data2InitApp, isMobile, waybackData2InitApp } = props;
 
         this.oauthUtils = new OAuthUtils();
 
         this.state = {
-            waybackItems: [],
-            waybackItemsReleaseNum2IndexLookup: null,
-            rNum4SelectedWaybackItems:
-                data2InitApp && data2InitApp.rNum4SelectedWaybackItems
-                    ? data2InitApp.rNum4SelectedWaybackItems
-                    : [],
-            rNum4WaybackItemsWithLocalChanges: [],
-            activeWaybackItem: null,
-            previewWaybackItem: null,
-            alternativeRNum4RreviewWaybackItem: null,
+            // waybackItems: [],
+            // waybackItemsReleaseNum2IndexLookup: null,
+            // rNum4SelectedWaybackItems:
+            //     data2InitApp && data2InitApp.rNum4SelectedWaybackItems
+            //         ? data2InitApp.rNum4SelectedWaybackItems
+            //         : [],
+            // rNum4WaybackItemsWithLocalChanges: [],
+            // activeWaybackItem: null,
+            // previewWaybackItem: null,
+            // alternativeRNum4RreviewWaybackItem: null,
             isSaveAsWebmapDialogVisible: false,
-            shouldOnlyShowItemsWithLocalChange:
-                data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange
-                    ? data2InitApp.shouldOnlyShowItemsWithLocalChange
-                    : getShouldShowUpdatesWithLocalChanges(),
-            // we want to show the release date in wayback title only when hover over the bar chart
-            shouldShowPreviewItemTitle: false,
+            // shouldOnlyShowItemsWithLocalChange:
+            //     data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange
+            //         ? data2InitApp.shouldOnlyShowItemsWithLocalChange
+            //         : getShouldShowUpdatesWithLocalChanges(),
+            // // we want to show the release date in wayback title only when hover over the bar chart
+            // shouldShowPreviewItemTitle: false,
             userSession: null,
-            mapExtent: null,
-            isGutterHide: isMobile ? true : false,
-            isSideBarHide: false,
-            isSwipeWidgetOpen: !isMobile && data2InitApp && data2InitApp.isSwipeWidgetOpen,
-            swipeWidgetLeadingLayer: null,
-            swipeWidgetTrailingLayer: null,
-            swipePosition: 50,
+            // mapExtent: null,
+            // isGutterHide: isMobile ? true : false,
+            // isSideBarHide: false,
+            // isSwipeWidgetOpen: !isMobile && data2InitApp && data2InitApp.isSwipeWidgetOpen,
+            // swipeWidgetLeadingLayer: null,
+            // swipeWidgetTrailingLayer: null,
+            // swipePosition: 50,
 
-            metadataQueryResult:null,
-            metadataPopupAnchor: null,
+            // metadataQueryResult:null,
+            // metadataPopupAnchor: null,
 
             // currentUrl: location.href,
         };
@@ -155,7 +155,7 @@ class App extends React.PureComponent<IProps, IState> {
         // this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(
         //     this
         // );
-        this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
+        // this.toggleIsGutterHide = this.toggleIsGutterHide.bind(this);
         // this.toggleIsSideBarHide = this.toggleIsSideBarHide.bind(this);
         // this.toggleSignInBtnOnClick = this.toggleSignInBtnOnClick.bind(this);
         // this.toggleSwipeWidget = this.toggleSwipeWidget.bind(this);
@@ -349,13 +349,13 @@ class App extends React.PureComponent<IProps, IState> {
     //     });
     // }
 
-    toggleIsGutterHide() {
-        const { isGutterHide } = this.state;
+    // toggleIsGutterHide() {
+    //     const { isGutterHide } = this.state;
 
-        this.setState({
-            isGutterHide: !isGutterHide,
-        });
-    }
+    //     this.setState({
+    //         isGutterHide: !isGutterHide,
+    //     });
+    // }
 
     // toggleIsSideBarHide() {
     //     const { isSideBarHide } = this.state;
@@ -413,31 +413,31 @@ class App extends React.PureComponent<IProps, IState> {
     //     }
     // }
 
-    updateUrlSearchParams() {
-        const {
-            activeWaybackItem,
-            shouldOnlyShowItemsWithLocalChange,
-            rNum4SelectedWaybackItems,
-            mapExtent,
-            isSwipeWidgetOpen,
-            swipeWidgetLeadingLayer,
-            swipeWidgetTrailingLayer
-        } = this.state;
+    // updateUrlSearchParams() {
+    //     const {
+    //         activeWaybackItem,
+    //         shouldOnlyShowItemsWithLocalChange,
+    //         rNum4SelectedWaybackItems,
+    //         mapExtent,
+    //         isSwipeWidgetOpen,
+    //         swipeWidgetLeadingLayer,
+    //         swipeWidgetTrailingLayer
+    //     } = this.state;
 
-        encodeSearchParam({
-            mapExtent,
-            rNum4SelectedWaybackItems,
-            rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
-            shouldOnlyShowItemsWithLocalChange,
-            isSwipeWidgetOpen,
-            rNum4SwipeWidgetLeadingLayer: swipeWidgetLeadingLayer ? swipeWidgetLeadingLayer.releaseNum : null,
-            rNum4SwipeWidgetTrailingLayer: swipeWidgetTrailingLayer? swipeWidgetTrailingLayer.releaseNum : null
-        });
+    //     encodeSearchParam({
+    //         mapExtent,
+    //         rNum4SelectedWaybackItems,
+    //         rNum4ActiveWaybackItem: activeWaybackItem ? activeWaybackItem.releaseNum : null,
+    //         shouldOnlyShowItemsWithLocalChange,
+    //         isSwipeWidgetOpen,
+    //         rNum4SwipeWidgetLeadingLayer: swipeWidgetLeadingLayer ? swipeWidgetLeadingLayer.releaseNum : null,
+    //         rNum4SwipeWidgetTrailingLayer: swipeWidgetTrailingLayer? swipeWidgetTrailingLayer.releaseNum : null
+    //     });
 
-        // this.setState({
-        //     currentUrl: location.href,
-        // });
-    }
+    //     // this.setState({
+    //     //     currentUrl: location.href,
+    //     // });
+    // }
 
     // getTargetLayerForMetadataPopup(){
     //     const { 
@@ -886,9 +886,9 @@ class App extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate() {
-        this.updateUrlSearchParams();
-    }
+    // componentDidUpdate() {
+    //     this.updateUrlSearchParams();
+    // }
 }
 
 export default App;

@@ -1,5 +1,6 @@
 import React, {
-    useContext
+    useContext,
+    useEffect
 } from 'react';
 
 import {
@@ -24,6 +25,7 @@ import {
 
 import SaveAsWebmapBtn from './index'
 import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
+import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '../../utils/UrlSearchParam';
 
 const SaveAsWebmapBtnContainer = () => {
 
@@ -54,6 +56,10 @@ const SaveAsWebmapBtnContainer = () => {
             dispatch(isSaveAsWebmapDialogOpenToggled())
         }
     }
+
+    useEffect(()=>{
+        saveReleaseNum4SelectedWaybackItemsInURLQueryParam(rNum4SelectedWaybackItems)
+    }, [rNum4SelectedWaybackItems])
 
     return (
         <SaveAsWebmapBtn
