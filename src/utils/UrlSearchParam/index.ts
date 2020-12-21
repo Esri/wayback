@@ -112,7 +112,7 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (rNum4SelectedWayback
     const key:searchParamKey = 'selected'
     const value = rNum4SelectedWaybackItems.length
         ? rNum4SelectedWaybackItems.join(',')
-        : '';
+        : 'null';
 
     updateQueryParam({
         key,
@@ -138,7 +138,7 @@ const saveSwipeWidgetInfoInURLQueryParam:SaveSwipeWidgetInfoInURLQueryParam = ({
     const key:searchParamKey = 'swipeWidget';
     const value = isOpen 
         ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}` 
-        : '';
+        : 'null';
 
     updateQueryParam({
         key,
@@ -151,7 +151,7 @@ const decodeURLQueryParam = (): ISearchParamData => {
     const localChangesOnly =
         urlQueryData.localChangesOnly === 'true' ? true : false;
 
-    const selected = urlQueryData.selected
+    const selected = urlQueryData.selected && urlQueryData.selected !== 'null'
         ? urlQueryData.selected.split(',').map((d) => +d)
         : null;
 
@@ -159,7 +159,7 @@ const decodeURLQueryParam = (): ISearchParamData => {
 
     const mapExtent = getMapExtent();
 
-    const isSwipeWidgetOpen = urlQueryData.swipeWidget ? true : false;
+    const isSwipeWidgetOpen = urlQueryData.swipeWidget && urlQueryData.swipeWidget !== 'null' ? true : false;
 
     const swipeWidgetLayers = isSwipeWidgetOpen
         ? urlQueryData.swipeWidget.split(',').map((d) => +d)

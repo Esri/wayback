@@ -11,8 +11,7 @@ import {
     // getDefaultExtent,
     // getCustomPortalUrl,
     getShouldShowUpdatesWithLocalChanges,
-    // setShouldOpenSaveWebMapDialog,
-    // getShouldOpenSaveWebMapDialog,
+    getShouldOpenSaveWebMapDialog,
 } from '../utils/LocalStorage';
 
 const searchParams:ISearchParamData = decodeURLQueryParam();
@@ -23,7 +22,8 @@ const getPreloadedState4UI = (searchParams:ISearchParamData): UIState => {
 
     const state:UIState = {
         ...initialUIState,
-        shouldOnlyShowItemsWithLocalChange
+        shouldOnlyShowItemsWithLocalChange,
+        isSaveAsWebmapDialogOpen: getShouldOpenSaveWebMapDialog()
     };
 
     return state;

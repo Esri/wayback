@@ -11,9 +11,9 @@ import OAuthUtils from '../../utils/Esri-OAuth';
 // } from '../../utils/UrlSearchParam';
 import { getServiceUrl } from '../../utils/Tier';
 import {
-    getDefaultExtent,
+    // getDefaultExtent,
     getCustomPortalUrl,
-    getShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
 } from '../../utils/LocalStorage';
@@ -54,18 +54,18 @@ import {
     IScreenPoint
 } from '../../types';
 
-interface IWaybackItemsReleaseNum2IndexLookup {
-    [key: number]: number;
-}
+// interface IWaybackItemsReleaseNum2IndexLookup {
+//     [key: number]: number;
+// }
 
 interface IProps {
-    data2InitApp?: ISearchParamData;
-    // isDev?:boolean
-    isMobile?: boolean;
-    waybackManager?: WaybackManager;
-    waybackData2InitApp?: {
-        waybackItems: Array<IWaybackItem>;
-    };
+    // data2InitApp?: ISearchParamData;
+    // // isDev?:boolean
+    // isMobile?: boolean;
+    // waybackManager?: WaybackManager;
+    // waybackData2InitApp?: {
+    //     waybackItems: Array<IWaybackItem>;
+    // };
 }
 
 interface IState {
@@ -79,10 +79,10 @@ interface IState {
 
     // mapExtent: IExtentGeomety;
 
-    isSaveAsWebmapDialogVisible: boolean;
+    // isSaveAsWebmapDialogVisible: boolean;
     // shouldOnlyShowItemsWithLocalChange: boolean;
     // shouldShowPreviewItemTitle: boolean;
-    userSession: IUserSession;
+    // userSession: IUserSession;
     // isGutterHide: boolean;
     // isSideBarHide: boolean;
     // isSwipeWidgetOpen: boolean;
@@ -99,7 +99,7 @@ interface IState {
 
 class App extends React.PureComponent<IProps, IState> {
     // private waybackManager:WaybackManager;
-    private oauthUtils: OAuthUtils;
+    // private oauthUtils: OAuthUtils;
 
     // private delay4TogglePreviewWaybackItem: NodeJS.Timeout;
 
@@ -108,49 +108,49 @@ class App extends React.PureComponent<IProps, IState> {
 
         // const { data2InitApp, isMobile, waybackData2InitApp } = props;
 
-        this.oauthUtils = new OAuthUtils();
+        // this.oauthUtils = new OAuthUtils();
 
-        this.state = {
-            // waybackItems: [],
-            // waybackItemsReleaseNum2IndexLookup: null,
-            // rNum4SelectedWaybackItems:
-            //     data2InitApp && data2InitApp.rNum4SelectedWaybackItems
-            //         ? data2InitApp.rNum4SelectedWaybackItems
-            //         : [],
-            // rNum4WaybackItemsWithLocalChanges: [],
-            // activeWaybackItem: null,
-            // previewWaybackItem: null,
-            // alternativeRNum4RreviewWaybackItem: null,
-            isSaveAsWebmapDialogVisible: false,
-            // shouldOnlyShowItemsWithLocalChange:
-            //     data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange
-            //         ? data2InitApp.shouldOnlyShowItemsWithLocalChange
-            //         : getShouldShowUpdatesWithLocalChanges(),
-            // // we want to show the release date in wayback title only when hover over the bar chart
-            // shouldShowPreviewItemTitle: false,
-            userSession: null,
-            // mapExtent: null,
-            // isGutterHide: isMobile ? true : false,
-            // isSideBarHide: false,
-            // isSwipeWidgetOpen: !isMobile && data2InitApp && data2InitApp.isSwipeWidgetOpen,
-            // swipeWidgetLeadingLayer: null,
-            // swipeWidgetTrailingLayer: null,
-            // swipePosition: 50,
+        // this.state = {
+        //     // waybackItems: [],
+        //     // waybackItemsReleaseNum2IndexLookup: null,
+        //     // rNum4SelectedWaybackItems:
+        //     //     data2InitApp && data2InitApp.rNum4SelectedWaybackItems
+        //     //         ? data2InitApp.rNum4SelectedWaybackItems
+        //     //         : [],
+        //     // rNum4WaybackItemsWithLocalChanges: [],
+        //     // activeWaybackItem: null,
+        //     // previewWaybackItem: null,
+        //     // alternativeRNum4RreviewWaybackItem: null,
+        //     // isSaveAsWebmapDialogVisible: false,
+        //     // shouldOnlyShowItemsWithLocalChange:
+        //     //     data2InitApp && data2InitApp.shouldOnlyShowItemsWithLocalChange
+        //     //         ? data2InitApp.shouldOnlyShowItemsWithLocalChange
+        //     //         : getShouldShowUpdatesWithLocalChanges(),
+        //     // // we want to show the release date in wayback title only when hover over the bar chart
+        //     // shouldShowPreviewItemTitle: false,
+        //     // userSession: null,
+        //     // mapExtent: null,
+        //     // isGutterHide: isMobile ? true : false,
+        //     // isSideBarHide: false,
+        //     // isSwipeWidgetOpen: !isMobile && data2InitApp && data2InitApp.isSwipeWidgetOpen,
+        //     // swipeWidgetLeadingLayer: null,
+        //     // swipeWidgetTrailingLayer: null,
+        //     // swipePosition: 50,
 
-            // metadataQueryResult:null,
-            // metadataPopupAnchor: null,
+        //     // metadataQueryResult:null,
+        //     // metadataPopupAnchor: null,
 
-            // currentUrl: location.href,
-        };
+        //     // currentUrl: location.href,
+        // };
 
         // this.setActiveWaybackItem = this.setActiveWaybackItem.bind(this);
         // this.setPreviewWaybackItem = this.setPreviewWaybackItem.bind(this);
         // this.toggleSelectWaybackItem = this.toggleSelectWaybackItem.bind(this);
         // this.queryLocalChanges = this.queryLocalChanges.bind(this);
         // this.unselectAllWaybackItems = this.unselectAllWaybackItems.bind(this);
-        this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(
-            this
-        );
+        // this.toggleSaveAsWebmapDialog = this.toggleSaveAsWebmapDialog.bind(
+        //     this
+        // );
         // this.setMapExtent = this.setMapExtent.bind(this);
         // this.toggleShouldOnlyShowItemsWithLocalChange = this.toggleShouldOnlyShowItemsWithLocalChange.bind(
         //     this
@@ -322,12 +322,12 @@ class App extends React.PureComponent<IProps, IState> {
     //     });
     // }
 
-    setUserSession(userSession: IUserSession) {
-        // console.log('setUserSession', userSession);
-        this.setState({
-            userSession,
-        });
-    }
+    // setUserSession(userSession: IUserSession) {
+    //     // console.log('setUserSession', userSession);
+    //     this.setState({
+    //         userSession,
+    //     });
+    // }
 
     // setMapExtent(mapExtent: IExtentGeomety) {
     //     // console.log('setMapExtent', mapExtent);
@@ -371,27 +371,27 @@ class App extends React.PureComponent<IProps, IState> {
     //     return waybackItems[index];
     // }
 
-    toggleSaveAsWebmapDialog(isVisible?: boolean) {
-        // console.log('toggleSaveAsWebmapDialog', isVisible);
-        const { isSaveAsWebmapDialogVisible, userSession } = this.state;
+    // toggleSaveAsWebmapDialog(isVisible?: boolean) {
+    //     // console.log('toggleSaveAsWebmapDialog', isVisible);
+    //     const { isSaveAsWebmapDialogVisible, userSession } = this.state;
 
-        isVisible =
-            typeof isVisible === 'boolean'
-                ? isVisible
-                : !isSaveAsWebmapDialogVisible;
+    //     isVisible =
+    //         typeof isVisible === 'boolean'
+    //             ? isVisible
+    //             : !isSaveAsWebmapDialogVisible;
 
-        if (isVisible && !userSession) {
-            // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
-            setShouldOpenSaveWebMapDialog();
+    //     if (isVisible && !userSession) {
+    //         // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
+    //         setShouldOpenSaveWebMapDialog();
 
-            // sign in first before opening the save as web map dialog because the userSession is required to create web map
-            this.oauthUtils.sigIn();
-        } else {
-            this.setState({
-                isSaveAsWebmapDialogVisible: isVisible,
-            });
-        }
-    }
+    //         // sign in first before opening the save as web map dialog because the userSession is required to create web map
+    //         this.oauthUtils.sigIn();
+    //     } else {
+    //         this.setState({
+    //             isSaveAsWebmapDialogVisible: isVisible,
+    //         });
+    //     }
+    // }
 
     // toggleSwipeWidget(){
 
@@ -855,36 +855,36 @@ class App extends React.PureComponent<IProps, IState> {
         );
     }
 
-    async componentDidMount() {
-        const { waybackData2InitApp } = this.props;
+    // async componentDidMount() {
+    //     const { waybackData2InitApp } = this.props;
 
-        const arcgisPortal = getServiceUrl('portal-url');
+    //     const arcgisPortal = getServiceUrl('portal-url');
 
-        // const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
-        const customizedPortal = getCustomPortalUrl();
-        // console.log(customizedPortal)
+    //     // const customizedPortal = getPortalUrlInSearchParam(); //'https://rags19003.ags.esri.com/portal';
+    //     const customizedPortal = getCustomPortalUrl();
+    //     // console.log(customizedPortal)
 
-        try {
-            // please note the appId used here only works for apps hosted under *.arcgis.com domain
-            // need to switch to using appropriate appId if the app will be hosted under different domain
-            const userSession = await this.oauthUtils.init({
-                appId: config.appId,
-                portalUrl: customizedPortal || arcgisPortal,
-            });
-            this.setUserSession(userSession);
-            console.log(userSession);
+    //     try {
+    //         // please note the appId used here only works for apps hosted under *.arcgis.com domain
+    //         // need to switch to using appropriate appId if the app will be hosted under different domain
+    //         const userSession = await this.oauthUtils.init({
+    //             appId: config.appId,
+    //             portalUrl: customizedPortal || arcgisPortal,
+    //         });
+    //         this.setUserSession(userSession);
+    //         console.log(userSession);
 
-            // const waybackData2InitApp = await this.waybackManager.init();
-            // console.log(waybackData2InitApp);
-            // this.setWaybackItems(waybackData2InitApp.waybackItems);
+    //         // const waybackData2InitApp = await this.waybackManager.init();
+    //         // console.log(waybackData2InitApp);
+    //         // this.setWaybackItems(waybackData2InitApp.waybackItems);
 
-            if (getShouldOpenSaveWebMapDialog() && userSession) {
-                this.toggleSaveAsWebmapDialog(true);
-            }
-        } catch (err) {
-            console.error('failed to get waybackData2InitApp');
-        }
-    }
+    //         if (getShouldOpenSaveWebMapDialog() && userSession) {
+    //             this.toggleSaveAsWebmapDialog(true);
+    //         }
+    //     } catch (err) {
+    //         console.error('failed to get waybackData2InitApp');
+    //     }
+    // }
 
     // componentDidUpdate() {
     //     this.updateUrlSearchParams();

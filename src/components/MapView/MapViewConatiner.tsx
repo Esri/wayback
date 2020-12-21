@@ -46,14 +46,14 @@ const MapViewConatiner = () => {
 
     const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
 
-    const mapExtentFromURL = useSelector(mapExtentSelector);
+    const mapExtent = useSelector(mapExtentSelector);
 
     const getInitialExtent = ():IExtentGeomety=>{
 
         const defaultExtentFromLocalStorage = getDefaultExtent() //getDefaultExtent();
 
         return (
-            mapExtentFromURL || 
+            mapExtent || 
             defaultExtentFromLocalStorage || 
             AppConfig.defaultMapExtent 
         );
@@ -71,12 +71,15 @@ const MapViewConatiner = () => {
 
     const onExtentChange = (extent:IExtentGeomety)=>{
         dispatch(mapExtentUpdated(extent));
-        saveMapExtentInURLQueryParam(extent)
     }
 
     useEffect(() => {
         saveReleaseNum4ActiveWaybackItemInURLQueryParam(activeWaybackItem.releaseNum)
     }, [activeWaybackItem])
+
+    useEffect(() => {
+        saveMapExtentInURLQueryParam(mapExtent)
+    }, [mapExtent])
 
     return (
         <MapView

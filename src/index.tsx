@@ -13,7 +13,7 @@ import configureAppStore, { getPreloadedState } from './store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
 
 import WaybackManager from './core/WaybackManager';
-import App from './components/App';
+import App from './components/App/App';
 // import { decodeSearchParam } from './utils/UrlSearchParam';
 
 // import { setDefaultOptions } from 'esri-loader';
