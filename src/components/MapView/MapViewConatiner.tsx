@@ -10,21 +10,21 @@ import {
 } from 'react-redux';
 
 import {
-    isReferenceLayerVisibleSelector,
+    // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated
 } from '../../store/reducers/Map';
 
 import {
-    activeWaybackItemSelector,
+    // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
 } from '../../store/reducers/WaybackItems';
 
 import MapView from './MapView';
-import ReferenceLayer from '../ReferenceLayer/ReferenceLayer';
+import ReferenceLayer from '../ReferenceLayer/ReferenceLayerContainer';
 import SearchWidget from '../SearchWidget/SearchWidget';
-import WaybackLayer from '../WaybackLayer/WaybackLayer';
+import WaybackLayer from '../WaybackLayer/WaybackLayerContainer';
 import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer';
 import MetadataPopup from '../PopUp/MetadataPopupContainer';
 import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTaskContainer';
@@ -34,17 +34,37 @@ import AppConfig from '../../app-config'
 import { IExtentGeomety, IMapPointInfo } from '../../types';
 import { getDefaultExtent } from '../../utils/LocalStorage';
 import { AppContext } from '../../contexts/AppContextProvider';
-import { saveMapExtentInURLQueryParam, saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
+import { saveMapExtentInURLQueryParam } from '../../utils/UrlSearchParam';
 
-const MapViewConatiner = () => {
+// wrap the MapView and it's children into this flex grow container, 
+// so it can adjust it's width depends on the visibility of swipe widget layers selector components on left and right side
+const FlexGrowItemWapper:React.FC = ({
+    children
+})=>{
+    return (
+        <div 
+            style={{
+                position: 'relative',
+                flexGrow: 1,
+                flexShrink: 0
+            }}
+        >
+            { children }
+        </div>
+    )
+}
+
+const MapViewConatiner:React.FC = ({
+    children
+}) => {
 
     const dispatch = useDispatch();
 
     const { waybackManager } = useContext(AppContext)
 
-    const activeWaybackItem = useSelector(activeWaybackItemSelector);
+    // const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
-    const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
+    // const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
 
     const mapExtent = useSelector(mapExtentSelector);
 
@@ -74,40 +94,20 @@ const MapViewConatiner = () => {
     }
 
     useEffect(() => {
-        saveReleaseNum4ActiveWaybackItemInURLQueryParam(activeWaybackItem.releaseNum)
-    }, [activeWaybackItem])
-
-    useEffect(() => {
         saveMapExtentInURLQueryParam(mapExtent)
     }, [mapExtent])
 
     return (
-        <MapView
-            initialExtent={getInitialExtent()}
-            onUpdateEnd={queryVersionsWithLocalChanges}
-            onExtentChange={onExtentChange}
-        >
-            <WaybackLayer 
-                activeWaybackItem={activeWaybackItem}
-            />
+        <FlexGrowItemWapper>
+            <MapView
+                initialExtent={getInitialExtent()}
+                onUpdateEnd={queryVersionsWithLocalChanges}
+                onExtentChange={onExtentChange}
+            >
+                { children }
+            </MapView>
+        </FlexGrowItemWapper>
 
-            <ReferenceLayer 
-                isVisible={isReferenceLayerVisible}
-            />
-
-            <SearchWidget 
-                position={'top-left'}
-            />
-
-            <TilePreviewWindow />
-
-            <MetadataPopup />
-
-            <MetadataQueryTask />
-
-            <SwipeWidget />
-
-        </MapView>
     )
 }
 

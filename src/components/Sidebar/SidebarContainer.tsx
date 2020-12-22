@@ -30,31 +30,9 @@ import {
 } from '../SharedUI'
 import { AppContext } from '../../contexts/AppContextProvider';
 
-const FlexyContainer:React.FC = ({
+const SidebarContainer:React.FC = ({
     children
-})=>{
-    return (
-        <div className="leader-half fancy-scrollbar"
-            style={{
-                position: 'relative',
-                flexGrow: 1,
-                flexShrink: 0,
-                flexBasis: 200,
-                overflowX: 'hidden',
-                overflowY: 'auto',
-            }}
-        >
-            <Spacing
-                paddingLeft='1rem'
-                paddingRight='1rem'
-            >
-                { children }
-            </Spacing>
-        </div>
-    )
-};
-
-const SidebarContainer = () => {
+}) => {
 
     const { isMobile } = useContext(AppContext)
 
@@ -70,27 +48,7 @@ const SidebarContainer = () => {
             isGutterHide={isGutterHide}
             isMobile={isMobile}
         >
-            <SidebarToggleBtn />
-
-            <Spacing
-                paddingLeft='1rem'
-                paddingRight='1rem'
-            >
-                <MobileHide>
-                    <AppTitleText />
-                </MobileHide>
-                
-                <BarChart />
-
-                <Title4ActiveItem />
-
-                <ShowLocalChangesCheckboxToggle />
-
-            </Spacing>
-
-            <FlexyContainer>
-                <ListView />
-            </FlexyContainer>
+            { children }
 
         </Sidebar>
     )

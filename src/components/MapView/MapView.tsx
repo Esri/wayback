@@ -78,6 +78,10 @@ const MapView: React.FC<Props> = ({
 
             const center = mapView.center;
 
+            if(!center){
+                return;
+            }
+
             const extent = webMercatorUtils.webMercatorToGeographic(
                 mapView.extent
             );

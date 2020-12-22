@@ -123,10 +123,10 @@ class ListView extends React.PureComponent<IProps, IState> {
         ) : null;
 
         return (
-            <div>
+            <>
                 <div className="list-view-container">{cards}</div>
                 {staticTooltip}
-            </div>
+            </>
         );
     }
 }

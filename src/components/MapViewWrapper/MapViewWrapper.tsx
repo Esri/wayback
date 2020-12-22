@@ -24,7 +24,9 @@ import {
 import { AppContext } from '../../contexts/AppContextProvider';
 import { isGutterHideSelector } from '../../store/reducers/UI';
 
-const MapViewWrapper = () => {
+const MapViewWrapper:React.FC = ({
+    children
+}) => {
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
@@ -56,23 +58,8 @@ const MapViewWrapper = () => {
                 display: 'flex'
             }}
         >
-            <SwipeWidgetLayerSelector 
-                targetLayer='leading'
-            />
 
-            <div 
-                style={{
-                    position: 'relative',
-                    flexGrow: 1,
-                    flexShrink: 0
-                }}
-            >
-                <MapView />
-            </div>
-            
-            <SwipeWidgetLayerSelector 
-                targetLayer='trailing'
-            />
+            { children }
             
         </div>
     )

@@ -25,6 +25,33 @@ import {
 import ListView from './index';
 import { IWaybackItem } from '../../types';
 import { AppContext } from '../../contexts/AppContextProvider';
+import {
+    Spacing
+} from '../SharedUI'
+
+const ListViewWrapper:React.FC = ({
+    children
+})=>{
+    return (
+        <div className="leader-half fancy-scrollbar"
+            style={{
+                position: 'relative',
+                flexGrow: 1,
+                flexShrink: 0,
+                flexBasis: 200,
+                overflowX: 'hidden',
+                overflowY: 'auto',
+            }}
+        >
+            <Spacing
+                paddingLeft='1rem'
+                paddingRight='1rem'
+            >
+                { children }
+            </Spacing>
+        </div>
+    )
+}
 
 const ListViewContainer = () => {
 
@@ -41,32 +68,34 @@ const ListViewContainer = () => {
     const shouldOnlyShowItemsWithLocalChange = useSelector(shouldOnlyShowItemsWithLocalChangeSelector);
 
     return (
-        <ListView
-            isMobile={isMobile}
-            waybackItems={waybackItems}
-            activeWaybackItem={activeWaybackItem}
-            shouldOnlyShowItemsWithLocalChange={
-                shouldOnlyShowItemsWithLocalChange
-            }
-            rNum4SelectedWaybackItems={
-                rNum4SelectedWaybackItems
-            }
-            rNum4WaybackItemsWithLocalChanges={
-                rNum4WaybackItemsWithLocalChanges
-            }
-            onClick={(releaseNum:number)=>{
-                dispatch(setActiveWaybackItem(releaseNum))
-            }}
-            onMouseEnter={(releaseNum:number)=>{
-                dispatch(setPreviewWaybackItem(releaseNum))
-            }}
-            onMouseOut={()=>[
-                dispatch(setPreviewWaybackItem())
-            ]}
-            toggleSelect={(releaseNum:number)=>{
-                dispatch(toggleSelectWaybackItem(releaseNum))
-            }}
-        />
+        <ListViewWrapper>
+            <ListView
+                isMobile={isMobile}
+                waybackItems={waybackItems}
+                activeWaybackItem={activeWaybackItem}
+                shouldOnlyShowItemsWithLocalChange={
+                    shouldOnlyShowItemsWithLocalChange
+                }
+                rNum4SelectedWaybackItems={
+                    rNum4SelectedWaybackItems
+                }
+                rNum4WaybackItemsWithLocalChanges={
+                    rNum4WaybackItemsWithLocalChanges
+                }
+                onClick={(releaseNum:number)=>{
+                    dispatch(setActiveWaybackItem(releaseNum))
+                }}
+                onMouseEnter={(releaseNum:number)=>{
+                    dispatch(setPreviewWaybackItem(releaseNum))
+                }}
+                onMouseOut={()=>[
+                    dispatch(setPreviewWaybackItem())
+                ]}
+                toggleSelect={(releaseNum:number)=>{
+                    dispatch(toggleSelectWaybackItem(releaseNum))
+                }}
+            />
+        </ListViewWrapper>
     )
 }
 
