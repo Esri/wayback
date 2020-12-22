@@ -13,6 +13,7 @@ import {
     MobileHeader,
     MobileFooter,
     ReferenceLayer,
+    ReferenceLayerToggle,
     Sidebar,
     SearchWidget,
     ShareDialog,
@@ -94,6 +95,8 @@ const AppLayout = () => {
                     <MetadataQueryTask />
 
                     <SwipeWidget />
+
+                    <ReferenceLayerToggle />
 
                 </MapView>
                 

@@ -11,6 +11,7 @@ export { default as MetadataQueryTask } from './MetadataQueryTask/MetadataQueryT
 export { default as MobileHeader } from './MobileHeader/MobileHeaderContainer';
 export { default as MobileFooter } from './MobileFooter/MobileFooterContainer';
 export { default as ReferenceLayer } from './ReferenceLayer/ReferenceLayerContainer';
+export { default as ReferenceLayerToggle } from './ReferenceLayerToggle/ReferenceLayerToggleContainer';
 export { default as Sidebar } from './Sidebar/SidebarContainer';
 export { default as SearchWidget } from './SearchWidget/SearchWidget';
 export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
