@@ -25,7 +25,8 @@ import {
     swipeWidgetTrailingLayerSelector,
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
-    isSwipeWidgetOpenSelector
+    isSwipeWidgetOpenSelector,
+    isSwipeWidgetOpenToggled
 } from '../../store/reducers/SwipeView'
 
 import { IWaybackItem } from '../../types';
@@ -54,6 +55,12 @@ const SwipeWidgetLayerSelectorContainer:React.FC<Props> = ({
     const leadingLayer: IWaybackItem = useSelector(swipeWidgetLeadingLayerSelector);
     const trailingLayer: IWaybackItem = useSelector(swipeWidgetTrailingLayerSelector);
 
+    const closeBtnOnClick = targetLayer === 'trailing' 
+        ? ()=>{
+            dispatch(isSwipeWidgetOpenToggled())
+        } 
+        : null;
+
     return isSwipeWidgetOpen && !isMobile ? (
         <SwipeWidgetLayerSelector 
             targetLayerType={targetLayer}
@@ -76,6 +83,7 @@ const SwipeWidgetLayerSelectorContainer:React.FC<Props> = ({
                 }
 
             }}
+            onClose={closeBtnOnClick}
         />
     ) : null;
 }
