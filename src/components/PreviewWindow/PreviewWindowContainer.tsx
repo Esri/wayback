@@ -1,5 +1,6 @@
 import React, {
-    useContext
+    useContext,
+    useEffect
 } from 'react';
 
 import {
@@ -31,6 +32,11 @@ const PreviewWindowContainer:React.FC<Props> = ({
     const previewWaybackItem = useSelector(previewWaybackItemSelector);
 
     const releaseNum4AlternativePreviewWaybackItem = useSelector(releaseNum4AlternativePreviewWaybackItemSelector);
+
+    useEffect(()=>{
+        console.log('previewWaybackItem', previewWaybackItem)
+        console.log('releaseNum4AlternativePreviewWaybackItem', releaseNum4AlternativePreviewWaybackItem)
+    }, [previewWaybackItem, releaseNum4AlternativePreviewWaybackItem])
 
     return !isMobile ? (
         <TilePreviewWindow

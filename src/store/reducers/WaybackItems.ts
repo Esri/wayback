@@ -153,7 +153,7 @@ export const setPreviewWaybackItem = (
             // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
             const rNums = allReleaseNumbers
                 .filter((rNum) => {
-                    const hasLocalChange = releaseNum4ItemsWithLocalChanges.indexOf(releaseNumber) > -1;
+                    const hasLocalChange = releaseNum4ItemsWithLocalChanges.indexOf(rNum) > -1;
                     return hasLocalChange || rNum === releaseNumber;
                 });
             
