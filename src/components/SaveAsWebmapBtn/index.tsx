@@ -63,7 +63,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
                     aria-label={tooltipContent}
                 >
                     <div className="overlay-label text-white text-center">
-                        <span className="val-holder-count-of-selected-items">
+                        <span>
                             {selectedWaybackItems.length}
                         </span>
                     </div>

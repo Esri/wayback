@@ -1,11 +1,5 @@
 import './style/index.scss';
 
-// import '@babel/polyfill';
-
-// // required by ArcGIS REST JS
-// import 'isomorphic-fetch';
-// import 'es6-promise';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -13,13 +7,16 @@ import configureAppStore, { getPreloadedState } from './store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
 
 import WaybackManager from './core/WaybackManager';
+
 import {
     AppLayout
 } from './components/';
-// import { decodeSearchParam } from './utils/UrlSearchParam';
 
-// import { setDefaultOptions } from 'esri-loader';
-// setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
+import { setDefaultOptions } from 'esri-loader';
+
+setDefaultOptions({ 
+    version: '4.18'
+});
 
 const initApp = async () => {
 

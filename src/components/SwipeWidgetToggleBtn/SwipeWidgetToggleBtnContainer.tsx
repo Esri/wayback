@@ -41,7 +41,6 @@ const SwipeWidgetToggleBtnContainer = () => {
         <MobileHide>
             <SwipeWidgetToggleBtn 
                 isOpen={isSwipeWidgetOpen}
-                marginTop={rNum4SelectedWaybackItems.length ? '1rem' : 'unset'}
                 onClickHandler={onClickHandler}
             />
         </MobileHide>

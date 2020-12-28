@@ -3,13 +3,14 @@
 .save-as-webmap-btn-container{
     position: relative;
     width: 100%;
-    height: 50px;
+    // height: 50px;
 
     .create-agol-webmap {
         background: url('../../static/icons/QueueGroupNo.png') center no-repeat;
         cursor: default;
         width: 100%;
-        height: 100%;
+        // height: 100%;
+        height: 50px;
 
         .overlay-label {
             position: absolute;
