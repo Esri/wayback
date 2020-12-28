@@ -2,7 +2,7 @@
 import { loadModules } from 'esri-loader';
 
 import './style.scss';
-import * as React from 'react';
+import React from 'react';
 import { IWaybackItem } from '../../types';
 import { geometryFns } from 'helper-toolkit-ts';
 

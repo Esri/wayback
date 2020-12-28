@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { loadModules } from 'esri-loader';
 
 import {

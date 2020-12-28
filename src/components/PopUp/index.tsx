@@ -1,6 +1,6 @@
 // import { loadModules } from 'esri-loader';
 import './style.scss';
-import * as React from 'react';
+import React from 'react';
 
 // import WaybackManager from '../../core/WaybackManager';
 import { dateFns } from 'helper-toolkit-ts';
