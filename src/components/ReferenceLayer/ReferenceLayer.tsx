@@ -60,7 +60,7 @@ const ReferenceLayer:React.FC<Props> = ({
     }
 
     useEffect(() => {
-        console.log(mapView)
+        // console.log(mapView)
         if (mapView) {
             init();
         }
