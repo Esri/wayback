@@ -1,13 +1,22 @@
+  
+import '@arcgis/core/assets/esri/themes/light/main.css';
 import React, {
     useEffect
 } from 'react';
 
-import { loadModules, loadCss } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IMap from 'esri/Map';
-import IWatchUtils from 'esri/core/watchUtils';
-import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import IExtent from 'esri/geometry/Extent';
+// import { loadModules, loadCss } from 'esri-loader';
+// import IMapView from 'esri/views/MapView';
+// import IMap from 'esri/Map';
+// import IWatchUtils from 'esri/core/watchUtils';
+// import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+// import IExtent from 'esri/geometry/Extent';
+
+import MapView from '@arcgis/core/views/MapView';
+import EsriMap from '@arcgis/core/Map';
+import { whenTrue } from '@arcgis/core/core/watchUtils';
+import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
+import Extent from '@arcgis/core/geometry/Extent';
+
 import { IExtentGeomety, IMapPointInfo } from '../../types';
 
 interface Props {
@@ -17,7 +26,7 @@ interface Props {
     children?: React.ReactNode;
 }
 
-const MapView: React.FC<Props> = ({ 
+const MapViewComponent: React.FC<Props> = ({ 
     initialExtent,
     onUpdateEnd,
     onExtentChange,
@@ -26,86 +35,121 @@ const MapView: React.FC<Props> = ({
 
     const mapDivRef = React.useRef<HTMLDivElement>();
 
-    const [mapView, setMapView] = React.useState<IMapView>(null);
+    const [mapView, setMapView] = React.useState<MapView>(null);
 
-    const initMapView = async () => {
-        type Modules = [typeof IMapView, typeof IMap, typeof IExtent];
+    const initMapView = () => {
+        // type Modules = [typeof IMapView, typeof IMap, typeof IExtent];
 
-        try {
-            const [MapView, Map, Extent] = await (loadModules([
-                'esri/views/MapView',
-                'esri/Map',
-                'esri/geometry/Extent'
-            ]) as Promise<Modules>);
+        // try {
+        //     const [MapView, Map, Extent] = await (loadModules([
+        //         'esri/views/MapView',
+        //         'esri/Map',
+        //         'esri/geometry/Extent'
+        //     ]) as Promise<Modules>);
 
-            const view = new MapView({
-                container: mapDivRef.current,
-                map: new Map(),
-                extent: new Extent({
-                    ...initialExtent
-                })
-            });
+        //     const view = new MapView({
+        //         container: mapDivRef.current,
+        //         map: new Map(),
+        //         extent: new Extent({
+        //             ...initialExtent
+        //         })
+        //     });
 
-            setMapView(view);
+        //     setMapView(view);
 
-        } catch (err) {
-            console.error(err);
-        }
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        const view = new MapView({
+            container: mapDivRef.current,
+            map: new EsriMap(),
+            extent: new Extent({
+                ...initialExtent
+            })
+        });
+
+        setMapView(view);
     };
 
     const initWatchUtils = async()=>{
-        try {
-            type Modules = [typeof IWatchUtils];
+        // try {
+        //     type Modules = [typeof IWatchUtils];
 
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+        //     const [watchUtils] = await (loadModules([
+        //         'esri/core/watchUtils',
+        //     ]) as Promise<Modules>);
 
-            watchUtils.whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
-        } catch (err) {
-            console.error(err);
-        }
+        //     watchUtils.whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
     }
 
     const mapViewUpdateEndHandler = async()=>{
 
-        try {
-            type Modules = [typeof IWebMercatorUtils];
+        // try {
+        //     type Modules = [typeof IWebMercatorUtils];
 
-            const [webMercatorUtils] = await (loadModules([
-                'esri/geometry/support/webMercatorUtils',
-            ]) as Promise<Modules>);
+        //     const [webMercatorUtils] = await (loadModules([
+        //         'esri/geometry/support/webMercatorUtils',
+        //     ]) as Promise<Modules>);
 
-            const center = mapView.center;
+        //     const center = mapView.center;
 
-            if(!center){
-                return;
-            }
+        //     if(!center){
+        //         return;
+        //     }
 
-            const extent = webMercatorUtils.webMercatorToGeographic(
-                mapView.extent
-            );
+        //     const extent = webMercatorUtils.webMercatorToGeographic(
+        //         mapView.extent
+        //     );
 
-            // console.log('mapview update ended', center);
+        //     // console.log('mapview update ended', center);
 
-            const mapViewCenterPointInfo: IMapPointInfo = {
-                latitude: center.latitude,
-                longitude: center.longitude,
-                zoom: mapView.zoom,
-                geometry: center.toJSON(),
-            };
+        //     const mapViewCenterPointInfo: IMapPointInfo = {
+        //         latitude: center.latitude,
+        //         longitude: center.longitude,
+        //         zoom: mapView.zoom,
+        //         geometry: center.toJSON(),
+        //     };
 
-            onUpdateEnd(mapViewCenterPointInfo);
+        //     onUpdateEnd(mapViewCenterPointInfo);
 
-            onExtentChange(extent.toJSON());
+        //     onExtentChange(extent.toJSON());
 
-        } catch (err) {
-            console.error(err);
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        const center = mapView.center;
+
+        if(!center){
+            return;
         }
+
+        const extent = webMercatorToGeographic(
+            mapView.extent
+        );
+
+        // console.log('mapview update ended', center);
+
+        const mapViewCenterPointInfo: IMapPointInfo = {
+            latitude: center.latitude,
+            longitude: center.longitude,
+            zoom: mapView.zoom,
+            geometry: center.toJSON(),
+        };
+
+        onUpdateEnd(mapViewCenterPointInfo);
+
+        onExtentChange(extent.toJSON());
     }
 
     useEffect(() => {
-        loadCss();
+        // loadCss();
         initMapView();
     }, []);
 
@@ -142,4 +186,4 @@ const MapView: React.FC<Props> = ({
     );
 };
 
-export default MapView;
+export default MapViewComponent;

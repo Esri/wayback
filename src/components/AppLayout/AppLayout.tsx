@@ -82,7 +82,7 @@ const AppLayout = () => {
 
                     <WaybackLayer/>
 
-                    <ReferenceLayer/>
+                    {/* <ReferenceLayer/>
 
                     <SearchWidget 
                         position={'top-left'}
@@ -96,7 +96,7 @@ const AppLayout = () => {
 
                     <SwipeWidget />
 
-                    <ReferenceLayerToggle />
+                    <ReferenceLayerToggle /> */}
 
                 </MapView>
                 

@@ -4,8 +4,10 @@ import React, {
 
 // import { loadModules } from 'esri-loader';
 
-import IMapView from 'esri/views/MapView';
-import IWebTileLayer from 'esri/layers/WebTileLayer';
+// import IMapView from 'esri/views/MapView';
+// import IWebTileLayer from 'esri/layers/WebTileLayer';
+import MapView from '@arcgis/core/views/MapView';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer'
 import { IWaybackItem } from '../../types';
 
 import {
@@ -14,7 +16,7 @@ import {
 
 type Props = {
     activeWaybackItem: IWaybackItem;
-    mapView?: IMapView;
+    mapView?: MapView;
 }
 
 const WaybackLayer:React.FC<Props> = ({
@@ -22,15 +24,15 @@ const WaybackLayer:React.FC<Props> = ({
     mapView
 }) => {
 
-    const waybackLayerRef = useRef<IWebTileLayer>();
+    const waybackLayerRef = useRef<WebTileLayer>();
 
-    const updateWaybackLayer = async()=> {
+    const updateWaybackLayer = ()=> {
 
         if (waybackLayerRef.current) {
             mapView.map.remove(waybackLayerRef.current);
         }
 
-        waybackLayerRef.current = await getWaybackLayer(activeWaybackItem);
+        waybackLayerRef.current = getWaybackLayer(activeWaybackItem);
 
         // always add as the bottom most layer
         mapView.map.add(waybackLayerRef.current, 0);
