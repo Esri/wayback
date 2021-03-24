@@ -3,12 +3,19 @@ import React, {
     useEffect
 } from 'react';
 
-import { loadModules } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import ISwipe from 'esri/widgets/Swipe';
-import IWebTileLayer from 'esri/layers/WebTileLayer';
-import IWatchUtils from 'esri/core/watchUtils';
+// import { loadModules } from 'esri-loader';
+// import IMapView from 'esri/views/MapView';
+// import ISwipe from 'esri/widgets/Swipe';
+// import IWebTileLayer from 'esri/layers/WebTileLayer';
+// import IWatchUtils from 'esri/core/watchUtils';
 import { IWaybackItem } from '../../types';
+
+import MapView from '@arcgis/core/views/MapView';
+import Swipe from '@arcgis/core/widgets/Swipe';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import {
+    watch
+} from '@arcgis/core/core/watchUtils'
 
 import {
     getWaybackLayer
@@ -18,7 +25,7 @@ type Props = {
     waybackItem4LeadingLayer: IWaybackItem;
     waybackItem4TrailingLayer: IWaybackItem;
     isOpen: boolean;
-    mapView?: IMapView;
+    mapView?: MapView;
 
     positionOnChange: (position:number)=>void;
     // onLoaded:()=>void;
@@ -35,71 +42,105 @@ const SwipeWidget:React.FC<Props> = ({
     // onLoaded
 }) => {
 
-    const swipeWidgetRef = useRef<ISwipe>();
-    const layersRef = useRef<IWebTileLayer[]>([]);
+    const swipeWidgetRef = useRef<Swipe>();
+    const layersRef = useRef<WebTileLayer[]>([]);
 
     const init = async()=>{
 
-        type Modules = [
-            typeof ISwipe,
-        ];
+        if(swipeWidgetRef.current){
+            show();
+        } else {
 
-        try {
-            const [ Swipe ] = await (loadModules([
-                'esri/widgets/Swipe',
-            ]) as Promise<Modules>);
+            const leadingLayer = getWaybackLayer(waybackItem4LeadingLayer);
+            const trailingLayer = getWaybackLayer(waybackItem4TrailingLayer);
+
+            layersRef.current = [leadingLayer, trailingLayer];
+
+            mapView.map.addMany(layersRef.current, 1);
+
+            const swipe = new Swipe({
+                view: mapView,
+                leadingLayers: [leadingLayer],
+                trailingLayers: [trailingLayer],
+                direction: "horizontal",
+                position: 50 // position set to middle of the view (50%)
+            });
     
-            if(swipeWidgetRef.current){
-                show();
-            } else {
+            swipeWidgetRef.current = swipe;
 
-                const leadingLayer = await getWaybackLayer(waybackItem4LeadingLayer);
-                const trailingLayer = await getWaybackLayer(waybackItem4TrailingLayer);
+            mapView.ui.add(swipe);
 
-                layersRef.current = [leadingLayer, trailingLayer];
+            addEventHandlers(swipe);
 
-                mapView.map.addMany(layersRef.current, 1);
-
-                const swipe = new Swipe({
-                    view: mapView,
-                    leadingLayers: [leadingLayer],
-                    trailingLayers: [trailingLayer],
-                    direction: "horizontal",
-                    position: 50 // position set to middle of the view (50%)
-                });
-        
-                swipeWidgetRef.current = swipe;
-    
-                mapView.ui.add(swipe);
-
-                addEventHandlers(swipe);
-
-                // onLoaded();
-            }
-
-        } catch(err){
-            console.error(err);
-            init();
+            // onLoaded();
         }
+
+        // type Modules = [
+        //     typeof ISwipe,
+        // ];
+
+        // try {
+        //     const [ Swipe ] = await (loadModules([
+        //         'esri/widgets/Swipe',
+        //     ]) as Promise<Modules>);
+    
+        //     if(swipeWidgetRef.current){
+        //         show();
+        //     } else {
+
+        //         const leadingLayer = await getWaybackLayer(waybackItem4LeadingLayer);
+        //         const trailingLayer = await getWaybackLayer(waybackItem4TrailingLayer);
+
+        //         layersRef.current = [leadingLayer, trailingLayer];
+
+        //         mapView.map.addMany(layersRef.current, 1);
+
+        //         const swipe = new Swipe({
+        //             view: mapView,
+        //             leadingLayers: [leadingLayer],
+        //             trailingLayers: [trailingLayer],
+        //             direction: "horizontal",
+        //             position: 50 // position set to middle of the view (50%)
+        //         });
+        
+        //         swipeWidgetRef.current = swipe;
+    
+        //         mapView.ui.add(swipe);
+
+        //         addEventHandlers(swipe);
+
+        //         // onLoaded();
+        //     }
+
+        // } catch(err){
+        //     console.error(err);
+        //     init();
+        // }
 
     };
 
-    const addEventHandlers = async(swipeWidget:ISwipe)=>{
-        try {
-            type Modules = [typeof IWatchUtils];
+    const addEventHandlers = (swipeWidget:Swipe)=>{
+        // try {
+        //     type Modules = [typeof IWatchUtils];
 
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+        //     const [watchUtils] = await (loadModules([
+        //         'esri/core/watchUtils',
+        //     ]) as Promise<Modules>);
 
-            watchUtils.watch(swipeWidget, 'position', (position:number) => {
-                // console.log('position changes for swipe widget', position);
-                positionOnChange(position);
-            });
+        //     watch(swipeWidget, 'position', (position:number) => {
+        //         // console.log('position changes for swipe widget', position);
+        //         positionOnChange(position);
+        //     });
 
-        } catch (err) {
-            console.error(err);
-        }
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        
+        watch(swipeWidget, 'position', (position:number) => {
+            // console.log('position changes for swipe widget', position);
+            positionOnChange(position);
+        });
     }
 
     const show = ()=>{

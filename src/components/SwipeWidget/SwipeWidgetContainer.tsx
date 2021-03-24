@@ -23,12 +23,13 @@ import {
     MobileHide
 } from '../SharedUI';
 
-import IMapView from 'esri/views/MapView';
+// import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 import { IWaybackItem } from '../../types';
 import { saveSwipeWidgetInfoInURLQueryParam } from '../../utils/UrlSearchParam';
 
 type Props = {
-    mapView?: IMapView;
+    mapView?: MapView;
 }
 
 const SwipeWidgetContainer:React.FC<Props> = ({

@@ -5,8 +5,8 @@ import React, {
 
 import {
     useSelector,
-    useDispatch,
-    batch
+    // useDispatch,
+    // batch
 } from 'react-redux';
 
 import {
@@ -16,11 +16,11 @@ import {
 
 import TilePreviewWindow from './index';
 
-import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 import { AppContext } from '../../contexts/AppContextProvider';
 
 type Props = {
-    mapView?: IMapView;
+    mapView?: MapView;
 }
 
 const PreviewWindowContainer:React.FC<Props> = ({

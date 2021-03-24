@@ -1,8 +1,11 @@
-import IEsriConfig from 'esri/config';
-import { loadModules } from 'esri-loader';
+// import IEsriConfig from 'esri/config';
+// import { loadModules } from 'esri-loader';
 import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
-import EsriRquest from 'esri/request';
+// import EsriRquest from 'esri/request';
+
+import esriRequest from '@arcgis/core/request'
+import esriConfig from '@arcgis/core/config'
 
 interface ICreateWebmapParams {
     title: string;
@@ -144,15 +147,15 @@ const createWebmap = async ({
         return null;
     }
 
-    type Modules = [
-        typeof IEsriConfig,
-        typeof EsriRquest
-    ];
+    // type Modules = [
+    //     typeof IEsriConfig,
+    //     typeof EsriRquest
+    // ];
 
-    const [ esriConfig, esriRequest ] = await (loadModules([
-        'esri/config',
-        'esri/request'
-    ]) as Promise<Modules>);
+    // const [ esriConfig, esriRequest ] = await (loadModules([
+    //     'esri/config',
+    //     'esri/request'
+    // ]) as Promise<Modules>);
 
     if(userSession.credential.server !== 'https://www.arcgis.com'){
         esriConfig.request.trustedServers.push(userSession.credential.server);

@@ -2,9 +2,12 @@ import React, {
     useEffect, useRef
 } from 'react'
 
-import { loadModules } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IVectorTileLayer from 'esri/layers/VectorTileLayer';
+// import { loadModules } from 'esri-loader';
+// import IMapView from 'esri/views/MapView';
+// import IVectorTileLayer from 'esri/layers/VectorTileLayer';
+
+import MapView from '@arcgis/core/views/MapView';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 
 import {
     REFERENCE_LAYER_ITEM_ID
@@ -12,7 +15,7 @@ import {
 
 type Props = {
     isVisible: boolean;
-    mapView?: IMapView;
+    mapView?: MapView;
 }
 
 const ReferenceLayer:React.FC<Props> = ({
@@ -20,31 +23,40 @@ const ReferenceLayer:React.FC<Props> = ({
     mapView
 }) => {
 
-    const referenceLayerRef = useRef<IVectorTileLayer>();
+    const referenceLayerRef = useRef<VectorTileLayer>();
 
-    const init = async()=>{
-        try {
+    const init = ()=>{
+        // try {
 
-            type Modules = [
-                typeof IVectorTileLayer
-            ];
+        //     type Modules = [
+        //         typeof IVectorTileLayer
+        //     ];
 
-            const [VectorTileLayer] = await (loadModules([
-                'esri/layers/VectorTileLayer',
-            ]) as Promise<Modules>);
+        //     const [VectorTileLayer] = await (loadModules([
+        //         'esri/layers/VectorTileLayer',
+        //     ]) as Promise<Modules>);
 
-            referenceLayerRef.current = new VectorTileLayer({
-                portalItem: {
-                    id: REFERENCE_LAYER_ITEM_ID,
-                },
-                visible: isVisible
-            });
+        //     referenceLayerRef.current = new VectorTileLayer({
+        //         portalItem: {
+        //             id: REFERENCE_LAYER_ITEM_ID,
+        //         },
+        //         visible: isVisible
+        //     });
             
-            mapView.map.add(referenceLayerRef.current)
+        //     mapView.map.add(referenceLayerRef.current)
 
-        } catch (err) {
-            console.error(err);
-        }
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        referenceLayerRef.current = new VectorTileLayer({
+            portalItem: {
+                id: REFERENCE_LAYER_ITEM_ID,
+            },
+            visible: isVisible
+        });
+        
+        mapView.map.add(referenceLayerRef.current)
     }
 
     useEffect(() => {

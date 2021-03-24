@@ -28,10 +28,11 @@ import {
 
 import MetadataQueryTask from './MetadataQueryTask';
 
-import IMapView from 'esri/views/MapView';
+// import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 
 type Props = {
-    mapView?: IMapView
+    mapView?: MapView
 };
 
 const MetadataQueryTaskContainer:React.FC<Props> = ({

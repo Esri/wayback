@@ -1,17 +1,23 @@
 // preview the tile image that interscets with the center of the map view
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 
 import './style.scss';
 import React from 'react';
 import { IWaybackItem } from '../../types';
 import { geometryFns } from 'helper-toolkit-ts';
 
-import IMapView from 'esri/views/MapView';
-import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import IPoint from 'esri/geometry/Point';
+// import IMapView from 'esri/views/MapView';
+// import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+// import IPoint from 'esri/geometry/Point';
+
+import MapView from '@arcgis/core/views/MapView';
+import Point from '@arcgis/core/geometry/Point';
+import {
+    lngLatToXY
+} from '@arcgis/core/geometry/support/webMercatorUtils';
 
 interface IProps {
-    mapView?: IMapView;
+    mapView?: MapView;
     previewWaybackItem: IWaybackItem;
     alternativeRNum4RreviewWaybackItem: number;
 }
@@ -80,39 +86,56 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         return previewWindowImageUrl;
     }
 
-    async getTilePosition(tileLon: number, tileLat: number) {
+    getTilePosition(tileLon: number, tileLat: number) {
         const { mapView } = this.props;
 
-        try {
-            type Modules = [typeof IPoint, typeof IWebMercatorUtils];
+        // convert lat lon to x y and create a point object
+        const tileXY = lngLatToXY(tileLon, tileLat);
 
-            const [Point, webMercatorUtils] = await (loadModules([
-                'esri/geometry/Point',
-                'esri/geometry/support/webMercatorUtils',
-            ]) as Promise<Modules>);
+        const point = new Point({
+            x: tileXY[0],
+            y: tileXY[1],
+            spatialReference: { wkid: 3857 },
+        });
 
-            // convert lat lon to x y and create a point object
-            const tileXY = webMercatorUtils.lngLatToXY(tileLon, tileLat);
+        // convert to screen point and we will use this val to position the preview window
+        const tileTopLeftXY = mapView.toScreen(point);
 
-            const point = new Point({
-                x: tileXY[0],
-                y: tileXY[1],
-                spatialReference: { wkid: 3857 },
-            });
+        return {
+            top: tileTopLeftXY.y,
+            left: tileTopLeftXY.x,
+        };
 
-            // convert to screen point and we will use this val to position the preview window
-            const tileTopLeftXY = mapView.toScreen(point);
+        // try {
+        //     type Modules = [typeof IPoint, typeof IWebMercatorUtils];
 
-            return {
-                top: tileTopLeftXY.y,
-                left: tileTopLeftXY.x,
-            };
-        } catch (err) {
-            return null;
-        }
+        //     const [Point, webMercatorUtils] = await (loadModules([
+        //         'esri/geometry/Point',
+        //         'esri/geometry/support/webMercatorUtils',
+        //     ]) as Promise<Modules>);
+
+        //     // convert lat lon to x y and create a point object
+        //     const tileXY = webMercatorUtils.lngLatToXY(tileLon, tileLat);
+
+        //     const point = new Point({
+        //         x: tileXY[0],
+        //         y: tileXY[1],
+        //         spatialReference: { wkid: 3857 },
+        //     });
+
+        //     // convert to screen point and we will use this val to position the preview window
+        //     const tileTopLeftXY = mapView.toScreen(point);
+
+        //     return {
+        //         top: tileTopLeftXY.y,
+        //         left: tileTopLeftXY.x,
+        //     };
+        // } catch (err) {
+        //     return null;
+        // }
     }
 
-    async updatePreviewWindowState() {
+    updatePreviewWindowState() {
         try {
             const tileInfo = this.getTileInfo();
 
@@ -122,7 +145,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 column: tileInfo.column,
             });
 
-            const { top, left } = await this.getTilePosition(
+            const { top, left } = this.getTilePosition(
                 tileInfo.tileLon,
                 tileInfo.tileLat
             );
