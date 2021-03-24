@@ -7,6 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const ArcGISPlugin = require('@arcgis/webpack-plugin');
 
 const computerName = os.hostname();
 
@@ -77,23 +78,7 @@ module.exports = (env, options)=> {
                     ]
                 },
                 { 
-                    test: /\.woff$/, 
-                    loader: "url-loader",
-                    options: {
-                        limit: 10000,
-                        mimetype: 'application/font-woff'
-                    }
-                },
-                { 
-                    test: /\.ttf$/,  
-                    loader: "url-loader",
-                    options: {
-                        limit: 10000,
-                        mimetype: 'application/octet-stream'
-                    }
-                },
-                { 
-                    test: /\.eot$/,  
+                    test: /\.(woff|woff2|ttf|eot)$/,  
                     loader: "file-loader" 
                 },
                 // { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
@@ -131,6 +116,12 @@ module.exports = (env, options)=> {
                         },
                     }
                 ],
+            }),
+            new ArcGISPlugin({ 
+                locales: ['en'],
+                features: {
+                    "3d": false
+                }
             }),
             new HtmlWebPackPlugin({
                 // inject: false,
@@ -172,20 +163,20 @@ module.exports = (env, options)=> {
             new CleanWebpackPlugin()
         ].filter(Boolean),
         optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    default: false,
-                    vendors: false,
-                    // vendor chunk
-                    vendor: {
-                        // sync + async chunks
-                        chunks: 'all',
-                        name: 'vendor',
-                        // import file path containing node_modules
-                        test: /node_modules/
-                    }
-                }
-            },
+            // splitChunks: {
+            //     cacheGroups: {
+            //         default: false,
+            //         vendors: false,
+            //         // vendor chunk
+            //         vendor: {
+            //             // sync + async chunks
+            //             chunks: 'all',
+            //             name: 'vendor',
+            //             // import file path containing node_modules
+            //             test: /node_modules/
+            //         }
+            //     }
+            // },
             minimizer: [
                 new TerserPlugin({
                     extractComments: true,
