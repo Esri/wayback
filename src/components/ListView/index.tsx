@@ -75,7 +75,7 @@ class ListView extends React.PureComponent<IProps, IState> {
               })
             : waybackItems;
 
-        const cards = cardData.map((d, i) => {
+        const cards = cardData.map((d) => {
             const isActive =
                 activeWaybackItem.releaseNum === d.releaseNum ? true : false;
             const isSelected =

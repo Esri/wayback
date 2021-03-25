@@ -5,7 +5,7 @@ import config from './config';
 
 interface IProps {
     currentUrl: string;
-    onClose: ()=>void;
+    onClose: () => void;
 }
 
 interface IState {

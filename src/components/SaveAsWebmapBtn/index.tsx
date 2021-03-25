@@ -31,9 +31,12 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
 
         const isActive = selectedWaybackItems.length ? true : false;
 
-        const containerClass = classNames('save-as-webmap-btn-container customized-tooltip', {
-            'is-disabled': disabled
-        })
+        const containerClass = classNames(
+            'save-as-webmap-btn-container customized-tooltip',
+            {
+                'is-disabled': disabled,
+            }
+        );
 
         const btnClass = classNames(
             'create-agol-webmap tooltip tooltip-multiline tooltip-right',
@@ -63,9 +66,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
                     aria-label={tooltipContent}
                 >
                     <div className="overlay-label text-white text-center">
-                        <span>
-                            {selectedWaybackItems.length}
-                        </span>
+                        <span>{selectedWaybackItems.length}</span>
                     </div>
                 </div>
                 {clearBtn}

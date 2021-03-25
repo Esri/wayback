@@ -1,33 +1,24 @@
-import React, {
-    useEffect, useRef
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // import { loadModules } from 'esri-loader';
 
 // import IMapView from 'esri/views/MapView';
 // import IWebTileLayer from 'esri/layers/WebTileLayer';
 import MapView from '@arcgis/core/views/MapView';
-import WebTileLayer from '@arcgis/core/layers/WebTileLayer'
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 import { IWaybackItem } from '../../types';
 
-import {
-    getWaybackLayer
-} from './getWaybackLayer';
+import { getWaybackLayer } from './getWaybackLayer';
 
 type Props = {
     activeWaybackItem: IWaybackItem;
     mapView?: MapView;
-}
+};
 
-const WaybackLayer:React.FC<Props> = ({
-    activeWaybackItem,
-    mapView
-}) => {
-
+const WaybackLayer: React.FC<Props> = ({ activeWaybackItem, mapView }) => {
     const waybackLayerRef = useRef<WebTileLayer>();
 
-    const updateWaybackLayer = ()=> {
-
+    const updateWaybackLayer = () => {
         if (waybackLayerRef.current) {
             mapView.map.remove(waybackLayerRef.current);
         }
@@ -36,7 +27,7 @@ const WaybackLayer:React.FC<Props> = ({
 
         // always add as the bottom most layer
         mapView.map.add(waybackLayerRef.current, 0);
-    }
+    };
 
     // const getWaybackLayer = async()=>{
 
@@ -59,13 +50,13 @@ const WaybackLayer:React.FC<Props> = ({
     //     }
     // }
 
-    useEffect(()=>{
-        if(mapView && activeWaybackItem){
-            updateWaybackLayer()
+    useEffect(() => {
+        if (mapView && activeWaybackItem) {
+            updateWaybackLayer();
         }
-    }, [mapView, activeWaybackItem])
+    }, [mapView, activeWaybackItem]);
 
     return null;
-}
+};
 
-export default WaybackLayer
+export default WaybackLayer;

@@ -2,50 +2,42 @@ import React, { useContext } from 'react';
 
 import Gutter from './index';
 
-import {
-    useSelector,
-    useDispatch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {
-    isSwipeWidgetOpenSelector,
-} from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
 
 import {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
-    isGutterHideSelector
-} from '../../store/reducers/UI'
+    isGutterHideSelector,
+} from '../../store/reducers/UI';
 import { AppContext } from '../../contexts/AppContextProvider';
 
 type Props = {
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
-const GutterContainer:React.FC<Props> = ({
-    children
-}) => {
-
+const GutterContainer: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
-    const isHide = useSelector(isGutterHideSelector)
+    const isHide = useSelector(isGutterHideSelector);
 
-    const { isMobile } = useContext(AppContext)
+    const { isMobile } = useContext(AppContext);
 
-    const aboutButtonOnClick = ()=>{
+    const aboutButtonOnClick = () => {
         dispatch(isAboutThisAppModalOpenToggled());
-    }
+    };
 
-    const shareButtonOnClick = ()=>{
+    const shareButtonOnClick = () => {
         dispatch(isShareModalOpenToggled());
-    }
+    };
 
-    const settingButtonOnClick = ()=>{
+    const settingButtonOnClick = () => {
         dispatch(isSettingModalOpenToggled());
-    }
+    };
 
     return !isHide ? (
         <Gutter
@@ -55,9 +47,9 @@ const GutterContainer:React.FC<Props> = ({
             shareButtonOnClick={shareButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
-            { children }
+            {children}
         </Gutter>
     ) : null;
-}
+};
 
-export default GutterContainer
+export default GutterContainer;

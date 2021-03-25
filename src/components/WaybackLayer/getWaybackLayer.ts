@@ -1,13 +1,11 @@
-
 // import { loadModules } from 'esri-loader';
 // import IWebTileLayer from 'esri/layers/WebTileLayer';
 
-import WebTileLayer from '@arcgis/core/layers/WebTileLayer'
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 
-import { IWaybackItem } from "../../types";
+import { IWaybackItem } from '../../types';
 
-export const getWaybackLayer = (waybackItem:IWaybackItem):WebTileLayer=>{
-
+export const getWaybackLayer = (waybackItem: IWaybackItem): WebTileLayer => {
     // try {
     //     type Modules = [typeof IWebTileLayer];
 
@@ -31,4 +29,4 @@ export const getWaybackLayer = (waybackItem:IWaybackItem):WebTileLayer=>{
     });
 
     return waybackLayer;
-}
+};

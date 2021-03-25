@@ -5,26 +5,24 @@ import classnames from 'classnames';
 
 type Props = {
     isOpen: boolean;
-    onClickHandler:()=>void;
-}
+    onClickHandler: () => void;
+};
 
-const SwipeWidgetToggleBtn:React.FC<Props> = ({
+const SwipeWidgetToggleBtn: React.FC<Props> = ({
     isOpen,
-    onClickHandler
-}) => {
-
+    onClickHandler,
+}: Props) => {
     const classNames = classnames('swipe-widget-toggle-btn', {
-        'is-open': isOpen
-    })
+        'is-open': isOpen,
+    });
 
     return (
         <div
             className={classNames}
             onClick={onClickHandler}
             title="Toggle Swipe Mode"
-        >
-        </div>
-    )
-}
+        ></div>
+    );
+};
 
-export default SwipeWidgetToggleBtn
+export default SwipeWidgetToggleBtn;

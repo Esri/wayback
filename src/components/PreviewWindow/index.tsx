@@ -12,9 +12,7 @@ import { geometryFns } from 'helper-toolkit-ts';
 
 import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
-import {
-    lngLatToXY
-} from '@arcgis/core/geometry/support/webMercatorUtils';
+import { lngLatToXY } from '@arcgis/core/geometry/support/webMercatorUtils';
 
 interface IProps {
     mapView?: MapView;

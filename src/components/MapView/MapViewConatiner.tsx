@@ -1,18 +1,11 @@
-import React, {
-    useContext,
-    useEffect
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
-    mapExtentUpdated
+    mapExtentUpdated,
 } from '../../store/reducers/Map';
 
 import {
@@ -22,45 +15,33 @@ import {
 } from '../../store/reducers/WaybackItems';
 
 import MapView from './MapView';
-import ReferenceLayer from '../ReferenceLayer/ReferenceLayerContainer';
-import SearchWidget from '../SearchWidget/SearchWidget';
-import WaybackLayer from '../WaybackLayer/WaybackLayerContainer';
-import TilePreviewWindow from '../PreviewWindow/PreviewWindowContainer';
-import MetadataPopup from '../PopUp/MetadataPopupContainer';
-import MetadataQueryTask from '../MetadataQueryTask/MetadataQueryTaskContainer';
-import SwipeWidget from '../SwipeWidget/SwipeWidgetContainer';
 
-import AppConfig from '../../app-config'
+import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '../../types';
 import { getDefaultExtent } from '../../utils/LocalStorage';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { saveMapExtentInURLQueryParam } from '../../utils/UrlSearchParam';
 
-// wrap the MapView and it's children into this flex grow container, 
+// wrap the MapView and it's children into this flex grow container,
 // so it can adjust it's width depends on the visibility of swipe widget layers selector components on left and right side
-const FlexGrowItemWapper:React.FC = ({
-    children
-})=>{
+const FlexGrowItemWapper: React.FC = ({ children }) => {
     return (
-        <div 
+        <div
             style={{
                 position: 'relative',
                 flexGrow: 1,
-                flexShrink: 0
+                flexShrink: 0,
             }}
         >
-            { children }
+            {children}
         </div>
-    )
-}
+    );
+};
 
-const MapViewConatiner:React.FC = ({
-    children
-}) => {
-
+const MapViewConatiner: React.FC = ({ children }) => {
     const dispatch = useDispatch();
 
-    const { waybackManager } = useContext(AppContext)
+    const { waybackManager } = useContext(AppContext);
 
     // const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
@@ -68,18 +49,19 @@ const MapViewConatiner:React.FC = ({
 
     const mapExtent = useSelector(mapExtentSelector);
 
-    const getInitialExtent = ():IExtentGeomety=>{
-
-        const defaultExtentFromLocalStorage = getDefaultExtent() //getDefaultExtent();
+    const getInitialExtent = (): IExtentGeomety => {
+        const defaultExtentFromLocalStorage = getDefaultExtent(); //getDefaultExtent();
 
         return (
-            mapExtent || 
-            defaultExtentFromLocalStorage || 
-            AppConfig.defaultMapExtent 
+            mapExtent ||
+            defaultExtentFromLocalStorage ||
+            AppConfig.defaultMapExtent
         );
     };
 
-    const queryVersionsWithLocalChanges = async(mapCenterPoint: IMapPointInfo)=>{
+    const queryVersionsWithLocalChanges = async (
+        mapCenterPoint: IMapPointInfo
+    ) => {
         try {
             const rNums = await waybackManager.getLocalChanges(mapCenterPoint);
             // console.log(rNums);
@@ -89,13 +71,13 @@ const MapViewConatiner:React.FC = ({
         }
     };
 
-    const onExtentChange = (extent:IExtentGeomety)=>{
+    const onExtentChange = (extent: IExtentGeomety) => {
         dispatch(mapExtentUpdated(extent));
-    }
+    };
 
     useEffect(() => {
-        saveMapExtentInURLQueryParam(mapExtent)
-    }, [mapExtent])
+        saveMapExtentInURLQueryParam(mapExtent);
+    }, [mapExtent]);
 
     return (
         <FlexGrowItemWapper>
@@ -104,11 +86,10 @@ const MapViewConatiner:React.FC = ({
                 onUpdateEnd={queryVersionsWithLocalChanges}
                 onExtentChange={onExtentChange}
             >
-                { children }
+                {children}
             </MapView>
         </FlexGrowItemWapper>
+    );
+};
 
-    )
-}
-
-export default MapViewConatiner
+export default MapViewConatiner;

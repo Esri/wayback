@@ -17,7 +17,7 @@ import {
 interface IProps {
     metadata: IWaybackMetadataQueryResult;
     metadataAnchorScreenPoint: IScreenPoint;
-    onClose: ()=>void;
+    onClose: () => void;
     // mapView?: IMapView;
     // waybackManager?: WaybackManager;
     // targetLayer: IWaybackItem;
@@ -192,7 +192,13 @@ class PopUp extends React.PureComponent<IProps> {
             width: this.Width,
         } as React.CSSProperties;
 
-        const { provider, source, resolution, accuracy, releaseDate } = metadata;
+        const {
+            provider,
+            source,
+            resolution,
+            accuracy,
+            releaseDate,
+        } = metadata;
 
         // const releaseDate = 'targetLayer.releaseDateLabel';
         const formattedDate = this.formatMetadataDate();

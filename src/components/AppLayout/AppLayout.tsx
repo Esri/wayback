@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import {
     AboutThisApp,
@@ -27,65 +27,50 @@ import {
     ShowLocalChangesCheckboxToggle,
     TilePreviewWindow,
     Title4ActiveItem,
-    WaybackLayer
-} from '..'
-import { getServiceUrl } from '../../utils/Tier'
+    WaybackLayer,
+} from '..';
+import { getServiceUrl } from '../../utils/Tier';
 
-import {
-    MobileHide,
-    Spacing
-} from '../SharedUI'
+import { MobileHide, Spacing } from '../SharedUI';
 
-const AppLayout = () => {
+const AppLayout = (): JSX.Element => {
     return (
         <>
             <MobileHeader />
 
             <Gutter>
-
                 <SaveAsWebmapBtn />
 
                 <SwipeWidgetToggleBtn />
-
             </Gutter>
 
             <Sidebar>
-
                 <SidebarToggleBtn />
 
-                <Spacing
-                    paddingLeft='1rem'
-                    paddingRight='1rem'
-                >
+                <Spacing paddingLeft="1rem" paddingRight="1rem">
                     <MobileHide>
                         <AppTitleText />
                     </MobileHide>
-                    
+
                     <BarChart />
 
                     <Title4ActiveItem />
 
                     <ShowLocalChangesCheckboxToggle />
-
                 </Spacing>
 
                 <ListView />
-
             </Sidebar>
 
             <MapViewWrapper>
-
-                <SwipeWidgetLayerSelector 
-                    targetLayer='leading'
-                />
+                <SwipeWidgetLayerSelector targetLayer="leading" />
 
                 <MapView>
+                    <WaybackLayer />
 
-                    <WaybackLayer/>
+                    <ReferenceLayer />
 
-                    <ReferenceLayer/>
-
-                    <SearchWidget 
+                    <SearchWidget
                         portalUrl={getServiceUrl('portal-url')}
                         position={'top-left'}
                     />
@@ -98,14 +83,10 @@ const AppLayout = () => {
 
                     <SwipeWidget />
 
-                    <ReferenceLayerToggle /> 
-
+                    <ReferenceLayerToggle />
                 </MapView>
-                
-                <SwipeWidgetLayerSelector 
-                    targetLayer='trailing'
-                />
 
+                <SwipeWidgetLayerSelector targetLayer="trailing" />
             </MapViewWrapper>
 
             <SaveAsWebMapDialog />
@@ -118,7 +99,7 @@ const AppLayout = () => {
 
             <MobileFooter />
         </>
-    )
-}
+    );
+};
 
-export default AppLayout
+export default AppLayout;

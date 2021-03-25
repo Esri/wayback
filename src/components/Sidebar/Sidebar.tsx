@@ -1,23 +1,25 @@
-import React from 'react'
-import { DEFAULT_BACKGROUND_COLOR, GUTTER_WIDTH, SIDEBAR_WIDTH } from '../../constants/UI'
+import React from 'react';
+import {
+    DEFAULT_BACKGROUND_COLOR,
+    GUTTER_WIDTH,
+    SIDEBAR_WIDTH,
+} from '../../constants/UI';
 
 type Props = {
     isHide: boolean;
     isGutterHide: boolean;
     isMobile: boolean;
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
-const Sidebar:React.FC<Props> = ({
+const Sidebar: React.FC<Props> = ({
     isHide,
     isGutterHide,
     isMobile,
-    children
-}:Props) => {
-
-    const getStyle = ():React.CSSProperties=>{
-
-        const mobileStyle:React.CSSProperties = {
+    children,
+}: Props) => {
+    const getStyle = (): React.CSSProperties => {
+        const mobileStyle: React.CSSProperties = {
             position: 'absolute',
             top: 'auto',
             bottom: 0,
@@ -25,10 +27,10 @@ const Sidebar:React.FC<Props> = ({
             left: isGutterHide ? 0 : GUTTER_WIDTH,
             width: isGutterHide ? '100%' : 'calc(100% - 50px)',
             maxHeight: 300,
-            padding: '.5rem 0'
-        }
+            padding: '.5rem 0',
+        };
 
-        const defaultStyle:React.CSSProperties = {
+        const defaultStyle: React.CSSProperties = {
             position: 'absolute',
             top: 0,
             left: GUTTER_WIDTH,
@@ -45,24 +47,18 @@ const Sidebar:React.FC<Props> = ({
             flexWrap: 'nowrap',
             justifyContent: 'flex-start',
             alignContent: 'stretch',
-            alignItems: 'stretch'
-        }
+            alignItems: 'stretch',
+        };
 
-        return isMobile 
-            ? {
-                ...defaultStyle,
-                ...mobileStyle
-            } as React.CSSProperties
-            : defaultStyle
-    }
+        return isMobile
+            ? ({
+                  ...defaultStyle,
+                  ...mobileStyle,
+              } as React.CSSProperties)
+            : defaultStyle;
+    };
 
-    return !isHide ? (
-        <div
-            style={getStyle()}
-        >
-            { children }
-        </div>
-    ) : null;
-}
+    return !isHide ? <div style={getStyle()}>{children}</div> : null;
+};
 
-export default Sidebar
+export default Sidebar;

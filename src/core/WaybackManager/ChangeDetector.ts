@@ -257,7 +257,7 @@ class WaybackChangeDetector {
             xhr.open('GET', imageUrl, true);
             xhr.responseType = 'arraybuffer';
 
-            xhr.onload = function(e) {
+            xhr.onload = function (e) {
                 if (this.status == 200) {
                     const uInt8Array = new Uint8Array(this.response);
                     let i = uInt8Array.length;

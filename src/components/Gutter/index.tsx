@@ -6,13 +6,13 @@ import { MOBILE_HEADER_HEIGHT } from '../../constants/UI';
 // import SettingModalConfig from '../SettingDialog/config';
 
 interface IProps {
-    isMobile:boolean;
-    settingsBtnDisabled:boolean;
+    isMobile: boolean;
+    settingsBtnDisabled: boolean;
     // children: JSX.Element[] | JSX.Element;
 
-    aboutButtonOnClick:()=>void;
-    shareButtonOnClick:()=>void;
-    settingButtonOnClick:()=>void;
+    aboutButtonOnClick: () => void;
+    shareButtonOnClick: () => void;
+    settingButtonOnClick: () => void;
 }
 
 class Gutter extends React.PureComponent<IProps> {
@@ -20,18 +20,19 @@ class Gutter extends React.PureComponent<IProps> {
         super(props);
     }
 
-    render() {
+    render(): JSX.Element {
         const {
             isMobile,
             shareButtonOnClick,
             aboutButtonOnClick,
-            settingButtonOnClick
+            settingButtonOnClick,
         } = this.props;
 
         return (
-            <div className="gutter-container"
+            <div
+                className="gutter-container"
                 style={{
-                    top: isMobile ? MOBILE_HEADER_HEIGHT : 0
+                    top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
                 }}
             >
                 <div className="shadow-trailer padding-leader-quarter padding-trailer-quarter trailer-quarter">
@@ -68,7 +69,9 @@ class Gutter extends React.PureComponent<IProps> {
                     </div>
 
                     <div
-                        className={`gutter-nav-btn ${this.props.settingsBtnDisabled ? 'btn-disabled' : ''}`}
+                        className={`gutter-nav-btn ${
+                            this.props.settingsBtnDisabled ? 'btn-disabled' : ''
+                        }`}
                         // data-modal={SettingModalConfig['modal-id']}
                         title="Settings"
                         onClick={settingButtonOnClick}

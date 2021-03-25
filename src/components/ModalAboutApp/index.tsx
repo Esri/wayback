@@ -4,7 +4,7 @@ import React from 'react';
 // import config from './config';
 
 interface IProps {
-    onClose: ()=>void;
+    onClose: () => void;
 }
 // interface IState {}
 

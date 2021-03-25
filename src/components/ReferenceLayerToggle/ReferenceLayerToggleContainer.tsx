@@ -1,33 +1,32 @@
-import React, {
-    useCallback
-} from 'react'
+import React, { useCallback } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import {
-    useSelector,
-    useDispatch
-} from 'react-redux'
-import { isReferenceLayerVisibleSelector, isReferenceLayerVisibleToggled } from '../../store/reducers/Map'
-import { MobileHide } from '../SharedUI'
+    isReferenceLayerVisibleSelector,
+    isReferenceLayerVisibleToggled,
+} from '../../store/reducers/Map';
+import { MobileHide } from '../SharedUI';
 
-import ReferenceLayerToggle from './ReferenceLayerToggle'
+import ReferenceLayerToggle from './ReferenceLayerToggle';
 
 const ReferenceLayerToggleContainer = () => {
-
     const dispatch = useDispatch();
-    const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
+    const isReferenceLayerVisible = useSelector(
+        isReferenceLayerVisibleSelector
+    );
 
     const toggleReferenceLayer = useCallback(() => {
-        dispatch(isReferenceLayerVisibleToggled())
-    },[])
+        dispatch(isReferenceLayerVisibleToggled());
+    }, []);
 
     return (
         <MobileHide>
-            <ReferenceLayerToggle 
+            <ReferenceLayerToggle
                 isActive={isReferenceLayerVisible}
                 onClick={toggleReferenceLayer}
             />
         </MobileHide>
-    )
-}
+    );
+};
 
-export default ReferenceLayerToggleContainer
+export default ReferenceLayerToggleContainer;

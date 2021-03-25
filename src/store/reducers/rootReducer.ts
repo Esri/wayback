@@ -8,5 +8,5 @@ export default combineReducers({
     UI,
     Map,
     SwipeView,
-    WaybackItems
+    WaybackItems,
 });

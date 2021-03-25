@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const LocateWidget = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+    return <div></div>;
+};
 
-export default LocateWidget
+export default LocateWidget;

@@ -12,8 +12,7 @@ import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import Portal from '@arcgis/core/portal/Portal';
 import Credential from '@arcgis/core/identity/Credential';
-import esriConfig from '@arcgis/core/config'
-
+import esriConfig from '@arcgis/core/config';
 
 export default class OAuthUtils {
     private oauthInfo: OAuthInfo;
@@ -25,8 +24,7 @@ export default class OAuthUtils {
         appId = '',
         portalUrl = 'https://www.arcgis.com',
     } = {}): Promise<IUserSession> {
-
-        if(portalUrl !== 'https://www.arcgis.com'){
+        if (portalUrl !== 'https://www.arcgis.com') {
             esriConfig.request.trustedServers.push(portalUrl);
         }
 

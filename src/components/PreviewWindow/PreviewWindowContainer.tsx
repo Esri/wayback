@@ -1,7 +1,4 @@
-import React, {
-    useContext,
-    useEffect
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import {
     useSelector,
@@ -11,7 +8,7 @@ import {
 
 import {
     previewWaybackItemSelector,
-    releaseNum4AlternativePreviewWaybackItemSelector
+    releaseNum4AlternativePreviewWaybackItemSelector,
 } from '../../store/reducers/WaybackItems';
 
 import TilePreviewWindow from './index';
@@ -21,22 +18,16 @@ import { AppContext } from '../../contexts/AppContextProvider';
 
 type Props = {
     mapView?: MapView;
-}
+};
 
-const PreviewWindowContainer:React.FC<Props> = ({
-    mapView
-}) => {
-
-    const { isMobile } = useContext(AppContext)
+const PreviewWindowContainer: React.FC<Props> = ({ mapView }: Props) => {
+    const { isMobile } = useContext(AppContext);
 
     const previewWaybackItem = useSelector(previewWaybackItemSelector);
 
-    const releaseNum4AlternativePreviewWaybackItem = useSelector(releaseNum4AlternativePreviewWaybackItemSelector);
-
-    useEffect(()=>{
-        console.log('previewWaybackItem', previewWaybackItem)
-        console.log('releaseNum4AlternativePreviewWaybackItem', releaseNum4AlternativePreviewWaybackItem)
-    }, [previewWaybackItem, releaseNum4AlternativePreviewWaybackItem])
+    const releaseNum4AlternativePreviewWaybackItem = useSelector(
+        releaseNum4AlternativePreviewWaybackItemSelector
+    );
 
     return !isMobile ? (
         <TilePreviewWindow
@@ -47,7 +38,9 @@ const PreviewWindowContainer:React.FC<Props> = ({
             }
             mapView={mapView}
         />
-    ) : <></>
-}
+    ) : (
+        <></>
+    );
+};
 
-export default PreviewWindowContainer
+export default PreviewWindowContainer;

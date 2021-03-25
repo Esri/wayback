@@ -1,22 +1,17 @@
 import React from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
     metadataPopupAnchorSelector,
     metadataQueryResultSelector,
-    metadataQueryResultUpdated
+    metadataQueryResultUpdated,
 } from '../../store/reducers/Map';
 
 import MetadataPopUp from './index';
 
 const MetadataPopupContainer = () => {
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const metadata = useSelector(metadataQueryResultSelector);
 
@@ -26,12 +21,11 @@ const MetadataPopupContainer = () => {
         <MetadataPopUp
             metadata={metadata}
             metadataAnchorScreenPoint={anchorPoint}
-
-            onClose={()=>{
-                dispatch(metadataQueryResultUpdated(null))
+            onClose={() => {
+                dispatch(metadataQueryResultUpdated(null));
             }}
         />
-    )
-}
+    );
+};
 
-export default MetadataPopupContainer
+export default MetadataPopupContainer;

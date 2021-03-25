@@ -1,21 +1,16 @@
 import React from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import{
+import {
     isGutterHideSelector,
-    isGutterHideToggled
+    isGutterHideToggled,
 } from '../../store/reducers/UI';
 
 import { MobileShow } from '../SharedUI';
-import MobileHeader from './index'
+import MobileHeader from './index';
 
 const MobileHeaderContainer = () => {
-
     const isGutterHide = useSelector(isGutterHideSelector);
 
     const dispatch = useDispatch();
@@ -24,13 +19,12 @@ const MobileHeaderContainer = () => {
         <MobileShow>
             <MobileHeader
                 isGutterHide={isGutterHide}
-                leftNavBtnOnClick={()=>{
-                    dispatch(isGutterHideToggled())
+                leftNavBtnOnClick={() => {
+                    dispatch(isGutterHideToggled());
                 }}
             />
         </MobileShow>
+    );
+};
 
-    )
-}
-
-export default MobileHeaderContainer
+export default MobileHeaderContainer;

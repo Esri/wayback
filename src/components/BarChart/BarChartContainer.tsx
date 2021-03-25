@@ -1,18 +1,12 @@
-import React, {
-    useEffect
-} from 'react';
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
     allWaybackItemsSelector,
     activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesSelector,
     setActiveWaybackItem,
-    setPreviewWaybackItem
+    setPreviewWaybackItem,
 } from '../../store/reducers/WaybackItems';
 
 import {
@@ -23,35 +17,36 @@ import {
 import BarChart from './index';
 import { IWaybackItem } from '../../types';
 
-import {
-    MobileHide
-} from '../SharedUI'
+import { MobileHide } from '../SharedUI';
 
-const BarChartContainer:React.FC = () => {
-
+const BarChartContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
 
-    const activeWaybackItem: IWaybackItem = useSelector(activeWaybackItemSelector);
-    
-    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(releaseNum4ItemsWithLocalChangesSelector);
+    const activeWaybackItem: IWaybackItem = useSelector(
+        activeWaybackItemSelector
+    );
 
-    const shouldOnlyShowItemsWithLocalChange: boolean = useSelector(shouldOnlyShowItemsWithLocalChangeSelector);
+    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
+        releaseNum4ItemsWithLocalChangesSelector
+    );
 
-    const onClickHandler = (releaseNum: number)=>{
+    const shouldOnlyShowItemsWithLocalChange: boolean = useSelector(
+        shouldOnlyShowItemsWithLocalChangeSelector
+    );
+
+    const onClickHandler = (releaseNum: number) => {
         dispatch(setActiveWaybackItem(releaseNum));
-    }
+    };
 
-    const onMouseEnterHandler = (        
-        releaseNum: number
-    )=>{
+    const onMouseEnterHandler = (releaseNum: number) => {
         dispatch(setPreviewWaybackItem(releaseNum, true));
-    }
+    };
 
-    const onMouseOutHandler = ()=>{
+    const onMouseOutHandler = () => {
         dispatch(setPreviewWaybackItem());
-    }
+    };
 
     return (
         <MobileHide>
@@ -69,7 +64,7 @@ const BarChartContainer:React.FC = () => {
                 onMouseOut={onMouseOutHandler}
             />
         </MobileHide>
-    )
-}
+    );
+};
 
-export default BarChartContainer
+export default BarChartContainer;

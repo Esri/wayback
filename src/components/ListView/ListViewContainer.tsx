@@ -1,6 +1,4 @@
-import React, {
-    useContext
-} from 'react'
+import React, { useContext } from 'react';
 
 import {
     useSelector,
@@ -15,25 +13,20 @@ import {
     allWaybackItemsSelector,
     setPreviewWaybackItem,
     setActiveWaybackItem,
-    toggleSelectWaybackItem
+    toggleSelectWaybackItem,
 } from '../../store/reducers/WaybackItems';
 
-import {
-    shouldOnlyShowItemsWithLocalChangeSelector
-} from '../../store/reducers/UI';
+import { shouldOnlyShowItemsWithLocalChangeSelector } from '../../store/reducers/UI';
 
 import ListView from './index';
 import { IWaybackItem } from '../../types';
 import { AppContext } from '../../contexts/AppContextProvider';
-import {
-    Spacing
-} from '../SharedUI'
+import { Spacing } from '../SharedUI';
 
-const ListViewWrapper:React.FC = ({
-    children
-})=>{
+const ListViewWrapper: React.FC = ({ children }) => {
     return (
-        <div className="leader-half fancy-scrollbar"
+        <div
+            className="leader-half fancy-scrollbar"
             style={{
                 position: 'relative',
                 flexGrow: 1,
@@ -43,29 +36,33 @@ const ListViewWrapper:React.FC = ({
                 overflowY: 'auto',
             }}
         >
-            <Spacing
-                paddingLeft='1rem'
-                paddingRight='1rem'
-            >
-                { children }
+            <Spacing paddingLeft="1rem" paddingRight="1rem">
+                {children}
             </Spacing>
         </div>
-    )
-}
+    );
+};
 
 const ListViewContainer = () => {
-
     const dispatch = useDispatch();
 
     const { isMobile } = useContext(AppContext);
 
     const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
-    const activeWaybackItem: IWaybackItem = useSelector(activeWaybackItemSelector);
+    const activeWaybackItem: IWaybackItem = useSelector(
+        activeWaybackItemSelector
+    );
 
-    const rNum4SelectedWaybackItems: number[] = useSelector(releaseNum4SelectedItemsSelector);
-    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(releaseNum4ItemsWithLocalChangesSelector);
+    const rNum4SelectedWaybackItems: number[] = useSelector(
+        releaseNum4SelectedItemsSelector
+    );
+    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
+        releaseNum4ItemsWithLocalChangesSelector
+    );
 
-    const shouldOnlyShowItemsWithLocalChange = useSelector(shouldOnlyShowItemsWithLocalChangeSelector);
+    const shouldOnlyShowItemsWithLocalChange = useSelector(
+        shouldOnlyShowItemsWithLocalChangeSelector
+    );
 
     return (
         <ListViewWrapper>
@@ -76,27 +73,23 @@ const ListViewContainer = () => {
                 shouldOnlyShowItemsWithLocalChange={
                     shouldOnlyShowItemsWithLocalChange
                 }
-                rNum4SelectedWaybackItems={
-                    rNum4SelectedWaybackItems
-                }
+                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
                 rNum4WaybackItemsWithLocalChanges={
                     rNum4WaybackItemsWithLocalChanges
                 }
-                onClick={(releaseNum:number)=>{
-                    dispatch(setActiveWaybackItem(releaseNum))
+                onClick={(releaseNum: number) => {
+                    dispatch(setActiveWaybackItem(releaseNum));
                 }}
-                onMouseEnter={(releaseNum:number)=>{
-                    dispatch(setPreviewWaybackItem(releaseNum))
+                onMouseEnter={(releaseNum: number) => {
+                    dispatch(setPreviewWaybackItem(releaseNum));
                 }}
-                onMouseOut={()=>[
-                    dispatch(setPreviewWaybackItem())
-                ]}
-                toggleSelect={(releaseNum:number)=>{
-                    dispatch(toggleSelectWaybackItem(releaseNum))
+                onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
+                toggleSelect={(releaseNum: number) => {
+                    dispatch(toggleSelectWaybackItem(releaseNum));
                 }}
             />
         </ListViewWrapper>
-    )
-}
+    );
+};
 
-export default ListViewContainer
+export default ListViewContainer;

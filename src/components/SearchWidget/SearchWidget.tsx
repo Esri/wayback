@@ -1,6 +1,4 @@
-import React, {
-    useEffect
-} from 'react';
+import React, { useEffect } from 'react';
 
 // import { loadModules } from 'esri-loader';
 // import IMapView from 'esri/views/MapView';
@@ -12,7 +10,7 @@ import MapView from '@arcgis/core/views/MapView';
 import Extent from '@arcgis/core/geometry/Extent';
 import Graphic from '@arcgis/core/Graphic';
 import Search from '@arcgis/core/widgets/Search';
-import Portal from '@arcgis/core/portal/Portal'
+import Portal from '@arcgis/core/portal/Portal';
 
 type UIAddPosition =
     | 'bottom-leading'
@@ -52,9 +50,7 @@ const SearchWidget: React.FC<Props> = ({
             return;
         }
 
-        const portal = portalUrl 
-            ? new Portal({ url : portalUrl }) 
-            : null;
+        const portal = portalUrl ? new Portal({ url: portalUrl }) : null;
 
         const searchWidget = new Search({
             view: mapView,
@@ -72,7 +68,7 @@ const SearchWidget: React.FC<Props> = ({
         }
 
         if (searchCompletedHandler) {
-            searchWidget.on('search-complete', (evt) => {
+            searchWidget.on('search-complete', () => {
                 if (
                     searchWidget.results[0] &&
                     searchWidget?.results[0]?.results[0]
@@ -84,7 +80,7 @@ const SearchWidget: React.FC<Props> = ({
                 }
             });
         }
-        
+
         // type Modules = [typeof ISearchWidget];
 
         // try {

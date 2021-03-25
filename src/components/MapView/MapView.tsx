@@ -1,8 +1,5 @@
-  
 import '@arcgis/core/assets/esri/themes/light/main.css';
-import React, {
-    useEffect
-} from 'react';
+import React, { useEffect } from 'react';
 
 // import { loadModules, loadCss } from 'esri-loader';
 // import IMapView from 'esri/views/MapView';
@@ -26,13 +23,12 @@ interface Props {
     children?: React.ReactNode;
 }
 
-const MapViewComponent: React.FC<Props> = ({ 
+const MapViewComponent: React.FC<Props> = ({
     initialExtent,
     onUpdateEnd,
     onExtentChange,
-    children 
+    children,
 }: Props) => {
-
     const mapDivRef = React.useRef<HTMLDivElement>();
 
     const [mapView, setMapView] = React.useState<MapView>(null);
@@ -65,14 +61,14 @@ const MapViewComponent: React.FC<Props> = ({
             container: mapDivRef.current,
             map: new EsriMap(),
             extent: new Extent({
-                ...initialExtent
-            })
+                ...initialExtent,
+            }),
         });
 
         setMapView(view);
     };
 
-    const initWatchUtils = async()=>{
+    const initWatchUtils = async () => {
         // try {
         //     type Modules = [typeof IWatchUtils];
 
@@ -86,10 +82,9 @@ const MapViewComponent: React.FC<Props> = ({
         // }
 
         whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
-    }
+    };
 
-    const mapViewUpdateEndHandler = async()=>{
-
+    const mapViewUpdateEndHandler = async () => {
         // try {
         //     type Modules = [typeof IWebMercatorUtils];
 
@@ -126,13 +121,11 @@ const MapViewComponent: React.FC<Props> = ({
 
         const center = mapView.center;
 
-        if(!center){
+        if (!center) {
             return;
         }
 
-        const extent = webMercatorToGeographic(
-            mapView.extent
-        );
+        const extent = webMercatorToGeographic(mapView.extent);
 
         // console.log('mapview update ended', center);
 
@@ -146,7 +139,7 @@ const MapViewComponent: React.FC<Props> = ({
         onUpdateEnd(mapViewCenterPointInfo);
 
         onExtentChange(extent.toJSON());
-    }
+    };
 
     useEffect(() => {
         // loadCss();
@@ -154,7 +147,7 @@ const MapViewComponent: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        if(mapView){
+        if (mapView) {
             initWatchUtils();
         }
     }, [mapView]);

@@ -1,13 +1,13 @@
 import React from 'react';
 
-// import { 
+// import {
 //     MobileHide
 // } from '../SharedUI'
 
 // interface IProps {}
 // interface IState {}
 
-const TitleText = ()=> {
+const TitleText = () => {
     return (
         <div className="text-center trailer-quarter">
             <span className="font-size-2 avenir-light trailer-0">
@@ -15,6 +15,6 @@ const TitleText = ()=> {
             </span>
         </div>
     );
-}
+};
 
 export default TitleText;

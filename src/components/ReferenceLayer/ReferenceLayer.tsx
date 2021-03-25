@@ -1,29 +1,22 @@
-import React, {
-    useEffect, useRef
-} from 'react'
+import React, { useEffect, useRef } from 'react';
 
 // import { loadModules } from 'esri-loader';
 // import IMapView from 'esri/views/MapView';
 // import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 
 import MapView from '@arcgis/core/views/MapView';
-import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 
 type Props = {
     url?: string;
     isVisible: boolean;
     mapView?: MapView;
-}
+};
 
-const ReferenceLayer:React.FC<Props> = ({
-    url,
-    isVisible,
-    mapView
-}) => {
-
+const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
     const referenceLayerRef = useRef<VectorTileLayer>();
 
-    const init = ()=>{
+    const init = () => {
         // try {
 
         //     type Modules = [
@@ -40,7 +33,7 @@ const ReferenceLayer:React.FC<Props> = ({
         //         },
         //         visible: isVisible
         //     });
-            
+
         //     mapView.map.add(referenceLayerRef.current)
 
         // } catch (err) {
@@ -49,26 +42,26 @@ const ReferenceLayer:React.FC<Props> = ({
 
         referenceLayerRef.current = new VectorTileLayer({
             url,
-            visible: isVisible
+            visible: isVisible,
         });
-        
-        mapView.map.add(referenceLayerRef.current)
-    }
+
+        mapView.map.add(referenceLayerRef.current);
+    };
 
     useEffect(() => {
         // console.log(mapView)
         if (mapView) {
             init();
         }
-    }, [ mapView ]);
+    }, [mapView]);
 
     useEffect(() => {
         if (mapView && referenceLayerRef.current) {
-            referenceLayerRef.current.visible = isVisible
+            referenceLayerRef.current.visible = isVisible;
         }
-    }, [ isVisible ]);
+    }, [isVisible]);
 
     return null;
-}
+};
 
-export default ReferenceLayer
+export default ReferenceLayer;

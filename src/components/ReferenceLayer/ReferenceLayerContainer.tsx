@@ -1,14 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {
-    isReferenceLayerVisibleSelector,
-} from '../../store/reducers/Map';
+import { isReferenceLayerVisibleSelector } from '../../store/reducers/Map';
 
 import IMapView from 'esri/views/MapView';
 
@@ -16,21 +10,21 @@ import ReferenceLayer from './ReferenceLayer';
 import { getServiceUrl } from '../../utils/Tier';
 
 type Props = {
-    mapView?:IMapView
-}
+    mapView?: IMapView;
+};
 
-const ReferenceLayerContainer:React.FC<Props> = ({
-    mapView
-}) => {
-    const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
+const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
+    const isReferenceLayerVisible = useSelector(
+        isReferenceLayerVisibleSelector
+    );
 
     return (
-        <ReferenceLayer 
+        <ReferenceLayer
             url={getServiceUrl('reference-layer')}
             mapView={mapView}
             isVisible={isReferenceLayerVisible}
         />
-    )
-}
+    );
+};
 
-export default ReferenceLayerContainer
+export default ReferenceLayerContainer;

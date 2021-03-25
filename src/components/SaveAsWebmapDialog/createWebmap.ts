@@ -4,8 +4,8 @@ import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
 // import EsriRquest from 'esri/request';
 
-import esriRequest from '@arcgis/core/request'
-import esriConfig from '@arcgis/core/config'
+import esriRequest from '@arcgis/core/request';
+import esriConfig from '@arcgis/core/config';
 
 interface ICreateWebmapParams {
     title: string;
@@ -64,7 +64,7 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
             wmtsInfo: {
                 url: getServiceUrl('wayback-imagery-base'),
                 // layerIdentifier: waybackItem.itemReleaseName || '',
-                tileMatrixSet: 'default028mm'
+                tileMatrixSet: 'default028mm',
             },
             visibility: isVisible,
             title: waybackItem.itemTitle,
@@ -155,10 +155,10 @@ const createWebmap = async ({
     //     'esri/request'
     // ]) as Promise<Modules>);
 
-    if(userSession.credential.server !== 'https://www.arcgis.com'){
+    if (userSession.credential.server !== 'https://www.arcgis.com') {
         esriConfig.request.trustedServers.push(userSession.credential.server);
     }
-    
+
     const requestUrl = getRequestUrl(userSession);
 
     const formData = new FormData();

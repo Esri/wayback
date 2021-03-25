@@ -1,26 +1,27 @@
-import React from 'react'
+import React from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import {
-    useSelector,
-    useDispatch
-} from 'react-redux';
-import { isGutterHideSelector, isSideBarHideSelector, isSideBarHideToggled } from '../../store/reducers/UI';
+    isGutterHideSelector,
+    isSideBarHideSelector,
+    isSideBarHideToggled,
+} from '../../store/reducers/UI';
 
-import MobileFooter from './MobileFooter'
+import MobileFooter from './MobileFooter';
 
 const MobileFooterContainer = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const isGutterHide = useSelector(isGutterHideSelector);
     const isSideBarHide = useSelector(isSideBarHideSelector);
 
     return isSideBarHide ? (
-        <MobileFooter 
+        <MobileFooter
             isGutterHide={isGutterHide}
-            OnClick={()=>{
-                dispatch(isSideBarHideToggled())
+            OnClick={() => {
+                dispatch(isSideBarHideToggled());
             }}
         />
     ) : null;
-}
+};
 
-export default MobileFooterContainer
+export default MobileFooterContainer;

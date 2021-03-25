@@ -8,13 +8,13 @@ type searchParamKey =
     | 'selected'
     | 'active'
     // | 'portal'
-    | 'swipeWidget'
+    | 'swipeWidget';
 
-type SaveSwipeWidgetInfoInURLQueryParam = (params:{
+type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
-    rNum4SwipeWidgetLeadingLayer?:number, 
-    rNum4SwipeWidgetTrailingLayer?:number
-})=>void;
+    rNum4SwipeWidgetLeadingLayer?: number;
+    rNum4SwipeWidgetTrailingLayer?: number;
+}) => void;
 
 const urlQueryData: {
     [key in searchParamKey]: string;
@@ -25,19 +25,22 @@ const getMapExtent = (): IExtentGeomety => {
     //     [key in searchParamKey]: string;
     // } = urlFns.parseQuery();
 
-    const ext = urlQueryData.ext ? urlQueryData.ext.split(',').map(d=>+d) : null;
-
-    const mapExtent: IExtentGeomety = ext && ext.length === 4
-        ? {
-              xmin: ext[0],
-              ymin: ext[1],
-              xmax: ext[2],
-              ymax: ext[3],
-              spatialReference: {
-                  wkid: 4326,
-              },
-          }
+    const ext = urlQueryData.ext
+        ? urlQueryData.ext.split(',').map((d) => +d)
         : null;
+
+    const mapExtent: IExtentGeomety =
+        ext && ext.length === 4
+            ? {
+                  xmin: ext[0],
+                  ymin: ext[1],
+                  xmax: ext[2],
+                  ymax: ext[3],
+                  spatialReference: {
+                      wkid: 4326,
+                  },
+              }
+            : null;
 
     return mapExtent;
 };
@@ -66,8 +69,8 @@ const getMapExtent = (): IExtentGeomety => {
 //         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
 //         // portal: getPortalUrlInSearchParam(),
 //         // concat release numbers for leading and trailing layers into comma separated string
-//         swipeWidget: isSwipeWidgetOpen 
-//             ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}` 
+//         swipeWidget: isSwipeWidgetOpen
+//             ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
 //             : ''
 //     };
 
@@ -83,71 +86,77 @@ const getMapExtent = (): IExtentGeomety => {
 //     return location.href;
 // };
 
-const saveMapExtentInURLQueryParam = (mapExtent:IExtentGeomety):void=>{
-    const key:searchParamKey = 'ext'
+const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
+    const key: searchParamKey = 'ext';
     const value = mapExtent
-        ? [ mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax ]
-            .map((d) => d.toFixed(5))
-            .join(',')
+        ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax]
+              .map((d) => d.toFixed(5))
+              .join(',')
         : '';
 
     updateQueryParam({
         key,
-        value
+        value,
     });
-    
-}
+};
 
-const saveLocalChangesOnlyInURLQueryParam = (localChangesOnly:boolean):void=>{
-    const key:searchParamKey = 'localChangesOnly'
+const saveLocalChangesOnlyInURLQueryParam = (
+    localChangesOnly: boolean
+): void => {
+    const key: searchParamKey = 'localChangesOnly';
     const value = localChangesOnly ? 'true' : '';
 
     updateQueryParam({
         key,
-        value
+        value,
     });
-}
+};
 
-const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (rNum4SelectedWaybackItems:number[]):void=>{
-    const key:searchParamKey = 'selected'
+const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
+    rNum4SelectedWaybackItems: number[]
+): void => {
+    const key: searchParamKey = 'selected';
     const value = rNum4SelectedWaybackItems.length
         ? rNum4SelectedWaybackItems.join(',')
         : '';
 
     updateQueryParam({
         key,
-        value
+        value,
     });
-}
+};
 
-const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (rNum4ActiveWaybackItem:number):void=>{
-    const key:searchParamKey = 'active'
-    const value = rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '';
-
-    updateQueryParam({
-        key,
-        value
-    });
-}
-
-const saveSwipeWidgetInfoInURLQueryParam:SaveSwipeWidgetInfoInURLQueryParam = ({
-    isOpen, 
-    rNum4SwipeWidgetLeadingLayer, 
-    rNum4SwipeWidgetTrailingLayer
-})=>{
-    const key:searchParamKey = 'swipeWidget';
-    const value = isOpen 
-        ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}` 
+const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
+    rNum4ActiveWaybackItem: number
+): void => {
+    const key: searchParamKey = 'active';
+    const value = rNum4ActiveWaybackItem
+        ? rNum4ActiveWaybackItem.toString()
         : '';
 
     updateQueryParam({
         key,
-        value
+        value,
     });
-}
+};
+
+const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam = ({
+    isOpen,
+    rNum4SwipeWidgetLeadingLayer,
+    rNum4SwipeWidgetTrailingLayer,
+}) => {
+    const key: searchParamKey = 'swipeWidget';
+    const value = isOpen
+        ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
+        : '';
+
+    updateQueryParam({
+        key,
+        value,
+    });
+};
 
 const decodeURLQueryParam = (): ISearchParamData => {
-
     const localChangesOnly =
         urlQueryData.localChangesOnly === 'true' ? true : false;
 
@@ -163,7 +172,7 @@ const decodeURLQueryParam = (): ISearchParamData => {
 
     const swipeWidgetLayers = isSwipeWidgetOpen
         ? urlQueryData.swipeWidget.split(',').map((d) => +d)
-        : []
+        : [];
 
     const searchParams: ISearchParamData = {
         mapExtent,
@@ -172,7 +181,7 @@ const decodeURLQueryParam = (): ISearchParamData => {
         rNum4ActiveWaybackItem: active,
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
-        rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null
+        rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
     };
 
     return searchParams;
@@ -184,5 +193,5 @@ export {
     saveLocalChangesOnlyInURLQueryParam,
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
-    saveSwipeWidgetInfoInURLQueryParam
+    saveSwipeWidgetInfoInURLQueryParam,
 };
