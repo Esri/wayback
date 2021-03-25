@@ -41,7 +41,7 @@ module.exports = (env, options)=> {
             chunkFilename: '[name].[contenthash].js',
             publicPath: '',
         },
-        devtool: devMode ? 'source-map' : '',
+        devtool: devMode ? 'source-map' : 'eval',
         resolve: {
             extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
         },
