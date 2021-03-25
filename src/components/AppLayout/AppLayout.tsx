@@ -29,6 +29,7 @@ import {
     Title4ActiveItem,
     WaybackLayer
 } from '..'
+import { getServiceUrl } from '../../utils/Tier'
 
 import {
     MobileHide,
@@ -85,6 +86,7 @@ const AppLayout = () => {
                     <ReferenceLayer/>
 
                     <SearchWidget 
+                        portalUrl={getServiceUrl('portal-url')}
                         position={'top-left'}
                     />
 

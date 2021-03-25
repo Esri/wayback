@@ -9,16 +9,14 @@ import React, {
 import MapView from '@arcgis/core/views/MapView';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 
-import {
-    REFERENCE_LAYER_ITEM_ID
-} from './constants';
-
 type Props = {
+    url?: string;
     isVisible: boolean;
     mapView?: MapView;
 }
 
 const ReferenceLayer:React.FC<Props> = ({
+    url,
     isVisible,
     mapView
 }) => {
@@ -50,9 +48,7 @@ const ReferenceLayer:React.FC<Props> = ({
         // }
 
         referenceLayerRef.current = new VectorTileLayer({
-            portalItem: {
-                id: REFERENCE_LAYER_ITEM_ID,
-            },
+            url,
             visible: isVisible
         });
         

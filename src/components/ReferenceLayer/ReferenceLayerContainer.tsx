@@ -13,6 +13,7 @@ import {
 import IMapView from 'esri/views/MapView';
 
 import ReferenceLayer from './ReferenceLayer';
+import { getServiceUrl } from '../../utils/Tier';
 
 type Props = {
     mapView?:IMapView
@@ -25,6 +26,7 @@ const ReferenceLayerContainer:React.FC<Props> = ({
 
     return (
         <ReferenceLayer 
+            url={getServiceUrl('reference-layer')}
             mapView={mapView}
             isVisible={isReferenceLayerVisible}
         />

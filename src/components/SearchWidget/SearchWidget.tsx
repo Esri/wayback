@@ -11,7 +11,8 @@ import React, {
 import MapView from '@arcgis/core/views/MapView';
 import Extent from '@arcgis/core/geometry/Extent';
 import Graphic from '@arcgis/core/Graphic';
-import Search from '@arcgis/core/widgets/Search'
+import Search from '@arcgis/core/widgets/Search';
+import Portal from '@arcgis/core/portal/Portal'
 
 type UIAddPosition =
     | 'bottom-leading'
@@ -34,6 +35,7 @@ type SearchResult = {
 type Props = {
     position?: UIAddPosition;
     containerId?: string;
+    portalUrl?: string;
     mapView?: MapView;
     searchCompletedHandler?: (result: SearchResult) => void;
 };
@@ -41,6 +43,7 @@ type Props = {
 const SearchWidget: React.FC<Props> = ({
     position,
     containerId,
+    portalUrl,
     mapView,
     searchCompletedHandler,
 }: Props) => {
@@ -49,10 +52,15 @@ const SearchWidget: React.FC<Props> = ({
             return;
         }
 
+        const portal = portalUrl 
+            ? new Portal({ url : portalUrl }) 
+            : null;
+
         const searchWidget = new Search({
             view: mapView,
             resultGraphicEnabled: false,
             popupEnabled: false,
+            portal,
             container: containerId,
         });
 

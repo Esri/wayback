@@ -13,6 +13,9 @@ const config: IAppConfig = {
                 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com/waybackconfig.json',
             'wayback-change-detector-layer':
                 'https://metadatadev.maptiles.arcgis.com/arcgis/rest/services/Wayback_Footprints/MapServer/0',
+            // the vector tile layer provides a detailed reference layer, including transporation and labels for the world. 
+            // Labels are in local languages at large scale. This layer is designed for use with World Imagery.
+            'reference-layer': 'https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json'
         },
     },
     // The dev enivornment is optional, please comment out the dev section below if don't need the dev enivornment
@@ -25,6 +28,7 @@ const config: IAppConfig = {
                 'https://s3-us-west-2.amazonaws.com/config.maptiles.arcgis.com/dev/waybackconfig.json',
             'wayback-change-detector-layer':
                 'https://metadatadev.maptiles.arcgis.com/arcgis/rest/services/Wayback_Footprints/MapServer/0',
+            'reference-layer': 'https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json'
         },
     },
     defaultMapExtent: {

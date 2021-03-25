@@ -90,7 +90,8 @@ type ValidServiceUrlNames =
     | 'portal-url'
     | 'wayback-imagery-base'
     | 'wayback-config'
-    | 'wayback-change-detector-layer';
+    | 'wayback-change-detector-layer'
+    | 'reference-layer';
 
 interface IAppConfig {
     appId: string;
