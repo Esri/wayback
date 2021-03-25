@@ -98,8 +98,7 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
                 {
                     id: 'defaultBasemap',
                     layerType: 'ArcGISTiledMapServiceLayer',
-                    url:
-                        'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/',
+                    url: getServiceUrl('world-imagery-basemap'),
                     visibility: true,
                     opacity: 1,
                     title: 'World Imagery',
@@ -108,9 +107,8 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
                     type: 'VectorTileLayer',
                     layerType: 'VectorTileLayer',
                     title: 'Hybrid Reference Layer (Local Language)',
-                    styleUrl:
-                        'https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json',
-                    itemId: '2a2e806e6e654ea78ecb705149ceae9f',
+                    styleUrl: getServiceUrl('reference-layer'),
+                    // itemId: '2a2e806e6e654ea78ecb705149ceae9f',
                     visibility: true,
                     isReference: true,
                     opacity: 1,
