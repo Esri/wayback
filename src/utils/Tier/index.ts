@@ -5,7 +5,7 @@ const isHostedOnArcGisDomain = (() => {
     return window.location.hostname.match(/arcgis.com/gi) ? true : false;
 })();
 
-const isHostedOnLivingAtlasDomain = (() => {
+export const isHostedOnLivingAtlasDomain = (() => {
     return window.location.hostname.match(/livingatlas/gi) ? true : false;
 })();
 

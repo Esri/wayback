@@ -28,6 +28,7 @@ import {
     TilePreviewWindow,
     Title4ActiveItem,
     WaybackLayer,
+    HeadTags,
 } from '..';
 import { getServiceUrl } from '../../utils/Tier';
 
@@ -36,6 +37,8 @@ import { MobileHide, Spacing } from '../SharedUI';
 const AppLayout = (): JSX.Element => {
     return (
         <>
+            <HeadTags />
+
             <MobileHeader />
 
             <Gutter>

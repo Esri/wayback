@@ -26,3 +26,4 @@ export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesChe
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
+export { default as HeadTags } from './HeadTags/HeadTags';
