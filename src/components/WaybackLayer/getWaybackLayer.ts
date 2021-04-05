@@ -1,12 +1,14 @@
-// import { loadModules } from 'esri-loader';
-// import IWebTileLayer from 'esri/layers/WebTileLayer';
-
-import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
-// import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
+// import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
 
 import { IWaybackItem } from '../../types';
+import { getServiceUrl } from '../../utils/Tier';
 
-export const getWaybackLayer = (waybackItem: IWaybackItem): WebTileLayer => {
+export const WAYBACK_LAYER_ID = 'waybackWMTSLayer'
+
+const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base')
+
+export const getWaybackLayer = (waybackItem: IWaybackItem): WMTSLayer => {
     // try {
     //     type Modules = [typeof IWebTileLayer];
 
@@ -25,17 +27,17 @@ export const getWaybackLayer = (waybackItem: IWaybackItem): WebTileLayer => {
     //     return null;
     // }
 
-    const waybackLayer = new WebTileLayer({
-        urlTemplate: waybackItem.itemURL,
-    });
-
-    // const waybackLayer = new WMTSLayer({
-    //     // id: this.WaybackLayerId,
-    //     url: 'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
-    //     activeLayer: {
-    //       id: waybackItem.itemReleaseName,
-    //     }
+    // const waybackLayer = new WebTileLayer({
+    //     urlTemplate: waybackItem.itemURL,
     // });
+
+    const waybackLayer = new WMTSLayer({
+        id: WAYBACK_LAYER_ID,
+        url: WaybackImagerBaseURL + '/WMTS/1.0.0/WMTSCapabilities.xml',
+        activeLayer: {
+            id: waybackItem.layerIdentifier || 'WB_2020_R08'
+        }
+    });
 
     return waybackLayer;
 };

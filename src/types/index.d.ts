@@ -9,6 +9,7 @@ interface IWaybackConfig {
         metadataLayerItemID: string;
         metadataLayerUrl: string;
         itemReleaseName: string;
+        layerIdentifier?:string;
     };
 }
 
@@ -22,6 +23,7 @@ interface IWaybackItem {
     itemURL: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;
+    layerIdentifier?:string;
 }
 
 interface IPointGeomety {

@@ -16,6 +16,10 @@ import Extent from '@arcgis/core/geometry/Extent';
 
 import { IExtentGeomety, IMapPointInfo } from '../../types';
 
+import { WAYBACK_LAYER_ID } from '../WaybackLayer/getWaybackLayer'
+import WMTSLayer from '@arcgis/core/layers/WMTSLayer';
+import LOD from '@arcgis/core/layers/support/LOD';
+
 interface Props {
     initialExtent: IExtentGeomety;
     onUpdateEnd: (centerPoint: IMapPointInfo) => void;
@@ -132,7 +136,7 @@ const MapViewComponent: React.FC<Props> = ({
         const mapViewCenterPointInfo: IMapPointInfo = {
             latitude: center.latitude,
             longitude: center.longitude,
-            zoom: mapView.zoom,
+            zoom: getCurrZoomLevel(),
             geometry: center.toJSON(),
         };
 
@@ -140,6 +144,29 @@ const MapViewComponent: React.FC<Props> = ({
 
         onExtentChange(extent.toJSON());
     };
+
+    // calculate current zoom level using current map scale and tile infos from Wayback WMTS layer
+    const getCurrZoomLevel = ():number =>{
+
+        const mapScale = mapView.scale;
+
+        // get active sublayer from wayback WMTS layer
+        const { activeLayer } = mapView.map.findLayerById(WAYBACK_LAYER_ID) as WMTSLayer;
+
+        // A TileLayer has a number of LODs (Levels of Detail). 
+        // Each LOD corresponds to a map at a given scale or resolution.
+        const LODS = activeLayer.tileMatrixSets.getItemAt(0).tileInfo.lods as LOD[];
+
+        for(let LOD of LODS){
+            const { level, scale } = LOD;
+
+            if(scale < (mapScale * Math.sqrt(2)) && scale > (mapScale / Math.sqrt(2))){
+                return level;
+            }
+        }
+
+        return -1;
+    }
 
     useEffect(() => {
         // loadCss();
