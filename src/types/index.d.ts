@@ -99,6 +99,7 @@ type ValidServiceUrlNames =
 interface IAppConfig {
     appId: string;
     shouldUseWaybackFootprintsLayer: boolean;
+    onPremises: boolean;
     productionEnv: {
         serviceUrls: {
             [name in ValidServiceUrlNames]: string;

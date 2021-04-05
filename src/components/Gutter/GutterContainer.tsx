@@ -25,7 +25,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
     const isHide = useSelector(isGutterHideSelector);
 
-    const { isMobile } = useContext(AppContext);
+    const { isMobile, onPremises } = useContext(AppContext);
 
     const aboutButtonOnClick = () => {
         dispatch(isAboutThisAppModalOpenToggled());
@@ -43,6 +43,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         <Gutter
             isMobile={isMobile}
             settingsBtnDisabled={isSwipeWidgetOpen}
+            shareBtnDisabled={onPremises}
             aboutButtonOnClick={aboutButtonOnClick}
             shareButtonOnClick={shareButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}

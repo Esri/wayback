@@ -13,6 +13,7 @@ type AppContextValue = {
     oauthUtils: OAuthUtils;
     userSession: IUserSession;
     isMobile: boolean;
+    onPremises: boolean;
 };
 
 type AppContextProviderProps = {
@@ -39,6 +40,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
             userSession,
             waybackManager,
             isMobile: miscFns.isMobileDevice(),
+            onPremises: config.onPremises
         };
 
         setValue(contextValue);

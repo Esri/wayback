@@ -30,11 +30,15 @@ import {
     WaybackLayer,
     HeadTags,
 } from '..';
+import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
 
 import { MobileHide, Spacing } from '../SharedUI';
 
-const AppLayout = (): JSX.Element => {
+const AppLayout:React.FC = ()=> {
+
+    const { onPremises } = React.useContext(AppContext);
+
     return (
         <>
             <HeadTags />
@@ -96,7 +100,7 @@ const AppLayout = (): JSX.Element => {
 
             <SettingDialog />
 
-            <ShareDialog />
+            { !onPremises && <ShareDialog /> }
 
             <AboutThisApp />
 
