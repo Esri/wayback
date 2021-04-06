@@ -15,6 +15,7 @@ import WaybackManager from '../../core/WaybackManager';
 import MapView from '@arcgis/core/views/MapView';
 import { watch } from '@arcgis/core/core/watchUtils';
 import Point from '@arcgis/core/geometry/Point';
+import { getCurrZoomLevel } from '../MapView/MapView';
 
 type Props = {
     waybackManager: WaybackManager;
@@ -73,7 +74,7 @@ const MetadataQueryLayer: React.FC<Props> = ({
             const res = await waybackManager.getMetadata({
                 releaseNum,
                 pointGeometry: mapPoint.toJSON(),
-                zoom: mapView.zoom,
+                zoom: getCurrZoomLevel(mapView) //mapView.zoom,
             });
 
             const metadata: IWaybackMetadataQueryResult = res
