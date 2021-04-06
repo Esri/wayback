@@ -35,7 +35,7 @@ export const getWaybackLayer = (waybackItem: IWaybackItem): WMTSLayer => {
         id: WAYBACK_LAYER_ID,
         url: WaybackImagerBaseURL + '/WMTS/1.0.0/WMTSCapabilities.xml',
         activeLayer: {
-            id: waybackItem.layerIdentifier || 'WB_2020_R08'
+            id: waybackItem.layerIdentifier
         }
     });
 
