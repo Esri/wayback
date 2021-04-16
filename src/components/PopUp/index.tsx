@@ -192,10 +192,25 @@ class PopUp extends React.PureComponent<IProps> {
             width: this.Width,
         } as React.CSSProperties;
 
-        const { provider, source, resolution, accuracy, releaseDate } = metadata;
+        const { provider, source, resolution, accuracy, releaseDate, date } = metadata;
 
         // const releaseDate = 'targetLayer.releaseDateLabel';
         const formattedDate = this.formatMetadataDate();
+
+        const providerAndCaptureDateInfo = date 
+            ? (
+                <span>
+                    {provider} ({source}) image captured on{' '}
+                    <b>{formattedDate}</b> as shown in the{' '}
+                    <b>{releaseDate}</b> version of the World Imagery
+                    map.
+                </span>
+            ) 
+            : (
+                <span>
+                    {provider} ({source}) imagery.
+                </span>
+            )
 
         return (
             <div className="popup-container" style={containerStyle}>
@@ -204,10 +219,7 @@ class PopUp extends React.PureComponent<IProps> {
                 <div className="content-wrap text-white">
                     <div className="text-wrap">
                         <p className="trailer-half">
-                            {provider} ({source}) image captured on{' '}
-                            <b>{formattedDate}</b> as shown in the{' '}
-                            <b>{releaseDate}</b> version of the World Imagery
-                            map.
+                            { providerAndCaptureDateInfo }
                         </p>
                         <p className="trailer-half">
                             <b>Resolution</b>: Pixels in the source image
