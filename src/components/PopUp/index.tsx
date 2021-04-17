@@ -208,7 +208,9 @@ class PopUp extends React.PureComponent<IProps> {
             ) 
             : (
                 <span>
-                    {provider} ({source}) imagery.
+                    {provider} ({source}) imagery as shown in the{' '}
+                    <b>{releaseDate}</b> version of the World Imagery
+                    map.
                 </span>
             )
 
