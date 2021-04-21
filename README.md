@@ -35,7 +35,7 @@ npm run build
 ```
 
 ## External Libraries:
-- [ArcGIS API for JavaScript (4.12)](https://developers.arcgis.com/javascript/index.html)
+- [ArcGIS API for JavaScript (4.18)](https://developers.arcgis.com/javascript/index.html)
 - [D3.js v4](https://d3js.org/)
 
 ## Resources
@@ -53,7 +53,14 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
-Copyright 2018 Esri
+
+### The Imagery
+
+The imagery presented in the Wayback app is subject to the terms and conditions set forth in the Esri Master Agreement or Terms of Use.  See [World Imagery](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9) for additional details on the imagery content and applicable Terms of Use.
+
+### The Software
+
+Copyright 2021 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
