@@ -13,7 +13,7 @@ import { geometryFns } from 'helper-toolkit-ts';
 import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 import { lngLatToXY } from '@arcgis/core/geometry/support/webMercatorUtils';
-import { getCurrZoomLevel } from '../MapView/MapView'
+// import { getCurrZoomLevel } from '../MapView/MapView'
 
 interface IProps {
     mapView?: MapView;
@@ -48,7 +48,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const { mapView } = this.props;
 
         const center = mapView.center;
-        const level = getCurrZoomLevel(mapView) //mapView.zoom;
+        const level = mapView.zoom // getCurrZoomLevel(mapView)
 
         // get the tile row, col num from the map center point
         const tileRow = geometryFns.lat2tile(center.latitude, level);
