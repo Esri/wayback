@@ -1,17 +1,15 @@
-// preview the tile image that interscets with the center of the map view
-// import { loadModules } from 'esri-loader';
 
-// import './style.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { IWaybackItem } from '../../types';
 // import { geometryFns } from 'helper-toolkit-ts';
 
 import MapView from '@arcgis/core/views/MapView';
-// import Point from '@arcgis/core/geometry/Point';
-// import { lngLatToXY } from '@arcgis/core/geometry/support/webMercatorUtils';
-// import { getCurrZoomLevel } from '../MapView/MapView'
 
 import styled from 'styled-components';
+
+import {
+    generateFrames
+} from './utils';
 
 const WIDTH = 500;
 const HEIGHT = 300;
@@ -27,6 +25,7 @@ const PreviewWindowContainer = styled.div`
     z-index: 5;
     border: solid 1px rgba(240,240,240,.5);
     box-shadow: 0 0 10px 10px rgba(0,0,0,.6);
+    box-sizing: border-box;
 `;
 
 const PreviewImage = styled.img`
@@ -61,10 +60,63 @@ const PreviewWindow:React.FC<Props> = ({
     mapView
 }:Props)=>{
 
-    const [imageUrl, setImageUrl] = useState<string>()
+    const containerRef = useRef<HTMLDivElement>()
+
+    const [imageUrl, setImageUrl] = useState<string>();
+
+    // left position of map view container DIV relative to the window
+    const mapViewContainerLeftPos = useMemo(()=>{
+        if(!mapView || !mapView.container){
+            return 0;
+        }
+
+        const {
+            left
+        } = mapView.container.getBoundingClientRect();
+
+        return left;
+    }, [mapView])
+
+    const fetchPreviewWindowImage = async(releaseNum:number)=>{
+        const container = containerRef.current;
+
+        const elemRect = container.getBoundingClientRect();
+        // console.log(elemRect)
+
+        const { offsetHeight, offsetWidth } = container;
+
+        const [ image ] = await generateFrames({
+            frameRect: {
+                // elemRect.left is the left position of the container DIV relative to map view container,
+                // therefore, we need to add the mapViewContainerLeft to it to get the 
+                // left position of the container DIV relative to window
+                screenX: elemRect.left - mapViewContainerLeftPos,
+                screenY: elemRect.top,
+                width: offsetWidth,
+                height: offsetHeight,
+            },
+            mapView,
+            releaseNums: [releaseNum.toString()],
+        });
+
+        setImageUrl(image);
+    }
+
+    useEffect(()=>{
+
+        if(!previewWaybackItem){
+            setImageUrl('');
+            return;
+        }
+
+        fetchPreviewWindowImage(alternativeRNum4RreviewWaybackItem);
+
+    }, [previewWaybackItem, alternativeRNum4RreviewWaybackItem])
 
     return previewWaybackItem ? (
-        <PreviewWindowContainer>
+        <PreviewWindowContainer
+            ref={containerRef}
+        >
             <PreviewImage src={imageUrl} />
             <PreviewItemInfo>
                 <span 
