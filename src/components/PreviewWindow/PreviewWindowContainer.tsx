@@ -33,10 +33,10 @@ const PreviewWindowContainer:React.FC<Props> = ({
 
     const releaseNum4AlternativePreviewWaybackItem = useSelector(releaseNum4AlternativePreviewWaybackItemSelector);
 
-    useEffect(()=>{
-        console.log('previewWaybackItem', previewWaybackItem)
-        console.log('releaseNum4AlternativePreviewWaybackItem', releaseNum4AlternativePreviewWaybackItem)
-    }, [previewWaybackItem, releaseNum4AlternativePreviewWaybackItem])
+    // useEffect(()=>{
+    //     console.log('previewWaybackItem', previewWaybackItem)
+    //     console.log('releaseNum4AlternativePreviewWaybackItem', releaseNum4AlternativePreviewWaybackItem)
+    // }, [previewWaybackItem, releaseNum4AlternativePreviewWaybackItem])
 
     return !isMobile ? (
         <TilePreviewWindow

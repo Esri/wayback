@@ -87,8 +87,10 @@ class WaybackChangeDetector {
                     url: this.getTileImageUrl({ column, row, level, rNum }),
                 };
             });
+            console.log(candidates)
 
             const rNumsNoDuplicates = await this.removeDuplicates(candidates);
+            console.log(rNumsNoDuplicates)
 
             return rNumsNoDuplicates;
         } catch (err) {
@@ -227,20 +229,24 @@ class WaybackChangeDetector {
 
         // reverse the candidates list so the wayback items will be sorted by release dates in ascending order (oldest >>> latest)
         const imageDataUriRequests = candidates.reverse().map((candidate) => {
-            return this.getImagedDataUri(candidate.url, candidate.rNum);
+            return this.getSampledImagedDataUri(candidate.url, candidate.rNum);
         });
 
         try {
             const imageDataUriResults = await Promise.all(imageDataUriRequests);
-            // console.log(imageBlobResults);
 
-            imageDataUriResults.reduce((accu, curr) => {
-                if (!accu.includes(curr.dataUri)) {
-                    accu.push(curr.dataUri);
-                    finalResults.push(curr.rNum);
+            let dataUri4PrevRelease = '';
+
+            for(let { dataUri, rNum } of imageDataUriResults){
+
+                if(dataUri === dataUri4PrevRelease){
+                    continue;
                 }
-                return accu;
-            }, []);
+
+                finalResults.push(rNum);
+                dataUri4PrevRelease = dataUri;
+            }
+
         } catch (err) {
             console.error('failed to fetch all image data uri', err);
         }
@@ -248,10 +254,15 @@ class WaybackChangeDetector {
         return finalResults;
     }
 
-    async getImagedDataUri(
+    async getSampledImagedDataUri(
         imageUrl: string,
         rNum: number
     ): Promise<IResponseGetImageBlob> {
+
+        const samplePoints = [
+            512, 1000, 2500, 5000, 7500, 10000, 12500, 15000
+        ]
+
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', imageUrl, true);
@@ -267,8 +278,14 @@ class WaybackChangeDetector {
                     }
                     const data = binaryString.join('');
                     const base64 = window.btoa(data);
-                    const dataUri = base64.substr(512, 5000);
+                    console.log(base64.length)
+
+                    let dataUri = '' //base64.substr(512, 5000);
                     // console.log(tileImageDataUri);
+
+                    for(let point of samplePoints){
+                        dataUri += base64.substr(point, 500)
+                    }
 
                     resolve({
                         rNum,
