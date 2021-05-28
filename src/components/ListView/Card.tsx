@@ -90,6 +90,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                 className={cardClass}
                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
                 onMouseLeave={onMouseOut}
+                data-release-num={data.releaseNum}
             >
                 <div
                     className="is-flexy cursor-pointer"
