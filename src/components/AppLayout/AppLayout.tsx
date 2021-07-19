@@ -2,10 +2,10 @@ import React from 'react';
 
 import {
     AboutThisApp,
-    AppTitleText,
-    BarChart,
+    // AppTitleText,
+    // BarChart,
     Gutter,
-    ListView,
+    // ListView,
     MapView,
     MapViewWrapper,
     MetadataPopup,
@@ -22,18 +22,18 @@ import {
     SwipeWidgetToggleBtn,
     SettingDialog,
     SaveAsWebmapBtn,
-    SidebarToggleBtn,
+    // SidebarToggleBtn,
     SwipeWidgetLayerSelector,
-    ShowLocalChangesCheckboxToggle,
+    // ShowLocalChangesCheckboxToggle,
     TilePreviewWindow,
-    Title4ActiveItem,
+    // Title4ActiveItem,
     WaybackLayer,
     HeadTags,
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
 
-import { MobileHide, Spacing } from '../SharedUI';
+// import { MobileHide, Spacing } from '../SharedUI';
 
 const AppLayout:React.FC = ()=> {
 
@@ -52,7 +52,7 @@ const AppLayout:React.FC = ()=> {
             </Gutter>
 
             <Sidebar>
-                <SidebarToggleBtn />
+                {/* <SidebarToggleBtn />
 
                 <Spacing paddingLeft="1rem" paddingRight="1rem">
                     <MobileHide>
@@ -66,7 +66,7 @@ const AppLayout:React.FC = ()=> {
                     <ShowLocalChangesCheckboxToggle />
                 </Spacing>
 
-                <ListView />
+                <ListView /> */}
             </Sidebar>
 
             <MapViewWrapper>
