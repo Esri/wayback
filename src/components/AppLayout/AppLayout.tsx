@@ -32,6 +32,7 @@ import {
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
+import AnimationModeToogleBtn from '../AnimationModeToogleBtn/AnimationModeToogleBtn';
 
 // import { MobileHide, Spacing } from '../SharedUI';
 
@@ -49,6 +50,8 @@ const AppLayout:React.FC = ()=> {
                 <SaveAsWebmapBtn />
 
                 <SwipeWidgetToggleBtn />
+
+                <AnimationModeToogleBtn />
             </Gutter>
 
             <Sidebar>

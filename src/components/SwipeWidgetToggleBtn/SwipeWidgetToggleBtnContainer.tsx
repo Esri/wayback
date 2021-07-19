@@ -4,7 +4,7 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 
 import {
     isSwipeWidgetOpenSelector,
-    isSwipeWidgetOpenToggled,
+    toggleSwipeWidget
 } from '../../store/reducers/SwipeView';
 
 import { releaseNum4SelectedItemsSelector } from '../../store/reducers/WaybackItems';
@@ -26,7 +26,7 @@ const SwipeWidgetToggleBtnContainer = () => {
     const onClickHandler = () => {
         batch(() => {
             dispatch(metadataQueryResultUpdated(null));
-            dispatch(isSwipeWidgetOpenToggled());
+            dispatch(toggleSwipeWidget());
         });
     };
 

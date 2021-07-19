@@ -5,7 +5,12 @@ import {
     // createAsyncThunk
 } from '@reduxjs/toolkit';
 // import { IWaybackItem } from '../../types';
-import { RootState } from '../configureStore';
+
+import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+
+import {
+    isSwipeWidgetOpenToggled,
+} from './SwipeView';
 
 export type AnimationModeState = {
     isAnimationModeOn: boolean;
@@ -30,6 +35,16 @@ const { reducer } = slice;
 export const {
     isAnimationModeOnToggled
 } = slice.actions;
+
+export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    const { SwipeView } = getState();
+
+    if(SwipeView.isSwipeWidgetOpen){
+        dispatch(isSwipeWidgetOpenToggled());
+    }
+
+    dispatch(isAnimationModeOnToggled());
+}
 
 export const isAnimationModeOnSelector = createSelector(
     (state: RootState) => state.AnimationMode.isAnimationModeOn,

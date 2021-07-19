@@ -17,7 +17,7 @@ import {
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
     isSwipeWidgetOpenSelector,
-    isSwipeWidgetOpenToggled,
+    toggleSwipeWidget
 } from '../../store/reducers/SwipeView';
 
 import { IWaybackItem } from '../../types';
@@ -54,7 +54,7 @@ const SwipeWidgetLayerSelectorContainer: React.FC<Props> = ({
     const closeBtnOnClick =
         targetLayer === 'trailing'
             ? () => {
-                  dispatch(isSwipeWidgetOpenToggled());
+                  dispatch(toggleSwipeWidget());
               }
             : null;
 
