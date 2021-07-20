@@ -28,13 +28,7 @@ import { MobileHide, Spacing } from '../SharedUI';
 const MainContent:React.FC = ()=>{
     return (
         <>
-            <SidebarToggleBtn />
-
             <Spacing paddingLeft="1rem" paddingRight="1rem">
-                <MobileHide>
-                    <AppTitleText />
-                </MobileHide>
-
                 <BarChart />
 
                 <Title4ActiveItem />
@@ -50,13 +44,20 @@ const MainContent:React.FC = ()=>{
 const AnimatorControls:React.FC = ()=>{
     return (
         <>
-            <SidebarToggleBtn />
+            <div 
+                style={{
+                    padding: '0 1rem',
+                    marginTop: '.5rem'
+                }}
+            >
+                <div className='btn btn-fill'>Download GIF</div>
 
-            <Spacing paddingLeft="1rem" paddingRight="1rem">
-                <MobileHide>
-                    <AppTitleText />
-                </MobileHide>
-            </Spacing>
+                <div className='leader-half'>
+                    <span className="font-size--2">
+                        Animation Frames
+                    </span>
+                </div>
+            </div>
         </>
     )
 }
@@ -78,6 +79,12 @@ const SidebarContainer: React.FC = ({ children }) => {
             isGutterHide={isGutterHide}
             isMobile={isMobile}
         >
+            <SidebarToggleBtn />
+
+            <MobileHide>
+                <AppTitleText />
+            </MobileHide>
+
             { isAnimationModeOn ? <AnimatorControls /> : <MainContent /> }
         </Sidebar>
     );
