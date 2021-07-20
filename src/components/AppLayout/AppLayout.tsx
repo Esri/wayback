@@ -29,6 +29,7 @@ import {
     // Title4ActiveItem,
     WaybackLayer,
     HeadTags,
+    AnimationPanel
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
@@ -94,6 +95,8 @@ const AppLayout:React.FC = ()=> {
                     <SwipeWidget />
 
                     <ReferenceLayerToggle />
+
+                    <AnimationPanel />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />

@@ -27,4 +27,5 @@ export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowConta
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
 export { default as HeadTags } from './HeadTags/HeadTags';
-export { default as AnimationModeToogleBtn } from './AnimationModeToogleBtn/AnimationModeToogleBtn'
+export { default as AnimationModeToogleBtn } from './AnimationModeToogleBtn/AnimationModeToogleBtn';
+export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
