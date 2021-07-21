@@ -57,7 +57,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
 
             return userSession;
         } catch (err) {
-            console.error(err);
+            // console.error(err);
             return null;
         }
     };

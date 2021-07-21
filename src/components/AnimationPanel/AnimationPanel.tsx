@@ -1,14 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 
 import { generateFrames } from './generateFrames4GIF';
 
 import Resizable from './Resizable';
 
 type Props = {
-    releaseNums: string[]
-    mapView?: IMapView;
+    releaseNums: number[]
+    mapView?: MapView;
 };
 
 // import gifshot from 'gifshot';
@@ -24,54 +24,59 @@ type CreateGIFCallBack = (response: {
     errorMsg: string;
 }) => void;
 
+type GetFramesParams = {
+    releaseNums:number[], 
+    container: HTMLDivElement, 
+    mapView: MapView
+}
+
+export const PARENT_CONTAINER_LEFT_OFFSET = 300;
+
+const getFrames = async ({
+    releaseNums, 
+    container, 
+    mapView
+}:GetFramesParams):Promise<string[]> => {
+
+    const elemRect = container.getBoundingClientRect();
+    // console.log(elemRect)
+
+    const { offsetHeight, offsetWidth } = container;
+
+    const images = await generateFrames({
+        frameRect: {
+            screenX: elemRect.left - PARENT_CONTAINER_LEFT_OFFSET,
+            screenY: elemRect.top,
+            width: offsetWidth,
+            height: offsetHeight,
+        },
+        mapView,
+        releaseNums
+    });
+
+    return images;
+};
+
 const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
     const containerRef = useRef<HTMLDivElement>();
 
     const [backgroundImg, setBackgroundImg] = useState<string>();
 
-    const getFrames = async () => {
-        const container = containerRef.current;
+    useEffect(() => {
+        (async()=>{
+            if(releaseNums.length){
 
-        const elemRect = container.getBoundingClientRect();
-        // console.log(elemRect)
+                const frames = await getFrames({
+                    releaseNums,
+                    container: containerRef.current,
+                    mapView
+                });
 
-        const { offsetHeight, offsetWidth } = container;
-
-        const images = await generateFrames({
-            frameRect: {
-                screenX: elemRect.left - 300,
-                screenY: elemRect.top,
-                width: offsetWidth,
-                height: offsetHeight,
-            },
-            mapView,
-            releaseNums
-        });
-
-        setBackgroundImg(images[1]);
-
-        // const createGIFCallback: CreateGIFCallBack = (response) => {
-        //     if (!response.error) {
-        //         setBackgroundImg(response.image);
-        //     }
-        // };
-
-        // gifshot.createGIF(
-        //     {
-        //         images,
-        //         frameDuration: 10,
-        //         gifWidth: offsetWidth,
-        //         gifHeight: offsetHeight,
-        //         // showFrameText: true,
-        //     },
-        //     createGIFCallback
-        // );
-    };
-
-    // useEffect(() => {
-    //     // getFrames();
-    // }, []);
+                console.log(frames)
+            }
+        })();
+    }, [releaseNums]);
 
     return (
         <>

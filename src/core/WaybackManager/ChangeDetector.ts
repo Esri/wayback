@@ -87,10 +87,10 @@ class WaybackChangeDetector {
                     url: this.getTileImageUrl({ column, row, level, rNum }),
                 };
             });
-            console.log(candidates)
+            // console.log(candidates)
 
             const rNumsNoDuplicates = await this.removeDuplicates(candidates);
-            console.log(rNumsNoDuplicates)
+            // console.log(rNumsNoDuplicates)
 
             return rNumsNoDuplicates;
         } catch (err) {
@@ -278,7 +278,7 @@ class WaybackChangeDetector {
                     }
                     const data = binaryString.join('');
                     const base64 = window.btoa(data);
-                    console.log(base64.length)
+                    // console.log(base64.length)
 
                     let dataUri = '' //base64.substr(512, 5000);
                     // console.log(tileImageDataUri);

@@ -1,9 +1,9 @@
-import IMapView from 'esri/views/MapView';
-import IPoint from 'esri/geometry/Point';
+import MapView from '@arcgis/core/views/MapView';
+import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
 
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 
 type TileInfo = {
     row: number;
@@ -28,8 +28,8 @@ type FrameRectInfo = {
 
 type GenerateFramesParams = {
     frameRect: FrameRectInfo;
-    mapView: IMapView;
-    releaseNums: string[];
+    mapView: MapView;
+    releaseNums: number[];
 };
 
 export const generateFrames = async ({
@@ -40,7 +40,7 @@ export const generateFrames = async ({
     const frames = [];
 
     // get list of tiles that can cover the entire container DIV
-    const tiles = await getListOfTiles({
+    const tiles = getListOfTiles({
         frameRect,
         mapView,
     });
@@ -67,7 +67,7 @@ const generateFrame = async ({
 }: {
     frameRect: FrameRectInfo;
     tiles: TileInfo[];
-    releaseNum: string;
+    releaseNum: number;
 }): Promise<string> => {
     return new Promise((resolve, reject) => {
         const { screenX, screenY, height, width } = frameRect;
@@ -116,19 +116,19 @@ const generateFrame = async ({
     });
 };
 
-const getListOfTiles = async ({
+const getListOfTiles = ({
     frameRect,
     mapView,
 }: {
     frameRect: FrameRectInfo;
-    mapView: IMapView;
-}): Promise<TileInfo[]> => {
+    mapView: MapView;
+}): TileInfo[] => {
     const tiles: TileInfo[] = [];
 
     const { screenX, screenY, width, height } = frameRect;
 
     // get tile that intersect with top-left corner of the container
-    const topLeftTile = await getTileByScreenPoint({
+    const topLeftTile = getTileByScreenPoint({
         screenX,
         screenY,
         mapView,
@@ -163,20 +163,20 @@ const getListOfTiles = async ({
 };
 
 // get tile that intersect with the screen point
-const getTileByScreenPoint = async ({
+const getTileByScreenPoint = ({
     screenX,
     screenY,
     mapView,
 }: {
     screenY: number;
     screenX: number;
-    mapView: IMapView;
-}): Promise<TileInfo> => {
-    type Modules = [typeof IPoint];
+    mapView: MapView;
+}): TileInfo=> {
+    // type Modules = [typeof IPoint];
 
-    const [Point] = await (loadModules(['esri/geometry/Point']) as Promise<
-        Modules
-    >);
+    // const [Point] = await (loadModules(['esri/geometry/Point']) as Promise<
+    //     Modules
+    // >);
 
     const level = mapView.zoom;
 

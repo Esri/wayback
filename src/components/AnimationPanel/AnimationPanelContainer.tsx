@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector, rNum4AnimationFramesSelector } from '../../store/reducers/AnimationMode';
 
 import IMapView from 'esri/views/MapView';
 
@@ -18,9 +18,11 @@ const AnimationPanelContainer:React.FC<Props> = ({
 
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
+    const rNum4AnimationFrames: number[] = useSelector(rNum4AnimationFramesSelector);
+
     return isAnimationModeOn ? (
         <AnimationPanel 
-            releaseNums={[]}
+            releaseNums={rNum4AnimationFrames}
             mapView={mapView}
         />
     ) : null;

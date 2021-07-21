@@ -30,7 +30,7 @@ const Resizable: React.FC<Props> = ({ children }: Props) => {
 
     const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
 
-    const [size, setSize] = useState<Size>({ width: 500, height: 300 });
+    const [size, setSize] = useState<Size>({ width: 300, height: 300 });
 
     // when the container is being dragged, we keep updating it's position using current mouse position,
     // by default, the top left corner of the container will be snapped to the new position,
