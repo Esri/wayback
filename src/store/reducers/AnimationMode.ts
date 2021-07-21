@@ -14,10 +14,12 @@ import {
 
 export type AnimationModeState = {
     isAnimationModeOn: boolean;
+    rNum4AnimationFrames: number[]
 };
 
 export const initialAnimationModeState = {
     isAnimationModeOn: false,
+    rNum4AnimationFrames: []
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -26,6 +28,9 @@ const slice = createSlice({
     reducers: {
         isAnimationModeOnToggled: (state: AnimationModeState) => {
             state.isAnimationModeOn = !state.isAnimationModeOn;
+        },
+        rNum4AnimationFramesLoaded: (state:AnimationModeState, action:PayloadAction<number[]>)=>{
+            state.rNum4AnimationFrames = action.payload
         }
     },
 });
@@ -33,7 +38,8 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
-    isAnimationModeOnToggled
+    isAnimationModeOnToggled,
+    rNum4AnimationFramesLoaded
 } = slice.actions;
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
@@ -49,6 +55,11 @@ export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: Store
 export const isAnimationModeOnSelector = createSelector(
     (state: RootState) => state.AnimationMode.isAnimationModeOn,
     (isAnimationModeOn) => isAnimationModeOn
+);
+
+export const rNum4AnimationFramesSelector = createSelector(
+    (state: RootState) => state.AnimationMode.rNum4AnimationFrames,
+    (rNum4AnimationFrames) => rNum4AnimationFrames
 );
 
 export default reducer;

@@ -20,47 +20,11 @@ import {
     BarChart,
     Title4ActiveItem,
     ShowLocalChangesCheckboxToggle,
-    ListView
+    ListView,
+    AnimationControls
 } from '../'
 
 import { MobileHide, Spacing } from '../SharedUI';
-
-const MainContent:React.FC = ()=>{
-    return (
-        <>
-            <Spacing paddingLeft="1rem" paddingRight="1rem">
-                <BarChart />
-
-                <Title4ActiveItem />
-
-                <ShowLocalChangesCheckboxToggle />
-            </Spacing>
-
-            <ListView />
-        </>
-    )
-}
-
-const AnimatorControls:React.FC = ()=>{
-    return (
-        <>
-            <div 
-                style={{
-                    padding: '0 1rem',
-                    marginTop: '.5rem'
-                }}
-            >
-                <div className='btn btn-fill'>Download GIF</div>
-
-                <div className='leader-half'>
-                    <span className="font-size--2">
-                        Animation Frames
-                    </span>
-                </div>
-            </div>
-        </>
-    )
-}
 
 const SidebarContainer: React.FC = ({ children }) => {
     const { isMobile } = useContext(AppContext);
@@ -72,6 +36,26 @@ const SidebarContainer: React.FC = ({ children }) => {
     const isHide = useSelector(isSideBarHideSelector);
 
     const isGutterHide = useSelector(isGutterHideSelector);
+
+    const getContent = ()=>{
+        if(isAnimationModeOn){
+            return <AnimationControls />
+        }
+
+        return (
+            <>
+                <Spacing paddingLeft="1rem" paddingRight="1rem">
+                    <BarChart />
+
+                    <Title4ActiveItem />
+
+                    <ShowLocalChangesCheckboxToggle />
+                </Spacing>
+
+                <ListView />
+            </>
+        );
+    }
 
     return (
         <Sidebar
@@ -85,7 +69,7 @@ const SidebarContainer: React.FC = ({ children }) => {
                 <AppTitleText />
             </MobileHide>
 
-            { isAnimationModeOn ? <AnimatorControls /> : <MainContent /> }
+            { getContent() }
         </Sidebar>
     );
 };
