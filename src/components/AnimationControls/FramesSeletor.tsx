@@ -2,18 +2,23 @@ import React from 'react';
 
 import { IWaybackItem } from '../../types';
 
+import {
+    LayerSelector
+} from '../'
+
 type Props = {
     waybackItems: IWaybackItem[];
     rNum4AnimationFrames: number[];
     activeItem: IWaybackItem;
-    // onSelect: (data: IWaybackItem) => void;
+    onSelect: (data: IWaybackItem) => void;
 };
 
 
 const FramesSeletor:React.FC<Props> = ({
     waybackItems,
     rNum4AnimationFrames,
-    activeItem
+    activeItem,
+    onSelect
 }:Props) => {
 
     const getList = () => {
@@ -28,43 +33,15 @@ const FramesSeletor:React.FC<Props> = ({
                 const isSelected =
                     activeItem && activeItem.itemID === itemID;
 
-                // const classNames = classnames(
-                //     'swipe-widget-layer-selector-item',
-                //     {
-                //         'is-selected': isSelected,
-                //         'is-arrow-on-left': targetLayerType === 'trailing',
-                //     }
-                // );
-
                 return (
-                    <div
+                    <LayerSelector
                         // className={classNames}
                         key={itemID}
-                        style={{
-                            position: 'relative',
-                            display: 'flex',
-                            alignItems: 'center',
-                            width: '100%',
-                            height: '38px',
-                            margin: '.5rem 0',
-                            padding: '0 .5rem',
-                            backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
-                            color: isSelected ? '#fff' : 'unset',
-                            // borderLeft:
-                            //     targetLayerType === 'leading' && isSelected
-                            //         ? ' 4px solid #fff'
-                            //         : '4px solid transparent',
-                            // borderRight:
-                            //     targetLayerType === 'trailing' && isSelected
-                            //         ? ' 4px solid #fff'
-                            //         : '4px solid transparent',
-                            boxSizing: 'border-box',
-                            cursor: 'pointer',
-                        }}
-                        // onClick={onSelect.bind(this, d)}
+                        isSelected={isSelected}
+                        onClick={onSelect.bind(this, d)}
                     >
                         {releaseDateLabel}
-                    </div>
+                    </LayerSelector>
                 );
             });
 

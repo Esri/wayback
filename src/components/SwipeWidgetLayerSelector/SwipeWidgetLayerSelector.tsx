@@ -3,6 +3,10 @@ import React from 'react';
 import { IWaybackItem } from '../../types';
 import classnames from 'classnames';
 
+import {
+    LayerSelector
+} from '../'
+
 export const SwipeWidgetLayerSelectorWidth = 210;
 
 export type SwipeWidgetLayer = 'leading' | 'trailing';
@@ -44,36 +48,47 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                         'is-arrow-on-left': targetLayerType === 'trailing',
                     }
                 );
+                // return (
+                //     <div
+                //         className={classNames}
+                //         key={itemID}
+                //         style={{
+                //             position: 'relative',
+                //             display: 'flex',
+                //             alignItems: 'center',
+                //             width: '100%',
+                //             height: '38px',
+                //             margin: '.5rem 0',
+                //             padding: '0 .5rem',
+                //             backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
+                //             color: isSelected ? '#fff' : 'unset',
+                //             borderLeft:
+                //                 targetLayerType === 'leading' && isSelected
+                //                     ? ' 4px solid #fff'
+                //                     : '4px solid transparent',
+                //             borderRight:
+                //                 targetLayerType === 'trailing' && isSelected
+                //                     ? ' 4px solid #fff'
+                //                     : '4px solid transparent',
+                //             boxSizing: 'border-box',
+                //             cursor: 'pointer',
+                //         }}
+                //         onClick={onSelect.bind(this, d)}
+                //     >
+                //         {releaseDateLabel}
+                //     </div>
+                // );
+
                 return (
-                    <div
-                        className={classNames}
+                    <LayerSelector
                         key={itemID}
-                        style={{
-                            position: 'relative',
-                            display: 'flex',
-                            alignItems: 'center',
-                            width: '100%',
-                            height: '38px',
-                            margin: '.5rem 0',
-                            padding: '0 .5rem',
-                            backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
-                            color: isSelected ? '#fff' : 'unset',
-                            borderLeft:
-                                targetLayerType === 'leading' && isSelected
-                                    ? ' 4px solid #fff'
-                                    : '4px solid transparent',
-                            borderRight:
-                                targetLayerType === 'trailing' && isSelected
-                                    ? ' 4px solid #fff'
-                                    : '4px solid transparent',
-                            boxSizing: 'border-box',
-                            cursor: 'pointer',
-                        }}
+                        isSelected={isSelected}
+                        showArrowOnLeft={targetLayerType === 'trailing'}
                         onClick={onSelect.bind(this, d)}
                     >
                         {releaseDateLabel}
-                    </div>
-                );
+                    </LayerSelector>
+                )
             });
 
         return (

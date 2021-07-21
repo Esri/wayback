@@ -7,7 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     releaseNum4ItemsWithLocalChangesSelector,
     allWaybackItemsSelector,
-    activeWaybackItemSelector
+    activeWaybackItemSelector,
+    releaseNum4ActiveWaybackItemUpdated
 } from '../../store/reducers/WaybackItems';
 
 import {
@@ -47,13 +48,18 @@ const AnimationControls = () => {
                 }}
             >
                 <DonwloadGifButton />
+
+                <FramesSeletor 
+                    waybackItems={waybackItems}
+                    activeItem={activeItem}
+                    rNum4AnimationFrames={rNum4AnimationFrames}
+                    onSelect={(item)=>{
+                        const { releaseNum} = item;
+                        dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum));
+                    }}
+                />
             </div>
 
-            <FramesSeletor 
-                waybackItems={waybackItems}
-                activeItem={activeItem}
-                rNum4AnimationFrames={rNum4AnimationFrames}
-            />
         </>
     )
 }
