@@ -6,6 +6,10 @@ import React, {
     useCallback,
 } from 'react';
 
+import {
+    PARENT_CONTAINER_LEFT_OFFSET
+} from './AnimationPanel'
+
 type Position = {
     top: number;
     left: number;
@@ -17,14 +21,14 @@ type Size = {
 };
 
 type Props = {
+    containerRef:  React.RefObject<HTMLDivElement>;
     children?: React.ReactNode;
 };
 
-const PARENT_CONTAINER_LEFT_OFFSET = 300;
 const CONTAINER_MIN_SIZE = 256;
 
-const Resizable: React.FC<Props> = ({ children }: Props) => {
-    const containerRef = useRef<HTMLDivElement>();
+const Resizable: React.FC<Props> = ({ containerRef, children }: Props) => {
+    // const containerRef = useRef<HTMLDivElement>();
 
     // const resizeBtnRef = useRef<HTMLDivElement>();
 

@@ -5,6 +5,7 @@ import MapView from '@arcgis/core/views/MapView';
 import { generateFrames } from './generateFrames4GIF';
 
 import Resizable from './Resizable';
+import ImageAutoPlay from './ImageAutoPlay'
 
 type Props = {
     releaseNums: number[]
@@ -30,7 +31,8 @@ type GetFramesParams = {
     mapView: MapView
 }
 
-export const PARENT_CONTAINER_LEFT_OFFSET = 300;
+// width of Gutter and Side Bar, need to calculate this dynamically
+export const PARENT_CONTAINER_LEFT_OFFSET = 350;
 
 const getFrames = async ({
     releaseNums, 
@@ -57,11 +59,12 @@ const getFrames = async ({
     return images;
 };
 
+const containerRef = React.createRef<HTMLDivElement>();
+
 const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
-    const containerRef = useRef<HTMLDivElement>();
-
-    const [backgroundImg, setBackgroundImg] = useState<string>();
+    // array of frame images as dataURI string 
+    const [frames, setFrames] = useState<string[]>();
 
     useEffect(() => {
         (async()=>{
@@ -73,7 +76,7 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
                     mapView
                 });
 
-                console.log(frames)
+                setFrames(frames);
             }
         })();
     }, [releaseNums]);
@@ -93,20 +96,12 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
             >
             </div> */}
 
-            <Resizable>
-                <div
-                    ref={containerRef}
-                    style={{
-                        position: 'relative',
-                        width: '100%',
-                        height: '100%',
-                        background: backgroundImg
-                            ? `url(${backgroundImg})`
-                            : 'transparent',
-                        border: '1px solid red',
-                        boxSizing: 'border-box',
-                    }}
-                ></div>
+            <Resizable
+                containerRef={containerRef}
+            >
+                <ImageAutoPlay 
+                    frames={frames}
+                />
             </Resizable>
         </>
     );
