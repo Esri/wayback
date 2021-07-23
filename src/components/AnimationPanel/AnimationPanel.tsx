@@ -1,11 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
 
 import { generateFrames } from './generateFrames4GIF';
 
 import Resizable from './Resizable';
-import ImageAutoPlay from './ImageAutoPlay'
+import ImageAutoPlay from './ImageAutoPlay';
+import LoadingIndicator from './LoadingIndicator';
+
+import { whenTrue } from '@arcgis/core/core/watchUtils';
 
 type Props = {
     releaseNums: number[]
@@ -66,8 +69,12 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
     // array of frame images as dataURI string 
     const [frames, setFrames] = useState<string[]>();
 
-    useEffect(() => {
-        (async()=>{
+    const resizeOnChangeEndDelay = useRef<NodeJS.Timeout>();
+
+    const getAnimationFrames = useCallback(
+        async() => {
+            // console.log('calling getAnimationFrames', releaseNums)
+
             if(releaseNums.length){
 
                 const frames = await getFrames({
@@ -78,8 +85,35 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
                 setFrames(frames);
             }
-        })();
+        },
+        [releaseNums],
+    );
+
+    const resizableOnChange = ()=>{
+        
+        setFrames(null);
+
+        clearTimeout(resizeOnChangeEndDelay.current)
+
+        resizeOnChangeEndDelay.current = setTimeout(()=>{
+            getAnimationFrames()
+        }, 500)
+    }
+
+    useEffect(() => {
+        getAnimationFrames();
     }, [releaseNums]);
+    
+    useEffect(()=>{
+        const onUpdating = whenTrue(mapView, 'updating', ()=>{
+            setFrames(null);
+        })
+
+        return ()=>{
+            // onStationary.remove();
+            onUpdating.remove();
+        }
+    }, []);
 
     return (
         <>
@@ -97,11 +131,20 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
             </div> */}
 
             <Resizable
+                onChange={resizableOnChange}
                 containerRef={containerRef}
             >
-                <ImageAutoPlay 
-                    frames={frames}
-                />
+                {
+                    frames && frames.length 
+                    ?  (
+                        <ImageAutoPlay 
+                            frames={frames}
+                        />
+                    ) 
+                    : (
+                        <LoadingIndicator />
+                    )
+                }
             </Resizable>
         </>
     );

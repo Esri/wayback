@@ -23,11 +23,13 @@ type Size = {
 type Props = {
     containerRef:  React.RefObject<HTMLDivElement>;
     children?: React.ReactNode;
+    // eithe size or position is updated
+    onChange?: ()=>void;
 };
 
 const CONTAINER_MIN_SIZE = 256;
 
-const Resizable: React.FC<Props> = ({ containerRef, children }: Props) => {
+const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props) => {
     // const containerRef = useRef<HTMLDivElement>();
 
     // const resizeBtnRef = useRef<HTMLDivElement>();
@@ -89,6 +91,8 @@ const Resizable: React.FC<Props> = ({ containerRef, children }: Props) => {
             top,
             left,
         });
+
+        onChange();
     }, []);
 
     const resize = useCallback((evt: MouseEvent) => {
@@ -109,6 +113,8 @@ const Resizable: React.FC<Props> = ({ containerRef, children }: Props) => {
                     ? newHeight
                     : CONTAINER_MIN_SIZE,
         });
+
+        onChange();
     }, []);
 
     const addUpdatePositionHanlder = useCallback((evt) => {
@@ -152,6 +158,7 @@ const Resizable: React.FC<Props> = ({ containerRef, children }: Props) => {
                 background: 'rgba(0,0,0,.75)',
                 cursor: 'move',
                 userSelect: 'none',
+                border: '1.5px solid rgba(0,0,0,.95)'
             }}
             onMouseDown={addUpdatePositionHanlder}
         >
