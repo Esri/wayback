@@ -155,10 +155,11 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
                 height: size.height,
                 width: size.width,
                 zIndex: 5,
-                background: 'rgba(0,0,0,.75)',
+                // background: 'rgba(0,0,0,.75)',
+                boxShadow: '0 0 10px 10px rgba(0,0,0,.6)',
                 cursor: 'move',
                 userSelect: 'none',
-                border: '1.5px solid rgba(0,0,0,.95)'
+                border: '1px solid rgba(255,255,255,.95)'
             }}
             onMouseDown={addUpdatePositionHanlder}
         >

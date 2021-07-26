@@ -8,7 +8,7 @@ import Resizable from './Resizable';
 import ImageAutoPlay from './ImageAutoPlay';
 import LoadingIndicator from './LoadingIndicator';
 
-import { whenTrue } from '@arcgis/core/core/watchUtils';
+import { whenTrue, whenFalse } from '@arcgis/core/core/watchUtils';
 
 type Props = {
     releaseNums: number[]
@@ -69,13 +69,26 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
     // array of frame images as dataURI string 
     const [frames, setFrames] = useState<string[]>();
 
-    const resizeOnChangeEndDelay = useRef<NodeJS.Timeout>();
+    const loadingReleaseNumsRef = useRef<boolean>(false);
+
+    const getAnimationFramesDelay = useRef<NodeJS.Timeout>();
+
+    const releaseNumsRef = useRef<number[]>();
 
     const getAnimationFrames = useCallback(
-        async() => {
-            // console.log('calling getAnimationFrames', releaseNums)
+        () => {
+            // in milliseconds
+            const DELAY_TIME = 1000;
 
-            if(releaseNums.length){
+            clearTimeout(getAnimationFramesDelay.current)
+
+            getAnimationFramesDelay.current = setTimeout(async()=>{
+                
+                const releaseNums = releaseNumsRef.current;
+
+                if(!releaseNums || !releaseNums.length || loadingReleaseNumsRef.current){
+                    return;
+                }
 
                 const frames = await getFrames({
                     releaseNums,
@@ -84,28 +97,31 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
                 });
 
                 setFrames(frames);
-            }
+
+            }, DELAY_TIME)
         },
         [releaseNums],
     );
 
-    const resizableOnChange = ()=>{
+    const resizableOnChange = useCallback(()=>{
         
         setFrames(null);
 
-        clearTimeout(resizeOnChangeEndDelay.current)
-
-        resizeOnChangeEndDelay.current = setTimeout(()=>{
-            getAnimationFrames()
-        }, 500)
-    }
+        getAnimationFrames()
+    }, []);
 
     useEffect(() => {
-        getAnimationFrames();
+        releaseNumsRef.current = releaseNums;
+
+        loadingReleaseNumsRef.current = false;
+
+        getAnimationFrames()
+
     }, [releaseNums]);
     
     useEffect(()=>{
-        const onUpdating = whenTrue(mapView, 'updating', ()=>{
+        const onUpdating = whenFalse(mapView, 'stationary', ()=>{
+            loadingReleaseNumsRef.current = true;
             setFrames(null);
         })
 
@@ -117,7 +133,7 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
     return (
         <>
-            {/* <div
+            <div
                 style={{
                     position: 'absolute',
                     top: 0,
@@ -128,7 +144,7 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
                     pointerEvents: 'none'
                 }}
             >
-            </div> */}
+            </div>
 
             <Resizable
                 onChange={resizableOnChange}
