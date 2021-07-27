@@ -2,7 +2,7 @@ import React, {
     useEffect
 } from 'react'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 
 import {
     releaseNum4ItemsWithLocalChangesSelector,
@@ -13,7 +13,10 @@ import {
 
 import {
     rNum4AnimationFramesLoaded,
-    rNum4AnimationFramesSelector
+    rNum4AnimationFramesSelector,
+    rNum2ExcludeSelector,
+    rNum2ExcludeToggled,
+    rNum2ExcludeReset
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -33,10 +36,15 @@ const AnimationControls = () => {
 
     const rNum4AnimationFrames: number[] = useSelector(rNum4AnimationFramesSelector);
 
+    const rNum2ExcludeFromAnimation: number[] = useSelector(rNum2ExcludeSelector);
+
     const activeItem:IWaybackItem = useSelector(activeWaybackItemSelector)
 
     useEffect(()=>{
-        dispatch(rNum4AnimationFramesLoaded(rNum4WaybackItemsWithLocalChanges))
+        batch(()=>{
+            dispatch(rNum4AnimationFramesLoaded(rNum4WaybackItemsWithLocalChanges))
+            dispatch(rNum2ExcludeReset())
+        });
     }, [rNum4WaybackItemsWithLocalChanges])
 
     return (
@@ -53,9 +61,13 @@ const AnimationControls = () => {
                     waybackItems={waybackItems}
                     activeItem={activeItem}
                     rNum4AnimationFrames={rNum4AnimationFrames}
+                    rNum2Exclude={rNum2ExcludeFromAnimation}
                     onSelect={(item)=>{
                         const { releaseNum} = item;
                         dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum));
+                    }}
+                    toggleFrame={(rNum)=>{
+                        dispatch(rNum2ExcludeToggled(rNum))
                     }}
                 />
             </div>
