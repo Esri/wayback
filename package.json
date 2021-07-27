@@ -44,6 +44,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-helmet": "^6.1.0",
     "@types/react-redux": "^7.1.11",
+    "@types/shortid": "0.0.29",
     "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
@@ -97,6 +98,7 @@
     "react-helmet": "^6.1.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
+    "shortid": "^2.2.16",
     "styled-components": "^5.3.0"
   },
   "resolutions": {

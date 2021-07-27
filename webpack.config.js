@@ -117,12 +117,12 @@ module.exports = (env, options)=> {
                     }
                 ],
             }),
-            new ArcGISPlugin({ 
-                locales: ['en'],
-                features: {
-                    "3d": false
-                }
-            }),
+            // new ArcGISPlugin({ 
+            //     locales: ['en'],
+            //     features: {
+            //         "3d": false
+            //     }
+            // }),
             new HtmlWebPackPlugin({
                 // inject: false,
                 // hash: true,

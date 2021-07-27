@@ -10,6 +10,8 @@ import LoadingIndicator from './LoadingIndicator';
 
 import { whenTrue, whenFalse } from '@arcgis/core/core/watchUtils';
 
+// import shortid from 'shortid'
+
 type Props = {
     releaseNums: number[]
     mapView?: MapView;
@@ -31,7 +33,11 @@ type CreateGIFCallBack = (response: {
 type GetFramesParams = {
     releaseNums:number[], 
     container: HTMLDivElement, 
-    mapView: MapView
+    mapView: MapView,
+}
+
+type GetFramesResponse = {
+    images: string[];
 }
 
 // width of Gutter and Side Bar, need to calculate this dynamically
@@ -41,7 +47,7 @@ const getFrames = async ({
     releaseNums, 
     container, 
     mapView
-}:GetFramesParams):Promise<string[]> => {
+}:GetFramesParams):Promise<GetFramesResponse> => {
 
     const elemRect = container.getBoundingClientRect();
     // console.log(elemRect)
@@ -59,7 +65,9 @@ const getFrames = async ({
         releaseNums
     });
 
-    return images;
+    return {
+        images
+    };
 };
 
 const containerRef = React.createRef<HTMLDivElement>();
@@ -78,25 +86,32 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
     const getAnimationFrames = useCallback(
         () => {
             // in milliseconds
-            const DELAY_TIME = 1000;
+            const DELAY_TIME = 1500;
 
             clearTimeout(getAnimationFramesDelay.current)
 
             getAnimationFramesDelay.current = setTimeout(async()=>{
-                
-                const releaseNums = releaseNumsRef.current;
 
-                if(!releaseNums || !releaseNums.length || loadingReleaseNumsRef.current){
-                    return;
+                try {
+                    const releaseNums = releaseNumsRef.current;
+
+                    if(!releaseNums || !releaseNums.length || loadingReleaseNumsRef.current){
+                        return;
+                    }
+
+                    const {
+                        images
+                    } = await getFrames({
+                        releaseNums,
+                        container: containerRef.current,
+                        mapView,
+                    });
+    
+                    setFrames(images);
+
+                } catch(err){
+                    console.error(err);
                 }
-
-                const frames = await getFrames({
-                    releaseNums,
-                    container: containerRef.current,
-                    mapView
-                });
-
-                setFrames(frames);
 
             }, DELAY_TIME)
         },
