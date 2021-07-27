@@ -32,11 +32,16 @@ type GenerateFramesParams = {
     releaseNums: number[];
 };
 
+export type FrameData = {
+    releaseNum: number;
+    frameDataURI: string;
+}
+
 export const generateFrames = async ({
     frameRect,
     mapView,
     releaseNums,
-}: GenerateFramesParams): Promise<string[]> => {
+}: GenerateFramesParams): Promise<FrameData[]> => {
     const frames = [];
 
     // get list of tiles that can cover the entire container DIV
@@ -52,7 +57,10 @@ export const generateFrames = async ({
             releaseNum,
         });
 
-        frames.push(frameAsDataURL);
+        frames.push({
+            releaseNum,
+            frameDataURI: frameAsDataURL
+        });
     }
 
     // console.log(frameDataURL)

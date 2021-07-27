@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
 
-import { generateFrames } from './generateFrames4GIF';
+import { FrameData, generateFrames } from './generateFrames4GIF';
 
 import Resizable from './Resizable';
 import ImageAutoPlay from './ImageAutoPlay';
@@ -36,10 +36,6 @@ type GetFramesParams = {
     mapView: MapView,
 }
 
-type GetFramesResponse = {
-    images: string[];
-}
-
 // width of Gutter and Side Bar, need to calculate this dynamically
 export const PARENT_CONTAINER_LEFT_OFFSET = 350;
 
@@ -47,14 +43,14 @@ const getFrames = async ({
     releaseNums, 
     container, 
     mapView
-}:GetFramesParams):Promise<GetFramesResponse> => {
+}:GetFramesParams):Promise<FrameData[]> => {
 
     const elemRect = container.getBoundingClientRect();
     // console.log(elemRect)
 
     const { offsetHeight, offsetWidth } = container;
 
-    const images = await generateFrames({
+    const frameData = await generateFrames({
         frameRect: {
             screenX: elemRect.left - PARENT_CONTAINER_LEFT_OFFSET,
             screenY: elemRect.top,
@@ -65,9 +61,7 @@ const getFrames = async ({
         releaseNums
     });
 
-    return {
-        images
-    };
+    return frameData;
 };
 
 const containerRef = React.createRef<HTMLDivElement>();
@@ -75,7 +69,7 @@ const containerRef = React.createRef<HTMLDivElement>();
 const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
     // array of frame images as dataURI string 
-    const [frames, setFrames] = useState<string[]>();
+    const [frames, setFrames] = useState<FrameData[]>();
 
     const loadingReleaseNumsRef = useRef<boolean>(false);
 
@@ -99,15 +93,13 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
                         return;
                     }
 
-                    const {
-                        images
-                    } = await getFrames({
+                    const frameData = await getFrames({
                         releaseNums,
                         container: containerRef.current,
                         mapView,
                     });
     
-                    setFrames(images);
+                    setFrames(frameData);
 
                 } catch(err){
                     console.error(err);
