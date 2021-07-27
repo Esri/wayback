@@ -21,8 +21,10 @@ const ImageAutoPlay:React.FC<Props> = ({
 
     const [idx, setIdx] = useState<number>(0);
 
+    // list of frames that will be shown in the final animation
     const [activeFrames, setActiveFrame ] = useState<FrameData[]>([]);
 
+    // release numbers for the frames to be excluded from animation
     const rNum2Exclude = useSelector(rNum2ExcludeSelector);
 
     const interval4ImageRotation = useRef<NodeJS.Timeout>();
