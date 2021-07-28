@@ -107,9 +107,9 @@ const generateFrame = async ({
 
                 context.drawImage(img, dx, dy, TILE_SIZE, TILE_SIZE);
 
-                context.font = '22px "Avenir Next';
-                context.fillStyle = "#fff";
-                context.fillText(`Wayback Imagery ${releaseNum}`, 50, 50);
+                // context.font = '22px "Avenir Next';
+                // context.fillStyle = "#fff";
+                // context.fillText(`Wayback Imagery ${releaseNum}`, 50, 50);
 
                 tilesProcessed++;
 

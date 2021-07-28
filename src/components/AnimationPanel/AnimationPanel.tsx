@@ -9,11 +9,12 @@ import ImageAutoPlay from './ImageAutoPlay';
 import LoadingIndicator from './LoadingIndicator';
 
 import { whenTrue, whenFalse } from '@arcgis/core/core/watchUtils';
+import { IWaybackItem } from '../../types';
 
 // import shortid from 'shortid'
 
 type Props = {
-    releaseNums: number[]
+    waybackItems4Animation: IWaybackItem[]
     mapView?: MapView;
 };
 
@@ -66,16 +67,16 @@ const getFrames = async ({
 
 const containerRef = React.createRef<HTMLDivElement>();
 
-const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
+const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Props) => {
 
     // array of frame images as dataURI string 
     const [frames, setFrames] = useState<FrameData[]>();
 
-    const loadingReleaseNumsRef = useRef<boolean>(false);
+    const loadingWaybackItems4AnimationRef = useRef<boolean>(false);
 
     const getAnimationFramesDelay = useRef<NodeJS.Timeout>();
 
-    const releaseNumsRef = useRef<number[]>();
+    const waybackItems4AnimationRef = useRef<IWaybackItem[]>();
 
     const getAnimationFrames = useCallback(
         () => {
@@ -84,14 +85,16 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
             clearTimeout(getAnimationFramesDelay.current)
 
+            const waybackItems = waybackItems4AnimationRef.current;
+
+            if(!waybackItems || !waybackItems.length || loadingWaybackItems4AnimationRef.current){
+                return;
+            }
+
             getAnimationFramesDelay.current = setTimeout(async()=>{
 
                 try {
-                    const releaseNums = releaseNumsRef.current;
-
-                    if(!releaseNums || !releaseNums.length || loadingReleaseNumsRef.current){
-                        return;
-                    }
+                    const releaseNums = waybackItems.map(d=>d.releaseNum)
 
                     const frameData = await getFrames({
                         releaseNums,
@@ -107,7 +110,7 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
 
             }, DELAY_TIME)
         },
-        [releaseNums],
+        [waybackItems4Animation],
     );
 
     const resizableOnChange = useCallback(()=>{
@@ -118,17 +121,17 @@ const AnimationPanel: React.FC<Props> = ({ releaseNums, mapView }: Props) => {
     }, []);
 
     useEffect(() => {
-        releaseNumsRef.current = releaseNums;
+        waybackItems4AnimationRef.current = waybackItems4Animation;
 
-        loadingReleaseNumsRef.current = false;
+        loadingWaybackItems4AnimationRef.current = false;
 
         getAnimationFrames()
 
-    }, [releaseNums]);
+    }, [waybackItems4Animation]);
     
     useEffect(()=>{
         const onUpdating = whenFalse(mapView, 'stationary', ()=>{
-            loadingReleaseNumsRef.current = true;
+            loadingWaybackItems4AnimationRef.current = true;
             setFrames(null);
         })
 

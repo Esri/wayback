@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isAnimationModeOnSelector, rNum4AnimationFramesSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector, waybackItems4AnimationSelector } from '../../store/reducers/AnimationMode';
 
 import IMapView from 'esri/views/MapView';
 
@@ -11,6 +11,7 @@ type Props = {
 };
 
 import AnimationPanel from './AnimationPanel';
+import { IWaybackItem } from '../../types';
 
 const AnimationPanelContainer:React.FC<Props> = ({
     mapView
@@ -18,11 +19,11 @@ const AnimationPanelContainer:React.FC<Props> = ({
 
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
-    const rNum4AnimationFrames: number[] = useSelector(rNum4AnimationFramesSelector);
+    const waybackItems4Animation: IWaybackItem[] = useSelector(waybackItems4AnimationSelector);
 
     return isAnimationModeOn ? (
         <AnimationPanel 
-            releaseNums={rNum4AnimationFrames}
+            waybackItems4Animation={waybackItems4Animation}
             mapView={mapView}
         />
     ) : null;

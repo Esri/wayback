@@ -7,8 +7,9 @@ import {
 } from '../'
 
 type Props = {
-    waybackItems: IWaybackItem[];
-    rNum4AnimationFrames: number[];
+    // waybackItems: IWaybackItem[];
+    // rNum4AnimationFrames: number[];
+    waybackItemsWithLocalChanges: IWaybackItem[];
     rNum2Exclude: number[];
     activeItem: IWaybackItem;
     onSelect: (data: IWaybackItem) => void;
@@ -16,8 +17,9 @@ type Props = {
 };
 
 const FramesSeletor:React.FC<Props> = ({
-    waybackItems,
-    rNum4AnimationFrames,
+    // waybackItems,
+    // rNum4AnimationFrames,
+    waybackItemsWithLocalChanges,
     rNum2Exclude,
     activeItem,
     onSelect,
@@ -25,12 +27,7 @@ const FramesSeletor:React.FC<Props> = ({
 }:Props) => {
 
     const getList = () => {
-        const items = waybackItems
-            .filter((d) => {
-                return (
-                    rNum4AnimationFrames.indexOf(d.releaseNum) > -1
-                );
-            })
+        const items = waybackItemsWithLocalChanges
             .map((d) => {
                 const { releaseDateLabel, itemID, releaseNum } = d;
                 const isSelected =
@@ -87,6 +84,7 @@ const FramesSeletor:React.FC<Props> = ({
             <div
                 style={{
                     width: '100%',
+                    marginTop: '1rem'
                 }}
             >
                 <div>

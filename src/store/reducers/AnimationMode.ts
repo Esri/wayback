@@ -4,6 +4,7 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
+import { IWaybackItem } from '../../types';
 // import { IWaybackItem } from '../../types';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
@@ -14,13 +15,15 @@ import {
 
 export type AnimationModeState = {
     isAnimationModeOn: boolean;
-    rNum4AnimationFrames: number[],
+    // rNum4AnimationFrames: number[],
+    waybackItems4Animation: IWaybackItem[]
     rNum2Exclude: number[]
 };
 
 export const initialAnimationModeState = {
     isAnimationModeOn: false,
-    rNum4AnimationFrames: [],
+    // rNum4AnimationFrames: [],
+    waybackItems4Animation: [],
     rNum2Exclude: []
 } as AnimationModeState;
 
@@ -31,8 +34,11 @@ const slice = createSlice({
         isAnimationModeOnToggled: (state: AnimationModeState) => {
             state.isAnimationModeOn = !state.isAnimationModeOn;
         },
-        rNum4AnimationFramesLoaded: (state:AnimationModeState, action:PayloadAction<number[]>)=>{
-            state.rNum4AnimationFrames = action.payload
+        // rNum4AnimationFramesLoaded: (state:AnimationModeState, action:PayloadAction<number[]>)=>{
+        //     state.rNum4AnimationFrames = action.payload
+        // },
+        waybackItems4AnimationLoaded: (state:AnimationModeState, action:PayloadAction<IWaybackItem[]>)=>{
+            state.waybackItems4Animation = action.payload
         },
         rNum2ExcludeToggled: (state:AnimationModeState, action:PayloadAction<number>)=>{
 
@@ -56,7 +62,8 @@ const { reducer } = slice;
 
 export const {
     isAnimationModeOnToggled,
-    rNum4AnimationFramesLoaded,
+    // rNum4AnimationFramesLoaded,
+    waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
     rNum2ExcludeReset
 } = slice.actions;
@@ -76,11 +83,15 @@ export const isAnimationModeOnSelector = createSelector(
     (isAnimationModeOn) => isAnimationModeOn
 );
 
-export const rNum4AnimationFramesSelector = createSelector(
-    (state: RootState) => state.AnimationMode.rNum4AnimationFrames,
-    (rNum4AnimationFrames) => rNum4AnimationFrames
-);
+// export const rNum4AnimationFramesSelector = createSelector(
+//     (state: RootState) => state.AnimationMode.rNum4AnimationFrames,
+//     (rNum4AnimationFrames) => rNum4AnimationFrames
+// );
 
+export const waybackItems4AnimationSelector = createSelector(
+    (state: RootState) => state.AnimationMode.waybackItems4Animation,
+    (waybackItems4Animation) => waybackItems4Animation
+);
 
 export const rNum2ExcludeSelector = createSelector(
     (state: RootState) => state.AnimationMode.rNum2Exclude,
