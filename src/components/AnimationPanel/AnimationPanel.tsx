@@ -32,7 +32,8 @@ type CreateGIFCallBack = (response: {
 }) => void;
 
 type GetFramesParams = {
-    releaseNums:number[], 
+    waybackItems: IWaybackItem[],
+    // releaseNums:number[], 
     container: HTMLDivElement, 
     mapView: MapView,
 }
@@ -41,7 +42,8 @@ type GetFramesParams = {
 export const PARENT_CONTAINER_LEFT_OFFSET = 350;
 
 const getFrames = async ({
-    releaseNums, 
+    waybackItems,
+    // releaseNums, 
     container, 
     mapView
 }:GetFramesParams):Promise<FrameData[]> => {
@@ -51,6 +53,8 @@ const getFrames = async ({
 
     const { offsetHeight, offsetWidth } = container;
 
+    const releaseNums = waybackItems.map(d=>d.releaseNum)
+
     const frameData = await generateFrames({
         frameRect: {
             screenX: elemRect.left - PARENT_CONTAINER_LEFT_OFFSET,
@@ -59,7 +63,7 @@ const getFrames = async ({
             height: offsetHeight,
         },
         mapView,
-        releaseNums
+        waybackItems
     });
 
     return frameData;
@@ -94,10 +98,9 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
             getAnimationFramesDelay.current = setTimeout(async()=>{
 
                 try {
-                    const releaseNums = waybackItems.map(d=>d.releaseNum)
 
                     const frameData = await getFrames({
-                        releaseNums,
+                        waybackItems,
                         container: containerRef.current,
                         mapView,
                     });

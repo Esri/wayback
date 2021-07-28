@@ -2,6 +2,7 @@ import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
+import { IWaybackItem } from '../../types';
 
 // import { loadModules } from 'esri-loader';
 
@@ -29,18 +30,19 @@ type FrameRectInfo = {
 type GenerateFramesParams = {
     frameRect: FrameRectInfo;
     mapView: MapView;
-    releaseNums: number[];
+    waybackItems: IWaybackItem[];
 };
 
 export type FrameData = {
     releaseNum: number;
+    waybackItem: IWaybackItem;
     frameDataURI: string;
 }
 
 export const generateFrames = async ({
     frameRect,
     mapView,
-    releaseNums,
+    waybackItems,
 }: GenerateFramesParams): Promise<FrameData[]> => {
     const frames = [];
 
@@ -50,7 +52,10 @@ export const generateFrames = async ({
         mapView,
     });
 
-    for (const releaseNum of releaseNums) {
+    for (const item of waybackItems) {
+
+        const { releaseNum } = item;
+
         const frameAsDataURL = await generateFrame({
             frameRect,
             tiles,
@@ -59,6 +64,7 @@ export const generateFrames = async ({
 
         frames.push({
             releaseNum,
+            waybackItem: item,
             frameDataURI: frameAsDataURL
         });
     }

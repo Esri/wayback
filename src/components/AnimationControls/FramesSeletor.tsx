@@ -27,7 +27,13 @@ const FramesSeletor:React.FC<Props> = ({
 }:Props) => {
 
     const getList = () => {
-        const items = waybackItemsWithLocalChanges
+
+        if(!waybackItemsWithLocalChanges || !waybackItemsWithLocalChanges.length){
+            return null;
+        }
+
+        const items = [...waybackItemsWithLocalChanges]
+            .sort((a,b)=>b.releaseDatetime - a.releaseDatetime)
             .map((d) => {
                 const { releaseDateLabel, itemID, releaseNum } = d;
                 const isSelected =

@@ -44,7 +44,7 @@ const ImageAutoPlay:React.FC<Props> = ({
                 return idx + 1 >= activeFrames.length ? 0 : idx + 1
             })
             // console.log(idxRef.current)
-        }, 1000)
+        }, 1500)
     }, [activeFrames])
 
     useEffect(()=>{
@@ -66,17 +66,38 @@ const ImageAutoPlay:React.FC<Props> = ({
         }
     }, [rNum2Exclude]);
 
-    const getBackgrounImage = ()=>{
+    const getCurrentFrame = ()=>{
 
         if(!activeFrames || !activeFrames.length){
-            return ''
+            return null
         }
 
-        if(!activeFrames[idx]){
-            return activeFrames[0] ? activeFrames[0].frameDataURI : ''
-        }
+        const currFame = activeFrames[idx] || activeFrames[0];
 
-        return `url(${activeFrames[idx].frameDataURI})`
+        const {releaseDateLabel} = currFame.waybackItem;
+
+        return (
+            <div
+                style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
+                    background: `url(${currFame.frameDataURI})`,
+                    boxSizing: 'border-box',
+                }}
+            >
+                <div className='text-white text-center'
+                    style={{
+                        position: 'absolute',
+                        top: '.5rem',
+                        width: '100%',
+                        textShadow: `0 0 3px #000`
+                    }}
+                >
+                    <span className='font-size-2'>{releaseDateLabel}</span>
+                </div>
+            </div>
+        )
     }
 
     useEffect(()=>{
@@ -87,17 +108,7 @@ const ImageAutoPlay:React.FC<Props> = ({
         }
     }, [])
 
-    return (
-        <div
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                background: getBackgrounImage(),
-                boxSizing: 'border-box',
-            }}
-        ></div>
-    );
+    return getCurrentFrame();
 }
 
 export default ImageAutoPlay
