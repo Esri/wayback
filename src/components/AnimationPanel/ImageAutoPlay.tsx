@@ -44,7 +44,7 @@ const ImageAutoPlay:React.FC<Props> = ({
                 return idx + 1 >= activeFrames.length ? 0 : idx + 1
             })
             // console.log(idxRef.current)
-        }, 1500)
+        }, 1000)
     }, [activeFrames])
 
     useEffect(()=>{

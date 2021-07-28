@@ -85,19 +85,18 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
     const getAnimationFrames = useCallback(
         () => {
             // in milliseconds
-            const DELAY_TIME = 1500;
+            const DELAY_TIME = 2000;
 
             clearTimeout(getAnimationFramesDelay.current)
-
-            const waybackItems = waybackItems4AnimationRef.current;
-
-            if(!waybackItems || !waybackItems.length || loadingWaybackItems4AnimationRef.current){
-                return;
-            }
 
             getAnimationFramesDelay.current = setTimeout(async()=>{
 
                 try {
+                    const waybackItems = waybackItems4AnimationRef.current;
+
+                    if(!waybackItems || !waybackItems.length || loadingWaybackItems4AnimationRef.current){
+                        return;
+                    }        
 
                     const frameData = await getFrames({
                         waybackItems,

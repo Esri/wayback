@@ -1,0 +1,22 @@
+.spinner-wrap{
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+	height: 3px;
+	overflow:hidden;
+}
+
+.frames-loading-indicator {
+	background-color: #fff;
+    width: 30%;
+    height: 100%;
+	margin-top:0;
+	margin-left:-25%;
+    animation: bounce_loadingProgress 2s infinite ease-in;
+}
+
+@keyframes bounce_loadingProgress {
+	0%{ margin-left:-25%; }
+	50%{ margin-left:100%; }
+}
