@@ -29,11 +29,11 @@ import {
     // Title4ActiveItem,
     WaybackLayer,
     HeadTags,
-    AnimationPanel
+    AnimationPanel,
+    AnimationModeToggleBtn
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
-import AnimationModeToogleBtn from '../AnimationModeToogleBtn/AnimationModeToogleBtn';
 
 // import { MobileHide, Spacing } from '../SharedUI';
 
@@ -52,7 +52,7 @@ const AppLayout:React.FC = ()=> {
 
                 <SwipeWidgetToggleBtn />
 
-                <AnimationModeToogleBtn />
+                <AnimationModeToggleBtn />
             </Gutter>
 
             <Sidebar>

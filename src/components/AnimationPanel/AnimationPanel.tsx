@@ -7,29 +7,20 @@ import { FrameData, generateFrames } from './generateFrames4GIF';
 import Resizable from './Resizable';
 import ImageAutoPlay from './ImageAutoPlay';
 import LoadingIndicator from './LoadingIndicator';
+import DownloadGIFDialog from './DownloadGIFDialog';
 
-import { whenTrue, whenFalse } from '@arcgis/core/core/watchUtils';
+import { whenFalse } from '@arcgis/core/core/watchUtils';
 import { IWaybackItem } from '../../types';
+import { useSelector } from 'react-redux';
 
-// import shortid from 'shortid'
+import {
+    isDownloadGIFDialogOnSelector
+} from '../../store/reducers/AnimationMode'
 
 type Props = {
     waybackItems4Animation: IWaybackItem[]
     mapView?: MapView;
 };
-
-// import gifshot from 'gifshot';
-
-type CreateGIFCallBack = (response: {
-    // image - Base 64 image
-    image: string;
-    // error - Boolean that determines if an error occurred
-    error: boolean;
-    // errorCode - Helpful error label
-    errorCode: string;
-    // errorMsg - Helpful error message
-    errorMsg: string;
-}) => void;
 
 type GetFramesParams = {
     waybackItems: IWaybackItem[],
@@ -120,6 +111,8 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
     const getAnimationFramesDelay = useRef<NodeJS.Timeout>();
 
     const waybackItems4AnimationRef = useRef<IWaybackItem[]>();
+
+    const isDownloadGIFDialogOn = useSelector(isDownloadGIFDialogOnSelector)
 
     const getAnimationFrames = useCallback(
         () => {
@@ -223,6 +216,12 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                     )
                 }
             </Resizable>
+
+            {
+                isDownloadGIFDialogOn 
+                    ? <DownloadGIFDialog frameData={frameData}/> 
+                    : null
+            }
         </>
     );
 };

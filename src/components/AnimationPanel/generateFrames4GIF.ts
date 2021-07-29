@@ -37,6 +37,8 @@ export type FrameData = {
     releaseNum: number;
     waybackItem: IWaybackItem;
     frameDataURI: string;
+    height: number;
+    width: number;
 }
 
 export const generateFrames = async ({
@@ -44,7 +46,7 @@ export const generateFrames = async ({
     mapView,
     waybackItems,
 }: GenerateFramesParams): Promise<FrameData[]> => {
-    const frames = [];
+    const frames:FrameData[] = [];
 
     // get list of tiles that can cover the entire container DIV
     const tiles = getListOfTiles({
@@ -65,7 +67,9 @@ export const generateFrames = async ({
         frames.push({
             releaseNum,
             waybackItem: item,
-            frameDataURI: frameAsDataURL
+            frameDataURI: frameAsDataURL,
+            width: frameRect.width,
+            height: frameRect.height
         });
     }
 

@@ -15,6 +15,7 @@ import {
 
 export type AnimationModeState = {
     isAnimationModeOn: boolean;
+    isDownloadGIFDialogOn: boolean;
     // rNum4AnimationFrames: number[],
     waybackItems4Animation: IWaybackItem[]
     rNum2Exclude: number[]
@@ -22,6 +23,7 @@ export type AnimationModeState = {
 
 export const initialAnimationModeState = {
     isAnimationModeOn: false,
+    isDownloadGIFDialogOn: false,
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
     rNum2Exclude: []
@@ -33,6 +35,9 @@ const slice = createSlice({
     reducers: {
         isAnimationModeOnToggled: (state: AnimationModeState) => {
             state.isAnimationModeOn = !state.isAnimationModeOn;
+        },
+        isDownloadGIFDialogOnToggled: (state: AnimationModeState) => {
+            state.isDownloadGIFDialogOn = !state.isDownloadGIFDialogOn;
         },
         // rNum4AnimationFramesLoaded: (state:AnimationModeState, action:PayloadAction<number[]>)=>{
         //     state.rNum4AnimationFrames = action.payload
@@ -62,7 +67,7 @@ const { reducer } = slice;
 
 export const {
     isAnimationModeOnToggled,
-    // rNum4AnimationFramesLoaded,
+    isDownloadGIFDialogOnToggled,
     waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
     rNum2ExcludeReset
@@ -83,10 +88,10 @@ export const isAnimationModeOnSelector = createSelector(
     (isAnimationModeOn) => isAnimationModeOn
 );
 
-// export const rNum4AnimationFramesSelector = createSelector(
-//     (state: RootState) => state.AnimationMode.rNum4AnimationFrames,
-//     (rNum4AnimationFrames) => rNum4AnimationFrames
-// );
+export const isDownloadGIFDialogOnSelector = createSelector(
+    (state: RootState) => state.AnimationMode.isDownloadGIFDialogOn,
+    (isDownloadGIFDialogOn) => isDownloadGIFDialogOn
+);
 
 export const waybackItems4AnimationSelector = createSelector(
     (state: RootState) => state.AnimationMode.waybackItems4Animation,
