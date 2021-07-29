@@ -38,6 +38,16 @@ type GetFramesParams = {
     mapView: MapView,
 }
 
+type GetFramesResponse = {
+    data: FrameData[];
+    taskInfo: string;
+}
+
+type GetTaskFingerPrintParams = {
+    container: HTMLDivElement, 
+    mapView: MapView,
+}
+
 // width of Gutter and Side Bar, need to calculate this dynamically
 export const PARENT_CONTAINER_LEFT_OFFSET = 350;
 
@@ -46,16 +56,19 @@ const getFrames = async ({
     // releaseNums, 
     container, 
     mapView
-}:GetFramesParams):Promise<FrameData[]> => {
+}:GetFramesParams):Promise<GetFramesResponse> => {
+
+    const taskInfo = getAnimationTaskInfo({
+        container, mapView
+    });
 
     const elemRect = container.getBoundingClientRect();
     // console.log(elemRect)
 
     const { offsetHeight, offsetWidth } = container;
+    // const releaseNums = waybackItems.map(d=>d.releaseNum)
 
-    const releaseNums = waybackItems.map(d=>d.releaseNum)
-
-    const frameData = await generateFrames({
+    const data = await generateFrames({
         frameRect: {
             screenX: elemRect.left - PARENT_CONTAINER_LEFT_OFFSET,
             screenY: elemRect.top,
@@ -66,15 +79,41 @@ const getFrames = async ({
         waybackItems
     });
 
-    return frameData;
+    return {
+        data,
+        taskInfo
+    };
 };
+
+// get a string that represent current Map (extent) and UI State (size, position of the Resize component)
+// this string will be used as a finger print to check if frame data returned by getFrames match the current Map and UI state, 
+// sometimes multiple getFrames calls can be triggered (zoom the map after resizing the window) and we should only show the response from the last request
+const getAnimationTaskInfo = ({
+    container, 
+    mapView
+}:GetTaskFingerPrintParams):string=>{
+
+    if(!mapView || !container){
+        return ''
+    }
+
+    const {
+        xmax, xmin, ymax, ymin
+    } = mapView.extent;
+
+    const { left, top } = container.getBoundingClientRect();
+
+    const { offsetHeight, offsetWidth } = container;
+
+    return [ xmax, xmin, ymax, ymin, left, top, offsetHeight, offsetWidth ].join('#');
+}
 
 const containerRef = React.createRef<HTMLDivElement>();
 
 const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Props) => {
 
     // array of frame images as dataURI string 
-    const [frames, setFrames] = useState<FrameData[]>();
+    const [frameData, setFrameData] = useState<FrameData[]>();
 
     const loadingWaybackItems4AnimationRef = useRef<boolean>(false);
 
@@ -85,7 +124,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
     const getAnimationFrames = useCallback(
         () => {
             // in milliseconds
-            const DELAY_TIME = 2000;
+            const DELAY_TIME = 1500;
 
             clearTimeout(getAnimationFramesDelay.current)
 
@@ -94,17 +133,27 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                 try {
                     const waybackItems = waybackItems4AnimationRef.current;
 
+                    const container = containerRef.current;
+
                     if(!waybackItems || !waybackItems.length || loadingWaybackItems4AnimationRef.current){
                         return;
                     }        
 
-                    const frameData = await getFrames({
+                    const {
+                        data, 
+                        taskInfo
+                    } = await getFrames({
                         waybackItems,
-                        container: containerRef.current,
+                        container,
                         mapView,
                     });
-    
-                    setFrames(frameData);
+
+                    if(taskInfo !== getAnimationTaskInfo({ mapView, container }) ){
+                        console.error('animation task info doesn\'t match current map or UI state, ignore frame data returned by this task')
+                        return;
+                    }
+
+                    setFrameData(data);
 
                 } catch(err){
                     console.error(err);
@@ -117,7 +166,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
     const resizableOnChange = useCallback(()=>{
         
-        setFrames(null);
+        setFrameData(null);
 
         getAnimationFrames()
     }, []);
@@ -134,7 +183,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
     useEffect(()=>{
         const onUpdating = whenFalse(mapView, 'stationary', ()=>{
             loadingWaybackItems4AnimationRef.current = true;
-            setFrames(null);
+            setFrameData(null);
         })
 
         return ()=>{
@@ -163,10 +212,10 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                 containerRef={containerRef}
             >
                 {
-                    frames && frames.length 
+                    frameData && frameData.length 
                     ?  (
                         <ImageAutoPlay 
-                            frames={frames}
+                            frameData={frameData}
                         />
                     ) 
                     : (

@@ -12,11 +12,11 @@ import {
 import { FrameData } from './generateFrames4GIF';
 
 type Props = {
-    frames: FrameData[]
+    frameData: FrameData[]
 }
 
 const ImageAutoPlay:React.FC<Props> = ({
-    frames
+    frameData
 }:Props) => {
 
     const [idx, setIdx] = useState<number>(0);
@@ -52,10 +52,10 @@ const ImageAutoPlay:React.FC<Props> = ({
         clearTimeout(setActiveFrameDelay.current);
 
         const frames2show = rNum2Exclude.length 
-            ? frames.filter(d=>{
+            ? frameData.filter(d=>{
                 return rNum2Exclude.indexOf(d.releaseNum) === -1;
             })
-            : frames;
+            : frameData;
 
         if(!activeFrames.length){
             setActiveFrame(frames2show);
