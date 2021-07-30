@@ -7,7 +7,9 @@ import { FrameData } from './generateFrames4GIF';
 import classnames from 'classnames';
 
 type Props = {
-    frameData: FrameData[]
+    frameData: FrameData[];
+    rNum2Exclude: number[];
+    speed?: number // animation speed in second
 }
 
 import gifshot from 'gifshot';
@@ -23,7 +25,13 @@ type CreateGIFCallBack = (response: {
     errorMsg: string;
 }) => void;
 
-const donwload = (dataURI='', fileName='')=>{
+type SaveAsGIFParams = {
+    frameData:FrameData[];
+    outputFileName: string;
+    speed: number;
+}
+
+const donwload = (dataURI='', fileName=''):void=>{
     const link = document.createElement('a');
     link.download = fileName;
     link.href = dataURI;
@@ -32,8 +40,57 @@ const donwload = (dataURI='', fileName='')=>{
     document.body.removeChild(link);
 }
 
+const saveAsGIF = async({    
+    frameData,
+    outputFileName,
+    speed
+}:SaveAsGIFParams):Promise<void>=>{
+
+    return new Promise((resolve, reject)=>{
+
+        const gifShotCallBack: CreateGIFCallBack = (response) => {
+
+            if (!response.error) {
+                donwload(response.image, outputFileName)
+                resolve();
+            } else {
+                reject(response.error)
+            }
+        };
+
+        const images: string[] = frameData.map(d=>{
+            const { frameCanvas, waybackItem } = d;
+
+            const { releaseDateLabel } = waybackItem;
+
+            const context = frameCanvas.getContext('2d');
+
+            context.font = '20px "Avenir Next';
+            context.shadowColor="black";
+            context.shadowBlur= 5;
+            context.fillStyle = "#fff";
+            context.fillText(`${releaseDateLabel}`, 15, 30);
+
+            return frameCanvas.toDataURL();
+        });
+
+        gifshot.createGIF(
+            {
+                images,
+                frameDuration: speed * 10,
+                gifWidth: frameData[0].width,
+                gifHeight: frameData[0].height,
+                showFrameText: true,
+            },
+            gifShotCallBack
+        );
+    })
+}
+
 const DownloadGIFDialog:React.FC<Props> = ({
-    frameData
+    frameData,
+    speed=1,
+    rNum2Exclude,
 }) => {
 
     const dispatch = useDispatch();
@@ -46,29 +103,28 @@ const DownloadGIFDialog:React.FC<Props> = ({
         dispatch(isDownloadGIFDialogOnToggled())
     },[])
 
-    const downloadBtnOnClick = useCallback(()=>{
+    const downloadBtnOnClick = useCallback(async()=>{
 
         setIsDownloading(true)
 
-        const callback: CreateGIFCallBack = (response) => {
-            if (!response.error) {
-                donwload(response.image, outputFileName)
-            }
+        const data = !rNum2Exclude.length 
+            ? frameData
+            : frameData.filter(d=>rNum2Exclude.indexOf(d.releaseNum) === -1)
 
-            closeDialog()
-        };
+        try {
+            await saveAsGIF({
+                frameData: data,
+                outputFileName,
+                speed
+            });
 
-        gifshot.createGIF(
-            {
-                images: frameData.map(d=>d.frameDataURI),
-                frameDuration: 10,
-                gifWidth: frameData[0].width,
-                gifHeight: frameData[0].height,
-                showFrameText: true,
-            },
-            callback
-        );
-    }, [frameData, outputFileName])
+            closeDialog();
+
+        } catch(err){
+            console.error(err);
+        }
+
+    }, [frameData, rNum2Exclude, outputFileName])
 
     const getContent = ()=>{
         if(isDownloading){

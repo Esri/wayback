@@ -18,6 +18,7 @@ export type AnimationModeState = {
     isDownloadGIFDialogOn: boolean;
     // rNum4AnimationFrames: number[],
     waybackItems4Animation: IWaybackItem[]
+    // array of release numbers for items to be excluded from the animation
     rNum2Exclude: number[]
 };
 

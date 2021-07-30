@@ -36,6 +36,7 @@ type GenerateFramesParams = {
 export type FrameData = {
     releaseNum: number;
     waybackItem: IWaybackItem;
+    frameCanvas: HTMLCanvasElement;
     frameDataURI: string;
     height: number;
     width: number;
@@ -58,7 +59,7 @@ export const generateFrames = async ({
 
         const { releaseNum } = item;
 
-        const frameAsDataURL = await generateFrame({
+        const {frameCanvas, frameDataURI} = await generateFrame({
             frameRect,
             tiles,
             releaseNum,
@@ -67,7 +68,8 @@ export const generateFrames = async ({
         frames.push({
             releaseNum,
             waybackItem: item,
-            frameDataURI: frameAsDataURL,
+            frameCanvas,
+            frameDataURI,
             width: frameRect.width,
             height: frameRect.height
         });
@@ -86,7 +88,10 @@ const generateFrame = async ({
     frameRect: FrameRectInfo;
     tiles: TileInfo[];
     releaseNum: number;
-}): Promise<string> => {
+}): Promise<{
+    frameCanvas: HTMLCanvasElement,
+    frameDataURI: string
+}> => {
     return new Promise((resolve, reject) => {
         const { screenX, screenY, height, width } = frameRect;
 
@@ -125,7 +130,11 @@ const generateFrame = async ({
 
                 // all tiles are drawn to canvas, return the canvas as D
                 if (tilesProcessed === tiles.length) {
-                    resolve(canvas.toDataURL('image/png'));
+                    // resolve(canvas.toDataURL('image/png'));
+                    resolve({
+                        frameCanvas: canvas,
+                        frameDataURI: canvas.toDataURL('image/png')
+                    })
                 }
             });
         }

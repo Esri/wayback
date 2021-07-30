@@ -4,19 +4,21 @@ import React, {
     useState
 } from 'react'
 
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
-import {
-    rNum2ExcludeSelector,
-} from '../../store/reducers/AnimationMode'
+// import {
+//     rNum2ExcludeSelector,
+// } from '../../store/reducers/AnimationMode'
 import { FrameData } from './generateFrames4GIF';
 
 type Props = {
     frameData: FrameData[]
+    rNum2Exclude: number[]
 }
 
 const ImageAutoPlay:React.FC<Props> = ({
-    frameData
+    frameData,
+    rNum2Exclude
 }:Props) => {
 
     const [idx, setIdx] = useState<number>(0);
@@ -24,8 +26,8 @@ const ImageAutoPlay:React.FC<Props> = ({
     // list of frames that will be shown in the final animation
     const [activeFrames, setActiveFrame ] = useState<FrameData[]>([]);
 
-    // release numbers for the frames to be excluded from animation
-    const rNum2Exclude = useSelector(rNum2ExcludeSelector);
+    // // release numbers for the frames to be excluded from animation
+    // const rNum2Exclude = useSelector(rNum2ExcludeSelector);
 
     const interval4ImageRotation = useRef<NodeJS.Timeout>();
 
@@ -72,9 +74,9 @@ const ImageAutoPlay:React.FC<Props> = ({
             return null
         }
 
-        const currFame = activeFrames[idx] || activeFrames[0];
+        const { waybackItem, frameDataURI } = activeFrames[idx] || activeFrames[0];
 
-        const {releaseDateLabel} = currFame.waybackItem;
+        const {releaseDateLabel} = waybackItem;
 
         return (
             <div
@@ -82,7 +84,7 @@ const ImageAutoPlay:React.FC<Props> = ({
                     position: 'relative',
                     width: '100%',
                     height: '100%',
-                    background: `url(${currFame.frameDataURI})`,
+                    background: `url(${frameDataURI})`,
                     boxSizing: 'border-box',
                 }}
             >
