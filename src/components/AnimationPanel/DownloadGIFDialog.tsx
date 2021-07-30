@@ -59,17 +59,20 @@ const saveAsGIF = async({
         };
 
         const images: string[] = frameData.map(d=>{
-            const { frameCanvas, waybackItem } = d;
+            const { frameCanvas, waybackItem, height } = d;
 
             const { releaseDateLabel } = waybackItem;
 
             const context = frameCanvas.getContext('2d');
 
-            context.font = '20px "Avenir Next';
+            context.font = '22px "Avenir Next';
             context.shadowColor="black";
             context.shadowBlur= 5;
             context.fillStyle = "#fff";
             context.fillText(`${releaseDateLabel}`, 15, 30);
+
+            context.font = '16px "Avenir Next';
+            context.fillText(`World Imagery Wayback`, 15, height - 15);
 
             return frameCanvas.toDataURL();
         });
