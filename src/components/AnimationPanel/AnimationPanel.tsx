@@ -17,6 +17,7 @@ import {
     isDownloadGIFDialogOnSelector,
     rNum2ExcludeSelector
 } from '../../store/reducers/AnimationMode'
+import Background from './Background';
 
 type Props = {
     waybackItems4Animation: IWaybackItem[]
@@ -191,18 +192,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
     return (
         <>
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: "rgba(0,0,0,.25)",
-                    pointerEvents: 'none'
-                }}
-            >
-            </div>
+            <Background />
 
             <Resizable
                 onChange={resizableOnChange}
