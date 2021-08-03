@@ -19,7 +19,9 @@ export type AnimationModeState = {
     // rNum4AnimationFrames: number[],
     waybackItems4Animation: IWaybackItem[]
     // array of release numbers for items to be excluded from the animation
-    rNum2Exclude: number[]
+    rNum2Exclude: number[];
+    // animation speed in milliseconds
+    animationSpeed: number
 };
 
 export const initialAnimationModeState = {
@@ -27,7 +29,8 @@ export const initialAnimationModeState = {
     isDownloadGIFDialogOn: false,
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
-    rNum2Exclude: []
+    rNum2Exclude: [],
+    animationSpeed: 1500
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -60,6 +63,9 @@ const slice = createSlice({
         },
         rNum2ExcludeReset: (state:AnimationModeState)=>{
             state.rNum2Exclude = []
+        },
+        animationSpeedChanged: (state:AnimationModeState, action:PayloadAction<number>)=>{
+            state.animationSpeed = action.payload
         }
     },
 });
@@ -71,7 +77,8 @@ export const {
     isDownloadGIFDialogOnToggled,
     waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
-    rNum2ExcludeReset
+    rNum2ExcludeReset,
+    animationSpeedChanged
 } = slice.actions;
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
@@ -102,6 +109,11 @@ export const waybackItems4AnimationSelector = createSelector(
 export const rNum2ExcludeSelector = createSelector(
     (state: RootState) => state.AnimationMode.rNum2Exclude,
     (rNum2Exclude) => rNum2Exclude
+);
+
+export const animationSpeedSelector = createSelector(
+    (state: RootState) => state.AnimationMode.animationSpeed,
+    (animationSpeed) => animationSpeed
 );
 
 export default reducer;

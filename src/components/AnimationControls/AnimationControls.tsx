@@ -1,4 +1,5 @@
 import React, {
+    useCallback,
     useEffect
 } from 'react'
 
@@ -17,13 +18,15 @@ import {
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
     rNum2ExcludeToggled,
-    rNum2ExcludeReset
+    rNum2ExcludeReset,
+    animationSpeedChanged
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
 
 import DonwloadGifButton from './DonwloadGifButton';
 import FramesSeletor from './FramesSeletor';
+import SpeedSelector from './SpeedSelector';
 
 const AnimationControls = () => {
 
@@ -50,6 +53,10 @@ const AnimationControls = () => {
     //     });
     // }, [rNum4WaybackItemsWithLocalChanges])
 
+    const speedOnChange = useCallback((speed:number)=>{
+        dispatch(animationSpeedChanged(speed))
+    }, [])
+
     useEffect(()=>{
         batch(()=>{
             dispatch(waybackItems4AnimationLoaded(waybackItemsWithLocalChanges))
@@ -66,6 +73,10 @@ const AnimationControls = () => {
                 }}
             >
                 <DonwloadGifButton />
+
+                <SpeedSelector 
+                    onChange={speedOnChange}
+                />
 
                 <FramesSeletor 
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}

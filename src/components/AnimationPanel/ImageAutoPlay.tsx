@@ -3,22 +3,27 @@ import React, {
     useRef,
     useState
 } from 'react'
+// import { useSelector } from 'react-redux';
+// import { animationSpeedSelector } from '../../store/reducers/AnimationMode';
 
 // import { useSelector } from 'react-redux';
 
 // import {
 //     rNum2ExcludeSelector,
 // } from '../../store/reducers/AnimationMode'
+
 import { FrameData } from './generateFrames4GIF';
 
 type Props = {
-    frameData: FrameData[]
-    rNum2Exclude: number[]
+    frameData: FrameData[];
+    rNum2Exclude: number[];
+    speed: number;
 }
 
 const ImageAutoPlay:React.FC<Props> = ({
     frameData,
-    rNum2Exclude
+    rNum2Exclude,
+    speed
 }:Props) => {
 
     const [idx, setIdx] = useState<number>(0);
@@ -33,6 +38,8 @@ const ImageAutoPlay:React.FC<Props> = ({
 
     const setActiveFrameDelay = useRef<NodeJS.Timeout>();
 
+    // const anumationSpeed = useSelector(animationSpeedSelector);
+    
     useEffect(()=>{
 
         clearInterval(interval4ImageRotation.current)
@@ -46,8 +53,9 @@ const ImageAutoPlay:React.FC<Props> = ({
                 return idx + 1 >= activeFrames.length ? 0 : idx + 1
             })
             // console.log(idxRef.current)
-        }, 1000)
-    }, [activeFrames])
+        }, speed)
+        
+    }, [activeFrames, speed])
 
     useEffect(()=>{
 

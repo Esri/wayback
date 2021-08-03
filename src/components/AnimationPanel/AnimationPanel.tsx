@@ -14,6 +14,7 @@ import { IWaybackItem } from '../../types';
 import { useSelector } from 'react-redux';
 
 import {
+    animationSpeedSelector,
     isDownloadGIFDialogOnSelector,
     rNum2ExcludeSelector
 } from '../../store/reducers/AnimationMode'
@@ -116,6 +117,8 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
     const isDownloadGIFDialogOn = useSelector(isDownloadGIFDialogOnSelector)
 
+    const animationSpeed = useSelector(animationSpeedSelector)
+
     // release numbers for the frames to be excluded from animation
     const rNum2Exclude = useSelector(rNum2ExcludeSelector);
 
@@ -204,6 +207,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                         <ImageAutoPlay 
                             frameData={frameData}
                             rNum2Exclude={rNum2Exclude}
+                            speed={animationSpeed}
                         />
                     ) 
                     : (
@@ -214,7 +218,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
             {
                 isDownloadGIFDialogOn 
-                    ? <DownloadGIFDialog frameData={frameData} rNum2Exclude={rNum2Exclude}/> 
+                    ? <DownloadGIFDialog frameData={frameData} rNum2Exclude={rNum2Exclude} speed={animationSpeed / 1000}/> 
                     : null
             }
         </>
