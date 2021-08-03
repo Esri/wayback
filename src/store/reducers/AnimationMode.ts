@@ -30,7 +30,7 @@ export const initialAnimationModeState = {
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: 1500
+    animationSpeed: 1000
 } as AnimationModeState;
 
 const slice = createSlice({

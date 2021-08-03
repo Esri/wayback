@@ -54,7 +54,7 @@ const AnimationControls = () => {
     // }, [rNum4WaybackItemsWithLocalChanges])
 
     const speedOnChange = useCallback((speed:number)=>{
-        dispatch(animationSpeedChanged(speed))
+        dispatch(animationSpeedChanged(speed * 1000))
     }, [])
 
     useEffect(()=>{
