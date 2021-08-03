@@ -19,7 +19,8 @@ import {
     rNum2ExcludeSelector,
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
-    animationSpeedChanged
+    animationSpeedChanged,
+    animationSpeedSelector
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -32,29 +33,16 @@ const AnimationControls = () => {
 
     const dispatch = useDispatch();
 
-    // const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
-
-    // const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
-    //     releaseNum4ItemsWithLocalChangesSelector
-    // );
-
-    // const rNum4AnimationFrames: number[] = useSelector(rNum4AnimationFramesSelector);
-
     const rNum2ExcludeFromAnimation: number[] = useSelector(rNum2ExcludeSelector);
 
     const activeItem:IWaybackItem = useSelector(activeWaybackItemSelector);
 
     const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(waybackItemsWithLocalChangesSelector);
 
-    // useEffect(()=>{
-    //     batch(()=>{
-    //         dispatch(rNum4AnimationFramesLoaded(rNum4WaybackItemsWithLocalChanges))
-    //         dispatch(rNum2ExcludeReset())
-    //     });
-    // }, [rNum4WaybackItemsWithLocalChanges])
+    const animationSpeed = useSelector(animationSpeedSelector)
 
     const speedOnChange = useCallback((speed:number)=>{
-        dispatch(animationSpeedChanged(speed * 1000))
+        dispatch(animationSpeedChanged(speed))
     }, [])
 
     useEffect(()=>{
@@ -75,6 +63,7 @@ const AnimationControls = () => {
                 <DonwloadGifButton />
 
                 <SpeedSelector 
+                    defaultVal={animationSpeed}
                     onChange={speedOnChange}
                 />
 

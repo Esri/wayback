@@ -10,10 +10,16 @@ declare global {
 }
 
 type Props = {
+    defaultVal: number;
     onChange: (speed:number)=>void;
 }
 
+const MIN_VAL = .5; // min animation speed is .5 second
+const MAX_VAL = 3; // max animation speed is 3 second
+const SLIDER_STEP = .5
+
 const SpeedSelector:React.FC<Props> = ({
+    defaultVal,
     onChange
 }:Props) => {
 
@@ -27,34 +33,36 @@ const SpeedSelector:React.FC<Props> = ({
             clearTimeout(onChangeDely.current);
 
             onChangeDely.current = setTimeout(()=>{
-                console.log('slider on change', evt.target.value)
-
+                // console.log('slider on change', evt.target.value)
                 onChange(+evt.target.value)
             }, 500)
         })
 
         return ()=>{
             clearTimeout(onChangeDely.current);
-            sliderRef.current.removeEventListener('calciteSliderChange')
         }
     }, [])
+
+    React.useEffect(() => {
+        console.log(defaultVal)
+    }, [defaultVal])
 
     return (
         <div className='leader-half trailer-1'>
 
             <div className='trailer-quarter'>
-                <span className='font-size--2'>Animation Speed</span>
+                <span className='font-size--3'>Animation Speed (in seconds)</span>
             </div>
 
             <div className="padding-left-half padding-right-half ">
                 <calcite-slider 
                     ref={sliderRef} 
-                    min=".5" 
-                    max="3" 
+                    min={MIN_VAL} 
+                    max={MAX_VAL}
                     snap 
                     ticks=".5" 
-                    step=".5" 
-                    value="1" 
+                    step={SLIDER_STEP}
+                    value={defaultVal} 
                     label-ticks
                     theme="dark"
                 ></calcite-slider>

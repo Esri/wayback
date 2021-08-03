@@ -117,6 +117,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
     const isDownloadGIFDialogOn = useSelector(isDownloadGIFDialogOnSelector)
 
+    // in second
     const animationSpeed = useSelector(animationSpeedSelector)
 
     // release numbers for the frames to be excluded from animation
@@ -218,7 +219,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
 
             {
                 isDownloadGIFDialogOn 
-                    ? <DownloadGIFDialog frameData={frameData} rNum2Exclude={rNum2Exclude} speed={animationSpeed / 1000}/> 
+                    ? <DownloadGIFDialog frameData={frameData} rNum2Exclude={rNum2Exclude} speed={animationSpeed}/> 
                     : null
             }
         </>

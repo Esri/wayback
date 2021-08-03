@@ -20,7 +20,7 @@ export type AnimationModeState = {
     waybackItems4Animation: IWaybackItem[]
     // array of release numbers for items to be excluded from the animation
     rNum2Exclude: number[];
-    // animation speed in milliseconds
+    // animation speed in second
     animationSpeed: number
 };
 
@@ -30,7 +30,7 @@ export const initialAnimationModeState = {
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: 1000
+    animationSpeed: 1
 } as AnimationModeState;
 
 const slice = createSlice({

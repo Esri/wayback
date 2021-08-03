@@ -94,7 +94,7 @@ const FramesSeletor:React.FC<Props> = ({
                 }}
             >
                 <div>
-                    <span className="font-size--2">
+                    <span className="font-size--3">
                         Animation Frames
                     </span>
                 </div>
