@@ -93,11 +93,11 @@ const FramesSeletor:React.FC<Props> = ({
                     marginTop: '1rem'
                 }}
             >
-                <div>
+                {/* <div>
                     <span className="font-size--3">
                         Animation Frames
                     </span>
-                </div>
+                </div> */}
                 {items}
             </div>
         );

@@ -17,7 +17,7 @@ const LoadingIndicator = () => {
                 <div className='frames-loading-indicator'></div>
             </div>
             
-            <span className='text-white font-size-1'>fetching tiles...</span>
+            <span className='text-white font-size-1'>Loading imagery</span>
         </div>
     )
 }

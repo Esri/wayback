@@ -18,8 +18,8 @@ const Background = () => {
                 left: 0,
                 width: '100%',
                 height: '100%',
-                background: 'rgba(0,0,0,.25)',
-                // background: "linear-gradient(0deg, rgba(0,0,0,9) 0%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.2) 50%, rgba(0,0,0,.3) 80%, rgba(0,0,0,9) 100%)",
+                // background: 'rgba(0,0,0,.25)',
+                background: "linear-gradient(0deg, rgba(0,0,0,9) 0%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.2) 50%, rgba(0,0,0,.3) 80%, rgba(0,0,0,9) 100%)",
                 pointerEvents: 'none'
             }}
         >

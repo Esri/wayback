@@ -51,7 +51,7 @@ const SpeedSelector:React.FC<Props> = ({
         <div className='leader-half trailer-1'>
 
             <div className='trailer-quarter'>
-                <span className='font-size--3'>Animation Speed (in seconds)</span>
+                <span className='font-size--3'>Animation Speed</span>
             </div>
 
             <div className="padding-left-half padding-right-half ">

@@ -11,7 +11,7 @@ import {
     generateFrames
 } from './utils';
 
-const WIDTH = 300;
+const WIDTH = 500;
 const HEIGHT = 300;
 
 const PreviewWindowContainer = styled.div`
