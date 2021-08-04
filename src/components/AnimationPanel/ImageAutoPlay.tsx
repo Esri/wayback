@@ -82,9 +82,9 @@ const ImageAutoPlay:React.FC<Props> = ({
             return null
         }
 
-        const { waybackItem, frameDataURI } = activeFrames[idx] || activeFrames[0];
+        const { frameDataURI } = activeFrames[idx] || activeFrames[0];
 
-        const {releaseDateLabel} = waybackItem;
+        // const {releaseDateLabel} = waybackItem;
 
         return (
             <div
@@ -96,7 +96,7 @@ const ImageAutoPlay:React.FC<Props> = ({
                     boxSizing: 'border-box',
                 }}
             >
-                <div className='text-white text-center'
+                {/* <div className='text-white text-center'
                     style={{
                         position: 'absolute',
                         top: '.5rem',
@@ -105,7 +105,7 @@ const ImageAutoPlay:React.FC<Props> = ({
                     }}
                 >
                     <span className='font-size-2'>{releaseDateLabel}</span>
-                </div>
+                </div> */}
             </div>
         )
     }

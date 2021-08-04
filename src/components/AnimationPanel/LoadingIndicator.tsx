@@ -11,6 +11,7 @@ const LoadingIndicator = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                textShadow: `0 0 3px #000`
             }}
         >
             <div className='spinner-wrap'>

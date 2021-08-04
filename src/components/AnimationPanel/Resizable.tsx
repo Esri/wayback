@@ -171,11 +171,13 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
                 // ref={resizeBtnRef}
                 style={{
                     position: 'absolute',
-                    right: -5,
-                    bottom: -5,
-                    height: 10,
-                    width: 10,
-                    background: '#000',
+                    right: -7,
+                    bottom: -7,
+                    height: 14,
+                    width: 14,
+                    background: '#2C67AC',
+                    borderRadius: '50%',
+                    border: '1px solid #fff',
                     cursor: 'se-resize',
                 }}
                 onMouseDown={addResizeHandler}

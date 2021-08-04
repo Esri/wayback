@@ -11,8 +11,8 @@ type Props = {
     // rNum4AnimationFrames: number[];
     waybackItemsWithLocalChanges: IWaybackItem[];
     rNum2Exclude: number[];
-    activeItem: IWaybackItem;
-    onSelect: (data: IWaybackItem) => void;
+    // activeItem: IWaybackItem;
+    // onSelect: (data: IWaybackItem) => void;
     toggleFrame: (rNum:number) => void;
 };
 
@@ -21,8 +21,8 @@ const FramesSeletor:React.FC<Props> = ({
     // rNum4AnimationFrames,
     waybackItemsWithLocalChanges,
     rNum2Exclude,
-    activeItem,
-    onSelect,
+    // activeItem,
+    // onSelect,
     toggleFrame
 }:Props) => {
 
@@ -36,8 +36,8 @@ const FramesSeletor:React.FC<Props> = ({
             .sort((a,b)=>b.releaseDatetime - a.releaseDatetime)
             .map((d) => {
                 const { releaseDateLabel, itemID, releaseNum } = d;
-                const isSelected =
-                    activeItem && activeItem.itemID === itemID;
+                // const isSelected =
+                //     activeItem && activeItem.itemID === itemID;
 
                 const isExcluded = rNum2Exclude.indexOf(releaseNum) > -1;
 
@@ -57,8 +57,9 @@ const FramesSeletor:React.FC<Props> = ({
                     <LayerSelector
                         // className={classNames}
                         key={itemID}
-                        isSelected={isSelected}
-                        onClick={onSelect.bind(this, d)}
+                        // isSelected={isSelected}
+                        // onClick={onSelect.bind(this, d)}
+                        onClick={toggleFrame.bind(this, releaseNum)}
                     >
                         <div
                             style={{
@@ -90,7 +91,7 @@ const FramesSeletor:React.FC<Props> = ({
             <div
                 style={{
                     width: '100%',
-                    marginTop: '1rem'
+                    marginTop: '2rem'
                 }}
             >
                 {/* <div>
