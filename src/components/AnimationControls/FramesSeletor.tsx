@@ -91,7 +91,7 @@ const FramesSeletor:React.FC<Props> = ({
             <div
                 style={{
                     width: '100%',
-                    marginTop: '2rem'
+                    marginTop: '.5rem'
                 }}
             >
                 {/* <div>

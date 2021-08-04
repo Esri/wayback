@@ -48,12 +48,11 @@ const SpeedSelector:React.FC<Props> = ({
     }, [defaultVal])
 
     return (
-        <div className='leader-half trailer-1'>
-
-            <div className='trailer-quarter'>
-                <span className='font-size--3'>Animation Speed</span>
-            </div>
-
+        <div 
+            style={{
+                flexGrow: 1
+            }}
+        >
             <div className="padding-left-half padding-right-half ">
                 <calcite-slider 
                     ref={sliderRef} 

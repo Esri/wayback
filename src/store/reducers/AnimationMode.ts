@@ -21,7 +21,8 @@ export type AnimationModeState = {
     // array of release numbers for items to be excluded from the animation
     rNum2Exclude: number[];
     // animation speed in second
-    animationSpeed: number
+    animationSpeed: number;
+    isPlaying: boolean;
 };
 
 export const initialAnimationModeState = {
@@ -30,7 +31,8 @@ export const initialAnimationModeState = {
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: 1
+    animationSpeed: 1,
+    isPlaying: true
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -66,6 +68,9 @@ const slice = createSlice({
         },
         animationSpeedChanged: (state:AnimationModeState, action:PayloadAction<number>)=>{
             state.animationSpeed = action.payload
+        },
+        isAnimationPlayingToggled: (state:AnimationModeState)=>{
+            state.isPlaying = !state.isPlaying
         }
     },
 });
@@ -78,7 +83,8 @@ export const {
     waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
-    animationSpeedChanged
+    animationSpeedChanged,
+    isAnimationPlayingToggled
 } = slice.actions;
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
@@ -114,6 +120,11 @@ export const rNum2ExcludeSelector = createSelector(
 export const animationSpeedSelector = createSelector(
     (state: RootState) => state.AnimationMode.animationSpeed,
     (animationSpeed) => animationSpeed
+);
+
+export const isAnimationPlayingSelector = createSelector(
+    (state: RootState) => state.AnimationMode.isPlaying,
+    (isPlaying) => isPlaying
 );
 
 export default reducer;

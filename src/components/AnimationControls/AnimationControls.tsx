@@ -8,8 +8,8 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 import {
     // releaseNum4ItemsWithLocalChangesSelector,
     // allWaybackItemsSelector,
-    activeWaybackItemSelector,
-    releaseNum4ActiveWaybackItemUpdated,
+    // activeWaybackItemSelector,
+    // releaseNum4ActiveWaybackItemUpdated,
     waybackItemsWithLocalChangesSelector
 } from '../../store/reducers/WaybackItems';
 
@@ -20,7 +20,9 @@ import {
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
     animationSpeedChanged,
-    animationSpeedSelector
+    animationSpeedSelector,
+    isAnimationPlayingToggled,
+    isAnimationPlayingSelector
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -28,6 +30,7 @@ import { IWaybackItem } from '../../types';
 import DonwloadGifButton from './DonwloadGifButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
+import PlayPauseBtn from './PlayPauseBtn';
 
 const AnimationControls = () => {
 
@@ -39,10 +42,16 @@ const AnimationControls = () => {
 
     const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(waybackItemsWithLocalChangesSelector);
 
-    const animationSpeed = useSelector(animationSpeedSelector)
+    const animationSpeed = useSelector(animationSpeedSelector);
+
+    const isPlaying = useSelector(isAnimationPlayingSelector)
 
     const speedOnChange = useCallback((speed:number)=>{
         dispatch(animationSpeedChanged(speed))
+    }, []);
+
+    const playPauseBtnOnClick = useCallback(()=>{
+        dispatch(isAnimationPlayingToggled())
     }, [])
 
     useEffect(()=>{
@@ -62,10 +71,27 @@ const AnimationControls = () => {
             >
                 <DonwloadGifButton />
 
-                <SpeedSelector 
-                    defaultVal={animationSpeed}
-                    onChange={speedOnChange}
-                />
+                <div className='leader-half'>
+                    <span className='font-size--3'>Animation Speed</span>
+                </div>
+
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <PlayPauseBtn 
+                        isPlaying={isPlaying}
+                        onClick={playPauseBtnOnClick}
+                    />
+
+                    <SpeedSelector 
+                        defaultVal={animationSpeed}
+                        onChange={speedOnChange}
+                    />
+
+                </div>
 
                 <FramesSeletor 
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}

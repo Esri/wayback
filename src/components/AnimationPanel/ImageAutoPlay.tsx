@@ -3,7 +3,8 @@ import React, {
     useRef,
     useState
 } from 'react'
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { isAnimationPlayingSelector } from '../../store/reducers/AnimationMode';
 // import { animationSpeedSelector } from '../../store/reducers/AnimationMode';
 
 // import { useSelector } from 'react-redux';
@@ -39,12 +40,14 @@ const ImageAutoPlay:React.FC<Props> = ({
     const setActiveFrameDelay = useRef<NodeJS.Timeout>();
 
     // const anumationSpeed = useSelector(animationSpeedSelector);
+
+    const isPlaying = useSelector(isAnimationPlayingSelector)
     
     useEffect(()=>{
 
         clearInterval(interval4ImageRotation.current)
 
-        if(!activeFrames || !activeFrames.length){
+        if(!activeFrames || !activeFrames.length || !isPlaying){
             return;
         }
 
@@ -55,7 +58,7 @@ const ImageAutoPlay:React.FC<Props> = ({
             // console.log(idxRef.current)
         }, speed * 1000)
         
-    }, [activeFrames, speed])
+    }, [activeFrames, speed, isPlaying])
 
     useEffect(()=>{
 
