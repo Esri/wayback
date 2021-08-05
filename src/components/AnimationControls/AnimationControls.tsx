@@ -27,7 +27,8 @@ import {
     stopAnimation,
     updateAnimationSpeed,
     indexOfCurrentAnimationFrameSelector,
-    waybackItem4CurrentAnimationFrameSelector
+    waybackItem4CurrentAnimationFrameSelector,
+    setActiveFrameByReleaseNum
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -109,14 +110,14 @@ const AnimationControls = () => {
                     // activeItem={activeItem}
                     // rNum4AnimationFrames={rNum4AnimationFrames}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
-                    // onSelect={(item)=>{
-                    //     const { releaseNum} = item;
-                    //     dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum));
-                    // }}
+                    setActiveFrame={(rNum)=>{
+                        dispatch(setActiveFrameByReleaseNum(rNum))
+                    }}
                     toggleFrame={(rNum)=>{
                         dispatch(toggleAnimationFrame(rNum))
                     }}
                     waybackItem4CurrentAnimationFrame={waybackItem4CurrentAnimationFrame}
+                    isButtonDisabled={isPlaying}
                 />
             </div>
 

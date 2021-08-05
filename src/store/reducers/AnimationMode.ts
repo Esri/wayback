@@ -151,6 +151,27 @@ export const stopAnimation = ()=>(dispatch: StoreDispatch, getState: StoreGetSta
     clearInterval(interval4Animation);
 }
 
+export const setActiveFrameByReleaseNum = (releaseNum:number)=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    const { AnimationMode } = getState();
+
+    const { isPlaying, isLoadingFrameData, waybackItems4Animation } = AnimationMode;
+
+    if(isPlaying || isLoadingFrameData){
+        return;
+    }
+
+    let targetIdx = 0;
+
+    for(let i = 0; i < waybackItems4Animation.length; i++){
+        if(waybackItems4Animation[i].releaseNum === releaseNum){
+            targetIdx = i;
+            break;
+        }
+    }
+
+    dispatch(indexOfCurrentFrameChanged(targetIdx))
+}
+
 const showNextFrame = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
 
     const { AnimationMode } = getState();

@@ -13,7 +13,8 @@ type Props = {
     rNum2Exclude: number[];
     waybackItem4CurrentAnimationFrame: IWaybackItem;
     // activeItem: IWaybackItem;
-    // onSelect: (data: IWaybackItem) => void;
+    isButtonDisabled: boolean;
+    setActiveFrame: (rNum:number) => void;
     toggleFrame: (rNum:number) => void;
 };
 
@@ -24,7 +25,8 @@ const FramesSeletor:React.FC<Props> = ({
     rNum2Exclude,
     waybackItem4CurrentAnimationFrame,
     // activeItem,
-    // onSelect,
+    isButtonDisabled,
+    setActiveFrame,
     toggleFrame
 }:Props) => {
 
@@ -61,8 +63,9 @@ const FramesSeletor:React.FC<Props> = ({
                         key={itemID}
                         // isSelected={isSelected}
                         // onClick={onSelect.bind(this, d)}
-                        onClick={toggleFrame.bind(this, releaseNum)}
+                        onClick={setActiveFrame.bind(this, releaseNum)}
                         showBoarderOnLeft={waybackItem4CurrentAnimationFrame && waybackItem4CurrentAnimationFrame.releaseNum === releaseNum}
+                        disableCursorPointer={isButtonDisabled}
                     >
                         <div
                             style={{
@@ -70,7 +73,7 @@ const FramesSeletor:React.FC<Props> = ({
                                 alignItems: 'center'
                             }}
                         >
-                            <div className='margin-right-half'
+                            <div className='margin-right-half cursor-pointer'
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center'

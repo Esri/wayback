@@ -8,6 +8,7 @@ type Props = {
     showArrowOnLeft?: boolean;
     showBoarderOnLeft?: boolean;
     children:React.ReactNode;
+    disableCursorPointer?: boolean;
     onClick: ()=>void;
 }
 
@@ -15,6 +16,7 @@ const LayerSelector:React.FC<Props> = ({
     isSelected=false,
     showArrowOnLeft=false,
     showBoarderOnLeft=false,
+    disableCursorPointer=false,
     children,
     onClick
 }:Props) => {
@@ -49,7 +51,7 @@ const LayerSelector:React.FC<Props> = ({
                         ? ' 4px solid #fff'
                         : '4px solid transparent',
                 boxSizing: 'border-box',
-                cursor: 'pointer',
+                cursor: disableCursorPointer ? 'unset' : 'pointer',
             }}
             onClick={onClick}
         >
