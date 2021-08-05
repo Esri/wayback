@@ -1,5 +1,7 @@
-import './LoadingIndicator.scss'
+// import './LoadingIndicator.scss'
 import React from 'react';
+
+import LoadingSpinner from './LoadingSpinner'
 
 const LoadingIndicator = () => {
     return (
@@ -14,8 +16,15 @@ const LoadingIndicator = () => {
                 textShadow: `0 0 3px #000`
             }}
         >
-            <div className='spinner-wrap'>
-                <div className='frames-loading-indicator'></div>
+            <div
+                style={{
+                    position: 'absolute',
+                    top: -1,
+                    left: 0,
+                    width: '100%'
+                }}
+            >
+                <LoadingSpinner />
             </div>
             
             <span className='text-white font-size-1'>Loading imagery</span>

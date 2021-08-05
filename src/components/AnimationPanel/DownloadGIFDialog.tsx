@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import { isDownloadGIFDialogOnToggled } from '../../store/reducers/AnimationMode';
 import { FrameData } from './generateFrames4GIF';
 
+import LoadingSpinner from './LoadingSpinner'
+
 import classnames from 'classnames';
 
 type Props = {
@@ -144,6 +146,17 @@ const DownloadGIFDialog:React.FC<Props> = ({
 
                     <div className='text-right'>
                         <div className='btn' onClick={closeDialog}>Cancel</div>
+                    </div>
+
+                    <div
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            width: '100%'
+                        }}
+                    >
+                        <LoadingSpinner />
                     </div>
                 </>
             )

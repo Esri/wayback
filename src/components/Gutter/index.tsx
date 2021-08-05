@@ -57,19 +57,19 @@ class Gutter extends React.PureComponent<IProps> {
                     {
                         !shareBtnDisabled && (
                             <div
-                                className="gutter-nav-btn"
+                                className="gutter-nav-btn share-dialog-toggle-btn"
                                 // data-modal={ShareModalConfig['modal-id']}
                                 title="Share"
                                 onClick={shareButtonOnClick}
                             >
-                                <svg
+                                {/* <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     height="24"
                                     width="24"
                                 >
                                     <path d="M21.9 14h.1v8H2V2h12v1H3v18h18v-7zm-4.246-9.66L20 7h-4.773a6.274 6.274 0 0 0-6.22 6.5V17H10v-3.535a5.507 5.507 0 0 1 5.5-5.5h4.78l-2.683 2.683.707.707 3.89-3.89-3.833-3.833z" />
-                                </svg>
+                                </svg> */}
                             </div>
                         )
                     }
