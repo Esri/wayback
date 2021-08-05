@@ -59,19 +59,22 @@ const saveAsGIF = async({
         };
 
         const images: string[] = frameData.map(d=>{
-            const { frameCanvas, waybackItem, height } = d;
+            const { frameCanvas, height } = d;
 
-            const { releaseDateLabel } = waybackItem;
+            // const { releaseDateLabel } = waybackItem;
 
             const context = frameCanvas.getContext('2d');
 
-            context.font = '22px "Avenir Next';
+            // context.font = '22px "Avenir Next';
+            // context.shadowColor="black";
+            // context.shadowBlur= 5;
+            // context.fillStyle = "#fff";
+            // context.fillText(`${releaseDateLabel}`, 15, 30);
+
+            context.font = '12px "Avenir Next';
             context.shadowColor="black";
             context.shadowBlur= 5;
             context.fillStyle = "#fff";
-            context.fillText(`${releaseDateLabel}`, 15, 30);
-
-            context.font = '16px "Avenir Next';
             context.fillText(`World Imagery Wayback`, 15, height - 15);
 
             return frameCanvas.toDataURL();
@@ -131,21 +134,53 @@ const DownloadGIFDialog:React.FC<Props> = ({
 
     const getContent = ()=>{
         if(isDownloading){
-            return <span>Generating GIF file, please don't close the window</span>
+            return (
+                <>
+                    <div className='text-center leader-1'>
+                        <p className='trailer-quarter'>Generating animated GIF file...</p>
+                        <p>Your download will begim shortly.</p>
+                    </div>
+
+
+                    <div className='text-right'>
+                        <div className='btn' onClick={closeDialog}>Cancel</div>
+                    </div>
+                </>
+            )
         }
 
         return (
-            <div>
-                <span>Output file name:</span>
-                <label>
-                    <input
-                        type="text"
-                        // placeholder="https://<my-enterprise-url>/portal"
-                        // onChange={this.portalUrlInputOnChange}
-                        value={outputFileName}
-                    />
-                </label>
-            </div>
+            <>
+                <div className='text-center'>
+                    <span className='font-size-2'>Download GIF</span>
+                </div>
+
+                <div className='leader-1 trailer-1'>
+                    <div>
+                        <span>File name:</span>
+                        <label>
+                            <input
+                                type="text"
+                                // placeholder="https://<my-enterprise-url>/portal"
+                                onChange={(evt:React.ChangeEvent<HTMLInputElement>)=>{
+                                    setOutputFileName(evt.target.value)
+                                }}
+                                value={outputFileName}
+                            />
+                        </label>
+                    </div>
+                </div>
+
+                <div 
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end'
+                    }}
+                >
+                    <div className='btn btn-transparent' onClick={closeDialog}>Close</div>
+                    <div className={classnames('btn', {'btn-disabled': isDownloading})} onClick={downloadBtnOnClick}>Download</div>
+                </div>
+            </>
         )
     }
 
@@ -158,25 +193,8 @@ const DownloadGIFDialog:React.FC<Props> = ({
                 role="dialog"
                 aria-labelledby="modal"
             >
-                <div className='text-center'>
-                    <span className='font-size-2'>Save Animation as GIF file</span>
-                </div>
-
-                <div className='leader-1 trailer-1'>
-                    { getContent() }
-                </div>
-
-                <div 
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end'
-                    }}
-                >
-                    <div className='btn btn-transparent' onClick={closeDialog}>Close</div>
-                    <div className={classnames('btn', {'btn-disabled': isDownloading})} onClick={downloadBtnOnClick}>Download</div>
-                </div>
+                { getContent() }
             </div>
-            
         </div>
     )
 }
