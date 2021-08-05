@@ -17,12 +17,15 @@ import {
     waybackItems4AnimationLoaded,
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
-    rNum2ExcludeToggled,
+    toggleAnimationFrame,
     rNum2ExcludeReset,
-    animationSpeedChanged,
+    // animationSpeedChanged,
     animationSpeedSelector,
     isAnimationPlayingToggled,
-    isAnimationPlayingSelector
+    isAnimationPlayingSelector,
+    startAnimation,
+    stopAnimation,
+    updateAnimationSpeed
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -47,12 +50,16 @@ const AnimationControls = () => {
     const isPlaying = useSelector(isAnimationPlayingSelector)
 
     const speedOnChange = useCallback((speed:number)=>{
-        dispatch(animationSpeedChanged(speed))
+        dispatch(updateAnimationSpeed(speed))
     }, []);
 
     const playPauseBtnOnClick = useCallback(()=>{
-        dispatch(isAnimationPlayingToggled())
-    }, [])
+        if(isPlaying){
+            dispatch(stopAnimation())
+        } else {
+            dispatch(startAnimation())
+        }
+    }, [isPlaying])
 
     useEffect(()=>{
         batch(()=>{
@@ -103,7 +110,7 @@ const AnimationControls = () => {
                     //     dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNum));
                     // }}
                     toggleFrame={(rNum)=>{
-                        dispatch(rNum2ExcludeToggled(rNum))
+                        dispatch(toggleAnimationFrame(rNum))
                     }}
                 />
             </div>

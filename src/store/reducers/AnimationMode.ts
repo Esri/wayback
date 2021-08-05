@@ -4,6 +4,7 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
+import { batch } from 'react-redux';
 import { IWaybackItem } from '../../types';
 // import { IWaybackItem } from '../../types';
 
@@ -23,6 +24,7 @@ export type AnimationModeState = {
     // animation speed in second
     animationSpeed: number;
     isPlaying: boolean;
+    indexOfCurrentFrame: number;
 };
 
 export const initialAnimationModeState = {
@@ -32,7 +34,8 @@ export const initialAnimationModeState = {
     waybackItems4Animation: [],
     rNum2Exclude: [],
     animationSpeed: 1,
-    isPlaying: true
+    isPlaying: true,
+    indexOfCurrentFrame: 0
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -69,8 +72,11 @@ const slice = createSlice({
         animationSpeedChanged: (state:AnimationModeState, action:PayloadAction<number>)=>{
             state.animationSpeed = action.payload
         },
-        isAnimationPlayingToggled: (state:AnimationModeState)=>{
-            state.isPlaying = !state.isPlaying
+        isAnimationPlayingToggled: (state:AnimationModeState, action:PayloadAction<boolean>)=>{
+            state.isPlaying = action.payload
+        },
+        indexOfCurrentFrameChanged: (state:AnimationModeState, action:PayloadAction<number>)=>{
+            state.indexOfCurrentFrame = action.payload
         }
     },
 });
@@ -84,7 +90,8 @@ export const {
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
     animationSpeedChanged,
-    isAnimationPlayingToggled
+    isAnimationPlayingToggled,
+    indexOfCurrentFrameChanged
 } = slice.actions;
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
@@ -95,6 +102,85 @@ export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: Store
     }
 
     dispatch(isAnimationModeOnToggled());
+}
+
+let interval4Animation: NodeJS.Timeout;
+
+export const startAnimation = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    const { AnimationMode } = getState();
+
+    const { animationSpeed } = AnimationMode;
+
+    dispatch(isAnimationPlayingToggled(true))
+
+    clearInterval(interval4Animation);
+
+    interval4Animation = setInterval(()=>{
+        dispatch(showNextFrame())
+    }, animationSpeed * 1000)
+}
+
+export const stopAnimation = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    dispatch(isAnimationPlayingToggled(false))
+    clearInterval(interval4Animation);
+}
+
+const showNextFrame = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+
+    const { AnimationMode } = getState();
+
+    const { rNum2Exclude, waybackItems4Animation, indexOfCurrentFrame } = AnimationMode;
+
+    const rNum2ExcludeSet = new Set(rNum2Exclude);
+
+    let idx4NextFrame = indexOfCurrentFrame;
+    
+    // loop through the circular array to find next item to show
+    for(let i = indexOfCurrentFrame + 1; i < indexOfCurrentFrame + waybackItems4Animation.length; i++){
+        const targetIdx = i % waybackItems4Animation.length;
+
+        const targetItem = waybackItems4Animation[targetIdx];
+
+        if(!rNum2ExcludeSet.has(targetItem.releaseNum)){
+            idx4NextFrame = targetIdx;
+            break;
+        }
+    }
+
+    dispatch(indexOfCurrentFrameChanged(idx4NextFrame))
+}
+
+export const updateAnimationSpeed = (speedInSeconds:number)=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    const { AnimationMode } = getState();
+
+    const { isPlaying, animationSpeed } = AnimationMode;
+
+    if(speedInSeconds == animationSpeed){
+        return;
+    }
+
+    batch(()=>{
+        dispatch(animationSpeedChanged(speedInSeconds));
+    
+        if(isPlaying){
+            dispatch(startAnimation())
+        }
+    })
+}
+
+export const toggleAnimationFrame = (releaseNum:number)=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+    const { AnimationMode } = getState();
+
+    const { isPlaying } = AnimationMode;
+
+    batch(()=>{
+        dispatch(rNum2ExcludeToggled(releaseNum));
+    
+        if(isPlaying){
+            dispatch(startAnimation())
+        }
+    })
+
 }
 
 export const isAnimationModeOnSelector = createSelector(
@@ -125,6 +211,11 @@ export const animationSpeedSelector = createSelector(
 export const isAnimationPlayingSelector = createSelector(
     (state: RootState) => state.AnimationMode.isPlaying,
     (isPlaying) => isPlaying
+);
+
+export const indexOfCurrentAnimationFrameSelector = createSelector(
+    (state: RootState) => state.AnimationMode.indexOfCurrentFrame,
+    (indexOfCurrentFrame) => indexOfCurrentFrame
 );
 
 export default reducer;

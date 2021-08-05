@@ -3,8 +3,8 @@ import React, {
     useRef,
     useState
 } from 'react'
-import { useSelector } from 'react-redux';
-import { isAnimationPlayingSelector } from '../../store/reducers/AnimationMode';
+import { batch, useDispatch, useSelector } from 'react-redux';
+import { indexOfCurrentAnimationFrameSelector, indexOfCurrentFrameChanged, isAnimationPlayingSelector, startAnimation } from '../../store/reducers/AnimationMode';
 // import { animationSpeedSelector } from '../../store/reducers/AnimationMode';
 
 // import { useSelector } from 'react-redux';
@@ -17,75 +17,76 @@ import { FrameData } from './generateFrames4GIF';
 
 type Props = {
     frameData: FrameData[];
-    rNum2Exclude: number[];
-    speed: number;
+    // rNum2Exclude: number[];
+    // speed: number;
 }
 
 const ImageAutoPlay:React.FC<Props> = ({
     frameData,
-    rNum2Exclude,
-    speed
+    // rNum2Exclude,
+    // speed
 }:Props) => {
 
-    const [idx, setIdx] = useState<number>(0);
+    const dispatch = useDispatch()
 
-    // list of frames that will be shown in the final animation
-    const [activeFrames, setActiveFrame ] = useState<FrameData[]>([]);
+    // const [idx, setIdx] = useState<number>(0);
 
-    // // release numbers for the frames to be excluded from animation
-    // const rNum2Exclude = useSelector(rNum2ExcludeSelector);
+    // // list of frames that will be shown in the final animation
+    // const [activeFrames, setActiveFrame ] = useState<FrameData[]>([]);
 
-    const interval4ImageRotation = useRef<NodeJS.Timeout>();
+    // const interval4ImageRotation = useRef<NodeJS.Timeout>();
 
-    const setActiveFrameDelay = useRef<NodeJS.Timeout>();
+    // const setActiveFrameDelay = useRef<NodeJS.Timeout>();
 
-    // const anumationSpeed = useSelector(animationSpeedSelector);
+    // const isPlaying = useSelector(isAnimationPlayingSelector)
+    
+    // useEffect(()=>{
+
+    //     clearInterval(interval4ImageRotation.current)
+
+    //     if(!activeFrames || !activeFrames.length || !isPlaying){
+    //         return;
+    //     }
+
+    //     interval4ImageRotation.current = setInterval(()=>{
+    //         setIdx(idx=>{
+    //             return idx + 1 >= activeFrames.length ? 0 : idx + 1
+    //         })
+    //         // console.log(idxRef.current)
+    //     }, speed * 1000)
+        
+    // }, [activeFrames, speed, isPlaying])
+
+    // useEffect(()=>{
+
+    //     clearTimeout(setActiveFrameDelay.current);
+
+    //     const frames2show = rNum2Exclude.length 
+    //         ? frameData.filter(d=>{
+    //             return rNum2Exclude.indexOf(d.releaseNum) === -1;
+    //         })
+    //         : frameData;
+
+    //     if(!activeFrames.length){
+    //         setActiveFrame(frames2show);
+    //     } else {
+    //         setActiveFrameDelay.current = setTimeout(()=>{
+    //             setActiveFrame(frames2show);
+    //         }, 1000)
+    //     }
+    // }, [rNum2Exclude]);
+
+    const idx = useSelector(indexOfCurrentAnimationFrameSelector);
 
     const isPlaying = useSelector(isAnimationPlayingSelector)
-    
-    useEffect(()=>{
-
-        clearInterval(interval4ImageRotation.current)
-
-        if(!activeFrames || !activeFrames.length || !isPlaying){
-            return;
-        }
-
-        interval4ImageRotation.current = setInterval(()=>{
-            setIdx(idx=>{
-                return idx + 1 >= activeFrames.length ? 0 : idx + 1
-            })
-            // console.log(idxRef.current)
-        }, speed * 1000)
-        
-    }, [activeFrames, speed, isPlaying])
-
-    useEffect(()=>{
-
-        clearTimeout(setActiveFrameDelay.current);
-
-        const frames2show = rNum2Exclude.length 
-            ? frameData.filter(d=>{
-                return rNum2Exclude.indexOf(d.releaseNum) === -1;
-            })
-            : frameData;
-
-        if(!activeFrames.length){
-            setActiveFrame(frames2show);
-        } else {
-            setActiveFrameDelay.current = setTimeout(()=>{
-                setActiveFrame(frames2show);
-            }, 1000)
-        }
-    }, [rNum2Exclude]);
 
     const getCurrentFrame = ()=>{
 
-        if(!activeFrames || !activeFrames.length){
+        if(!frameData || !frameData.length){
             return null
         }
 
-        const { frameDataURI } = activeFrames[idx] || activeFrames[0];
+        const { frameDataURI } = frameData[idx] || frameData[0];
 
         // const {releaseDateLabel} = waybackItem;
 
@@ -99,27 +100,29 @@ const ImageAutoPlay:React.FC<Props> = ({
                     boxSizing: 'border-box',
                 }}
             >
-                {/* <div className='text-white text-center'
-                    style={{
-                        position: 'absolute',
-                        top: '.5rem',
-                        width: '100%',
-                        textShadow: `0 0 3px #000`
-                    }}
-                >
-                    <span className='font-size-2'>{releaseDateLabel}</span>
-                </div> */}
             </div>
         )
     }
 
     useEffect(()=>{
 
-        return ()=>{
-            clearInterval(interval4ImageRotation.current)
-            clearTimeout(setActiveFrameDelay.current)
-        }
-    }, [])
+        batch(()=>{
+            dispatch(indexOfCurrentFrameChanged(0))
+
+            if(isPlaying){
+                dispatch(startAnimation())
+            }
+        })
+
+    }, [frameData])
+
+    // useEffect(()=>{
+
+    //     return ()=>{
+    //         clearInterval(interval4ImageRotation.current)
+    //         clearTimeout(setActiveFrameDelay.current)
+    //     }
+    // }, [])
 
     return getCurrentFrame();
 }

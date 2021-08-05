@@ -11,12 +11,15 @@ import DownloadGIFDialog from './DownloadGIFDialog';
 
 import { whenFalse } from '@arcgis/core/core/watchUtils';
 import { IWaybackItem } from '../../types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
     animationSpeedSelector,
+    indexOfCurrentFrameChanged,
+    isAnimationModeOnSelector,
     isDownloadGIFDialogOnSelector,
-    rNum2ExcludeSelector
+    rNum2ExcludeSelector,
+    startAnimation
 } from '../../store/reducers/AnimationMode'
 import Background from './Background';
 
@@ -105,6 +108,8 @@ const getAnimationTaskInfo = ({
 const containerRef = React.createRef<HTMLDivElement>();
 
 const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Props) => {
+
+    const dispatch = useDispatch()
 
     // array of frame images as dataURI string 
     const [frameData, setFrameData] = useState<FrameData[]>();
@@ -207,8 +212,8 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                     ?  (
                         <ImageAutoPlay 
                             frameData={frameData}
-                            rNum2Exclude={rNum2Exclude}
-                            speed={animationSpeed}
+                            // rNum2Exclude={rNum2Exclude}
+                            // speed={animationSpeed}
                         />
                     ) 
                     : (
