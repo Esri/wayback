@@ -8,6 +8,7 @@ import IMapView from 'esri/views/MapView';
 
 import ReferenceLayer from './ReferenceLayer';
 import { getServiceUrl } from '../../utils/Tier';
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
 
 type Props = {
     mapView?: IMapView;
@@ -18,11 +19,13 @@ const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
         isReferenceLayerVisibleSelector
     );
 
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+
     return (
         <ReferenceLayer
             url={getServiceUrl('reference-layer')}
             mapView={mapView}
-            isVisible={isReferenceLayerVisible}
+            isVisible={isReferenceLayerVisible && !isAnimationModeOn}
         />
     );
 };

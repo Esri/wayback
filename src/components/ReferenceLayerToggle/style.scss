@@ -1,13 +1,14 @@
 .reference-layer-toggle {
     position: absolute;
     top: 15px;
-    left: 260px;
+    right: 15px;
     width: 240px;
     height: 32px;
     line-height: 32px;
-    background: rgba(0,0,0,.8);
+    background: #242424;
     z-index: 0;
     font-size: 0.8125rem;
+    color: #d1d1d1;
 
     display:flex;
     align-items:center;
@@ -18,6 +19,6 @@
     }
 
     svg {
-        fill: #fff;
+        fill: #d1d1d1;
     }
 }

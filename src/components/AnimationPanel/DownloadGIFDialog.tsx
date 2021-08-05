@@ -140,7 +140,7 @@ const DownloadGIFDialog:React.FC<Props> = ({
                 <>
                     <div className='text-center leader-1'>
                         <p className='trailer-quarter'>Generating animated GIF file...</p>
-                        <p>Your download will begim shortly.</p>
+                        <p>Your download will begin shortly.</p>
                     </div>
 
 
