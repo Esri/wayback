@@ -6,6 +6,7 @@ import classnames from 'classnames';
 type Props = {
     isSelected?: boolean;
     showArrowOnLeft?: boolean;
+    showBoarderOnLeft?: boolean;
     children:React.ReactNode;
     onClick: ()=>void;
 }
@@ -13,6 +14,7 @@ type Props = {
 const LayerSelector:React.FC<Props> = ({
     isSelected=false,
     showArrowOnLeft=false,
+    showBoarderOnLeft=false,
     children,
     onClick
 }:Props) => {
@@ -39,7 +41,7 @@ const LayerSelector:React.FC<Props> = ({
                 backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
                 color: isSelected ? '#fff' : 'unset',
                 borderLeft:
-                    !showArrowOnLeft && isSelected
+                    !showArrowOnLeft && isSelected || showBoarderOnLeft
                         ? ' 4px solid #fff'
                         : '4px solid transparent',
                 borderRight:

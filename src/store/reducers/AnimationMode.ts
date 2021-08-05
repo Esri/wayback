@@ -25,6 +25,7 @@ export type AnimationModeState = {
     animationSpeed: number;
     isPlaying: boolean;
     indexOfCurrentFrame: number;
+    isLoadingFrameData:boolean;
 };
 
 export const initialAnimationModeState = {
@@ -35,7 +36,8 @@ export const initialAnimationModeState = {
     rNum2Exclude: [],
     animationSpeed: 1,
     isPlaying: true,
-    indexOfCurrentFrame: 0
+    indexOfCurrentFrame: 0,
+    isLoadingFrameData: true
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -77,7 +79,11 @@ const slice = createSlice({
         },
         indexOfCurrentFrameChanged: (state:AnimationModeState, action:PayloadAction<number>)=>{
             state.indexOfCurrentFrame = action.payload
+        },
+        isLoadingFrameDataToggled: (state:AnimationModeState, action:PayloadAction<boolean>)=>{
+            state.isLoadingFrameData = action.payload;
         }
+
     },
 });
 
@@ -91,8 +97,28 @@ export const {
     rNum2ExcludeReset,
     animationSpeedChanged,
     isAnimationPlayingToggled,
-    indexOfCurrentFrameChanged
+    indexOfCurrentFrameChanged,
+    isLoadingFrameDataToggled
 } = slice.actions;
+
+export const toggleIsLoadingFrameData = (isLoading:boolean)=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
+
+    const { AnimationMode } = getState();
+
+    const { isPlaying } = AnimationMode;
+
+    batch(()=>{
+        dispatch(isLoadingFrameDataToggled(isLoading));
+
+        if(isLoading){
+            dispatch(indexOfCurrentFrameChanged(0));
+        }
+    
+        if(!isLoading && isPlaying){
+            dispatch(startAnimation())
+        }
+    })
+}
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
     const { SwipeView } = getState();
@@ -129,7 +155,11 @@ const showNextFrame = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
 
     const { AnimationMode } = getState();
 
-    const { rNum2Exclude, waybackItems4Animation, indexOfCurrentFrame } = AnimationMode;
+    const { rNum2Exclude, waybackItems4Animation, indexOfCurrentFrame, isLoadingFrameData } = AnimationMode;
+
+    if(isLoadingFrameData){
+        return;
+    }
 
     const rNum2ExcludeSet = new Set(rNum2Exclude);
 
@@ -216,6 +246,20 @@ export const isAnimationPlayingSelector = createSelector(
 export const indexOfCurrentAnimationFrameSelector = createSelector(
     (state: RootState) => state.AnimationMode.indexOfCurrentFrame,
     (indexOfCurrentFrame) => indexOfCurrentFrame
+);
+
+export const waybackItem4CurrentAnimationFrameSelector = createSelector(
+    (state: RootState) => state.AnimationMode.indexOfCurrentFrame,
+    (state: RootState) => state.AnimationMode.waybackItems4Animation,
+    (state: RootState) => state.AnimationMode.isLoadingFrameData,
+    (indexOfCurrentFrame, waybackItems4Animation, isLoadingFrameData) => {
+
+        if(!waybackItems4Animation.length || isLoadingFrameData){
+            return null;
+        }
+
+        return  waybackItems4Animation[indexOfCurrentFrame]
+    }
 );
 
 export default reducer;

@@ -25,7 +25,9 @@ import {
     isAnimationPlayingSelector,
     startAnimation,
     stopAnimation,
-    updateAnimationSpeed
+    updateAnimationSpeed,
+    indexOfCurrentAnimationFrameSelector,
+    waybackItem4CurrentAnimationFrameSelector
 } from '../../store/reducers/AnimationMode'
 
 import { IWaybackItem } from '../../types';
@@ -48,6 +50,8 @@ const AnimationControls = () => {
     const animationSpeed = useSelector(animationSpeedSelector);
 
     const isPlaying = useSelector(isAnimationPlayingSelector)
+
+    const waybackItem4CurrentAnimationFrame = useSelector(waybackItem4CurrentAnimationFrameSelector)
 
     const speedOnChange = useCallback((speed:number)=>{
         dispatch(updateAnimationSpeed(speed))
@@ -112,6 +116,7 @@ const AnimationControls = () => {
                     toggleFrame={(rNum)=>{
                         dispatch(toggleAnimationFrame(rNum))
                     }}
+                    waybackItem4CurrentAnimationFrame={waybackItem4CurrentAnimationFrame}
                 />
             </div>
 

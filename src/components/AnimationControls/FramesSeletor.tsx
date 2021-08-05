@@ -11,6 +11,7 @@ type Props = {
     // rNum4AnimationFrames: number[];
     waybackItemsWithLocalChanges: IWaybackItem[];
     rNum2Exclude: number[];
+    waybackItem4CurrentAnimationFrame: IWaybackItem;
     // activeItem: IWaybackItem;
     // onSelect: (data: IWaybackItem) => void;
     toggleFrame: (rNum:number) => void;
@@ -21,6 +22,7 @@ const FramesSeletor:React.FC<Props> = ({
     // rNum4AnimationFrames,
     waybackItemsWithLocalChanges,
     rNum2Exclude,
+    waybackItem4CurrentAnimationFrame,
     // activeItem,
     // onSelect,
     toggleFrame
@@ -60,6 +62,7 @@ const FramesSeletor:React.FC<Props> = ({
                         // isSelected={isSelected}
                         // onClick={onSelect.bind(this, d)}
                         onClick={toggleFrame.bind(this, releaseNum)}
+                        showBoarderOnLeft={waybackItem4CurrentAnimationFrame && waybackItem4CurrentAnimationFrame.releaseNum === releaseNum}
                     >
                         <div
                             style={{

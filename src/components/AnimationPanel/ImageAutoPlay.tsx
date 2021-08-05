@@ -78,7 +78,7 @@ const ImageAutoPlay:React.FC<Props> = ({
 
     const idx = useSelector(indexOfCurrentAnimationFrameSelector);
 
-    const isPlaying = useSelector(isAnimationPlayingSelector)
+    // const isPlaying = useSelector(isAnimationPlayingSelector)
 
     const getCurrentFrame = ()=>{
 
@@ -104,17 +104,17 @@ const ImageAutoPlay:React.FC<Props> = ({
         )
     }
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        batch(()=>{
-            dispatch(indexOfCurrentFrameChanged(0))
+    //     batch(()=>{
+    //         dispatch(indexOfCurrentFrameChanged(0))
 
-            if(isPlaying){
-                dispatch(startAnimation())
-            }
-        })
+    //         if(isPlaying){
+    //             dispatch(startAnimation())
+    //         }
+    //     })
 
-    }, [frameData])
+    // }, [frameData])
 
     // useEffect(()=>{
 

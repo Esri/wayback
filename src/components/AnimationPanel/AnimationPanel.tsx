@@ -19,7 +19,8 @@ import {
     isAnimationModeOnSelector,
     isDownloadGIFDialogOnSelector,
     rNum2ExcludeSelector,
-    startAnimation
+    startAnimation,
+    toggleIsLoadingFrameData
 } from '../../store/reducers/AnimationMode'
 import Background from './Background';
 
@@ -112,7 +113,7 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
     const dispatch = useDispatch()
 
     // array of frame images as dataURI string 
-    const [frameData, setFrameData] = useState<FrameData[]>();
+    const [frameData, setFrameData] = useState<FrameData[]>(null);
 
     const loadingWaybackItems4AnimationRef = useRef<boolean>(false);
 
@@ -198,6 +199,11 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
             onUpdating.remove();
         }
     }, []);
+
+    useEffect(()=>{
+        const isLoading = frameData === null;
+        dispatch(toggleIsLoadingFrameData(isLoading))
+    }, [frameData]);
 
     return (
         <>
