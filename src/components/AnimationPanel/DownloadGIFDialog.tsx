@@ -88,7 +88,9 @@ const saveAsGIF = async({
                 frameDuration: speed * 10,
                 gifWidth: frameData[0].width,
                 gifHeight: frameData[0].height,
-                showFrameText: true,
+                // showFrameText: true,
+                // sampleInterval: 5000,
+                numWorkers: 2
             },
             gifShotCallBack
         );
