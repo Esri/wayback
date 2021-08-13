@@ -12,11 +12,11 @@ import {
     AppLayout
 } from './components/';
 
-import { setDefaultOptions } from 'esri-loader';
+// import { setDefaultOptions } from 'esri-loader';
 
-setDefaultOptions({ 
-    version: '4.18'
-});
+// setDefaultOptions({ 
+//     version: '4.18'
+// });
 
 const initApp = async () => {
 
