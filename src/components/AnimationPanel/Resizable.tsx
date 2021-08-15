@@ -5,6 +5,7 @@ import React, {
     useEffect,
     useCallback,
 } from 'react';
+import { PREVIEW_WINDOW_HEIGHT, PREVIEW_WINDOW_WIDTH } from '../PreviewWindow/PreviewWindow';
 
 import {
     PARENT_CONTAINER_LEFT_OFFSET
@@ -29,7 +30,7 @@ type Props = {
 
 const CONTAINER_MIN_SIZE = 256;
 
-const CONTAINER_DEFAULT_SIZE = 300;
+// const CONTAINER_DEFAULT_SIZE = 300;
 
 const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props) => {
     // const containerRef = useRef<HTMLDivElement>();
@@ -38,7 +39,7 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
 
     const [position, setPosition] = useState<Position>();
 
-    const [size, setSize] = useState<Size>({ width: CONTAINER_DEFAULT_SIZE, height: CONTAINER_DEFAULT_SIZE });
+    const [size, setSize] = useState<Size>({ width: PREVIEW_WINDOW_WIDTH, height: PREVIEW_WINDOW_HEIGHT });
 
     // when the container is being dragged, we keep updating it's position using current mouse position,
     // by default, the top left corner of the container will be snapped to the new position,
@@ -152,8 +153,8 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
             ref={containerRef}
             style={{
                 position: 'absolute',
-                top:  position ? position.top : `calc(50% - ${CONTAINER_DEFAULT_SIZE / 2}px)`, //position.top,
-                left: position ? position.left : `calc(50% - ${CONTAINER_DEFAULT_SIZE / 2}px)`, //position.left,
+                top:  position ? position.top : `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`, //position.top,
+                left: position ? position.left : `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`, //position.left,
                 height: size.height,
                 width: size.width,
                 zIndex: 5,

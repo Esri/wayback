@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // import { loadModules } from 'esri-loader';
 // import IMapView from 'esri/views/MapView';
@@ -45,10 +45,13 @@ const SearchWidget: React.FC<Props> = ({
     mapView,
     searchCompletedHandler,
 }: Props) => {
+
+    const containerRef = useRef<HTMLDivElement>()
+
     const init = () => {
-        if (!position && !containerId) {
-            return;
-        }
+        // if (!position && !containerId) {
+        //     return;
+        // }
 
         const portal = portalUrl ? new Portal({ url: portalUrl }) : null;
 
@@ -57,15 +60,15 @@ const SearchWidget: React.FC<Props> = ({
             resultGraphicEnabled: false,
             popupEnabled: false,
             portal,
-            container: containerId,
+            container: containerRef.current,
         });
 
-        if (position && !containerId) {
-            mapView.ui.add(searchWidget, {
-                position,
-                index: 0,
-            });
-        }
+        // if (position && !containerId) {
+        //     mapView.ui.add(searchWidget, {
+        //         position,
+        //         index: 0,
+        //     });
+        // }
 
         if (searchCompletedHandler) {
             searchWidget.on('search-complete', () => {
@@ -126,7 +129,13 @@ const SearchWidget: React.FC<Props> = ({
         }
     }, [mapView]);
 
-    return null;
+    return (
+        <div ref={containerRef} style={{
+            position: 'absolute',
+            top: 15,
+            left: 15
+        }}></div>
+    );
 };
 
 export default SearchWidget;

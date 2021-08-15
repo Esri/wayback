@@ -11,15 +11,15 @@ import {
     generateFrames
 } from './utils';
 
-const WIDTH = 500;
-const HEIGHT = 300;
+export const PREVIEW_WINDOW_WIDTH = 500;
+export const PREVIEW_WINDOW_HEIGHT = 300;
 
 const PreviewWindowContainer = styled.div`
     position: absolute;
-    top: calc(50% - ${HEIGHT / 2}px);
-    left: calc(50% - ${WIDTH / 2}px);
-    width: ${WIDTH}px;
-    height: ${HEIGHT}px;
+    top: calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px);
+    left: calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px);
+    width: ${PREVIEW_WINDOW_WIDTH}px;
+    height: ${PREVIEW_WINDOW_HEIGHT}px;
     // background: #888;
     pointer-events: none;
     z-index: 5;

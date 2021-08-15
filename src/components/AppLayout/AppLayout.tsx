@@ -30,7 +30,8 @@ import {
     WaybackLayer,
     HeadTags,
     AnimationPanel,
-    AnimationModeToggleBtn
+    AnimationModeToggleBtn,
+    ZoomWidget
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
@@ -81,11 +82,6 @@ const AppLayout:React.FC = ()=> {
 
                     <ReferenceLayer />
 
-                    <SearchWidget
-                        portalUrl={getServiceUrl('portal-url')}
-                        position={'top-left'}
-                    />
-
                     <TilePreviewWindow />
 
                     <MetadataPopup />
@@ -94,9 +90,16 @@ const AppLayout:React.FC = ()=> {
 
                     <SwipeWidget />
 
+                    <AnimationPanel />
+
                     <ReferenceLayerToggle />
 
-                    <AnimationPanel />
+                    <SearchWidget
+                        portalUrl={getServiceUrl('portal-url')}
+                        // position={'top-left'}
+                    />
+
+                    <ZoomWidget />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />

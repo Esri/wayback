@@ -40,6 +40,8 @@ const MapViewComponent: React.FC<Props> = ({
             }),
         });
 
+        view.ui.remove(['zoom'])
+
         setMapView(view);
     };
 
