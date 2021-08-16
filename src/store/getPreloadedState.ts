@@ -9,9 +9,9 @@ import {
     initialSwipeViewState,
     SwipeViewState,
 } from '../store/reducers/SwipeView';
-import { ISearchParamData, IWaybackItem } from '../types';
+import { IURLParamData, IWaybackItem } from '../types';
 import { initialMapState, MapState } from './reducers/Map';
-import { decodeURLQueryParam } from '../utils/UrlSearchParam';
+import { decodeURLParams } from '../utils/UrlSearchParam';
 
 import {
     // getDefaultExtent,
@@ -20,11 +20,11 @@ import {
     getShouldOpenSaveWebMapDialog,
 } from '../utils/LocalStorage';
 
-const searchParams: ISearchParamData = decodeURLQueryParam();
+const urlParams: IURLParamData = decodeURLParams();
 
-const getPreloadedState4UI = (searchParams: ISearchParamData): UIState => {
+const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const shouldOnlyShowItemsWithLocalChange =
-        searchParams.shouldOnlyShowItemsWithLocalChange ||
+        urlParams.shouldOnlyShowItemsWithLocalChange ||
         getShouldShowUpdatesWithLocalChanges();
 
     const state: UIState = {
@@ -38,9 +38,9 @@ const getPreloadedState4UI = (searchParams: ISearchParamData): UIState => {
 
 const getPreloadedState4WaybackItems = (
     waybackItems: IWaybackItem[],
-    searchParams: ISearchParamData
+    urlParams: IURLParamData
 ): WaybackItemsState => {
-    const { rNum4SelectedWaybackItems, rNum4ActiveWaybackItem } = searchParams;
+    const { rNum4SelectedWaybackItems, rNum4ActiveWaybackItem } = urlParams;
 
     const byReleaseNumber: {
         [key: number]: IWaybackItem;
@@ -67,7 +67,7 @@ const getPreloadedState4WaybackItems = (
 };
 
 const getPreloadedState4SwipeView = (
-    searchParams: ISearchParamData,
+    urlParams: IURLParamData,
     waybackItems: IWaybackItem[]
 ): SwipeViewState => {
     const {
@@ -75,7 +75,7 @@ const getPreloadedState4SwipeView = (
         rNum4SwipeWidgetLeadingLayer,
         rNum4SwipeWidgetTrailingLayer,
         rNum4ActiveWaybackItem,
-    } = searchParams;
+    } = urlParams;
 
     const state: SwipeViewState = {
         ...initialSwipeViewState,
@@ -92,8 +92,8 @@ const getPreloadedState4SwipeView = (
     return state;
 };
 
-const getPreloadedState4Map = (searchParams: ISearchParamData): MapState => {
-    const { mapExtent } = searchParams;
+const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
+    const { mapExtent } = urlParams;
 
     const state: MapState = {
         ...initialMapState,
@@ -106,16 +106,16 @@ const getPreloadedState4Map = (searchParams: ISearchParamData): MapState => {
 const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
-    const uiState: UIState = getPreloadedState4UI(searchParams);
+    const uiState: UIState = getPreloadedState4UI(urlParams);
     const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
         waybackItems,
-        searchParams
+        urlParams
     );
     const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
-        searchParams,
+        urlParams,
         waybackItems
     );
-    const mapState: MapState = getPreloadedState4Map(searchParams);
+    const mapState: MapState = getPreloadedState4Map(urlParams);
 
     const preloadedState = {
         UI: uiState,

@@ -1,8 +1,8 @@
 import { urlFns } from 'helper-toolkit-ts';
-import { updateQueryParam } from 'helper-toolkit-ts/dist/url';
-import { ISearchParamData, IExtentGeomety } from '../../types';
+import { updateQueryParam, updateHashParam } from 'helper-toolkit-ts/dist/url';
+import { IURLParamData, IExtentGeomety } from '../../types';
 
-type searchParamKey =
+type ParamKey =
     | 'ext'
     | 'localChangesOnly'
     | 'selected'
@@ -16,17 +16,21 @@ type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     rNum4SwipeWidgetTrailingLayer?: number;
 }) => void;
 
-const urlQueryData: {
-    [key in searchParamKey]: string;
-} = urlFns.parseQuery();
+type URLData = {
+    [key in ParamKey]: string;
+}
 
-const getMapExtent = (): IExtentGeomety => {
+const urlQueryData: URLData = urlFns.parseQuery();
+
+const urlHashData: URLData = urlFns.parseHash();
+
+const getMapExtent = (urlData:URLData): IExtentGeomety => {
     // const urlQueryData: {
     //     [key in searchParamKey]: string;
     // } = urlFns.parseQuery();
 
-    const ext = urlQueryData.ext
-        ? urlQueryData.ext.split(',').map((d) => +d)
+    const ext = urlData.ext
+        ? urlData.ext.split(',').map((d) => +d)
         : null;
 
     const mapExtent: IExtentGeomety =
@@ -45,56 +49,15 @@ const getMapExtent = (): IExtentGeomety => {
     return mapExtent;
 };
 
-// const encodeSearchParam = ({
-//     mapExtent = null,
-//     rNum4SelectedWaybackItems = [],
-//     shouldOnlyShowItemsWithLocalChange = false,
-//     rNum4ActiveWaybackItem = null,
-//     isSwipeWidgetOpen=false,
-//     rNum4SwipeWidgetLeadingLayer=null,
-//     rNum4SwipeWidgetTrailingLayer=null
-// }: ISearchParamData) => {
-//     // console.log(mapExtent, rNum4SelectedWaybackItems, shouldOnlyShowItemsWithLocalChange, rNum4ActiveWaybackItem);
-
-//     const searchParams: { [key in searchParamKey]: string } = {
-//         ext: mapExtent
-//             ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax]
-//                   .map((d) => d.toFixed(5))
-//                   .join(',')
-//             : '',
-//         localChangesOnly: shouldOnlyShowItemsWithLocalChange ? 'true' : '',
-//         selected: rNum4SelectedWaybackItems.length
-//             ? rNum4SelectedWaybackItems.join(',')
-//             : '',
-//         active: rNum4ActiveWaybackItem ? rNum4ActiveWaybackItem.toString() : '',
-//         // portal: getPortalUrlInSearchParam(),
-//         // concat release numbers for leading and trailing layers into comma separated string
-//         swipeWidget: isSwipeWidgetOpen
-//             ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
-//             : ''
-//     };
-
-//     const searchParamsString = Object.keys(searchParams)
-//         .map((key) => {
-//             return searchParams[key] ? `${key}=${searchParams[key]}` : '';
-//         })
-//         .filter((d) => d)
-//         .join('&');
-
-//     urlFns.updateQueryParamInUrl(searchParamsString);
-
-//     return location.href;
-// };
-
 const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
-    const key: searchParamKey = 'ext';
+    const key: ParamKey = 'ext';
     const value = mapExtent
         ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax]
               .map((d) => d.toFixed(5))
               .join(',')
         : '';
 
-    updateQueryParam({
+    updateHashParam({
         key,
         value,
     });
@@ -103,10 +66,10 @@ const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
 const saveLocalChangesOnlyInURLQueryParam = (
     localChangesOnly: boolean
 ): void => {
-    const key: searchParamKey = 'localChangesOnly';
+    const key: ParamKey = 'localChangesOnly';
     const value = localChangesOnly ? 'true' : '';
 
-    updateQueryParam({
+    updateHashParam({
         key,
         value,
     });
@@ -115,12 +78,12 @@ const saveLocalChangesOnlyInURLQueryParam = (
 const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     rNum4SelectedWaybackItems: number[]
 ): void => {
-    const key: searchParamKey = 'selected';
+    const key: ParamKey = 'selected';
     const value = rNum4SelectedWaybackItems.length
         ? rNum4SelectedWaybackItems.join(',')
         : '';
 
-    updateQueryParam({
+    updateHashParam({
         key,
         value,
     });
@@ -129,12 +92,12 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
 const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
     rNum4ActiveWaybackItem: number
 ): void => {
-    const key: searchParamKey = 'active';
+    const key: ParamKey = 'active';
     const value = rNum4ActiveWaybackItem
         ? rNum4ActiveWaybackItem.toString()
         : '';
 
-    updateQueryParam({
+    updateHashParam({
         key,
         value,
     });
@@ -145,36 +108,42 @@ const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam = (
     rNum4SwipeWidgetLeadingLayer,
     rNum4SwipeWidgetTrailingLayer,
 }) => {
-    const key: searchParamKey = 'swipeWidget';
+    const key: ParamKey = 'swipeWidget';
     const value = isOpen
         ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
         : '';
 
-    updateQueryParam({
+    updateHashParam({
         key,
         value,
     });
 };
 
-const decodeURLQueryParam = (): ISearchParamData => {
-    const localChangesOnly =
-        urlQueryData.localChangesOnly === 'true' ? true : false;
+const decodeURLParams = (): IURLParamData => {
 
-    const selected = urlQueryData.selected
-        ? urlQueryData.selected.split(',').map((d) => +d)
+    const urlData:URLData = Object.keys(urlHashData).length
+        ? urlHashData
+        : urlQueryData;
+    // console.log(urlData)
+
+    const localChangesOnly =
+        urlData.localChangesOnly === 'true' ? true : false;
+
+    const selected = urlData.selected
+        ? urlData.selected.split(',').map((d) => +d)
         : null;
 
-    const active = urlQueryData.active ? +urlQueryData.active : null;
+    const active = urlData.active ? +urlData.active : null;
 
-    const mapExtent = getMapExtent();
+    const mapExtent = getMapExtent(urlData);
 
-    const isSwipeWidgetOpen = urlQueryData.swipeWidget ? true : false;
+    const isSwipeWidgetOpen = urlData.swipeWidget ? true : false;
 
     const swipeWidgetLayers = isSwipeWidgetOpen
-        ? urlQueryData.swipeWidget.split(',').map((d) => +d)
+        ? urlData.swipeWidget.split(',').map((d) => +d)
         : [];
 
-    const searchParams: ISearchParamData = {
+    const urlParams: IURLParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
         shouldOnlyShowItemsWithLocalChange: localChangesOnly,
@@ -184,11 +153,18 @@ const decodeURLQueryParam = (): ISearchParamData => {
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
     };
 
-    return searchParams;
+    // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
+    // this is the reason why we switched from using Search Params to Hash Params. And we need to remove Search Params from the URL to keep the URL clean and unique.
+    if(Object.keys(urlQueryData).length){
+        // remove the query string from URL
+        window.history.pushState({}, document.title, window.location.pathname);
+    }
+
+    return urlParams;
 };
 
 export {
-    decodeURLQueryParam,
+    decodeURLParams,
     saveMapExtentInURLQueryParam,
     saveLocalChangesOnlyInURLQueryParam,
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,

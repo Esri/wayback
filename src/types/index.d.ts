@@ -72,7 +72,7 @@ interface IUserSession {
     credential: ICredential;
 }
 
-interface ISearchParamData {
+interface IURLParamData {
     mapExtent?: IExtentGeomety;
     rNum4SelectedWaybackItems?: Array<number>;
     shouldOnlyShowItemsWithLocalChange?: boolean;
@@ -130,7 +130,7 @@ export {
     IScreenPoint,
     IUserSession,
     IExtentGeomety,
-    ISearchParamData,
+    IURLParamData,
     IStaticTooltipData,
     ValidServiceUrlNames,
     IAppConfig,

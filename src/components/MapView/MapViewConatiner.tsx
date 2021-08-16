@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -49,15 +49,17 @@ const MapViewConatiner: React.FC = ({ children }) => {
 
     const mapExtent = useSelector(mapExtentSelector);
 
-    const getInitialExtent = (): IExtentGeomety => {
+    const initialMapExtent = useMemo((): IExtentGeomety => {
         const defaultExtentFromLocalStorage = getDefaultExtent(); //getDefaultExtent();
+
+        // console.log(mapExtent)
 
         return (
             mapExtent ||
             defaultExtentFromLocalStorage ||
             AppConfig.defaultMapExtent
         );
-    };
+    }, []);
 
     const queryVersionsWithLocalChanges = async (
         mapCenterPoint: IMapPointInfo
@@ -82,7 +84,7 @@ const MapViewConatiner: React.FC = ({ children }) => {
     return (
         <FlexGrowItemWapper>
             <MapView
-                initialExtent={getInitialExtent()}
+                initialExtent={initialMapExtent}
                 onUpdateEnd={queryVersionsWithLocalChanges}
                 onExtentChange={onExtentChange}
             >
