@@ -8,13 +8,14 @@ import LoadingSpinner from './LoadingSpinner'
 
 import classnames from 'classnames';
 
+// import gifshot from 'gifshot';
+import GifStream from '@entryline/gifstream';
+
 type Props = {
     frameData: FrameData[];
     rNum2Exclude: number[];
     speed?: number // animation speed in second
 }
-
-import gifshot from 'gifshot';
 
 type CreateGIFCallBack = (response: {
     // image - Base 64 image
@@ -33,6 +34,18 @@ type SaveAsGIFParams = {
     speed: number;
 }
 
+type ResponseCreateGIF = {
+    error: string;
+    blob : Blob
+}
+
+type ImagesCreateGIF = {
+    src: string;
+    delay: number;
+}
+
+const gifStream = new GifStream();
+
 const donwload = (dataURI='', fileName=''):void=>{
     const link = document.createElement('a');
     link.download = fileName;
@@ -50,17 +63,30 @@ const saveAsGIF = async({
 
     return new Promise((resolve, reject)=>{
 
-        const gifShotCallBack: CreateGIFCallBack = (response) => {
+        // const gifShotCallBack: CreateGIFCallBack = (response) => {
 
-            if (!response.error) {
-                donwload(response.image, outputFileName)
-                resolve();
-            } else {
-                reject(response.error)
-            }
-        };
+        //     if (!response.error) {
+        //         donwload(response.image, outputFileName)
+        //         resolve();
+        //     } else {
+        //         reject(response.error)
+        //     }
+        // };
 
-        const images: string[] = frameData.map(d=>{
+        // gifshot.createGIF(
+        //     {
+        //         images,
+        //         frameDuration: speed * 10,
+        //         gifWidth: frameData[0].width,
+        //         gifHeight: frameData[0].height,
+        //         // showFrameText: true,
+        //         // sampleInterval: 5000,
+        //         numWorkers: 2
+        //     },
+        //     gifShotCallBack
+        // );
+
+        const images: ImagesCreateGIF[] = frameData.map(d=>{
             const { frameCanvas, height } = d;
 
             // const { releaseDateLabel } = waybackItem;
@@ -79,21 +105,34 @@ const saveAsGIF = async({
             context.fillStyle = "#fff";
             context.fillText(`World Imagery Wayback`, 15, height - 15);
 
-            return frameCanvas.toDataURL();
+            return {
+                src: frameCanvas.toDataURL(),
+                delay: speed * 1000
+            };
         });
 
-        gifshot.createGIF(
+        gifStream.createGIF(
             {
-                images,
-                frameDuration: speed * 10,
                 gifWidth: frameData[0].width,
                 gifHeight: frameData[0].height,
-                // showFrameText: true,
-                // sampleInterval: 5000,
-                numWorkers: 2
+                images,
+                progressCallback: (progress:number)=>{
+                    // console.log(progress)
+                }
             },
-            gifShotCallBack
-        );
+            (res:ResponseCreateGIF) => {
+            //   this.onGifComplete(obj, width, height);
+                // console.log(res)
+
+                if(res.error){
+                    reject(res.error)
+                }
+
+                const blobURL = URL.createObjectURL(res.blob);
+                donwload(blobURL, outputFileName)
+                resolve();
+            },
+          );
     })
 }
 
