@@ -46,13 +46,18 @@ type ImagesCreateGIF = {
 
 const gifStream = new GifStream();
 
-const donwload = (dataURI='', fileName=''):void=>{
+const donwload = (blob:Blob, fileName=''):void=>{
+
+    const url = URL.createObjectURL(blob);
+
     const link = document.createElement('a');
     link.download = fileName;
-    link.href = dataURI;
+    link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
 }
 
 const saveAsGIF = async({    
@@ -127,9 +132,8 @@ const saveAsGIF = async({
                 if(res.error){
                     reject(res.error)
                 }
-
-                const blobURL = URL.createObjectURL(res.blob);
-                donwload(blobURL, outputFileName)
+                
+                donwload(res.blob, outputFileName)
                 resolve();
             },
           );
