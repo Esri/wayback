@@ -105,7 +105,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 };
 
 const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationModeState => {
-    let { animationSpeed } = urlParams;
+    let { animationSpeed, rNum4FramesToExclude } = urlParams;
 
     if(animationSpeed === null || typeof animationSpeed !== 'number'){
         return initialAnimationModeState
@@ -114,7 +114,8 @@ const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationMod
     const state: AnimationModeState = {
         ...initialAnimationModeState,
         isAnimationModeOn: true,
-        animationSpeed
+        animationSpeed,
+        rNum2Exclude: rNum4FramesToExclude
     };
 
     return state;

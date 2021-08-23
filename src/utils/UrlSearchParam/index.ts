@@ -8,7 +8,8 @@ type ParamKey =
     | 'selected'
     | 'active'
     | 'animationSpeed'
-    | 'swipeWidget';
+    | 'swipeWidget'
+    | 'framesToExclude';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -132,6 +133,18 @@ const saveAnimationSpeedInURLQueryParam = (
     });
 };
 
+const saveFrames2ExcludeInURLQueryParam = (
+    rNums: number[],
+): void => {
+    const key: ParamKey = 'framesToExclude';
+    const value = rNums && rNums.length ? rNums.join(',') : '';
+
+    updateHashParam({
+        key,
+        value,
+    });
+};
+
 const decodeURLParams = (): IURLParamData => {
 
     const urlData:URLData = Object.keys(urlHashData).length
@@ -156,9 +169,13 @@ const decodeURLParams = (): IURLParamData => {
         ? urlData.swipeWidget.split(',').map((d) => +d)
         : [];
 
-    const animationSpeed = urlData.animationSpeed 
+    const animationSpeed = urlData.animationSpeed
         ? +urlData.animationSpeed
         : null;
+
+    const rNum4FramesToExclude = urlData.framesToExclude
+        ? urlData.framesToExclude.split(',').map(rNum=>+rNum)
+        : []
 
     const urlParams: IURLParamData = {
         mapExtent,
@@ -168,7 +185,8 @@ const decodeURLParams = (): IURLParamData => {
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
-        animationSpeed
+        animationSpeed,
+        rNum4FramesToExclude
     };
 
     // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
@@ -188,5 +206,6 @@ export {
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
     saveSwipeWidgetInfoInURLQueryParam,
-    saveAnimationSpeedInURLQueryParam
+    saveAnimationSpeedInURLQueryParam,
+    saveFrames2ExcludeInURLQueryParam
 };

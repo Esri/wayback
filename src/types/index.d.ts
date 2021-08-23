@@ -81,6 +81,7 @@ interface IURLParamData {
     rNum4SwipeWidgetLeadingLayer?: number;
     rNum4SwipeWidgetTrailingLayer?: number;
     animationSpeed?:number;
+    rNum4FramesToExclude?: number[];
 }
 
 interface IStaticTooltipData {

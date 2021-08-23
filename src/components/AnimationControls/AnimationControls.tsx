@@ -37,6 +37,8 @@ import DonwloadGifButton from './DonwloadGifButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import PlayPauseBtn from './PlayPauseBtn';
+import { usePrevious } from '../../hooks/usePrevious';
+import { saveFrames2ExcludeInURLQueryParam } from '../../utils/UrlSearchParam';
 
 const AnimationControls = () => {
 
@@ -48,11 +50,13 @@ const AnimationControls = () => {
 
     const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(waybackItemsWithLocalChangesSelector);
 
+    const prevWaybackItemsWithLocalChanges = usePrevious<IWaybackItem[]>(waybackItemsWithLocalChanges)
+
     const animationSpeed = useSelector(animationSpeedSelector);
 
     const isPlaying = useSelector(isAnimationPlayingSelector)
 
-    const waybackItem4CurrentAnimationFrame = useSelector(waybackItem4CurrentAnimationFrameSelector)
+    const waybackItem4CurrentAnimationFrame = useSelector(waybackItem4CurrentAnimationFrameSelector);
 
     const speedOnChange = useCallback((speed:number)=>{
         dispatch(updateAnimationSpeed(speed))
@@ -121,11 +125,23 @@ const AnimationControls = () => {
     }
 
     useEffect(()=>{
+
         batch(()=>{
             dispatch(waybackItems4AnimationLoaded(waybackItemsWithLocalChanges))
-            dispatch(rNum2ExcludeReset())
+
+            if(
+                prevWaybackItemsWithLocalChanges && 
+                prevWaybackItemsWithLocalChanges.length
+            ){
+                dispatch(rNum2ExcludeReset())
+            }
         });
     }, [waybackItemsWithLocalChanges])
+
+    useEffect(()=>{
+        // console.log(rNum2ExcludeFromAnimation)
+        saveFrames2ExcludeInURLQueryParam(rNum2ExcludeFromAnimation)
+    }, [rNum2ExcludeFromAnimation])
 
     return (
         <>
