@@ -80,6 +80,7 @@ interface IURLParamData {
     isSwipeWidgetOpen?: boolean;
     rNum4SwipeWidgetLeadingLayer?: number;
     rNum4SwipeWidgetTrailingLayer?: number;
+    animationSpeed?:number;
 }
 
 interface IStaticTooltipData {

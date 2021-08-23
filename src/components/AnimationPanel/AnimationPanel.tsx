@@ -15,11 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
     animationSpeedSelector,
-    indexOfCurrentFrameChanged,
-    isAnimationModeOnSelector,
+    // indexOfCurrentFrameChanged,
+    // isAnimationModeOnSelector,
     isDownloadGIFDialogOnSelector,
     rNum2ExcludeSelector,
-    startAnimation,
+    // startAnimation,
     toggleIsLoadingFrameData
 } from '../../store/reducers/AnimationMode'
 import Background from './Background';

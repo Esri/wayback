@@ -21,7 +21,7 @@ const AnimationPanelContainer:React.FC<Props> = ({
 
     const waybackItems4Animation: IWaybackItem[] = useSelector(waybackItems4AnimationSelector);
 
-    return isAnimationModeOn ? (
+    return isAnimationModeOn && waybackItems4Animation.length ? (
         <AnimationPanel 
             waybackItems4Animation={waybackItems4Animation}
             mapView={mapView}

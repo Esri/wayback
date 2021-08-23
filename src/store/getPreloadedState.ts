@@ -19,6 +19,7 @@ import {
     getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
 } from '../utils/LocalStorage';
+import { AnimationModeState, DEFAULT_ANIMATION_SPEED_IN_SECONDS, initialAnimationModeState } from './reducers/AnimationMode';
 
 const urlParams: IURLParamData = decodeURLParams();
 
@@ -103,6 +104,22 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     return state;
 };
 
+const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationModeState => {
+    let { animationSpeed } = urlParams;
+
+    if(animationSpeed === null || typeof animationSpeed !== 'number'){
+        return initialAnimationModeState
+    }
+
+    const state: AnimationModeState = {
+        ...initialAnimationModeState,
+        isAnimationModeOn: true,
+        animationSpeed
+    };
+
+    return state;
+};
+
 const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
@@ -117,11 +134,14 @@ const getPreloadedState = async (
     );
     const mapState: MapState = getPreloadedState4Map(urlParams);
 
+    const animationModeState:AnimationModeState = getPreloadedState4AnimationMode(urlParams)
+
     const preloadedState = {
         UI: uiState,
         WaybackItems: waybackItemsState,
         SwipeView: swipeViewState,
         Map: mapState,
+        AnimationMode: animationModeState
     } as PartialRootState;
 
     return preloadedState;

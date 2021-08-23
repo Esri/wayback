@@ -7,7 +7,7 @@ type ParamKey =
     | 'localChangesOnly'
     | 'selected'
     | 'active'
-    // | 'portal'
+    | 'animationSpeed'
     | 'swipeWidget';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
@@ -119,6 +119,19 @@ const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam = (
     });
 };
 
+const saveAnimationSpeedInURLQueryParam = (
+    isAnimationOn: boolean,
+    speed: number
+): void => {
+    const key: ParamKey = 'animationSpeed';
+    const value = isAnimationOn ? speed.toString() : '';
+
+    updateHashParam({
+        key,
+        value,
+    });
+};
+
 const decodeURLParams = (): IURLParamData => {
 
     const urlData:URLData = Object.keys(urlHashData).length
@@ -143,6 +156,10 @@ const decodeURLParams = (): IURLParamData => {
         ? urlData.swipeWidget.split(',').map((d) => +d)
         : [];
 
+    const animationSpeed = urlData.animationSpeed 
+        ? +urlData.animationSpeed
+        : null;
+
     const urlParams: IURLParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
@@ -151,6 +168,7 @@ const decodeURLParams = (): IURLParamData => {
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
+        animationSpeed
     };
 
     // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
@@ -170,4 +188,5 @@ export {
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
     saveSwipeWidgetInfoInURLQueryParam,
+    saveAnimationSpeedInURLQueryParam
 };

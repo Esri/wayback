@@ -66,21 +66,18 @@ const AnimationControls = () => {
         }
     }, [isPlaying])
 
-    useEffect(()=>{
-        batch(()=>{
-            dispatch(waybackItems4AnimationLoaded(waybackItemsWithLocalChanges))
-            dispatch(rNum2ExcludeReset())
-        });
-    }, [waybackItemsWithLocalChanges])
+    const getContent = ()=>{
 
-    return (
-        <>
-            <div 
-                style={{
-                    padding: '0 1rem',
-                    marginTop: '.5rem'
-                }}
-            >
+        if(!waybackItemsWithLocalChanges || !waybackItemsWithLocalChanges.length){
+            return (
+                <div className='text-center'>
+                    <p className='leader-1 font-size--2'>Loading versions with local changes.</p>
+                </div>
+            )
+        }
+
+        return (
+            <>
                 <DonwloadGifButton />
 
                 <div className='leader-half'>
@@ -119,6 +116,26 @@ const AnimationControls = () => {
                     waybackItem4CurrentAnimationFrame={waybackItem4CurrentAnimationFrame}
                     isButtonDisabled={isPlaying}
                 />
+            </>
+        );
+    }
+
+    useEffect(()=>{
+        batch(()=>{
+            dispatch(waybackItems4AnimationLoaded(waybackItemsWithLocalChanges))
+            dispatch(rNum2ExcludeReset())
+        });
+    }, [waybackItemsWithLocalChanges])
+
+    return (
+        <>
+            <div 
+                style={{
+                    padding: '0 1rem',
+                    marginTop: '.5rem'
+                }}
+            >
+                { getContent() }
             </div>
 
         </>

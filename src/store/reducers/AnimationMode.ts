@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import { IWaybackItem } from '../../types';
+import { saveAnimationSpeedInURLQueryParam } from '../../utils/UrlSearchParam';
 // import { IWaybackItem } from '../../types';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
@@ -28,7 +29,7 @@ export type AnimationModeState = {
     isLoadingFrameData:boolean;
 };
 
-const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1
+export const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1
 
 export const initialAnimationModeState = {
     isAnimationModeOn: false,
@@ -131,10 +132,13 @@ export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: Store
     const { SwipeView, AnimationMode } = getState();
 
     const {
-        isAnimationModeOn
-    } = AnimationMode
+        isAnimationModeOn,
+        animationSpeed
+    } = AnimationMode;
 
-    if(SwipeView.isSwipeWidgetOpen && !isAnimationModeOn){
+    const willAnimationModeBeTurnedOn = !isAnimationModeOn
+
+    if(SwipeView.isSwipeWidgetOpen && willAnimationModeBeTurnedOn){
         dispatch(isSwipeWidgetOpenToggled());
     }
 
@@ -142,6 +146,8 @@ export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: Store
         console.log('reset animation mode')
         dispatch(resetAnimationMode())
     }
+
+    saveAnimationSpeedInURLQueryParam(willAnimationModeBeTurnedOn, animationSpeed)
 
     dispatch(isAnimationModeOnToggled());
 }
@@ -227,6 +233,8 @@ export const updateAnimationSpeed = (speedInSeconds:number)=>(dispatch: StoreDis
     if(speedInSeconds == animationSpeed){
         return;
     }
+
+    saveAnimationSpeedInURLQueryParam(true, speedInSeconds)
 
     batch(()=>{
         dispatch(animationSpeedChanged(speedInSeconds));
