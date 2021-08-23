@@ -28,13 +28,15 @@ export type AnimationModeState = {
     isLoadingFrameData:boolean;
 };
 
+const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1
+
 export const initialAnimationModeState = {
     isAnimationModeOn: false,
     isDownloadGIFDialogOn: false,
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: 1,
+    animationSpeed: DEFAULT_ANIMATION_SPEED_IN_SECONDS,
     isPlaying: true,
     indexOfCurrentFrame: 0,
     isLoadingFrameData: true
@@ -82,8 +84,12 @@ const slice = createSlice({
         },
         isLoadingFrameDataToggled: (state:AnimationModeState, action:PayloadAction<boolean>)=>{
             state.isLoadingFrameData = action.payload;
+        },
+        resetAnimationMode: (state:AnimationModeState)=>{
+            state.isPlaying = true;
+            state.animationSpeed = DEFAULT_ANIMATION_SPEED_IN_SECONDS;
+            state.rNum2Exclude = [];
         }
-
     },
 });
 
@@ -98,7 +104,8 @@ export const {
     animationSpeedChanged,
     isAnimationPlayingToggled,
     indexOfCurrentFrameChanged,
-    isLoadingFrameDataToggled
+    isLoadingFrameDataToggled,
+    resetAnimationMode
 } = slice.actions;
 
 export const toggleIsLoadingFrameData = (isLoading:boolean)=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
@@ -121,10 +128,19 @@ export const toggleIsLoadingFrameData = (isLoading:boolean)=>(dispatch: StoreDis
 }
 
 export const toggleAnimationMode = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
-    const { SwipeView } = getState();
+    const { SwipeView, AnimationMode } = getState();
 
-    if(SwipeView.isSwipeWidgetOpen){
+    const {
+        isAnimationModeOn
+    } = AnimationMode
+
+    if(SwipeView.isSwipeWidgetOpen && !isAnimationModeOn){
         dispatch(isSwipeWidgetOpenToggled());
+    }
+
+    if(isAnimationModeOn){
+        console.log('reset animation mode')
+        dispatch(resetAnimationMode())
     }
 
     dispatch(isAnimationModeOnToggled());

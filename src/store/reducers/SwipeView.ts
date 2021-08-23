@@ -9,7 +9,7 @@ import {
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
 import {
-    isAnimationModeOnToggled
+    toggleAnimationMode
 } from './AnimationMode'
 
 export type SwipeViewState = {
@@ -67,7 +67,7 @@ export const toggleSwipeWidget = ()=>(dispatch: StoreDispatch, getState: StoreGe
     const { AnimationMode } = getState();
 
     if(AnimationMode.isAnimationModeOn){
-        dispatch(isAnimationModeOnToggled());
+        dispatch(toggleAnimationMode());
     }
 
     dispatch(isSwipeWidgetOpenToggled());
