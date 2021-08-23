@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 
 import { useDispatch } from 'react-redux'
 import { isDownloadGIFDialogOnToggled } from '../../store/reducers/AnimationMode';
@@ -30,7 +30,7 @@ type CreateGIFCallBack = (response: {
 
 type SaveAsGIFParams = {
     frameData:FrameData[];
-    outputFileName: string;
+    // outputFileName: string;
     speed: number;
 }
 
@@ -62,9 +62,9 @@ const donwload = (blob:Blob, fileName=''):void=>{
 
 const saveAsGIF = async({    
     frameData,
-    outputFileName,
+    // outputFileName,
     speed
-}:SaveAsGIFParams):Promise<void>=>{
+}:SaveAsGIFParams):Promise<Blob>=>{
 
     return new Promise((resolve, reject)=>{
 
@@ -133,8 +133,8 @@ const saveAsGIF = async({
                     reject(res.error)
                 }
                 
-                donwload(res.blob, outputFileName)
-                resolve();
+                // donwload(res.blob, outputFileName)
+                resolve(res.blob);
             },
           );
     })
@@ -152,6 +152,8 @@ const DownloadGIFDialog:React.FC<Props> = ({
 
     const [outputFileName, setOutputFileName ] = useState<string>('wayback-imagery-animation');
 
+    const isCancelled = useRef<boolean>(false);
+
     const closeDialog = useCallback(() => {
         dispatch(isDownloadGIFDialogOnToggled())
     },[])
@@ -165,11 +167,18 @@ const DownloadGIFDialog:React.FC<Props> = ({
             : frameData.filter(d=>rNum2Exclude.indexOf(d.releaseNum) === -1)
 
         try {
-            await saveAsGIF({
+            const blob = await saveAsGIF({
                 frameData: data,
-                outputFileName,
+                // outputFileName,
                 speed
             });
+
+            if(isCancelled.current){
+                console.log('gif task has been cancelled')
+                return;
+            }
+
+            donwload(blob, outputFileName)
 
             closeDialog();
 
@@ -190,7 +199,11 @@ const DownloadGIFDialog:React.FC<Props> = ({
 
 
                     <div className='text-right'>
-                        <div className='btn' onClick={closeDialog}>Cancel</div>
+                        <div className='btn' onClick={()=>{
+                            gifStream.cancel();
+                            isCancelled.current = true;
+                            closeDialog();
+                        }}>Cancel</div>
                     </div>
 
                     <div
