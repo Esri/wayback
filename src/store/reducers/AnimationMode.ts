@@ -135,7 +135,9 @@ let interval4Animation: NodeJS.Timeout;
 export const startAnimation = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
     const { AnimationMode } = getState();
 
-    const { animationSpeed } = AnimationMode;
+    let { animationSpeed } = AnimationMode;
+
+    animationSpeed = animationSpeed || .1
 
     dispatch(isAnimationPlayingToggled(true))
 
@@ -282,5 +284,10 @@ export const waybackItem4CurrentAnimationFrameSelector = createSelector(
         return  waybackItems4Animation[indexOfCurrentFrame]
     }
 );
+
+export const isLoadingFrameDataSelector = createSelector(
+    (state: RootState) => state.AnimationMode.isLoadingFrameData,
+    isLoadingFrameData=>isLoadingFrameData
+)
 
 export default reducer;

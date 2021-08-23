@@ -1,17 +1,24 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { isDownloadGIFDialogOnToggled } from '../../store/reducers/AnimationMode';
+import React, { useCallback} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import classnames from 'classnames'
+import { isDownloadGIFDialogOnToggled, isLoadingFrameDataSelector } from '../../store/reducers/AnimationMode';
 
 const DonwloadGifButton = () => {
 
     const dispatch = useDispatch();
 
-    const onClickHandler = ()=>{
+    const isLoadingFrameData = useSelector(isLoadingFrameDataSelector)
+
+    const onClickHandler = useCallback(() => {
         dispatch(isDownloadGIFDialogOnToggled())
-    }
+    },[]);
+
+    const classNames = classnames('btn btn-fill', {
+        'btn-disabled': isLoadingFrameData
+    })
 
     return (
-        <div className='btn btn-fill' onClick={onClickHandler}>Download GIF</div>
+        <div className={classNames} onClick={onClickHandler}>Download GIF</div>
     )
 }
 
