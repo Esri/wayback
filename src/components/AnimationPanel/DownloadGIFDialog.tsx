@@ -32,7 +32,6 @@ type SaveAsGIFParams = {
     frameData:FrameData[];
     // outputFileName: string;
     speed: number;
-    locationInfo: string
 }
 
 type ResponseCreateGIF = {
@@ -64,8 +63,7 @@ const donwload = (blob:Blob, fileName=''):void=>{
 const saveAsGIF = async({    
     frameData,
     // outputFileName,
-    speed,
-    locationInfo
+    speed
 }:SaveAsGIFParams):Promise<Blob>=>{
 
     // if the speed is zero, it means user wants to have the fastest speed, so let's use 100 millisecond
@@ -74,7 +72,7 @@ const saveAsGIF = async({
     return new Promise((resolve, reject)=>{
 
         const images: ImagesCreateGIF[] = frameData.map(d=>{
-            const { frameCanvas, height, width, waybackItem } = d;
+            const { frameCanvas, height, width, waybackItem, center } = d;
 
             const { releaseDateLabel } = waybackItem;
 
@@ -87,6 +85,7 @@ const saveAsGIF = async({
 
             const releaseData = `Wayback ${releaseDateLabel}`;
             const sourceInfo = 'Esri, Maxar, Earthstar Geographics, GIS Community';
+            const locationInfo = `${center.latitude.toFixed(3)}, ${center.longitude.toFixed(3)}`
 
             const metrics4ReleaseDate = context.measureText(releaseData)
             const metrics4LocationInfo = context.measureText(locationInfo)
@@ -185,8 +184,7 @@ const DownloadGIFDialog:React.FC<Props> = ({
             const blob = await saveAsGIF({
                 frameData: data,
                 // outputFileName,
-                speed,
-                locationInfo: '37.614,-104.127'
+                speed
             });
 
             if(isCancelled.current){

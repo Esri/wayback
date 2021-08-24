@@ -33,6 +33,11 @@ type GenerateFramesParams = {
     waybackItems: IWaybackItem[];
 };
 
+type CenterLocationForFrameRect = {
+    latitude: number;
+    longitude: number;
+}
+
 export type FrameData = {
     releaseNum: number;
     waybackItem: IWaybackItem;
@@ -40,6 +45,7 @@ export type FrameData = {
     frameDataURI: string;
     height: number;
     width: number;
+    center: CenterLocationForFrameRect;
 }
 
 export const generateFrames = async ({
@@ -54,6 +60,11 @@ export const generateFrames = async ({
         frameRect,
         mapView,
     });
+
+    const center = getCenterLocationForFrameRect({
+        frameRect,
+        mapView,
+    })
 
     for (const item of waybackItems) {
 
@@ -71,7 +82,8 @@ export const generateFrames = async ({
             frameCanvas,
             frameDataURI,
             width: frameRect.width,
-            height: frameRect.height
+            height: frameRect.height,
+            center
         });
     }
 
@@ -241,3 +253,30 @@ const getTileByScreenPoint = ({
         y,
     };
 };
+
+const getCenterLocationForFrameRect = ({
+    frameRect,
+    mapView,
+}: {
+    frameRect: FrameRectInfo;
+    mapView: MapView;
+}):CenterLocationForFrameRect=>{
+    const {
+        screenX, screenY, height, width
+    } = frameRect
+
+    const point = mapView.toMap({
+        x: screenX + width / 2,
+        y: screenY + height / 2
+    });
+
+    const {
+        latitude,
+        longitude
+    } = point;
+
+    return {
+        latitude,
+        longitude
+    };
+}
