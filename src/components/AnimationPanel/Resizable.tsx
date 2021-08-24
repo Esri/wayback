@@ -28,7 +28,7 @@ type Props = {
     onChange?: ()=>void;
 };
 
-const CONTAINER_MIN_SIZE = 256;
+const CONTAINER_MIN_SIZE = 260;
 
 // const CONTAINER_DEFAULT_SIZE = 300;
 

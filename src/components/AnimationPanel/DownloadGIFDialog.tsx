@@ -17,21 +17,22 @@ type Props = {
     speed?: number // animation speed in second
 }
 
-type CreateGIFCallBack = (response: {
-    // image - Base 64 image
-    image: string;
-    // error - Boolean that determines if an error occurred
-    error: boolean;
-    // errorCode - Helpful error label
-    errorCode: string;
-    // errorMsg - Helpful error message
-    errorMsg: string;
-}) => void;
+// type CreateGIFCallBack = (response: {
+//     // image - Base 64 image
+//     image: string;
+//     // error - Boolean that determines if an error occurred
+//     error: boolean;
+//     // errorCode - Helpful error label
+//     errorCode: string;
+//     // errorMsg - Helpful error message
+//     errorMsg: string;
+// }) => void;
 
 type SaveAsGIFParams = {
     frameData:FrameData[];
     // outputFileName: string;
     speed: number;
+    locationInfo: string
 }
 
 type ResponseCreateGIF = {
@@ -63,52 +64,66 @@ const donwload = (blob:Blob, fileName=''):void=>{
 const saveAsGIF = async({    
     frameData,
     // outputFileName,
-    speed
+    speed,
+    locationInfo
 }:SaveAsGIFParams):Promise<Blob>=>{
 
+    // if the speed is zero, it means user wants to have the fastest speed, so let's use 100 millisecond
+    speed = speed || .1;
+    
     return new Promise((resolve, reject)=>{
 
-        // const gifShotCallBack: CreateGIFCallBack = (response) => {
-
-        //     if (!response.error) {
-        //         donwload(response.image, outputFileName)
-        //         resolve();
-        //     } else {
-        //         reject(response.error)
-        //     }
-        // };
-
-        // gifshot.createGIF(
-        //     {
-        //         images,
-        //         frameDuration: speed * 10,
-        //         gifWidth: frameData[0].width,
-        //         gifHeight: frameData[0].height,
-        //         // showFrameText: true,
-        //         // sampleInterval: 5000,
-        //         numWorkers: 2
-        //     },
-        //     gifShotCallBack
-        // );
-
         const images: ImagesCreateGIF[] = frameData.map(d=>{
-            const { frameCanvas, height } = d;
+            const { frameCanvas, height, width, waybackItem } = d;
 
-            // const { releaseDateLabel } = waybackItem;
+            const { releaseDateLabel } = waybackItem;
 
             const context = frameCanvas.getContext('2d');
 
-            // context.font = '22px "Avenir Next';
-            // context.shadowColor="black";
-            // context.shadowBlur= 5;
-            // context.fillStyle = "#fff";
-            // context.fillText(`${releaseDateLabel}`, 15, 30);
-
-            context.font = '12px "Avenir Next';
+            context.font = '11px Avenir Next';
             context.shadowColor="black";
             context.shadowBlur= 5;
             context.fillStyle = "#fff";
-            context.fillText(`World Imagery Wayback`, 15, height - 15);
+
+            const releaseData = `Wayback ${releaseDateLabel}`;
+            const sourceInfo = 'Esri, Maxar, Earthstar Geographics, GIS Community';
+
+            const metrics4ReleaseDate = context.measureText(releaseData)
+            const metrics4LocationInfo = context.measureText(locationInfo)
+            const metrics4SourceInfo = context.measureText(sourceInfo);
+
+            const HorizontalPadding = 4;
+            const SpaceBetween = 4;
+
+            const shouldWrap = metrics4ReleaseDate.width + metrics4LocationInfo.width + metrics4SourceInfo.width + SpaceBetween * 2 + HorizontalPadding * 2 > width;
+
+            if(shouldWrap){
+
+                let y = height - 6
+                const horizontalPadding = (width - Math.ceil(metrics4SourceInfo.width)) / 2;
+                context.fillText(sourceInfo, horizontalPadding, y);
+
+                y = height - 20;
+                context.fillText(releaseData, horizontalPadding, y);
+
+                const xPos4LocationInfo = width - (metrics4LocationInfo.width + horizontalPadding)
+                context.fillText(locationInfo, xPos4LocationInfo, y);
+
+            } else {
+                const y = height - 6;
+
+                context.fillText(releaseData, HorizontalPadding, y);
+
+                const xPos4SourceInfo = width - (metrics4SourceInfo.width + HorizontalPadding)
+                context.fillText(sourceInfo, xPos4SourceInfo, y);
+
+                let xPos4LocationInfo = metrics4ReleaseDate.width + HorizontalPadding;
+                const availWidth = xPos4SourceInfo - xPos4LocationInfo;
+                const leftPadding4LocationInfo = (availWidth - metrics4LocationInfo.width) / 2;
+
+                xPos4LocationInfo = xPos4LocationInfo + leftPadding4LocationInfo;
+                context.fillText(locationInfo, xPos4LocationInfo, y);
+            }
 
             return {
                 src: frameCanvas.toDataURL(),
@@ -142,7 +157,7 @@ const saveAsGIF = async({
 
 const DownloadGIFDialog:React.FC<Props> = ({
     frameData,
-    speed=1,
+    speed,
     rNum2Exclude,
 }) => {
 
@@ -158,7 +173,7 @@ const DownloadGIFDialog:React.FC<Props> = ({
         dispatch(isDownloadGIFDialogOnToggled())
     },[])
 
-    const downloadBtnOnClick = useCallback(async()=>{
+    const downloadBtnOnClick = async()=>{
 
         setIsDownloading(true)
 
@@ -170,7 +185,8 @@ const DownloadGIFDialog:React.FC<Props> = ({
             const blob = await saveAsGIF({
                 frameData: data,
                 // outputFileName,
-                speed
+                speed,
+                locationInfo: '37.614,-104.127'
             });
 
             if(isCancelled.current){
@@ -186,7 +202,7 @@ const DownloadGIFDialog:React.FC<Props> = ({
             console.error(err);
         }
 
-    }, [frameData, rNum2Exclude, outputFileName])
+    }
 
     const getContent = ()=>{
         if(isDownloading){
