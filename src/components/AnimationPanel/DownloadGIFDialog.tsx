@@ -76,25 +76,35 @@ const saveAsGIF = async({
 
             const { releaseDateLabel } = waybackItem;
 
-            const context = frameCanvas.getContext('2d');
-
-            context.font = '11px Avenir Next';
-            context.shadowColor="black";
-            context.shadowBlur= 5;
-            context.fillStyle = "#fff";
-
             const releaseData = `Wayback ${releaseDateLabel}`;
             const sourceInfo = 'Esri, Maxar, Earthstar Geographics, GIS Community';
             const locationInfo = `${center.latitude.toFixed(3)}, ${center.longitude.toFixed(3)}`
+            const HorizontalPadding = 4;
+            const SpaceBetween = 4;
+
+            const context = frameCanvas.getContext('2d');
+            context.font = '11px Avenir Next';
 
             const metrics4ReleaseDate = context.measureText(releaseData)
             const metrics4LocationInfo = context.measureText(locationInfo)
             const metrics4SourceInfo = context.measureText(sourceInfo);
 
-            const HorizontalPadding = 4;
-            const SpaceBetween = 4;
-
             const shouldWrap = metrics4ReleaseDate.width + metrics4LocationInfo.width + metrics4SourceInfo.width + SpaceBetween * 2 + HorizontalPadding * 2 > width;
+
+            // draw the gradient background rect
+            const gradientRectHeight = shouldWrap ? 35 : 20;
+            // const gradient = context.createLinearGradient(0, 0, 0, gradientRectHeight);
+            // gradient.addColorStop(0, "rgba(0,0,0,0)");
+            // gradient.addColorStop(0.5, "rgba(0,0,0,.3)");
+            // gradient.addColorStop(1, "rgba(0,0,0,.6)");
+            context.fillStyle = 'rgba(0,0,0,.5)';
+            context.rect(0, height - gradientRectHeight, width, gradientRectHeight);
+            context.fill();
+
+            // draw the watermark text
+            context.shadowColor="black";
+            context.shadowBlur= 5;
+            context.fillStyle = "#fff";
 
             if(shouldWrap){
 
