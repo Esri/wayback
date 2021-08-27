@@ -8,6 +8,7 @@ import Resizable from './Resizable';
 import ImageAutoPlay from './ImageAutoPlay';
 import LoadingIndicator from './LoadingIndicator';
 import DownloadGIFDialog from './DownloadGIFDialog';
+import CloseBtn from './CloseBtn'
 
 import { whenFalse } from '@arcgis/core/core/watchUtils';
 import { IWaybackItem } from '../../types';
@@ -227,6 +228,8 @@ const AnimationPanel: React.FC<Props> = ({ waybackItems4Animation, mapView }: Pr
                     )
                 }
             </Resizable>
+
+            <CloseBtn />
 
             {
                 isDownloadGIFDialogOn 

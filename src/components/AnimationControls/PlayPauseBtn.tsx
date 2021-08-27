@@ -21,6 +21,9 @@ const PlayPauseBtn:React.FC<Props> = ({
     return (
         <div 
             className='margin-right-half cursor-pointer'
+            style={{
+                display: 'flex'
+            }}
             onClick={onClick}
         >
             { isPlaying ? PauseBtn : PlayBtn }

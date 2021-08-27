@@ -83,7 +83,7 @@ const saveAsGIF = async({
             const SpaceBetween = 4;
 
             const context = frameCanvas.getContext('2d');
-            context.font = '11px Avenir Next';
+            context.font = '9px Avenir Next';
 
             const metrics4ReleaseDate = context.measureText(releaseData)
             const metrics4LocationInfo = context.measureText(locationInfo)
@@ -92,34 +92,34 @@ const saveAsGIF = async({
             const shouldWrap = metrics4ReleaseDate.width + metrics4LocationInfo.width + metrics4SourceInfo.width + SpaceBetween * 2 + HorizontalPadding * 2 > width;
 
             // draw the gradient background rect
-            const gradientRectHeight = shouldWrap ? 35 : 20;
+            const gradientRectHeight = shouldWrap ? 28 : 16;
             // const gradient = context.createLinearGradient(0, 0, 0, gradientRectHeight);
             // gradient.addColorStop(0, "rgba(0,0,0,0)");
             // gradient.addColorStop(0.5, "rgba(0,0,0,.3)");
             // gradient.addColorStop(1, "rgba(0,0,0,.6)");
-            context.fillStyle = 'rgba(0,0,0,.5)';
+            context.fillStyle = 'rgba(0,0,0,.2)';
             context.rect(0, height - gradientRectHeight, width, gradientRectHeight);
             context.fill();
 
             // draw the watermark text
             context.shadowColor="black";
             context.shadowBlur= 5;
-            context.fillStyle = "#fff";
+            context.fillStyle = "rgba(255,255,255,.9)";
 
             if(shouldWrap){
 
-                let y = height - 6
+                let y = height - 4
                 const horizontalPadding = (width - Math.ceil(metrics4SourceInfo.width)) / 2;
                 context.fillText(sourceInfo, horizontalPadding, y);
 
-                y = height - 20;
+                y = height - 16;
                 context.fillText(releaseData, horizontalPadding, y);
 
                 const xPos4LocationInfo = width - (metrics4LocationInfo.width + horizontalPadding)
                 context.fillText(locationInfo, xPos4LocationInfo, y);
 
             } else {
-                const y = height - 6;
+                const y = height - 4;
 
                 context.fillText(releaseData, HorizontalPadding, y);
 
@@ -272,7 +272,7 @@ const DownloadGIFDialog:React.FC<Props> = ({
                         justifyContent: 'flex-end'
                     }}
                 >
-                    <div className='btn btn-transparent' onClick={closeDialog}>Close</div>
+                    <div className='btn btn-transparent' onClick={closeDialog}>Cancel</div>
                     <div className={classnames('btn', {'btn-disabled': isDownloading})} onClick={downloadBtnOnClick}>Download</div>
                 </div>
             </>
