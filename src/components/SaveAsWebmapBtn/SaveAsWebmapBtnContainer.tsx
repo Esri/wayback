@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -16,6 +16,7 @@ import { setShouldOpenSaveWebMapDialog } from '../../utils/LocalStorage';
 import SaveAsWebmapBtn from './index';
 import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
 import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '../../utils/UrlSearchParam';
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
 
 const SaveAsWebmapBtnContainer = () => {
     const dispatch = useDispatch();
@@ -26,7 +27,12 @@ const SaveAsWebmapBtnContainer = () => {
         releaseNum4SelectedItemsSelector
     );
 
-    const isDisabled: boolean = useSelector(isSwipeWidgetOpenSelector);
+    const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
+    const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
+
+    const isDisabled = useMemo(()=>{
+        return isSwipeWidgetOpen || isAnimationModeOn
+    }, [isSwipeWidgetOpen, isAnimationModeOn])
 
     const clearAllBtnOnClick = () => {
         dispatch(releaseNum4SelectedItemsCleaned());

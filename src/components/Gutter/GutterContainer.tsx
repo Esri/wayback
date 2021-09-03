@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import Gutter from './index';
 
@@ -13,6 +13,7 @@ import {
     isGutterHideSelector,
 } from '../../store/reducers/UI';
 import { AppContext } from '../../contexts/AppContextProvider';
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
 
 type Props = {
     children: React.ReactNode;
@@ -21,7 +22,12 @@ type Props = {
 const GutterContainer: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
+    const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
+
+    const settingsBtnDisabled = useMemo(()=>{
+        return isSwipeWidgetOpen || isAnimationModeOn
+    }, [isSwipeWidgetOpen, isAnimationModeOn])
 
     const isHide = useSelector(isGutterHideSelector);
 
@@ -42,7 +48,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
     return !isHide ? (
         <Gutter
             isMobile={isMobile}
-            settingsBtnDisabled={isSwipeWidgetOpen}
+            settingsBtnDisabled={settingsBtnDisabled}
             shareBtnDisabled={onPremises}
             aboutButtonOnClick={aboutButtonOnClick}
             shareButtonOnClick={shareButtonOnClick}
