@@ -21,6 +21,10 @@ import {
 } from '../utils/LocalStorage';
 import { AnimationModeState, DEFAULT_ANIMATION_SPEED_IN_SECONDS, initialAnimationModeState } from './reducers/AnimationMode';
 
+import {miscFns} from 'helper-toolkit-ts';
+
+const isMobile = miscFns.isMobileDevice()
+
 const urlParams: IURLParamData = decodeURLParams();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
@@ -107,7 +111,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationModeState => {
     let { animationSpeed, rNum4FramesToExclude } = urlParams;
 
-    if(animationSpeed === null || typeof animationSpeed !== 'number'){
+    if(animationSpeed === null || typeof animationSpeed !== 'number' || isMobile){
         return initialAnimationModeState
     }
 

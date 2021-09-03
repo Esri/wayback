@@ -1,5 +1,5 @@
 import './style.scss';
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 
 import classnames from 'classnames'
 
@@ -9,10 +9,13 @@ import {
     isAnimationModeOnSelector,
     toggleAnimationMode 
 } from '../../store/reducers/AnimationMode'
+import { AppContext } from '../../contexts/AppContextProvider';
 
 const AnimationModeToogleBtn = () => {
 
     const dispatch = useDispatch();
+
+    const { isMobile } = useContext(AppContext)
 
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
 
@@ -25,7 +28,7 @@ const AnimationModeToogleBtn = () => {
         { 'is-open': isAnimationModeOn }
     )
 
-    return (
+    return !isMobile ? (
         <div
             className={className}
             // style={{
@@ -42,7 +45,7 @@ const AnimationModeToogleBtn = () => {
                 <path d="M12 9.523v12.954l9.5-6.476zm1 1.892l6.725 4.586L13 20.585zM2 5v22h28V5zm27 21H3V6h26z"/><path fill="none" d="M0 0h32v32H0z"/>
             </svg> */}
         </div>
-    )
+    ) : null;
 }
 
 export default AnimationModeToogleBtn
