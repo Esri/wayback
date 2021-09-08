@@ -83,7 +83,7 @@ const saveAsGIF = async({
             const SpaceBetween = 4;
 
             const context = frameCanvas.getContext('2d');
-            context.font = '9px Avenir Next';
+            context.font = '10px Avenir Next';
 
             const metrics4ReleaseDate = context.measureText(releaseData)
             const metrics4LocationInfo = context.measureText(locationInfo)
