@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
 
 import {
     metadataPopupAnchorSelector,
@@ -17,7 +18,9 @@ const MetadataPopupContainer = () => {
 
     const anchorPoint = useSelector(metadataPopupAnchorSelector);
 
-    return (
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+
+    return !isAnimationModeOn ? (
         <MetadataPopUp
             metadata={metadata}
             metadataAnchorScreenPoint={anchorPoint}
@@ -25,7 +28,7 @@ const MetadataPopupContainer = () => {
                 dispatch(metadataQueryResultUpdated(null));
             }}
         />
-    );
+    ) : null;
 };
 
 export default MetadataPopupContainer;
