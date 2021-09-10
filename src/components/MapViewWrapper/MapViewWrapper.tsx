@@ -1,51 +1,32 @@
-import React, {
-    useContext
-} from 'react';
+import React, { useContext } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import{
-    isSwipeWidgetOpenSelector,
-} from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
 
-import MapView from '../MapView/MapViewConatiner';
-
-import SwipeWidgetLayerSelector from '../SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';
-
-import {
-    SIDEBAR_WIDTH,
-    GUTTER_WIDTH
-} from '../../constants/UI'
+import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '../../constants/UI';
 
 import { AppContext } from '../../contexts/AppContextProvider';
 import { isGutterHideSelector } from '../../store/reducers/UI';
 
-const MapViewWrapper:React.FC = ({
-    children
-}) => {
-
+const MapViewWrapper: React.FC = ({ children }) => {
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
-    const isGutterHide = useSelector(isGutterHideSelector)
+    const isGutterHide = useSelector(isGutterHideSelector);
 
-    const { isMobile } = useContext(AppContext)
+    const { isMobile } = useContext(AppContext);
 
-    const getLeftPosition = ():number =>{
-
-        if(isMobile){
+    const getLeftPosition = (): number => {
+        if (isMobile) {
             return isGutterHide ? 0 : GUTTER_WIDTH;
         }
 
-        if(isSwipeWidgetOpen){
+        if (isSwipeWidgetOpen) {
             return GUTTER_WIDTH;
         }
 
         return SIDEBAR_WIDTH + GUTTER_WIDTH;
-    }
+    };
 
     return (
         <div
@@ -55,14 +36,12 @@ const MapViewWrapper:React.FC = ({
                 bottom: 0,
                 right: 0,
                 left: getLeftPosition(),
-                display: 'flex'
+                display: 'flex',
             }}
         >
-
-            { children }
-            
+            {children}
         </div>
-    )
-}
+    );
+};
 
-export default MapViewWrapper
+export default MapViewWrapper;

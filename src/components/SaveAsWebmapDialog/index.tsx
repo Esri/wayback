@@ -260,7 +260,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
     render() {
         const { onClose } = this.props;
-        
+
         const { isWebmapReady } = this.state;
 
         const editDialogContent = !isWebmapReady ? this.getEditDialog() : null;
@@ -270,9 +270,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             : null;
 
         return (
-            <div
-                className="modal-overlay customized-modal is-active"
-            >
+            <div className="modal-overlay customized-modal is-active">
                 <div
                     className="modal-content column-6"
                     role="dialog"

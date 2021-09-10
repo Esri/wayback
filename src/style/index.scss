@@ -33,6 +33,12 @@ video, img {
     cursor: pointer;
 }
 
-*,*:focus,*:hover{
-    outline:none;
+// *,*:focus,*:hover{
+//     outline:none;
+// }
+
+#appRootDiv {
+    .esri-swipe--horizontal .esri-swipe__container {
+        outline: 0;
+    }
 }

@@ -4,9 +4,13 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
-import { IExtentGeomety, IScreenPoint, IWaybackMetadataQueryResult } from '../../types';
+import {
+    IExtentGeomety,
+    IScreenPoint,
+    IWaybackMetadataQueryResult,
+} from '../../types';
 
-import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+import { RootState } from '../configureStore';
 
 export type MapState = {
     mapExtent: IExtentGeomety;
@@ -15,30 +19,39 @@ export type MapState = {
     isReferenceLayerVisible: boolean;
 };
 
-export const initialMapState:MapState = {
+export const initialMapState: MapState = {
     mapExtent: null,
     metadataQueryResult: null,
     metadataPopupAnchor: null,
-    isReferenceLayerVisible: true
+    isReferenceLayerVisible: true,
 };
 
 const slice = createSlice({
     name: 'Map',
     initialState: initialMapState,
     reducers: {
-        mapExtentUpdated: (state:MapState, action:PayloadAction<IExtentGeomety>)=>{
+        mapExtentUpdated: (
+            state: MapState,
+            action: PayloadAction<IExtentGeomety>
+        ) => {
             state.mapExtent = action.payload;
         },
-        metadataQueryResultUpdated: (state:MapState, action:PayloadAction<IWaybackMetadataQueryResult>)=>{
-            state.metadataQueryResult = action.payload
+        metadataQueryResultUpdated: (
+            state: MapState,
+            action: PayloadAction<IWaybackMetadataQueryResult>
+        ) => {
+            state.metadataQueryResult = action.payload;
         },
-        metadataPopupAnchorUpdated: (state:MapState, action:PayloadAction<IScreenPoint>)=>{
-            state.metadataPopupAnchor = action.payload
+        metadataPopupAnchorUpdated: (
+            state: MapState,
+            action: PayloadAction<IScreenPoint>
+        ) => {
+            state.metadataPopupAnchor = action.payload;
         },
-        isReferenceLayerVisibleToggled: (state:MapState)=>{
-            state.isReferenceLayerVisible = !state.isReferenceLayerVisible
-        }
-    }
+        isReferenceLayerVisibleToggled: (state: MapState) => {
+            state.isReferenceLayerVisible = !state.isReferenceLayerVisible;
+        },
+    },
 });
 
 const { reducer } = slice;
@@ -47,27 +60,27 @@ export const {
     mapExtentUpdated,
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
-    isReferenceLayerVisibleToggled
+    isReferenceLayerVisibleToggled,
 } = slice.actions;
 
 export const mapExtentSelector = createSelector(
     (state: RootState) => state.Map.mapExtent,
-    mapExtent=>mapExtent
-)
+    (mapExtent) => mapExtent
+);
 
 export const isReferenceLayerVisibleSelector = createSelector(
     (state: RootState) => state.Map.isReferenceLayerVisible,
-    isReferenceLayerVisible=>isReferenceLayerVisible
-)
+    (isReferenceLayerVisible) => isReferenceLayerVisible
+);
 
 export const metadataQueryResultSelector = createSelector(
     (state: RootState) => state.Map.metadataQueryResult,
-    metadataQueryResult=>metadataQueryResult
-)
+    (metadataQueryResult) => metadataQueryResult
+);
 
 export const metadataPopupAnchorSelector = createSelector(
     (state: RootState) => state.Map.metadataPopupAnchor,
-    metadataPopupAnchor=>metadataPopupAnchor
-)
+    (metadataPopupAnchor) => metadataPopupAnchor
+);
 
 export default reducer;

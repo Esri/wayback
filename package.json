@@ -31,6 +31,7 @@
   },
   "homepage": "https://livingatlas.arcgis.com/wayback/",
   "devDependencies": {
+    "@arcgis/webpack-plugin": "^4.20.0",
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
@@ -41,7 +42,10 @@
     "@babel/preset-typescript": "^7.12.7",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-helmet": "^6.1.0",
     "@types/react-redux": "^7.1.11",
+    "@types/shortid": "0.0.29",
+    "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
     "babel-core": "^6.26.3",
@@ -73,6 +77,8 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@arcgis/core": "^4.20.2",
+    "@entryline/gifstream": "^1.2.1",
     "@esri/arcgis-rest-auth": "^2.22.0",
     "@esri/arcgis-rest-feature-layer": "^2.22.0",
     "@esri/arcgis-rest-request": "^2.22.0",
@@ -84,13 +90,21 @@
     "classnames": "^2.2.6",
     "d3": "^5.12.0",
     "es6-promise": "^4.2.8",
+<<<<<<< HEAD
     "esri-loader": "^3.2.0",
+=======
+    "esri-loader": "^2.16.0",
+    "gifshot": "^0.4.5",
+>>>>>>> es-modules
     "helper-toolkit-ts": "^1.1.14",
     "isomorphic-fetch": "^3.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
     "react-redux": "^7.2.2",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "shortid": "^2.2.16",
+    "styled-components": "^5.3.0"
   },
   "resolutions": {
     "styled-components": "^5"

@@ -17,7 +17,7 @@ import {
 interface IProps {
     metadata: IWaybackMetadataQueryResult;
     metadataAnchorScreenPoint: IScreenPoint;
-    onClose: ()=>void;
+    onClose: () => void;
     // mapView?: IMapView;
     // waybackManager?: WaybackManager;
     // targetLayer: IWaybackItem;

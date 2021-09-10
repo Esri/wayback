@@ -1,14 +1,17 @@
-import React, {
-    useEffect
-} from 'react';
+import '@arcgis/core/assets/esri/themes/dark/main.css';
+import React, { useEffect } from 'react';
 
-import { loadModules, loadCss } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IMap from 'esri/Map';
-import IWatchUtils from 'esri/core/watchUtils';
-import IWebMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import IExtent from 'esri/geometry/Extent';
+import MapView from '@arcgis/core/views/MapView';
+import EsriMap from '@arcgis/core/Map';
+import { whenTrue } from '@arcgis/core/core/watchUtils';
+import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
+import Extent from '@arcgis/core/geometry/Extent';
+
 import { IExtentGeomety, IMapPointInfo } from '../../types';
+
+// import { WAYBACK_LAYER_ID } from '../WaybackLayer/getWaybackLayer'
+// import WMTSLayer from '@arcgis/core/layers/WMTSLayer';
+// import LOD from '@arcgis/core/layers/support/LOD';
 
 interface Props {
     initialExtent: IExtentGeomety;
@@ -17,100 +20,66 @@ interface Props {
     children?: React.ReactNode;
 }
 
-const MapView: React.FC<Props> = ({ 
+const MapViewComponent: React.FC<Props> = ({
     initialExtent,
     onUpdateEnd,
     onExtentChange,
-    children 
+    children,
 }: Props) => {
-
     const mapDivRef = React.useRef<HTMLDivElement>();
 
-    const [mapView, setMapView] = React.useState<IMapView>(null);
+    const [mapView, setMapView] = React.useState<MapView>(null);
 
-    const initMapView = async () => {
-        type Modules = [typeof IMapView, typeof IMap, typeof IExtent];
+    const initMapView = () => {
 
-        try {
-            const [MapView, Map, Extent] = await (loadModules([
-                'esri/views/MapView',
-                'esri/Map',
-                'esri/geometry/Extent'
-            ]) as Promise<Modules>);
+        const view = new MapView({
+            container: mapDivRef.current,
+            map: new EsriMap(),
+            extent: new Extent({
+                ...initialExtent,
+            }),
+        });
 
-            const view = new MapView({
-                container: mapDivRef.current,
-                map: new Map(),
-                extent: new Extent({
-                    ...initialExtent
-                })
-            });
+        view.ui.remove(['zoom'])
 
-            setMapView(view);
-
-        } catch (err) {
-            console.error(err);
-        }
+        setMapView(view);
     };
 
-    const initWatchUtils = async()=>{
-        try {
-            type Modules = [typeof IWatchUtils];
+    const initWatchUtils = async () => {
+        whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
+    };
 
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+    const mapViewUpdateEndHandler = async () => {
 
-            watchUtils.whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
-        } catch (err) {
-            console.error(err);
+        const center = mapView.center;
+
+        if (!center) {
+            return;
         }
-    }
 
-    const mapViewUpdateEndHandler = async()=>{
+        const extent = webMercatorToGeographic(mapView.extent);
 
-        try {
-            type Modules = [typeof IWebMercatorUtils];
+        // console.log('mapview update ended', center);
 
-            const [webMercatorUtils] = await (loadModules([
-                'esri/geometry/support/webMercatorUtils',
-            ]) as Promise<Modules>);
+        const mapViewCenterPointInfo: IMapPointInfo = {
+            latitude: center.latitude,
+            longitude: center.longitude,
+            zoom: mapView.zoom, //getCurrZoomLevel(mapView),
+            geometry: center.toJSON(),
+        };
 
-            const center = mapView.center;
+        onUpdateEnd(mapViewCenterPointInfo);
 
-            if(!center){
-                return;
-            }
-
-            const extent = webMercatorUtils.webMercatorToGeographic(
-                mapView.extent
-            );
-
-            // console.log('mapview update ended', center);
-
-            const mapViewCenterPointInfo: IMapPointInfo = {
-                latitude: center.latitude,
-                longitude: center.longitude,
-                zoom: mapView.zoom,
-                geometry: center.toJSON(),
-            };
-
-            onUpdateEnd(mapViewCenterPointInfo);
-
-            onExtentChange(extent.toJSON());
-
-        } catch (err) {
-            console.error(err);
-        }
-    }
+        onExtentChange(extent.toJSON());
+    };
 
     useEffect(() => {
-        loadCss();
+        // loadCss();
         initMapView();
     }, []);
 
     useEffect(() => {
-        if(mapView){
+        if (mapView) {
             initWatchUtils();
         }
     }, [mapView]);
@@ -142,4 +111,28 @@ const MapView: React.FC<Props> = ({
     );
 };
 
-export default MapView;
+
+// // calculate current zoom level using current map scale and tile infos from Wayback WMTS layer
+// export const getCurrZoomLevel = (mapView:MapView):number =>{
+
+//     const mapScale = mapView.scale;
+
+//     // get active sublayer from wayback WMTS layer
+//     const { activeLayer } = mapView.map.findLayerById(WAYBACK_LAYER_ID) as WMTSLayer;
+
+//     // A TileLayer has a number of LODs (Levels of Detail). 
+//     // Each LOD corresponds to a map at a given scale or resolution.
+//     const LODS = activeLayer.tileMatrixSets.getItemAt(0).tileInfo.lods as LOD[];
+
+//     for(let LOD of LODS){
+//         const { level, scale } = LOD;
+
+//         if(scale < (mapScale * Math.sqrt(2)) && scale > (mapScale / Math.sqrt(2))){
+//             return level;
+//         }
+//     }
+
+//     return -1;
+// }
+
+export default MapViewComponent;

@@ -26,7 +26,7 @@ export const initialUIState = {
     isSideBarHide: false,
     isShareModalOpen: false,
     isAboutThisAppModalOpen: false,
-    isSettingModalOpen: false
+    isSettingModalOpen: false,
 } as UIState;
 
 const slice = createSlice({
@@ -36,14 +36,21 @@ const slice = createSlice({
         isSaveAsWebmapDialogOpenToggled: (state) => {
             state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
         },
-        shouldOnlyShowItemsWithLocalChangeToggled: (state, action:PayloadAction<boolean>) => {
-            const newVal =  typeof action.payload === 'boolean' 
-                ? action.payload
-                : !state.shouldOnlyShowItemsWithLocalChange
+        shouldOnlyShowItemsWithLocalChangeToggled: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            const newVal =
+                typeof action.payload === 'boolean'
+                    ? action.payload
+                    : !state.shouldOnlyShowItemsWithLocalChange;
 
             state.shouldOnlyShowItemsWithLocalChange = newVal;
         },
-        shouldShowPreviewItemTitleToggled: (state, action:PayloadAction<boolean>) => {
+        shouldShowPreviewItemTitleToggled: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
             state.shouldShowPreviewItemTitle = action.payload;
         },
         isGutterHideToggled: (state) => {
@@ -58,15 +65,15 @@ const slice = createSlice({
         isAboutThisAppModalOpenToggled: (state) => {
             state.isAboutThisAppModalOpen = !state.isAboutThisAppModalOpen;
         },
-        isSettingModalOpenToggled: (state)=>{
+        isSettingModalOpenToggled: (state) => {
             state.isSettingModalOpen = !state.isSettingModalOpen;
-        }
+        },
     },
 });
 
 const { reducer } = slice;
 
-export const { 
+export const {
     isSaveAsWebmapDialogOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
     shouldShowPreviewItemTitleToggled,
@@ -74,7 +81,7 @@ export const {
     isSideBarHideToggled,
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
-    isSettingModalOpenToggled
+    isSettingModalOpenToggled,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = createSelector(

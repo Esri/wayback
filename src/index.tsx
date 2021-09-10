@@ -8,31 +8,28 @@ import AppContextProvider from './contexts/AppContextProvider';
 
 import WaybackManager from './core/WaybackManager';
 
-import {
-    AppLayout
-} from './components/';
+import { AppLayout } from './components/';
 
 // import { setDefaultOptions } from 'esri-loader';
 
-// setDefaultOptions({ 
-//     version: '4.18'
+// setDefaultOptions({
+//     version: '4.18',
 // });
 
 const initApp = async () => {
-
     const waybackManager = new WaybackManager();
     const waybackData2InitApp = await waybackManager.init();
 
-    const preloadedState = await getPreloadedState(waybackData2InitApp.waybackItems);
-    // console.log(preloadedState)
+    const preloadedState = await getPreloadedState(
+        waybackData2InitApp.waybackItems
+    );
+    console.log(preloadedState);
 
     try {
         ReactDOM.render(
             <React.StrictMode>
                 <ReduxProvider store={configureAppStore(preloadedState)}>
-                    <AppContextProvider
-                        waybackManager={waybackManager}
-                    >
+                    <AppContextProvider waybackManager={waybackManager}>
                         <AppLayout />
                     </AppContextProvider>
                 </ReduxProvider>
@@ -47,5 +44,3 @@ const initApp = async () => {
 window.addEventListener('DOMContentLoaded', () => {
     initApp();
 });
-
-

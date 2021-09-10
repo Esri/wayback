@@ -1,66 +1,67 @@
-import React, {
-    useEffect, useRef
-} from 'react'
+import React, { useEffect, useRef } from 'react';
 
-import { loadModules } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IVectorTileLayer from 'esri/layers/VectorTileLayer';
+// import { loadModules } from 'esri-loader';
+// import IMapView from 'esri/views/MapView';
+// import IVectorTileLayer from 'esri/layers/VectorTileLayer';
 
-import {
-    REFERENCE_LAYER_ITEM_ID
-} from './constants';
+import MapView from '@arcgis/core/views/MapView';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 
 type Props = {
+    url?: string;
     isVisible: boolean;
-    mapView?: IMapView;
-}
+    mapView?: MapView;
+};
 
-const ReferenceLayer:React.FC<Props> = ({
-    isVisible,
-    mapView
-}) => {
+const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
+    const referenceLayerRef = useRef<VectorTileLayer>();
 
-    const referenceLayerRef = useRef<IVectorTileLayer>();
+    const init = () => {
+        // try {
 
-    const init = async()=>{
-        try {
+        //     type Modules = [
+        //         typeof IVectorTileLayer
+        //     ];
 
-            type Modules = [
-                typeof IVectorTileLayer
-            ];
+        //     const [VectorTileLayer] = await (loadModules([
+        //         'esri/layers/VectorTileLayer',
+        //     ]) as Promise<Modules>);
 
-            const [VectorTileLayer] = await (loadModules([
-                'esri/layers/VectorTileLayer',
-            ]) as Promise<Modules>);
+        //     referenceLayerRef.current = new VectorTileLayer({
+        //         portalItem: {
+        //             id: REFERENCE_LAYER_ITEM_ID,
+        //         },
+        //         visible: isVisible
+        //     });
 
-            referenceLayerRef.current = new VectorTileLayer({
-                portalItem: {
-                    id: REFERENCE_LAYER_ITEM_ID,
-                },
-                visible: isVisible
-            });
-            
-            mapView.map.add(referenceLayerRef.current)
+        //     mapView.map.add(referenceLayerRef.current)
 
-        } catch (err) {
-            console.error(err);
-        }
-    }
+        // } catch (err) {
+        //     console.error(err);
+        // }
+
+        referenceLayerRef.current = new VectorTileLayer({
+            url,
+            visible: isVisible,
+        });
+
+        mapView.map.add(referenceLayerRef.current);
+    };
 
     useEffect(() => {
-        console.log(mapView)
+        // console.log(mapView)
         if (mapView) {
             init();
         }
-    }, [ mapView ]);
+    }, [mapView]);
 
     useEffect(() => {
         if (mapView && referenceLayerRef.current) {
-            referenceLayerRef.current.visible = isVisible
+            referenceLayerRef.current.visible = isVisible;
         }
-    }, [ isVisible ]);
+    }, [isVisible]);
 
     return null;
-}
+};
 
-export default ReferenceLayer
+export default ReferenceLayer;

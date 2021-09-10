@@ -1,14 +1,8 @@
-import React, {
-    useEffect
-} from 'react'
+import React, { useEffect } from 'react';
 
-import {
-    useSelector,
-} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {
-    activeWaybackItemSelector,
-} from '../../store/reducers/WaybackItems';
+import { activeWaybackItemSelector } from '../../store/reducers/WaybackItems';
 import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
 
 import WaybackLayer from './WaybackLayer';
@@ -16,25 +10,21 @@ import WaybackLayer from './WaybackLayer';
 import IMapView from 'esri/views/MapView';
 
 type Props = {
-    mapView?:IMapView
-}
+    mapView?: IMapView;
+};
 
-const WaybackLayerContainer:React.FC<Props> = ({
-    mapView
-}) => {
-
+const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
     useEffect(() => {
-        saveReleaseNum4ActiveWaybackItemInURLQueryParam(activeWaybackItem.releaseNum)
-    }, [activeWaybackItem])
+        saveReleaseNum4ActiveWaybackItemInURLQueryParam(
+            activeWaybackItem.releaseNum
+        );
+    }, [activeWaybackItem]);
 
     return (
-        <WaybackLayer 
-            mapView={mapView}
-            activeWaybackItem={activeWaybackItem}
-        />
-    )
-}
+        <WaybackLayer mapView={mapView} activeWaybackItem={activeWaybackItem} />
+    );
+};
 
-export default WaybackLayerContainer
+export default WaybackLayerContainer;

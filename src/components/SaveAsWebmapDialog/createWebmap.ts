@@ -1,8 +1,11 @@
-import IEsriConfig from 'esri/config';
-import { loadModules } from 'esri-loader';
+// import IEsriConfig from 'esri/config';
+// import { loadModules } from 'esri-loader';
 import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
-import EsriRquest from 'esri/request';
+// import EsriRquest from 'esri/request';
+
+import esriRequest from '@arcgis/core/request';
+import esriConfig from '@arcgis/core/config';
 
 interface ICreateWebmapParams {
     title: string;
@@ -61,7 +64,7 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
             wmtsInfo: {
                 url: getServiceUrl('wayback-imagery-base'),
                 // layerIdentifier: waybackItem.itemReleaseName || '',
-                tileMatrixSet: 'default028mm'
+                tileMatrixSet: 'default028mm',
             },
             visibility: isVisible,
             title: waybackItem.itemTitle,
@@ -95,8 +98,7 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
                 {
                     id: 'defaultBasemap',
                     layerType: 'ArcGISTiledMapServiceLayer',
-                    url:
-                        'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/',
+                    url: getServiceUrl('world-imagery-basemap'),
                     visibility: true,
                     opacity: 1,
                     title: 'World Imagery',
@@ -105,9 +107,8 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
                     type: 'VectorTileLayer',
                     layerType: 'VectorTileLayer',
                     title: 'Hybrid Reference Layer (Local Language)',
-                    styleUrl:
-                        'https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json',
-                    itemId: '2a2e806e6e654ea78ecb705149ceae9f',
+                    styleUrl: getServiceUrl('reference-layer'),
+                    // itemId: '2a2e806e6e654ea78ecb705149ceae9f',
                     visibility: true,
                     isReference: true,
                     opacity: 1,
@@ -144,20 +145,20 @@ const createWebmap = async ({
         return null;
     }
 
-    type Modules = [
-        typeof IEsriConfig,
-        typeof EsriRquest
-    ];
+    // type Modules = [
+    //     typeof IEsriConfig,
+    //     typeof EsriRquest
+    // ];
 
-    const [ esriConfig, esriRequest ] = await (loadModules([
-        'esri/config',
-        'esri/request'
-    ]) as Promise<Modules>);
+    // const [ esriConfig, esriRequest ] = await (loadModules([
+    //     'esri/config',
+    //     'esri/request'
+    // ]) as Promise<Modules>);
 
-    if(userSession.credential.server !== 'https://www.arcgis.com'){
+    if (userSession.credential.server !== 'https://www.arcgis.com') {
         esriConfig.request.trustedServers.push(userSession.credential.server);
     }
-    
+
     const requestUrl = getRequestUrl(userSession);
 
     const formData = new FormData();

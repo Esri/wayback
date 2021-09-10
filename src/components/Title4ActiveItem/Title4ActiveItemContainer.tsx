@@ -1,6 +1,4 @@
-import React,{
-    useContext
-} from 'react';
+import React, { useContext } from 'react';
 
 import {
     useSelector,
@@ -13,24 +11,23 @@ import { AppContext } from '../../contexts/AppContextProvider';
 
 import {
     activeWaybackItemSelector,
-    previewWaybackItemSelector
+    previewWaybackItemSelector,
 } from '../../store/reducers/WaybackItems';
 
-import {
-    shouldShowPreviewItemTitleSelector
-} from '../../store/reducers/UI';
+import { shouldShowPreviewItemTitleSelector } from '../../store/reducers/UI';
 
 import Title4ActiveItem from './index';
 
 const Title4ActiveItemContainer = () => {
-
     const { isMobile } = useContext(AppContext);
 
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
     const previewWaybackItem = useSelector(previewWaybackItemSelector);
 
-    const shouldShowPreviewItemTitle = useSelector(shouldShowPreviewItemTitleSelector);
+    const shouldShowPreviewItemTitle = useSelector(
+        shouldShowPreviewItemTitleSelector
+    );
 
     return (
         <Title4ActiveItem
@@ -39,7 +36,7 @@ const Title4ActiveItemContainer = () => {
             previewWaybackItem={previewWaybackItem}
             shouldShowPreviewItemTitle={shouldShowPreviewItemTitle}
         />
-    )
-}
+    );
+};
 
-export default Title4ActiveItemContainer
+export default Title4ActiveItemContainer;

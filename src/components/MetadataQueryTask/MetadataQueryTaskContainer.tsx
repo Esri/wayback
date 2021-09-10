@@ -1,43 +1,33 @@
-import React, {
-    useContext
-} from 'react';
+import React, { useContext } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { AppContext } from '../../contexts/AppContextProvider';
 
-import {
-    activeWaybackItemSelector
-} from '../../store/reducers/WaybackItems';
+import { activeWaybackItemSelector } from '../../store/reducers/WaybackItems';
 
 import {
     isSwipeWidgetOpenSelector,
     swipePositionSelector,
     swipeWidgetLeadingLayerSelector,
-    swipeWidgetTrailingLayerSelector
+    swipeWidgetTrailingLayerSelector,
 } from '../../store/reducers/SwipeView';
 
 import {
     metadataQueryResultUpdated,
-    metadataPopupAnchorUpdated
+    metadataPopupAnchorUpdated,
 } from '../../store/reducers/Map';
 
 import MetadataQueryTask from './MetadataQueryTask';
 
-import IMapView from 'esri/views/MapView';
+// import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 
 type Props = {
-    mapView?: IMapView
+    mapView?: MapView;
 };
 
-const MetadataQueryTaskContainer:React.FC<Props> = ({
-    mapView
-}) => {
-
+const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
     const disptach = useDispatch();
 
     const { waybackManager } = useContext(AppContext);
@@ -46,11 +36,15 @@ const MetadataQueryTaskContainer:React.FC<Props> = ({
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
     const swipeWidgetPosition = useSelector(swipePositionSelector);
-    const swipeWidgetLeadingLayer = useSelector(swipeWidgetLeadingLayerSelector);
-    const swipeWidgetTrailingLayer = useSelector(swipeWidgetTrailingLayerSelector);
+    const swipeWidgetLeadingLayer = useSelector(
+        swipeWidgetLeadingLayerSelector
+    );
+    const swipeWidgetTrailingLayer = useSelector(
+        swipeWidgetTrailingLayerSelector
+    );
 
     return (
-        <MetadataQueryTask 
+        <MetadataQueryTask
             mapView={mapView}
             waybackManager={waybackManager}
             activeWaybackItem={activeWaybackItem}
@@ -58,16 +52,16 @@ const MetadataQueryTaskContainer:React.FC<Props> = ({
             swipeWidgetTrailingLayer={swipeWidgetTrailingLayer}
             isSwipeWidgetOpen={isSwipeWidgetOpen}
             swipeWidgetPosition={swipeWidgetPosition}
-            metadataOnChange={metadata=>{
+            metadataOnChange={(metadata) => {
                 // console.log(metadata)
                 disptach(metadataQueryResultUpdated(metadata));
             }}
-            anchorPointOnChange={anchorPoint=>{
+            anchorPointOnChange={(anchorPoint) => {
                 // console.log(anchorPoint)
                 disptach(metadataPopupAnchorUpdated(anchorPoint));
             }}
         />
-    )
-}
+    );
+};
 
-export default MetadataQueryTaskContainer
+export default MetadataQueryTaskContainer;

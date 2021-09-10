@@ -1,26 +1,41 @@
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+// import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
 
-import { loadModules } from 'esri-loader';
-import IWebTileLayer from 'esri/layers/WebTileLayer';
+import { IWaybackItem } from '../../types';
+// import { getServiceUrl } from '../../utils/Tier';
+// export const WAYBACK_LAYER_ID = 'waybackWMTSLayer'
+// const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base')
 
-import { IWaybackItem } from "../../types";
+export const getWaybackLayer = (waybackItem: IWaybackItem): WebTileLayer => {
+    // try {
+    //     type Modules = [typeof IWebTileLayer];
 
-export const getWaybackLayer = async(waybackItem:IWaybackItem)=>{
+    //     const [WebTileLayer] = await (loadModules([
+    //         'esri/layers/WebTileLayer',
+    //     ]) as Promise<Modules>);
 
-    try {
-        type Modules = [typeof IWebTileLayer];
+    //     const waybackLayer = new WebTileLayer({
+    //         urlTemplate: waybackItem.itemURL,
+    //     });
 
-        const [WebTileLayer] = await (loadModules([
-            'esri/layers/WebTileLayer',
-        ]) as Promise<Modules>);
+    //     return waybackLayer;
 
-        const waybackLayer = new WebTileLayer({
-            urlTemplate: waybackItem.itemURL,
-        });
+    // } catch (err) {
+    //     console.error(err)
+    //     return null;
+    // }
 
-        return waybackLayer;
+    const waybackLayer = new WebTileLayer({
+        urlTemplate: waybackItem.itemURL,
+    });
 
-    } catch (err) {
-        console.error(err)
-        return null;
-    }
-}
+    // const waybackLayer = new WMTSLayer({
+    //     id: WAYBACK_LAYER_ID,
+    //     url: WaybackImagerBaseURL + '/WMTS/1.0.0/WMTSCapabilities.xml',
+    //     activeLayer: {
+    //         id: waybackItem.layerIdentifier
+    //     }
+    // });
+
+    return waybackLayer;
+};

@@ -1,4 +1,4 @@
-# wayback
+# World Imagery Wayback App
 This app provides a dynamic browsing experience where previous World Imagery versions are presented within the map, along a timeline, and as a list. Versions that resulted in local changes are dynamically presented to the user based on location and scale. Preview changes by hovering and/or selecting individual layers. When ready, one or more Wayback layers can be added to an export queue and pushed to a new ArcGIS Online web map.
 
 [View it live](https://livingatlas.arcgis.com/wayback/)
@@ -35,7 +35,7 @@ npm run build
 ```
 
 ## External Libraries:
-- [ArcGIS API for JavaScript (4.18)](https://developers.arcgis.com/javascript/index.html)
+- [ArcGIS API for JavaScript (4.20)](https://developers.arcgis.com/javascript/index.html)
 - [D3.js v4](https://d3js.org/)
 
 ## Resources

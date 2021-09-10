@@ -1,46 +1,61 @@
-import React, {
-    useContext
-} from 'react';
+import React, { useContext } from 'react';
+
+import { useSelector } from 'react-redux';
+
+import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
+
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode'
 
 import {
-    useSelector,
-    useDispatch,
-    batch
-} from 'react-redux';
-
-import{
-    isSwipeWidgetOpenSelector,
-} from '../../store/reducers/SwipeView';
-
-import{
     isGutterHideSelector,
     isSideBarHideSelector,
 } from '../../store/reducers/UI';
 
 import Sidebar from './Sidebar';
-import AppTitleText from '../TitleText';
-import SidebarToggleBtn from '../SidebarToggleBtn/SidebarToogleBtnContainer';
-import BarChart from '../BarChart/BarChartContainer';
-import Title4ActiveItem from '../Title4ActiveItem/Title4ActiveItemContainer';
-import ShowLocalChangesCheckboxToggle from '../ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
-import ListView from '../ListView/ListViewContainer';
-import {
-    MobileHide,
-    Spacing
-} from '../SharedUI'
 import { AppContext } from '../../contexts/AppContextProvider';
 
-const SidebarContainer:React.FC = ({
-    children
-}) => {
+import {
+    SidebarToggleBtn,
+    AppTitleText,
+    BarChart,
+    Title4ActiveItem,
+    ShowLocalChangesCheckboxToggle,
+    ListView,
+    AnimationControls
+} from '../'
 
-    const { isMobile } = useContext(AppContext)
+import { MobileHide, Spacing } from '../SharedUI';
+
+const SidebarContainer: React.FC = ({ children }) => {
+    const { isMobile } = useContext(AppContext);
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     const isHide = useSelector(isSideBarHideSelector);
 
     const isGutterHide = useSelector(isGutterHideSelector);
+
+    const getContent = ()=>{
+        if(isAnimationModeOn){
+            return <AnimationControls />
+        }
+
+        return (
+            <>
+                <Spacing paddingLeft="1rem" paddingRight="1rem">
+                    <BarChart />
+
+                    <Title4ActiveItem />
+
+                    <ShowLocalChangesCheckboxToggle />
+                </Spacing>
+
+                <ListView />
+            </>
+        );
+    }
 
     return (
         <Sidebar
@@ -48,10 +63,15 @@ const SidebarContainer:React.FC = ({
             isGutterHide={isGutterHide}
             isMobile={isMobile}
         >
-            { children }
+            <SidebarToggleBtn />
 
+            <MobileHide>
+                <AppTitleText />
+            </MobileHide>
+
+            { getContent() }
         </Sidebar>
-    )
-}
+    );
+};
 
-export default SidebarContainer
+export default SidebarContainer;

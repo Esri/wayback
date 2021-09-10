@@ -9,6 +9,7 @@ interface IWaybackConfig {
         metadataLayerItemID: string;
         metadataLayerUrl: string;
         itemReleaseName: string;
+        layerIdentifier?:string;
     };
 }
 
@@ -22,6 +23,7 @@ interface IWaybackItem {
     itemURL: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;
+    layerIdentifier?:string;
 }
 
 interface IPointGeomety {
@@ -70,14 +72,16 @@ interface IUserSession {
     credential: ICredential;
 }
 
-interface ISearchParamData {
+interface IURLParamData {
     mapExtent?: IExtentGeomety;
     rNum4SelectedWaybackItems?: Array<number>;
     shouldOnlyShowItemsWithLocalChange?: boolean;
     rNum4ActiveWaybackItem?: number;
-    isSwipeWidgetOpen?:boolean;
-    rNum4SwipeWidgetLeadingLayer?:number;
-    rNum4SwipeWidgetTrailingLayer?:number;
+    isSwipeWidgetOpen?: boolean;
+    rNum4SwipeWidgetLeadingLayer?: number;
+    rNum4SwipeWidgetTrailingLayer?: number;
+    animationSpeed?:number;
+    rNum4FramesToExclude?: number[];
 }
 
 interface IStaticTooltipData {
@@ -90,11 +94,14 @@ type ValidServiceUrlNames =
     | 'portal-url'
     | 'wayback-imagery-base'
     | 'wayback-config'
-    | 'wayback-change-detector-layer';
+    | 'wayback-change-detector-layer'
+    | 'reference-layer'
+    | 'world-imagery-basemap';
 
 interface IAppConfig {
     appId: string;
     shouldUseWaybackFootprintsLayer: boolean;
+    onPremises: boolean;
     productionEnv: {
         serviceUrls: {
             [name in ValidServiceUrlNames]: string;
@@ -125,7 +132,7 @@ export {
     IScreenPoint,
     IUserSession,
     IExtentGeomety,
-    ISearchParamData,
+    IURLParamData,
     IStaticTooltipData,
     ValidServiceUrlNames,
     IAppConfig,

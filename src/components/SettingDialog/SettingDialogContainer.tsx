@@ -1,66 +1,55 @@
-import React, {
-    useContext
-} from 'react';
+import React, { useContext } from 'react';
 
-import {
-    useSelector,
-    useDispatch
-} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 import SetttingDialog from './index';
 
 import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
-    shouldOnlyShowItemsWithLocalChangeToggled
+    shouldOnlyShowItemsWithLocalChangeToggled,
 } from '../../store/reducers/UI';
 
-import {
-    mapExtentSelector
-} from '../../store/reducers/Map';
+import { mapExtentSelector } from '../../store/reducers/Map';
 
-import {
-    AppContext
-} from '../../contexts/AppContextProvider';
+import { AppContext } from '../../contexts/AppContextProvider';
 
 const SettingDialogContainer = () => {
-
     const dispatch = useDispatch();
 
-    const {
-        userSession,
-        oauthUtils
-    } = useContext(AppContext);
+    const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent = useSelector(mapExtentSelector);
 
     const isOpen = useSelector(isSettingModalOpenSelector);
 
-    const onCloseHandler = ()=>{
-        dispatch(isSettingModalOpenToggled())
-    }
+    const onCloseHandler = () => {
+        dispatch(isSettingModalOpenToggled());
+    };
 
-    const toggleSignInBtnOnClick = (shouldSignIn?: boolean)=>{
+    const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
         if (shouldSignIn) {
             oauthUtils.sigIn();
         } else {
             oauthUtils.signOut();
         }
-    }
+    };
 
-    const shouldShowLocalChangesByDefaultOnClick = (val:boolean)=>{
+    const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
         dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
-    }
+    };
 
     return isOpen ? (
-        <SetttingDialog 
+        <SetttingDialog
             mapExtent={mapExtent}
             userSession={userSession}
             toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-            shouldShowLocalChangesByDefaultOnClick={shouldShowLocalChangesByDefaultOnClick}
+            shouldShowLocalChangesByDefaultOnClick={
+                shouldShowLocalChangesByDefaultOnClick
+            }
             onClose={onCloseHandler}
         />
     ) : null;
-}
+};
 
-export default SettingDialogContainer
+export default SettingDialogContainer;

@@ -1,57 +1,46 @@
-import React, {
-    useContext,
-    useEffect
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import {
-    useSelector,
-    useDispatch
-} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
     isSaveAsWebmapDialogOpenSelector,
-    isSaveAsWebmapDialogOpenToggled
+    isSaveAsWebmapDialogOpenToggled,
 } from '../../store/reducers/UI';
 
-import {
-    mapExtentSelector
-} from '../../store/reducers/Map';
+import { mapExtentSelector } from '../../store/reducers/Map';
 
 import {
     allWaybackItemsSelector,
-    releaseNum4SelectedItemsSelector
+    releaseNum4SelectedItemsSelector,
 } from '../../store/reducers/WaybackItems';
 
-import {
-    AppContext
-} from '../../contexts/AppContextProvider';
+import { AppContext } from '../../contexts/AppContextProvider';
 
 import SaveAsWebMapDialog from './index';
 import { IExtentGeomety, IWaybackItem } from '../../types';
 
 const SaveAsWebmapDialogContainer = () => {
-
     const dispatch = useDispatch();
 
-    const {
-        userSession
-    } = useContext(AppContext);
+    const { userSession } = useContext(AppContext);
 
     const mapExtent: IExtentGeomety = useSelector(mapExtentSelector);
 
     const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
 
-    const rNum4SelectedWaybackItems: number[] = useSelector(releaseNum4SelectedItemsSelector);
+    const rNum4SelectedWaybackItems: number[] = useSelector(
+        releaseNum4SelectedItemsSelector
+    );
 
     const isOpen: boolean = useSelector(isSaveAsWebmapDialogOpenSelector);
 
-    const onCloseHandler = ()=>{
+    const onCloseHandler = () => {
         dispatch(isSaveAsWebmapDialogOpenToggled());
     };
 
-    useEffect(()=>{
-        console.log(isOpen)
-    }, [isOpen])
+    useEffect(() => {
+        console.log(isOpen);
+    }, [isOpen]);
 
     return isOpen ? (
         <SaveAsWebMapDialog
@@ -62,6 +51,6 @@ const SaveAsWebmapDialogContainer = () => {
             onClose={onCloseHandler}
         />
     ) : null;
-}
+};
 
-export default SaveAsWebmapDialogContainer
+export default SaveAsWebmapDialogContainer;

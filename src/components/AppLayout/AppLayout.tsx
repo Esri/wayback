@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 import {
     AboutThisApp,
-    AppTitleText,
-    BarChart,
+    // AppTitleText,
+    // BarChart,
     Gutter,
-    ListView,
+    // ListView,
     MapView,
     MapViewWrapper,
     MetadataPopup,
@@ -22,71 +22,65 @@ import {
     SwipeWidgetToggleBtn,
     SettingDialog,
     SaveAsWebmapBtn,
-    SidebarToggleBtn,
+    // SidebarToggleBtn,
     SwipeWidgetLayerSelector,
-    ShowLocalChangesCheckboxToggle,
+    // ShowLocalChangesCheckboxToggle,
     TilePreviewWindow,
-    Title4ActiveItem,
-    WaybackLayer
-} from '..'
+    // Title4ActiveItem,
+    WaybackLayer,
+    HeadTags,
+    AnimationPanel,
+    AnimationModeToggleBtn,
+    ZoomWidget
+} from '..';
+import { AppContext } from '../../contexts/AppContextProvider';
+import { getServiceUrl } from '../../utils/Tier';
 
-import {
-    MobileHide,
-    Spacing
-} from '../SharedUI'
+// import { MobileHide, Spacing } from '../SharedUI';
 
-const AppLayout = () => {
+const AppLayout:React.FC = ()=> {
+
+    const { onPremises } = React.useContext(AppContext);
+
     return (
         <>
+            <HeadTags />
+
             <MobileHeader />
 
             <Gutter>
-
                 <SaveAsWebmapBtn />
 
                 <SwipeWidgetToggleBtn />
 
+                <AnimationModeToggleBtn />
             </Gutter>
 
             <Sidebar>
+                {/* <SidebarToggleBtn />
 
-                <SidebarToggleBtn />
-
-                <Spacing
-                    paddingLeft='1rem'
-                    paddingRight='1rem'
-                >
+                <Spacing paddingLeft="1rem" paddingRight="1rem">
                     <MobileHide>
                         <AppTitleText />
                     </MobileHide>
-                    
+
                     <BarChart />
 
                     <Title4ActiveItem />
 
                     <ShowLocalChangesCheckboxToggle />
-
                 </Spacing>
 
-                <ListView />
-
+                <ListView /> */}
             </Sidebar>
 
             <MapViewWrapper>
-
-                <SwipeWidgetLayerSelector 
-                    targetLayer='leading'
-                />
+                <SwipeWidgetLayerSelector targetLayer="leading" />
 
                 <MapView>
+                    <WaybackLayer />
 
-                    <WaybackLayer/>
-
-                    <ReferenceLayer/>
-
-                    <SearchWidget 
-                        position={'top-left'}
-                    />
+                    <ReferenceLayer />
 
                     <TilePreviewWindow />
 
@@ -96,27 +90,32 @@ const AppLayout = () => {
 
                     <SwipeWidget />
 
+                    <AnimationPanel />
+
                     <ReferenceLayerToggle />
 
-                </MapView>
-                
-                <SwipeWidgetLayerSelector 
-                    targetLayer='trailing'
-                />
+                    <SearchWidget
+                        portalUrl={getServiceUrl('portal-url')}
+                        // position={'top-left'}
+                    />
 
+                    <ZoomWidget />
+                </MapView>
+
+                <SwipeWidgetLayerSelector targetLayer="trailing" />
             </MapViewWrapper>
 
             <SaveAsWebMapDialog />
 
             <SettingDialog />
 
-            <ShareDialog />
+            { !onPremises && <ShareDialog /> }
 
             <AboutThisApp />
 
             <MobileFooter />
         </>
-    )
-}
+    );
+};
 
-export default AppLayout
+export default AppLayout;

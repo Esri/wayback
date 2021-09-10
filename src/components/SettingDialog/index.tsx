@@ -28,7 +28,7 @@ interface IProps {
         shouldShowLocalChangesByDefault: boolean
     ) => void;
 
-    onClose: ()=>void;
+    onClose: () => void;
 }
 
 interface IState {
@@ -88,7 +88,11 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             shouldShowLocalChangesByDefault,
         } = this.state;
 
-        const { shouldShowLocalChangesByDefaultOnClick, onClose, mapExtent } = this.props;
+        const {
+            shouldShowLocalChangesByDefaultOnClick,
+            onClose,
+            mapExtent,
+        } = this.props;
 
         if (shouldSaveAsDefaultExtent) {
             // const mapExt = getMapExtent();
@@ -108,10 +112,9 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             );
         }
 
-        const customPortalUrl = shouldUseCustomPortalUrl && portalUrl 
-            ? portalUrl 
-            : null;
-            
+        const customPortalUrl =
+            shouldUseCustomPortalUrl && portalUrl ? portalUrl : null;
+
         setCustomPortalUrl(customPortalUrl);
 
         if (customPortalUrl !== CustomUrlFromLocalStorage) {
