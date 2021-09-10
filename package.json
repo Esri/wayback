@@ -90,12 +90,8 @@
     "classnames": "^2.2.6",
     "d3": "^5.12.0",
     "es6-promise": "^4.2.8",
-<<<<<<< HEAD
-    "esri-loader": "^3.2.0",
-=======
     "esri-loader": "^2.16.0",
     "gifshot": "^0.4.5",
->>>>>>> es-modules
     "helper-toolkit-ts": "^1.1.14",
     "isomorphic-fetch": "^3.0.0",
     "react": "^17.0.1",
