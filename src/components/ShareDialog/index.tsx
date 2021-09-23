@@ -132,13 +132,13 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                             aria-label="Facebook"
                             rel="noopener noreferrer"
                         ></a>
-                        <a
+                        {/* <a
                             className="icon-social-github cursor-pointer"
                             href={config['github-repo-url']}
                             target="_blank"
                             aria-label="github"
                             rel="noopener noreferrer"
-                        ></a>
+                        ></a> */}
                     </div>
                 </div>
             </div>
