@@ -34,7 +34,7 @@ export default class OAuthUtils {
             portalUrl,
         });
 
-        IdentityManager.useSignInPage = false;
+        // IdentityManager.useSignInPage = false;
 
         IdentityManager.registerOAuthInfos([this.oauthInfo]);
 

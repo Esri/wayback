@@ -8,6 +8,7 @@ const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const computerName = os.hostname();
 
@@ -106,6 +107,7 @@ module.exports = (env, options)=> {
             ]
         },
         plugins: [
+            new ForkTsCheckerWebpackPlugin(),
             // copy static files from public folder to build directory
             new CopyPlugin({
                 patterns: [
