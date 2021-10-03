@@ -4,14 +4,13 @@ import { useSelector } from 'react-redux';
 
 import { isReferenceLayerVisibleSelector } from '../../store/reducers/Map';
 
-import IMapView from 'esri/views/MapView';
-
 import ReferenceLayer from './ReferenceLayer';
 import { getServiceUrl } from '../../utils/Tier';
 import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import MapView from '@arcgis/core/views/MapView';
 
 type Props = {
-    mapView?: IMapView;
+    mapView?: MapView;
 };
 
 const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {

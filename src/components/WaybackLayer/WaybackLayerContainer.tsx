@@ -7,10 +7,11 @@ import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/Url
 
 import WaybackLayer from './WaybackLayer';
 
-import IMapView from 'esri/views/MapView';
+// import IMapView from 'esri/views/MapView';
+import MapView from '@arcgis/core/views/MapView';
 
 type Props = {
-    mapView?: IMapView;
+    mapView?: MapView;
 };
 
 const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {

@@ -84,15 +84,12 @@
     "@esri/arcgis-rest-feature-layer": "^2.22.0",
     "@esri/arcgis-rest-request": "^2.22.0",
     "@reduxjs/toolkit": "^1.5.0",
-    "@types/arcgis-js-api": "^4.17.0",
     "@types/d3": "^5.7.2",
     "@types/es6-promise": "^3.3.0",
     "axios": "^0.21.2",
     "classnames": "^2.2.6",
     "d3": "^5.12.0",
     "es6-promise": "^4.2.8",
-    "esri-loader": "^2.16.0",
-    "gifshot": "^0.4.5",
     "helper-toolkit-ts": "^1.1.14",
     "isomorphic-fetch": "^3.0.0",
     "react": "^17.0.1",
@@ -100,7 +97,6 @@
     "react-helmet": "^6.1.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
-    "shortid": "^2.2.16",
     "styled-components": "^5.3.0"
   },
   "resolutions": {

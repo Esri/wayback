@@ -1,5 +1,7 @@
-import IPortal from 'esri/portal/Portal';
-import ICredential from 'esri/identity/Credential';
+// import IPortal from 'esri/portal/Portal';
+// import ICredential from 'esri/identity/Credential';
+import Credential from '@arcgis/core/identity/Credential';
+import Portal from '@arcgis/core/portal/Portal';
 
 interface IWaybackConfig {
     [key: number]: {
@@ -68,8 +70,8 @@ interface IScreenPoint {
 }
 
 interface IUserSession {
-    portal: IPortal;
-    credential: ICredential;
+    portal: Portal;
+    credential: Credential;
 }
 
 interface IURLParamData {

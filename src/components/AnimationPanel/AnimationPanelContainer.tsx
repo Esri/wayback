@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux';
 
 import { isAnimationModeOnSelector, waybackItems4AnimationSelector } from '../../store/reducers/AnimationMode';
 
-import IMapView from 'esri/views/MapView';
-
-type Props = {
-    mapView?: IMapView;
-};
+// import IMapView from 'esri/views/MapView';
 
 import AnimationPanel from './AnimationPanel';
 import { IWaybackItem } from '../../types';
+import MapView from '@arcgis/core/views/MapView';
+
+type Props = {
+    mapView?: MapView;
+};
 
 const AnimationPanelContainer:React.FC<Props> = ({
     mapView
