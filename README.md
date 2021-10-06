@@ -6,6 +6,9 @@ This app provides a dynamic browsing experience where previous World Imagery ver
 ![App](./public/screenshot.png)
 
 ## Installing 
+
+Before we begin, make sure you have a fresh version of [Node.js](https://nodejs.org/en/) and NPM installed. The current Long Term Support (LTS) release is an ideal starting point. 
+
 To begin, clone this repository to your computer:
 
 ```sh
