@@ -29,7 +29,7 @@ const SettingDialogContainer = () => {
 
     const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
         if (shouldSignIn) {
-            oauthUtils.sigIn();
+            oauthUtils.signIn();
         } else {
             oauthUtils.signOut();
         }

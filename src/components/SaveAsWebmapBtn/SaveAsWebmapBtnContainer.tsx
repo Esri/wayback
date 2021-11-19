@@ -11,7 +11,7 @@ import {
 
 import { AppContext } from '../../contexts/AppContextProvider';
 
-import { setShouldOpenSaveWebMapDialog } from '../../utils/LocalStorage';
+import { saveHashParams, setShouldOpenSaveWebMapDialog } from '../../utils/LocalStorage';
 
 import SaveAsWebmapBtn from './index';
 import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
@@ -43,8 +43,11 @@ const SaveAsWebmapBtnContainer = () => {
             // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
             setShouldOpenSaveWebMapDialog();
 
+            // save hash params in local storage so the current app state can be restored after sigining in
+            saveHashParams();
+
             // sign in first before opening the save as web map dialog because the userSession is required to create web map
-            oauthUtils.sigIn();
+            oauthUtils.signIn();
         } else {
             dispatch(isSaveAsWebmapDialogOpenToggled());
         }

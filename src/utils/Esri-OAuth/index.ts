@@ -109,7 +109,7 @@ export default class OAuthUtils {
         // }
     }
 
-    sigIn() {
+    signIn() {
         this.esriId
             .getCredential(this.oauthInfo.portalUrl + '/sharing')
             .then((res: Credential) => {

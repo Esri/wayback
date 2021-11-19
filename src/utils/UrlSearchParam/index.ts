@@ -1,6 +1,8 @@
+import { decodeQueryString } from '@esri/arcgis-rest-request';
 import { urlFns } from 'helper-toolkit-ts';
 import { updateQueryParam, updateHashParam } from 'helper-toolkit-ts/dist/url';
 import { IURLParamData, IExtentGeomety } from '../../types';
+import { getHashParamsFromLocalStorage } from '../LocalStorage';
 
 type ParamKey =
     | 'ext'
@@ -146,11 +148,27 @@ const saveFrames2ExcludeInURLQueryParam = (
 };
 
 const decodeURLParams = (): IURLParamData => {
+    // use hash params first, the OAuth overwrites the hash params so need to make sure the hash data is not from OAuth
+    let urlData:URLData = Object.keys(urlHashData).length && urlHashData['access_token'] === undefined
+        ? urlHashData 
+        : null;
 
-    const urlData:URLData = Object.keys(urlHashData).length
-        ? urlHashData
-        : urlQueryData;
-    // console.log(urlData)
+    // try to use query params if hash params is not found
+    if(!urlData){
+        urlData = Object.keys(urlQueryData).length 
+            ? urlQueryData
+            : null;
+    }
+
+    // try to use hash params string from local storage, and set urlData to empty Object if hash params string is not found either
+    if(!urlData){
+        const hashParamsFromLocalStorage = getHashParamsFromLocalStorage();
+        console.log('hashParamsFromLocalStorage', hashParamsFromLocalStorage)
+
+        urlData = hashParamsFromLocalStorage
+            ? decodeQueryString(hashParamsFromLocalStorage) as URLData
+            : {} as URLData;
+    }
 
     const localChangesOnly =
         urlData.localChangesOnly === 'true' ? true : false;
