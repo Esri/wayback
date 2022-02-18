@@ -128,6 +128,11 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
 const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
     const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
     let snippetStr = 'Wayback imagery from ';
+
+    if(releaseDates.length === 1){
+        return snippetStr + releaseDates[0]
+    }
+
     snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
     snippetStr += ' and ' + releaseDates[releaseDates.length - 1]; // add last one to str with and in front, so we will have "a, b, c and d"
     return snippetStr;
