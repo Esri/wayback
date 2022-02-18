@@ -58,9 +58,9 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     checkIsRequiredFieldMissing() {
-        const { title, tags } = this.state;
+        const { title } = this.state;
 
-        const isRequiredFieldMissing = !title || !tags ? true : false;
+        const isRequiredFieldMissing = !title ? true : false;
 
         this.setState({
             isRequiredFieldMissing,
@@ -86,10 +86,10 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         this.setState(
             {
                 tags,
-            },
-            () => {
-                this.checkIsRequiredFieldMissing();
             }
+            // () => {
+            //     this.checkIsRequiredFieldMissing();
+            // }
         );
     }
 
@@ -208,11 +208,11 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                     Tags
                     <input
                         type="text"
-                        placeholder="tags are required"
-                        className={tags ? 'input-success' : 'input-error'}
+                        placeholder="tags are optional"
+                        // className={tags ? 'input-success' : 'input-error'}
                         value={tags}
                         onChange={this.setTags}
-                        required={true}
+                        // required={true}
                         disabled={isCreatingWebmap ? true : false}
                     />
                 </label>
