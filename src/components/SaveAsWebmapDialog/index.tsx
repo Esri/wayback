@@ -247,6 +247,18 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         );
     }
 
+    /**
+     * Get the warning message for the user who does not have privilege to publish content
+     */
+    getWarningMessage4OrgUser(){
+        return (
+            <div>
+                <p>You signed in using a account that does not have privilege to create content in your ArcGIS Online organization.</p>
+                <p>Please sign in using a different account.</p>
+            </div>
+        )
+    }
+
     componentDidUpdate(prevPros: IProps) {
         // TODO: this logic is broken after wrapping this component in the container component
         if (
@@ -259,16 +271,27 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { onClose } = this.props;
+        const { onClose, userSession } = this.props;
 
         const { isWebmapReady } = this.state;
 
-        const editDialogContent = !isWebmapReady ? this.getEditDialog() : null;
+        /**
+         * the signed-in user has no privilage to create content if it has the role in the organization equals to 'org_user'
+         */
+        const hasNoPrivilege2CreateContent = userSession?.portal?.user?.role === 'org_user';
 
-        const openWebmapContent = isWebmapReady
+        const editDialogContent = !isWebmapReady && !hasNoPrivilege2CreateContent 
+            ? this.getEditDialog() 
+            : null;
+
+        const openWebmapContent = isWebmapReady && !hasNoPrivilege2CreateContent
             ? this.getOpenWebmapContent()
             : null;
 
+        const warningMessage4OrgUser = hasNoPrivilege2CreateContent
+            ? this.getWarningMessage4OrgUser()
+            : null;
+        
         return (
             <div className="modal-overlay customized-modal is-active">
                 <div
@@ -297,6 +320,8 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                     {editDialogContent}
 
                     {openWebmapContent}
+
+                    {warningMessage4OrgUser}
                 </div>
             </div>
         );
