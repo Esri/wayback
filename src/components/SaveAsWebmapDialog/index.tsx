@@ -15,6 +15,7 @@ interface IProps {
     mapExtent: IExtentGeomety;
 
     onClose: (val: boolean) => void;
+    signInButtonOnClick: ()=>void;
 }
 
 interface IState {
@@ -251,10 +252,13 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
      * Get the warning message for the user who does not have privilege to publish content
      */
     getWarningMessage4OrgUser(){
+
+        const { signInButtonOnClick } = this.props;
+
         return (
             <div>
                 <p>You signed in using a account that does not have privilege to create content in your ArcGIS Online organization.</p>
-                <p>Please sign in using a different account.</p>
+                <p>Please <span className='text-blue cursor-pointer' onClick={signInButtonOnClick}>sign in</span> again using a different account.</p>
             </div>
         )
     }

@@ -22,7 +22,7 @@ import { IExtentGeomety, IWaybackItem } from '../../types';
 const SaveAsWebmapDialogContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession } = useContext(AppContext);
+    const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent: IExtentGeomety = useSelector(mapExtentSelector);
 
@@ -38,9 +38,9 @@ const SaveAsWebmapDialogContainer = () => {
         dispatch(isSaveAsWebmapDialogOpenToggled());
     };
 
-    useEffect(() => {
-        console.log(isOpen);
-    }, [isOpen]);
+    // useEffect(() => {
+    //     console.log(isOpen);
+    // }, [isOpen]);
 
     return isOpen ? (
         <SaveAsWebMapDialog
@@ -49,6 +49,9 @@ const SaveAsWebmapDialogContainer = () => {
             userSession={userSession}
             mapExtent={mapExtent}
             onClose={onCloseHandler}
+            signInButtonOnClick={()=>{
+                oauthUtils.signInUsingDifferentAccount()
+            }}
         />
     ) : null;
 };

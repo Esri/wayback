@@ -70,4 +70,9 @@ export default class OAuthUtils {
         this.esriId.destroyCredentials();
         window.location.reload();
     }
+
+    signInUsingDifferentAccount(){
+        this.esriId.destroyCredentials();
+        this.signIn()
+    }
 }
