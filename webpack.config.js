@@ -12,9 +12,13 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const computerName = os.hostname();
 
-// need to use the *.arcgis.com hostname to test the esri oauth module
-// because the appId used by this app only works under the *.arcgis.com domain
-const hostname = computerName.includes('jzhang') 
+/**
+ * the App ID `WaybackImagery` of this app only works with `arcgis.com` domain, 
+ * therefore I need to run the webpack dev server using the host name below `${computerName}.arcgis.com` instead of `localhost`.
+ * 
+ * You should update `appId` in `./src/app-config.ts` to use your onw App ID.
+ */
+const hostname = computerName.includes('Esri') 
     ? `${computerName}.arcgis.com` 
     : 'localhost';
 
@@ -33,7 +37,8 @@ module.exports = (env, options)=> {
     return {
         devServer: {
             https: true,
-            host: hostname
+            host: hostname,
+            allowedHosts: "all"
         },
         entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
