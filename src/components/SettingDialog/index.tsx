@@ -1,12 +1,6 @@
 import './style.scss';
 import React from 'react';
 import classnames from 'classnames';
-// import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
-// import {
-//     // savePortalUrlInSearchParam,
-//     // getPortalUrlInSearchParam,
-//     getMapExtent,
-// } from '../../utils/UrlSearchParam';
 import {
     saveDefaultExtent,
     getCustomPortalUrl,

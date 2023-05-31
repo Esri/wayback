@@ -1,8 +1,6 @@
 import './style.scss';
 import React, { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContextProvider';
-// import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
-// import config from './config';
 
 interface IProps {
     onClose: () => void;

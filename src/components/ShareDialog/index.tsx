@@ -1,6 +1,5 @@
 import './style.scss';
 import React from 'react';
-// import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import config from './config';
 
 interface IProps {

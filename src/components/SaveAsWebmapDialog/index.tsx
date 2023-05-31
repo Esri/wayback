@@ -1,6 +1,5 @@
 import './style.scss';
 import React from 'react';
-// import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import classnames from 'classnames';
 import config from './config';
 
