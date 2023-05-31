@@ -38,8 +38,8 @@ npm run build
 ```
 
 ## External Libraries:
-- [ArcGIS API for JavaScript (4.20)](https://developers.arcgis.com/javascript/index.html)
-- [D3.js v4](https://d3js.org/)
+- [ArcGIS API for JavaScript (4.26)](https://developers.arcgis.com/javascript/index.html)
+- [D3.js v5](https://d3js.org/)
 
 ## Resources
 - [Wayback - 81 Flavors of World Imagery](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/wayback-81-flavors-of-world-imagery/)
