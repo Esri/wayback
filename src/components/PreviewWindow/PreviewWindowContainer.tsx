@@ -30,17 +30,18 @@ const PreviewWindowContainer: React.FC<Props> = ({ mapView }: Props) => {
         releaseNum4AlternativePreviewWaybackItemSelector
     );
 
-    return !isMobile ? (
+    if (isMobile) {
+        return null;
+    }
+
+    return (
         <PreviewWindow
-            // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
             previewWaybackItem={previewWaybackItem}
             alternativeRNum4RreviewWaybackItem={
                 releaseNum4AlternativePreviewWaybackItem
             }
             mapView={mapView}
         />
-    ) : (
-        <></>
     );
 };
 

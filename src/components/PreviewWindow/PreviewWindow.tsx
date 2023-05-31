@@ -1,49 +1,14 @@
+import './style.scss';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { IWaybackItem } from '../../types';
 // import { geometryFns } from 'helper-toolkit-ts';
-
 import MapView from '@arcgis/core/views/MapView';
 
-import styled from 'styled-components';
-
+// import styled from 'styled-components';
 import { generateFrames } from './utils';
 
 export const PREVIEW_WINDOW_WIDTH = 500;
 export const PREVIEW_WINDOW_HEIGHT = 300;
-
-const PreviewWindowContainer = styled.div`
-    position: absolute;
-    top: calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px);
-    left: calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px);
-    width: ${PREVIEW_WINDOW_WIDTH}px;
-    height: ${PREVIEW_WINDOW_HEIGHT}px;
-    // background: #888;
-    pointer-events: none;
-    z-index: 5;
-    border: solid 1px rgba(240, 240, 240, 0.5);
-    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.6);
-    box-sizing: border-box;
-`;
-
-const PreviewImage = styled.img`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-`;
-
-const PreviewItemInfo = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0.35rem 0.5rem;
-    // background: linear-gradient(to bottom, rgba(0,0,0,.8) , rgba(0,0,0,.4) );
-    background: rgba(44, 103, 172, 0.75);
-    color: #fff;
-    box-sizing: border-box;
-`;
 
 type Props = {
     mapView?: MapView;
@@ -105,10 +70,23 @@ const PreviewWindow: React.FC<Props> = ({
         fetchPreviewWindowImage(alternativeRNum4RreviewWaybackItem);
     }, [previewWaybackItem, alternativeRNum4RreviewWaybackItem]);
 
-    return previewWaybackItem ? (
-        <PreviewWindowContainer ref={containerRef}>
-            <PreviewImage src={imageUrl} />
-            <PreviewItemInfo>
+    if (!previewWaybackItem) {
+        return null;
+    }
+
+    return (
+        <div
+            className="preview-window-container"
+            ref={containerRef}
+            style={{
+                top: `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`,
+                left: `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`,
+                width: `${PREVIEW_WINDOW_WIDTH}px`,
+                height: `${PREVIEW_WINDOW_HEIGHT}px`,
+            }}
+        >
+            <img src={imageUrl} />
+            <div className="preview-item-info">
                 <span
                     style={{
                         fontSize: '.95rem',
@@ -116,9 +94,9 @@ const PreviewWindow: React.FC<Props> = ({
                 >
                     <b>Wayback {previewWaybackItem.releaseDateLabel}</b> preview
                 </span>
-            </PreviewItemInfo>
-        </PreviewWindowContainer>
-    ) : null;
+            </div>
+        </div>
+    );
 };
 
 export default PreviewWindow;

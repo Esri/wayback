@@ -1,5 +1,5 @@
-export { default as AboutThisApp } from './ModalAboutApp/AboutThisAppContainer';
 export { default as AppLayout } from './AppLayout/AppLayout';
+export { default as AboutThisApp } from './ModalAboutApp/AboutThisAppContainer';
 export { default as AppTitleText } from './TitleText';
 export { default as BarChart } from './BarChart/BarChartContainer';
 export { default as Gutter } from './Gutter/GutterContainer';
@@ -23,11 +23,13 @@ export { default as SaveAsWebmapBtn } from './SaveAsWebmapBtn/SaveAsWebmapBtnCon
 export { default as SidebarToggleBtn } from './SidebarToggleBtn/SidebarToogleBtnContainer';
 export { default as SwipeWidgetLayerSelector } from './SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';
 export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
-export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
 export { default as AnimationModeToggleBtn } from './AnimationModeToggleBtn/AnimationModeToogleBtn';
-export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
+
 export { default as AnimationControls } from './AnimationControls/AnimationControls';
 export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
+
+export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
+export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
