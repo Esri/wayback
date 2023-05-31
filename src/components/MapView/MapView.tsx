@@ -31,7 +31,6 @@ const MapViewComponent: React.FC<Props> = ({
     const [mapView, setMapView] = React.useState<MapView>(null);
 
     const initMapView = () => {
-
         const view = new MapView({
             container: mapDivRef.current,
             map: new EsriMap(),
@@ -40,7 +39,7 @@ const MapViewComponent: React.FC<Props> = ({
             }),
         });
 
-        view.ui.remove(['zoom'])
+        view.ui.remove(['zoom']);
 
         setMapView(view);
     };
@@ -50,7 +49,6 @@ const MapViewComponent: React.FC<Props> = ({
     };
 
     const mapViewUpdateEndHandler = async () => {
-
         const center = mapView.center;
 
         if (!center) {
@@ -111,7 +109,6 @@ const MapViewComponent: React.FC<Props> = ({
     );
 };
 
-
 // // calculate current zoom level using current map scale and tile infos from Wayback WMTS layer
 // export const getCurrZoomLevel = (mapView:MapView):number =>{
 
@@ -120,7 +117,7 @@ const MapViewComponent: React.FC<Props> = ({
 //     // get active sublayer from wayback WMTS layer
 //     const { activeLayer } = mapView.map.findLayerById(WAYBACK_LAYER_ID) as WMTSLayer;
 
-//     // A TileLayer has a number of LODs (Levels of Detail). 
+//     // A TileLayer has a number of LODs (Levels of Detail).
 //     // Each LOD corresponds to a map at a given scale or resolution.
 //     const LODS = activeLayer.tileMatrixSets.getItemAt(0).tileInfo.lods as LOD[];
 

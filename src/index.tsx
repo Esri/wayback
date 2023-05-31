@@ -11,14 +11,13 @@ import WaybackManager from './core/WaybackManager';
 import { AppLayout } from './components/';
 
 (async () => {
-
     const root = createRoot(document.getElementById('appRootDiv'));
-    
+
     try {
         const waybackManager = new WaybackManager();
 
         const waybackData2InitApp = await waybackManager.init();
-    
+
         const preloadedState = await getPreloadedState(
             waybackData2InitApp.waybackItems
         );

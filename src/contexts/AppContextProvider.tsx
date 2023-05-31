@@ -40,7 +40,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
             userSession,
             waybackManager,
             isMobile: miscFns.isMobileDevice(),
-            onPremises: config.onPremises
+            onPremises: config.onPremises,
         };
 
         setValue(contextValue);

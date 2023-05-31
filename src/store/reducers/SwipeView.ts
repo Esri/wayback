@@ -8,9 +8,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-import {
-    toggleAnimationMode
-} from './AnimationMode'
+import { toggleAnimationMode } from './AnimationMode';
 
 export type SwipeViewState = {
     isSwipeWidgetOpen: boolean;
@@ -63,15 +61,16 @@ export const {
     swipePositionUpdated,
 } = slice.actions;
 
-export const toggleSwipeWidget = ()=>(dispatch: StoreDispatch, getState: StoreGetState)=>{
-    const { AnimationMode } = getState();
+export const toggleSwipeWidget =
+    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const { AnimationMode } = getState();
 
-    if(AnimationMode.isAnimationModeOn){
-        dispatch(toggleAnimationMode());
-    }
+        if (AnimationMode.isAnimationModeOn) {
+            dispatch(toggleAnimationMode());
+        }
 
-    dispatch(isSwipeWidgetOpenToggled());
-}
+        dispatch(isSwipeWidgetOpenToggled());
+    };
 
 export const isSwipeWidgetOpenSelector = createSelector(
     (state: RootState) => state.SwipeView.isSwipeWidgetOpen,

@@ -121,9 +121,8 @@ class BarChart extends React.PureComponent<IProps, IState> {
             .attr('class', (d: IWaybackItem) => {
                 const classes = [this.BarRectClassName];
 
-                const hasLocalChange = rNum4WaybackItemsWithLocalChanges.includes(
-                    d.releaseNum
-                );
+                const hasLocalChange =
+                    rNum4WaybackItemsWithLocalChanges.includes(d.releaseNum);
 
                 if (shouldOnlyShowItemsWithLocalChange && !hasLocalChange) {
                     classes.push('is-hide');

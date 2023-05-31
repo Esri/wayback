@@ -5,11 +5,12 @@ import React, {
     useEffect,
     useCallback,
 } from 'react';
-import { PREVIEW_WINDOW_HEIGHT, PREVIEW_WINDOW_WIDTH } from '../PreviewWindow/PreviewWindow';
-
 import {
-    PARENT_CONTAINER_LEFT_OFFSET
-} from './AnimationPanel'
+    PREVIEW_WINDOW_HEIGHT,
+    PREVIEW_WINDOW_WIDTH,
+} from '../PreviewWindow/PreviewWindow';
+
+import { PARENT_CONTAINER_LEFT_OFFSET } from './AnimationPanel';
 
 type Position = {
     top: number;
@@ -22,24 +23,31 @@ type Size = {
 };
 
 type Props = {
-    containerRef:  React.RefObject<HTMLDivElement>;
+    containerRef: React.RefObject<HTMLDivElement>;
     children?: React.ReactNode;
     // eithe size or position is updated
-    onChange?: ()=>void;
+    onChange?: () => void;
 };
 
 const CONTAINER_MIN_SIZE = 260;
 
 // const CONTAINER_DEFAULT_SIZE = 300;
 
-const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props) => {
+const Resizable: React.FC<Props> = ({
+    containerRef,
+    onChange,
+    children,
+}: Props) => {
     // const containerRef = useRef<HTMLDivElement>();
 
     // const resizeBtnRef = useRef<HTMLDivElement>();
 
     const [position, setPosition] = useState<Position>();
 
-    const [size, setSize] = useState<Size>({ width: PREVIEW_WINDOW_WIDTH, height: PREVIEW_WINDOW_HEIGHT });
+    const [size, setSize] = useState<Size>({
+        width: PREVIEW_WINDOW_WIDTH,
+        height: PREVIEW_WINDOW_HEIGHT,
+    });
 
     // when the container is being dragged, we keep updating it's position using current mouse position,
     // by default, the top left corner of the container will be snapped to the new position,
@@ -53,12 +61,8 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
     const mouseOnMoveHandler = useCallback((evt: MouseEvent) => {
         const { clientX, clientY } = evt;
 
-        const {
-            offsetLeft,
-            offsetTop,
-            offsetHeight,
-            offsetWidth,
-        } = containerRef.current;
+        const { offsetLeft, offsetTop, offsetHeight, offsetWidth } =
+            containerRef.current;
 
         if (!positionOffset.current) {
             positionOffset.current = {
@@ -120,21 +124,24 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
         onChange();
     }, []);
 
-    const addUpdatePositionHanlder = useCallback((evt:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        window.addEventListener('mousemove', mouseOnMoveHandler);
-    }, []);
+    const addUpdatePositionHanlder = useCallback(
+        (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            window.addEventListener('mousemove', mouseOnMoveHandler);
+        },
+        []
+    );
 
     const removeUpdatePositionHanlder = useCallback(() => {
         positionOffset.current = null;
         window.removeEventListener('mousemove', mouseOnMoveHandler);
     }, []);
 
-    const addResizeHandler = useCallback((evt:any) => {
+    const addResizeHandler = useCallback((evt: any) => {
         evt.stopPropagation();
         window.addEventListener('mousemove', resize);
     }, []);
 
-    const removeResizeHandler = useCallback((evt:any) => {
+    const removeResizeHandler = useCallback((evt: any) => {
         window.removeEventListener('mousemove', resize);
     }, []);
 
@@ -153,8 +160,12 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
             ref={containerRef}
             style={{
                 position: 'absolute',
-                top:  position ? position.top : `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`, //position.top,
-                left: position ? position.left : `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`, //position.left,
+                top: position
+                    ? position.top
+                    : `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`, //position.top,
+                left: position
+                    ? position.left
+                    : `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`, //position.left,
                 height: size.height,
                 width: size.width,
                 zIndex: 5,
@@ -162,7 +173,7 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
                 boxShadow: '0 0 10px 10px rgba(0,0,0,.6)',
                 cursor: 'move',
                 userSelect: 'none',
-                border: '1px solid rgba(255,255,255,.95)'
+                border: '1px solid rgba(255,255,255,.95)',
             }}
             onMouseDown={addUpdatePositionHanlder}
         >

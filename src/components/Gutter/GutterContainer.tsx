@@ -25,9 +25,9 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
     const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
 
-    const settingsBtnDisabled = useMemo(()=>{
-        return isSwipeWidgetOpen || isAnimationModeOn
-    }, [isSwipeWidgetOpen, isAnimationModeOn])
+    const settingsBtnDisabled = useMemo(() => {
+        return isSwipeWidgetOpen || isAnimationModeOn;
+    }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
     const isHide = useSelector(isGutterHideSelector);
 

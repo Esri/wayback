@@ -74,8 +74,8 @@ class MetadataManager {
     }
 
     private getQueryUrl(releaseNum: number, zoom: number) {
-        const metadataLayerUrl = this.waybackconfig[releaseNum]
-            .metadataLayerUrl;
+        const metadataLayerUrl =
+            this.waybackconfig[releaseNum].metadataLayerUrl;
         const layerId = this.getLayerId(zoom);
         return `${metadataLayerUrl}/${layerId}/query`;
     }

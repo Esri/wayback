@@ -17,7 +17,7 @@ import {
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
     isSwipeWidgetOpenSelector,
-    toggleSwipeWidget
+    toggleSwipeWidget,
 } from '../../store/reducers/SwipeView';
 
 import { IWaybackItem } from '../../types';

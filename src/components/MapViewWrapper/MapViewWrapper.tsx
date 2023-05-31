@@ -10,8 +10,8 @@ import { AppContext } from '../../contexts/AppContextProvider';
 import { isGutterHideSelector } from '../../store/reducers/UI';
 
 type Props = {
-    children?:React.ReactNode
-}
+    children?: React.ReactNode;
+};
 
 const MapViewWrapper: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);

@@ -30,15 +30,14 @@ import {
     WaybackLayer,
     AnimationPanel,
     AnimationModeToggleBtn,
-    ZoomWidget
+    ZoomWidget,
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
 
 // import { MobileHide, Spacing } from '../SharedUI';
 
-const AppLayout:React.FC = ()=> {
-
+const AppLayout: React.FC = () => {
     const { onPremises } = React.useContext(AppContext);
 
     return (
@@ -90,7 +89,7 @@ const AppLayout:React.FC = ()=> {
 
             <SettingDialog />
 
-            { !onPremises && <ShareDialog /> }
+            {!onPremises && <ShareDialog />}
 
             <AboutThisApp />
 

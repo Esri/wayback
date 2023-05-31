@@ -18,7 +18,7 @@ const MetadataPopupContainer = () => {
 
     const anchorPoint = useSelector(metadataPopupAnchorSelector);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     return !isAnimationModeOn ? (
         <MetadataPopUp

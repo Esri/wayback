@@ -11,7 +11,7 @@ interface IWaybackConfig {
         metadataLayerItemID: string;
         metadataLayerUrl: string;
         itemReleaseName: string;
-        layerIdentifier?:string;
+        layerIdentifier?: string;
     };
 }
 
@@ -25,7 +25,7 @@ interface IWaybackItem {
     itemURL: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;
-    layerIdentifier?:string;
+    layerIdentifier?: string;
 }
 
 interface IPointGeomety {
@@ -82,7 +82,7 @@ interface IURLParamData {
     isSwipeWidgetOpen?: boolean;
     rNum4SwipeWidgetLeadingLayer?: number;
     rNum4SwipeWidgetTrailingLayer?: number;
-    animationSpeed?:number;
+    animationSpeed?: number;
     rNum4FramesToExclude?: number[];
 }
 

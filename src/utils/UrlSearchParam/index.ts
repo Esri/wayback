@@ -21,20 +21,18 @@ type SaveSwipeWidgetInfoInURLQueryParam = (params: {
 
 type URLData = {
     [key in ParamKey]: string;
-}
+};
 
 const urlQueryData: URLData = urlFns.parseQuery();
 
 const urlHashData: URLData = urlFns.parseHash();
 
-const getMapExtent = (urlData:URLData): IExtentGeomety => {
+const getMapExtent = (urlData: URLData): IExtentGeomety => {
     // const urlQueryData: {
     //     [key in searchParamKey]: string;
     // } = urlFns.parseQuery();
 
-    const ext = urlData.ext
-        ? urlData.ext.split(',').map((d) => +d)
-        : null;
+    const ext = urlData.ext ? urlData.ext.split(',').map((d) => +d) : null;
 
     const mapExtent: IExtentGeomety =
         ext && ext.length === 4
@@ -106,21 +104,22 @@ const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
     });
 };
 
-const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam = ({
-    isOpen,
-    rNum4SwipeWidgetLeadingLayer,
-    rNum4SwipeWidgetTrailingLayer,
-}) => {
-    const key: ParamKey = 'swipeWidget';
-    const value = isOpen
-        ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
-        : '';
+const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
+    ({
+        isOpen,
+        rNum4SwipeWidgetLeadingLayer,
+        rNum4SwipeWidgetTrailingLayer,
+    }) => {
+        const key: ParamKey = 'swipeWidget';
+        const value = isOpen
+            ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
+            : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
-};
+        updateHashParam({
+            key,
+            value,
+        });
+    };
 
 const saveAnimationSpeedInURLQueryParam = (
     isAnimationOn: boolean,
@@ -135,9 +134,7 @@ const saveAnimationSpeedInURLQueryParam = (
     });
 };
 
-const saveFrames2ExcludeInURLQueryParam = (
-    rNums: number[],
-): void => {
+const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
     const key: ParamKey = 'framesToExclude';
     const value = rNums && rNums.length ? rNums.join(',') : '';
 
@@ -149,29 +146,28 @@ const saveFrames2ExcludeInURLQueryParam = (
 
 const decodeURLParams = (): IURLParamData => {
     // use hash params first, the OAuth overwrites the hash params so need to make sure the hash data is not from OAuth
-    let urlData:URLData = Object.keys(urlHashData).length && urlHashData['access_token'] === undefined
-        ? urlHashData 
-        : null;
+    let urlData: URLData =
+        Object.keys(urlHashData).length &&
+        urlHashData['access_token'] === undefined
+            ? urlHashData
+            : null;
 
     // try to use query params if hash params is not found
-    if(!urlData){
-        urlData = Object.keys(urlQueryData).length 
-            ? urlQueryData
-            : null;
+    if (!urlData) {
+        urlData = Object.keys(urlQueryData).length ? urlQueryData : null;
     }
 
     // try to use hash params string from local storage, and set urlData to empty Object if hash params string is not found either
-    if(!urlData){
+    if (!urlData) {
         const hashParamsFromLocalStorage = getHashParamsFromLocalStorage();
-        console.log('hashParamsFromLocalStorage', hashParamsFromLocalStorage)
+        console.log('hashParamsFromLocalStorage', hashParamsFromLocalStorage);
 
         urlData = hashParamsFromLocalStorage
-            ? decodeQueryString(hashParamsFromLocalStorage) as URLData
-            : {} as URLData;
+            ? (decodeQueryString(hashParamsFromLocalStorage) as URLData)
+            : ({} as URLData);
     }
 
-    const localChangesOnly =
-        urlData.localChangesOnly === 'true' ? true : false;
+    const localChangesOnly = urlData.localChangesOnly === 'true' ? true : false;
 
     const selected = urlData.selected
         ? urlData.selected.split(',').map((d) => +d)
@@ -192,8 +188,8 @@ const decodeURLParams = (): IURLParamData => {
         : null;
 
     const rNum4FramesToExclude = urlData.framesToExclude
-        ? urlData.framesToExclude.split(',').map(rNum=>+rNum)
-        : []
+        ? urlData.framesToExclude.split(',').map((rNum) => +rNum)
+        : [];
 
     const urlParams: IURLParamData = {
         mapExtent,
@@ -204,12 +200,12 @@ const decodeURLParams = (): IURLParamData => {
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
         animationSpeed,
-        rNum4FramesToExclude
+        rNum4FramesToExclude,
     };
 
     // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
     // this is the reason why we switched from using Search Params to Hash Params. And we need to remove Search Params from the URL to keep the URL clean and unique.
-    if(Object.keys(urlQueryData).length){
+    if (Object.keys(urlQueryData).length) {
         // remove the query string from URL
         window.history.pushState({}, document.title, window.location.pathname);
     }
@@ -225,5 +221,5 @@ export {
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
     saveSwipeWidgetInfoInURLQueryParam,
     saveAnimationSpeedInURLQueryParam,
-    saveFrames2ExcludeInURLQueryParam
+    saveFrames2ExcludeInURLQueryParam,
 };

@@ -18,7 +18,7 @@ const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
         isReferenceLayerVisibleSelector
     );
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     return (
         <ReferenceLayer

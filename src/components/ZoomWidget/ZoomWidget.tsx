@@ -7,16 +7,13 @@ type Props = {
     mapView?: MapView;
 };
 
-const SearchWidget: React.FC<Props> = ({
-    mapView,
-}: Props) => {
-
-    const containerRef = useRef<HTMLDivElement>()
+const SearchWidget: React.FC<Props> = ({ mapView }: Props) => {
+    const containerRef = useRef<HTMLDivElement>();
 
     const init = () => {
         const zoom = new Zoom({
             view: mapView,
-            container: containerRef.current
+            container: containerRef.current,
         });
     };
 
@@ -27,11 +24,14 @@ const SearchWidget: React.FC<Props> = ({
     }, [mapView]);
 
     return (
-        <div ref={containerRef} style={{
-            position: 'absolute',
-            top: 50,
-            left: 15
-        }}></div>
+        <div
+            ref={containerRef}
+            style={{
+                position: 'absolute',
+                top: 50,
+                left: 15,
+            }}
+        ></div>
     );
 };
 

@@ -49,8 +49,8 @@ const SaveAsWebmapDialogContainer = () => {
             userSession={userSession}
             mapExtent={mapExtent}
             onClose={onCloseHandler}
-            signInButtonOnClick={()=>{
-                oauthUtils.signInUsingDifferentAccount()
+            signInButtonOnClick={() => {
+                oauthUtils.signInUsingDifferentAccount();
             }}
         />
     ) : null;

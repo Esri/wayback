@@ -30,4 +30,4 @@ export { default as AnimationModeToggleBtn } from './AnimationModeToggleBtn/Anim
 export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
 export { default as AnimationControls } from './AnimationControls/AnimationControls';
 export { default as LayerSelector } from './LayerSelector/LayerSelector';
-export { default as ZoomWidget } from './ZoomWidget/ZoomWidget'
+export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';

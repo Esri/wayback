@@ -1,5 +1,5 @@
 import './style.scss';
-import React from 'react'
+import React from 'react';
 
 import classnames from 'classnames';
 
@@ -7,27 +7,23 @@ type Props = {
     isSelected?: boolean;
     showArrowOnLeft?: boolean;
     showBoarderOnLeft?: boolean;
-    children?:React.ReactNode;
+    children?: React.ReactNode;
     disableCursorPointer?: boolean;
-    onClick: ()=>void;
-}
+    onClick: () => void;
+};
 
-const LayerSelector:React.FC<Props> = ({
-    isSelected=false,
-    showArrowOnLeft=false,
-    showBoarderOnLeft=false,
-    disableCursorPointer=false,
+const LayerSelector: React.FC<Props> = ({
+    isSelected = false,
+    showArrowOnLeft = false,
+    showBoarderOnLeft = false,
+    disableCursorPointer = false,
     children,
-    onClick
-}:Props) => {
-
-    const classNames = classnames(
-        'layer-selector',
-        {
-            'is-selected': isSelected,
-            'is-arrow-on-left': showArrowOnLeft,
-        }
-    );
+    onClick,
+}: Props) => {
+    const classNames = classnames('layer-selector', {
+        'is-selected': isSelected,
+        'is-arrow-on-left': showArrowOnLeft,
+    });
 
     return (
         <div
@@ -43,7 +39,7 @@ const LayerSelector:React.FC<Props> = ({
                 backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
                 color: isSelected ? '#fff' : 'unset',
                 borderLeft:
-                    !showArrowOnLeft && isSelected || showBoarderOnLeft
+                    (!showArrowOnLeft && isSelected) || showBoarderOnLeft
                         ? ' 4px solid #fff'
                         : '4px solid transparent',
                 borderRight:
@@ -55,9 +51,9 @@ const LayerSelector:React.FC<Props> = ({
             }}
             onClick={onClick}
         >
-            { children }
+            {children}
         </div>
     );
-}
+};
 
-export default LayerSelector
+export default LayerSelector;

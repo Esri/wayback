@@ -15,7 +15,7 @@ interface IProps {
     mapExtent: IExtentGeomety;
 
     onClose: (val: boolean) => void;
-    signInButtonOnClick: ()=>void;
+    signInButtonOnClick: () => void;
 }
 
 interface IState {
@@ -251,16 +251,27 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     /**
      * Get the warning message for the user who does not have privilege to publish content
      */
-    getWarningMessage4OrgUser(){
-
+    getWarningMessage4OrgUser() {
         const { signInButtonOnClick } = this.props;
 
         return (
             <div>
-                <p>You signed in using a account that does not have privilege to create content in your ArcGIS Online organization.</p>
-                <p>Please <span className='text-blue cursor-pointer' onClick={signInButtonOnClick}>sign in</span> again using a different account.</p>
+                <p>
+                    You signed in using a account that does not have privilege
+                    to create content in your ArcGIS Online organization.
+                </p>
+                <p>
+                    Please{' '}
+                    <span
+                        className="text-blue cursor-pointer"
+                        onClick={signInButtonOnClick}
+                    >
+                        sign in
+                    </span>{' '}
+                    again using a different account.
+                </p>
             </div>
-        )
+        );
     }
 
     componentDidUpdate(prevPros: IProps) {
@@ -282,20 +293,23 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         /**
          * the signed-in user has no privilage to create content if it has the role in the organization equals to 'org_user'
          */
-        const hasNoPrivilege2CreateContent = userSession?.portal?.user?.role === 'org_user';
+        const hasNoPrivilege2CreateContent =
+            userSession?.portal?.user?.role === 'org_user';
 
-        const editDialogContent = !isWebmapReady && !hasNoPrivilege2CreateContent 
-            ? this.getEditDialog() 
-            : null;
+        const editDialogContent =
+            !isWebmapReady && !hasNoPrivilege2CreateContent
+                ? this.getEditDialog()
+                : null;
 
-        const openWebmapContent = isWebmapReady && !hasNoPrivilege2CreateContent
-            ? this.getOpenWebmapContent()
-            : null;
+        const openWebmapContent =
+            isWebmapReady && !hasNoPrivilege2CreateContent
+                ? this.getOpenWebmapContent()
+                : null;
 
         const warningMessage4OrgUser = hasNoPrivilege2CreateContent
             ? this.getWarningMessage4OrgUser()
             : null;
-        
+
         return (
             <div className="modal-overlay customized-modal is-active">
                 <div

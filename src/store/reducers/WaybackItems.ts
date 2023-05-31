@@ -117,77 +117,78 @@ export const {
 
 let delay4SetPreviewWaybackItem: NodeJS.Timeout;
 
-export const setActiveWaybackItem = (releaseNumber: number) => (
-    dispatch: StoreDispatch
-    // getState: StoreGetState
-) => {
-    batch(() => {
-        dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNumber));
-        dispatch(releaseNum4LeadingLayerUpdated(releaseNumber));
-        dispatch(metadataQueryResultUpdated(null));
-    });
-};
-
-export const toggleSelectWaybackItem = (releaseNumber: number) => (
-    dispatch: StoreDispatch,
-    getState: StoreGetState
-) => {
-    const { releaseNum4SelectedItems } = getState().WaybackItems;
-
-    const isSelected = releaseNum4SelectedItems.indexOf(releaseNumber) > -1;
-
-    isSelected
-        ? dispatch(releaseNum4SelectedItemsRemoved(releaseNumber))
-        : dispatch(releaseNum4SelectedItemsAdded(releaseNumber));
-};
-
-export const setPreviewWaybackItem = (
-    releaseNumber?: number,
-    shouldShowPreviewItemTitle = false
-) => (dispatch: StoreDispatch, getState: StoreGetState) => {
-    clearTimeout(delay4SetPreviewWaybackItem);
-
-    delay4SetPreviewWaybackItem = global.setTimeout(() => {
-        const {
-            allReleaseNumbers,
-            releaseNum4ItemsWithLocalChanges,
-        } = getState().WaybackItems;
-
-        // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead,
-        // therefore we need to find the alternative release number to make sure we have the tile image to display in the preview window for each release
-        let releaseNum4AlternativePreviewWaybackItem: number = releaseNumber;
-
-        if (
-            releaseNumber &&
-            releaseNum4ItemsWithLocalChanges.indexOf(releaseNumber) === -1
-        ) {
-            // getting a list of release numbers ordered by release dates (desc) that only includes release has changes for the given area and the input release number,
-            // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
-            const rNums = allReleaseNumbers.filter((rNum) => {
-                const hasLocalChange =
-                    releaseNum4ItemsWithLocalChanges.indexOf(rNum) > -1;
-                return hasLocalChange || rNum === releaseNumber;
-            });
-
-            const indexOfInputRNum = rNums.indexOf(releaseNumber);
-
-            releaseNum4AlternativePreviewWaybackItem =
-                rNums[indexOfInputRNum + 1];
-        }
-
+export const setActiveWaybackItem =
+    (releaseNumber: number) =>
+    (
+        dispatch: StoreDispatch
+        // getState: StoreGetState
+    ) => {
         batch(() => {
-            dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
-            dispatch(
-                releaseNum4AlternativePreviewWaybackItemUpdated(
-                    releaseNum4AlternativePreviewWaybackItem
-                )
-            );
-            dispatch(
-                shouldShowPreviewItemTitleToggled(shouldShowPreviewItemTitle)
-            );
+            dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNumber));
+            dispatch(releaseNum4LeadingLayerUpdated(releaseNumber));
+            dispatch(metadataQueryResultUpdated(null));
         });
-    }, 200);
-};
+    };
+
+export const toggleSelectWaybackItem =
+    (releaseNumber: number) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const { releaseNum4SelectedItems } = getState().WaybackItems;
+
+        const isSelected = releaseNum4SelectedItems.indexOf(releaseNumber) > -1;
+
+        isSelected
+            ? dispatch(releaseNum4SelectedItemsRemoved(releaseNumber))
+            : dispatch(releaseNum4SelectedItemsAdded(releaseNumber));
+    };
+
+export const setPreviewWaybackItem =
+    (releaseNumber?: number, shouldShowPreviewItemTitle = false) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        clearTimeout(delay4SetPreviewWaybackItem);
+
+        delay4SetPreviewWaybackItem = global.setTimeout(() => {
+            const { allReleaseNumbers, releaseNum4ItemsWithLocalChanges } =
+                getState().WaybackItems;
+
+            // for wayback item, if that release doesn't have any changes for the given area, then it will use the tile from previous release instead,
+            // therefore we need to find the alternative release number to make sure we have the tile image to display in the preview window for each release
+            let releaseNum4AlternativePreviewWaybackItem: number =
+                releaseNumber;
+
+            if (
+                releaseNumber &&
+                releaseNum4ItemsWithLocalChanges.indexOf(releaseNumber) === -1
+            ) {
+                // getting a list of release numbers ordered by release dates (desc) that only includes release has changes for the given area and the input release number,
+                // in this case, we are sure the release number next to the input release number in this list must be the item does come with changes, or a legit tile image
+                const rNums = allReleaseNumbers.filter((rNum) => {
+                    const hasLocalChange =
+                        releaseNum4ItemsWithLocalChanges.indexOf(rNum) > -1;
+                    return hasLocalChange || rNum === releaseNumber;
+                });
+
+                const indexOfInputRNum = rNums.indexOf(releaseNumber);
+
+                releaseNum4AlternativePreviewWaybackItem =
+                    rNums[indexOfInputRNum + 1];
+            }
+
+            batch(() => {
+                dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
+                dispatch(
+                    releaseNum4AlternativePreviewWaybackItemUpdated(
+                        releaseNum4AlternativePreviewWaybackItem
+                    )
+                );
+                dispatch(
+                    shouldShowPreviewItemTitleToggled(
+                        shouldShowPreviewItemTitle
+                    )
+                );
+            });
+        }, 200);
+    };
 
 export const allWaybackItemsSelector = createSelector(
     (state: RootState) => state.WaybackItems.byReleaseNumber,

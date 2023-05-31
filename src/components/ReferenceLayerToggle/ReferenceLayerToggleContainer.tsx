@@ -20,21 +20,16 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     return (
         <MobileHide>
-            {
-                !isAnimationModeOn 
-                    ? (
-                        <ReferenceLayerToggle
-                            isActive={isReferenceLayerVisible}
-                            onClick={toggleReferenceLayer}
-                        />
-                    )
-                    : null
-            }
-            
+            {!isAnimationModeOn ? (
+                <ReferenceLayerToggle
+                    isActive={isReferenceLayerVisible}
+                    onClick={toggleReferenceLayer}
+                />
+            ) : null}
         </MobileHide>
     );
 };

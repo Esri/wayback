@@ -3,9 +3,7 @@ import React from 'react';
 import { IWaybackItem } from '../../types';
 import classnames from 'classnames';
 
-import {
-    LayerSelector
-} from '../'
+import { LayerSelector } from '../';
 
 export const SwipeWidgetLayerSelectorWidth = 210;
 
@@ -88,7 +86,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                     >
                         {releaseDateLabel}
                     </LayerSelector>
-                )
+                );
             });
 
         return (

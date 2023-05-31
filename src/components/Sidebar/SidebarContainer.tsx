@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
 
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode'
+import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
 
 import {
     isGutterHideSelector,
@@ -21,14 +21,14 @@ import {
     Title4ActiveItem,
     ShowLocalChangesCheckboxToggle,
     ListView,
-    AnimationControls
-} from '../'
+    AnimationControls,
+} from '../';
 
 import { MobileHide, Spacing } from '../SharedUI';
 
 type Props = {
-    children?:React.ReactNode
-}
+    children?: React.ReactNode;
+};
 
 const SidebarContainer: React.FC<Props> = ({ children }) => {
     const { isMobile } = useContext(AppContext);
@@ -41,9 +41,9 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
     const isGutterHide = useSelector(isGutterHideSelector);
 
-    const getContent = ()=>{
-        if(isAnimationModeOn){
-            return <AnimationControls />
+    const getContent = () => {
+        if (isAnimationModeOn) {
+            return <AnimationControls />;
         }
 
         return (
@@ -59,7 +59,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
                 <ListView />
             </>
         );
-    }
+    };
 
     return (
         <Sidebar
@@ -73,7 +73,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
                 <AppTitleText />
             </MobileHide>
 
-            { getContent() }
+            {getContent()}
         </Sidebar>
     );
 };

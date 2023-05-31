@@ -19,11 +19,15 @@ import {
     getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
 } from '../utils/LocalStorage';
-import { AnimationModeState, DEFAULT_ANIMATION_SPEED_IN_SECONDS, initialAnimationModeState } from './reducers/AnimationMode';
+import {
+    AnimationModeState,
+    DEFAULT_ANIMATION_SPEED_IN_SECONDS,
+    initialAnimationModeState,
+} from './reducers/AnimationMode';
 
-import {miscFns} from 'helper-toolkit-ts';
+import { miscFns } from 'helper-toolkit-ts';
 
-const isMobile = miscFns.isMobileDevice()
+const isMobile = miscFns.isMobileDevice();
 
 const urlParams: IURLParamData = decodeURLParams();
 
@@ -108,18 +112,24 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     return state;
 };
 
-const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationModeState => {
-    let { animationSpeed, rNum4FramesToExclude } = urlParams;
+const getPreloadedState4AnimationMode = (
+    urlParams: IURLParamData
+): AnimationModeState => {
+    const { animationSpeed, rNum4FramesToExclude } = urlParams;
 
-    if(animationSpeed === null || typeof animationSpeed !== 'number' || isMobile){
-        return initialAnimationModeState
+    if (
+        animationSpeed === null ||
+        typeof animationSpeed !== 'number' ||
+        isMobile
+    ) {
+        return initialAnimationModeState;
     }
 
     const state: AnimationModeState = {
         ...initialAnimationModeState,
         isAnimationModeOn: true,
         animationSpeed,
-        rNum2Exclude: rNum4FramesToExclude
+        rNum2Exclude: rNum4FramesToExclude,
     };
 
     return state;
@@ -139,14 +149,15 @@ const getPreloadedState = async (
     );
     const mapState: MapState = getPreloadedState4Map(urlParams);
 
-    const animationModeState:AnimationModeState = getPreloadedState4AnimationMode(urlParams)
+    const animationModeState: AnimationModeState =
+        getPreloadedState4AnimationMode(urlParams);
 
     const preloadedState = {
         UI: uiState,
         WaybackItems: waybackItemsState,
         SwipeView: swipeViewState,
         Map: mapState,
-        AnimationMode: animationModeState
+        AnimationMode: animationModeState,
     } as PartialRootState;
 
     return preloadedState;

@@ -10,5 +10,5 @@ export default combineReducers({
     Map,
     SwipeView,
     WaybackItems,
-    AnimationMode
+    AnimationMode,
 });

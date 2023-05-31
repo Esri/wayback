@@ -48,7 +48,7 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
         const { mapView } = this.props;
 
         const center = mapView.center;
-        const level = mapView.zoom // getCurrZoomLevel(mapView)
+        const level = mapView.zoom; // getCurrZoomLevel(mapView)
 
         // get the tile row, col num from the map center point
         const tileRow = geometryFns.lat2tile(center.latitude, level);
@@ -68,10 +68,8 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
     }
 
     getImageUrl({ level, row, column }: IParamGetImageUrl) {
-        const {
-            previewWaybackItem,
-            alternativeRNum4RreviewWaybackItem,
-        } = this.props;
+        const { previewWaybackItem, alternativeRNum4RreviewWaybackItem } =
+            this.props;
 
         const previewWindowImageUrl = previewWaybackItem.itemURL
             .replace(
@@ -154,7 +152,9 @@ class PreviewWindow extends React.PureComponent<IProps, IState> {
                 top,
                 left,
             });
-        } catch (err) {}
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     componentDidUpdate(prevProps: IProps) {

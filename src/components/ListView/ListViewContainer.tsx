@@ -24,8 +24,8 @@ import { AppContext } from '../../contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
 
 type Props = {
-    children?:React.ReactNode
-}
+    children?: React.ReactNode;
+};
 
 const ListViewWrapper: React.FC<Props> = ({ children }) => {
     return (

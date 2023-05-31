@@ -129,8 +129,8 @@ const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
     const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
     let snippetStr = 'Wayback imagery from ';
 
-    if(releaseDates.length === 1){
-        return snippetStr + releaseDates[0]
+    if (releaseDates.length === 1) {
+        return snippetStr + releaseDates[0];
     }
 
     snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"

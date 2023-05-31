@@ -11,7 +11,10 @@ import {
 
 import { AppContext } from '../../contexts/AppContextProvider';
 
-import { saveHashParams, setShouldOpenSaveWebMapDialog } from '../../utils/LocalStorage';
+import {
+    saveHashParams,
+    setShouldOpenSaveWebMapDialog,
+} from '../../utils/LocalStorage';
 
 import SaveAsWebmapBtn from './index';
 import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
@@ -30,9 +33,9 @@ const SaveAsWebmapBtnContainer = () => {
     const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
     const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
 
-    const isDisabled = useMemo(()=>{
-        return isSwipeWidgetOpen || isAnimationModeOn
-    }, [isSwipeWidgetOpen, isAnimationModeOn])
+    const isDisabled = useMemo(() => {
+        return isSwipeWidgetOpen || isAnimationModeOn;
+    }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
     const clearAllBtnOnClick = () => {
         dispatch(releaseNum4SelectedItemsCleaned());

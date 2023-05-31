@@ -237,16 +237,14 @@ class WaybackChangeDetector {
 
             let dataUri4PrevRelease = '';
 
-            for(let { dataUri, rNum } of imageDataUriResults){
-
-                if(dataUri === dataUri4PrevRelease){
+            for (const { dataUri, rNum } of imageDataUriResults) {
+                if (dataUri === dataUri4PrevRelease) {
                     continue;
                 }
 
                 finalResults.push(rNum);
                 dataUri4PrevRelease = dataUri;
             }
-
         } catch (err) {
             console.error('failed to fetch all image data uri', err);
         }
@@ -258,10 +256,7 @@ class WaybackChangeDetector {
         imageUrl: string,
         rNum: number
     ): Promise<IResponseGetImageBlob> {
-
-        const samplePoints = [
-            512, 1000, 2500, 5000, 7500, 10000, 12500, 15000
-        ]
+        const samplePoints = [512, 1000, 2500, 5000, 7500, 10000, 12500, 15000];
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -280,11 +275,11 @@ class WaybackChangeDetector {
                     const base64 = window.btoa(data);
                     // console.log(base64.length)
 
-                    let dataUri = '' //base64.substr(512, 5000);
+                    let dataUri = ''; //base64.substr(512, 5000);
                     // console.log(tileImageDataUri);
 
-                    for(let point of samplePoints){
-                        dataUri += base64.substr(point, 500)
+                    for (const point of samplePoints) {
+                        dataUri += base64.substr(point, 500);
                     }
 
                     resolve({

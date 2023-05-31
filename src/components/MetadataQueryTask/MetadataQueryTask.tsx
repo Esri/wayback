@@ -67,14 +67,13 @@ const MetadataQueryLayer: React.FC<Props> = ({
         try {
             anchorPointRef.current = mapPoint;
 
-            const { releaseNum, releaseDateLabel } = getTargetWaybackItem(
-                mapPoint
-            );
+            const { releaseNum, releaseDateLabel } =
+                getTargetWaybackItem(mapPoint);
 
             const res = await waybackManager.getMetadata({
                 releaseNum,
                 pointGeometry: mapPoint.toJSON(),
-                zoom: mapView.zoom // getCurrZoomLevel(mapView)
+                zoom: mapView.zoom, // getCurrZoomLevel(mapView)
             });
 
             const metadata: IWaybackMetadataQueryResult = res

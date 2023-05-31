@@ -45,8 +45,7 @@ const SearchWidget: React.FC<Props> = ({
     mapView,
     searchCompletedHandler,
 }: Props) => {
-
-    const containerRef = useRef<HTMLDivElement>()
+    const containerRef = useRef<HTMLDivElement>();
 
     const init = () => {
         // if (!position && !containerId) {
@@ -130,11 +129,14 @@ const SearchWidget: React.FC<Props> = ({
     }, [mapView]);
 
     return (
-        <div ref={containerRef} style={{
-            position: 'absolute',
-            top: 15,
-            left: 15
-        }}></div>
+        <div
+            ref={containerRef}
+            style={{
+                position: 'absolute',
+                top: 15,
+                left: 15,
+            }}
+        ></div>
     );
 };
 

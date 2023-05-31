@@ -4,7 +4,7 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 
 import {
     isSwipeWidgetOpenSelector,
-    toggleSwipeWidget
+    toggleSwipeWidget,
 } from '../../store/reducers/SwipeView';
 
 import { releaseNum4SelectedItemsSelector } from '../../store/reducers/WaybackItems';

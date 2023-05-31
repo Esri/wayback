@@ -12,7 +12,7 @@ import {
 } from '../../store/reducers/WaybackItems';
 
 // import TilePreviewWindow from './index';
-import PreviewWindow from './PreviewWindow'
+import PreviewWindow from './PreviewWindow';
 
 import MapView from '@arcgis/core/views/MapView';
 import { AppContext } from '../../contexts/AppContextProvider';

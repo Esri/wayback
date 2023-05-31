@@ -52,7 +52,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             portalUrl: CustomUrlFromLocalStorage,
             shouldUseCustomPortalUrl: CustomUrlFromLocalStorage ? true : false,
             shouldSaveAsDefaultExtent: false,
-            shouldShowLocalChangesByDefault: getShouldShowUpdatesWithLocalChanges(),
+            shouldShowLocalChangesByDefault:
+                getShouldShowUpdatesWithLocalChanges(),
             saveBtnLable: 'Save',
         };
 
@@ -88,11 +89,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             shouldShowLocalChangesByDefault,
         } = this.state;
 
-        const {
-            shouldShowLocalChangesByDefaultOnClick,
-            onClose,
-            mapExtent,
-        } = this.props;
+        const { shouldShowLocalChangesByDefaultOnClick, onClose, mapExtent } =
+            this.props;
 
         if (shouldSaveAsDefaultExtent) {
             // const mapExt = getMapExtent();

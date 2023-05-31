@@ -5,7 +5,7 @@ const KEYS = {
     showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges',
     shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog',
     customPortalUrl: 'WaybackAppCustomPortalUrl',
-    hashParams: 'WaybackAppHashParam'
+    hashParams: 'WaybackAppHashParam',
 };
 
 const setItem = (key?: string, value = '') => {
@@ -69,25 +69,25 @@ const getShouldOpenSaveWebMapDialog = () => {
     return val === 'true' ? true : false;
 };
 
-const saveHashParams = ()=>{
+const saveHashParams = () => {
     const hash = location.hash.toString();
 
-    if(!hash){
+    if (!hash) {
         return;
     }
 
     setItem(KEYS.hashParams, hash.slice(1));
-}
+};
 
-const getHashParamsFromLocalStorage = ()=>{
+const getHashParamsFromLocalStorage = () => {
     const val = getItem(KEYS.hashParams);
 
-    if(val) {
+    if (val) {
         removeItem(KEYS.hashParams);
     }
 
     return val;
-}
+};
 
 export {
     saveDefaultExtent,
@@ -99,5 +99,5 @@ export {
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
     saveHashParams,
-    getHashParamsFromLocalStorage
+    getHashParamsFromLocalStorage,
 };
