@@ -120,7 +120,7 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
         onChange();
     }, []);
 
-    const addUpdatePositionHanlder = useCallback((evt) => {
+    const addUpdatePositionHanlder = useCallback((evt:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         window.addEventListener('mousemove', mouseOnMoveHandler);
     }, []);
 
@@ -129,12 +129,12 @@ const Resizable: React.FC<Props> = ({ containerRef, onChange, children }: Props)
         window.removeEventListener('mousemove', mouseOnMoveHandler);
     }, []);
 
-    const addResizeHandler = useCallback((evt) => {
+    const addResizeHandler = useCallback((evt:any) => {
         evt.stopPropagation();
         window.addEventListener('mousemove', resize);
     }, []);
 
-    const removeResizeHandler = useCallback((evt) => {
+    const removeResizeHandler = useCallback((evt:any) => {
         window.removeEventListener('mousemove', resize);
     }, []);
 

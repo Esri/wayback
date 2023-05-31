@@ -28,7 +28,6 @@ import {
     TilePreviewWindow,
     // Title4ActiveItem,
     WaybackLayer,
-    HeadTags,
     AnimationPanel,
     AnimationModeToggleBtn,
     ZoomWidget
@@ -44,8 +43,6 @@ const AppLayout:React.FC = ()=> {
 
     return (
         <>
-            <HeadTags />
-
             <MobileHeader />
 
             <Gutter>
@@ -56,23 +53,7 @@ const AppLayout:React.FC = ()=> {
                 <AnimationModeToggleBtn />
             </Gutter>
 
-            <Sidebar>
-                {/* <SidebarToggleBtn />
-
-                <Spacing paddingLeft="1rem" paddingRight="1rem">
-                    <MobileHide>
-                        <AppTitleText />
-                    </MobileHide>
-
-                    <BarChart />
-
-                    <Title4ActiveItem />
-
-                    <ShowLocalChangesCheckboxToggle />
-                </Spacing>
-
-                <ListView /> */}
-            </Sidebar>
+            <Sidebar></Sidebar>
 
             <MapViewWrapper>
                 <SwipeWidgetLayerSelector targetLayer="leading" />

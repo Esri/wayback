@@ -14,6 +14,8 @@ interface IProps {
     aboutButtonOnClick: () => void;
     shareButtonOnClick: () => void;
     settingButtonOnClick: () => void;
+
+    children?:React.ReactNode;
 }
 
 class Gutter extends React.PureComponent<IProps> {

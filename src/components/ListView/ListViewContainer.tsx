@@ -23,7 +23,11 @@ import { IWaybackItem } from '../../types';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
 
-const ListViewWrapper: React.FC = ({ children }) => {
+type Props = {
+    children?:React.ReactNode
+}
+
+const ListViewWrapper: React.FC<Props> = ({ children }) => {
     return (
         <div
             className="leader-half fancy-scrollbar"

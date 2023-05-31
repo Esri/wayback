@@ -4,11 +4,10 @@ const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const computerName = os.hostname();
 
@@ -124,12 +123,6 @@ module.exports = (env, options)=> {
                     }
                 ],
             }),
-            // new ArcGISPlugin({ 
-            //     locales: ['en'],
-            //     features: {
-            //         "3d": false
-            //     }
-            // }),
             new HtmlWebPackPlugin({
                 // inject: false,
                 // hash: true,
@@ -193,7 +186,7 @@ module.exports = (env, options)=> {
                         }
                     }
                 }), 
-                new OptimizeCSSAssets({})
+                new CssMinimizerPlugin()
             ]
         }
     }

@@ -7,7 +7,7 @@ type Props = {
     isSelected?: boolean;
     showArrowOnLeft?: boolean;
     showBoarderOnLeft?: boolean;
-    children:React.ReactNode;
+    children?:React.ReactNode;
     disableCursorPointer?: boolean;
     onClick: ()=>void;
 }

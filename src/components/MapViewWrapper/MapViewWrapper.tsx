@@ -9,7 +9,11 @@ import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '../../constants/UI';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { isGutterHideSelector } from '../../store/reducers/UI';
 
-const MapViewWrapper: React.FC = ({ children }) => {
+type Props = {
+    children?:React.ReactNode
+}
+
+const MapViewWrapper: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
     const isGutterHide = useSelector(isGutterHideSelector);

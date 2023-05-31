@@ -26,7 +26,11 @@ import {
 
 import { MobileHide, Spacing } from '../SharedUI';
 
-const SidebarContainer: React.FC = ({ children }) => {
+type Props = {
+    children?:React.ReactNode
+}
+
+const SidebarContainer: React.FC<Props> = ({ children }) => {
     const { isMobile } = useContext(AppContext);
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
