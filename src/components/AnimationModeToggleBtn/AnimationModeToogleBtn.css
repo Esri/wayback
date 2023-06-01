@@ -2,7 +2,6 @@
     position: relative;
     width: 100%;
     height: 45px;
-    // margin-top: 1rem;
     cursor: pointer;
     background: url('../../static/icons/AnimateOff.png') center center no-repeat;
 }

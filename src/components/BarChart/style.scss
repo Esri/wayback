@@ -1,8 +1,6 @@
-@import '../../style/colors.scss';
-
 .bar-chart-container {
     .bar {
-        fill: $color-inactive-item;
+        fill: var(--color-inactive-item);
     }
     
     .bar:hover {
@@ -10,16 +8,16 @@
     }
     
     .bar.is-highlighted  {
-        fill: $color-highlight-item;
+        fill: var(--color-highlight-item);
     }
     
     .bar.is-highlighted:hover {
-        fill: $color-hover-item;
+        fill: var(--color-hover-item);
     }
     
     .bar.is-active,
     .bar.is-highlighted.is-active {
-        fill: $color-active-item;
+        fill: var(--color-active-item);
     }
 
     .bar.is-hide {
@@ -30,16 +28,16 @@
     
         path {
             /* display: none; */
-            stroke: $barchart-axis-color;
+            stroke: var(--barchart-axis-color);
         }
     
         .tick {
             line {
-                stroke: $barchart-axis-color;
+                stroke: var(--barchart-axis-color);
             }
     
             text {
-                fill: $controls-text-color;
+                fill: var(--controls-text-color);
             }
         }
     }

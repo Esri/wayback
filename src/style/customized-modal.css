@@ -1,0 +1,8 @@
+.customized-modal {
+    background-color: rgba(26,61,96, 0.9);
+}
+
+.customized-modal .modal-content {
+    background: #000;
+    color: var(--default-text-color);
+}

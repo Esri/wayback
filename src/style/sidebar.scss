@@ -1,13 +1,10 @@
-@import './config.scss';
-@import './colors.scss';
-
 .sidebar {
     position: absolute;
     top: 0;
-    left: $gutter-width;
-    width: $sidebar-width;
+    left: var(--gutter-width);
+    width: var(--sidebar-width);
     height: 100%;
-    background-color: $default-ui-bgColor;
+    background-color: var(--default-ui-bgColor);
     // overflow: hidden;
     box-sizing: border-box;
     z-index: 1;
@@ -52,9 +49,9 @@
         top: auto;
         bottom: 0;
         right: 0;
-        left: $gutter-width;
+        left: var(--gutter-width);
         width: calc(100% - 50px);
-        max-height: $sidebar-height-mobile;
+        max-height: var(--sidebar-height-mobile);
 
         .sidebar-toggle-btn {
             display: block;

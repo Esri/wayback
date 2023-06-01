@@ -1,4 +1,4 @@
-import './style.scss';
+import './AnimationModeToogleBtn.css';
 import React, { useCallback, useContext } from 'react';
 
 import classnames from 'classnames';

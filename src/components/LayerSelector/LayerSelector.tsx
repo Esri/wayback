@@ -1,4 +1,4 @@
-import './style.scss';
+import './LayerSelector.css';
 import React from 'react';
 
 import classnames from 'classnames';

@@ -1,4 +1,4 @@
-import './style.scss';
+import './MobileHeader.css';
 import React from 'react';
 import AppTitleText from '../TitleText';
 

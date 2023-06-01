@@ -1,4 +1,4 @@
-import './style.scss';
+import './SwipeWidgetLayerSelector.css';
 import React from 'react';
 import { IWaybackItem } from '../../types';
 import classnames from 'classnames';

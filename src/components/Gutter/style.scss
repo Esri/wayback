@@ -1,23 +1,19 @@
 
-@import '../../style/config.scss';
-@import '../../style/colors.scss';
-
 .gutter-container {
 
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    width: $gutter-width;
-    background-color: $gutter-bgColor;
+    width: var(--gutter-width);
+    background-color: var(--gutter-bgColor);
     padding: 0;
     z-index: 5;
     box-sizing: border-box;
 
-
     .gutter-nav-btn {
         position: relative;
-        width: $gutter-width;
+        width: var(--gutter-width);
         cursor: pointer;
 
         display: flex;

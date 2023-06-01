@@ -1,10 +1,9 @@
 @import './calcite-web/css/calcite-web.min.css';
-@import './colors.scss';
-@import './config.scss';
+@import './variables.css';
+@import './customized-modal.css';
+@import './customized-tooltip.css';
+@import './fancy-scrollbar.css';
 @import './sidebar.scss';
-@import './customized-modal.scss';
-@import './customized-tooltip.scss';
-@import './fancy-scrollbar.scss';
 
 html, body {
     padding: 0;
@@ -12,10 +11,10 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    color: $default-text-color
+    color: var(--default-text-color)
 }
 
-#appRootDiv, .app-content {
+#appRootDiv {
     position: relative;
     width: 100%;
     height: 100%;
@@ -33,12 +32,6 @@ video, img {
     cursor: pointer;
 }
 
-// *,*:focus,*:hover{
-//     outline:none;
-// }
-
-#appRootDiv {
-    .esri-swipe--horizontal .esri-swipe__container {
-        outline: 0;
-    }
+#appRootDiv .esri-swipe--horizontal .esri-swipe__container {
+    outline: 0;
 }

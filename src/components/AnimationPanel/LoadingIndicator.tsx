@@ -1,4 +1,3 @@
-// import './LoadingIndicator.scss'
 import React from 'react';
 
 import LoadingSpinner from './LoadingSpinner';
