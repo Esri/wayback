@@ -22,10 +22,10 @@
     flex-basis: 100px;
 }
 
-.list-view-container .list-card .open-item-btn {
+/* .list-view-container .list-card .open-item-btn {
     font-size: 1rem;
-}
-
+} */
+/* 
 .list-view-container .list-card .add-to-webmap-btn {
     width: var(--list-card-height);
     height: var(--list-card-height);
@@ -35,7 +35,7 @@
 .list-view-container .list-card [class^="icon-ui-"]:before, 
 .list-view-container .list-card [class*=" icon-ui-"]:before {
     padding-right: 0;
-}
+} */
 
 .list-view-container .list-card.is-active {
     position: relative;
@@ -43,8 +43,9 @@
     border-left: solid 4px var(--color-active-item);
 }
 
-.list-view-container .list-card.is-active a, 
-.list-view-container .list-card.is-active .open-item-btn {
+.list-view-container .list-card.is-active a
+/* .list-view-container .list-card.is-active .open-item-btn  */
+{
     text-decoration: none;
     color: #fff;
 }
@@ -68,32 +69,32 @@
     margin-top: -12px;
 }
 
-.list-view-container .list-card.is-selected .add-to-webmap-btn {
+/* .list-view-container .list-card.is-selected .add-to-webmap-btn {
     background: rgba(255,255,255,.2) url('../../static/icons/QueueOn.png') center no-repeat;
-}
+} */
 
 .list-view-container .list-card.is-highlighted {
     opacity: 1;
     border-left: solid 4px var(--color-highlight-item);
 }
 
-.list-view-container .list-card.is-highlighted .add-to-webmap-btn {
+/* .list-view-container .list-card.is-highlighted .add-to-webmap-btn {
     background: url('../../static/icons/QueueOffSelected.png') center no-repeat;
-}
+} */
 
-.list-view-container .list-card.is-highlighted a, .list-view-container .list-card.is-highlighted .open-item-btn {
+/* .list-view-container .list-card.is-highlighted a, .list-view-container .list-card.is-highlighted .open-item-btn {
     text-decoration: none;
     color: #fff;
-}
+} */
 
 .list-view-container .list-card.is-active.is-highlighted {
     background-color: var(--color-active-item);
     border-left: solid 4px var(--color-highlight-item);
 }
 
-.list-view-container .list-card.is-highlighted.is-selected .add-to-webmap-btn {
+/* .list-view-container .list-card.is-highlighted.is-selected .add-to-webmap-btn {
     background: rgba(255,255,255,.2) url('../../static/icons/QueueOnSelected.png') center no-repeat;
-}
+} */
 
 .list-view-container .list-card.is-highlighted:hover {
     border-left: solid 4px var(--color-highlight-item);

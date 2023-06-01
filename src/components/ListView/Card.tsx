@@ -22,12 +22,14 @@ interface IProps {
 
 // interface IState {}
 
+const ButtonWrapperClassnames = `items-center px-2 cursor-pointer text-white`;
+
 class ListViewCard extends React.PureComponent<IProps> {
     constructor(props: IProps) {
         super(props);
 
         this.openItem = this.openItem.bind(this);
-        this.showTooltip = this.showTooltip.bind(this);
+        // this.showTooltip = this.showTooltip.bind(this);
         this.hideTooltip = this.hideTooltip.bind(this);
     }
 
@@ -43,16 +45,16 @@ class ListViewCard extends React.PureComponent<IProps> {
         window.open(itemUrl, '_blank');
     }
 
-    showTooltip(evt: React.MouseEvent) {
-        const { toggleTooltip } = this.props;
-        const boundingRect = evt.currentTarget.getBoundingClientRect();
+    // showTooltip(evt: React.MouseEvent) {
+    //     const { toggleTooltip } = this.props;
+    //     const boundingRect = evt.currentTarget.getBoundingClientRect();
 
-        toggleTooltip({
-            content: evt.currentTarget.getAttribute('data-tooltip-content'),
-            left: boundingRect.left + evt.currentTarget.clientWidth + 5,
-            top: boundingRect.top + 3,
-        });
-    }
+    //     toggleTooltip({
+    //         content: evt.currentTarget.getAttribute('data-tooltip-content'),
+    //         left: boundingRect.left + evt.currentTarget.clientWidth + 5,
+    //         top: boundingRect.top + 3,
+    //     });
+    // }
 
     hideTooltip() {
         const { toggleTooltip } = this.props;
@@ -71,22 +73,16 @@ class ListViewCard extends React.PureComponent<IProps> {
             toggleSelect,
         } = this.props;
 
-        const cardClass = classnames('list-card trailer-half', {
-            // 'is-active' indicates if is viewing this release on map
-            'is-active': isActive,
-            // 'is-highlighted' indicates if this release has local change
-            'is-highlighted': isHighlighted,
-            // 'is-selected' indicates if this release is being selected
-            'is-selected': isSelected,
-        });
-
-        const tooltipContentAdd2WebmapBtn = isSelected
-            ? 'Remove this release from your ArcGIS Online Map'
-            : 'Add this release to an ArcGIS Online Map';
-
         return (
             <div
-                className={cardClass}
+                className={classnames('list-card mb-2 group', {
+                    // 'is-active' indicates if is viewing this release on map
+                    'is-active': isActive,
+                    // 'is-highlighted' indicates if this release has local change
+                    'is-highlighted': isHighlighted,
+                    // 'is-selected' indicates if this release is being selected
+                    'is-selected': isSelected,
+                })}
                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
                 onMouseLeave={onMouseOut}
                 data-release-num={data.releaseNum}
@@ -104,30 +100,50 @@ class ListViewCard extends React.PureComponent<IProps> {
                 </div>
 
                 <div
-                    className="open-item-btn margin-right-half cursor-pointer link-light-gray"
-                    onMouseOver={this.showTooltip}
-                    onMouseOut={this.hideTooltip}
+                    className={classnames(ButtonWrapperClassnames, {
+                        flex: isActive,
+                        'hidden group-hover:flex': !isActive,
+                    })}
                     onClick={this.openItem}
-                    data-tooltip-content="Learn more about this release..."
+                    title="Learn more about this release..."
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        className="svg-icon"
-                    >
-                        <path d="M26 30H2V6h14V4H0v28h28V18h-2zM21 8C12.715 8 6 14.717 6 23c0 .336.029.668.051 1h4A11.464 11.464 0 0 1 10 23c0-6.065 4.936-11 11-11h3.004l-6 6h4L30 10l-7.996-8h-4l6 6H21z" />
-                    </svg>
+                    <calcite-icon icon="information" scale="m" />
                 </div>
 
                 <div
-                    className="add-to-webmap-btn cursor-pointer"
-                    onMouseOver={this.showTooltip}
-                    onMouseOut={this.hideTooltip}
+                    className={classnames(ButtonWrapperClassnames, {
+                        flex: isActive,
+                        'hidden group-hover:flex': !isActive,
+                    })}
+                    onClick={this.openItem}
+                    title="Download a local copy of imagery tiles"
+                >
+                    <calcite-icon icon="download-to" scale="m" />
+                </div>
+
+                <div
+                    className={classnames(ButtonWrapperClassnames, {
+                        flex: isActive,
+                        'hidden group-hover:flex': !isActive,
+                        'bg-white bg-opacity-20': isSelected,
+                    })}
                     onClick={toggleSelect.bind(this, data.releaseNum)}
-                    data-tooltip-content={tooltipContentAdd2WebmapBtn}
-                ></div>
+                    title={
+                        isSelected
+                            ? 'Remove this release from your ArcGIS Online Map'
+                            : 'Add this release to an ArcGIS Online Map'
+                    }
+                >
+                    <calcite-icon icon="arcgis-online" scale="m" />
+                </div>
+
+                {/* <div
+                    className="add-to-webmap-btn cursor-pointer"
+                    // onMouseOver={this.showTooltip}
+                    // onMouseOut={this.hideTooltip}
+                    onClick={toggleSelect.bind(this, data.releaseNum)}
+                    title={tooltipContentAdd2WebmapBtn}
+                ></div> */}
             </div>
         );
     }
