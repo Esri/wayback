@@ -1,8 +1,4 @@
-import { decodeQueryString } from '@esri/arcgis-rest-request';
-import { urlFns } from 'helper-toolkit-ts';
-import { updateQueryParam, updateHashParam } from 'helper-toolkit-ts/dist/url';
 import { IURLParamData, IExtentGeomety } from '../../types';
-import { getHashParamsFromLocalStorage } from '../LocalStorage';
 
 type ParamKey =
     | 'ext'
@@ -19,20 +15,35 @@ type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     rNum4SwipeWidgetTrailingLayer?: number;
 }) => void;
 
-type URLData = {
-    [key in ParamKey]: string;
+let hashParams = new URLSearchParams(window.location.hash.slice(1));
+
+/**
+ * update Hash Params in the URL using data from hashParams
+ */
+export const updateHashParams = (key: ParamKey, value: string) => {
+    if (value === undefined || value === null) {
+        hashParams.delete(key);
+    } else {
+        hashParams.set(key, value);
+    }
+
+    window.location.hash = hashParams.toString();
 };
 
-const urlQueryData: URLData = urlFns.parseQuery();
+export const getHashParamValueByKey = (key: ParamKey): string => {
+    if (!hashParams.has(key)) {
+        return '';
+    }
 
-const urlHashData: URLData = urlFns.parseHash();
+    return hashParams.get(key);
+};
 
-const getMapExtent = (urlData: URLData): IExtentGeomety => {
-    // const urlQueryData: {
-    //     [key in searchParamKey]: string;
-    // } = urlFns.parseQuery();
-
-    const ext = urlData.ext ? urlData.ext.split(',').map((d) => +d) : null;
+const getMapExtent = (): IExtentGeomety => {
+    const ext = getHashParamValueByKey('ext')
+        ? getHashParamValueByKey('ext')
+              .split(',')
+              .map((d) => +d)
+        : null;
 
     const mapExtent: IExtentGeomety =
         ext && ext.length === 4
@@ -58,10 +69,7 @@ const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
               .join(',')
         : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveLocalChangesOnlyInURLQueryParam = (
@@ -70,10 +78,7 @@ const saveLocalChangesOnlyInURLQueryParam = (
     const key: ParamKey = 'localChangesOnly';
     const value = localChangesOnly ? 'true' : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
@@ -84,10 +89,7 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
         ? rNum4SelectedWaybackItems.join(',')
         : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
@@ -98,10 +100,7 @@ const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
         ? rNum4ActiveWaybackItem.toString()
         : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
@@ -115,10 +114,7 @@ const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
             ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
             : '';
 
-        updateHashParam({
-            key,
-            value,
-        });
+        updateHashParams(key, value);
     };
 
 const saveAnimationSpeedInURLQueryParam = (
@@ -128,67 +124,52 @@ const saveAnimationSpeedInURLQueryParam = (
     const key: ParamKey = 'animationSpeed';
     const value = isAnimationOn ? speed.toString() : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
     const key: ParamKey = 'framesToExclude';
     const value = rNums && rNums.length ? rNums.join(',') : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const decodeURLParams = (): IURLParamData => {
-    // use hash params first, the OAuth overwrites the hash params so need to make sure the hash data is not from OAuth
-    let urlData: URLData =
-        Object.keys(urlHashData).length &&
-        urlHashData['access_token'] === undefined
-            ? urlHashData
-            : null;
+    hashParams = new URLSearchParams(window.location.hash.slice(1));
 
-    // try to use query params if hash params is not found
-    if (!urlData) {
-        urlData = Object.keys(urlQueryData).length ? urlQueryData : null;
-    }
+    const localChangesOnly =
+        getHashParamValueByKey('localChangesOnly') === 'true' ? true : false;
 
-    // try to use hash params string from local storage, and set urlData to empty Object if hash params string is not found either
-    if (!urlData) {
-        const hashParamsFromLocalStorage = getHashParamsFromLocalStorage();
-        console.log('hashParamsFromLocalStorage', hashParamsFromLocalStorage);
-
-        urlData = hashParamsFromLocalStorage
-            ? (decodeQueryString(hashParamsFromLocalStorage) as URLData)
-            : ({} as URLData);
-    }
-
-    const localChangesOnly = urlData.localChangesOnly === 'true' ? true : false;
-
-    const selected = urlData.selected
-        ? urlData.selected.split(',').map((d) => +d)
+    const selected = getHashParamValueByKey('selected')
+        ? getHashParamValueByKey('selected')
+              .split(',')
+              .map((d) => +d)
         : null;
 
-    const active = urlData.active ? +urlData.active : null;
+    const active = getHashParamValueByKey('active')
+        ? +getHashParamValueByKey('active')
+        : null;
 
-    const mapExtent = getMapExtent(urlData);
+    const mapExtent = getMapExtent();
 
-    const isSwipeWidgetOpen = urlData.swipeWidget ? true : false;
+    const isSwipeWidgetOpen = getHashParamValueByKey('swipeWidget')
+        ? true
+        : false;
 
     const swipeWidgetLayers = isSwipeWidgetOpen
-        ? urlData.swipeWidget.split(',').map((d) => +d)
+        ? getHashParamValueByKey('swipeWidget')
+              .split(',')
+              .map((d) => +d)
         : [];
 
-    const animationSpeed = urlData.animationSpeed
-        ? +urlData.animationSpeed
+    const animationSpeed = getHashParamValueByKey('animationSpeed')
+        ? +getHashParamValueByKey('animationSpeed')
         : null;
 
-    const rNum4FramesToExclude = urlData.framesToExclude
-        ? urlData.framesToExclude.split(',').map((rNum) => +rNum)
+    const rNum4FramesToExclude = getHashParamValueByKey('framesToExclude')
+        ? getHashParamValueByKey('framesToExclude')
+              .split(',')
+              .map((rNum) => +rNum)
         : [];
 
     const urlParams: IURLParamData = {
@@ -202,13 +183,6 @@ const decodeURLParams = (): IURLParamData => {
         animationSpeed,
         rNum4FramesToExclude,
     };
-
-    // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
-    // this is the reason why we switched from using Search Params to Hash Params. And we need to remove Search Params from the URL to keep the URL clean and unique.
-    if (Object.keys(urlQueryData).length) {
-        // remove the query string from URL
-        window.history.pushState({}, document.title, window.location.pathname);
-    }
 
     return urlParams;
 };

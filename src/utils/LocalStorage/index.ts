@@ -69,25 +69,25 @@ const getShouldOpenSaveWebMapDialog = () => {
     return val === 'true' ? true : false;
 };
 
-const saveHashParams = () => {
-    const hash = location.hash.toString();
+// const saveHashParams = () => {
+//     const hash = location.hash.toString();
 
-    if (!hash) {
-        return;
-    }
+//     if (!hash) {
+//         return;
+//     }
 
-    setItem(KEYS.hashParams, hash.slice(1));
-};
+//     setItem(KEYS.hashParams, hash.slice(1));
+// };
 
-const getHashParamsFromLocalStorage = () => {
-    const val = getItem(KEYS.hashParams);
+// const getHashParamsFromLocalStorage = () => {
+//     const val = getItem(KEYS.hashParams);
 
-    if (val) {
-        removeItem(KEYS.hashParams);
-    }
+//     if (val) {
+//         removeItem(KEYS.hashParams);
+//     }
 
-    return val;
-};
+//     return val;
+// };
 
 export {
     saveDefaultExtent,
@@ -98,6 +98,6 @@ export {
     getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
-    saveHashParams,
-    getHashParamsFromLocalStorage,
+    // saveHashParams,
+    // getHashParamsFromLocalStorage,
 };

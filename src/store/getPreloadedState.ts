@@ -29,8 +29,6 @@ import { miscFns } from 'helper-toolkit-ts';
 
 const isMobile = miscFns.isMobileDevice();
 
-const urlParams: IURLParamData = decodeURLParams();
-
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const shouldOnlyShowItemsWithLocalChange =
         urlParams.shouldOnlyShowItemsWithLocalChange ||
@@ -138,7 +136,10 @@ const getPreloadedState4AnimationMode = (
 const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
+    const urlParams: IURLParamData = decodeURLParams();
+
     const uiState: UIState = getPreloadedState4UI(urlParams);
+
     const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
         waybackItems,
         urlParams
