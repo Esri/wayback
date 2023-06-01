@@ -23,7 +23,7 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
             onClick={onClickHandler}
             title="Toggle Swipe Mode"
         >
-            <calcite-icon icon="compare" s="l" />
+            <calcite-icon icon="compare" scale="l" />
         </div>
     );
 };

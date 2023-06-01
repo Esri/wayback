@@ -1,36 +1,16 @@
-.save-as-webmap-btn-container {
-    position: relative;
-    width: 100%;
-}
-
-.save-as-webmap-btn-container .create-agol-webmap {
-    background: url('../../static/icons/QueueGroupNo.png') center no-repeat;
-    cursor: default;
-    width: 100%;
-    height: 50px;
-}
-
-.save-as-webmap-btn-container .create-agol-webmap .overlay-label {
+.save-as-webmap-btn-container .indicator-count-of-selected-items {
     position: absolute;
-    bottom: -5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
+    top: -4px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
     border-radius: 50%;
     background-color: var(--color-active-item);
     font-size: 0.65rem;
     box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, .5);
-    display: none;
-}
-
-.save-as-webmap-btn-container .create-agol-webmap.is-active {
-    background: url('../../static/icons/QueueGroupYes.png') center no-repeat;
-    cursor: pointer;
-}
-
-.save-as-webmap-btn-container .create-agol-webmap.is-active .overlay-label {
-    display: block;
+    @apply text-white text-center;
+    /* display: none; */
 }
 
 .save-as-webmap-btn-container .font-size--4 {

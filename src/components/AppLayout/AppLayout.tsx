@@ -45,11 +45,11 @@ const AppLayout: React.FC = () => {
             <MobileHeader />
 
             <Gutter>
-                <SaveAsWebmapBtn />
-
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
+
+                <SaveAsWebmapBtn />
             </Gutter>
 
             <Sidebar></Sidebar>

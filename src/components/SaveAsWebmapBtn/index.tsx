@@ -31,45 +31,44 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
 
         const isActive = selectedWaybackItems.length ? true : false;
 
-        const containerClass = classNames(
-            'save-as-webmap-btn-container customized-tooltip',
-            {
-                'is-disabled': disabled,
-            }
-        );
-
-        const btnClass = classNames(
-            'create-agol-webmap tooltip tooltip-multiline tooltip-right',
-            {
-                'is-active': isActive,
-            }
-        );
-
-        const clearBtn = isActive ? (
-            <div
-                className="font-size--4 text-center cursor-pointer leader-quarter"
-                onClick={clearAll.bind(this)}
-            >
-                clear all
-            </div>
-        ) : null;
-
         const tooltipContent = isActive
             ? 'Open these versions in a new Web Map'
             : 'Choose versions from the list to build a set of Wayback layers for use in a new Web Map';
 
         return (
-            <div className={containerClass}>
+            <div
+                className={classNames(
+                    'save-as-webmap-btn-container relative w-full text-center',
+                    {
+                        'is-disabled': disabled,
+                    }
+                )}
+            >
                 <div
-                    className={btnClass}
+                    // className={btnClass}
+                    className={classNames('relative', {
+                        'cursor-pointer': isActive,
+                    })}
                     onClick={this.onClickHandler}
-                    aria-label={tooltipContent}
+                    title={tooltipContent}
                 >
-                    <div className="overlay-label text-white text-center">
-                        <span>{selectedWaybackItems.length}</span>
-                    </div>
+                    <calcite-icon icon="arcgis-online" scale="l" />
+
+                    {isActive && (
+                        <div className="indicator-count-of-selected-items">
+                            <span>{selectedWaybackItems.length}</span>
+                        </div>
+                    )}
                 </div>
-                {clearBtn}
+
+                {isActive && (
+                    <div
+                        className="text-center cursor-pointer text-xs"
+                        onClick={clearAll.bind(this)}
+                    >
+                        clear all
+                    </div>
+                )}
             </div>
         );
     }
