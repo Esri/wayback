@@ -83,7 +83,7 @@
     "@esri/arcgis-rest-auth": "^2.22.0",
     "@esri/arcgis-rest-feature-layer": "^2.22.0",
     "@esri/arcgis-rest-request": "^2.22.0",
-    "@reduxjs/toolkit": "^1.5.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "@types/d3": "^5.7.2",
     "@types/es6-promise": "^3.3.0",
     "axios": "^0.21.2",
