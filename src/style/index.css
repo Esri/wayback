@@ -29,3 +29,12 @@ html, body {
 video, img {
     height: 0;
 }
+
+a {
+    color: #0079c1;
+    text-decoration: none;
+}
+
+input, textarea { 
+    @apply text-gray-600 text-sm px-1;
+}

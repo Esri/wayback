@@ -49,11 +49,11 @@ const About: React.FC<IProps> = ({ onClose }: IProps) => {
                     </svg>
                 </span>
 
-                <h2 className="trailer-half text-center trailer-1">
+                <h2 className="text-3xl trailer-half text-center trailer-1">
                     World Imagery Wayback
                 </h2>
-                <h5 className="">WHAT</h5>
-                <p>
+                <h5 className="text-xl mb-3">WHAT</h5>
+                <p className="mb-6">
                     Wayback is a digital archive, providing users with access to
                     the different versions of{' '}
                     <a
@@ -80,8 +80,8 @@ const About: React.FC<IProps> = ({ onClose }: IProps) => {
                     . {!onPremises ? githubRepoInfo : null}
                 </p>
 
-                <h5 className="">WHY</h5>
-                <p>
+                <h5 className="text-xl mb-3">WHY</h5>
+                <p className="mb-6">
                     As World Imagery is updated with more current imagery, new
                     versions of the map are published. When and where updates
                     occur, the previous imagery is replaced and is no longer
@@ -92,8 +92,8 @@ const About: React.FC<IProps> = ({ onClose }: IProps) => {
                     previous version of World Imagery.
                 </p>
 
-                <h5 className="">HOW</h5>
-                <p>
+                <h5 className="text-xl mb-2">HOW</h5>
+                <p className="mb-6">
                     Available versions of the World Imagery map are presented
                     within a timeline and as layers in a list. Versions that
                     resulted in local changes are highlighted in bold white, and

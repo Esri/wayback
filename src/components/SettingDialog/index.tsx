@@ -215,7 +215,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         </svg>
                     </span>
 
-                    <h2 className="text-center trailer-1">Settings</h2>
+                    <h2 className="text-3xl text-center trailer-1">Settings</h2>
 
                     <div className="leader-half trailer-1">
                         <label className="toggle-switch">

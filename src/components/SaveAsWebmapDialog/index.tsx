@@ -189,7 +189,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
         return (
             <div className="dialog-content">
-                <h5>Wayback Map Settings:</h5>
+                <h5 className="text-xl mb-3">Wayback Map Settings:</h5>
                 <label>
                     Title
                     <input

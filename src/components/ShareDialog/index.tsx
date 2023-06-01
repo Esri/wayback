@@ -84,7 +84,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                             </svg>
                         </span>
 
-                        <h4 className="text-center">
+                        <h4 className="text-xl text-center">
                             Share World Imagery Wayback
                         </h4>
                     </div>

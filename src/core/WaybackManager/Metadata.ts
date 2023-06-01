@@ -2,7 +2,7 @@ import {
     queryFeatures,
     IQueryFeaturesResponse,
     IFeature,
-} from '@esri/arcgis-rest-feature-layer';
+} from '@esri/arcgis-rest-feature-service';
 import { IWaybackConfig, IWaybackMetadataQueryResult } from '../../types/index';
 import { IParamsQueryMetadata } from './types';
 import config from './config';
