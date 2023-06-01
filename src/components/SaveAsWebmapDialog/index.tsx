@@ -1,4 +1,3 @@
-import './style.scss';
 import React from 'react';
 import classnames from 'classnames';
 import config from './config';

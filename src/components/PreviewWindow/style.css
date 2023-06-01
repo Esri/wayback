@@ -1,0 +1,27 @@
+.preview-window-container {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    border: solid 1px rgba(240, 240, 240, 0.5);
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.6);
+    box-sizing: border-box;
+}
+
+.preview-window-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.preview-window-container .preview-item-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    background: rgba(44, 103, 172, 0.75);
+    color: #fff;
+    box-sizing: border-box;
+}

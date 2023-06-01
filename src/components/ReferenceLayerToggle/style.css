@@ -12,13 +12,13 @@
 
     display:flex;
     align-items:center;
+}
 
-    div {
-        display:flex;
-        align-items:center;
-    }
+.reference-layer-toggle div {
+    display:flex;
+    align-items:center;
+}
 
-    svg {
-        fill: #d1d1d1;
-    }
+.reference-layer-toggle svg {
+    fill: #d1d1d1;
 }

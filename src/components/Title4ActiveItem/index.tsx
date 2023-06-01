@@ -33,7 +33,7 @@ class Title4ActiveItem extends React.PureComponent<IProps> {
         ) : null;
 
         return (
-            <div className="title-for-active-item text-center text-blue">
+            <div className="text-center text-blue">
                 <h4 className="font-size-2 avenir-light trailer-0">
                     Wayback {releaseDate}
                 </h4>
