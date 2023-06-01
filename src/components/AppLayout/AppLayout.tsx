@@ -31,6 +31,7 @@ import {
     AnimationPanel,
     AnimationModeToggleBtn,
     ZoomWidget,
+    OpenDownloadPanelBtn,
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
@@ -48,6 +49,8 @@ const AppLayout: React.FC = () => {
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
+
+                <OpenDownloadPanelBtn />
 
                 <SaveAsWebmapBtn />
             </Gutter>

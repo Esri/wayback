@@ -33,3 +33,5 @@ export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
 export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
+
+export { OpenDownloadPanelBtn } from './OpenDownloadPanelBtn/OpenDownloadPanelBtn';
