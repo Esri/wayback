@@ -31,16 +31,6 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
     const [value, setValue] = useState<AppContextValue>();
 
     const init = async () => {
-        // const oauthUtils = new OAuthUtils();
-
-        // const userSession = await getUserSession(oauthUtils);
-        // console.log('userSession', userSession);
-
-        await initEsriOAuth({
-            appId: config.appId,
-            portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
-        });
-
         const contextValue: AppContextValue = {
             // oauthUtils,
             // userSession,
@@ -51,22 +41,6 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
 
         setValue(contextValue);
     };
-
-    // const getUserSession = async (
-    //     oauthUtils: OAuthUtils
-    // ): Promise<IUserSession> => {
-    //     try {
-    //         const userSession = await oauthUtils.init({
-    //             appId: config.appId,
-    //             portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
-    //         });
-
-    //         return userSession;
-    //     } catch (err) {
-    //         // console.error(err);
-    //         return null;
-    //     }
-    // };
 
     React.useEffect(() => {
         init();

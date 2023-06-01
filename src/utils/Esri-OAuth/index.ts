@@ -1,6 +1,6 @@
 // import { loadModules } from 'esri-loader';
 
-import { IUserSession } from '../../types';
+// import { IUserSession } from '../../types';
 
 // import IOAuthInfo from 'esri/identity/OAuthInfo';
 // import IIdentityManager from 'esri/identity/IdentityManager';
@@ -48,7 +48,7 @@ export const initEsriOAuth = async ({
             appId,
             portalUrl,
             popup: false,
-            preserveUrlHash: true,
+            // preserveUrlHash: true,
         });
 
         esriId = IdentityManager;
