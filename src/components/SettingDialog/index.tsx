@@ -8,14 +8,13 @@ import {
     setShouldShowUpdatesWithLocalChanges,
     getShouldShowUpdatesWithLocalChanges,
 } from '../../utils/LocalStorage';
-import { IExtentGeomety, IUserSession } from '../../types';
+import { IExtentGeomety } from '../../types';
 // import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
 interface IProps {
     mapExtent?: IExtentGeomety;
-    // userSession?: IUserSession;
     signedInAlready?: boolean;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;

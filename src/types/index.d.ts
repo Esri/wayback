@@ -69,10 +69,10 @@ interface IScreenPoint {
     y: number;
 }
 
-interface IUserSession {
-    portal: Portal;
-    credential: Credential;
-}
+// interface IUserSession {
+//     portal: Portal;
+//     credential: Credential;
+// }
 
 interface IURLParamData {
     mapExtent?: IExtentGeomety;
@@ -132,7 +132,7 @@ export {
     IPointGeomety,
     IWaybackMetadataQueryResult,
     IScreenPoint,
-    IUserSession,
+    // IUserSession,
     IExtentGeomety,
     IURLParamData,
     IStaticTooltipData,

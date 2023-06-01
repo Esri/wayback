@@ -1,6 +1,6 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import { IWaybackItem, IExtentGeomety } from '../../types';
 import { getServiceUrl } from '../../utils/Tier';
 // import EsriRquest from 'esri/request';
 

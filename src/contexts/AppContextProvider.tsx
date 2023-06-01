@@ -1,6 +1,5 @@
 import React, { useState, createContext } from 'react';
 import WaybackManager from '../core/WaybackManager';
-// import { IUserSession } from '../types';
 // import OAuthUtils from '../utils/Esri-OAuth';
 import { getServiceUrl } from '../utils/Tier';
 import { getCustomPortalUrl } from '../utils/LocalStorage';
@@ -11,8 +10,6 @@ import { initEsriOAuth } from '../utils/Esri-OAuth';
 
 type AppContextValue = {
     waybackManager: WaybackManager;
-    // oauthUtils: OAuthUtils;
-    // userSession: IUserSession;
     isMobile: boolean;
     onPremises: boolean;
 };

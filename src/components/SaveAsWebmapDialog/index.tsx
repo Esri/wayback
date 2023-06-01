@@ -2,14 +2,13 @@ import React from 'react';
 import classnames from 'classnames';
 import config from './config';
 
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import { IWaybackItem, IExtentGeomety } from '../../types';
 import createWebmap from './createWebmap';
 
 interface IProps {
     // isVisible?: boolean;
     waybackItems: Array<IWaybackItem>;
     rNum4SelectedWaybackItems: Array<number>;
-    // userSession: IUserSession;
     /**
      * if ture, user has signed in alredy
      */

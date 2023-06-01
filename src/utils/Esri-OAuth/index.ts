@@ -1,7 +1,4 @@
 // import { loadModules } from 'esri-loader';
-
-// import { IUserSession } from '../../types';
-
 // import IOAuthInfo from 'esri/identity/OAuthInfo';
 // import IIdentityManager from 'esri/identity/IdentityManager';
 // import IPortal from 'esri/portal/Portal';
