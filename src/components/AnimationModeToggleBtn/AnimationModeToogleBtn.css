@@ -1,4 +1,5 @@
-.animation-toggle-btn {
+/* .animation-toggle-btn {
+    @apply relative w-full cursor-pointer h-11 text-center;
     position: relative;
     width: 100%;
     height: 45px;
@@ -8,4 +9,4 @@
 
 .animation-toggle-btn.is-open {
     background: url('../../static/icons/AnimateOn.png') center center no-repeat;
-}
+} */

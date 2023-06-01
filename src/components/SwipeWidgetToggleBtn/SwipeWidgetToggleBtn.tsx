@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+// import './style.css';
 
 import classnames from 'classnames';
 
@@ -12,16 +12,19 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
     isOpen,
     onClickHandler,
 }: Props) => {
-    const classNames = classnames('swipe-widget-toggle-btn', {
-        'is-open': isOpen,
-    });
-
     return (
         <div
-            className={classNames}
+            className={classnames(
+                'relative w-full text-center my-3 cursor-pointer',
+                {
+                    'is-open': isOpen,
+                }
+            )}
             onClick={onClickHandler}
             title="Toggle Swipe Mode"
-        ></div>
+        >
+            <calcite-icon icon="compare" s="l" />
+        </div>
     );
 };
 
