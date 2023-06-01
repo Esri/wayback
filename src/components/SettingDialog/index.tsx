@@ -15,7 +15,8 @@ type SaveBtnLabelValue = 'Save' | 'Saved';
 
 interface IProps {
     mapExtent?: IExtentGeomety;
-    userSession?: IUserSession;
+    // userSession?: IUserSession;
+    signedInAlready?: boolean;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
     shouldShowLocalChangesByDefaultOnClick: (
@@ -158,7 +159,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
     // }
 
     render() {
-        const { userSession, toggleSignInBtnOnClick, onClose } = this.props;
+        const { signedInAlready, toggleSignInBtnOnClick, onClose } = this.props;
         const {
             portalUrl,
             shouldUseCustomPortalUrl,
@@ -292,7 +293,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
 
                     <div className="text-right">
                         <span className="margin-right-1">
-                            {userSession ? signOutBtn : null}
+                            {signedInAlready ? signOutBtn : null}
                         </span>
 
                         <span

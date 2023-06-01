@@ -9,7 +9,20 @@ interface IProps {
     // isVisible?: boolean;
     waybackItems: Array<IWaybackItem>;
     rNum4SelectedWaybackItems: Array<number>;
-    userSession: IUserSession;
+    // userSession: IUserSession;
+    /**
+     * if ture, user has signed in alredy
+     */
+    hasSignedInAlready?: boolean;
+    /**
+     * role of signed in user
+     */
+    userRole?: string;
+    /**
+     * access token of signe in user
+     */
+    token?: string;
+    portalBaseURL?: string;
     mapExtent: IExtentGeomety;
 
     onClose: (val: boolean) => void;
@@ -105,12 +118,9 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     async saveAsWebmap() {
-        const {
-            userSession,
-            waybackItems,
-            rNum4SelectedWaybackItems,
-            mapExtent,
-        } = this.props;
+        const { waybackItems, rNum4SelectedWaybackItems, mapExtent } =
+            this.props;
+
         const { title, tags, description } = this.state;
 
         const waybackItemsToSave = waybackItems.filter((d) => {
@@ -124,7 +134,6 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                 title,
                 tags,
                 description,
-                userSession,
                 mapExtent,
                 waybackItemsToSave,
             });
@@ -141,20 +150,20 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     openWebmap() {
-        const { userSession } = this.props;
+        const { hasSignedInAlready, portalBaseURL } = this.props;
         const { webmapId } = this.state;
 
-        const baseUrl =
-            userSession &&
-            userSession.portal.url &&
-            userSession.portal.urlKey &&
-            userSession.portal.customBaseUrl
-                ? `https://${userSession.portal.urlKey}.${userSession.portal.customBaseUrl}`
-                : userSession.portal.url;
+        // const baseUrl =
+        //     userSession &&
+        //     userSession.portal.url &&
+        //     userSession.portal.urlKey &&
+        //     userSession.portal.customBaseUrl
+        //         ? `https://${userSession.portal.urlKey}.${userSession.portal.customBaseUrl}`
+        //         : userSession.portal.url;
 
         const itemUrl =
-            userSession && webmapId
-                ? `${baseUrl}/home/item.html?id=${webmapId}`
+            hasSignedInAlready && webmapId
+                ? `${portalBaseURL}/home/item.html?id=${webmapId}`
                 : null;
 
         if (itemUrl) {
@@ -284,15 +293,14 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { onClose, userSession } = this.props;
+        const { onClose, userRole } = this.props;
 
         const { isWebmapReady } = this.state;
 
         /**
          * the signed-in user has no privilage to create content if it has the role in the organization equals to 'org_user'
          */
-        const hasNoPrivilege2CreateContent =
-            userSession?.portal?.user?.role === 'org_user';
+        const hasNoPrivilege2CreateContent = userRole === 'org_user';
 
         const editDialogContent =
             !isWebmapReady && !hasNoPrivilege2CreateContent

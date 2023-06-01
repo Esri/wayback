@@ -9,7 +9,7 @@ import {
     releaseNum4SelectedItemsCleaned,
 } from '../../store/reducers/WaybackItems';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '../../contexts/AppContextProvider';
 
 import {
     saveHashParams,
@@ -20,11 +20,12 @@ import SaveAsWebmapBtn from './index';
 import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
 import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '../../utils/UrlSearchParam';
 import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnonymouns, signIn } from '../../utils/Esri-OAuth';
 
 const SaveAsWebmapBtnContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession, oauthUtils } = useContext(AppContext);
+    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const rNum4SelectedWaybackItems: number[] = useSelector(
         releaseNum4SelectedItemsSelector
@@ -42,7 +43,7 @@ const SaveAsWebmapBtnContainer = () => {
     };
 
     const onClickHandler = () => {
-        if (!userSession) {
+        if (isAnonymouns()) {
             // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
             setShouldOpenSaveWebMapDialog();
 
@@ -50,7 +51,7 @@ const SaveAsWebmapBtnContainer = () => {
             saveHashParams();
 
             // sign in first before opening the save as web map dialog because the userSession is required to create web map
-            oauthUtils.signIn();
+            signIn();
         } else {
             dispatch(isSaveAsWebmapDialogOpenToggled());
         }

@@ -12,12 +12,13 @@ import {
 
 import { mapExtentSelector } from '../../store/reducers/Map';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '../../contexts/AppContextProvider';
+import { isAnonymouns, signIn, signOut } from '../../utils/Esri-OAuth';
 
 const SettingDialogContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession, oauthUtils } = useContext(AppContext);
+    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent = useSelector(mapExtentSelector);
 
@@ -29,9 +30,9 @@ const SettingDialogContainer = () => {
 
     const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
         if (shouldSignIn) {
-            oauthUtils.signIn();
+            signIn();
         } else {
-            oauthUtils.signOut();
+            signOut();
         }
     };
 
@@ -42,7 +43,7 @@ const SettingDialogContainer = () => {
     return isOpen ? (
         <SetttingDialog
             mapExtent={mapExtent}
-            userSession={userSession}
+            signedInAlready={isAnonymouns() === false}
             toggleSignInBtnOnClick={toggleSignInBtnOnClick}
             shouldShowLocalChangesByDefaultOnClick={
                 shouldShowLocalChangesByDefaultOnClick

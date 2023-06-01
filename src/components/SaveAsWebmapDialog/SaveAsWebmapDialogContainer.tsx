@@ -14,15 +14,21 @@ import {
     releaseNum4SelectedItemsSelector,
 } from '../../store/reducers/WaybackItems';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '../../contexts/AppContextProvider';
 
 import SaveAsWebMapDialog from './index';
 import { IExtentGeomety, IWaybackItem } from '../../types';
+import {
+    getToken,
+    getUserRole,
+    isAnonymouns,
+    signInUsingDifferentAccount,
+} from '../../utils/Esri-OAuth';
 
 const SaveAsWebmapDialogContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession, oauthUtils } = useContext(AppContext);
+    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent: IExtentGeomety = useSelector(mapExtentSelector);
 
@@ -46,11 +52,13 @@ const SaveAsWebmapDialogContainer = () => {
         <SaveAsWebMapDialog
             waybackItems={waybackItems}
             rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-            userSession={userSession}
+            hasSignedInAlready={isAnonymouns() === false}
+            token={getToken()}
+            userRole={getUserRole()}
             mapExtent={mapExtent}
             onClose={onCloseHandler}
             signInButtonOnClick={() => {
-                oauthUtils.signInUsingDifferentAccount();
+                signInUsingDifferentAccount();
             }}
         />
     ) : null;
