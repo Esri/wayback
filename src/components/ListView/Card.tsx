@@ -22,7 +22,7 @@ interface IProps {
 
 // interface IState {}
 
-const ButtonWrapperClassnames = `items-center px-2 cursor-pointer text-white`;
+const ButtonWrapperClassnames = `relative h-full items-center px-2 cursor-pointer text-white`;
 
 class ListViewCard extends React.PureComponent<IProps> {
     constructor(props: IProps) {
@@ -73,6 +73,8 @@ class ListViewCard extends React.PureComponent<IProps> {
             toggleSelect,
         } = this.props;
 
+        const showControlButtons = isActive || isSelected;
+
         return (
             <div
                 className={classnames('list-card mb-2 group', {
@@ -101,8 +103,8 @@ class ListViewCard extends React.PureComponent<IProps> {
 
                 <div
                     className={classnames(ButtonWrapperClassnames, {
-                        flex: isActive,
-                        'hidden group-hover:flex': !isActive,
+                        flex: showControlButtons,
+                        'hidden group-hover:flex': !showControlButtons,
                     })}
                     onClick={this.openItem}
                     title="Learn more about this release..."
@@ -112,8 +114,8 @@ class ListViewCard extends React.PureComponent<IProps> {
 
                 <div
                     className={classnames(ButtonWrapperClassnames, {
-                        flex: isActive,
-                        'hidden group-hover:flex': !isActive,
+                        flex: showControlButtons,
+                        'hidden group-hover:flex': !showControlButtons,
                     })}
                     onClick={this.openItem}
                     title="Download a local copy of imagery tiles"
@@ -123,8 +125,8 @@ class ListViewCard extends React.PureComponent<IProps> {
 
                 <div
                     className={classnames(ButtonWrapperClassnames, {
-                        flex: isActive,
-                        'hidden group-hover:flex': !isActive,
+                        flex: showControlButtons,
+                        'hidden group-hover:flex': !showControlButtons,
                         'bg-white bg-opacity-20': isSelected,
                     })}
                     onClick={toggleSelect.bind(this, data.releaseNum)}
