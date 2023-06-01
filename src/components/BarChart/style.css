@@ -1,0 +1,28 @@
+.bar-chart-container .bar {
+    fill: var(--color-inactive-item);
+}
+.bar-chart-container .bar:hover {
+    fill: #888;
+}
+.bar-chart-container .bar.is-highlighted {
+    fill: var(--color-highlight-item);
+}
+.bar-chart-container .bar.is-highlighted:hover {
+    fill: var(--color-hover-item);
+}
+.bar-chart-container .bar.is-active, .bar-chart-container .bar.is-highlighted.is-active {
+    fill: var(--color-active-item);
+}
+.bar-chart-container .bar.is-hide {
+    display: none;
+}
+
+.bar-chart-container .axis--x path {
+    stroke: var(--barchart-axis-color);
+}
+.bar-chart-container .axis--x .tick line {
+    stroke: var(--barchart-axis-color);
+}
+.bar-chart-container .axis--x .tick text {
+    fill: var(--controls-text-color);
+}

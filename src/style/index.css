@@ -3,7 +3,7 @@
 @import './customized-modal.css';
 @import './customized-tooltip.css';
 @import './fancy-scrollbar.css';
-@import './sidebar.scss';
+@import './sidebar.css';
 
 html, body {
     padding: 0;
@@ -11,17 +11,20 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    color: var(--default-text-color)
+    color: var(--default-text-color);
 }
-
 #appRootDiv {
     position: relative;
     width: 100%;
     height: 100%;
+}
+#appRootDiv video, 
+#appRootDiv img {
+    height: auto;
+}
 
-    video, img {
-        height: auto;
-    }
+#appRootDiv .esri-swipe--horizontal .esri-swipe__container {
+    outline: 0;
 }
 
 video, img {
@@ -32,6 +35,3 @@ video, img {
     cursor: pointer;
 }
 
-#appRootDiv .esri-swipe--horizontal .esri-swipe__container {
-    outline: 0;
-}

@@ -1,9 +1,6 @@
-import './style.scss';
+import './style.css';
 import React from 'react';
 import { MOBILE_HEADER_HEIGHT } from '../../constants/UI';
-// import AboutThisAppModalConfig from '../ModalAboutApp/config';
-// import ShareModalConfig from '../ShareDialog/config';
-// import SettingModalConfig from '../SettingDialog/config';
 
 interface IProps {
     isMobile: boolean;

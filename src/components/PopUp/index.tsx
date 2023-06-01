@@ -1,5 +1,5 @@
 // import { loadModules } from 'esri-loader';
-import './style.scss';
+import './style.css';
 import React from 'react';
 
 // import WaybackManager from '../../core/WaybackManager';

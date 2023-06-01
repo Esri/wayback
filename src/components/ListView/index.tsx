@@ -1,4 +1,4 @@
-import './style.scss';
+import './style.css';
 import React from 'react';
 
 import { IWaybackItem, IStaticTooltipData } from '../../types';

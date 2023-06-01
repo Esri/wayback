@@ -1,0 +1,48 @@
+.gutter-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--gutter-width);
+    background-color: var(--gutter-bgColor);
+    padding: 0;
+    z-index: 5;
+    box-sizing: border-box;
+}
+
+.gutter-container .gutter-nav-btn {
+    position: relative;
+    width: var(--gutter-width);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0.5rem 0;
+}
+
+.gutter-container .gutter-nav-btn svg {
+    fill: #ccc;
+}
+
+.gutter-container .shadow-trailer {
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, .3);
+}
+
+.gutter-container [class^="icon-ui-"]:before, 
+.gutter-container [class*=" icon-ui-"]:before {
+    padding-right: 0;
+}
+
+.is-mobile .gutter-container {
+    display: block;
+    top: 45px;
+}
+
+.share-dialog-toggle-btn {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    cursor: pointer;
+    background: url('../../static/icons/Share.png') center center no-repeat;
+}
