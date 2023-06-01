@@ -1,6 +1,6 @@
 .save-as-webmap-btn-container .indicator-count-of-selected-items {
     position: absolute;
-    top: -4px;
+    bottom: 3px;
     right: 2px;
     width: 16px;
     height: 16px;
