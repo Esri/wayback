@@ -68,15 +68,11 @@ module.exports = (env, options)=> {
                     ]
                 },
                 {
-                    test: /\.s?[ac]ss$/,
+                    test: /\.css$/i,
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
                             loader: "css-loader", options: {
-                                sourceMap: true
-                            }
-                        }, {
-                            loader: "sass-loader", options: {
                                 sourceMap: true
                             }
                         }
