@@ -48,7 +48,8 @@ export const initEsriOAuth = async ({
             appId,
             portalUrl,
             popup: false,
-            // preserveUrlHash: true,
+            flowType: 'implicit',
+            preserveUrlHash: true,
         });
 
         esriId = IdentityManager;
@@ -101,7 +102,7 @@ export const getPortalBaseUrl = () => {
 
     const { urlKey, url, customBaseUrl } = userPortal;
 
-    return urlKey ? `https://${urlKey}.${customBaseUrl}` : `${url}`;
+    return urlKey ? `https://${urlKey}.${customBaseUrl}` : url;
 };
 
 /**

@@ -19,6 +19,7 @@ import {
 import SaveAsWebMapDialog from './index';
 import { IExtentGeomety, IWaybackItem } from '../../types';
 import {
+    getPortalBaseUrl,
     getToken,
     getUserRole,
     isAnonymouns,
@@ -53,6 +54,7 @@ const SaveAsWebmapDialogContainer = () => {
             waybackItems={waybackItems}
             rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
             hasSignedInAlready={isAnonymouns() === false}
+            portalBaseURL={getPortalBaseUrl()}
             token={getToken()}
             userRole={getUserRole()}
             mapExtent={mapExtent}

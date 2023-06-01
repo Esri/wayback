@@ -13,16 +13,16 @@ interface IProps {
     /**
      * if ture, user has signed in alredy
      */
-    hasSignedInAlready?: boolean;
+    hasSignedInAlready: boolean;
     /**
      * role of signed in user
      */
-    userRole?: string;
+    userRole: string;
     /**
      * access token of signe in user
      */
-    token?: string;
-    portalBaseURL?: string;
+    token: string;
+    portalBaseURL: string;
     mapExtent: IExtentGeomety;
 
     onClose: (val: boolean) => void;
