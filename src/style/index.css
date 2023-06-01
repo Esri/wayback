@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import './calcite-web/css/calcite-web.min.css';
 @import './variables.css';
 @import './customized-modal.css';
@@ -6,18 +10,13 @@
 @import './sidebar.css';
 
 html, body {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+    @apply p-0 m-0 w-full h-full overflow-hidden;
     color: var(--default-text-color);
 }
 #appRootDiv {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    @apply relative w-full h-full;
 }
+
 #appRootDiv video, 
 #appRootDiv img {
     height: auto;
@@ -30,8 +29,3 @@ html, body {
 video, img {
     height: 0;
 }
-
-.cursor-pointer {
-    cursor: pointer;
-}
-

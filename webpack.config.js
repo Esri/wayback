@@ -33,6 +33,8 @@ module.exports = (env, options)=> {
 
     const devMode = options.mode === 'development' ? true : false;
 
+    process.env.NODE_ENV = options.mode;
+
     return {
         devServer: {
             https: true,
@@ -72,9 +74,13 @@ module.exports = (env, options)=> {
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
-                            loader: "css-loader", options: {
+                            loader: "css-loader", 
+                            options: {
                                 sourceMap: true
                             }
+                        },
+                        {
+                            loader: 'postcss-loader'
                         }
                     ]
                 },

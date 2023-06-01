@@ -69,7 +69,7 @@
 }
 
 .list-view-container .list-card.is-selected .add-to-webmap-btn {
-    background: var(--add-to-webmap-btn-is-selected-bgColor) url('../../static/icons/QueueOn.png') center no-repeat;
+    background: rgba(255,255,255,.2) url('../../static/icons/QueueOn.png') center no-repeat;
 }
 
 .list-view-container .list-card.is-highlighted {
@@ -92,7 +92,7 @@
 }
 
 .list-view-container .list-card.is-highlighted.is-selected .add-to-webmap-btn {
-    background: var(--add-to-webmap-btn-is-selected-bgColor) url('../../static/icons/QueueOnSelected.png') center no-repeat;
+    background: rgba(255,255,255,.2) url('../../static/icons/QueueOnSelected.png') center no-repeat;
 }
 
 .list-view-container .list-card.is-highlighted:hover {
