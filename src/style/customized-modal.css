@@ -4,5 +4,5 @@
 
 .customized-modal .modal-content {
     background: #000;
-    color: var(--default-text-color);
+    /* color: var(--default-text-color); */
 }

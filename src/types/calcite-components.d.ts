@@ -5,6 +5,7 @@ declare global {
         export interface IntrinsicElements {
             'calcite-loader': any;
             'calcite-icon': any;
+            'calcite-button': any;
         }
     }
 }

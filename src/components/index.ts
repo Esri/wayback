@@ -35,3 +35,4 @@ export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowConta
 export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
 
 export { OpenDownloadPanelBtn } from './OpenDownloadPanelBtn/OpenDownloadPanelBtn';
+export { DownloadDialog } from './DownloadDialog';

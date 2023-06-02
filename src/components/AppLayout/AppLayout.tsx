@@ -32,6 +32,7 @@ import {
     AnimationModeToggleBtn,
     ZoomWidget,
     OpenDownloadPanelBtn,
+    DownloadDialog,
 } from '..';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { getServiceUrl } from '../../utils/Tier';
@@ -93,6 +94,8 @@ const AppLayout: React.FC = () => {
             <SettingDialog />
 
             {!onPremises && <ShareDialog />}
+
+            <DownloadDialog />
 
             <AboutThisApp />
 

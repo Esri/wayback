@@ -16,6 +16,7 @@ interface IProps {
 
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
+    downloadButtonOnClick: (releaseNum: number) => void;
     onMouseEnter?: (releaseNum: number) => void;
     onMouseOut?: () => void;
 }
@@ -64,6 +65,7 @@ class ListView extends React.PureComponent<IProps, IState> {
             onClick,
             onMouseEnter,
             onMouseOut,
+            downloadButtonOnClick,
         } = this.props;
 
         const cardData = shouldOnlyShowItemsWithLocalChange
@@ -99,6 +101,7 @@ class ListView extends React.PureComponent<IProps, IState> {
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}
                     toggleTooltip={this.setTooltipData}
+                    downloadButtonOnClick={downloadButtonOnClick}
                 />
             );
         });

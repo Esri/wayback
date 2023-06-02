@@ -12,6 +12,7 @@ interface IProps {
 
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
+    downloadButtonOnClick: (releaseNum: number) => void;
     onMouseEnter?: (
         releaseNum: number,
         shouldShowPreviewItemTitle: boolean
@@ -71,6 +72,7 @@ class ListViewCard extends React.PureComponent<IProps> {
             onMouseEnter,
             onMouseOut,
             toggleSelect,
+            downloadButtonOnClick,
         } = this.props;
 
         const showControlButtons = isActive || isSelected;
@@ -117,7 +119,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         flex: showControlButtons,
                         'hidden group-hover:flex': !showControlButtons,
                     })}
-                    onClick={this.openItem}
+                    onClick={downloadButtonOnClick.bind(this, data.releaseNum)}
                     title="Download a local copy of imagery tiles"
                 >
                     <calcite-icon icon="download-to" scale="m" />

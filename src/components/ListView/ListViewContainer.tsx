@@ -22,6 +22,7 @@ import ListView from './index';
 import { IWaybackItem } from '../../types';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
+import { addToDownloadList } from '../../store/reducers/DownloadMode';
 
 type Props = {
     children?: React.ReactNode;
@@ -90,6 +91,9 @@ const ListViewContainer = () => {
                 onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
                 toggleSelect={(releaseNum: number) => {
                     dispatch(toggleSelectWaybackItem(releaseNum));
+                }}
+                downloadButtonOnClick={(releaseNum: number) => {
+                    dispatch(addToDownloadList(releaseNum));
                 }}
             />
         </ListViewWrapper>
