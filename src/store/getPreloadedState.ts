@@ -26,6 +26,10 @@ import {
 } from './reducers/AnimationMode';
 
 import { miscFns } from 'helper-toolkit-ts';
+import {
+    DownloadModeState,
+    initialDownloadModeState,
+} from './reducers/DownloadMode';
 
 const isMobile = miscFns.isMobileDevice();
 
@@ -133,32 +137,46 @@ const getPreloadedState4AnimationMode = (
     return state;
 };
 
+const getPreloadedState4Downloadmode = (
+    urlParams: IURLParamData
+): DownloadModeState => {
+    const { isDownloadDialogOpen } = urlParams;
+
+    const state: DownloadModeState = {
+        ...initialDownloadModeState,
+        isDownloadDialogOpen,
+    };
+
+    return state;
+};
+
 const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
     const urlParams: IURLParamData = decodeURLParams();
 
-    const uiState: UIState = getPreloadedState4UI(urlParams);
+    // const uiState: UIState = getPreloadedState4UI(urlParams);
 
-    const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
-        waybackItems,
-        urlParams
-    );
-    const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
-        urlParams,
-        waybackItems
-    );
-    const mapState: MapState = getPreloadedState4Map(urlParams);
+    // const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
+    //     waybackItems,
+    //     urlParams
+    // );
+    // const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
+    //     urlParams,
+    //     waybackItems
+    // );
+    // const mapState: MapState = getPreloadedState4Map(urlParams);
 
-    const animationModeState: AnimationModeState =
-        getPreloadedState4AnimationMode(urlParams);
+    // const animationModeState: AnimationModeState =
+    //     getPreloadedState4AnimationMode(urlParams);
 
     const preloadedState = {
-        UI: uiState,
-        WaybackItems: waybackItemsState,
-        SwipeView: swipeViewState,
-        Map: mapState,
-        AnimationMode: animationModeState,
+        UI: getPreloadedState4UI(urlParams),
+        WaybackItems: getPreloadedState4WaybackItems(waybackItems, urlParams),
+        SwipeView: getPreloadedState4SwipeView(urlParams, waybackItems),
+        Map: getPreloadedState4Map(urlParams),
+        AnimationMode: getPreloadedState4AnimationMode(urlParams),
+        DownloadMode: getPreloadedState4Downloadmode(urlParams),
     } as PartialRootState;
 
     return preloadedState;

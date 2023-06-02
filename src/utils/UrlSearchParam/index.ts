@@ -7,7 +7,8 @@ type ParamKey =
     | 'active'
     | 'animationSpeed'
     | 'swipeWidget'
-    | 'framesToExclude';
+    | 'framesToExclude'
+    | 'downloadMode';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -75,10 +76,7 @@ const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
 const saveLocalChangesOnlyInURLQueryParam = (
     localChangesOnly: boolean
 ): void => {
-    const key: ParamKey = 'localChangesOnly';
-    const value = localChangesOnly ? 'true' : '';
-
-    updateHashParams(key, value);
+    updateHashParams('localChangesOnly', localChangesOnly ? 'true' : null);
 };
 
 const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
@@ -87,7 +85,7 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     const key: ParamKey = 'selected';
     const value = rNum4SelectedWaybackItems.length
         ? rNum4SelectedWaybackItems.join(',')
-        : '';
+        : null;
 
     updateHashParams(key, value);
 };
@@ -98,7 +96,7 @@ const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
     const key: ParamKey = 'active';
     const value = rNum4ActiveWaybackItem
         ? rNum4ActiveWaybackItem.toString()
-        : '';
+        : null;
 
     updateHashParams(key, value);
 };
@@ -112,7 +110,7 @@ const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
         const key: ParamKey = 'swipeWidget';
         const value = isOpen
             ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
-            : '';
+            : null;
 
         updateHashParams(key, value);
     };
@@ -122,14 +120,14 @@ const saveAnimationSpeedInURLQueryParam = (
     speed: number
 ): void => {
     const key: ParamKey = 'animationSpeed';
-    const value = isAnimationOn ? speed.toString() : '';
+    const value = isAnimationOn ? speed.toString() : null;
 
     updateHashParams(key, value);
 };
 
 const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
     const key: ParamKey = 'framesToExclude';
-    const value = rNums && rNums.length ? rNums.join(',') : '';
+    const value = rNums && rNums.length ? rNums.join(',') : null;
 
     updateHashParams(key, value);
 };
@@ -172,6 +170,9 @@ const decodeURLParams = (): IURLParamData => {
               .map((rNum) => +rNum)
         : [];
 
+    const isDownloadDialogOpen =
+        getHashParamValueByKey('downloadMode') === 'true' ? true : false;
+
     const urlParams: IURLParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
@@ -182,6 +183,7 @@ const decodeURLParams = (): IURLParamData => {
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
         animationSpeed,
         rNum4FramesToExclude,
+        isDownloadDialogOpen,
     };
 
     return urlParams;

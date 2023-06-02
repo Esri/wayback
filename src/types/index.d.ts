@@ -84,6 +84,7 @@ interface IURLParamData {
     rNum4SwipeWidgetTrailingLayer?: number;
     animationSpeed?: number;
     rNum4FramesToExclude?: number[];
+    isDownloadDialogOpen?: boolean;
 }
 
 interface IStaticTooltipData {
