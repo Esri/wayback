@@ -267,7 +267,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 ref={this.containerRef}
                 style={{
                     width: '100%',
-                    height: '90px',
+                    height: '55px',
                     marginBottom: '.5rem',
                 }}
             ></div>

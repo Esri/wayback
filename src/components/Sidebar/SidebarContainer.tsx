@@ -24,7 +24,7 @@ import {
     AnimationControls,
 } from '../';
 
-import { MobileHide, Spacing } from '../SharedUI';
+import { MobileHide } from '../SharedUI';
 
 type Props = {
     children?: React.ReactNode;
@@ -48,13 +48,13 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
         return (
             <>
-                <Spacing paddingLeft="1rem" paddingRight="1rem">
+                <div className="mx-4">
                     <BarChart />
 
-                    <Title4ActiveItem />
-
                     <ShowLocalChangesCheckboxToggle />
-                </Spacing>
+
+                    <Title4ActiveItem />
+                </div>
 
                 <ListView />
             </>
