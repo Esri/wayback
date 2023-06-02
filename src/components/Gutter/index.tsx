@@ -36,7 +36,15 @@ class Gutter extends React.PureComponent<IProps> {
                     top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
                 }}
             >
-                <div className="shadow-trailer pt-1">
+                {/* gradient effect on right side of gutter */}
+                <div
+                    className="absolute top-0 lef-0 z-0 w-full h-full"
+                    style={{
+                        background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
+                    }}
+                ></div>
+
+                <div className="py-2">
                     <div
                         className="gutter-nav-btn"
                         // data-modal={AboutThisAppModalConfig['modal-id']}
@@ -68,6 +76,14 @@ class Gutter extends React.PureComponent<IProps> {
                         <calcite-icon icon="gear" scale="l" />
                     </div>
                 </div>
+
+                {/* divider with shadow effect */}
+                <div
+                    className="w-full h-2"
+                    style={{
+                        background: `linear-gradient(5deg, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 100%)`,
+                    }}
+                ></div>
 
                 {this.props.children}
             </div>

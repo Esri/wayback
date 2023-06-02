@@ -41,9 +41,9 @@
     fill: #ccc;
 } */
 
-.gutter-container .shadow-trailer {
+/* .gutter-container .shadow-trailer {
     box-shadow: 0 0 12px 4px rgba(0, 0, 0, .3);
-}
+} */
 
 .is-mobile .gutter-container {
     display: block;
