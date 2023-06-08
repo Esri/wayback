@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
 
 import {
     metadataPopupAnchorSelector,
     metadataQueryResultSelector,
     metadataQueryResultUpdated,
-} from '../../store/reducers/Map';
+} from '@store/reducers/Map';
 
 import MetadataPopUp from './index';
 

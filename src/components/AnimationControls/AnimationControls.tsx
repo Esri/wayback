@@ -8,7 +8,7 @@ import {
     // activeWaybackItemSelector,
     // releaseNum4ActiveWaybackItemUpdated,
     waybackItemsWithLocalChangesSelector,
-} from '../../store/reducers/WaybackItems';
+} from '@store/reducers/WaybackItems';
 
 import {
     waybackItems4AnimationLoaded,
@@ -26,16 +26,16 @@ import {
     indexOfCurrentAnimationFrameSelector,
     waybackItem4CurrentAnimationFrameSelector,
     setActiveFrameByReleaseNum,
-} from '../../store/reducers/AnimationMode';
+} from '@store/reducers/AnimationMode';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import DonwloadGifButton from './DonwloadGifButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import PlayPauseBtn from './PlayPauseBtn';
-import { usePrevious } from '../../hooks/usePrevious';
-import { saveFrames2ExcludeInURLQueryParam } from '../../utils/UrlSearchParam';
+import { usePrevious } from '@hooks/usePrevious';
+import { saveFrames2ExcludeInURLQueryParam } from '@utils/UrlSearchParam';
 
 const AnimationControls = () => {
     const dispatch = useDispatch();

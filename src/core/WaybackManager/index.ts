@@ -1,8 +1,8 @@
 import config from '../../app-config';
 import axios from 'axios';
 
-import { getServiceUrl } from '../../utils/Tier';
-import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '../../types/index';
+import { getServiceUrl } from '@utils/Tier';
+import { IWaybackItem, IWaybackConfig, IMapPointInfo } from '@typings/index';
 import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
 import MetadataManager from './Metadata';

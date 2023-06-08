@@ -6,21 +6,21 @@ import {
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
-} from '../../store/reducers/Map';
+} from '@store/reducers/Map';
 
 import {
     // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
-} from '../../store/reducers/WaybackItems';
+} from '@store/reducers/WaybackItems';
 
 import MapView from './MapView';
 
 import AppConfig from '../../app-config';
-import { IExtentGeomety, IMapPointInfo } from '../../types';
-import { getDefaultExtent } from '../../utils/LocalStorage';
-import { AppContext } from '../../contexts/AppContextProvider';
-import { saveMapExtentInURLQueryParam } from '../../utils/UrlSearchParam';
+import { IExtentGeomety, IMapPointInfo } from '@typings/index';
+import { getDefaultExtent } from '@utils/LocalStorage';
+import { AppContext } from '@contexts/AppContextProvider';
+import { saveMapExtentInURLQueryParam } from '@utils/UrlSearchParam';
 
 type Props = {
     children?: React.ReactNode;

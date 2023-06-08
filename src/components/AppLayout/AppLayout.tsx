@@ -34,8 +34,8 @@ import {
     OpenDownloadPanelBtn,
     DownloadDialog,
 } from '..';
-import { AppContext } from '../../contexts/AppContextProvider';
-import { getServiceUrl } from '../../utils/Tier';
+import { AppContext } from '@contexts/AppContextProvider';
+import { getServiceUrl } from '@utils/Tier';
 
 // import { MobileHide, Spacing } from '../SharedUI';
 

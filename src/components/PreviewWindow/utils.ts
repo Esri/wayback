@@ -2,7 +2,7 @@ import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
-import { getServiceUrl } from '../../utils/Tier';
+import { getServiceUrl } from '@utils/Tier';
 
 const TILE_SIZE = 256;
 

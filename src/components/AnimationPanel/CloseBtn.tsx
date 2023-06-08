@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { toggleAnimationMode } from '../../store/reducers/AnimationMode';
+import { toggleAnimationMode } from '@store/reducers/AnimationMode';
 
 const CloseBtn = () => {
     const dispatch = useDispatch();

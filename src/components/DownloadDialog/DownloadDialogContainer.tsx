@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { isDownloadDialogOpenToggled } from '../../store/reducers/DownloadMode/reducer';
+import { isDownloadDialogOpenToggled } from '@store/reducers/DownloadMode/reducer';
 
-import { selectIsDownloadDialogOpen } from '../../store/reducers/DownloadMode/selectors';
+import { selectIsDownloadDialogOpen } from '@store/reducers/DownloadMode/selectors';
 
 import { DownloadDialog } from './DownloadDialog';
 import { useDispatch } from 'react-redux';
-import { updateHashParams } from '../../utils/UrlSearchParam';
-import { isAnonymouns, signIn } from '../../utils/Esri-OAuth';
+import { updateHashParams } from '@utils/UrlSearchParam';
+import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useDispatch();

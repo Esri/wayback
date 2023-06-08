@@ -1,12 +1,12 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
-import { IWaybackItem, IExtentGeomety } from '../../types';
-import { getServiceUrl } from '../../utils/Tier';
+import { IWaybackItem, IExtentGeomety } from '@typings/index';
+import { getServiceUrl } from '@utils/Tier';
 // import EsriRquest from 'esri/request';
 
 import esriRequest from '@arcgis/core/request';
 import esriConfig from '@arcgis/core/config';
-import { getCredential, getToken } from '../../utils/Esri-OAuth';
+import { getCredential, getToken } from '@utils/Esri-OAuth';
 
 interface ICreateWebmapParams {
     title: string;

@@ -5,7 +5,7 @@ import React, { useRef, useEffect } from 'react';
 // import ISwipe from 'esri/widgets/Swipe';
 // import IWebTileLayer from 'esri/layers/WebTileLayer';
 // import IWatchUtils from 'esri/core/watchUtils';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import MapView from '@arcgis/core/views/MapView';
 import Swipe from '@arcgis/core/widgets/Swipe';

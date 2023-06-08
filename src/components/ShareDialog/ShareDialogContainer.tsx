@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     isShareModalOpenSelector,
     isShareModalOpenToggled,
-} from '../../store/reducers/UI';
+} from '@store/reducers/UI';
 
 import ShareDialog from './index';
 

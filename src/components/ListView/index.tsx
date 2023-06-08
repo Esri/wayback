@@ -1,7 +1,7 @@
 import './style.css';
 import React from 'react';
 
-import { IWaybackItem, IStaticTooltipData } from '../../types';
+import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 
 import Card from './Card';
 import StaticTooltip from '../StaticTooltip';

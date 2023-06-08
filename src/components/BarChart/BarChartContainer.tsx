@@ -7,15 +7,15 @@ import {
     releaseNum4ItemsWithLocalChangesSelector,
     setActiveWaybackItem,
     setPreviewWaybackItem,
-} from '../../store/reducers/WaybackItems';
+} from '@store/reducers/WaybackItems';
 
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
     // shouldShowPreviewItemTitleToggled
-} from '../../store/reducers/UI';
+} from '@store/reducers/UI';
 
 import BarChart from './index';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import { MobileHide } from '../SharedUI';
 

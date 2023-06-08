@@ -2,21 +2,21 @@ import React, { useContext } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 
-import { activeWaybackItemSelector } from '../../store/reducers/WaybackItems';
+import { activeWaybackItemSelector } from '@store/reducers/WaybackItems';
 
 import {
     isSwipeWidgetOpenSelector,
     swipePositionSelector,
     swipeWidgetLeadingLayerSelector,
     swipeWidgetTrailingLayerSelector,
-} from '../../store/reducers/SwipeView';
+} from '@store/reducers/SwipeView';
 
 import {
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
-} from '../../store/reducers/Map';
+} from '@store/reducers/Map';
 
 import MetadataQueryTask from './MetadataQueryTask';
 

@@ -5,11 +5,11 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 import {
     isSwipeWidgetOpenSelector,
     toggleSwipeWidget,
-} from '../../store/reducers/SwipeView';
+} from '@store/reducers/SwipeView';
 
-import { releaseNum4SelectedItemsSelector } from '../../store/reducers/WaybackItems';
+import { releaseNum4SelectedItemsSelector } from '@store/reducers/WaybackItems';
 
-import { metadataQueryResultUpdated } from '../../store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/reducers/Map';
 
 import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
 import MobileHide from '../SharedUI/MobileHide';

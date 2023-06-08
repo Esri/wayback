@@ -7,7 +7,7 @@ import { whenTrue } from '@arcgis/core/core/watchUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
 
-import { IExtentGeomety, IMapPointInfo } from '../../types';
+import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 
 // import { WAYBACK_LAYER_ID } from '../WaybackLayer/getWaybackLayer'
 // import WMTSLayer from '@arcgis/core/layers/WMTSLayer';

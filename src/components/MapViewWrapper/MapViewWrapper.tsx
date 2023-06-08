@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/reducers/SwipeView';
 
 import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '../../constants/UI';
 
-import { AppContext } from '../../contexts/AppContextProvider';
-import { isGutterHideSelector } from '../../store/reducers/UI';
+import { AppContext } from '@contexts/AppContextProvider';
+import { isGutterHideSelector } from '@store/reducers/UI';
 
 type Props = {
     children?: React.ReactNode;

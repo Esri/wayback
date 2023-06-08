@@ -13,7 +13,17 @@
         "resolveJsonModule": true,
         "suppressImplicitAnyIndexErrors": true,
         "typeRoots": [ "./src/types", "./node_modules/@types"],
-        "lib": [ "es2015", "dom" ]
+        "lib": [ "es2015", "dom" ],
+        "paths": {
+            "@components/*": ["./src/components/*"],
+            "@constants/*": ["./src/constants/*"],
+            "@contexts/*": ["./src/contexts/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@store/*": ["./src/store/*"],
+            "@styles/*": ["./src/style/*"],
+            "@typings/*": ["./src/types/*"],
+            "@utils/*": ["./src/utils/*"],
+        }
 
     },
     "exclude": ["node_modules", "typings"],

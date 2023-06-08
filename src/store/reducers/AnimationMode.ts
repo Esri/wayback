@@ -5,9 +5,9 @@ import {
     // createAsyncThunk
 } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
-import { IWaybackItem } from '../../types';
-import { saveAnimationSpeedInURLQueryParam } from '../../utils/UrlSearchParam';
-// import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
+import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
+// import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 

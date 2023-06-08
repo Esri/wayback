@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 // import IWebTileLayer from 'esri/layers/WebTileLayer';
 import MapView from '@arcgis/core/views/MapView';
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import { getWaybackLayer } from './getWaybackLayer';
 

@@ -2,10 +2,7 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-    isGutterHideSelector,
-    isGutterHideToggled,
-} from '../../store/reducers/UI';
+import { isGutterHideSelector, isGutterHideToggled } from '@store/reducers/UI';
 
 import { MobileShow } from '../SharedUI';
 import MobileHeader from './index';

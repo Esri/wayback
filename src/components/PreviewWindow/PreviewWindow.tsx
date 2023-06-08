@@ -1,6 +1,6 @@
 import './style.css';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 // import { geometryFns } from 'helper-toolkit-ts';
 import MapView from '@arcgis/core/views/MapView';
 

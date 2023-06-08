@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 
 interface IProps {
     onClose: () => void;

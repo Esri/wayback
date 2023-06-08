@@ -8,8 +8,8 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 import {
     isAnimationModeOnSelector,
     toggleAnimationMode,
-} from '../../store/reducers/AnimationMode';
-import { AppContext } from '../../contexts/AppContextProvider';
+} from '@store/reducers/AnimationMode';
+import { AppContext } from '@contexts/AppContextProvider';
 
 const AnimationModeToogleBtn = () => {
     const dispatch = useDispatch();

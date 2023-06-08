@@ -5,7 +5,7 @@ import {
     isGutterHideSelector,
     isSideBarHideSelector,
     isSideBarHideToggled,
-} from '../../store/reducers/UI';
+} from '@store/reducers/UI';
 
 import MobileFooter from './MobileFooter';
 

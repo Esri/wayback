@@ -5,7 +5,7 @@ import {
     IFeature,
 } from '@esri/arcgis-rest-feature-service';
 import { geometryFns } from 'helper-toolkit-ts';
-import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '../../types/index';
+import { IWaybackConfig, IMapPointInfo, IWaybackItem } from '@typings/index';
 import config from './config';
 
 interface ICandidates {

@@ -1,4 +1,4 @@
-import { IURLParamData, IExtentGeomety } from '../../types';
+import { IURLParamData, IExtentGeomety } from '@typings/index';
 
 type ParamKey =
     | 'ext'

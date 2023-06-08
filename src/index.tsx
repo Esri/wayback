@@ -3,14 +3,14 @@ import './style/index.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
-import configureAppStore, { getPreloadedState } from './store/configureStore';
+import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
 import WaybackManager from './core/WaybackManager';
-import { AppLayout } from './components/';
-import { initEsriOAuth, isAnonymouns, signIn } from './utils/Esri-OAuth';
+import { AppLayout } from '@components/index';
+import { initEsriOAuth, isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import config from './app-config';
-import { getCustomPortalUrl } from './utils/LocalStorage';
-import { getServiceUrl } from './utils/Tier';
+import { getCustomPortalUrl } from '@utils/LocalStorage';
+import { getServiceUrl } from '@utils/Tier';
 
 (async () => {
     try {

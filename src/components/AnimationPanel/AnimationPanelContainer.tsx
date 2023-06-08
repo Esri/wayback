@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import {
     isAnimationModeOnSelector,
     waybackItems4AnimationSelector,
-} from '../../store/reducers/AnimationMode';
+} from '@store/reducers/AnimationMode';
 
 // import IMapView from 'esri/views/MapView';
 
 import AnimationPanel from './AnimationPanel';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 import MapView from '@arcgis/core/views/MapView';
 
 type Props = {

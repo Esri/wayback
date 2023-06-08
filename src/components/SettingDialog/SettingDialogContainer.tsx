@@ -8,12 +8,12 @@ import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
-} from '../../store/reducers/UI';
+} from '@store/reducers/UI';
 
-import { mapExtentSelector } from '../../store/reducers/Map';
+import { mapExtentSelector } from '@store/reducers/Map';
 
-// import { AppContext } from '../../contexts/AppContextProvider';
-import { isAnonymouns, signIn, signOut } from '../../utils/Esri-OAuth';
+// import { AppContext } from '@contexts/AppContextProvider';
+import { isAnonymouns, signIn, signOut } from '@utils/Esri-OAuth';
 
 const SettingDialogContainer = () => {
     const dispatch = useDispatch();

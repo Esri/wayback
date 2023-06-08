@@ -2,7 +2,7 @@ import {
     IPointGeomety,
     // IMapPointInfo,
     // IWaybackConfig,
-} from '../../types/index';
+} from '@typings/index';
 
 interface IParamsQueryMetadata {
     pointGeometry: IPointGeomety;

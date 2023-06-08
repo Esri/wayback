@@ -7,8 +7,8 @@ import {
     setCustomPortalUrl,
     setShouldShowUpdatesWithLocalChanges,
     getShouldShowUpdatesWithLocalChanges,
-} from '../../utils/LocalStorage';
-import { IExtentGeomety } from '../../types';
+} from '@utils/LocalStorage';
+import { IExtentGeomety } from '@typings/index';
 // import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';

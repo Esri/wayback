@@ -4,7 +4,7 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
-// import { IWaybackItem } from '../../types';
+// import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 

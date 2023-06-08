@@ -2,25 +2,25 @@ import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/reducers/SwipeView';
 
 import {
     releaseNum4SelectedItemsSelector,
     releaseNum4SelectedItemsCleaned,
-} from '../../store/reducers/WaybackItems';
+} from '@store/reducers/WaybackItems';
 
-// import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '@contexts/AppContextProvider';
 
 import {
     // saveHashParams,
     setShouldOpenSaveWebMapDialog,
-} from '../../utils/LocalStorage';
+} from '@utils/LocalStorage';
 
 import SaveAsWebmapBtn from './index';
-import { isSaveAsWebmapDialogOpenToggled } from '../../store/reducers/UI';
-import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '../../utils/UrlSearchParam';
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
-import { isAnonymouns, signIn } from '../../utils/Esri-OAuth';
+import { isSaveAsWebmapDialogOpenToggled } from '@store/reducers/UI';
+import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '@utils/UrlSearchParam';
+import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
+import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 
 const SaveAsWebmapBtnContainer = () => {
     const dispatch = useDispatch();

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
 import {
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
-} from '../../store/reducers/Map';
+} from '@store/reducers/Map';
 import { MobileHide } from '../SharedUI';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';

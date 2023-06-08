@@ -1,6 +1,6 @@
 import './SwipeWidgetLayerSelector.css';
 import React from 'react';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 import classnames from 'classnames';
 
 import { LayerSelector } from '../';

@@ -50,7 +50,17 @@ module.exports = (env, options)=> {
         },
         devtool: devMode ? 'source-map' : false,
         resolve: {
-            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+            alias: {
+                '@components': path.resolve(__dirname, 'src/components/'),
+                '@components': path.resolve(__dirname, 'src/components/'),
+                '@contexts': path.resolve(__dirname, 'src/contexts/'),
+                '@hooks': path.resolve(__dirname, 'src/hooks/'),
+                '@store': path.resolve(__dirname, 'src/store/'),
+                '@styles': path.resolve(__dirname, 'src/style/'),
+                '@typings': path.resolve(__dirname, 'src/types/'),
+                '@utils': path.resolve(__dirname, 'src/utils/'),
+            },
         },
         module: {
             rules: [

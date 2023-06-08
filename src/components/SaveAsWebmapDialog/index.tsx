@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import config from './config';
 
-import { IWaybackItem, IExtentGeomety } from '../../types';
+import { IWaybackItem, IExtentGeomety } from '@typings/index';
 import createWebmap from './createWebmap';
 
 interface IProps {

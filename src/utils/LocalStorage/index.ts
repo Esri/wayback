@@ -1,4 +1,4 @@
-import { IExtentGeomety } from '../../types';
+import { IExtentGeomety } from '@typings/index';
 
 const KEYS = {
     defaultExtent: 'WaybackAppDefaultExtent',

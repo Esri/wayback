@@ -5,7 +5,7 @@ import {
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IWaybackItem,
-} from '../../types';
+} from '@typings/index';
 
 // import IMapView from 'esri/views/MapView';
 // import IWatchUtils from 'esri/core/watchUtils';

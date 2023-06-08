@@ -14,15 +14,15 @@ import {
     setPreviewWaybackItem,
     setActiveWaybackItem,
     toggleSelectWaybackItem,
-} from '../../store/reducers/WaybackItems';
+} from '@store/reducers/WaybackItems';
 
-import { shouldOnlyShowItemsWithLocalChangeSelector } from '../../store/reducers/UI';
+import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/reducers/UI';
 
 import ListView from './index';
-import { IWaybackItem } from '../../types';
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
-import { addToDownloadList } from '../../store/reducers/DownloadMode/thunks';
+import { addToDownloadList } from '@store/reducers/DownloadMode/thunks';
+import { IWaybackItem } from '@typings/index';
 
 type Props = {
     children?: React.ReactNode;

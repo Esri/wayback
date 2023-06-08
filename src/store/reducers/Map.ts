@@ -8,7 +8,7 @@ import {
     IExtentGeomety,
     IScreenPoint,
     IWaybackMetadataQueryResult,
-} from '../../types';
+} from '@typings/index';
 
 import { RootState } from '../configureStore';
 

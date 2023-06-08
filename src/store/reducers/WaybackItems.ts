@@ -7,7 +7,7 @@ import {
 
 import { batch } from 'react-redux';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
@@ -16,7 +16,7 @@ import { shouldShowPreviewItemTitleToggled } from './UI';
 import { releaseNum4LeadingLayerUpdated } from './SwipeView';
 
 import { metadataQueryResultUpdated } from './Map';
-// import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
+// import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '@utils/UrlSearchParam';
 
 export type WaybackItemsState = {
     byReleaseNumber: {

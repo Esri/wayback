@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { IWaybackItem, IStaticTooltipData } from '../../types';
-import { getServiceUrl } from '../../utils/Tier';
+import { IWaybackItem, IStaticTooltipData } from '@typings/index';
+import { getServiceUrl } from '@utils/Tier';
 
 interface IProps {
     data: IWaybackItem;

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { isDownloadGIFDialogOnToggled } from '../../store/reducers/AnimationMode';
+import { isDownloadGIFDialogOnToggled } from '@store/reducers/AnimationMode';
 import { FrameData } from './generateFrames4GIF';
 
 import LoadingSpinner from './LoadingSpinner';

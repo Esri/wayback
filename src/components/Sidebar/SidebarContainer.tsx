@@ -2,17 +2,17 @@ import React, { useContext } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/reducers/SwipeView';
 
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
 
 import {
     isGutterHideSelector,
     isSideBarHideSelector,
-} from '../../store/reducers/UI';
+} from '@store/reducers/UI';
 
 import Sidebar from './Sidebar';
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 
 import {
     SidebarToggleBtn,

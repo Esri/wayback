@@ -2,7 +2,7 @@ import './style.css';
 import React from 'react';
 import * as d3 from 'd3';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 interface IProps {
     waybackItems: Array<IWaybackItem>;

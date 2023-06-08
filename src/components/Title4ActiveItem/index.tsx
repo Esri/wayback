@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 interface IProps {
     isMobile: boolean;

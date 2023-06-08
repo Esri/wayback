@@ -11,7 +11,7 @@ import DownloadGIFDialog from './DownloadGIFDialog';
 import CloseBtn from './CloseBtn';
 
 import { whenFalse } from '@arcgis/core/core/watchUtils';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -22,7 +22,7 @@ import {
     rNum2ExcludeSelector,
     // startAnimation,
     toggleIsLoadingFrameData,
-} from '../../store/reducers/AnimationMode';
+} from '@store/reducers/AnimationMode';
 import Background from './Background';
 
 type Props = {
