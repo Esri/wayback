@@ -23,6 +23,7 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
 import { addToDownloadList } from '@store/DownloadMode/thunks';
 import { IWaybackItem } from '@typings/index';
+import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
 
 type Props = {
     children?: React.ReactNode;
@@ -69,6 +70,10 @@ const ListViewContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
+    const { zoom } = useSelector(selectMapCenterAndZoom);
+
+    const mapExtent = useSelector(mapExtentSelector);
+
     return (
         <ListViewWrapper>
             <ListView
@@ -96,8 +101,8 @@ const ListViewContainer = () => {
                     dispatch(
                         addToDownloadList({
                             releaseNumber: releaseNum,
-                            extent: null,
-                            zoomLevel: 0,
+                            extent: mapExtent,
+                            zoomLevel: zoom,
                         })
                     );
                 }}

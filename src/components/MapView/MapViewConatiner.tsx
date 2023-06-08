@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
+    mapCenterUpdated,
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
+    zoomUpdated,
 } from '@store/Map/reducer';
 
 import {
@@ -21,6 +23,7 @@ import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 import { getDefaultExtent } from '@utils/LocalStorage';
 import { AppContext } from '@contexts/AppContextProvider';
 import { saveMapExtentInURLQueryParam } from '@utils/UrlSearchParam';
+import { batch } from 'react-redux';
 
 type Props = {
     children?: React.ReactNode;
@@ -95,7 +98,19 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         <FlexGrowItemWapper>
             <MapView
                 initialExtent={initialMapExtent}
-                onUpdateEnd={queryVersionsWithLocalChanges}
+                onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
+                    queryVersionsWithLocalChanges(mapCenterPoint);
+
+                    batch(() => {
+                        dispatch(
+                            mapCenterUpdated([
+                                mapCenterPoint.longitude,
+                                mapCenterPoint.latitude,
+                            ])
+                        );
+                        dispatch(zoomUpdated(mapCenterPoint.zoom));
+                    });
+                }}
                 onExtentChange={onExtentChange}
             >
                 {children}

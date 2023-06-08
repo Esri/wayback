@@ -15,6 +15,8 @@ export const addToDownloadList =
         dispatch: StoreDispatch
         // getState: StoreGetState
     ) => {
+        console.log(releaseNumber, zoomLevel, extent);
+
         batch(() => {
             dispatch(isDownloadDialogOpenToggled());
         });

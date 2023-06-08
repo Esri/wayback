@@ -1,9 +1,9 @@
 import '@arcgis/core/assets/esri/themes/dark/main.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
 import EsriMap from '@arcgis/core/Map';
-import { whenTrue } from '@arcgis/core/core/watchUtils';
+import { when } from '@arcgis/core/core/reactiveUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
 
@@ -26,6 +26,8 @@ const MapViewComponent: React.FC<Props> = ({
     onExtentChange,
     children,
 }: Props) => {
+    // const stringifiedMapExtentRef = useRef<string>();
+
     const mapDivRef = React.useRef<HTMLDivElement>();
 
     const [mapView, setMapView] = React.useState<MapView>(null);
@@ -42,45 +44,74 @@ const MapViewComponent: React.FC<Props> = ({
         view.ui.remove(['zoom']);
 
         setMapView(view);
+
+        view.when(() => {
+            initWatchUtils(view);
+        });
     };
 
-    const initWatchUtils = async () => {
-        whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
+    const initWatchUtils = async (view: MapView) => {
+        // whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
+        when(
+            () => view.stationary === true,
+            () => {
+                const center = view?.center;
+
+                if (!center) {
+                    return;
+                }
+
+                const extent = webMercatorToGeographic(view.extent);
+
+                // console.log('mapview update ended', center);
+
+                const mapViewCenterPointInfo: IMapPointInfo = {
+                    latitude: center.latitude,
+                    longitude: center.longitude,
+                    zoom: view.zoom, //getCurrZoomLevel(mapView),
+                    geometry: center.toJSON(),
+                };
+
+                onUpdateEnd(mapViewCenterPointInfo);
+
+                onExtentChange(extent.toJSON());
+            }
+        );
     };
 
-    const mapViewUpdateEndHandler = async () => {
-        const center = mapView.center;
+    // const mapViewUpdateEndHandler = async () => {
+    //     const center = mapView.center;
 
-        if (!center) {
-            return;
-        }
+    //     if (!center) {
+    //         return;
+    //     }
 
-        const extent = webMercatorToGeographic(mapView.extent);
+    //     const extent = webMercatorToGeographic(mapView.extent);
 
-        // console.log('mapview update ended', center);
+    //     // console.log('mapview update ended', center);
 
-        const mapViewCenterPointInfo: IMapPointInfo = {
-            latitude: center.latitude,
-            longitude: center.longitude,
-            zoom: mapView.zoom, //getCurrZoomLevel(mapView),
-            geometry: center.toJSON(),
-        };
+    //     const mapViewCenterPointInfo: IMapPointInfo = {
+    //         latitude: center.latitude,
+    //         longitude: center.longitude,
+    //         zoom: mapView.zoom, //getCurrZoomLevel(mapView),
+    //         geometry: center.toJSON(),
+    //     };
 
-        onUpdateEnd(mapViewCenterPointInfo);
+    //     onUpdateEnd(mapViewCenterPointInfo);
 
-        onExtentChange(extent.toJSON());
-    };
+    //     onExtentChange(extent.toJSON());
+    // };
 
     useEffect(() => {
         // loadCss();
         initMapView();
     }, []);
 
-    useEffect(() => {
-        if (mapView) {
-            initWatchUtils();
-        }
-    }, [mapView]);
+    // useEffect(() => {
+    //     if (mapView) {
+    //         initWatchUtils();
+    //     }
+    // }, [mapView]);
 
     return (
         <>
