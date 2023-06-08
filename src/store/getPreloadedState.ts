@@ -29,7 +29,7 @@ import { miscFns } from 'helper-toolkit-ts';
 import {
     DownloadModeState,
     initialDownloadModeState,
-} from './reducers/DownloadMode';
+} from './reducers/DownloadMode/reducer';
 
 const isMobile = miscFns.isMobileDevice();
 

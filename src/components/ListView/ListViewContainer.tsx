@@ -22,7 +22,7 @@ import ListView from './index';
 import { IWaybackItem } from '../../types';
 import { AppContext } from '../../contexts/AppContextProvider';
 import { Spacing } from '../SharedUI';
-import { addToDownloadList } from '../../store/reducers/DownloadMode';
+import { addToDownloadList } from '../../store/reducers/DownloadMode/thunks';
 
 type Props = {
     children?: React.ReactNode;
@@ -93,7 +93,13 @@ const ListViewContainer = () => {
                     dispatch(toggleSelectWaybackItem(releaseNum));
                 }}
                 downloadButtonOnClick={(releaseNum: number) => {
-                    dispatch(addToDownloadList(releaseNum));
+                    dispatch(
+                        addToDownloadList({
+                            releaseNumber: releaseNum,
+                            extent: null,
+                            zoomLevel: 0,
+                        })
+                    );
                 }}
             />
         </ListViewWrapper>

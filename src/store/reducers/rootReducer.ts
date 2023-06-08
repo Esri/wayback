@@ -4,7 +4,7 @@ import Map from './Map';
 import SwipeView from './SwipeView';
 import WaybackItems from './WaybackItems';
 import AnimationMode from './AnimationMode';
-import DownloadMode from './DownloadMode';
+import DownloadMode from './DownloadMode/reducer';
 
 export default combineReducers({
     UI,

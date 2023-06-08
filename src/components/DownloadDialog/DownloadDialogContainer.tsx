@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    isDownloadDialogOpenToggled,
-    selectIsDownloadDialogOpen,
-} from '../../store/reducers/DownloadMode';
+import { isDownloadDialogOpenToggled } from '../../store/reducers/DownloadMode/reducer';
+
+import { selectIsDownloadDialogOpen } from '../../store/reducers/DownloadMode/selectors';
+
 import { DownloadDialog } from './DownloadDialog';
 import { useDispatch } from 'react-redux';
 import { updateHashParams } from '../../utils/UrlSearchParam';
