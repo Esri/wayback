@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import {
     isDownloadGIFDialogOnToggled,
     isLoadingFrameDataSelector,
-} from '@store/reducers/AnimationMode';
+} from '@store/AnimationMode/reducer';
 
 const DonwloadGifButton = () => {
     const dispatch = useDispatch();

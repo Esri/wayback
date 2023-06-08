@@ -6,13 +6,13 @@ import {
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
-} from '@store/reducers/Map';
+} from '@store/Map/reducer';
 
 import {
     // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 import MapView from './MapView';
 

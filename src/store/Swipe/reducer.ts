@@ -8,7 +8,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-import { toggleAnimationMode } from './AnimationMode';
+import { toggleAnimationMode } from '../AnimationMode/reducer';
 
 export type SwipeViewState = {
     isSwipeWidgetOpen: boolean;

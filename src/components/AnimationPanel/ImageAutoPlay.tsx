@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { indexOfCurrentAnimationFrameSelector } from '@store/reducers/AnimationMode';
+import { indexOfCurrentAnimationFrameSelector } from '@store/AnimationMode/reducer';
 
 import { FrameData } from './generateFrames4GIF';
 

@@ -7,9 +7,9 @@ import {
     swipeWidgetLeadingLayerSelector,
     swipeWidgetTrailingLayerSelector,
     swipePositionUpdated,
-} from '@store/reducers/SwipeView';
+} from '@store/Swipe/reducer';
 
-import { metadataQueryResultUpdated } from '@store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidget from './SwipeWidget';
 

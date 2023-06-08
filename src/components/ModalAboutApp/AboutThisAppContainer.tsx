@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     isAboutThisAppModalOpenSelector,
     isAboutThisAppModalOpenToggled,
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 
 import AboutThisApp from './index';
 

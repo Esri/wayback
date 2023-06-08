@@ -11,11 +11,11 @@ import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-import { shouldShowPreviewItemTitleToggled } from './UI';
+import { shouldShowPreviewItemTitleToggled } from '../UI/reducer';
 
-import { releaseNum4LeadingLayerUpdated } from './SwipeView';
+import { releaseNum4LeadingLayerUpdated } from '../Swipe/reducer';
 
-import { metadataQueryResultUpdated } from './Map';
+import { metadataQueryResultUpdated } from '../Map/reducer';
 // import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '@utils/UrlSearchParam';
 
 export type WaybackItemsState = {

@@ -4,7 +4,7 @@ import {
     DeepPartial,
 } from '@reduxjs/toolkit';
 
-import rootReducer from './reducers/rootReducer';
+import rootReducer from './rootReducer';
 
 import getPreloadedState from './getPreloadedState';
 

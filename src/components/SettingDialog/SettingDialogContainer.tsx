@@ -8,9 +8,9 @@ import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 
-import { mapExtentSelector } from '@store/reducers/Map';
+import { mapExtentSelector } from '@store/Map/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
 import { isAnonymouns, signIn, signOut } from '@utils/Esri-OAuth';

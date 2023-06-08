@@ -8,7 +8,7 @@ import {
     // activeWaybackItemSelector,
     // releaseNum4ActiveWaybackItemUpdated,
     waybackItemsWithLocalChangesSelector,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 import {
     waybackItems4AnimationLoaded,
@@ -26,7 +26,7 @@ import {
     indexOfCurrentAnimationFrameSelector,
     waybackItem4CurrentAnimationFrameSelector,
     setActiveFrameByReleaseNum,
-} from '@store/reducers/AnimationMode';
+} from '@store/AnimationMode/reducer';
 
 import { IWaybackItem } from '@typings/index';
 

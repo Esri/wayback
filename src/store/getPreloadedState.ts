@@ -1,16 +1,10 @@
 import { PartialRootState } from './configureStore';
 
-import { initialUIState, UIState } from '../store/reducers/UI';
-import {
-    initialWaybackItemsState,
-    WaybackItemsState,
-} from '../store/reducers/WaybackItems';
-import {
-    initialSwipeViewState,
-    SwipeViewState,
-} from '../store/reducers/SwipeView';
+import { initialUIState, UIState } from './UI/reducer';
+import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
+import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IURLParamData, IWaybackItem } from '../types';
-import { initialMapState, MapState } from './reducers/Map';
+import { initialMapState, MapState } from './Map/reducer';
 import { decodeURLParams } from '../utils/UrlSearchParam';
 
 import {
@@ -23,13 +17,13 @@ import {
     AnimationModeState,
     DEFAULT_ANIMATION_SPEED_IN_SECONDS,
     initialAnimationModeState,
-} from './reducers/AnimationMode';
+} from './AnimationMode/reducer';
 
 import { miscFns } from 'helper-toolkit-ts';
 import {
     DownloadModeState,
     initialDownloadModeState,
-} from './reducers/DownloadMode/reducer';
+} from './DownloadMode/reducer';
 
 const isMobile = miscFns.isMobileDevice();
 

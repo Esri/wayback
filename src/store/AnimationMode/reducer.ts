@@ -11,7 +11,7 @@ import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-import { isSwipeWidgetOpenToggled } from './SwipeView';
+import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
 
 export type AnimationModeState = {
     isAnimationModeOn: boolean;

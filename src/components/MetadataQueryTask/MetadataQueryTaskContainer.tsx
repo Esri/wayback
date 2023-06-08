@@ -4,19 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { AppContext } from '@contexts/AppContextProvider';
 
-import { activeWaybackItemSelector } from '@store/reducers/WaybackItems';
+import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 
 import {
     isSwipeWidgetOpenSelector,
     swipePositionSelector,
     swipeWidgetLeadingLayerSelector,
     swipeWidgetTrailingLayerSelector,
-} from '@store/reducers/SwipeView';
+} from '@store/Swipe/reducer';
 
 import {
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
-} from '@store/reducers/Map';
+} from '@store/Map/reducer';
 
 import MetadataQueryTask from './MetadataQueryTask';
 

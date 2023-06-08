@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '@store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
     releaseNum4SelectedItemsSelector,
     releaseNum4SelectedItemsCleaned,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
 
@@ -17,9 +17,9 @@ import {
 } from '@utils/LocalStorage';
 
 import SaveAsWebmapBtn from './index';
-import { isSaveAsWebmapDialogOpenToggled } from '@store/reducers/UI';
+import { isSaveAsWebmapDialogOpenToggled } from '@store/UI/reducer';
 import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '@utils/UrlSearchParam';
-import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 
 const SaveAsWebmapBtnContainer = () => {

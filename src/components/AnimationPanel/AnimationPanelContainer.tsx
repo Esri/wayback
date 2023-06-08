@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import {
     isAnimationModeOnSelector,
     waybackItems4AnimationSelector,
-} from '@store/reducers/AnimationMode';
+} from '@store/AnimationMode/reducer';
 
 // import IMapView from 'esri/views/MapView';
 

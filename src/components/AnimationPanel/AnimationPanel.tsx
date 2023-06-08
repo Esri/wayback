@@ -22,7 +22,7 @@ import {
     rNum2ExcludeSelector,
     // startAnimation,
     toggleIsLoadingFrameData,
-} from '@store/reducers/AnimationMode';
+} from '@store/AnimationMode/reducer';
 import Background from './Background';
 
 type Props = {

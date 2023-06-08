@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { isDownloadDialogOpenToggled } from '@store/reducers/DownloadMode/reducer';
+import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
 
-import { selectIsDownloadDialogOpen } from '@store/reducers/DownloadMode/selectors';
+import { selectIsDownloadDialogOpen } from '@store/DownloadMode/selectors';
 
 import { DownloadDialog } from './DownloadDialog';
 import { useDispatch } from 'react-redux';

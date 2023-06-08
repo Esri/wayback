@@ -2,10 +2,7 @@ import React, { useCallback } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-    isSideBarHideSelector,
-    isSideBarHideToggled,
-} from '@store/reducers/UI';
+import { isSideBarHideSelector, isSideBarHideToggled } from '@store/UI/reducer';
 
 import SidebarToggleBtn from './index';
 import { MobileShow } from '../SharedUI/';

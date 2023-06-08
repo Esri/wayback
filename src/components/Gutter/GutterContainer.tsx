@@ -4,16 +4,16 @@ import Gutter from './index';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '@store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
     isGutterHideSelector,
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
-import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 type Props = {
     children: React.ReactNode;

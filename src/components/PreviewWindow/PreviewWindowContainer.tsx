@@ -9,7 +9,7 @@ import {
 import {
     previewWaybackItemSelector,
     releaseNum4AlternativePreviewWaybackItemSelector,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 // import TilePreviewWindow from './index';
 import PreviewWindow from './PreviewWindow';

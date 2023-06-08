@@ -5,14 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     isSaveAsWebmapDialogOpenSelector,
     isSaveAsWebmapDialogOpenToggled,
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 
-import { mapExtentSelector } from '@store/reducers/Map';
+import { mapExtentSelector } from '@store/Map/reducer';
 
 import {
     allWaybackItemsSelector,
     releaseNum4SelectedItemsSelector,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
 

@@ -7,9 +7,9 @@ import {
     releaseNum4ItemsWithLocalChangesSelector,
     allWaybackItemsSelector,
     releaseNum4ActiveWaybackItemUpdated,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
-import { metadataQueryResultUpdated } from '@store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import {
     swipeWidgetLeadingLayerSelector,
@@ -18,7 +18,7 @@ import {
     releaseNum4TrailingLayerUpdated,
     isSwipeWidgetOpenSelector,
     toggleSwipeWidget,
-} from '@store/reducers/SwipeView';
+} from '@store/Swipe/reducer';
 
 import { IWaybackItem } from '@typings/index';
 

@@ -1,5 +1,5 @@
 import { IExtent } from '@esri/arcgis-rest-request';
-import { StoreDispatch } from '../../configureStore';
+import { StoreDispatch } from '../configureStore';
 import { batch } from 'react-redux';
 import { isDownloadDialogOpenToggled } from './reducer';
 

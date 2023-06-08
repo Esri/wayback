@@ -9,7 +9,7 @@ import {
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
     shouldOnlyShowItemsWithLocalChangeToggled,
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 import { saveLocalChangesOnlyInURLQueryParam } from '@utils/UrlSearchParam';
 
 import ShowLocalChangesCheckboxToggle from './index';

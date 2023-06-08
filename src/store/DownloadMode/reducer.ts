@@ -5,7 +5,7 @@ import {
     // createAsyncThunk
 } from '@reduxjs/toolkit';
 
-import { RootState, StoreDispatch, StoreGetState } from '../../configureStore';
+import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import { batch } from 'react-redux';
 import { IExtent } from '@esri/arcgis-rest-request';
 

@@ -12,9 +12,9 @@ import { AppContext } from '@contexts/AppContextProvider';
 import {
     activeWaybackItemSelector,
     previewWaybackItemSelector,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
-import { shouldShowPreviewItemTitleSelector } from '@store/reducers/UI';
+import { shouldShowPreviewItemTitleSelector } from '@store/UI/reducer';
 
 import Title4ActiveItem from './index';
 

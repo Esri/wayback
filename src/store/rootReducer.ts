@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import UI from './UI';
-import Map from './Map';
-import SwipeView from './SwipeView';
-import WaybackItems from './WaybackItems';
-import AnimationMode from './AnimationMode';
+import UI from './UI/reducer';
+import Map from './Map/reducer';
+import SwipeView from './Swipe/reducer';
+import WaybackItems from './Wayback/reducer';
+import AnimationMode from './AnimationMode/reducer';
 import DownloadMode from './DownloadMode/reducer';
 
 export default combineReducers({

@@ -7,12 +7,12 @@ import {
     releaseNum4ItemsWithLocalChangesSelector,
     setActiveWaybackItem,
     setPreviewWaybackItem,
-} from '@store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
     // shouldShowPreviewItemTitleToggled
-} from '@store/reducers/UI';
+} from '@store/UI/reducer';
 
 import BarChart from './index';
 import { IWaybackItem } from '@typings/index';

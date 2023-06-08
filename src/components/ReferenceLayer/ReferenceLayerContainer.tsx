@@ -2,11 +2,11 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isReferenceLayerVisibleSelector } from '@store/reducers/Map';
+import { isReferenceLayerVisibleSelector } from '@store/Map/reducer';
 
 import ReferenceLayer from './ReferenceLayer';
 import { getServiceUrl } from '@utils/Tier';
-import { isAnimationModeOnSelector } from '@store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import MapView from '@arcgis/core/views/MapView';
 
 type Props = {
