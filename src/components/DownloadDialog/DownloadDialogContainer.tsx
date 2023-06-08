@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
 
-import { selectIsDownloadDialogOpen } from '@store/DownloadMode/selectors';
+import {
+    selectDownloadJobs,
+    selectIsDownloadDialogOpen,
+} from '@store/DownloadMode/selectors';
 
 import { DownloadDialog } from './DownloadDialog';
 import { useDispatch } from 'react-redux';
@@ -13,6 +16,8 @@ export const DownloadDialogContainer = () => {
     const dispatch = useDispatch();
 
     const isOpen = useSelector(selectIsDownloadDialogOpen);
+
+    const jobs = useSelector(selectDownloadJobs);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);
@@ -28,6 +33,7 @@ export const DownloadDialogContainer = () => {
 
     return (
         <DownloadDialog
+            jobs={jobs}
             closeButtonOnClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
             }}

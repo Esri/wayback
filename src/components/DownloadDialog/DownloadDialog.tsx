@@ -1,13 +1,26 @@
+import { DownloadJob } from '@store/DownloadMode/reducer';
 import React, { FC } from 'react';
+import { DonwloadJob } from './DonwloadJob';
 
 type Props = {
+    /**
+     * list of donwload jobs
+     */
+    jobs: DownloadJob[];
+    /**
+     * fires when close button is clicked
+     * @returns
+     */
     closeButtonOnClick: () => void;
 };
 
-export const DownloadDialog: FC<Props> = ({ closeButtonOnClick }: Props) => {
+export const DownloadDialog: FC<Props> = ({
+    jobs,
+    closeButtonOnClick,
+}: Props) => {
     return (
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden bg-custom-modal-background flex items-center justify-center z-50">
-            <div className="max-w-2xl mx-auto bg-custom-modal-content-background p-2 pb-8">
+            <div className="max-w-3xl mx-auto bg-custom-modal-content-background p-2 pb-8">
                 <div className="text-right">
                     <calcite-button
                         icon-start="x"
@@ -27,7 +40,13 @@ export const DownloadDialog: FC<Props> = ({ closeButtonOnClick }: Props) => {
                         {/* You can choose this window while your tiles are prepared. */}
                     </p>
 
-                    <div></div>
+                    <div>
+                        {jobs.map((job) => {
+                            const { id } = job;
+
+                            return <DonwloadJob key={id} data={job} />;
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

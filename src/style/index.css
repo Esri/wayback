@@ -9,6 +9,12 @@
 @import './fancy-scrollbar.css';
 @import './sidebar.css';
 
+@layer utilities {
+    .disabled {
+        @apply opacity-50 pointer-events-none;
+    }
+}
+
 html, body {
     @apply p-0 m-0 w-full h-full overflow-hidden;
     color: var(--default-text-color);

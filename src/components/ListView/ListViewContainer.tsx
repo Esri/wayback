@@ -14,6 +14,7 @@ import {
     setPreviewWaybackItem,
     setActiveWaybackItem,
     toggleSelectWaybackItem,
+    selectWaybackItemsByReleaseNum,
 } from '@store/Wayback/reducer';
 
 import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
@@ -100,7 +101,7 @@ const ListViewContainer = () => {
                 downloadButtonOnClick={(releaseNum: number) => {
                     dispatch(
                         addToDownloadList({
-                            releaseNumber: releaseNum,
+                            releaseNum,
                             extent: mapExtent,
                             zoomLevel: zoom,
                         })

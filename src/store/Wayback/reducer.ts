@@ -50,11 +50,23 @@ const slice = createSlice({
         ) => {
             const items = action.payload;
 
-            items.forEach((item) => {
+            const byReleaseNumber = {};
+            const allReleaseNumbers = [];
+
+            for (const item of items) {
                 const { releaseNum } = item;
-                state.byReleaseNumber[releaseNum] = item;
-                state.allReleaseNumbers.push(releaseNum);
-            });
+                byReleaseNumber[releaseNum] = item;
+                allReleaseNumbers.push(releaseNum);
+            }
+
+            // items.forEach((item) => {
+            //     const { releaseNum } = item;
+            //     state.byReleaseNumber[releaseNum] = item;
+            //     state.allReleaseNumbers.push(releaseNum);
+            // });
+
+            state.byReleaseNumber = byReleaseNumber;
+            state.allReleaseNumbers = allReleaseNumbers;
         },
         releaseNum4SelectedItemsAdded: (
             state: WaybackItemsState,
@@ -237,6 +249,11 @@ export const releaseNum4AlternativePreviewWaybackItemSelector = createSelector(
         state.WaybackItems.releaseNum4AlternativePreviewWaybackItem,
     (releaseNum4AlternativePreviewWaybackItem) =>
         releaseNum4AlternativePreviewWaybackItem
+);
+
+export const selectWaybackItemsByReleaseNum = createSelector(
+    (state: RootState) => state.WaybackItems.byReleaseNumber,
+    (byReleaseNumber) => byReleaseNumber
 );
 
 export default reducer;

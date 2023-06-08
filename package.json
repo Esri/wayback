@@ -103,6 +103,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-redux": "^8.0.7",
-    "redux": "^4.2.1"
+    "redux": "^4.2.1",
+    "shortid": "^2.2.16"
   }
 }

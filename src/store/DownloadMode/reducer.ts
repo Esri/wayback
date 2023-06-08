@@ -8,16 +8,21 @@ import {
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import { batch } from 'react-redux';
 import { IExtent } from '@esri/arcgis-rest-request';
+import { IWaybackItem } from '@typings/index';
 
 export type DownloadJob = {
     /**
      * unique identifier of this download job
      */
     id: string;
+    // /**
+    //  * wayback release number for this download job
+    //  */
+    // releaseNum: number;
     /**
-     * wayback release number for this download job
+     * wayback item associated with this download job
      */
-    releaseNum: number;
+    waybackItem: IWaybackItem;
     /**
      * map extent of this download job
      */
@@ -41,7 +46,7 @@ export type DownloadJob = {
     /**
      * status of this download job
      */
-    status: 'pending' | 'finished' | '';
+    status: 'not started' | 'pending' | 'finished';
     /**
      * unix timestamp of when this job was created
      */
