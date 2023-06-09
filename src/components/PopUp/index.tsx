@@ -1,8 +1,6 @@
 // import { loadModules } from 'esri-loader';
 import './style.css';
 import React from 'react';
-
-// import WaybackManager from '../../services/waybackManager';
 import { dateFns } from 'helper-toolkit-ts';
 
 import {
@@ -10,26 +8,12 @@ import {
     IScreenPoint,
     // IWaybackItem,
 } from '@typings/index';
-// import IMapView from 'esri/views/MapView';
-// import IWatchUtils from 'esri/core/watchUtils';
-// import IPoint from 'esri/geometry/Point';
 
 interface IProps {
     metadata: IWaybackMetadataQueryResult;
     metadataAnchorScreenPoint: IScreenPoint;
     onClose: () => void;
-    // mapView?: IMapView;
-    // waybackManager?: WaybackManager;
-    // targetLayer: IWaybackItem;
-    // previewWaybackItem: IWaybackItem;
-    // // disabled: boolean;
 }
-
-// interface IState {
-//     anchorPoint: IPoint;
-//     metadata: IWaybackMetadataQueryResult;
-//     metadataAnchorScreenPoint: IScreenPoint;
-// }
 
 class PopUp extends React.PureComponent<IProps> {
     private readonly Width = 360;
@@ -37,113 +21,7 @@ class PopUp extends React.PureComponent<IProps> {
 
     constructor(props: IProps) {
         super(props);
-
-        // this.state = {
-        //     anchorPoint: null,
-        //     metadata: null,
-        //     metadataAnchorScreenPoint: null,
-        // };
-
-        // this.onClose = this.onClose.bind(this);
     }
-
-    // setAnchorPoint(point: IPoint) {
-    //     const { mapView } = this.props;
-
-    //     this.setState(
-    //         {
-    //             anchorPoint: point,
-    //             metadataAnchorScreenPoint: mapView.toScreen(point),
-    //         },
-    //         async () => {
-    //             const response = await this.queryMetadata();
-    //             this.setMetaData(response.metadata);
-    //         }
-    //     );
-    // }
-
-    // setMetaData(metadata?: IWaybackMetadataQueryResult) {
-    //     this.setState({
-    //         metadata,
-    //     });
-    // }
-
-    // async initMapViewEventHandlers() {
-    //     const { mapView } = this.props;
-
-    //     try {
-    //         type Modules = [typeof IWatchUtils];
-
-    //         const [watchUtils] = await (loadModules([
-    //             'esri/core/watchUtils',
-    //         ]) as Promise<Modules>);
-
-    //         mapView.on('click', (evt) => {
-    //             // console.log('view on click, should show popup', evt.mapPoint);
-    //             this.setAnchorPoint(evt.mapPoint);
-    //         });
-
-    //         watchUtils.watch(mapView, 'zoom', () => {
-    //             // console.log('view zoom is on updating, should hide the popup', zoom);
-    //             this.onClose();
-    //         });
-
-    //         watchUtils.watch(mapView, 'center', () => {
-    //             // console.log('view center is on updating, should update the popup position');
-    //             // need to update the screen point for popup anchor since the map center has changed
-    //             this.updateScreenPoint4PopupAnchor();
-    //         });
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // }
-
-    // async queryMetadata() {
-    //     const { waybackManager, targetLayer, mapView } = this.props;
-
-    //     const { anchorPoint } = this.state;
-
-    //     if(!anchorPoint && !mapView){
-    //         return;
-    //     }
-
-    //     const pointGeometry = anchorPoint || mapView.center;
-
-    //     try {
-    //         const metadata = await waybackManager.getMetadata({
-    //             releaseNum: targetLayer.releaseNum,
-    //             pointGeometry: pointGeometry.toJSON(),
-    //             zoom: mapView.zoom,
-    //         });
-
-    //         return {
-    //             metadata,
-    //         };
-    //     } catch (err) {
-    //         console.error(err);
-
-    //         return {
-    //             metadata: null,
-    //         };
-    //     }
-    // }
-
-    // updateScreenPoint4PopupAnchor() {
-    //     const { mapView } = this.props;
-    //     const { anchorPoint, metadata } = this.state;
-
-    //     if (anchorPoint && metadata) {
-    //         const metadataAnchorScreenPoint = mapView.toScreen(anchorPoint);
-
-    //         this.setState({
-    //             metadataAnchorScreenPoint,
-    //         });
-    //     }
-    // }
-
-    // onClose() {
-    //     this.setMetaData();
-    // }
 
     formatMetadataDate() {
         const { metadata } = this.props;
@@ -157,24 +35,6 @@ class PopUp extends React.PureComponent<IProps> {
 
         return `${month} ${day}, ${year}`;
     }
-
-    // componentDidUpdate(prevProps: IProps) {
-    //     const { mapView, previewWaybackItem, targetLayer } = this.props;
-
-    //     if (prevProps.mapView !== mapView) {
-    //         this.initMapViewEventHandlers();
-    //     }
-
-    //     if (prevProps.previewWaybackItem !== previewWaybackItem) {
-    //         this.onClose();
-    //     }
-
-    //     // call queryMetadata once the active wayback item is updated to warm up the metadata service,
-    //     // because the first query always takes much longer time
-    //     if( prevProps.targetLayer !== targetLayer) {
-    //         this.queryMetadata();
-    //     }
-    // }
 
     render() {
         // const { targetLayer } = this.props;
