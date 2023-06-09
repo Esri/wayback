@@ -14,6 +14,7 @@ import { DownloadDialog } from './DownloadDialog';
 import { useDispatch } from 'react-redux';
 import { updateHashParams } from '@utils/UrlSearchParam';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useDispatch();
@@ -21,6 +22,11 @@ export const DownloadDialogContainer = () => {
     const isOpen = useSelector(selectIsDownloadDialogOpen);
 
     const jobs = useSelector(selectDownloadJobs);
+
+    useEffect(() => {
+        // save jobs to localhost so they can be restored
+        saveDownloadJobs2LocalStorage(jobs);
+    }, [jobs]);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);

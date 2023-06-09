@@ -1,3 +1,4 @@
+import { DownloadJob } from '@store/DownloadMode/reducer';
 import { IExtentGeomety } from '@typings/index';
 
 const KEYS = {
@@ -6,6 +7,7 @@ const KEYS = {
     shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog',
     customPortalUrl: 'WaybackAppCustomPortalUrl',
     hashParams: 'WaybackAppHashParam',
+    downloadJobs: `WaybackAppDownloadJobs`,
 };
 
 const setItem = (key?: string, value = '') => {
@@ -69,6 +71,19 @@ const getShouldOpenSaveWebMapDialog = () => {
     return val === 'true' ? true : false;
 };
 
+const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
+    if (!jobs || !jobs.length) {
+        removeItem(KEYS.downloadJobs);
+    } else {
+        setItem(KEYS.downloadJobs, JSON.stringify(jobs));
+    }
+};
+
+const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
+    const val = getItem(KEYS.downloadJobs);
+    return val ? JSON.parse(val) : [];
+};
+
 // const saveHashParams = () => {
 //     const hash = location.hash.toString();
 
@@ -98,6 +113,8 @@ export {
     getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
+    saveDownloadJobs2LocalStorage,
+    getDownloadJobsFromLocalStorage,
     // saveHashParams,
     // getHashParamsFromLocalStorage,
 };

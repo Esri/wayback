@@ -12,6 +12,7 @@ import {
     // getCustomPortalUrl,
     getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
+    getDownloadJobsFromLocalStorage,
 } from '../utils/LocalStorage';
 import {
     AnimationModeState,
@@ -136,9 +137,24 @@ const getPreloadedState4Downloadmode = (
 ): DownloadModeState => {
     const { isDownloadDialogOpen } = urlParams;
 
+    const jobs = getDownloadJobsFromLocalStorage();
+
+    const byId = {};
+    const ids = [];
+
+    for (const job of jobs) {
+        const { id } = job;
+        byId[id] = job;
+        ids.push(id);
+    }
+
     const state: DownloadModeState = {
         ...initialDownloadModeState,
         isDownloadDialogOpen,
+        jobs: {
+            byId,
+            ids,
+        },
     };
 
     return state;
