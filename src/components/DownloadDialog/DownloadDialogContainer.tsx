@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { updateHashParams } from '@utils/UrlSearchParam';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
+import { updateUserSelectedZoomLevels } from '@store/DownloadMode/thunks';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useDispatch();
@@ -50,7 +51,8 @@ export const DownloadDialogContainer = () => {
                 dispatch(downloadJobRemoved(id));
             }}
             levelsOnChange={(id, levels) => {
-                console.log(id, levels);
+                // console.log(id, levels);
+                dispatch(updateUserSelectedZoomLevels(id, levels));
             }}
         />
     );

@@ -4,6 +4,7 @@ import { batch } from 'react-redux';
 import {
     DownloadJob,
     downloadJobCreated,
+    downloadJobUpdated,
     isDownloadDialogOpenToggled,
 } from './reducer';
 import { generate } from 'shortid';
@@ -61,4 +62,26 @@ export const addToDownloadList =
             dispatch(downloadJobCreated(downloadJob));
             dispatch(isDownloadDialogOpenToggled());
         });
+    };
+
+export const updateUserSelectedZoomLevels =
+    (id: string, levels: number[]) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const { DownloadMode } = getState();
+
+        const { jobs } = DownloadMode;
+
+        const { byId } = jobs;
+
+        if (!byId[id]) {
+            console.error('cannot find job data with job id of %s', id);
+            return;
+        }
+
+        const updatedJobsData: DownloadJob = {
+            ...byId[id],
+            levels,
+        };
+
+        dispatch(downloadJobUpdated(updatedJobsData));
     };

@@ -95,6 +95,10 @@ const slice = createSlice({
                 (id) => id !== idOfJob2BeRemoved
             );
         },
+        downloadJobUpdated: (state, action: PayloadAction<DownloadJob>) => {
+            const { id } = action.payload;
+            state.jobs.byId[id] = action.payload;
+        },
     },
 });
 
@@ -104,6 +108,7 @@ export const {
     isDownloadDialogOpenToggled,
     downloadJobCreated,
     downloadJobRemoved,
+    downloadJobUpdated,
 } = slice.actions;
 
 export default reducer;
