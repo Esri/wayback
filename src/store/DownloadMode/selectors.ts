@@ -13,3 +13,26 @@ export const selectDownloadJobs = createSelector(
         return ids.map((id) => byId[id]);
     }
 );
+
+export const selectNumOfDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => jobs.ids.length
+);
+
+export const selectNumOfPendingDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        return ids.filter((id) => byId[id].status === 'pending').length;
+    }
+);
+
+export const selectNumOfFinishedDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        return ids.filter((id) => byId[id].status === 'finished').length;
+    }
+);

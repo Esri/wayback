@@ -1,0 +1,14 @@
+.indicator-bubble {
+    /* position: absolute;
+    bottom: 3px;
+    right: 2px; */
+    /* width: 16px; */
+    /* height: 16px; */
+    /* line-height: 16px; */
+    /* border-radius: 50%; */
+    /* background-color: var(--color-active-item); */
+    @apply text-white flex justify-center items-center bg-custom-theme-blue w-4 h-4 absolute rounded-full bottom-[3px] right-[2px];
+    font-size: 0.65rem;
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, .5);
+    /* display: none; */
+}

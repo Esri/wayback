@@ -37,7 +37,7 @@ module.exports = (env, options)=> {
 
     return {
         devServer: {
-            https: true,
+            server: 'https',
             host: hostname,
             allowedHosts: "all"
         },

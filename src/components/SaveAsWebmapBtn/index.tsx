@@ -1,6 +1,7 @@
 import './style.css';
 import React from 'react';
 import classNames from 'classnames';
+import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 
 interface IProps {
     selectedWaybackItems: Array<number>;
@@ -55,9 +56,12 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
                     <calcite-icon icon="arcgis-online" scale="l" />
 
                     {isActive && (
-                        <div className="indicator-count-of-selected-items">
+                        // <div className="indicator-count-of-selected-items">
+                        //     <span>{selectedWaybackItems.length}</span>
+                        // </div>
+                        <IndicatorBubble>
                             <span>{selectedWaybackItems.length}</span>
-                        </div>
+                        </IndicatorBubble>
                     )}
                 </div>
 

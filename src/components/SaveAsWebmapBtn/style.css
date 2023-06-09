@@ -1,18 +1,3 @@
-.save-as-webmap-btn-container .indicator-count-of-selected-items {
-    position: absolute;
-    bottom: 3px;
-    right: 2px;
-    width: 16px;
-    height: 16px;
-    line-height: 16px;
-    border-radius: 50%;
-    background-color: var(--color-active-item);
-    font-size: 0.65rem;
-    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, .5);
-    @apply text-white text-center;
-    /* display: none; */
-}
-
 .save-as-webmap-btn-container .font-size--4 {
     font-size: 0.7rem;
 }
