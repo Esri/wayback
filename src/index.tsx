@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
-import WaybackManager from './core/WaybackManager';
+import WaybackManager from './core/wayback';
 import { AppLayout } from '@components/index';
 import { initEsriOAuth, isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import config from './app-config';
