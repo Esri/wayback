@@ -1,3 +1,4 @@
+import { MapCenter } from '@store/Map/reducer';
 import { IURLParamData, IExtentGeomety } from '@typings/index';
 
 type ParamKey =
@@ -8,7 +9,8 @@ type ParamKey =
     | 'animationSpeed'
     | 'swipeWidget'
     | 'framesToExclude'
-    | 'downloadMode';
+    | 'downloadMode'
+    | 'mapCenter';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -130,6 +132,30 @@ const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
     const value = rNums && rNums.length ? rNums.join(',') : null;
 
     updateHashParams(key, value);
+};
+
+export const saveMapCenterToHashParams = (center: MapCenter, zoom: number) => {
+    const { lon, lat } = center;
+    const value = `${lon.toFixed(3)},${lat.toFixed(3)},${zoom}`;
+    updateHashParams('mapCenter', value);
+};
+
+export const getMapCenterFromHashParams = () => {
+    const value = getHashParamValueByKey('mapCenter');
+
+    if (!value) {
+        return null;
+    }
+
+    const [lon, lat, zoom] = value.split(',').map((d) => +d);
+
+    return {
+        center: {
+            lon,
+            lat,
+        },
+        zoom,
+    };
 };
 
 const decodeURLParams = (): IURLParamData => {

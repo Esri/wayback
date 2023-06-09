@@ -7,6 +7,7 @@ import {
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
+    selectMapCenterAndZoom,
     zoomUpdated,
 } from '@store/Map/reducer';
 
@@ -22,7 +23,10 @@ import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 import { getDefaultExtent } from '@utils/LocalStorage';
 import { AppContext } from '@contexts/AppContextProvider';
-import { saveMapExtentInURLQueryParam } from '@utils/UrlSearchParam';
+import {
+    saveMapCenterToHashParams,
+    saveMapExtentInURLQueryParam,
+} from '@utils/UrlSearchParam';
 import { batch } from 'react-redux';
 
 type Props = {
@@ -62,6 +66,8 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const mapExtent = useSelector(mapExtentSelector);
 
+    const { center, zoom } = useSelector(selectMapCenterAndZoom);
+
     const initialMapExtent = useMemo((): IExtentGeomety => {
         const defaultExtentFromLocalStorage = getDefaultExtent(); //getDefaultExtent();
 
@@ -90,9 +96,17 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         dispatch(mapExtentUpdated(extent));
     };
 
+    // useEffect(() => {
+    //     saveMapExtentInURLQueryParam(mapExtent);
+    // }, [mapExtent]);
+
     useEffect(() => {
-        saveMapExtentInURLQueryParam(mapExtent);
-    }, [mapExtent]);
+        if (center === null || zoom === null) {
+            return;
+        }
+
+        saveMapCenterToHashParams(center, zoom);
+    }, [center, zoom]);
 
     return (
         <FlexGrowItemWapper>
@@ -103,10 +117,10 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
                     batch(() => {
                         dispatch(
-                            mapCenterUpdated([
-                                mapCenterPoint.longitude,
-                                mapCenterPoint.latitude,
-                            ])
+                            mapCenterUpdated({
+                                lon: mapCenterPoint.longitude,
+                                lat: mapCenterPoint.latitude,
+                            })
                         );
                         dispatch(zoomUpdated(mapCenterPoint.zoom));
                     });
