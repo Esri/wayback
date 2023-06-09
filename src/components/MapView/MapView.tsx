@@ -6,6 +6,7 @@ import EsriMap from '@arcgis/core/Map';
 import { when } from '@arcgis/core/core/reactiveUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
+import TileInfo from '@arcgis/core/layers/support/TileInfo';
 
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 import { MapCenter } from '@store/Map/reducer';
@@ -56,6 +57,20 @@ const MapViewComponent: React.FC<Props> = ({
             extent,
             center: center ? [center.lon, center.lat] : null,
             zoom,
+            constraints: {
+                /**
+                 * The MapView's constraints.effectiveLODs will be null if the following statements are true
+                 * - The map doesn't have a basemap, or
+                 * - the basemap does not have a TileInfo,
+                 * - AND the first layer added to the map does not have a TileInfo.
+                 *
+                 * If the effectiveLODs are null, it is not possible to set zoom on the MapView because the conversion is not possible.
+                 * The zoom value will be -1 in this case. Setting scale will work.
+                 * To address this, the MapView's constraints.lods can be defined at the time of its initialization by calling `TileInfo.create().lods`.
+                 * @see https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
+                 */
+                lods: TileInfo.create().lods,
+            },
         });
 
         view.ui.remove(['zoom']);
