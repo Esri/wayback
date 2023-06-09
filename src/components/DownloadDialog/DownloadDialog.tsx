@@ -12,15 +12,40 @@ type Props = {
      * @returns
      */
     closeButtonOnClick: () => void;
+    /**
+     * fires when user clicks on the remove button to delete the download job
+     * @param id job id
+     * @returns
+     */
+    removeButtonOnClick: (id: string) => void;
 };
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
     closeButtonOnClick,
+    removeButtonOnClick,
 }: Props) => {
+    const getJobsList = () => {
+        if (!jobs?.length) {
+            return <div className="text-center my-8">No download jobs.</div>;
+        }
+
+        return jobs.map((job) => {
+            const { id } = job;
+            return (
+                <div key={id} className="mb-3">
+                    <DonwloadJob
+                        data={job}
+                        removeButtonOnClick={removeButtonOnClick}
+                    />
+                </div>
+            );
+        });
+    };
+
     return (
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden bg-custom-modal-background flex items-center justify-center z-50">
-            <div className="max-w-3xl mx-auto bg-custom-modal-content-background p-2 pb-8">
+            <div className="max-w-3xl mx-8 min-h-[50%] bg-custom-modal-content-background p-2 pb-8">
                 <div className="text-right">
                     <calcite-button
                         icon-start="x"
@@ -40,13 +65,7 @@ export const DownloadDialog: FC<Props> = ({
                         {/* You can choose this window while your tiles are prepared. */}
                     </p>
 
-                    <div>
-                        {jobs.map((job) => {
-                            const { id } = job;
-
-                            return <DonwloadJob key={id} data={job} />;
-                        })}
-                    </div>
+                    <div>{getJobsList()}</div>
                 </div>
             </div>
         </div>

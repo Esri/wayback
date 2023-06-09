@@ -27,7 +27,7 @@ export const addToDownloadList =
             id: generate(),
             waybackItem: byReleaseNumber[releaseNum],
             minZoomLevel: zoomLevel,
-            maxZoomLevel: zoomLevel,
+            maxZoomLevel: zoomLevel + 5,
             levels: [zoomLevel, zoomLevel],
             extent,
             status: 'not started',

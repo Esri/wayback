@@ -87,12 +87,22 @@ const slice = createSlice({
             state.jobs.byId[id] = action.payload;
             state.jobs.ids = [id, ...state.jobs.ids];
         },
+        downloadJobRemoved: (state, action: PayloadAction<string>) => {
+            const idOfJob2BeRemoved = action.payload;
+            delete state.jobs.byId[idOfJob2BeRemoved];
+            state.jobs.ids = state.jobs.ids.filter(
+                (id) => id !== idOfJob2BeRemoved
+            );
+        },
     },
 });
 
 const { reducer } = slice;
 
-export const { isDownloadDialogOpenToggled, downloadJobCreated } =
-    slice.actions;
+export const {
+    isDownloadDialogOpenToggled,
+    downloadJobCreated,
+    downloadJobRemoved,
+} = slice.actions;
 
 export default reducer;

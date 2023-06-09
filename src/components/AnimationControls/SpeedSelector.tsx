@@ -1,13 +1,5 @@
 import React from 'react';
 
-declare global {
-    namespace JSX {
-        export interface IntrinsicElements {
-            'calcite-slider': any;
-        }
-    }
-}
-
 type Props = {
     defaultVal: number;
     onChange: (speed: number) => void;

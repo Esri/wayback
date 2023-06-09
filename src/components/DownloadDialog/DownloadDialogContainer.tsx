@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
+import {
+    downloadJobRemoved,
+    isDownloadDialogOpenToggled,
+} from '@store/DownloadMode/reducer';
 
 import {
     selectDownloadJobs,
@@ -36,6 +39,9 @@ export const DownloadDialogContainer = () => {
             jobs={jobs}
             closeButtonOnClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
+            }}
+            removeButtonOnClick={(id) => {
+                dispatch(downloadJobRemoved(id));
             }}
         />
     );

@@ -4,10 +4,24 @@ import { DownloadJob } from '@store/DownloadMode/reducer';
 
 type Props = {
     data: DownloadJob;
+    /**
+     * fires when user clicks on the remove button to delete the download job
+     * @param id job id
+     * @returns
+     */
+    removeButtonOnClick: (id: string) => void;
 };
 
-export const DonwloadJob: FC<Props> = ({ data }) => {
-    const { waybackItem, levels, totalTiles, status } = data || {};
+export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
+    const {
+        id,
+        waybackItem,
+        levels,
+        totalTiles,
+        status,
+        minZoomLevel,
+        maxZoomLevel,
+    } = data || {};
 
     const getStatusIcon = () => {
         if (status === 'pending') {
@@ -18,7 +32,16 @@ export const DonwloadJob: FC<Props> = ({ data }) => {
             return <calcite-icon icon="check" scale="s" />;
         }
 
-        return null;
+        return (
+            <calcite-icon
+                icon="x"
+                scale="s"
+                style={{
+                    cursor: 'pointer',
+                }}
+                onClick={removeButtonOnClick.bind(null, id)}
+            />
+        );
     };
 
     const getButtonLable = () => {
@@ -44,10 +67,22 @@ export const DonwloadJob: FC<Props> = ({ data }) => {
                     {getStatusIcon()}
                 </div>
 
-                <div className="mr-4">
+                <div className="">
                     <span className="text-2xl text-custom-theme-blue">
                         {waybackItem.releaseDateLabel}
                     </span>
+                </div>
+
+                <div className="flex-grow px-4">
+                    <calcite-slider
+                        label-ticks
+                        snap
+                        max={maxZoomLevel}
+                        min={minZoomLevel}
+                        value={maxZoomLevel}
+                        step="1"
+                        ticks="1"
+                    ></calcite-slider>
                 </div>
 
                 <div className="text-sm text-white">
