@@ -56,6 +56,7 @@ module.exports = (env, options)=> {
                 '@constants': path.resolve(__dirname, 'src/constants/'),
                 '@contexts': path.resolve(__dirname, 'src/contexts/'),
                 '@hooks': path.resolve(__dirname, 'src/hooks/'),
+                '@services': path.resolve(__dirname, 'src/services/'),
                 '@store': path.resolve(__dirname, 'src/store/'),
                 '@styles': path.resolve(__dirname, 'src/style/'),
                 '@typings': path.resolve(__dirname, 'src/types/'),

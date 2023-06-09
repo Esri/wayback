@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import classnames from 'classnames';
 import { DownloadJob } from '@store/DownloadMode/reducer';
+import { numberFns } from 'helper-toolkit-ts';
 
 type Props = {
     data: DownloadJob;
@@ -17,11 +18,33 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
         id,
         waybackItem,
         levels,
-        totalTiles,
         status,
         minZoomLevel,
         maxZoomLevel,
+        tileEstimations,
     } = data || {};
+
+    const totalTiles = useMemo(() => {
+        if (!tileEstimations || !tileEstimations.length) {
+            return 0;
+        }
+
+        let total = 0;
+
+        for (const { count, level } of tileEstimations) {
+            if (level < minZoomLevel) {
+                continue;
+            }
+
+            if (level > maxZoomLevel) {
+                break;
+            }
+
+            total += count;
+        }
+
+        return total;
+    }, [tileEstimations, minZoomLevel, maxZoomLevel]);
 
     const getStatusIcon = () => {
         if (status === 'pending') {
@@ -93,7 +116,9 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
                     </div>
 
                     <div className="leading-none">
-                        <span>~{totalTiles || 0} tiles</span>
+                        <span>
+                            ~{numberFns.numberWithCommas(totalTiles)} tiles
+                        </span>
                     </div>
                 </div>
             </div>

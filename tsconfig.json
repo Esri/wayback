@@ -19,6 +19,7 @@
             "@constants/*": ["./src/constants/*"],
             "@contexts/*": ["./src/contexts/*"],
             "@hooks/*": ["./src/hooks/*"],
+            "@services/*": ["./src/services/*"],
             "@store/*": ["./src/store/*"],
             "@styles/*": ["./src/style/*"],
             "@typings/*": ["./src/types/*"],

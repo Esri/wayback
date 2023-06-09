@@ -9,6 +9,7 @@ import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import { batch } from 'react-redux';
 import { IExtent } from '@esri/arcgis-rest-request';
 import { IWaybackItem } from '@typings/index';
+import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 
 export type DownloadJob = {
     /**
@@ -44,6 +45,10 @@ export type DownloadJob = {
      */
     levels: number[];
     /**
+     * estimations of number of tiles that can be included in the output bundle
+     */
+    tileEstimations: TileEstimation[];
+    /**
      * status of this download job
      */
     status: 'not started' | 'pending' | 'finished';
@@ -51,10 +56,6 @@ export type DownloadJob = {
      * unix timestamp of when this job was created
      */
     createdTime: number;
-    /**
-     * an estimation of total number of tiles that will be included in the bundle
-     */
-    totalTiles?: number;
 };
 
 export type DownloadModeState = {

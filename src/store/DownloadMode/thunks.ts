@@ -7,10 +7,20 @@ import {
     isDownloadDialogOpenToggled,
 } from './reducer';
 import { generate } from 'shortid';
+import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 
 type AddToDownloadListParams = {
+    /**
+     * user selected wayback release number
+     */
     releaseNum: number;
+    /**
+     * current map zoom level
+     */
     zoomLevel: number;
+    /**
+     * current map extent
+     */
     extent: IExtent;
 };
 
@@ -23,12 +33,25 @@ export const addToDownloadList =
 
         const { byReleaseNumber } = WaybackItems;
 
+        const tileEstimations = getTileEstimationsInOutputBundle(
+            extent,
+            zoomLevel
+        );
+
+        // const totalTiles = tileEstimations.reduce((total, curr)=>{
+        //     return total + curr.count
+        // }, 0)
+
+        const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
+
         const downloadJob: DownloadJob = {
             id: generate(),
             waybackItem: byReleaseNumber[releaseNum],
             minZoomLevel: zoomLevel,
-            maxZoomLevel: zoomLevel + 5,
-            levels: [zoomLevel, zoomLevel],
+            maxZoomLevel,
+            tileEstimations,
+            // totalTiles,
+            levels: [zoomLevel, maxZoomLevel],
             extent,
             status: 'not started',
             createdTime: new Date().getTime(),
