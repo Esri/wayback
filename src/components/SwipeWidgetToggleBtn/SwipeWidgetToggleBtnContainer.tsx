@@ -12,7 +12,7 @@ import { releaseNum4SelectedItemsSelector } from '@store/Wayback/reducer';
 import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
-import MobileHide from '../SharedUI/MobileHide';
+import MobileHide from '../MobileVisibility/MobileHide';
 
 const SwipeWidgetToggleBtnContainer = () => {
     const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
-import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '../../constants/UI';
+import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '@constants/UI';
 
 import { AppContext } from '@contexts/AppContextProvider';
 import { isGutterHideSelector } from '@store/UI/reducer';

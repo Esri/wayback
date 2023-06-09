@@ -17,7 +17,7 @@ import {
 import BarChart from './index';
 import { IWaybackItem } from '@typings/index';
 
-import { MobileHide } from '../SharedUI';
+import { MobileHide } from '../MobileVisibility';
 
 const BarChartContainer: React.FC = () => {
     const dispatch = useDispatch();

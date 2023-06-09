@@ -13,7 +13,7 @@ import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidget from './SwipeWidget';
 
-import { MobileHide } from '../SharedUI';
+import { MobileHide } from '../MobileVisibility';
 
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';

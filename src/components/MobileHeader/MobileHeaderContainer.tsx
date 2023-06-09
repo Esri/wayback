@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 
-import { MobileShow } from '../SharedUI';
+import { MobileShow } from '../MobileVisibility';
 import MobileHeader from './index';
 
 const MobileHeaderContainer = () => {

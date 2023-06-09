@@ -3,7 +3,7 @@ import {
     DEFAULT_BACKGROUND_COLOR,
     GUTTER_WIDTH,
     SIDEBAR_WIDTH,
-} from '../../constants/UI';
+} from '@constants/UI';
 
 type Props = {
     isHide: boolean;

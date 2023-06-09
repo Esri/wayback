@@ -6,7 +6,7 @@ import {
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
 } from '@store/Map/reducer';
-import { MobileHide } from '../SharedUI';
+import { MobileHide } from '../MobileVisibility';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 

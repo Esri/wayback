@@ -21,7 +21,6 @@ import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
 
 import ListView from './index';
 import { AppContext } from '@contexts/AppContextProvider';
-import { Spacing } from '../SharedUI';
 import { addToDownloadList } from '@store/DownloadMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
@@ -43,9 +42,7 @@ const ListViewWrapper: React.FC<Props> = ({ children }) => {
                 overflowY: 'auto',
             }}
         >
-            <Spacing paddingLeft="1rem" paddingRight="1rem">
-                {children}
-            </Spacing>
+            <div className="mx-4">{children}</div>
         </div>
     );
 };

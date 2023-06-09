@@ -1,6 +1,6 @@
 import './style.css';
 import React from 'react';
-import { MOBILE_HEADER_HEIGHT } from '../../constants/UI';
+import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
 
 interface IProps {
     isMobile: boolean;

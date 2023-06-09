@@ -21,7 +21,7 @@ import {
     AnimationControls,
 } from '../';
 
-import { MobileHide } from '../SharedUI';
+import { MobileHide } from '../MobileVisibility';
 
 type Props = {
     children?: React.ReactNode;
