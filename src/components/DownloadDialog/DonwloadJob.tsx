@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
@@ -8,12 +8,24 @@ type Props = {
     /**
      * fires when user clicks on the remove button to delete the download job
      * @param id job id
-     * @returns
+     * @returns void
      */
     removeButtonOnClick: (id: string) => void;
+    /**
+     * fires when user makes changes to the selected zoom levels using the slider
+     * @param levels
+     * @returns void
+     */
+    levelsOnChange: (id: string, levels: number[]) => void;
 };
 
-export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
+export const DonwloadJob: FC<Props> = ({
+    data,
+    removeButtonOnClick,
+    levelsOnChange,
+}) => {
+    const sliderRef = React.useRef<any>();
+
     const {
         id,
         waybackItem,
@@ -31,12 +43,14 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
 
         let total = 0;
 
+        const [minZoom, maxZoom] = levels;
+
         for (const { count, level } of tileEstimations) {
-            if (level < minZoomLevel) {
+            if (level < minZoom) {
                 continue;
             }
 
-            if (level > maxZoomLevel) {
+            if (level > maxZoom) {
                 break;
             }
 
@@ -44,7 +58,7 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
         }
 
         return total;
-    }, [tileEstimations, minZoomLevel, maxZoomLevel]);
+    }, [tileEstimations, levels]);
 
     const getStatusIcon = () => {
         if (status === 'pending') {
@@ -79,6 +93,17 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
         return 'create tile package';
     };
 
+    useEffect(() => {
+        sliderRef.current.addEventListener(
+            'calciteSliderChange',
+            (evt: any) => {
+                const userSelectedMaxZoomLevel = +evt.target.value;
+
+                levelsOnChange(id, [levels[0], userSelectedMaxZoomLevel]);
+            }
+        );
+    }, []);
+
     if (!data) {
         return null;
     }
@@ -98,11 +123,12 @@ export const DonwloadJob: FC<Props> = ({ data, removeButtonOnClick }) => {
 
                 <div className="flex-grow px-4">
                     <calcite-slider
+                        ref={sliderRef}
                         label-ticks
                         snap
                         max={maxZoomLevel}
                         min={minZoomLevel}
-                        value={maxZoomLevel}
+                        value={levels[1]}
                         step="1"
                         ticks="1"
                     ></calcite-slider>

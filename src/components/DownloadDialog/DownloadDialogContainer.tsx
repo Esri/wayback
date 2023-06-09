@@ -49,6 +49,9 @@ export const DownloadDialogContainer = () => {
             removeButtonOnClick={(id) => {
                 dispatch(downloadJobRemoved(id));
             }}
+            levelsOnChange={(id, levels) => {
+                console.log(id, levels);
+            }}
         />
     );
 };

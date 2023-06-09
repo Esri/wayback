@@ -18,12 +18,19 @@ type Props = {
      * @returns
      */
     removeButtonOnClick: (id: string) => void;
+    /**
+     * fires when user makes changes to the selected zoom levels using the slider
+     * @param levels
+     * @returns void
+     */
+    levelsOnChange: (id: string, levels: number[]) => void;
 };
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
     closeButtonOnClick,
     removeButtonOnClick,
+    levelsOnChange,
 }: Props) => {
     const getJobsList = () => {
         if (!jobs?.length) {
@@ -37,6 +44,7 @@ export const DownloadDialog: FC<Props> = ({
                     <DonwloadJob
                         data={job}
                         removeButtonOnClick={removeButtonOnClick}
+                        levelsOnChange={levelsOnChange}
                     />
                 </div>
             );
