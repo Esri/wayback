@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import WaybackManager from '../core/wayback';
+import WaybackManager from '../services/wayback';
 // import OAuthUtils from '../utils/Esri-OAuth';
 import { getServiceUrl } from '../utils/Tier';
 import { getCustomPortalUrl } from '../utils/LocalStorage';

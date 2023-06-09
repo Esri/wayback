@@ -2,7 +2,7 @@
 import './style.css';
 import React from 'react';
 
-// import WaybackManager from '../../core/WaybackManager';
+// import WaybackManager from '../../services/waybackManager';
 import { dateFns } from 'helper-toolkit-ts';
 
 import {
