@@ -8,6 +8,7 @@ import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercat
 import Extent from '@arcgis/core/geometry/Extent';
 
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
+import { MapCenter } from '@store/Map/reducer';
 
 // import { WAYBACK_LAYER_ID } from '../WaybackLayer/getWaybackLayer'
 // import WMTSLayer from '@arcgis/core/layers/WMTSLayer';
@@ -15,6 +16,14 @@ import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 
 interface Props {
     initialExtent: IExtentGeomety;
+    /**
+     * Coordinate pair `{longitude, latitude}` that represent the default center of the map view
+     */
+    center?: MapCenter;
+    /**
+     * deafult zoom level
+     */
+    zoom?: number;
     onUpdateEnd: (centerPoint: IMapPointInfo) => void;
     onExtentChange: (extent: IExtentGeomety) => void;
     children?: React.ReactNode;
@@ -22,6 +31,8 @@ interface Props {
 
 const MapViewComponent: React.FC<Props> = ({
     initialExtent,
+    center,
+    zoom,
     onUpdateEnd,
     onExtentChange,
     children,
@@ -33,12 +44,18 @@ const MapViewComponent: React.FC<Props> = ({
     const [mapView, setMapView] = React.useState<MapView>(null);
 
     const initMapView = () => {
+        const extent = initialExtent
+            ? new Extent({
+                  ...initialExtent,
+              })
+            : null;
+
         const view = new MapView({
             container: mapDivRef.current,
             map: new EsriMap(),
-            extent: new Extent({
-                ...initialExtent,
-            }),
+            extent,
+            center: center ? [center.lon, center.lat] : null,
+            zoom,
         });
 
         view.ui.remove(['zoom']);

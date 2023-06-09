@@ -5,7 +5,10 @@ import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
 import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IURLParamData, IWaybackItem } from '../types';
 import { initialMapState, MapState } from './Map/reducer';
-import { decodeURLParams } from '../utils/UrlSearchParam';
+import {
+    decodeURLParams,
+    getMapCenterFromHashParams,
+} from '../utils/UrlSearchParam';
 
 import {
     // getDefaultExtent,
@@ -101,9 +104,13 @@ const getPreloadedState4SwipeView = (
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     const { mapExtent } = urlParams;
 
+    const { center, zoom } = getMapCenterFromHashParams() || {};
+
     const state: MapState = {
         ...initialMapState,
         mapExtent,
+        center,
+        zoom,
     };
 
     return state;

@@ -60,24 +60,17 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const { waybackManager } = useContext(AppContext);
 
-    // const activeWaybackItem = useSelector(activeWaybackItemSelector);
-
-    // const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
-
     const mapExtent = useSelector(mapExtentSelector);
 
     const { center, zoom } = useSelector(selectMapCenterAndZoom);
 
-    const initialMapExtent = useMemo((): IExtentGeomety => {
-        const defaultExtentFromLocalStorage = getDefaultExtent(); //getDefaultExtent();
+    const defaultMapExtent = useMemo((): IExtentGeomety => {
+        // no need to use default map extent if center and zoom are already defined
+        if (center && zoom) {
+            return null;
+        }
 
-        // console.log(mapExtent)
-
-        return (
-            mapExtent ||
-            defaultExtentFromLocalStorage ||
-            AppConfig.defaultMapExtent
-        );
+        return mapExtent || getDefaultExtent() || AppConfig.defaultMapExtent;
     }, []);
 
     const queryVersionsWithLocalChanges = async (
@@ -101,7 +94,7 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     // }, [mapExtent]);
 
     useEffect(() => {
-        if (center === null || zoom === null) {
+        if (!center || !zoom) {
             return;
         }
 
@@ -111,7 +104,9 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     return (
         <FlexGrowItemWapper>
             <MapView
-                initialExtent={initialMapExtent}
+                initialExtent={defaultMapExtent}
+                center={center}
+                zoom={zoom}
                 onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
                     queryVersionsWithLocalChanges(mapCenterPoint);
 
