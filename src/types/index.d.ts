@@ -1,7 +1,7 @@
 // import IPortal from 'esri/portal/Portal';
 // import ICredential from 'esri/identity/Credential';
-import Credential from '@arcgis/core/identity/Credential';
-import Portal from '@arcgis/core/portal/Portal';
+// import Credential from '@arcgis/core/identity/Credential';
+// import Portal from '@arcgis/core/portal/Portal';
 
 interface IWaybackConfig {
     [key: number]: {
@@ -99,7 +99,8 @@ type ValidServiceUrlNames =
     | 'wayback-config'
     | 'wayback-change-detector-layer'
     | 'reference-layer'
-    | 'world-imagery-basemap';
+    | 'world-imagery-basemap'
+    | 'wayback-export-base';
 
 interface IAppConfig {
     appId: string;
