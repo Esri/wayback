@@ -11,6 +11,12 @@ import { IExtent } from '@esri/arcgis-rest-request';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 
+export type DownloadJobStatus =
+    | 'not started'
+    | 'pending'
+    | 'finished'
+    | 'failed';
+
 export type DownloadJob = {
     /**
      * unique identifier of this download job
@@ -51,11 +57,19 @@ export type DownloadJob = {
     /**
      * status of this download job
      */
-    status: 'not started' | 'pending' | 'finished';
+    status: DownloadJobStatus;
     /**
-     * unix timestamp of when this job was created
+     * unix timestamp of when this job was finished
      */
-    createdTime: number;
+    finishedTime?: number;
+    /**
+     * id of the Wayport geoprocessing job that user submitted to create the wayback tile package
+     */
+    GPJobId?: string;
+    /**
+     * output URL from the Wayport GP service job that user can use to download the export tile package
+     */
+    outputTilePackageURL?: string;
 };
 
 export type DownloadModeState = {
@@ -95,9 +109,11 @@ const slice = createSlice({
                 (id) => id !== idOfJob2BeRemoved
             );
         },
-        downloadJobUpdated: (state, action: PayloadAction<DownloadJob>) => {
-            const { id } = action.payload;
-            state.jobs.byId[id] = action.payload;
+        downloadJobsUpdated: (state, action: PayloadAction<DownloadJob[]>) => {
+            for (const job of action.payload) {
+                const { id } = job;
+                state.jobs.byId[id] = job;
+            }
         },
     },
 });
@@ -108,7 +124,7 @@ export const {
     isDownloadDialogOpenToggled,
     downloadJobCreated,
     downloadJobRemoved,
-    downloadJobUpdated,
+    downloadJobsUpdated,
 } = slice.actions;
 
 export default reducer;

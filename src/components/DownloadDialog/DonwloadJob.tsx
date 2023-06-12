@@ -6,6 +6,18 @@ import { numberFns } from 'helper-toolkit-ts';
 type Props = {
     data: DownloadJob;
     /**
+     * fires when user clicks on the create tile package button to start the download job
+     * @param id download job id
+     * @returns
+     */
+    createTilePackageButtonOnClick: (id: string) => void;
+    /**
+     * fires when user clicks on the download tile package button
+     * @param id download job id
+     * @returns
+     */
+    downloadTilePackageButtonOnClick: (gpJobId: string) => void;
+    /**
      * fires when user clicks on the remove button to delete the download job
      * @param id job id
      * @returns void
@@ -21,6 +33,8 @@ type Props = {
 
 export const DonwloadJob: FC<Props> = ({
     data,
+    createTilePackageButtonOnClick,
+    downloadTilePackageButtonOnClick,
     removeButtonOnClick,
     levelsOnChange,
 }) => {
@@ -34,6 +48,7 @@ export const DonwloadJob: FC<Props> = ({
         minZoomLevel,
         maxZoomLevel,
         tileEstimations,
+        // GPJobId
     } = data || {};
 
     const totalTiles = useMemo(() => {
@@ -91,6 +106,14 @@ export const DonwloadJob: FC<Props> = ({
         }
 
         return 'create tile package';
+    };
+
+    const buttonOnClickHandler = () => {
+        if (status === 'not started') {
+            createTilePackageButtonOnClick(id);
+        } else if (status === 'finished') {
+            downloadTilePackageButtonOnClick(id);
+        }
     };
 
     useEffect(() => {
@@ -156,6 +179,7 @@ export const DonwloadJob: FC<Props> = ({
                         disabled: status === 'pending',
                     }
                 )}
+                onClick={buttonOnClickHandler}
             >
                 <span className="uppercase">{getButtonLable()}</span>
             </div>

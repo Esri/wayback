@@ -8,6 +8,18 @@ type Props = {
      */
     jobs: DownloadJob[];
     /**
+     * fires when user clicks on the create tile package button to start the download job
+     * @param id job id
+     * @returns
+     */
+    createTilePackageButtonOnClick: (id: string) => void;
+    /**
+     * fires when user clicks on the download tile package button
+     * @param gpJobId geoprocessing job id
+     * @returns
+     */
+    downloadTilePackageButtonOnClick: (gpJobId: string) => void;
+    /**
      * fires when close button is clicked
      * @returns
      */
@@ -28,6 +40,8 @@ type Props = {
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
+    createTilePackageButtonOnClick,
+    downloadTilePackageButtonOnClick,
     closeButtonOnClick,
     removeButtonOnClick,
     levelsOnChange,
@@ -43,6 +57,12 @@ export const DownloadDialog: FC<Props> = ({
                 <div key={id} className="mb-3">
                     <DonwloadJob
                         data={job}
+                        createTilePackageButtonOnClick={
+                            createTilePackageButtonOnClick
+                        }
+                        downloadTilePackageButtonOnClick={
+                            downloadTilePackageButtonOnClick
+                        }
                         removeButtonOnClick={removeButtonOnClick}
                         levelsOnChange={levelsOnChange}
                     />

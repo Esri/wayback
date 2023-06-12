@@ -36,3 +36,16 @@ export const selectNumOfFinishedDownloadJobs = createSelector(
         return ids.filter((id) => byId[id].status === 'finished').length;
     }
 );
+
+export const selectPendingDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const idOfPendingJobs = ids.filter(
+            (id) => byId[id].status === 'pending'
+        );
+
+        return idOfPendingJobs.map((id) => byId[id]);
+    }
+);

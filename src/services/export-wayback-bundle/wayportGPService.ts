@@ -21,7 +21,7 @@ type SubmitJobParams = {
     /**
      * user selected zoom levels
      */
-    zoomLevels: number[];
+    levels: number[];
 };
 
 type SubmitJobResponse = {
@@ -61,16 +61,24 @@ type GetJobOutputResponse = {
 
 const WAYPORT_GP_SERVICE_ROOT = getServiceUrl('wayback-export-base');
 
+/**
+ *
+ * @param param0
+ * @returns
+ *
+ * @see https://developers.arcgis.com/rest/services-reference/enterprise/submit-gp-job.htm
+ */
 export const submitJob = async ({
     extent,
     layerIdentifier,
-    zoomLevels,
+    levels,
 }: SubmitJobParams): Promise<SubmitJobResponse> => {
+    // the GP service prefers extent in web mercator projection
     const extentInWebMercator = geographicToWebMercator(
         new Extent(extent)
     ) as Extent;
 
-    const [minZoom, maxZoom] = zoomLevels;
+    const [minZoom, maxZoom] = levels;
 
     const { xmin, ymin, xmax, ymax } = extentInWebMercator;
 
@@ -102,11 +110,11 @@ export const checkJobStatus = async (
 };
 
 export const getJobOutput = async (
-    jobId: string,
-    paramUrl: string
+    jobId: string
+    // paramUrl: string
 ): Promise<GetJobOutputResponse> => {
     const res = await fetch(
-        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/${paramUrl}?f=json`
+        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json`
     );
 
     const data = await res.json();
