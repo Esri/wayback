@@ -24,6 +24,7 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { addToDownloadList } from '@store/DownloadMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
+import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/DownloadMode/selectors';
 
 type Props = {
     children?: React.ReactNode;
@@ -68,6 +69,10 @@ const ListViewContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
+    const hasReachedLimitOfConcurrentDownloadJobs = useSelector(
+        selectHasReachedLimitOfConcurrentDownloadJobs
+    );
+
     const { zoom } = useSelector(selectMapCenterAndZoom);
 
     const mapExtent = useSelector(mapExtentSelector);
@@ -78,6 +83,9 @@ const ListViewContainer = () => {
                 isMobile={isMobile}
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}
+                hasReachedLimitOfConcurrentDownloadJobs={
+                    hasReachedLimitOfConcurrentDownloadJobs
+                }
                 shouldOnlyShowItemsWithLocalChange={
                     shouldOnlyShowItemsWithLocalChange
                 }

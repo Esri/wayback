@@ -40,7 +40,7 @@ type AddToDownloadListParams = {
 
 let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
-const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
+const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 30;
 
 const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
@@ -192,7 +192,7 @@ export const checkPendingDownloadJobStatus =
             dispatch(downloadJobsUpdated(updatedJobsData));
 
             // call this thunk function again in case there are still pending jobs left
-            dispatch(checkPendingDownloadJobStatus);
+            dispatch(checkPendingDownloadJobStatus());
         }, CHECK_JOB_STATUS_DELAY_IN_SECONDS * 1000);
     };
 

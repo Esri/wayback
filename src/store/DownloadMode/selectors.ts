@@ -19,6 +19,11 @@ export const selectNumOfDownloadJobs = createSelector(
     (jobs) => jobs.ids.length
 );
 
+export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => jobs.ids.length >= 5
+);
+
 export const selectNumOfPendingDownloadJobs = createSelector(
     (state: RootState) => state.DownloadMode.jobs,
     (jobs) => {

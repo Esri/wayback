@@ -9,6 +9,10 @@ interface IProps {
     isActive: boolean;
     isSelected: boolean;
     isHighlighted: boolean;
+    /**
+     * if true, download button should be disabled
+     */
+    shouldDownloadButtonBeDisabled?: boolean;
 
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
@@ -68,6 +72,7 @@ class ListViewCard extends React.PureComponent<IProps> {
             isActive,
             isSelected,
             isHighlighted,
+            shouldDownloadButtonBeDisabled,
             onClick,
             onMouseEnter,
             onMouseOut,
@@ -118,9 +123,21 @@ class ListViewCard extends React.PureComponent<IProps> {
                     className={classnames(ButtonWrapperClassnames, {
                         flex: showControlButtons,
                         'hidden group-hover:flex': !showControlButtons,
+                        'cursor-default opacity-50':
+                            shouldDownloadButtonBeDisabled,
                     })}
-                    onClick={downloadButtonOnClick.bind(this, data.releaseNum)}
-                    title="Download a local copy of imagery tiles"
+                    onClick={() => {
+                        if (shouldDownloadButtonBeDisabled) {
+                            return;
+                        }
+
+                        downloadButtonOnClick(data.releaseNum);
+                    }}
+                    title={
+                        shouldDownloadButtonBeDisabled
+                            ? 'Reached the maximum limit for download jobs'
+                            : 'Download a local copy of imagery tiles'
+                    }
                 >
                     <calcite-icon icon="download-to" scale="m" />
                 </div>
