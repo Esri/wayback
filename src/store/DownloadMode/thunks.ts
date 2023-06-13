@@ -46,16 +46,17 @@ const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
 export const addToDownloadList =
     ({ releaseNum, zoomLevel, extent }: AddToDownloadListParams) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
 
         const { WaybackItems } = getState();
 
         const { byReleaseNumber } = WaybackItems;
 
-        const tileEstimations = getTileEstimationsInOutputBundle(
+        const tileEstimations = await getTileEstimationsInOutputBundle(
             extent,
-            zoomLevel
+            zoomLevel,
+            releaseNum
         );
 
         // const totalTiles = tileEstimations.reduce((total, curr)=>{

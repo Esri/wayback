@@ -60,6 +60,8 @@ export const DonwloadJob: FC<Props> = ({
         // GPJobId
     } = data || {};
 
+    const sliderProp = maxZoomLevel === minZoomLevel ? { disabled: true } : {};
+
     const totalTiles = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {
             return 0;
@@ -146,11 +148,16 @@ export const DonwloadJob: FC<Props> = ({
                         ref={sliderRef}
                         label-ticks
                         snap
-                        max={maxZoomLevel}
+                        max={
+                            maxZoomLevel === minZoomLevel
+                                ? maxZoomLevel + 1
+                                : maxZoomLevel
+                        }
                         min={minZoomLevel}
                         value={levels[1]}
                         step="1"
                         ticks="1"
+                        {...sliderProp}
                     ></calcite-slider>
                 </div>
 

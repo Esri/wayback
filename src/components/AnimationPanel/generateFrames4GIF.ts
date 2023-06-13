@@ -3,6 +3,7 @@ import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackItem } from '@typings/index';
+import { getServiceUrl } from '@utils/Tier';
 
 // import { loadModules } from 'esri-loader';
 
@@ -47,6 +48,8 @@ export type FrameData = {
     width: number;
     center: CenterLocationForFrameRect;
 };
+
+const WaybackImageBaseURL = getServiceUrl('wayback-imagery-base');
 
 export const generateFrames = async ({
     frameRect,
@@ -120,7 +123,7 @@ const generateFrame = async ({
             const img = new Image(TILE_SIZE, TILE_SIZE);
             img.crossOrigin = 'anonymous';
 
-            const imageURL = `https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/${releaseNum}/${level}/${row}/${column}`;
+            const imageURL = `${WaybackImageBaseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
 
             img.src = imageURL;
 

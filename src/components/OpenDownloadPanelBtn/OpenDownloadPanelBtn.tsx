@@ -20,7 +20,7 @@ export const OpenDownloadPanelBtn = () => {
     const numOfFinishedJobs = useSelector(selectNumOfFinishedDownloadJobs);
 
     const getIndicator = () => {
-        if (!numOfPendingJobs && !numOfFinishedJobs) {
+        if (!numOfJobs) {
             return null;
         }
 
@@ -41,7 +41,7 @@ export const OpenDownloadPanelBtn = () => {
                         <path fill="none" d="M0 0h16v16H0z" />
                     </svg>
                 ) : (
-                    <span>{numOfPendingJobs}</span>
+                    <span>{numOfJobs}</span>
                 )}
             </IndicatorBubble>
         );
