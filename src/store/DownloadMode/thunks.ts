@@ -12,12 +12,14 @@ import { generate } from 'shortid';
 import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import {
     checkJobStatus,
+    getJobOutput,
     submitJob,
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
+import { downloadExportBundle } from '@services/export-wayback-bundle/downloadOutputBundle';
 
 type AddToDownloadListParams = {
     /**
@@ -160,16 +162,24 @@ export const checkPendingDownloadJobStatus =
                     const existingJobData = pendingJobs[index];
 
                     let status: DownloadJobStatus = 'pending';
+                    let finishTime: number = null;
 
-                    if (res.jobStatus === 'esriJobSucceeded') {
-                        status = 'finished';
-                    } else if (res.jobStatus === 'esriJobFailed') {
-                        status = 'failed';
+                    if (
+                        res.jobStatus === 'esriJobSucceeded' ||
+                        res.jobStatus === 'esriJobFailed'
+                    ) {
+                        status =
+                            res.jobStatus === 'esriJobSucceeded'
+                                ? 'finished'
+                                : 'failed';
+
+                        finishTime = new Date().getTime();
                     }
 
                     return {
                         ...existingJobData,
                         status,
+                        finishTime,
                     };
                 }
             );
@@ -179,4 +189,54 @@ export const checkPendingDownloadJobStatus =
             // call this thunk function again in case there are still pending jobs left
             dispatch(checkPendingDownloadJobStatus);
         }, CHECK_JOB_STATUS_DELAY_IN_SECONDS * 1000);
+    };
+
+export const downloadOutputTilePackage =
+    (id: string) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const { DownloadMode } = getState();
+
+        const { jobs } = DownloadMode;
+
+        const { byId } = jobs;
+
+        if (!byId[id]) {
+            console.error('cannot find job data with job id of %s', id);
+            return;
+        }
+
+        const { GPJobId } = byId[id];
+
+        try {
+            dispatch(
+                downloadJobsUpdated([
+                    {
+                        ...byId[id],
+                        status: 'downloading',
+                    },
+                ])
+            );
+
+            await downloadExportBundle(GPJobId);
+
+            dispatch(
+                downloadJobsUpdated([
+                    {
+                        ...byId[id],
+                        status: 'downloaded',
+                    },
+                ])
+            );
+        } catch (err) {
+            // console.log(err);
+
+            dispatch(
+                downloadJobsUpdated([
+                    {
+                        ...byId[id],
+                        status: 'failed',
+                    },
+                ])
+            );
+        }
     };

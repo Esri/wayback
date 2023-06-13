@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
-import { DownloadJob } from '@store/DownloadMode/reducer';
+import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
 
 type Props = {
@@ -29,6 +29,15 @@ type Props = {
      * @returns void
      */
     levelsOnChange: (id: string, levels: number[]) => void;
+};
+
+const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
+    'not started': 'create tile package',
+    pending: 'in progress...',
+    finished: 'donwload',
+    failed: 'failed',
+    downloading: 'downloading',
+    downloaded: 'downloaded',
 };
 
 export const DonwloadJob: FC<Props> = ({
@@ -80,7 +89,11 @@ export const DonwloadJob: FC<Props> = ({
             return <calcite-loader scale="s" inline></calcite-loader>;
         }
 
-        if (status === 'finished') {
+        if (
+            status === 'finished' ||
+            status === 'downloading' ||
+            status === 'downloaded'
+        ) {
             return <calcite-icon icon="check" scale="s" />;
         }
 
@@ -94,18 +107,6 @@ export const DonwloadJob: FC<Props> = ({
                 onClick={removeButtonOnClick.bind(null, id)}
             />
         );
-    };
-
-    const getButtonLable = () => {
-        if (status === 'pending') {
-            return 'in progress...';
-        }
-
-        if (status === 'finished') {
-            return 'download';
-        }
-
-        return 'create tile package';
     };
 
     const buttonOnClickHandler = () => {
@@ -176,12 +177,15 @@ export const DonwloadJob: FC<Props> = ({
                 className={classnames(
                     'flex justify-center items-center w-52  bg-custom-theme-blue text-white cursor-pointer shrink-0',
                     {
-                        disabled: status === 'pending',
+                        disabled:
+                            status === 'pending' || status === 'downloading',
                     }
                 )}
                 onClick={buttonOnClickHandler}
             >
-                <span className="uppercase">{getButtonLable()}</span>
+                <span className="uppercase">
+                    {ButtonLableByStatus[status] || status}
+                </span>
             </div>
         </div>
     );
