@@ -89,11 +89,7 @@ export const DonwloadJob: FC<Props> = ({
             return <calcite-loader scale="s" inline></calcite-loader>;
         }
 
-        if (
-            status === 'finished' ||
-            status === 'downloading' ||
-            status === 'downloaded'
-        ) {
+        if (status === 'finished' || status === 'downloading') {
             return <calcite-icon icon="check" scale="s" />;
         }
 
@@ -178,7 +174,10 @@ export const DonwloadJob: FC<Props> = ({
                     'flex justify-center items-center w-52  bg-custom-theme-blue text-white cursor-pointer shrink-0',
                     {
                         disabled:
-                            status === 'pending' || status === 'downloading',
+                            status === 'pending' ||
+                            status === 'downloading' ||
+                            status === 'failed' ||
+                            status === 'downloaded',
                     }
                 )}
                 onClick={buttonOnClickHandler}

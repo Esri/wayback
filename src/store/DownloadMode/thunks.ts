@@ -16,6 +16,7 @@ import {
     submitJob,
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
+    selectDownloadJobs,
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
@@ -39,6 +40,8 @@ type AddToDownloadListParams = {
 let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
 const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
+
+const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
 export const addToDownloadList =
     ({ releaseNum, zoomLevel, extent }: AddToDownloadListParams) =>
@@ -239,4 +242,20 @@ export const downloadOutputTilePackage =
                 ])
             );
         }
+    };
+
+export const removeExpiredJobs =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobs = selectDownloadJobs(getState());
+
+        // unix timestamp of curren time
+        const now = new Date().getTime();
+
+        // find jobs that were finished more than 1 hour ago
+        const expiredJobs = jobs.filter((job) => {
+            const ageOfJobInSeconds = (now - job.finishTime) / 1000;
+            return ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS;
+        });
+
+        const idOfExpiredJobs = expiredJobs.map((job) => job.id);
     };

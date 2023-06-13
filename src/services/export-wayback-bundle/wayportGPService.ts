@@ -75,7 +75,15 @@ export const submitJob = async ({
 }: SubmitJobParams): Promise<SubmitJobResponse> => {
     // the GP service prefers extent in web mercator projection
     const extentInWebMercator = geographicToWebMercator(
-        new Extent(extent)
+        new Extent({
+            xmin: extent.xmin,
+            ymin: extent.ymin,
+            xmax: extent.xmax,
+            ymax: extent.ymax,
+            spatialReference: {
+                wkid: 4326,
+            },
+        })
     ) as Extent;
 
     const [minZoom, maxZoom] = levels;
