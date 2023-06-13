@@ -7,7 +7,7 @@ import SetttingDialog from './index';
 import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
-    shouldOnlyShowItemsWithLocalChangeToggled,
+    // shouldOnlyShowItemsWithLocalChangeToggled,
 } from '@store/UI/reducer';
 
 import { mapExtentSelector } from '@store/Map/reducer';
@@ -36,18 +36,18 @@ const SettingDialogContainer = () => {
         }
     };
 
-    const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
-        dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
-    };
+    // const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
+    //     dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
+    // };
 
     return isOpen ? (
         <SetttingDialog
             mapExtent={mapExtent}
             signedInAlready={isAnonymouns() === false}
             toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-            shouldShowLocalChangesByDefaultOnClick={
-                shouldShowLocalChangesByDefaultOnClick
-            }
+            // shouldShowLocalChangesByDefaultOnClick={
+            //     shouldShowLocalChangesByDefaultOnClick
+            // }
             onClose={onCloseHandler}
         />
     ) : null;

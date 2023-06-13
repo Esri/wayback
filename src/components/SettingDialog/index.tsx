@@ -5,8 +5,8 @@ import {
     saveDefaultExtent,
     getCustomPortalUrl,
     setCustomPortalUrl,
-    setShouldShowUpdatesWithLocalChanges,
-    getShouldShowUpdatesWithLocalChanges,
+    // setShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
 } from '@utils/LocalStorage';
 import { IExtentGeomety } from '@typings/index';
 // import config from './config';
@@ -18,9 +18,9 @@ interface IProps {
     signedInAlready?: boolean;
 
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
-    shouldShowLocalChangesByDefaultOnClick: (
-        shouldShowLocalChangesByDefault: boolean
-    ) => void;
+    // shouldShowLocalChangesByDefaultOnClick: (
+    //     shouldShowLocalChangesByDefault: boolean
+    // ) => void;
 
     onClose: () => void;
 }
@@ -29,7 +29,7 @@ interface IState {
     portalUrl: string;
     shouldUseCustomPortalUrl: boolean;
     shouldSaveAsDefaultExtent: boolean;
-    shouldShowLocalChangesByDefault: boolean;
+    // shouldShowLocalChangesByDefault: boolean;
     saveBtnLable: SaveBtnLabelValue;
 }
 
@@ -46,8 +46,8 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             portalUrl: CustomUrlFromLocalStorage,
             shouldUseCustomPortalUrl: CustomUrlFromLocalStorage ? true : false,
             shouldSaveAsDefaultExtent: false,
-            shouldShowLocalChangesByDefault:
-                getShouldShowUpdatesWithLocalChanges(),
+            // shouldShowLocalChangesByDefault:
+            //     getShouldShowUpdatesWithLocalChanges(),
             saveBtnLable: 'Save',
         };
 
@@ -80,29 +80,28 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             portalUrl,
             shouldUseCustomPortalUrl,
             shouldSaveAsDefaultExtent,
-            shouldShowLocalChangesByDefault,
+            // shouldShowLocalChangesByDefault,
         } = this.state;
 
-        const { shouldShowLocalChangesByDefaultOnClick, onClose, mapExtent } =
-            this.props;
+        const { onClose, mapExtent } = this.props;
 
         if (shouldSaveAsDefaultExtent) {
             // const mapExt = getMapExtent();
             saveDefaultExtent(mapExtent);
         }
 
-        if (
-            shouldShowLocalChangesByDefault !==
-            getShouldShowUpdatesWithLocalChanges()
-        ) {
-            setShouldShowUpdatesWithLocalChanges(
-                shouldShowLocalChangesByDefault
-            );
+        // if (
+        //     shouldShowLocalChangesByDefault !==
+        //     getShouldShowUpdatesWithLocalChanges()
+        // ) {
+        //     setShouldShowUpdatesWithLocalChanges(
+        //         shouldShowLocalChangesByDefault
+        //     );
 
-            shouldShowLocalChangesByDefaultOnClick(
-                shouldShowLocalChangesByDefault
-            );
-        }
+        //     shouldShowLocalChangesByDefaultOnClick(
+        //         shouldShowLocalChangesByDefault
+        //     );
+        // }
 
         const customPortalUrl =
             shouldUseCustomPortalUrl && portalUrl ? portalUrl : null;
@@ -163,21 +162,16 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
             portalUrl,
             shouldUseCustomPortalUrl,
             shouldSaveAsDefaultExtent,
-            shouldShowLocalChangesByDefault,
+            // shouldShowLocalChangesByDefault,
             saveBtnLable,
         } = this.state;
 
-        const isShouldShowLocalChangesByDefaultChanged =
-            shouldShowLocalChangesByDefault !==
-            getShouldShowUpdatesWithLocalChanges();
+        // const isShouldShowLocalChangesByDefaultChanged =
+        //     shouldShowLocalChangesByDefault !==
+        //     getShouldShowUpdatesWithLocalChanges();
 
         const saveBtnClasses = classnames('btn', {
-            'btn-disabled':
-                !portalUrl &&
-                !shouldSaveAsDefaultExtent &&
-                !isShouldShowLocalChangesByDefaultChanged
-                    ? true
-                    : false,
+            'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent,
         });
 
         const signOutBtn = (
@@ -237,7 +231,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                         </label>
                     </div>
 
-                    <div className="leader-half trailer-1">
+                    {/* <div className="leader-half trailer-1">
                         <label className="toggle-switch">
                             <input
                                 type="checkbox"
@@ -257,7 +251,7 @@ class SettingDialog extends React.PureComponent<IProps, IState> {
                                 Show only versions with local changes by default
                             </span>
                         </label>
-                    </div>
+                    </div> */}
 
                     <div className="leader-half trailer-1">
                         <label className="toggle-switch">

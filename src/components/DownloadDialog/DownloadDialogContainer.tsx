@@ -21,6 +21,7 @@ import {
     startDownloadJob,
     updateUserSelectedZoomLevels,
     downloadOutputTilePackage,
+    cleanUpDownloadJobs,
 } from '@store/DownloadMode/thunks';
 // import { getJobOutput } from '@services/export-wayback-bundle/wayportGPService';
 
@@ -57,6 +58,12 @@ export const DownloadDialogContainer = () => {
             dispatch(checkPendingDownloadJobStatus());
         }
     }, [numPendingJobs]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            dispatch(cleanUpDownloadJobs());
+        }
+    }, [isOpen]);
 
     if (!isOpen) {
         return null;

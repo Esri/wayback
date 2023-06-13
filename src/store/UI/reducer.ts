@@ -20,7 +20,7 @@ export type UIState = {
 
 export const initialUIState = {
     isSaveAsWebmapDialogOpen: false,
-    shouldOnlyShowItemsWithLocalChange: false,
+    shouldOnlyShowItemsWithLocalChange: true,
     shouldShowPreviewItemTitle: false,
     isGutterHide: false,
     isSideBarHide: false,

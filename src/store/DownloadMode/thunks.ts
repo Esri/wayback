@@ -5,6 +5,7 @@ import {
     DownloadJob,
     DownloadJobStatus,
     downloadJobCreated,
+    downloadJobRemoved,
     downloadJobsUpdated,
     isDownloadDialogOpenToggled,
 } from './reducer';
@@ -141,11 +142,12 @@ export const startDownloadJob =
 
 export const checkPendingDownloadJobStatus =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        // console.log('calling checkDownloadJobStatus')
+        console.log('calling checkDownloadJobStatus');
 
         clearTimeout(checkDownloadJobStatusTimeout);
 
         const pendingJobs = selectPendingDownloadJobs(getState());
+        console.log(pendingJobs);
 
         if (!pendingJobs.length) {
             return;
@@ -244,7 +246,11 @@ export const downloadOutputTilePackage =
         }
     };
 
-export const removeExpiredJobs =
+/**
+ * remove download jobs that has been downloaded or are expired
+ * @returns
+ */
+export const cleanUpDownloadJobs =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobs = selectDownloadJobs(getState());
 
@@ -252,10 +258,16 @@ export const removeExpiredJobs =
         const now = new Date().getTime();
 
         // find jobs that were finished more than 1 hour ago
-        const expiredJobs = jobs.filter((job) => {
+        const jobsToBeRemoved = jobs.filter((job) => {
             const ageOfJobInSeconds = (now - job.finishTime) / 1000;
-            return ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS;
+            return (
+                ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS ||
+                job.status === 'downloaded' ||
+                job.status === 'failed'
+            );
         });
 
-        const idOfExpiredJobs = expiredJobs.map((job) => job.id);
+        for (const job of jobsToBeRemoved) {
+            dispatch(downloadJobRemoved(job.id));
+        }
     };

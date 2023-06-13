@@ -39,13 +39,13 @@ const getDefaultExtent = (): IExtentGeomety => {
     return defaultExtent ? JSON.parse(defaultExtent) : null;
 };
 
-const setShouldShowUpdatesWithLocalChanges = (val = false) => {
-    setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
-};
+// const setShouldShowUpdatesWithLocalChanges = (val = false) => {
+//     setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
+// };
 
-const getShouldShowUpdatesWithLocalChanges = () => {
-    return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
-};
+// const getShouldShowUpdatesWithLocalChanges = () => {
+//     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
+// };
 
 const setShouldOpenSaveWebMapDialog = () => {
     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
@@ -109,8 +109,8 @@ export {
     getDefaultExtent,
     getCustomPortalUrl,
     setCustomPortalUrl,
-    setShouldShowUpdatesWithLocalChanges,
-    getShouldShowUpdatesWithLocalChanges,
+    // setShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
     saveDownloadJobs2LocalStorage,

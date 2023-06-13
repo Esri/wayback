@@ -13,7 +13,7 @@ import {
 import {
     // getDefaultExtent,
     // getCustomPortalUrl,
-    getShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
 } from '../utils/LocalStorage';
@@ -32,13 +32,13 @@ import {
 const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
-    const shouldOnlyShowItemsWithLocalChange =
-        urlParams.shouldOnlyShowItemsWithLocalChange ||
-        getShouldShowUpdatesWithLocalChanges();
+    // const shouldOnlyShowItemsWithLocalChange = true
+    // urlParams.shouldOnlyShowItemsWithLocalChange ||
+    // getShouldShowUpdatesWithLocalChanges();
 
     const state: UIState = {
         ...initialUIState,
-        shouldOnlyShowItemsWithLocalChange,
+        // shouldOnlyShowItemsWithLocalChange,
         isSaveAsWebmapDialogOpen: getShouldOpenSaveWebMapDialog(),
     };
 

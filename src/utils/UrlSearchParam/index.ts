@@ -75,11 +75,11 @@ const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
     updateHashParams(key, value);
 };
 
-const saveLocalChangesOnlyInURLQueryParam = (
-    localChangesOnly: boolean
-): void => {
-    updateHashParams('localChangesOnly', localChangesOnly ? 'true' : null);
-};
+// const saveLocalChangesOnlyInURLQueryParam = (
+//     localChangesOnly: boolean
+// ): void => {
+//     updateHashParams('localChangesOnly', localChangesOnly ? 'true' : null);
+// };
 
 const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     rNum4SelectedWaybackItems: number[]
@@ -163,8 +163,8 @@ export const getMapCenterFromHashParams = () => {
 const decodeURLParams = (): IURLParamData => {
     hashParams = new URLSearchParams(window.location.hash.slice(1));
 
-    const localChangesOnly =
-        getHashParamValueByKey('localChangesOnly') === 'true' ? true : false;
+    // const localChangesOnly =
+    //     getHashParamValueByKey('localChangesOnly') === 'true' ? true : false;
 
     const selected = getHashParamValueByKey('selected')
         ? getHashParamValueByKey('selected')
@@ -204,7 +204,7 @@ const decodeURLParams = (): IURLParamData => {
     const urlParams: IURLParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
-        shouldOnlyShowItemsWithLocalChange: localChangesOnly,
+        // shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active,
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
@@ -220,7 +220,7 @@ const decodeURLParams = (): IURLParamData => {
 export {
     decodeURLParams,
     saveMapExtentInURLQueryParam,
-    saveLocalChangesOnlyInURLQueryParam,
+    // saveLocalChangesOnlyInURLQueryParam,
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
     saveSwipeWidgetInfoInURLQueryParam,
