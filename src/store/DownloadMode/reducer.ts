@@ -16,7 +16,6 @@ export type DownloadJobStatus =
     | 'pending'
     | 'finished'
     | 'failed'
-    | 'downloading'
     | 'downloaded';
 
 export type DownloadJob = {
@@ -72,10 +71,19 @@ export type DownloadJob = {
      * id of the Wayport geoprocessing job that user submitted to create the wayback tile package
      */
     GPJobId?: string;
-    // /**
-    //  * output URL from the Wayport GP service job that user can use to download the export tile package
-    //  */
-    // outputTilePackageURL?: string;
+    /**
+     * Info about the output Tile Package created by Wayport GP service job
+     */
+    outputTilePackageInfo?: {
+        /**
+         * url to download the tile package
+         */
+        url: string;
+        /**
+         * size of the output tile package
+         */
+        size: number;
+    };
 };
 
 export type DownloadModeState = {

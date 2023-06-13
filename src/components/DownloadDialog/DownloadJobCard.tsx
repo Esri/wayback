@@ -36,7 +36,6 @@ const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
     pending: 'in progress...',
     finished: 'donwload',
     failed: 'failed',
-    downloading: 'downloading',
     downloaded: 'downloaded',
 };
 
@@ -57,6 +56,7 @@ export const DownloadJobCard: FC<Props> = ({
         minZoomLevel,
         maxZoomLevel,
         tileEstimations,
+        outputTilePackageInfo,
         // GPJobId
     } = data || {};
 
@@ -94,7 +94,7 @@ export const DownloadJobCard: FC<Props> = ({
             return <calcite-loader scale="s" inline></calcite-loader>;
         }
 
-        if (status === 'finished' || status === 'downloading') {
+        if (status === 'finished') {
             return <calcite-icon icon="check" scale="s" />;
         }
 
@@ -116,6 +116,31 @@ export const DownloadJobCard: FC<Props> = ({
         } else if (status === 'finished') {
             downloadTilePackageButtonOnClick(id);
         }
+    };
+
+    const getButtonLable = () => {
+        if (status === 'finished' && outputTilePackageInfo !== undefined) {
+            const sizeInMB = (outputTilePackageInfo.size / 1000000).toFixed(1);
+            return `Download - ${sizeInMB}MB`;
+        }
+
+        return ButtonLableByStatus[status] || status;
+    };
+
+    const shouldDisableActionButton = () => {
+        if (
+            status === 'pending' ||
+            status === 'failed' ||
+            status === 'downloaded'
+        ) {
+            return true;
+        }
+
+        if (status === 'finished' && !outputTilePackageInfo) {
+            return true;
+        }
+
+        return false;
     };
 
     useEffect(() => {
@@ -183,18 +208,12 @@ export const DownloadJobCard: FC<Props> = ({
                 className={classnames(
                     'flex justify-center items-center w-52  bg-custom-theme-blue text-white cursor-pointer shrink-0',
                     {
-                        disabled:
-                            status === 'pending' ||
-                            status === 'downloading' ||
-                            status === 'failed' ||
-                            status === 'downloaded',
+                        disabled: shouldDisableActionButton(),
                     }
                 )}
                 onClick={buttonOnClickHandler}
             >
-                <span className="uppercase">
-                    {ButtonLableByStatus[status] || status}
-                </span>
+                <span className="uppercase">{getButtonLable()}</span>
             </div>
         </div>
     );

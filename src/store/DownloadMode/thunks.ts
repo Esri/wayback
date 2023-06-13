@@ -13,7 +13,7 @@ import { generate } from 'shortid';
 import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import {
     checkJobStatus,
-    getJobOutput,
+    getJobOutputInfo,
     submitJob,
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
@@ -21,7 +21,6 @@ import {
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
-import { downloadExportBundle } from '@services/export-wayback-bundle/downloadOutputBundle';
 
 type AddToDownloadListParams = {
     /**
@@ -40,7 +39,7 @@ type AddToDownloadListParams = {
 
 let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
-const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 30;
+const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
 const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
@@ -143,12 +142,9 @@ export const startDownloadJob =
 
 export const checkPendingDownloadJobStatus =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        console.log('calling checkDownloadJobStatus');
-
         clearTimeout(checkDownloadJobStatusTimeout);
 
         const pendingJobs = selectPendingDownloadJobs(getState());
-        console.log(pendingJobs);
 
         if (!pendingJobs.length) {
             return;
@@ -192,6 +188,8 @@ export const checkPendingDownloadJobStatus =
 
             dispatch(downloadJobsUpdated(updatedJobsData));
 
+            dispatch(getOutputTilePackageInfo());
+
             // call this thunk function again in case there are still pending jobs left
             dispatch(checkPendingDownloadJobStatus());
         }, CHECK_JOB_STATUS_DELAY_IN_SECONDS * 1000);
@@ -211,40 +209,22 @@ export const downloadOutputTilePackage =
             return;
         }
 
-        const { GPJobId } = byId[id];
+        const { outputTilePackageInfo } = byId[id];
 
-        try {
-            dispatch(
-                downloadJobsUpdated([
-                    {
-                        ...byId[id],
-                        status: 'downloading',
-                    },
-                ])
-            );
-
-            await downloadExportBundle(GPJobId);
-
-            dispatch(
-                downloadJobsUpdated([
-                    {
-                        ...byId[id],
-                        status: 'downloaded',
-                    },
-                ])
-            );
-        } catch (err) {
-            // console.log(err);
-
-            dispatch(
-                downloadJobsUpdated([
-                    {
-                        ...byId[id],
-                        status: 'failed',
-                    },
-                ])
-            );
+        if (!outputTilePackageInfo) {
+            return;
         }
+
+        window.open(outputTilePackageInfo.url, '_blank');
+
+        dispatch(
+            downloadJobsUpdated([
+                {
+                    ...byId[id],
+                    status: 'downloaded',
+                },
+            ])
+        );
     };
 
 /**
@@ -271,4 +251,47 @@ export const cleanUpDownloadJobs =
         for (const job of jobsToBeRemoved) {
             dispatch(downloadJobRemoved(job.id));
         }
+    };
+
+/**
+ * get output tile package info for finished jobs
+ * @returns
+ */
+export const getOutputTilePackageInfo =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobs = selectDownloadJobs(getState());
+
+        const finishedJobs = jobs.filter((job) => {
+            return (
+                job.status === 'finished' &&
+                job.outputTilePackageInfo === undefined
+            );
+        });
+
+        if (!finishedJobs.length) {
+            return;
+        }
+
+        const tilePackageInfoRequests = finishedJobs.map((job) => {
+            return getJobOutputInfo(job.GPJobId);
+        });
+
+        try {
+            const tilePackageInfoResponses = await Promise.all(
+                tilePackageInfoRequests
+            );
+            console.log(tilePackageInfoResponses);
+
+            const updatedJobData = finishedJobs.map((jobData, index) => {
+                return {
+                    ...jobData,
+                    outputTilePackageInfo: tilePackageInfoResponses[index],
+                };
+            });
+
+            dispatch(downloadJobsUpdated(updatedJobData));
+        } catch (err) {
+            console.error(err);
+        }
+        // console.log(tilePackageInfoResponses)
     };

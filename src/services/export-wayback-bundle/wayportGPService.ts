@@ -2,6 +2,7 @@ import { IExtent } from '@esri/arcgis-rest-request';
 import { getServiceUrl } from '@utils/Tier';
 import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
+import axios from 'axios';
 
 type GPJobStatus =
     | 'esriJobSubmitted'
@@ -57,6 +58,11 @@ type GetJobOutputResponse = {
          */
         url: string;
     };
+};
+
+export type WayportTilePackageInfo = {
+    url: string;
+    size: number;
 };
 
 const WAYPORT_GP_SERVICE_ROOT = getServiceUrl('wayback-export-base');
@@ -117,15 +123,27 @@ export const checkJobStatus = async (
     return data as CheckJobStatusResponse;
 };
 
-export const getJobOutput = async (
+export const getJobOutputInfo = async (
     jobId: string
-    // paramUrl: string
-): Promise<GetJobOutputResponse> => {
-    const res = await fetch(
+): Promise<WayportTilePackageInfo> => {
+    const outputRes = await fetch(
         `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json`
     );
 
-    const data = await res.json();
+    const data = (await outputRes.json()) as GetJobOutputResponse;
 
-    return data as GetJobOutputResponse;
+    const url = data?.value?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    const tilePackageHeaders = await fetch(url, {
+        method: 'HEAD',
+    });
+
+    return {
+        url,
+        size: +tilePackageHeaders.headers.get('Content-Length'),
+    };
 };
