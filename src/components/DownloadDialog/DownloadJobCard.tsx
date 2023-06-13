@@ -40,7 +40,7 @@ const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
     downloaded: 'downloaded',
 };
 
-export const DonwloadJob: FC<Props> = ({
+export const DownloadJobCard: FC<Props> = ({
     data,
     createTilePackageButtonOnClick,
     downloadTilePackageButtonOnClick,
@@ -60,7 +60,10 @@ export const DonwloadJob: FC<Props> = ({
         // GPJobId
     } = data || {};
 
-    const sliderProp = maxZoomLevel === minZoomLevel ? { disabled: true } : {};
+    const shouldSliderBeDisabled =
+        maxZoomLevel === minZoomLevel || status !== 'not started';
+
+    const sliderProp = shouldSliderBeDisabled ? { disabled: true } : {};
 
     const totalTiles = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {

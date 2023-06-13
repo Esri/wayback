@@ -38,7 +38,10 @@ export const selectNumOfFinishedDownloadJobs = createSelector(
     (jobs) => {
         const { byId, ids } = jobs;
 
-        return ids.filter((id) => byId[id].status === 'finished').length;
+        return ids.filter((id) => {
+            const { status } = byId[id];
+            return status !== 'not started' && status !== 'pending'; //byId[id].status === 'finished' || byId[id].status === 'downloaded' || byId[id].status === 'downloading' || byId[id].status === 'failed' ||
+        }).length;
     }
 );
 

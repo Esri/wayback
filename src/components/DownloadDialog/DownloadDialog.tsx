@@ -1,6 +1,6 @@
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import React, { FC } from 'react';
-import { DonwloadJob } from './DonwloadJob';
+import { DownloadJobCard } from './DownloadJobCard';
 
 type Props = {
     /**
@@ -55,7 +55,7 @@ export const DownloadDialog: FC<Props> = ({
             const { id } = job;
             return (
                 <div key={id} className="mb-3">
-                    <DonwloadJob
+                    <DownloadJobCard
                         data={job}
                         createTilePackageButtonOnClick={
                             createTilePackageButtonOnClick

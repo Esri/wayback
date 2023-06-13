@@ -15,7 +15,7 @@ export const OpenDownloadPanelBtn = () => {
 
     const numOfJobs = useSelector(selectNumOfDownloadJobs);
 
-    const numOfPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
+    // const numOfPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
 
     const numOfFinishedJobs = useSelector(selectNumOfFinishedDownloadJobs);
 
