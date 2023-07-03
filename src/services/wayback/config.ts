@@ -11,7 +11,7 @@ export default {
                 fieldname: 'SRC_DESC',
             },
             {
-                fieldname: 'SRC_RES',
+                fieldname: 'SAMP_RES',
             },
             {
                 fieldname: 'SRC_ACC',
