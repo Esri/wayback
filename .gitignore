@@ -68,3 +68,5 @@ dist
 
 # outdated files
 /src/old
+
+*.http
