@@ -70,6 +70,7 @@ const MapViewComponent: React.FC<Props> = ({
                  * @see https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
                  */
                 lods: TileInfo.create().lods,
+                rotationEnabled: false,
             },
         });
 
