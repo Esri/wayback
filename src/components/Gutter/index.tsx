@@ -61,7 +61,7 @@ class Gutter extends React.PureComponent<IProps> {
                             title="Share"
                             onClick={shareButtonOnClick}
                         >
-                            <calcite-icon icon="link" scale="l" />
+                            <calcite-icon icon="share" scale="l" />
                         </div>
                     )}
 
