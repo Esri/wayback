@@ -13,11 +13,12 @@ import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
 import MobileHide from '../MobileVisibility/MobileHide';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 const SwipeWidgetToggleBtnContainer = () => {
     const dispatch = useDispatch();
 
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     // const rNum4SelectedWaybackItems = useSelector(
     //     releaseNum4SelectedItemsSelector
@@ -33,7 +34,7 @@ const SwipeWidgetToggleBtnContainer = () => {
     return (
         <MobileHide>
             <SwipeWidgetToggleBtn
-                isOpen={isSwipeWidgetOpen}
+                inactive={isAnimationModeOn}
                 onClickHandler={onClickHandler}
             />
         </MobileHide>

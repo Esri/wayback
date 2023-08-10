@@ -4,12 +4,15 @@ import React from 'react';
 import classnames from 'classnames';
 
 type Props = {
-    isOpen: boolean;
+    /**
+     * if true, the animation mode is on and the swipe button should be set to semi-transparent
+     */
+    inactive: boolean;
     onClickHandler: () => void;
 };
 
 const SwipeWidgetToggleBtn: React.FC<Props> = ({
-    isOpen,
+    inactive,
     onClickHandler,
 }: Props) => {
     return (
@@ -17,7 +20,7 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
             className={classnames(
                 'relative w-full text-center my-3 cursor-pointer',
                 {
-                    'is-open': isOpen,
+                    'opacity-50': inactive,
                 }
             )}
             onClick={onClickHandler}

@@ -10,13 +10,17 @@ import {
     toggleAnimationMode,
 } from '@store/AnimationMode/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
+import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 const AnimationModeToogleBtn = () => {
     const dispatch = useDispatch();
 
     const { isMobile } = useContext(AppContext);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    // const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+
+    // if swipe widget is on, the animation button should be set to semi-transparent
+    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
     const onClickHandler = useCallback(() => {
         dispatch(toggleAnimationMode());
@@ -27,7 +31,7 @@ const AnimationModeToogleBtn = () => {
             className={classnames(
                 'relative w-full cursor-pointer my-3 text-center',
                 {
-                    'is-open': isAnimationModeOn,
+                    'opacity-50': isSwipeWidgetOpen,
                 }
             )}
             // style={{
