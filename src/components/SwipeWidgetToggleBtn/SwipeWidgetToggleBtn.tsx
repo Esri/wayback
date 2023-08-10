@@ -7,12 +7,17 @@ type Props = {
     /**
      * if true, the animation mode is on and the swipe button should be set to semi-transparent
      */
-    inactive: boolean;
+    useDisabledStyle: boolean;
+    /**
+     * if true, the animation mode is on and the swipe button should be set to semi-transparent
+     */
+    active: boolean;
     onClickHandler: () => void;
 };
 
 const SwipeWidgetToggleBtn: React.FC<Props> = ({
-    inactive,
+    useDisabledStyle,
+    active,
     onClickHandler,
 }: Props) => {
     return (
@@ -20,7 +25,8 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
             className={classnames(
                 'relative w-full text-center my-3 cursor-pointer',
                 {
-                    'opacity-50': inactive,
+                    'opacity-50': useDisabledStyle,
+                    'text-white': active,
                 }
             )}
             onClick={onClickHandler}

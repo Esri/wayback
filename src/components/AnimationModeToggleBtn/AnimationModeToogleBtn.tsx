@@ -17,7 +17,7 @@ const AnimationModeToogleBtn = () => {
 
     const { isMobile } = useContext(AppContext);
 
-    // const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     // if swipe widget is on, the animation button should be set to semi-transparent
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
@@ -32,6 +32,7 @@ const AnimationModeToogleBtn = () => {
                 'relative w-full cursor-pointer my-3 text-center',
                 {
                     'opacity-50': isSwipeWidgetOpen,
+                    'text-white': isAnimationModeOn,
                 }
             )}
             // style={{

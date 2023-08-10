@@ -20,6 +20,8 @@ const SwipeWidgetToggleBtnContainer = () => {
 
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
+    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+
     // const rNum4SelectedWaybackItems = useSelector(
     //     releaseNum4SelectedItemsSelector
     // );
@@ -34,7 +36,8 @@ const SwipeWidgetToggleBtnContainer = () => {
     return (
         <MobileHide>
             <SwipeWidgetToggleBtn
-                inactive={isAnimationModeOn}
+                useDisabledStyle={isAnimationModeOn}
+                active={isSwipeWidgetOpen}
                 onClickHandler={onClickHandler}
             />
         </MobileHide>
