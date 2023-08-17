@@ -99,6 +99,7 @@
     "classnames": "^2.2.6",
     "d3": "^7.8.5",
     "helper-toolkit-ts": "^1.1.14",
+    "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",

@@ -9,7 +9,7 @@ import {
     downloadJobsUpdated,
     isDownloadDialogOpenToggled,
 } from './reducer';
-import { generate } from 'shortid';
+import { nanoid } from 'nanoid';
 import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import {
     checkJobStatus,
@@ -65,7 +65,7 @@ export const addToDownloadList =
         const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
         const downloadJob: DownloadJob = {
-            id: generate(),
+            id: nanoid(),
             waybackItem: byReleaseNumber[releaseNum],
             minZoomLevel: zoomLevel,
             maxZoomLevel,

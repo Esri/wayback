@@ -147,14 +147,30 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 return BarWidth;
             })
             .attr('height', height)
-            .on('click', (d: IWaybackItem) => {
+            .on('click', function () {
+                // onClick(d.releaseNum);
+
+                const d = d3.select(this).data()[0] as IWaybackItem;
+
+                if (!d) {
+                    return;
+                }
+
+                // console.log(d)
                 onClick(d.releaseNum);
             })
-            .on('mouseover', (d: IWaybackItem) => {
+            .on('mouseover', function () {
+                const d = d3.select(this).data()[0] as IWaybackItem;
+
+                if (!d) {
+                    return;
+                }
+
+                // console.log(d)
                 onMouseEnter(d.releaseNum, true);
             })
             .on('mouseout', (d: IWaybackItem) => {
-                onMouseOut();
+                // onMouseOut();
             });
     }
 
