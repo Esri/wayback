@@ -84,87 +84,91 @@ class ListViewCard extends React.PureComponent<IProps> {
 
         return (
             <div
-                className={classnames('list-card mb-2 group', {
-                    // 'is-active' indicates if is viewing this release on map
-                    'is-active': isActive,
-                    // 'is-highlighted' indicates if this release has local change
-                    'is-highlighted': isHighlighted,
-                    // 'is-selected' indicates if this release is being selected
-                    'is-selected': isSelected,
-                })}
+                className="py-1"
                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
                 onMouseLeave={onMouseOut}
                 data-release-num={data.releaseNum}
             >
                 <div
-                    className="is-flexy cursor-pointer"
-                    onClick={onClick.bind(this, data.releaseNum)}
+                    className={classnames('list-card group', {
+                        // 'is-active' indicates if is viewing this release on map
+                        'is-active': isActive,
+                        // 'is-highlighted' indicates if this release has local change
+                        'is-highlighted': isHighlighted,
+                        // 'is-selected' indicates if this release is being selected
+                        'is-selected': isSelected,
+                    })}
                 >
-                    <a
-                        className="margin-left-half link-light-gray cursor-pointer"
-                        // onClick={onClick.bind(this, data.releaseNum)}
+                    <div
+                        className="is-flexy cursor-pointer"
+                        onClick={onClick.bind(this, data.releaseNum)}
                     >
-                        {data.releaseDateLabel}
-                    </a>
-                </div>
+                        <a
+                            className="margin-left-half link-light-gray cursor-pointer"
+                            // onClick={onClick.bind(this, data.releaseNum)}
+                        >
+                            {data.releaseDateLabel}
+                        </a>
+                    </div>
 
-                <div
-                    className={classnames(ButtonWrapperClassnames, {
-                        flex: showControlButtons,
-                        'hidden group-hover:flex': !showControlButtons,
-                    })}
-                    onClick={this.openItem}
-                    title="Learn more about this release..."
-                >
-                    <calcite-icon icon="information" scale="m" />
-                </div>
+                    <div
+                        className={classnames(ButtonWrapperClassnames, {
+                            flex: showControlButtons,
+                            'hidden group-hover:flex': !showControlButtons,
+                        })}
+                        onClick={this.openItem}
+                        title="Learn more about this release..."
+                    >
+                        <calcite-icon icon="information" scale="m" />
+                    </div>
 
-                {/* <div
-                    className={classnames(ButtonWrapperClassnames, {
-                        flex: showControlButtons,
-                        'hidden group-hover:flex': !showControlButtons,
-                        'cursor-default opacity-50':
-                            shouldDownloadButtonBeDisabled,
-                    })}
-                    onClick={() => {
-                        if (shouldDownloadButtonBeDisabled) {
-                            return;
+                    {/* <div
+                        className={classnames(ButtonWrapperClassnames, {
+                            flex: showControlButtons,
+                            'hidden group-hover:flex': !showControlButtons,
+                            'cursor-default opacity-50':
+                                shouldDownloadButtonBeDisabled,
+                        })}
+                        onClick={() => {
+                            if (shouldDownloadButtonBeDisabled) {
+                                return;
+                            }
+
+                            downloadButtonOnClick(data.releaseNum);
+                        }}
+                        title={
+                            shouldDownloadButtonBeDisabled
+                                ? 'Reached the maximum limit for download jobs'
+                                : 'Download a local copy of imagery tiles'
                         }
+                    >
+                        <calcite-icon icon="download-to" scale="m" />
+                    </div> */}
 
-                        downloadButtonOnClick(data.releaseNum);
-                    }}
-                    title={
-                        shouldDownloadButtonBeDisabled
-                            ? 'Reached the maximum limit for download jobs'
-                            : 'Download a local copy of imagery tiles'
-                    }
-                >
-                    <calcite-icon icon="download-to" scale="m" />
-                </div> */}
+                    <div
+                        className={classnames(ButtonWrapperClassnames, {
+                            flex: showControlButtons,
+                            'hidden group-hover:flex': !showControlButtons,
+                            'bg-white bg-opacity-20': isSelected,
+                        })}
+                        onClick={toggleSelect.bind(this, data.releaseNum)}
+                        title={
+                            isSelected
+                                ? 'Remove this release from your ArcGIS Online Map'
+                                : 'Add this release to an ArcGIS Online Map'
+                        }
+                    >
+                        <calcite-icon icon="arcgis-online" scale="m" />
+                    </div>
 
-                <div
-                    className={classnames(ButtonWrapperClassnames, {
-                        flex: showControlButtons,
-                        'hidden group-hover:flex': !showControlButtons,
-                        'bg-white bg-opacity-20': isSelected,
-                    })}
-                    onClick={toggleSelect.bind(this, data.releaseNum)}
-                    title={
-                        isSelected
-                            ? 'Remove this release from your ArcGIS Online Map'
-                            : 'Add this release to an ArcGIS Online Map'
-                    }
-                >
-                    <calcite-icon icon="arcgis-online" scale="m" />
+                    {/* <div
+                        className="add-to-webmap-btn cursor-pointer"
+                        // onMouseOver={this.showTooltip}
+                        // onMouseOut={this.hideTooltip}
+                        onClick={toggleSelect.bind(this, data.releaseNum)}
+                        title={tooltipContentAdd2WebmapBtn}
+                    ></div> */}
                 </div>
-
-                {/* <div
-                    className="add-to-webmap-btn cursor-pointer"
-                    // onMouseOver={this.showTooltip}
-                    // onMouseOut={this.hideTooltip}
-                    onClick={toggleSelect.bind(this, data.releaseNum)}
-                    title={tooltipContentAdd2WebmapBtn}
-                ></div> */}
             </div>
         );
     }
