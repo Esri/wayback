@@ -49,7 +49,7 @@ const AppLayout: React.FC = () => {
 
                 <AnimationModeToggleBtn />
 
-                {/* <OpenDownloadPanelBtn /> */}
+                <OpenDownloadPanelBtn />
 
                 <SaveAsWebmapBtn />
             </Gutter>
@@ -93,7 +93,7 @@ const AppLayout: React.FC = () => {
 
             {!onPremises && <ShareDialog />}
 
-            {/* <DownloadDialog /> */}
+            <DownloadDialog />
 
             <AboutThisApp />
 

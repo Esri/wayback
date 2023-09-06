@@ -39,7 +39,7 @@ const config: IAppConfig = {
             'world-imagery-basemap':
                 'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/',
             'wayback-export-base':
-                'https://34.220.147.218:6443/arcgis/rest/services/Wayport/GPServer/Wayport',
+                'https://wayportdev.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport',
         },
     },
     defaultMapExtent: {

@@ -122,7 +122,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         <calcite-icon icon="information" scale="m" />
                     </div>
 
-                    {/* <div
+                    <div
                         className={classnames(ButtonWrapperClassnames, {
                             flex: showControlButtons,
                             'hidden group-hover:flex': !showControlButtons,
@@ -143,7 +143,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         }
                     >
                         <calcite-icon icon="download-to" scale="m" />
-                    </div> */}
+                    </div>
 
                     <div
                         className={classnames(ButtonWrapperClassnames, {
