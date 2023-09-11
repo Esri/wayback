@@ -243,8 +243,8 @@ export const cleanUpDownloadJobs =
             const ageOfJobInSeconds = (now - job.finishTime) / 1000;
             return (
                 ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS ||
-                job.status === 'downloaded' ||
-                job.status === 'failed'
+                job.status === 'downloaded'
+                // job.status === 'failed'
             );
         });
 
