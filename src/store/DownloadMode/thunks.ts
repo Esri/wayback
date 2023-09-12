@@ -41,7 +41,7 @@ let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
 const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
-const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
 export const addToDownloadList =
     ({ releaseNum, zoomLevel, extent }: AddToDownloadListParams) =>
@@ -240,12 +240,22 @@ export const cleanUpDownloadJobs =
 
         // find jobs that were finished more than 1 hour ago
         const jobsToBeRemoved = jobs.filter((job) => {
-            const ageOfJobInSeconds = (now - job.finishTime) / 1000;
-            return (
-                ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS ||
-                job.status === 'downloaded'
-                // job.status === 'failed'
-            );
+            // downloaded job should be removed
+            if (job.status === 'downloaded') {
+                return true;
+            }
+
+            // any finished job that is 1 hour old should be removed
+            if (job.finishTime) {
+                const secondsSinceJobWasFinished =
+                    (now - job.finishTime) / 1000;
+                return (
+                    secondsSinceJobWasFinished >
+                    DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
+                );
+            }
+
+            false;
         });
 
         for (const job of jobsToBeRemoved) {
