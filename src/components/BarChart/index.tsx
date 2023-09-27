@@ -170,7 +170,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 onMouseEnter(d.releaseNum, true);
             })
             .on('mouseout', (d: IWaybackItem) => {
-                // onMouseOut();
+                onMouseOut();
             });
     }
 
