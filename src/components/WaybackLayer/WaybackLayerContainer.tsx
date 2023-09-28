@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { activeWaybackItemSelector } from '../../store/reducers/WaybackItems';
-import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '../../utils/UrlSearchParam';
+import { activeWaybackItemSelector } from '@store/Wayback/reducer';
+import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '@utils/UrlSearchParam';
 
 import WaybackLayer from './WaybackLayer';
 

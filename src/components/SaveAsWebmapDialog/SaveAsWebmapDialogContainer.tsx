@@ -5,24 +5,31 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     isSaveAsWebmapDialogOpenSelector,
     isSaveAsWebmapDialogOpenToggled,
-} from '../../store/reducers/UI';
+} from '@store/UI/reducer';
 
-import { mapExtentSelector } from '../../store/reducers/Map';
+import { mapExtentSelector } from '@store/Map/reducer';
 
 import {
     allWaybackItemsSelector,
     releaseNum4SelectedItemsSelector,
-} from '../../store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '@contexts/AppContextProvider';
 
 import SaveAsWebMapDialog from './index';
-import { IExtentGeomety, IWaybackItem } from '../../types';
+import { IExtentGeomety, IWaybackItem } from '@typings/index';
+import {
+    getPortalBaseUrl,
+    getToken,
+    getUserRole,
+    isAnonymouns,
+    signInUsingDifferentAccount,
+} from '@utils/Esri-OAuth';
 
 const SaveAsWebmapDialogContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession, oauthUtils } = useContext(AppContext);
+    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent: IExtentGeomety = useSelector(mapExtentSelector);
 
@@ -46,11 +53,14 @@ const SaveAsWebmapDialogContainer = () => {
         <SaveAsWebMapDialog
             waybackItems={waybackItems}
             rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-            userSession={userSession}
+            hasSignedInAlready={isAnonymouns() === false}
+            portalBaseURL={getPortalBaseUrl()}
+            token={getToken()}
+            userRole={getUserRole()}
             mapExtent={mapExtent}
             onClose={onCloseHandler}
-            signInButtonOnClick={()=>{
-                oauthUtils.signInUsingDifferentAccount()
+            signInButtonOnClick={() => {
+                signInUsingDifferentAccount();
             }}
         />
     ) : null;

@@ -4,10 +4,8 @@ const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-// const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
@@ -35,9 +33,11 @@ module.exports = (env, options)=> {
 
     const devMode = options.mode === 'development' ? true : false;
 
+    process.env.NODE_ENV = options.mode;
+
     return {
         devServer: {
-            https: true,
+            server: 'https',
             host: hostname,
             allowedHosts: "all"
         },
@@ -50,7 +50,18 @@ module.exports = (env, options)=> {
         },
         devtool: devMode ? 'source-map' : false,
         resolve: {
-            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+            alias: {
+                '@components': path.resolve(__dirname, 'src/components/'),
+                '@constants': path.resolve(__dirname, 'src/constants/'),
+                '@contexts': path.resolve(__dirname, 'src/contexts/'),
+                '@hooks': path.resolve(__dirname, 'src/hooks/'),
+                '@services': path.resolve(__dirname, 'src/services/'),
+                '@store': path.resolve(__dirname, 'src/store/'),
+                '@styles': path.resolve(__dirname, 'src/style/'),
+                '@typings': path.resolve(__dirname, 'src/types/'),
+                '@utils': path.resolve(__dirname, 'src/utils/'),
+            },
         },
         module: {
             rules: [
@@ -70,17 +81,17 @@ module.exports = (env, options)=> {
                     ]
                 },
                 {
-                    test: /\.s?[ac]ss$/,
+                    test: /\.css$/i,
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
-                            loader: "css-loader", options: {
+                            loader: "css-loader", 
+                            options: {
                                 sourceMap: true
                             }
-                        }, {
-                            loader: "sass-loader", options: {
-                                sourceMap: true
-                            }
+                        },
+                        {
+                            loader: 'postcss-loader'
                         }
                     ]
                 },
@@ -125,12 +136,6 @@ module.exports = (env, options)=> {
                     }
                 ],
             }),
-            // new ArcGISPlugin({ 
-            //     locales: ['en'],
-            //     features: {
-            //         "3d": false
-            //     }
-            // }),
             new HtmlWebPackPlugin({
                 // inject: false,
                 // hash: true,

@@ -1,0 +1,8 @@
+.save-as-webmap-btn-container .font-size--4 {
+    font-size: 0.7rem;
+}
+
+.save-as-webmap-btn-container.is-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}

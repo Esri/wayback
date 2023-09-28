@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 
 import {
     releaseNum4ItemsWithLocalChangesSelector,
     allWaybackItemsSelector,
     releaseNum4ActiveWaybackItemUpdated,
-} from '../../store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
-import { metadataQueryResultUpdated } from '../../store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import {
     swipeWidgetLeadingLayerSelector,
@@ -17,10 +17,10 @@ import {
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
     isSwipeWidgetOpenSelector,
-    toggleSwipeWidget
-} from '../../store/reducers/SwipeView';
+    toggleSwipeWidget,
+} from '@store/Swipe/reducer';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 import SwipeWidgetLayerSelector, {
     SwipeWidgetLayer,

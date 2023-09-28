@@ -4,18 +4,21 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 
 import {
     isSwipeWidgetOpenSelector,
-    toggleSwipeWidget
-} from '../../store/reducers/SwipeView';
+    toggleSwipeWidget,
+} from '@store/Swipe/reducer';
 
-import { releaseNum4SelectedItemsSelector } from '../../store/reducers/WaybackItems';
+import { releaseNum4SelectedItemsSelector } from '@store/Wayback/reducer';
 
-import { metadataQueryResultUpdated } from '../../store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
-import MobileHide from '../SharedUI/MobileHide';
+import MobileHide from '../MobileVisibility/MobileHide';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 const SwipeWidgetToggleBtnContainer = () => {
     const dispatch = useDispatch();
+
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
 
@@ -33,7 +36,8 @@ const SwipeWidgetToggleBtnContainer = () => {
     return (
         <MobileHide>
             <SwipeWidgetToggleBtn
-                isOpen={isSwipeWidgetOpen}
+                useDisabledStyle={isAnimationModeOn}
+                active={isSwipeWidgetOpen}
                 onClickHandler={onClickHandler}
             />
         </MobileHide>

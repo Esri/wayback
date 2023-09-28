@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './calcite-web/css/calcite-web.min.css';
+@import './variables.css';
+@import './customized-modal.css';
+@import './customized-tooltip.css';
+@import './fancy-scrollbar.css';
+@import './sidebar.css';
+
+@layer utilities {
+    .disabled {
+        @apply opacity-50 pointer-events-none;
+    }
+}
+
+html, body {
+    @apply p-0 m-0 w-full h-full overflow-hidden;
+    color: var(--default-text-color);
+}
+#appRootDiv {
+    @apply relative w-full h-full;
+}
+
+#appRootDiv video, 
+#appRootDiv img {
+    height: auto;
+}
+
+#appRootDiv .esri-swipe--horizontal .esri-swipe__container {
+    outline: 0;
+}
+
+video, img {
+    height: 0;
+}
+
+a {
+    color: #0079c1;
+    text-decoration: none;
+}
+
+input, textarea { 
+    @apply text-gray-600 text-sm px-1;
+}

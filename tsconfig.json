@@ -12,8 +12,19 @@
         "target": "es5",
         "resolveJsonModule": true,
         "suppressImplicitAnyIndexErrors": true,
-        "typeRoots": [ "./types", "./node_modules/@types"],
-        "lib": [ "es2015", "dom" ]
+        "typeRoots": [ "./src/types", "./node_modules/@types"],
+        "lib": [ "es2020", "dom" ],
+        "paths": {
+            "@components/*": ["./src/components/*"],
+            "@constants/*": ["./src/constants/*"],
+            "@contexts/*": ["./src/contexts/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@services/*": ["./src/services/*"],
+            "@store/*": ["./src/store/*"],
+            "@styles/*": ["./src/style/*"],
+            "@typings/*": ["./src/types/*"],
+            "@utils/*": ["./src/utils/*"],
+        }
 
     },
     "exclude": ["node_modules", "typings"],

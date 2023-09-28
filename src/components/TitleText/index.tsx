@@ -1,17 +1,11 @@
 import React from 'react';
 
-// import {
-//     MobileHide
-// } from '../SharedUI'
-
-// interface IProps {}
-// interface IState {}
-
 const TitleText = () => {
     return (
-        <div className="text-center trailer-quarter">
-            <span className="font-size-2 avenir-light trailer-0">
-                World Imagery <span className="text-white">Wayback</span>
+        <div className="text-center mb-2">
+            <span className="text-xl font-light">
+                ESRI | World Imagery{' '}
+                <span className="text-white font-medium">Wayback</span>
             </span>
         </div>
     );

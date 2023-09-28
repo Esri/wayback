@@ -1,8 +1,8 @@
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 // import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
 
-import { IWaybackItem } from '../../types';
-// import { getServiceUrl } from '../../utils/Tier';
+import { IWaybackItem } from '@typings/index';
+// import { getServiceUrl } from '@utils/Tier';
 // export const WAYBACK_LAYER_ID = 'waybackWMTSLayer'
 // const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base')
 

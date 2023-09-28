@@ -2,7 +2,8 @@ import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
+import { getServiceUrl } from '@utils/Tier';
 
 // import { loadModules } from 'esri-loader';
 
@@ -36,7 +37,7 @@ type GenerateFramesParams = {
 type CenterLocationForFrameRect = {
     latitude: number;
     longitude: number;
-}
+};
 
 export type FrameData = {
     releaseNum: number;
@@ -46,14 +47,16 @@ export type FrameData = {
     height: number;
     width: number;
     center: CenterLocationForFrameRect;
-}
+};
+
+const WaybackImageBaseURL = getServiceUrl('wayback-imagery-base');
 
 export const generateFrames = async ({
     frameRect,
     mapView,
     waybackItems,
 }: GenerateFramesParams): Promise<FrameData[]> => {
-    const frames:FrameData[] = [];
+    const frames: FrameData[] = [];
 
     // get list of tiles that can cover the entire container DIV
     const tiles = getListOfTiles({
@@ -64,13 +67,12 @@ export const generateFrames = async ({
     const center = getCenterLocationForFrameRect({
         frameRect,
         mapView,
-    })
+    });
 
     for (const item of waybackItems) {
-
         const { releaseNum } = item;
 
-        const {frameCanvas, frameDataURI} = await generateFrame({
+        const { frameCanvas, frameDataURI } = await generateFrame({
             frameRect,
             tiles,
             releaseNum,
@@ -83,7 +85,7 @@ export const generateFrames = async ({
             frameDataURI,
             width: frameRect.width,
             height: frameRect.height,
-            center
+            center,
         });
     }
 
@@ -101,8 +103,8 @@ const generateFrame = async ({
     tiles: TileInfo[];
     releaseNum: number;
 }): Promise<{
-    frameCanvas: HTMLCanvasElement,
-    frameDataURI: string
+    frameCanvas: HTMLCanvasElement;
+    frameDataURI: string;
 }> => {
     return new Promise((resolve, reject) => {
         const { screenX, screenY, height, width } = frameRect;
@@ -121,7 +123,7 @@ const generateFrame = async ({
             const img = new Image(TILE_SIZE, TILE_SIZE);
             img.crossOrigin = 'anonymous';
 
-            const imageURL = `https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/${releaseNum}/${level}/${row}/${column}`;
+            const imageURL = `${WaybackImageBaseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
 
             img.src = imageURL;
 
@@ -145,8 +147,8 @@ const generateFrame = async ({
                     // resolve(canvas.toDataURL('image/png'));
                     resolve({
                         frameCanvas: canvas,
-                        frameDataURI: canvas.toDataURL('image/png')
-                    })
+                        frameDataURI: canvas.toDataURL('image/png'),
+                    });
                 }
             });
         }
@@ -210,7 +212,7 @@ const getTileByScreenPoint = ({
     screenY: number;
     screenX: number;
     mapView: MapView;
-}): TileInfo=> {
+}): TileInfo => {
     // type Modules = [typeof IPoint];
 
     // const [Point] = await (loadModules(['esri/geometry/Point']) as Promise<
@@ -260,23 +262,18 @@ const getCenterLocationForFrameRect = ({
 }: {
     frameRect: FrameRectInfo;
     mapView: MapView;
-}):CenterLocationForFrameRect=>{
-    const {
-        screenX, screenY, height, width
-    } = frameRect
+}): CenterLocationForFrameRect => {
+    const { screenX, screenY, height, width } = frameRect;
 
     const point = mapView.toMap({
         x: screenX + width / 2,
-        y: screenY + height / 2
+        y: screenY + height / 2,
     });
 
-    const {
-        latitude,
-        longitude
-    } = point;
+    const { latitude, longitude } = point;
 
     return {
         latitude,
-        longitude
+        longitude,
     };
-}
+};

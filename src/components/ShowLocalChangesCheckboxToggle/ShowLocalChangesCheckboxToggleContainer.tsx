@@ -9,8 +9,8 @@ import {
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
     shouldOnlyShowItemsWithLocalChangeToggled,
-} from '../../store/reducers/UI';
-import { saveLocalChangesOnlyInURLQueryParam } from '../../utils/UrlSearchParam';
+} from '@store/UI/reducer';
+// import { saveLocalChangesOnlyInURLQueryParam } from '@utils/UrlSearchParam';
 
 import ShowLocalChangesCheckboxToggle from './index';
 
@@ -21,9 +21,9 @@ const ShowLocalChangesCheckboxToggleContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
-    useEffect(() => {
-        saveLocalChangesOnlyInURLQueryParam(shouldOnlyShowItemsWithLocalChange);
-    }, [shouldOnlyShowItemsWithLocalChange]);
+    // useEffect(() => {
+    //     saveLocalChangesOnlyInURLQueryParam(shouldOnlyShowItemsWithLocalChange);
+    // }, [shouldOnlyShowItemsWithLocalChange]);
 
     return (
         <ShowLocalChangesCheckboxToggle

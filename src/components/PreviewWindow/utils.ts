@@ -2,7 +2,7 @@ import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
-import { getServiceUrl } from '../../utils/Tier';
+import { getServiceUrl } from '@utils/Tier';
 
 const TILE_SIZE = 256;
 
@@ -31,7 +31,7 @@ type GenerateFramesParams = {
     releaseNums: string[];
 };
 
-const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base')
+const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base');
 
 export const generateFrames = async ({
     frameRect,
@@ -59,7 +59,6 @@ export const generateFrames = async ({
     // console.log(frameDataURL)
     return frames;
 };
-
 
 // get data URL from canvas with map tiles that conver the entire container
 const generateFrame = async ({
@@ -170,7 +169,6 @@ const getTileByScreenPoint = ({
     screenX: number;
     mapView: MapView;
 }): TileInfo => {
-
     const level = mapView.zoom;
 
     // convert screen point to map point

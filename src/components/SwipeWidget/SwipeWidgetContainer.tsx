@@ -7,18 +7,18 @@ import {
     swipeWidgetLeadingLayerSelector,
     swipeWidgetTrailingLayerSelector,
     swipePositionUpdated,
-} from '../../store/reducers/SwipeView';
+} from '@store/Swipe/reducer';
 
-import { metadataQueryResultUpdated } from '../../store/reducers/Map';
+import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidget from './SwipeWidget';
 
-import { MobileHide } from '../SharedUI';
+import { MobileHide } from '../MobileVisibility';
 
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';
-import { IWaybackItem } from '../../types';
-import { saveSwipeWidgetInfoInURLQueryParam } from '../../utils/UrlSearchParam';
+import { IWaybackItem } from '@typings/index';
+import { saveSwipeWidgetInfoInURLQueryParam } from '@utils/UrlSearchParam';
 
 type Props = {
     mapView?: MapView;

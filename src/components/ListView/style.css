@@ -1,0 +1,106 @@
+.list-view-container {
+    height: calc(100% - 260px);
+    padding-bottom: 10px;
+}
+.list-view-container .list-card {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+    height: var(--list-card-height);
+    line-height: var(--list-card-height);
+    padding-left: 0.5rem;
+    background-color: #1c1c1c;
+    border-left: solid 4px #1c1c1c;
+}
+.list-view-container .list-card .is-flexy {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100px;
+}
+
+/* .list-view-container .list-card .open-item-btn {
+    font-size: 1rem;
+} */
+/* 
+.list-view-container .list-card .add-to-webmap-btn {
+    width: var(--list-card-height);
+    height: var(--list-card-height);
+    background: url('../../static/icons/QueueOff.png') center no-repeat;
+}
+
+.list-view-container .list-card [class^="icon-ui-"]:before, 
+.list-view-container .list-card [class*=" icon-ui-"]:before {
+    padding-right: 0;
+} */
+
+.list-view-container .list-card.is-active {
+    position: relative;
+    background-color: var(--color-active-item);
+    border-left: solid 4px var(--color-active-item);
+}
+
+.list-view-container .list-card.is-active a
+/* .list-view-container .list-card.is-active .open-item-btn  */
+{
+    text-decoration: none;
+    color: #fff;
+}
+
+.list-view-container .list-card.is-active:hover {
+    background-color: var(--color-active-item);
+    border-left-color: var(--color-active-item);
+}
+
+.list-view-container .list-card.is-active:after {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border-left-color: var(--color-active-item);
+    border-width: 12px;
+    margin-top: -12px;
+}
+
+/* .list-view-container .list-card.is-selected .add-to-webmap-btn {
+    background: rgba(255,255,255,.2) url('../../static/icons/QueueOn.png') center no-repeat;
+} */
+
+.list-view-container .list-card.is-highlighted {
+    opacity: 1;
+    border-left: solid 4px var(--color-highlight-item);
+}
+
+/* .list-view-container .list-card.is-highlighted .add-to-webmap-btn {
+    background: url('../../static/icons/QueueOffSelected.png') center no-repeat;
+} */
+
+/* .list-view-container .list-card.is-highlighted a, .list-view-container .list-card.is-highlighted .open-item-btn {
+    text-decoration: none;
+    color: #fff;
+} */
+
+.list-view-container .list-card.is-active.is-highlighted {
+    background-color: var(--color-active-item);
+    border-left: solid 4px var(--color-highlight-item);
+}
+
+/* .list-view-container .list-card.is-highlighted.is-selected .add-to-webmap-btn {
+    background: rgba(255,255,255,.2) url('../../static/icons/QueueOnSelected.png') center no-repeat;
+} */
+
+.list-view-container .list-card.is-highlighted:hover {
+    border-left: solid 4px var(--color-highlight-item);
+}
+
+.list-view-container .list-card:hover {
+    background-color: var(--color-hover-item);
+    border-left: solid 4px var(--color-hover-item);
+}

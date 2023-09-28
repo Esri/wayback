@@ -5,12 +5,12 @@ import {
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IWaybackItem,
-} from '../../types';
+} from '@typings/index';
 
 // import IMapView from 'esri/views/MapView';
 // import IWatchUtils from 'esri/core/watchUtils';
 // import IPoint from 'esri/geometry/Point';
-import WaybackManager from '../../core/WaybackManager';
+import WaybackManager from '../../services/wayback';
 
 import MapView from '@arcgis/core/views/MapView';
 import { watch } from '@arcgis/core/core/watchUtils';
@@ -67,14 +67,13 @@ const MetadataQueryLayer: React.FC<Props> = ({
         try {
             anchorPointRef.current = mapPoint;
 
-            const { releaseNum, releaseDateLabel } = getTargetWaybackItem(
-                mapPoint
-            );
+            const { releaseNum, releaseDateLabel } =
+                getTargetWaybackItem(mapPoint);
 
             const res = await waybackManager.getMetadata({
                 releaseNum,
                 pointGeometry: mapPoint.toJSON(),
-                zoom: mapView.zoom // getCurrZoomLevel(mapView)
+                zoom: mapView.zoom, // getCurrZoomLevel(mapView)
             });
 
             const metadata: IWaybackMetadataQueryResult = res

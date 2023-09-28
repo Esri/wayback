@@ -1,7 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect } from 'react';
 
-export const usePrevious = <T extends unknown>(value:T):T=>{
-
+export const usePrevious = <T,>(value: T): T => {
     const ref = useRef<T>();
 
     // Store current value in ref
@@ -11,5 +10,4 @@ export const usePrevious = <T extends unknown>(value:T):T=>{
 
     // Return previous value (happens before update in useEffect above)
     return ref.current;
-
-}
+};

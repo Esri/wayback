@@ -1,19 +1,18 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
-import { getServiceUrl } from '../../utils/Tier';
+import { IWaybackItem, IExtentGeomety } from '@typings/index';
+import { getServiceUrl } from '@utils/Tier';
 // import EsriRquest from 'esri/request';
 
 import esriRequest from '@arcgis/core/request';
 import esriConfig from '@arcgis/core/config';
+import { getCredential, getToken } from '@utils/Esri-OAuth';
 
 interface ICreateWebmapParams {
     title: string;
     tags: string;
     description: string;
     mapExtent: IExtentGeomety;
-
-    userSession: IUserSession;
     waybackItemsToSave?: Array<IWaybackItem>;
 }
 
@@ -46,8 +45,8 @@ interface ICreateWebmapResponse {
     folder?: string;
 }
 
-const getRequestUrl = (userSession: IUserSession) => {
-    const credential = userSession.credential;
+const getRequestUrl = () => {
+    const credential = getCredential();
     return credential
         ? `${credential.server}/sharing/rest/content/users/${credential.userId}/addItem`
         : '';
@@ -129,8 +128,8 @@ const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
     const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
     let snippetStr = 'Wayback imagery from ';
 
-    if(releaseDates.length === 1){
-        return snippetStr + releaseDates[0]
+    if (releaseDates.length === 1) {
+        return snippetStr + releaseDates[0];
     }
 
     snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
@@ -142,7 +141,6 @@ const createWebmap = async ({
     title = '',
     tags = '',
     description = '',
-    userSession = null,
     mapExtent = null,
     waybackItemsToSave = [],
 }: ICreateWebmapParams): Promise<ICreateWebmapResponse> => {
@@ -150,21 +148,13 @@ const createWebmap = async ({
         return null;
     }
 
-    // type Modules = [
-    //     typeof IEsriConfig,
-    //     typeof EsriRquest
-    // ];
+    const credential = getCredential();
 
-    // const [ esriConfig, esriRequest ] = await (loadModules([
-    //     'esri/config',
-    //     'esri/request'
-    // ]) as Promise<Modules>);
-
-    if (userSession.credential.server !== 'https://www.arcgis.com') {
-        esriConfig.request.trustedServers.push(userSession.credential.server);
+    if (credential.server !== 'https://www.arcgis.com') {
+        esriConfig.request.trustedServers.push(credential.server);
     }
 
-    const requestUrl = getRequestUrl(userSession);
+    const requestUrl = getRequestUrl();
 
     const formData = new FormData();
 
@@ -185,7 +175,7 @@ const createWebmap = async ({
         type: 'Web Map',
         overwrite: 'true',
         f: 'json',
-        token: userSession.credential.token,
+        token: getToken(),
     };
 
     Object.keys(uploadRequestContent).map((key) => {

@@ -4,16 +4,16 @@ import Gutter from './index';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { isSwipeWidgetOpenSelector } from '../../store/reducers/SwipeView';
+import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
     isGutterHideSelector,
-} from '../../store/reducers/UI';
-import { AppContext } from '../../contexts/AppContextProvider';
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+} from '@store/UI/reducer';
+import { AppContext } from '@contexts/AppContextProvider';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 type Props = {
     children: React.ReactNode;
@@ -25,9 +25,9 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
     const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
 
-    const settingsBtnDisabled = useMemo(()=>{
-        return isSwipeWidgetOpen || isAnimationModeOn
-    }, [isSwipeWidgetOpen, isAnimationModeOn])
+    const settingsBtnDisabled = useMemo(() => {
+        return isSwipeWidgetOpen || isAnimationModeOn;
+    }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
     const isHide = useSelector(isGutterHideSelector);
 

@@ -1,21 +1,31 @@
-import './style.scss';
 import React from 'react';
-// import * as calcite from 'calcite-web/dist/js/calcite-web.min.js';
 import classnames from 'classnames';
 import config from './config';
 
-import { IWaybackItem, IUserSession, IExtentGeomety } from '../../types';
+import { IWaybackItem, IExtentGeomety } from '@typings/index';
 import createWebmap from './createWebmap';
 
 interface IProps {
     // isVisible?: boolean;
     waybackItems: Array<IWaybackItem>;
     rNum4SelectedWaybackItems: Array<number>;
-    userSession: IUserSession;
+    /**
+     * if ture, user has signed in alredy
+     */
+    hasSignedInAlready: boolean;
+    /**
+     * role of signed in user
+     */
+    userRole: string;
+    /**
+     * access token of signe in user
+     */
+    token: string;
+    portalBaseURL: string;
     mapExtent: IExtentGeomety;
 
     onClose: (val: boolean) => void;
-    signInButtonOnClick: ()=>void;
+    signInButtonOnClick: () => void;
 }
 
 interface IState {
@@ -107,12 +117,9 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     async saveAsWebmap() {
-        const {
-            userSession,
-            waybackItems,
-            rNum4SelectedWaybackItems,
-            mapExtent,
-        } = this.props;
+        const { waybackItems, rNum4SelectedWaybackItems, mapExtent } =
+            this.props;
+
         const { title, tags, description } = this.state;
 
         const waybackItemsToSave = waybackItems.filter((d) => {
@@ -126,7 +133,6 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                 title,
                 tags,
                 description,
-                userSession,
                 mapExtent,
                 waybackItemsToSave,
             });
@@ -143,20 +149,20 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     openWebmap() {
-        const { userSession } = this.props;
+        const { hasSignedInAlready, portalBaseURL } = this.props;
         const { webmapId } = this.state;
 
-        const baseUrl =
-            userSession &&
-            userSession.portal.url &&
-            userSession.portal.urlKey &&
-            userSession.portal.customBaseUrl
-                ? `https://${userSession.portal.urlKey}.${userSession.portal.customBaseUrl}`
-                : userSession.portal.url;
+        // const baseUrl =
+        //     userSession &&
+        //     userSession.portal.url &&
+        //     userSession.portal.urlKey &&
+        //     userSession.portal.customBaseUrl
+        //         ? `https://${userSession.portal.urlKey}.${userSession.portal.customBaseUrl}`
+        //         : userSession.portal.url;
 
         const itemUrl =
-            userSession && webmapId
-                ? `${baseUrl}/home/item.html?id=${webmapId}`
+            hasSignedInAlready && webmapId
+                ? `${portalBaseURL}/home/item.html?id=${webmapId}`
                 : null;
 
         if (itemUrl) {
@@ -191,7 +197,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
         return (
             <div className="dialog-content">
-                <h5>Wayback Map Settings:</h5>
+                <h5 className="text-xl mb-3">Wayback Map Settings:</h5>
                 <label>
                     Title
                     <input
@@ -251,16 +257,27 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     /**
      * Get the warning message for the user who does not have privilege to publish content
      */
-    getWarningMessage4OrgUser(){
-
+    getWarningMessage4OrgUser() {
         const { signInButtonOnClick } = this.props;
 
         return (
             <div>
-                <p>You signed in using a account that does not have privilege to create content in your ArcGIS Online organization.</p>
-                <p>Please <span className='text-blue cursor-pointer' onClick={signInButtonOnClick}>sign in</span> again using a different account.</p>
+                <p>
+                    You signed in using a account that does not have privilege
+                    to create content in your ArcGIS Online organization.
+                </p>
+                <p>
+                    Please{' '}
+                    <span
+                        className="text-blue cursor-pointer"
+                        onClick={signInButtonOnClick}
+                    >
+                        sign in
+                    </span>{' '}
+                    again using a different account.
+                </p>
             </div>
-        )
+        );
     }
 
     componentDidUpdate(prevPros: IProps) {
@@ -275,27 +292,29 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { onClose, userSession } = this.props;
+        const { onClose, userRole } = this.props;
 
         const { isWebmapReady } = this.state;
 
         /**
          * the signed-in user has no privilage to create content if it has the role in the organization equals to 'org_user'
          */
-        const hasNoPrivilege2CreateContent = userSession?.portal?.user?.role === 'org_user';
+        const hasNoPrivilege2CreateContent = userRole === 'org_user';
 
-        const editDialogContent = !isWebmapReady && !hasNoPrivilege2CreateContent 
-            ? this.getEditDialog() 
-            : null;
+        const editDialogContent =
+            !isWebmapReady && !hasNoPrivilege2CreateContent
+                ? this.getEditDialog()
+                : null;
 
-        const openWebmapContent = isWebmapReady && !hasNoPrivilege2CreateContent
-            ? this.getOpenWebmapContent()
-            : null;
+        const openWebmapContent =
+            isWebmapReady && !hasNoPrivilege2CreateContent
+                ? this.getOpenWebmapContent()
+                : null;
 
         const warningMessage4OrgUser = hasNoPrivilege2CreateContent
             ? this.getWarningMessage4OrgUser()
             : null;
-        
+
         return (
             <div className="modal-overlay customized-modal is-active">
                 <div

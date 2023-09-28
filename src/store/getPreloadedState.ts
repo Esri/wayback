@@ -1,40 +1,44 @@
 import { PartialRootState } from './configureStore';
 
-import { initialUIState, UIState } from '../store/reducers/UI';
-import {
-    initialWaybackItemsState,
-    WaybackItemsState,
-} from '../store/reducers/WaybackItems';
-import {
-    initialSwipeViewState,
-    SwipeViewState,
-} from '../store/reducers/SwipeView';
+import { initialUIState, UIState } from './UI/reducer';
+import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
+import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IURLParamData, IWaybackItem } from '../types';
-import { initialMapState, MapState } from './reducers/Map';
-import { decodeURLParams } from '../utils/UrlSearchParam';
+import { initialMapState, MapState } from './Map/reducer';
+import {
+    decodeURLParams,
+    getMapCenterFromHashParams,
+} from '../utils/UrlSearchParam';
 
 import {
     // getDefaultExtent,
     // getCustomPortalUrl,
-    getShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
+    getDownloadJobsFromLocalStorage,
 } from '../utils/LocalStorage';
-import { AnimationModeState, DEFAULT_ANIMATION_SPEED_IN_SECONDS, initialAnimationModeState } from './reducers/AnimationMode';
+import {
+    AnimationModeState,
+    DEFAULT_ANIMATION_SPEED_IN_SECONDS,
+    initialAnimationModeState,
+} from './AnimationMode/reducer';
 
-import {miscFns} from 'helper-toolkit-ts';
+import { miscFns } from 'helper-toolkit-ts';
+import {
+    DownloadModeState,
+    initialDownloadModeState,
+} from './DownloadMode/reducer';
 
-const isMobile = miscFns.isMobileDevice()
-
-const urlParams: IURLParamData = decodeURLParams();
+const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
-    const shouldOnlyShowItemsWithLocalChange =
-        urlParams.shouldOnlyShowItemsWithLocalChange ||
-        getShouldShowUpdatesWithLocalChanges();
+    // const shouldOnlyShowItemsWithLocalChange = true
+    // urlParams.shouldOnlyShowItemsWithLocalChange ||
+    // getShouldShowUpdatesWithLocalChanges();
 
     const state: UIState = {
         ...initialUIState,
-        shouldOnlyShowItemsWithLocalChange,
+        // shouldOnlyShowItemsWithLocalChange,
         isSaveAsWebmapDialogOpen: getShouldOpenSaveWebMapDialog(),
     };
 
@@ -100,26 +104,64 @@ const getPreloadedState4SwipeView = (
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     const { mapExtent } = urlParams;
 
+    const { center, zoom } = getMapCenterFromHashParams() || {};
+
     const state: MapState = {
         ...initialMapState,
         mapExtent,
+        center,
+        zoom,
     };
 
     return state;
 };
 
-const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationModeState => {
-    let { animationSpeed, rNum4FramesToExclude } = urlParams;
+const getPreloadedState4AnimationMode = (
+    urlParams: IURLParamData
+): AnimationModeState => {
+    const { animationSpeed, rNum4FramesToExclude } = urlParams;
 
-    if(animationSpeed === null || typeof animationSpeed !== 'number' || isMobile){
-        return initialAnimationModeState
+    if (
+        animationSpeed === null ||
+        typeof animationSpeed !== 'number' ||
+        isMobile
+    ) {
+        return initialAnimationModeState;
     }
 
     const state: AnimationModeState = {
         ...initialAnimationModeState,
         isAnimationModeOn: true,
         animationSpeed,
-        rNum2Exclude: rNum4FramesToExclude
+        rNum2Exclude: rNum4FramesToExclude,
+    };
+
+    return state;
+};
+
+const getPreloadedState4Downloadmode = (
+    urlParams: IURLParamData
+): DownloadModeState => {
+    const { isDownloadDialogOpen } = urlParams;
+
+    const jobs = getDownloadJobsFromLocalStorage();
+
+    const byId = {};
+    const ids = [];
+
+    for (const job of jobs) {
+        const { id } = job;
+        byId[id] = job;
+        ids.push(id);
+    }
+
+    const state: DownloadModeState = {
+        ...initialDownloadModeState,
+        isDownloadDialogOpen,
+        jobs: {
+            byId,
+            ids,
+        },
     };
 
     return state;
@@ -128,25 +170,30 @@ const getPreloadedState4AnimationMode = (urlParams: IURLParamData): AnimationMod
 const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
-    const uiState: UIState = getPreloadedState4UI(urlParams);
-    const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
-        waybackItems,
-        urlParams
-    );
-    const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
-        urlParams,
-        waybackItems
-    );
-    const mapState: MapState = getPreloadedState4Map(urlParams);
+    const urlParams: IURLParamData = decodeURLParams();
 
-    const animationModeState:AnimationModeState = getPreloadedState4AnimationMode(urlParams)
+    // const uiState: UIState = getPreloadedState4UI(urlParams);
+
+    // const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
+    //     waybackItems,
+    //     urlParams
+    // );
+    // const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
+    //     urlParams,
+    //     waybackItems
+    // );
+    // const mapState: MapState = getPreloadedState4Map(urlParams);
+
+    // const animationModeState: AnimationModeState =
+    //     getPreloadedState4AnimationMode(urlParams);
 
     const preloadedState = {
-        UI: uiState,
-        WaybackItems: waybackItemsState,
-        SwipeView: swipeViewState,
-        Map: mapState,
-        AnimationMode: animationModeState
+        UI: getPreloadedState4UI(urlParams),
+        WaybackItems: getPreloadedState4WaybackItems(waybackItems, urlParams),
+        SwipeView: getPreloadedState4SwipeView(urlParams, waybackItems),
+        Map: getPreloadedState4Map(urlParams),
+        AnimationMode: getPreloadedState4AnimationMode(urlParams),
+        DownloadMode: getPreloadedState4Downloadmode(urlParams),
     } as PartialRootState;
 
     return preloadedState;

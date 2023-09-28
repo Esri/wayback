@@ -1,8 +1,5 @@
-import { decodeQueryString } from '@esri/arcgis-rest-request';
-import { urlFns } from 'helper-toolkit-ts';
-import { updateQueryParam, updateHashParam } from 'helper-toolkit-ts/dist/url';
-import { IURLParamData, IExtentGeomety } from '../../types';
-import { getHashParamsFromLocalStorage } from '../LocalStorage';
+import { MapCenter } from '@store/Map/reducer';
+import { IURLParamData, IExtentGeomety } from '@typings/index';
 
 type ParamKey =
     | 'ext'
@@ -11,7 +8,9 @@ type ParamKey =
     | 'active'
     | 'animationSpeed'
     | 'swipeWidget'
-    | 'framesToExclude';
+    | 'framesToExclude'
+    | 'downloadMode'
+    | 'mapCenter';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -19,21 +18,34 @@ type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     rNum4SwipeWidgetTrailingLayer?: number;
 }) => void;
 
-type URLData = {
-    [key in ParamKey]: string;
-}
+let hashParams = new URLSearchParams(window.location.hash.slice(1));
 
-const urlQueryData: URLData = urlFns.parseQuery();
+/**
+ * update Hash Params in the URL using data from hashParams
+ */
+export const updateHashParams = (key: ParamKey, value: string) => {
+    if (value === undefined || value === null) {
+        hashParams.delete(key);
+    } else {
+        hashParams.set(key, value);
+    }
 
-const urlHashData: URLData = urlFns.parseHash();
+    window.location.hash = hashParams.toString();
+};
 
-const getMapExtent = (urlData:URLData): IExtentGeomety => {
-    // const urlQueryData: {
-    //     [key in searchParamKey]: string;
-    // } = urlFns.parseQuery();
+export const getHashParamValueByKey = (key: ParamKey): string => {
+    if (!hashParams.has(key)) {
+        return '';
+    }
 
-    const ext = urlData.ext
-        ? urlData.ext.split(',').map((d) => +d)
+    return hashParams.get(key);
+};
+
+const getMapExtent = (): IExtentGeomety => {
+    const ext = getHashParamValueByKey('ext')
+        ? getHashParamValueByKey('ext')
+              .split(',')
+              .map((d) => +d)
         : null;
 
     const mapExtent: IExtentGeomety =
@@ -60,23 +72,14 @@ const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
               .join(',')
         : '';
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
-const saveLocalChangesOnlyInURLQueryParam = (
-    localChangesOnly: boolean
-): void => {
-    const key: ParamKey = 'localChangesOnly';
-    const value = localChangesOnly ? 'true' : '';
-
-    updateHashParam({
-        key,
-        value,
-    });
-};
+// const saveLocalChangesOnlyInURLQueryParam = (
+//     localChangesOnly: boolean
+// ): void => {
+//     updateHashParams('localChangesOnly', localChangesOnly ? 'true' : null);
+// };
 
 const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     rNum4SelectedWaybackItems: number[]
@@ -84,12 +87,9 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     const key: ParamKey = 'selected';
     const value = rNum4SelectedWaybackItems.length
         ? rNum4SelectedWaybackItems.join(',')
-        : '';
+        : null;
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
 const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
@@ -98,121 +98,121 @@ const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
     const key: ParamKey = 'active';
     const value = rNum4ActiveWaybackItem
         ? rNum4ActiveWaybackItem.toString()
-        : '';
+        : null;
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
-const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam = ({
-    isOpen,
-    rNum4SwipeWidgetLeadingLayer,
-    rNum4SwipeWidgetTrailingLayer,
-}) => {
-    const key: ParamKey = 'swipeWidget';
-    const value = isOpen
-        ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
-        : '';
+const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
+    ({
+        isOpen,
+        rNum4SwipeWidgetLeadingLayer,
+        rNum4SwipeWidgetTrailingLayer,
+    }) => {
+        const key: ParamKey = 'swipeWidget';
+        const value = isOpen
+            ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
+            : null;
 
-    updateHashParam({
-        key,
-        value,
-    });
-};
+        updateHashParams(key, value);
+    };
 
 const saveAnimationSpeedInURLQueryParam = (
     isAnimationOn: boolean,
     speed: number
 ): void => {
     const key: ParamKey = 'animationSpeed';
-    const value = isAnimationOn ? speed.toString() : '';
+    const value = isAnimationOn ? speed.toString() : null;
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
 };
 
-const saveFrames2ExcludeInURLQueryParam = (
-    rNums: number[],
-): void => {
+const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
     const key: ParamKey = 'framesToExclude';
-    const value = rNums && rNums.length ? rNums.join(',') : '';
+    const value = rNums && rNums.length ? rNums.join(',') : null;
 
-    updateHashParam({
-        key,
-        value,
-    });
+    updateHashParams(key, value);
+};
+
+export const saveMapCenterToHashParams = (center: MapCenter, zoom: number) => {
+    const { lon, lat } = center;
+    const value = `${lon.toFixed(3)},${lat.toFixed(3)},${zoom}`;
+    updateHashParams('mapCenter', value);
+    // remove ext from URL as it is no longer needed
+    updateHashParams('ext', null);
+};
+
+export const getMapCenterFromHashParams = () => {
+    const value = getHashParamValueByKey('mapCenter');
+
+    if (!value) {
+        return null;
+    }
+
+    const [lon, lat, zoom] = value.split(',').map((d) => +d);
+
+    return {
+        center: {
+            lon,
+            lat,
+        },
+        zoom,
+    };
 };
 
 const decodeURLParams = (): IURLParamData => {
-    // use hash params first, the OAuth overwrites the hash params so need to make sure the hash data is not from OAuth
-    let urlData:URLData = Object.keys(urlHashData).length && urlHashData['access_token'] === undefined
-        ? urlHashData 
+    hashParams = new URLSearchParams(window.location.hash.slice(1));
+
+    // const localChangesOnly =
+    //     getHashParamValueByKey('localChangesOnly') === 'true' ? true : false;
+
+    const selected = getHashParamValueByKey('selected')
+        ? getHashParamValueByKey('selected')
+              .split(',')
+              .map((d) => +d)
         : null;
 
-    // try to use query params if hash params is not found
-    if(!urlData){
-        urlData = Object.keys(urlQueryData).length 
-            ? urlQueryData
-            : null;
-    }
-
-    // try to use hash params string from local storage, and set urlData to empty Object if hash params string is not found either
-    if(!urlData){
-        const hashParamsFromLocalStorage = getHashParamsFromLocalStorage();
-        console.log('hashParamsFromLocalStorage', hashParamsFromLocalStorage)
-
-        urlData = hashParamsFromLocalStorage
-            ? decodeQueryString(hashParamsFromLocalStorage) as URLData
-            : {} as URLData;
-    }
-
-    const localChangesOnly =
-        urlData.localChangesOnly === 'true' ? true : false;
-
-    const selected = urlData.selected
-        ? urlData.selected.split(',').map((d) => +d)
+    const active = getHashParamValueByKey('active')
+        ? +getHashParamValueByKey('active')
         : null;
 
-    const active = urlData.active ? +urlData.active : null;
+    const mapExtent = getMapExtent();
 
-    const mapExtent = getMapExtent(urlData);
-
-    const isSwipeWidgetOpen = urlData.swipeWidget ? true : false;
+    const isSwipeWidgetOpen = getHashParamValueByKey('swipeWidget')
+        ? true
+        : false;
 
     const swipeWidgetLayers = isSwipeWidgetOpen
-        ? urlData.swipeWidget.split(',').map((d) => +d)
+        ? getHashParamValueByKey('swipeWidget')
+              .split(',')
+              .map((d) => +d)
         : [];
 
-    const animationSpeed = urlData.animationSpeed
-        ? +urlData.animationSpeed
+    const animationSpeed = getHashParamValueByKey('animationSpeed')
+        ? +getHashParamValueByKey('animationSpeed')
         : null;
 
-    const rNum4FramesToExclude = urlData.framesToExclude
-        ? urlData.framesToExclude.split(',').map(rNum=>+rNum)
-        : []
+    const rNum4FramesToExclude = getHashParamValueByKey('framesToExclude')
+        ? getHashParamValueByKey('framesToExclude')
+              .split(',')
+              .map((rNum) => +rNum)
+        : [];
+
+    const isDownloadDialogOpen =
+        getHashParamValueByKey('downloadMode') === 'true' ? true : false;
 
     const urlParams: IURLParamData = {
         mapExtent,
         rNum4SelectedWaybackItems: selected,
-        shouldOnlyShowItemsWithLocalChange: localChangesOnly,
+        // shouldOnlyShowItemsWithLocalChange: localChangesOnly,
         rNum4ActiveWaybackItem: active,
         isSwipeWidgetOpen,
         rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
         animationSpeed,
-        rNum4FramesToExclude
+        rNum4FramesToExclude,
+        isDownloadDialogOpen,
     };
-
-    // the app used to save UI states in URL Search Params, which is not ideal as it makes very hard for the CDN to cache all of those URLs,
-    // this is the reason why we switched from using Search Params to Hash Params. And we need to remove Search Params from the URL to keep the URL clean and unique.
-    if(Object.keys(urlQueryData).length){
-        // remove the query string from URL
-        window.history.pushState({}, document.title, window.location.pathname);
-    }
 
     return urlParams;
 };
@@ -220,10 +220,10 @@ const decodeURLParams = (): IURLParamData => {
 export {
     decodeURLParams,
     saveMapExtentInURLQueryParam,
-    saveLocalChangesOnlyInURLQueryParam,
+    // saveLocalChangesOnlyInURLQueryParam,
     saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
     saveReleaseNum4ActiveWaybackItemInURLQueryParam,
     saveSwipeWidgetInfoInURLQueryParam,
     saveAnimationSpeedInURLQueryParam,
-    saveFrames2ExcludeInURLQueryParam
+    saveFrames2ExcludeInURLQueryParam,
 };

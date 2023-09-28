@@ -3,28 +3,45 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
+    mapCenterUpdated,
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
-} from '../../store/reducers/Map';
+    selectMapCenterAndZoom,
+    zoomUpdated,
+} from '@store/Map/reducer';
 
 import {
     // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
-} from '../../store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 import MapView from './MapView';
 
 import AppConfig from '../../app-config';
-import { IExtentGeomety, IMapPointInfo } from '../../types';
-import { getDefaultExtent } from '../../utils/LocalStorage';
-import { AppContext } from '../../contexts/AppContextProvider';
-import { saveMapExtentInURLQueryParam } from '../../utils/UrlSearchParam';
+import { IExtentGeomety, IMapPointInfo } from '@typings/index';
+import { getDefaultExtent } from '@utils/LocalStorage';
+import { AppContext } from '@contexts/AppContextProvider';
+import {
+    saveMapCenterToHashParams,
+    saveMapExtentInURLQueryParam,
+} from '@utils/UrlSearchParam';
+import { batch } from 'react-redux';
+
+type Props = {
+    children?: React.ReactNode;
+};
+
+type FlexGrowItemWapperProps = {
+    children?: React.ReactNode;
+};
 
 // wrap the MapView and it's children into this flex grow container,
 // so it can adjust it's width depends on the visibility of swipe widget layers selector components on left and right side
-const FlexGrowItemWapper: React.FC = ({ children }) => {
+const FlexGrowItemWapper: React.FC<FlexGrowItemWapperProps> = ({
+    children,
+}) => {
     return (
         <div
             style={{
@@ -38,27 +55,22 @@ const FlexGrowItemWapper: React.FC = ({ children }) => {
     );
 };
 
-const MapViewConatiner: React.FC = ({ children }) => {
+const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
     const { waybackManager } = useContext(AppContext);
 
-    // const activeWaybackItem = useSelector(activeWaybackItemSelector);
-
-    // const isReferenceLayerVisible = useSelector(isReferenceLayerVisibleSelector);
-
     const mapExtent = useSelector(mapExtentSelector);
 
-    const initialMapExtent = useMemo((): IExtentGeomety => {
-        const defaultExtentFromLocalStorage = getDefaultExtent(); //getDefaultExtent();
+    const { center, zoom } = useSelector(selectMapCenterAndZoom);
 
-        // console.log(mapExtent)
+    const defaultMapExtent = useMemo((): IExtentGeomety => {
+        // no need to use default map extent if center and zoom are already defined
+        if (center && zoom) {
+            return null;
+        }
 
-        return (
-            mapExtent ||
-            defaultExtentFromLocalStorage ||
-            AppConfig.defaultMapExtent
-        );
+        return mapExtent || getDefaultExtent() || AppConfig.defaultMapExtent;
     }, []);
 
     const queryVersionsWithLocalChanges = async (
@@ -77,15 +89,37 @@ const MapViewConatiner: React.FC = ({ children }) => {
         dispatch(mapExtentUpdated(extent));
     };
 
+    // useEffect(() => {
+    //     saveMapExtentInURLQueryParam(mapExtent);
+    // }, [mapExtent]);
+
     useEffect(() => {
-        saveMapExtentInURLQueryParam(mapExtent);
-    }, [mapExtent]);
+        if (!center || !zoom) {
+            return;
+        }
+
+        saveMapCenterToHashParams(center, zoom);
+    }, [center, zoom]);
 
     return (
         <FlexGrowItemWapper>
             <MapView
-                initialExtent={initialMapExtent}
-                onUpdateEnd={queryVersionsWithLocalChanges}
+                initialExtent={defaultMapExtent}
+                center={center}
+                zoom={zoom}
+                onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
+                    queryVersionsWithLocalChanges(mapCenterPoint);
+
+                    batch(() => {
+                        dispatch(
+                            mapCenterUpdated({
+                                lon: mapCenterPoint.longitude,
+                                lat: mapCenterPoint.latitude,
+                            })
+                        );
+                        dispatch(zoomUpdated(mapCenterPoint.zoom));
+                    });
+                }}
                 onExtentChange={onExtentChange}
             >
                 {children}

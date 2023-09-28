@@ -1,8 +1,8 @@
-import './style.scss';
+import './style.css';
 import React from 'react';
 import * as d3 from 'd3';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 interface IProps {
     waybackItems: Array<IWaybackItem>;
@@ -121,9 +121,8 @@ class BarChart extends React.PureComponent<IProps, IState> {
             .attr('class', (d: IWaybackItem) => {
                 const classes = [this.BarRectClassName];
 
-                const hasLocalChange = rNum4WaybackItemsWithLocalChanges.includes(
-                    d.releaseNum
-                );
+                const hasLocalChange =
+                    rNum4WaybackItemsWithLocalChanges.includes(d.releaseNum);
 
                 if (shouldOnlyShowItemsWithLocalChange && !hasLocalChange) {
                     classes.push('is-hide');
@@ -148,10 +147,26 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 return BarWidth;
             })
             .attr('height', height)
-            .on('click', (d: IWaybackItem) => {
+            .on('click', function () {
+                // onClick(d.releaseNum);
+
+                const d = d3.select(this).data()[0] as IWaybackItem;
+
+                if (!d) {
+                    return;
+                }
+
+                // console.log(d)
                 onClick(d.releaseNum);
             })
-            .on('mouseover', (d: IWaybackItem) => {
+            .on('mouseover', function () {
+                const d = d3.select(this).data()[0] as IWaybackItem;
+
+                if (!d) {
+                    return;
+                }
+
+                // console.log(d)
                 onMouseEnter(d.releaseNum, true);
             })
             .on('mouseout', (d: IWaybackItem) => {
@@ -268,7 +283,7 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 ref={this.containerRef}
                 style={{
                     width: '100%',
-                    height: '90px',
+                    height: '55px',
                     marginBottom: '.5rem',
                 }}
             ></div>

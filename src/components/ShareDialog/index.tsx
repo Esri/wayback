@@ -1,6 +1,5 @@
-import './style.scss';
+import './style.css';
 import React from 'react';
-// import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
 import config from './config';
 
 interface IProps {
@@ -85,7 +84,7 @@ class ShareDialog extends React.PureComponent<IProps, IState> {
                             </svg>
                         </span>
 
-                        <h4 className="text-center">
+                        <h4 className="text-xl text-center">
                             Share World Imagery Wayback
                         </h4>
                     </div>

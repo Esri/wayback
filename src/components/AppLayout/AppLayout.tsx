@@ -28,51 +28,33 @@ import {
     TilePreviewWindow,
     // Title4ActiveItem,
     WaybackLayer,
-    HeadTags,
     AnimationPanel,
     AnimationModeToggleBtn,
-    ZoomWidget
+    ZoomWidget,
+    OpenDownloadPanelBtn,
+    DownloadDialog,
 } from '..';
-import { AppContext } from '../../contexts/AppContextProvider';
-import { getServiceUrl } from '../../utils/Tier';
+import { AppContext } from '@contexts/AppContextProvider';
+import { getServiceUrl } from '@utils/Tier';
 
-// import { MobileHide, Spacing } from '../SharedUI';
-
-const AppLayout:React.FC = ()=> {
-
+const AppLayout: React.FC = () => {
     const { onPremises } = React.useContext(AppContext);
 
     return (
         <>
-            <HeadTags />
-
             <MobileHeader />
 
             <Gutter>
-                <SaveAsWebmapBtn />
-
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
+
+                {/* <OpenDownloadPanelBtn /> */}
+
+                <SaveAsWebmapBtn />
             </Gutter>
 
-            <Sidebar>
-                {/* <SidebarToggleBtn />
-
-                <Spacing paddingLeft="1rem" paddingRight="1rem">
-                    <MobileHide>
-                        <AppTitleText />
-                    </MobileHide>
-
-                    <BarChart />
-
-                    <Title4ActiveItem />
-
-                    <ShowLocalChangesCheckboxToggle />
-                </Spacing>
-
-                <ListView /> */}
-            </Sidebar>
+            <Sidebar></Sidebar>
 
             <MapViewWrapper>
                 <SwipeWidgetLayerSelector targetLayer="leading" />
@@ -109,7 +91,9 @@ const AppLayout:React.FC = ()=> {
 
             <SettingDialog />
 
-            { !onPremises && <ShareDialog /> }
+            {!onPremises && <ShareDialog />}
+
+            {/* <DownloadDialog /> */}
 
             <AboutThisApp />
 

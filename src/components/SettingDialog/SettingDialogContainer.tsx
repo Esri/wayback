@@ -7,17 +7,18 @@ import SetttingDialog from './index';
 import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
-    shouldOnlyShowItemsWithLocalChangeToggled,
-} from '../../store/reducers/UI';
+    // shouldOnlyShowItemsWithLocalChangeToggled,
+} from '@store/UI/reducer';
 
-import { mapExtentSelector } from '../../store/reducers/Map';
+import { mapExtentSelector } from '@store/Map/reducer';
 
-import { AppContext } from '../../contexts/AppContextProvider';
+// import { AppContext } from '@contexts/AppContextProvider';
+import { isAnonymouns, signIn, signOut } from '@utils/Esri-OAuth';
 
 const SettingDialogContainer = () => {
     const dispatch = useDispatch();
 
-    const { userSession, oauthUtils } = useContext(AppContext);
+    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const mapExtent = useSelector(mapExtentSelector);
 
@@ -29,24 +30,24 @@ const SettingDialogContainer = () => {
 
     const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
         if (shouldSignIn) {
-            oauthUtils.signIn();
+            signIn();
         } else {
-            oauthUtils.signOut();
+            signOut();
         }
     };
 
-    const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
-        dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
-    };
+    // const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
+    //     dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
+    // };
 
     return isOpen ? (
         <SetttingDialog
             mapExtent={mapExtent}
-            userSession={userSession}
+            signedInAlready={isAnonymouns() === false}
             toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-            shouldShowLocalChangesByDefaultOnClick={
-                shouldShowLocalChangesByDefaultOnClick
-            }
+            // shouldShowLocalChangesByDefaultOnClick={
+            //     shouldShowLocalChangesByDefaultOnClick
+            // }
             onClose={onCloseHandler}
         />
     ) : null;

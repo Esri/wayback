@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { isAnimationModeOnSelector } from '../../store/reducers/AnimationMode';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import {
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
-} from '../../store/reducers/Map';
-import { MobileHide } from '../SharedUI';
+} from '@store/Map/reducer';
+import { MobileHide } from '../MobileVisibility';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 
@@ -20,21 +20,16 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector)
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     return (
         <MobileHide>
-            {
-                !isAnimationModeOn 
-                    ? (
-                        <ReferenceLayerToggle
-                            isActive={isReferenceLayerVisible}
-                            onClick={toggleReferenceLayer}
-                        />
-                    )
-                    : null
-            }
-            
+            {!isAnimationModeOn ? (
+                <ReferenceLayerToggle
+                    isActive={isReferenceLayerVisible}
+                    onClick={toggleReferenceLayer}
+                />
+            ) : null}
         </MobileHide>
     );
 };

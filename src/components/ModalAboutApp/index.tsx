@@ -1,32 +1,25 @@
-import './style.scss';
 import React, { useContext } from 'react';
-import { AppContext } from '../../contexts/AppContextProvider';
-// import { modal } from 'calcite-web/dist/js/calcite-web.min.js';
-// import config from './config';
+import { AppContext } from '@contexts/AppContextProvider';
 
 interface IProps {
     onClose: () => void;
 }
 // interface IState {}
 
-const About:React.FC<IProps> = ({
-    onClose
-}:IProps)=>{
-
-    const {
-        onPremises
-    } = useContext(AppContext)
+const About: React.FC<IProps> = ({ onClose }: IProps) => {
+    const { onPremises } = useContext(AppContext);
 
     const githubRepoInfo = (
         <>
-            The source code for this app is available on{' '} 
+            The source code for this app is available on{' '}
             <a
                 href="https://github.com/vannizhang/wayback"
                 target="_blank"
                 rel="noopener noreferrer"
-            >   
+            >
                 Github
-            </a>.
+            </a>
+            .
         </>
     );
 
@@ -56,13 +49,13 @@ const About:React.FC<IProps> = ({
                     </svg>
                 </span>
 
-                <h2 className="trailer-half text-center trailer-1">
+                <h2 className="text-3xl trailer-half text-center trailer-1">
                     World Imagery Wayback
                 </h2>
-                <h5 className="">WHAT</h5>
-                <p>
-                    Wayback is a digital archive, providing users with
-                    access to the different versions of{' '}
+                <h5 className="text-xl mb-3">WHAT</h5>
+                <p className="mb-6">
+                    Wayback is a digital archive, providing users with access to
+                    the different versions of{' '}
                     <a
                         href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
                         target="_blank"
@@ -70,13 +63,13 @@ const About:React.FC<IProps> = ({
                     >
                         World Imagery
                     </a>{' '}
-                    created over time. Each layer in the archive represents
-                    a snapshot of the entire World Imagery map, as it
-                    existed on the date it was published. Wayback currently
-                    provides access to all published versions of World
-                    Imagery, dating back to February 20, 2014. There is an
-                    ArcGIS Online item for every version which can be
-                    accessed directly from this app or within the{' '}
+                    created over time. Each layer in the archive represents a
+                    snapshot of the entire World Imagery map, as it existed on
+                    the date it was published. Wayback currently provides access
+                    to all published versions of World Imagery, dating back to
+                    February 20, 2014. There is an ArcGIS Online item for every
+                    version which can be accessed directly from this app or
+                    within the{' '}
                     <a
                         href="https://www.arcgis.com/home/group.html?id=0f3189e1d1414edfad860b697b7d8311#settings"
                         target="_blank"
@@ -84,36 +77,34 @@ const About:React.FC<IProps> = ({
                     >
                         Wayback Imagery group
                     </a>
-                    .{' '} 
-                    { !onPremises ? githubRepoInfo : null }
+                    . {!onPremises ? githubRepoInfo : null}
                 </p>
 
-                <h5 className="">WHY</h5>
-                <p>
-                    As World Imagery is updated with more current imagery,
-                    new versions of the map are published. When and where
-                    updates occur, the previous imagery is replaced and is
-                    no longer visible. For many use cases, the new imagery
-                    is more desirable and typically preferred. Other times,
-                    however, the previous imagery may support use cases that
-                    the new imagery does not. In these cases, a user may
-                    need to access a previous version of World Imagery.
+                <h5 className="text-xl mb-3">WHY</h5>
+                <p className="mb-6">
+                    As World Imagery is updated with more current imagery, new
+                    versions of the map are published. When and where updates
+                    occur, the previous imagery is replaced and is no longer
+                    visible. For many use cases, the new imagery is more
+                    desirable and typically preferred. Other times, however, the
+                    previous imagery may support use cases that the new imagery
+                    does not. In these cases, a user may need to access a
+                    previous version of World Imagery.
                 </p>
 
-                <h5 className="">HOW</h5>
-                <p>
-                    Available versions of the World Imagery map are
-                    presented within a timeline and as layers in a list.
-                    Versions that resulted in local changes are highlighted
-                    in bold white, and the layer currently selected is
-                    highlighted in blue. Point and click on the map for
-                    additional imagery details within the selected layer.
-                    One or more layers can be added to a queue and pushed to
-                    a new ArcGIS Online web map.
+                <h5 className="text-xl mb-2">HOW</h5>
+                <p className="mb-6">
+                    Available versions of the World Imagery map are presented
+                    within a timeline and as layers in a list. Versions that
+                    resulted in local changes are highlighted in bold white, and
+                    the layer currently selected is highlighted in blue. Point
+                    and click on the map for additional imagery details within
+                    the selected layer. One or more layers can be added to a
+                    queue and pushed to a new ArcGIS Online web map.
                 </p>
             </div>
         </div>
     );
-}
+};
 
 export default About;

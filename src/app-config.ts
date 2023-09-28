@@ -21,6 +21,7 @@ const config: IAppConfig = {
             // this world imagery basemap will be used when user saves selected Wayback items into a new webmap
             'world-imagery-basemap':
                 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/',
+            'wayback-export-base': '',
         },
     },
     // The dev enivornment is optional, please comment out the dev section below if don't need the dev enivornment
@@ -37,6 +38,8 @@ const config: IAppConfig = {
                 'https://devext.arcgis.com/sharing/rest/content/items/2155f4cadf454b9a973b12dc73d1ffaf/resources/styles/root.json?f=pjson',
             'world-imagery-basemap':
                 'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/',
+            'wayback-export-base':
+                'https://34.220.147.218:6443/arcgis/rest/services/Wayport/GPServer/Wayport',
         },
     },
     defaultMapExtent: {

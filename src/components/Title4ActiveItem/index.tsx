@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IWaybackItem } from '../../types';
+import { IWaybackItem } from '@typings/index';
 
 interface IProps {
     isMobile: boolean;
@@ -8,8 +8,6 @@ interface IProps {
     previewWaybackItem: IWaybackItem;
     shouldShowPreviewItemTitle: boolean;
 }
-
-// interface IState {}
 
 class Title4ActiveItem extends React.PureComponent<IProps> {
     constructor(props: IProps) {
@@ -28,16 +26,23 @@ class Title4ActiveItem extends React.PureComponent<IProps> {
             ? previewWaybackItem.releaseDateLabel
             : activeWaybackItem.releaseDateLabel;
 
-        const subtitle = !isMobile ? (
-            <span className="font-size--3">Click map for imagery details</span>
-        ) : null;
-
         return (
-            <div className="title-for-active-item text-center text-blue">
-                <h4 className="font-size-2 avenir-light trailer-0">
-                    Wayback {releaseDate}
-                </h4>
-                {subtitle}
+            <div className="flex text-custom-theme-blue justify-center items-center">
+                <div className="leading-none">
+                    <span className="text-xs">Selected release</span>
+                    <br />
+                    <span className="text-xl font-medium">{releaseDate}</span>
+                </div>
+
+                {!isMobile && (
+                    <>
+                        <div className="ml-3 pl-3 border-l border-custom-theme-blue-dark w-2/5 leading-none">
+                            <span className="text-xs">
+                                Click map for imagery details
+                            </span>
+                        </div>
+                    </>
+                )}
             </div>
         );
     }

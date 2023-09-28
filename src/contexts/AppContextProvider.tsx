@@ -1,17 +1,15 @@
 import React, { useState, createContext } from 'react';
-import WaybackManager from '../core/WaybackManager';
-import { IUserSession } from '../types';
-import OAuthUtils from '../utils/Esri-OAuth';
+import WaybackManager from '../services/wayback';
+// import OAuthUtils from '../utils/Esri-OAuth';
 import { getServiceUrl } from '../utils/Tier';
 import { getCustomPortalUrl } from '../utils/LocalStorage';
 import { miscFns } from 'helper-toolkit-ts';
 
 import config from '../app-config';
+import { initEsriOAuth } from '../utils/Esri-OAuth';
 
 type AppContextValue = {
     waybackManager: WaybackManager;
-    oauthUtils: OAuthUtils;
-    userSession: IUserSession;
     isMobile: boolean;
     onPremises: boolean;
 };
@@ -30,36 +28,15 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
     const [value, setValue] = useState<AppContextValue>();
 
     const init = async () => {
-        const oauthUtils = new OAuthUtils();
-
-        const userSession = await getUserSession(oauthUtils);
-        // console.log('userSession', userSession);
-
         const contextValue: AppContextValue = {
-            oauthUtils,
-            userSession,
+            // oauthUtils,
+            // userSession,
             waybackManager,
             isMobile: miscFns.isMobileDevice(),
-            onPremises: config.onPremises
+            onPremises: config.onPremises,
         };
 
         setValue(contextValue);
-    };
-
-    const getUserSession = async (
-        oauthUtils: OAuthUtils
-    ): Promise<IUserSession> => {
-        try {
-            const userSession = await oauthUtils.init({
-                appId: config.appId,
-                portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
-            });
-
-            return userSession;
-        } catch (err) {
-            // console.error(err);
-            return null;
-        }
     };
 
     React.useEffect(() => {

@@ -1,27 +1,39 @@
 import React from 'react';
-import './style.scss';
+// import './style.css';
 
 import classnames from 'classnames';
 
 type Props = {
-    isOpen: boolean;
+    /**
+     * if true, the animation mode is on and the swipe button should be set to semi-transparent
+     */
+    useDisabledStyle: boolean;
+    /**
+     * if true, the animation mode is on and the swipe button should be set to semi-transparent
+     */
+    active: boolean;
     onClickHandler: () => void;
 };
 
 const SwipeWidgetToggleBtn: React.FC<Props> = ({
-    isOpen,
+    useDisabledStyle,
+    active,
     onClickHandler,
 }: Props) => {
-    const classNames = classnames('swipe-widget-toggle-btn', {
-        'is-open': isOpen,
-    });
-
     return (
         <div
-            className={classNames}
+            className={classnames(
+                'relative w-full text-center my-3 cursor-pointer',
+                {
+                    'opacity-50': useDisabledStyle,
+                    'text-white': active,
+                }
+            )}
             onClick={onClickHandler}
             title="Toggle Swipe Mode"
-        ></div>
+        >
+            <calcite-icon icon="compare" scale="l" />
+        </div>
     );
 };
 

@@ -1,7 +1,7 @@
-import './style.scss';
+import './style.css';
 import React from 'react';
 
-import { IWaybackItem, IStaticTooltipData } from '../../types';
+import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 
 import Card from './Card';
 import StaticTooltip from '../StaticTooltip';
@@ -13,9 +13,15 @@ interface IProps {
     shouldOnlyShowItemsWithLocalChange: boolean;
     rNum4SelectedWaybackItems: Array<number>;
     rNum4WaybackItemsWithLocalChanges: Array<number>;
+    /**
+     * if ture, the The donwload button will be disabled.
+     * the user can only have limited of number of download jobs in the list.
+     */
+    hasReachedLimitOfConcurrentDownloadJobs: boolean;
 
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
+    downloadButtonOnClick: (releaseNum: number) => void;
     onMouseEnter?: (releaseNum: number) => void;
     onMouseOut?: () => void;
 }
@@ -60,10 +66,12 @@ class ListView extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             rNum4WaybackItemsWithLocalChanges,
             shouldOnlyShowItemsWithLocalChange,
+            hasReachedLimitOfConcurrentDownloadJobs,
             toggleSelect,
             onClick,
             onMouseEnter,
             onMouseOut,
+            downloadButtonOnClick,
         } = this.props;
 
         const cardData = shouldOnlyShowItemsWithLocalChange
@@ -95,10 +103,14 @@ class ListView extends React.PureComponent<IProps, IState> {
                     isSelected={isSelected}
                     isHighlighted={isHighlighted}
                     toggleSelect={toggleSelect}
+                    shouldDownloadButtonBeDisabled={
+                        hasReachedLimitOfConcurrentDownloadJobs
+                    }
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}
                     toggleTooltip={this.setTooltipData}
+                    downloadButtonOnClick={downloadButtonOnClick}
                 />
             );
         });

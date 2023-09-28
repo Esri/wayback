@@ -1,4 +1,4 @@
-import { ValidServiceUrlNames } from '../../types';
+import { ValidServiceUrlNames } from '@typings/index';
 import config from '../../app-config';
 
 const isHostedOnArcGisDomain = (() => {

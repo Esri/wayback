@@ -9,13 +9,13 @@ import {
 import {
     previewWaybackItemSelector,
     releaseNum4AlternativePreviewWaybackItemSelector,
-} from '../../store/reducers/WaybackItems';
+} from '@store/Wayback/reducer';
 
 // import TilePreviewWindow from './index';
-import PreviewWindow from './PreviewWindow'
+import PreviewWindow from './PreviewWindow';
 
 import MapView from '@arcgis/core/views/MapView';
-import { AppContext } from '../../contexts/AppContextProvider';
+import { AppContext } from '@contexts/AppContextProvider';
 
 type Props = {
     mapView?: MapView;
@@ -30,17 +30,18 @@ const PreviewWindowContainer: React.FC<Props> = ({ mapView }: Props) => {
         releaseNum4AlternativePreviewWaybackItemSelector
     );
 
-    return !isMobile ? (
+    if (isMobile) {
+        return null;
+    }
+
+    return (
         <PreviewWindow
-            // no need to show preview window in mobile view, therefore just pass the null as previewWaybackItem
             previewWaybackItem={previewWaybackItem}
             alternativeRNum4RreviewWaybackItem={
                 releaseNum4AlternativePreviewWaybackItem
             }
             mapView={mapView}
         />
-    ) : (
-        <></>
     );
 };
 

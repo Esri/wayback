@@ -1,7 +1,7 @@
 // import IPortal from 'esri/portal/Portal';
 // import ICredential from 'esri/identity/Credential';
-import Credential from '@arcgis/core/identity/Credential';
-import Portal from '@arcgis/core/portal/Portal';
+// import Credential from '@arcgis/core/identity/Credential';
+// import Portal from '@arcgis/core/portal/Portal';
 
 interface IWaybackConfig {
     [key: number]: {
@@ -11,7 +11,7 @@ interface IWaybackConfig {
         metadataLayerItemID: string;
         metadataLayerUrl: string;
         itemReleaseName: string;
-        layerIdentifier?:string;
+        layerIdentifier?: string;
     };
 }
 
@@ -25,7 +25,7 @@ interface IWaybackItem {
     itemURL: string;
     metadataLayerItemID: string;
     metadataLayerUrl: string;
-    layerIdentifier?:string;
+    layerIdentifier?: string;
 }
 
 interface IPointGeomety {
@@ -69,10 +69,10 @@ interface IScreenPoint {
     y: number;
 }
 
-interface IUserSession {
-    portal: Portal;
-    credential: Credential;
-}
+// interface IUserSession {
+//     portal: Portal;
+//     credential: Credential;
+// }
 
 interface IURLParamData {
     mapExtent?: IExtentGeomety;
@@ -82,8 +82,9 @@ interface IURLParamData {
     isSwipeWidgetOpen?: boolean;
     rNum4SwipeWidgetLeadingLayer?: number;
     rNum4SwipeWidgetTrailingLayer?: number;
-    animationSpeed?:number;
+    animationSpeed?: number;
     rNum4FramesToExclude?: number[];
+    isDownloadDialogOpen?: boolean;
 }
 
 interface IStaticTooltipData {
@@ -98,7 +99,8 @@ type ValidServiceUrlNames =
     | 'wayback-config'
     | 'wayback-change-detector-layer'
     | 'reference-layer'
-    | 'world-imagery-basemap';
+    | 'world-imagery-basemap'
+    | 'wayback-export-base';
 
 interface IAppConfig {
     appId: string;
@@ -132,7 +134,7 @@ export {
     IPointGeomety,
     IWaybackMetadataQueryResult,
     IScreenPoint,
-    IUserSession,
+    // IUserSession,
     IExtentGeomety,
     IURLParamData,
     IStaticTooltipData,

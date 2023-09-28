@@ -1,11 +1,13 @@
-import { IExtentGeomety } from '../../types';
+import { DownloadJob } from '@store/DownloadMode/reducer';
+import { IExtentGeomety } from '@typings/index';
 
 const KEYS = {
     defaultExtent: 'WaybackAppDefaultExtent',
     showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges',
     shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog',
     customPortalUrl: 'WaybackAppCustomPortalUrl',
-    hashParams: 'WaybackAppHashParam'
+    hashParams: 'WaybackAppHashParam',
+    downloadJobs: `WaybackAppDownloadJobs`,
 };
 
 const setItem = (key?: string, value = '') => {
@@ -37,13 +39,13 @@ const getDefaultExtent = (): IExtentGeomety => {
     return defaultExtent ? JSON.parse(defaultExtent) : null;
 };
 
-const setShouldShowUpdatesWithLocalChanges = (val = false) => {
-    setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
-};
+// const setShouldShowUpdatesWithLocalChanges = (val = false) => {
+//     setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
+// };
 
-const getShouldShowUpdatesWithLocalChanges = () => {
-    return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
-};
+// const getShouldShowUpdatesWithLocalChanges = () => {
+//     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
+// };
 
 const setShouldOpenSaveWebMapDialog = () => {
     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
@@ -69,35 +71,50 @@ const getShouldOpenSaveWebMapDialog = () => {
     return val === 'true' ? true : false;
 };
 
-const saveHashParams = ()=>{
-    const hash = location.hash.toString();
-
-    if(!hash){
-        return;
+const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
+    if (!jobs || !jobs.length) {
+        removeItem(KEYS.downloadJobs);
+    } else {
+        setItem(KEYS.downloadJobs, JSON.stringify(jobs));
     }
+};
 
-    setItem(KEYS.hashParams, hash.slice(1));
-}
+const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
+    const val = getItem(KEYS.downloadJobs);
+    return val ? JSON.parse(val) : [];
+};
 
-const getHashParamsFromLocalStorage = ()=>{
-    const val = getItem(KEYS.hashParams);
+// const saveHashParams = () => {
+//     const hash = location.hash.toString();
 
-    if(val) {
-        removeItem(KEYS.hashParams);
-    }
+//     if (!hash) {
+//         return;
+//     }
 
-    return val;
-}
+//     setItem(KEYS.hashParams, hash.slice(1));
+// };
+
+// const getHashParamsFromLocalStorage = () => {
+//     const val = getItem(KEYS.hashParams);
+
+//     if (val) {
+//         removeItem(KEYS.hashParams);
+//     }
+
+//     return val;
+// };
 
 export {
     saveDefaultExtent,
     getDefaultExtent,
     getCustomPortalUrl,
     setCustomPortalUrl,
-    setShouldShowUpdatesWithLocalChanges,
-    getShouldShowUpdatesWithLocalChanges,
+    // setShouldShowUpdatesWithLocalChanges,
+    // getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
-    saveHashParams,
-    getHashParamsFromLocalStorage
+    saveDownloadJobs2LocalStorage,
+    getDownloadJobsFromLocalStorage,
+    // saveHashParams,
+    // getHashParamsFromLocalStorage,
 };
