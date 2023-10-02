@@ -49,6 +49,9 @@ const AppLayout: React.FC = () => {
             return;
         }
 
+        // should re-validate when current tab becomes visible again,
+        // so that we can sign out the current user if the token is no longer valid,
+        // this can heppen when user signs out it's ArcGIS Online account from another tab
         revalidateToken();
     }, [currentPageIsVisibleAgain]);
 

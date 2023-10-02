@@ -180,6 +180,7 @@ export const getCredential = (): Credential => {
 };
 
 export const revalidateToken = async () => {
+    // abort if not signed-in yet
     if (isAnonymouns()) {
         return;
     }
@@ -188,6 +189,8 @@ export const revalidateToken = async () => {
 
     const portalBaseUrl = getPortalBaseUrl();
 
+    // use portal self request to re-validate the token,
+    // portal self request with an invalid token would throw an error
     const requestURL = `${portalBaseUrl}/sharing/rest/portals/self?f=json&token=${token}`;
 
     try {
@@ -201,7 +204,7 @@ export const revalidateToken = async () => {
     } catch (err) {
         console.log(err);
 
-        // sign out if current token is invalid, means user has signed out from somewhere else
+        // sign out if user token is invalid, means user has signed out from somewhere else
         signOut();
     }
 };
