@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
     AboutThisApp,
@@ -36,9 +36,21 @@ import {
 } from '..';
 import { AppContext } from '@contexts/AppContextProvider';
 import { getServiceUrl } from '@utils/Tier';
+import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
+import { revalidateToken } from '@utils/Esri-OAuth';
 
 const AppLayout: React.FC = () => {
     const { onPremises } = React.useContext(AppContext);
+
+    const currentPageIsVisibleAgain = useCurrenPageBecomesVisible();
+
+    useEffect(() => {
+        if (!currentPageIsVisibleAgain) {
+            return;
+        }
+
+        revalidateToken();
+    }, [currentPageIsVisibleAgain]);
 
     return (
         <>

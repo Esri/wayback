@@ -178,3 +178,30 @@ export const getUserRole = (): string => {
 export const getCredential = (): Credential => {
     return credential;
 };
+
+export const revalidateToken = async () => {
+    if (isAnonymouns()) {
+        return;
+    }
+
+    const token = getToken();
+
+    const portalBaseUrl = getPortalBaseUrl();
+
+    const requestURL = `${portalBaseUrl}/sharing/rest/portals/self?f=json&token=${token}`;
+
+    try {
+        const res = await fetch(requestURL);
+
+        const data = await res.json();
+
+        if (data.error) {
+            throw data.error;
+        }
+    } catch (err) {
+        console.log(err);
+
+        // sign out if current token is invalid, means user has signed out from somewhere else
+        signOut();
+    }
+};
