@@ -111,6 +111,10 @@ export const submitJob = async ({
 
     const data = await res.json();
 
+    if (data.error) {
+        throw data.error;
+    }
+
     return data as SubmitJobResponse;
 };
 

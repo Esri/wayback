@@ -128,15 +128,22 @@ export const startDownloadJob =
                 layerIdentifier: waybackItem.layerIdentifier,
             });
 
-            const updatedJobData: DownloadJob = {
+            const submittedJob: DownloadJob = {
                 ...byId[id],
                 GPJobId: res.jobId,
                 status: 'pending',
             };
 
-            dispatch(downloadJobsUpdated([updatedJobData]));
+            dispatch(downloadJobsUpdated([submittedJob]));
         } catch (err) {
             console.log(err);
+
+            const failedJob: DownloadJob = {
+                ...byId[id],
+                status: 'failed',
+            };
+
+            dispatch(downloadJobsUpdated([failedJob]));
         }
     };
 

@@ -33,7 +33,7 @@ type Props = {
 
 const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
     'not started': 'create tile package',
-    pending: 'in progress...',
+    pending: 'in progress',
     finished: 'donwload',
     failed: 'failed',
     downloaded: 'downloaded',
@@ -90,9 +90,9 @@ export const DownloadJobCard: FC<Props> = ({
     }, [tileEstimations, levels]);
 
     const getStatusIcon = () => {
-        if (status === 'pending') {
-            return <calcite-loader scale="s" inline></calcite-loader>;
-        }
+        // if (status === 'pending') {
+        //     return <calcite-loader scale="s" inline></calcite-loader>;
+        // }
 
         if (status === 'finished') {
             return <calcite-icon icon="check" scale="s" />;
@@ -213,6 +213,9 @@ export const DownloadJobCard: FC<Props> = ({
                 )}
                 onClick={buttonOnClickHandler}
             >
+                {status === 'pending' && (
+                    <calcite-loader scale="s" inline></calcite-loader>
+                )}
                 <span className="uppercase">{getButtonLable()}</span>
             </div>
         </div>
