@@ -43,6 +43,13 @@ const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
 const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
+/**
+ * Min tile package level should always be 12 by default.
+ *
+ * @see https://github.com/vannizhang/wayback/issues/90
+ */
+const DEFAULT_MIN_LEVEL = 12;
+
 export const addToDownloadList =
     ({ releaseNum, zoomLevel, extent }: AddToDownloadListParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
@@ -54,7 +61,7 @@ export const addToDownloadList =
 
         const tileEstimations = await getTileEstimationsInOutputBundle(
             extent,
-            zoomLevel,
+            DEFAULT_MIN_LEVEL,
             releaseNum
         );
 
@@ -62,16 +69,17 @@ export const addToDownloadList =
         //     return total + curr.count
         // }, 0)
 
+        const minZoomLevel = DEFAULT_MIN_LEVEL;
         const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
         const downloadJob: DownloadJob = {
             id: nanoid(),
             waybackItem: byReleaseNumber[releaseNum],
-            minZoomLevel: zoomLevel,
+            minZoomLevel,
             maxZoomLevel,
             tileEstimations,
             // totalTiles,
-            levels: [zoomLevel, maxZoomLevel],
+            levels: [minZoomLevel, maxZoomLevel],
             extent,
             status: 'not started',
             // createdTime: new Date().getTime(),

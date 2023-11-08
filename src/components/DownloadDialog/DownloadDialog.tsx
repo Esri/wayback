@@ -72,7 +72,12 @@ export const DownloadDialog: FC<Props> = ({
     };
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden bg-custom-modal-background flex items-center justify-center z-50">
+        <div
+            className="absolute top-0 left-0 w-full h-full overflow-hidden flex items-center justify-center z-50"
+            style={{
+                background: `radial-gradient(circle, rgba(26,61,96,0.95) 50%, rgba(13,31,49,0.95) 100%)`,
+            }}
+        >
             <div className="max-w-3xl mx-8 min-h-[350px] bg-custom-modal-content-background p-2 pb-8">
                 <div className="text-right">
                     <calcite-button
