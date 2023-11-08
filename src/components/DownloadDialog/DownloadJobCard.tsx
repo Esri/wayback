@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
+import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 
 type Props = {
     data: DownloadJob;
@@ -127,6 +128,24 @@ export const DownloadJobCard: FC<Props> = ({
         return ButtonLableByStatus[status] || status;
     };
 
+    /**
+     * get formatted total number of title. Use comma separated if total is less than 1 million,
+     * otherwise, use abbreviation instead
+     * @param total
+     * @returns
+     */
+    const formatTotalNumOfTiles = (total: number) => {
+        if (!total) {
+            return 0;
+        }
+
+        if (total < 1e6) {
+            return numberFns.numberWithCommas(total);
+        }
+
+        return numberFns.abbreviateNumber(total);
+    };
+
     const shouldDisableActionButton = () => {
         if (
             status === 'pending' ||
@@ -137,6 +156,13 @@ export const DownloadJobCard: FC<Props> = ({
         }
 
         if (status === 'finished' && !outputTilePackageInfo) {
+            return true;
+        }
+
+        if (
+            status === 'not started' &&
+            totalTiles > MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
+        ) {
             return true;
         }
 
@@ -160,7 +186,7 @@ export const DownloadJobCard: FC<Props> = ({
 
     return (
         <div className="w-full flex items-stretch">
-            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 px-4 flex-grow">
+            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 pl-4 pr-2 flex-grow">
                 <div className="w-4 text-white mr-2 flex items-center">
                     {getStatusIcon()}
                 </div>
@@ -189,7 +215,7 @@ export const DownloadJobCard: FC<Props> = ({
                     ></calcite-slider>
                 </div>
 
-                <div className="text-sm text-white">
+                <div className="text-sm text-white w-[96px] shrink-0">
                     <div className="leading-none mb-[2px]">
                         <span>
                             Level {levels[0]} - {levels[1]}
@@ -197,9 +223,7 @@ export const DownloadJobCard: FC<Props> = ({
                     </div>
 
                     <div className="leading-none">
-                        <span>
-                            ~{numberFns.numberWithCommas(totalTiles)} tiles
-                        </span>
+                        <span>~{formatTotalNumOfTiles(totalTiles)} tiles</span>
                     </div>
                 </div>
             </div>

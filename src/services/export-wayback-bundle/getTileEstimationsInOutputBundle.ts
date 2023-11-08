@@ -19,7 +19,7 @@ const WaybackImageBaseURL = getServiceUrl('wayback-imagery-base');
 /**
  * maximum number of tiles allowed by the service
  */
-const MAX_NUM_TILES = 150000;
+export const MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT = 150000;
 
 /**
  * Get estimations of tiles that can be included in the output bundle.
@@ -40,15 +40,15 @@ export const getTileEstimationsInOutputBundle = async (
 ): Promise<TileEstimation[]> => {
     const tileEstimations: TileEstimation[] = [];
 
-    const UpperLimit = MAX_NUM_TILES * 1.1;
+    // const UpperLimit = MAX_NUM_TILES * 1.1;
 
     /**
      * a helper function to get estimation by zoom level recursively
      * @param zoomLevel
      * @returns void
      */
-    const helper = (zoomLevel: number, total = 0) => {
-        if (total >= UpperLimit || zoomLevel > 23) {
+    const helper = (zoomLevel: number) => {
+        if (zoomLevel > 23) {
             return;
         }
 
@@ -64,14 +64,19 @@ export const getTileEstimationsInOutputBundle = async (
         const cols = Math.abs(tileColMax - tileColMin) + 1;
         const count = rows * cols;
 
-        if (total + count <= UpperLimit) {
-            tileEstimations.push({
-                level: zoomLevel,
-                count,
-            });
-        }
+        // if (total + count <= UpperLimit) {
+        //     tileEstimations.push({
+        //         level: zoomLevel,
+        //         count,
+        //     });
+        // }
 
-        helper(zoomLevel + 1, total + count);
+        tileEstimations.push({
+            level: zoomLevel,
+            count,
+        });
+
+        helper(zoomLevel + 1);
     };
 
     helper(minZoomLevel);
