@@ -36,7 +36,7 @@ const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
     pending: 'in progress',
     finished: 'donwload',
     failed: 'failed',
-    downloaded: 'downloaded',
+    downloaded: 'CHECK BROWSER FOR DOWNLOAD PROGRESS',
 };
 
 export const DownloadJobCard: FC<Props> = ({
@@ -94,9 +94,9 @@ export const DownloadJobCard: FC<Props> = ({
         //     return <calcite-loader scale="s" inline></calcite-loader>;
         // }
 
-        if (status === 'finished') {
-            return <calcite-icon icon="check" scale="s" />;
-        }
+        // if (status === 'finished') {
+        //     return <calcite-icon icon="check" scale="s" />;
+        // }
 
         return (
             <calcite-icon
@@ -121,7 +121,7 @@ export const DownloadJobCard: FC<Props> = ({
     const getButtonLable = () => {
         if (status === 'finished' && outputTilePackageInfo !== undefined) {
             const sizeInMB = (outputTilePackageInfo.size / 1000000).toFixed(1);
-            return `Download - ${sizeInMB}MB`;
+            return `Tiles Ready to Download - ${sizeInMB}MB`;
         }
 
         return ButtonLableByStatus[status] || status;
@@ -206,7 +206,7 @@ export const DownloadJobCard: FC<Props> = ({
 
             <div
                 className={classnames(
-                    'flex justify-center items-center w-52  bg-custom-theme-blue text-white cursor-pointer shrink-0',
+                    'flex justify-center items-center w-52  bg-custom-theme-blue text-white text-center cursor-pointer shrink-0',
                     {
                         disabled: shouldDisableActionButton(),
                     }

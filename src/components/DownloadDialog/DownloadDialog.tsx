@@ -89,7 +89,7 @@ export const DownloadDialog: FC<Props> = ({
                 </div>
 
                 <div className="px-8 max-h-[500px] overflow-y-auto fancy-scrollbar">
-                    <h3 className="text-2xl mb-2">Download Local Tile Cache</h3>
+                    <h3 className="text-2xl mb-2">Download Tile Package</h3>
 
                     <p className="text-sm mb-4">
                         Based on your current map extent, choose a scale range
