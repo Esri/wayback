@@ -173,9 +173,14 @@ export const DownloadJobCard: FC<Props> = ({
         sliderRef.current.addEventListener(
             'calciteSliderChange',
             (evt: any) => {
-                const userSelectedMaxZoomLevel = +evt.target.value;
+                const userSelectedMinZoomLevel = +evt.target.minValue;
+                const userSelectedMaxZoomLevel = +evt.target.maxValue;
+                // console.log(evt.target.minValue,evt.target.maxValue)
 
-                levelsOnChange(id, [levels[0], userSelectedMaxZoomLevel]);
+                levelsOnChange(id, [
+                    userSelectedMinZoomLevel,
+                    userSelectedMaxZoomLevel,
+                ]);
             }
         );
     }, []);
@@ -208,7 +213,9 @@ export const DownloadJobCard: FC<Props> = ({
                                 : maxZoomLevel
                         }
                         min={minZoomLevel}
-                        value={levels[1]}
+                        // value={levels[1]}
+                        min-value={levels[0]}
+                        max-value={levels[1]}
                         step="1"
                         ticks="1"
                         {...sliderProp}
