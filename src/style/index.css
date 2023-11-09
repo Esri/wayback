@@ -33,6 +33,10 @@ html, body {
     outline: 0;
 }
 
+#appRootDiv .esri-view-root {
+    --esri-view-outline: 0;
+}
+
 video, img {
     height: 0;
 }

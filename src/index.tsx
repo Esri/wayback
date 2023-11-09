@@ -1,3 +1,4 @@
+import '@arcgis/core/assets/esri/themes/dark/main.css';
 import './style/index.css';
 
 import React from 'react';
@@ -7,7 +8,7 @@ import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
 import WaybackManager from './services/wayback';
 import { AppLayout } from '@components/index';
-import { initEsriOAuth, isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import { initEsriOAuth } from '@utils/Esri-OAuth';
 import config from './app-config';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
 import { getServiceUrl } from '@utils/Tier';
