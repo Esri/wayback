@@ -83,8 +83,8 @@ const ListViewContainer = () => {
                 isMobile={isMobile}
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}
-                hasReachedLimitOfConcurrentDownloadJobs={
-                    hasReachedLimitOfConcurrentDownloadJobs
+                shouldDownloadButtonBeDisabled={
+                    hasReachedLimitOfConcurrentDownloadJobs || zoom < 12
                 }
                 shouldOnlyShowItemsWithLocalChange={
                     shouldOnlyShowItemsWithLocalChange

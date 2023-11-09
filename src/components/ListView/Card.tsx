@@ -139,7 +139,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         title={
                             shouldDownloadButtonBeDisabled
                                 ? 'Reached the maximum limit for download jobs'
-                                : 'Download a local copy of imagery tiles'
+                                : 'Download a package of imagery tiles of current map extent'
                         }
                     >
                         <calcite-icon icon="download-to" scale="m" />

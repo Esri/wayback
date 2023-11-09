@@ -93,6 +93,8 @@ export const getTileEstimationsInOutputBundle = async (
 
         if (shouldBeIncluded) {
             output.push(tileEstimation);
+        } else {
+            break;
         }
     }
 
