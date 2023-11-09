@@ -106,6 +106,7 @@ export const DownloadJobCard: FC<Props> = ({
                 style={{
                     cursor: 'pointer',
                 }}
+                title="Cancel"
                 onClick={removeButtonOnClick.bind(null, id)}
             />
         );

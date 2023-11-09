@@ -138,8 +138,8 @@ class ListViewCard extends React.PureComponent<IProps> {
                         }}
                         title={
                             shouldDownloadButtonBeDisabled
-                                ? 'Reached the maximum limit for download jobs'
-                                : 'Download a package of imagery tiles of current map extent'
+                                ? 'Reached the maximum limit of 5 concurrent download jobs'
+                                : 'Download an imagery tile package for the current map extent' // TO-DO: handle situation zoom out situation, add "(zoom in to enable)" If zoomed out, show zoom in reminder first befor reaching max limit
                         }
                     >
                         <calcite-icon icon="download-to" scale="m" />

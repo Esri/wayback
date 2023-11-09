@@ -55,9 +55,7 @@ export const OpenDownloadPanelBtn = () => {
                     disabled: numOfJobs === 0,
                 }
             )}
-            title={
-                'download local copies of imagery tiles via the release row item'
-            }
+            title={'Choose a version from the list to download a tile package'}
             onClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
             }}
