@@ -13,7 +13,10 @@ interface IProps {
      * if true, download button should be disabled
      */
     shouldDownloadButtonBeDisabled?: boolean;
-
+    /**
+     * tooltip text for download button
+     */
+    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -73,6 +76,7 @@ class ListViewCard extends React.PureComponent<IProps> {
             isSelected,
             isHighlighted,
             shouldDownloadButtonBeDisabled,
+            downloadButtonTooltipText,
             onClick,
             onMouseEnter,
             onMouseOut,
@@ -136,11 +140,7 @@ class ListViewCard extends React.PureComponent<IProps> {
 
                             downloadButtonOnClick(data.releaseNum);
                         }}
-                        title={
-                            shouldDownloadButtonBeDisabled
-                                ? 'Reached the maximum limit of 5 concurrent download jobs'
-                                : 'Download an imagery tile package for the current map extent' // TO-DO: handle situation zoom out situation, add "(zoom in to enable)" If zoomed out, show zoom in reminder first befor reaching max limit
-                        }
+                        title={downloadButtonTooltipText}
                     >
                         <calcite-icon icon="download-to" scale="m" />
                     </div>

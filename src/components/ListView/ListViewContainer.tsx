@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import {
     useSelector,
@@ -77,6 +77,21 @@ const ListViewContainer = () => {
 
     const mapExtent = useSelector(mapExtentSelector);
 
+    const downloadButtonTooltipText = useMemo(() => {
+        const text =
+            'Download an imagery tile package for the current map extent';
+
+        if (zoom < 12) {
+            return text + ` (zoom in to enable)`;
+        }
+
+        if (hasReachedLimitOfConcurrentDownloadJobs) {
+            return 'Reached the maximum limit of 5 concurrent download jobs';
+        }
+
+        return text;
+    }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
+
     return (
         <ListViewWrapper>
             <ListView
@@ -86,6 +101,7 @@ const ListViewContainer = () => {
                 shouldDownloadButtonBeDisabled={
                     hasReachedLimitOfConcurrentDownloadJobs || zoom < 12
                 }
+                downloadButtonTooltipText={downloadButtonTooltipText}
                 shouldOnlyShowItemsWithLocalChange={
                     shouldOnlyShowItemsWithLocalChange
                 }

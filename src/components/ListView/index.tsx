@@ -20,7 +20,10 @@ interface IProps {
      * - map zoom level is 12+
      */
     shouldDownloadButtonBeDisabled: boolean;
-
+    /**
+     * tooltip text for download button
+     */
+    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -69,6 +72,7 @@ class ListView extends React.PureComponent<IProps, IState> {
             rNum4WaybackItemsWithLocalChanges,
             shouldOnlyShowItemsWithLocalChange,
             shouldDownloadButtonBeDisabled,
+            downloadButtonTooltipText,
             toggleSelect,
             onClick,
             onMouseEnter,
@@ -108,6 +112,7 @@ class ListView extends React.PureComponent<IProps, IState> {
                     shouldDownloadButtonBeDisabled={
                         shouldDownloadButtonBeDisabled
                     }
+                    downloadButtonTooltipText={downloadButtonTooltipText}
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}
