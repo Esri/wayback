@@ -7,6 +7,7 @@ import {
 
 import {
     selectDownloadJobs,
+    selectIsAddingNewDownloadJob,
     selectIsDownloadDialogOpen,
     selectNumOfPendingDownloadJobs,
 } from '@store/DownloadMode/selectors';
@@ -32,6 +33,8 @@ export const DownloadDialogContainer = () => {
     const jobs = useSelector(selectDownloadJobs);
 
     const numPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
+
+    const isAddingNewDownloadJob = useSelector(selectIsAddingNewDownloadJob);
 
     useEffect(() => {
         // save jobs to localhost so they can be restored
@@ -65,6 +68,7 @@ export const DownloadDialogContainer = () => {
     return (
         <DownloadDialog
             jobs={jobs}
+            isAddingNewDownloadJob={isAddingNewDownloadJob}
             closeButtonOnClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
             }}

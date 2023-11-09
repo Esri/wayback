@@ -7,6 +7,7 @@ import {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
+    isAddingNewDownloadJobToggled,
     isDownloadDialogOpenToggled,
 } from './reducer';
 import { nanoid } from 'nanoid';
@@ -55,6 +56,11 @@ export const addToDownloadList =
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
 
+        batch(() => {
+            dispatch(isAddingNewDownloadJobToggled());
+            dispatch(isDownloadDialogOpenToggled());
+        });
+
         const { WaybackItems } = getState();
 
         const { byReleaseNumber } = WaybackItems;
@@ -87,7 +93,7 @@ export const addToDownloadList =
 
         batch(() => {
             dispatch(downloadJobCreated(downloadJob));
-            dispatch(isDownloadDialogOpenToggled());
+            dispatch(isAddingNewDownloadJobToggled());
         });
     };
 

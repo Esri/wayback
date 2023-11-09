@@ -1,12 +1,18 @@
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import React, { FC } from 'react';
 import { DownloadJobCard } from './DownloadJobCard';
+import { DownloadJobPlaceholder } from './DownloadJobPlaceholder';
 
 type Props = {
     /**
      * list of donwload jobs
      */
     jobs: DownloadJob[];
+    /**
+     * if true, the system is in process of adding a new download job and
+     * a placeholder card should be displayed
+     */
+    isAddingNewDownloadJob: boolean;
     /**
      * fires when user clicks on the create tile package button to start the download job
      * @param id job id
@@ -40,6 +46,7 @@ type Props = {
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
+    isAddingNewDownloadJob,
     createTilePackageButtonOnClick,
     downloadTilePackageButtonOnClick,
     closeButtonOnClick,
@@ -47,7 +54,7 @@ export const DownloadDialog: FC<Props> = ({
     levelsOnChange,
 }: Props) => {
     const getJobsList = () => {
-        if (!jobs?.length) {
+        if (!jobs?.length && !isAddingNewDownloadJob) {
             return <div className="text-center my-8">No download jobs.</div>;
         }
 
@@ -78,7 +85,7 @@ export const DownloadDialog: FC<Props> = ({
                 background: `radial-gradient(circle, rgba(26,61,96,0.95) 50%, rgba(13,31,49,0.95) 100%)`,
             }}
         >
-            <div className="max-w-3xl mx-8 min-h-[350px] bg-custom-modal-content-background p-2 pb-8">
+            <div className="max-w-3xl mx-8 bg-custom-modal-content-background p-2 pb-8">
                 <div className="text-right">
                     <calcite-button
                         icon-start="x"
@@ -88,7 +95,7 @@ export const DownloadDialog: FC<Props> = ({
                     />
                 </div>
 
-                <div className="px-8 max-h-[500px] overflow-y-auto fancy-scrollbar">
+                <div className="px-8 max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
                     <h3 className="text-2xl mb-2">Download Tile Package</h3>
 
                     <p className="text-sm mb-4">
@@ -97,6 +104,8 @@ export const DownloadDialog: FC<Props> = ({
                         tiles.
                         {/* You can choose this window while your tiles are prepared. */}
                     </p>
+
+                    {isAddingNewDownloadJob && <DownloadJobPlaceholder />}
 
                     <div>{getJobsList()}</div>
                 </div>

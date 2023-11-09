@@ -6,6 +6,11 @@ export const selectIsDownloadDialogOpen = createSelector(
     (isDownloadDialogOpen) => isDownloadDialogOpen
 );
 
+export const selectIsAddingNewDownloadJob = createSelector(
+    (state: RootState) => state.DownloadMode.isAddingNewDownloadJob,
+    (isAddingNewDownloadJob) => isAddingNewDownloadJob
+);
+
 export const selectDownloadJobs = createSelector(
     (state: RootState) => state.DownloadMode.jobs,
     (jobs) => {
