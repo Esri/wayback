@@ -16,7 +16,7 @@ import {
     ReferenceLayerToggle,
     Sidebar,
     SearchWidget,
-    ShareDialog,
+    // ShareDialog,
     SwipeWidget,
     SaveAsWebMapDialog,
     SwipeWidgetToggleBtn,
@@ -34,13 +34,13 @@ import {
     OpenDownloadPanelBtn,
     DownloadDialog,
 } from '..';
-import { AppContext } from '@contexts/AppContextProvider';
+// import { AppContext } from '@contexts/AppContextProvider';
 import { getServiceUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 
 const AppLayout: React.FC = () => {
-    const { onPremises } = React.useContext(AppContext);
+    // const { onPremises } = React.useContext(AppContext);
 
     const currentPageIsVisibleAgain = useCurrenPageBecomesVisible();
 
@@ -106,7 +106,7 @@ const AppLayout: React.FC = () => {
 
             <SettingDialog />
 
-            {!onPremises && <ShareDialog />}
+            {/* {!onPremises && <ShareDialog />} */}
 
             <DownloadDialog />
 
