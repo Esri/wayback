@@ -39,14 +39,14 @@ export const DownloadDialogContainer = () => {
     useEffect(() => {
         // save jobs to localhost so they can be restored
         saveDownloadJobs2LocalStorage(jobs);
+
+        if (jobs?.length && isAnonymouns()) {
+            signIn();
+        }
     }, [jobs]);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);
-
-        if (isOpen && isAnonymouns()) {
-            signIn();
-        }
     }, [isOpen]);
 
     useEffect(() => {

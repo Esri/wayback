@@ -96,14 +96,69 @@ export const DownloadDialog: FC<Props> = ({
                 </div>
 
                 <div className="px-8 max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
-                    <h3 className="text-2xl mb-2">Download Tile Package</h3>
+                    <h3 className="text-2xl mb-2">
+                        Wayback Export (
+                        <a
+                            href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            beta
+                        </a>
+                        )
+                    </h3>
 
                     <p className="text-sm mb-4">
-                        Based on your current map extent, choose a scale range
-                        for your download. Downloads are limited to 150,000
-                        tiles.
+                        Exported basemap tiles are intended for offline use in
+                        ArcGIS applications and{' '}
+                        <a
+                            href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            offline applications
+                        </a>{' '}
+                        built with an ArcGIS Runtime SDK, in accordance with
+                        Esri’s terms of use:{' '}
+                        <a
+                            href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            View Summary
+                        </a>{' '}
+                        |{' '}
+                        <a
+                            href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            View Terms of Use
+                        </a>
+                        .
                         {/* You can choose this window while your tiles are prepared. */}
                     </p>
+
+                    <ul className="list-inside list-disc text-sm">
+                        <li>
+                            Exports are based on map extent, with a minimum zoom
+                            level of 12.
+                        </li>
+                        <li>
+                            Each export request is limited to a maximum of
+                            150,000 tiles.
+                        </li>
+                        <li>
+                            No more than five exports may be requested
+                            concurrently.
+                        </li>
+                        <li>
+                            This dialog can safely be closed while tile packages
+                            are being created.
+                        </li>
+                    </ul>
+
+                    <hr className="my-8 opacity-50" />
 
                     {isAddingNewDownloadJob && <DownloadJobPlaceholder />}
 
