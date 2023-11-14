@@ -21,7 +21,8 @@ const config: IAppConfig = {
             // this world imagery basemap will be used when user saves selected Wayback items into a new webmap
             'world-imagery-basemap':
                 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/',
-            'wayback-export-base': '',
+            'wayback-export-base':
+                'https://wayport.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport',
         },
     },
     // The dev enivornment is optional, please comment out the dev section below if don't need the dev enivornment
