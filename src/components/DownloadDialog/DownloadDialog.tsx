@@ -118,7 +118,7 @@ export const DownloadDialog: FC<Props> = ({
                         >
                             offline applications
                         </a>{' '}
-                        built with an ArcGIS Runtime SDK, in accordance with
+                        built with an ArcGIS Runtime SDK in accordance with
                         Esri’s terms of use:{' '}
                         <a
                             href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
@@ -127,7 +127,7 @@ export const DownloadDialog: FC<Props> = ({
                         >
                             View Summary
                         </a>{' '}
-                        |{' '}
+                        and{' '}
                         <a
                             href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
                             target="_blank"
