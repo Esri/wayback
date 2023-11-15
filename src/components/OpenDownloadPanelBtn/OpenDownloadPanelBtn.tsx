@@ -55,7 +55,7 @@ export const OpenDownloadPanelBtn = () => {
                     disabled: numOfJobs === 0,
                 }
             )}
-            title={'Choose a version from the list to download a tile package'}
+            title={'Choose a version from the list to export a tile package'}
             onClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
             }}

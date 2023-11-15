@@ -79,7 +79,7 @@ export const Gutter: FC<IProps> = ({
                         }, 3000);
                     }}
                 >
-                    <calcite-icon icon="copy" scale="l" />
+                    <calcite-icon icon="copy-to-clipboard" scale="l" />
                 </div>
 
                 <div

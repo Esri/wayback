@@ -79,14 +79,14 @@ const ListViewContainer = () => {
 
     const downloadButtonTooltipText = useMemo(() => {
         const text =
-            'Download an imagery tile package for the current map extent';
+            'Export an imagery tile package for the current map extent';
 
         if (zoom < 12) {
             return text + ` (zoom in to enable)`;
         }
 
         if (hasReachedLimitOfConcurrentDownloadJobs) {
-            return 'Reached the maximum limit of 5 concurrent download jobs';
+            return 'Reached the maximum limit of 5 concurrent export jobs';
         }
 
         return text;
