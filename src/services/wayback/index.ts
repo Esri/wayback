@@ -7,6 +7,7 @@ import { IParamsQueryMetadata } from './types';
 import { extractDateFromWaybackItemTitle } from './helpers';
 import MetadataManager from './Metadata';
 import ChangeDetector from './ChangeDetector';
+import { getRoundedDate } from 'helper-toolkit-ts/dist/date';
 
 class WaybackManager {
     // module to query the wayback metadata
@@ -98,7 +99,9 @@ class WaybackManager {
     }
 
     private fetchWaybackConfig(): Promise<IWaybackConfig> {
-        const requestUrl = getServiceUrl('wayback-config');
+        // make sure we can get the latest version of the wayback config file
+        const requestUrl =
+            getServiceUrl('wayback-config') + `?modified=${getRoundedDate(5)}`;
 
         return new Promise((resolve, reject) => {
             axios
