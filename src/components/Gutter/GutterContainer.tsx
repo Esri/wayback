@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 
-import Gutter from './index';
+import { Gutter } from './index';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,6 +14,7 @@ import {
 } from '@store/UI/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+import { copy2clipboard } from '@utils/snippets/copy2clipborad';
 
 type Props = {
     children: React.ReactNode;
@@ -31,27 +32,27 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
     const isHide = useSelector(isGutterHideSelector);
 
-    const { isMobile, onPremises } = useContext(AppContext);
+    const { isMobile } = useContext(AppContext);
 
     const aboutButtonOnClick = () => {
         dispatch(isAboutThisAppModalOpenToggled());
-    };
-
-    const shareButtonOnClick = () => {
-        dispatch(isShareModalOpenToggled());
     };
 
     const settingButtonOnClick = () => {
         dispatch(isSettingModalOpenToggled());
     };
 
+    const copyButtonOnClick = () => {
+        copy2clipboard(window.location.href);
+    };
+
     return !isHide ? (
         <Gutter
             isMobile={isMobile}
             settingsBtnDisabled={settingsBtnDisabled}
-            shareBtnDisabled={onPremises}
+            // shareBtnDisabled={onPremises}
             aboutButtonOnClick={aboutButtonOnClick}
-            shareButtonOnClick={shareButtonOnClick}
+            copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
             {children}

@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
+import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 
 type Props = {
     data: DownloadJob;
@@ -33,10 +34,10 @@ type Props = {
 
 const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
     'not started': 'create tile package',
-    pending: 'in progress...',
+    pending: 'in progress',
     finished: 'donwload',
     failed: 'failed',
-    downloaded: 'downloaded',
+    downloaded: 'CHECK BROWSER FOR DOWNLOAD PROGRESS',
 };
 
 export const DownloadJobCard: FC<Props> = ({
@@ -90,13 +91,13 @@ export const DownloadJobCard: FC<Props> = ({
     }, [tileEstimations, levels]);
 
     const getStatusIcon = () => {
-        if (status === 'pending') {
-            return <calcite-loader scale="s" inline></calcite-loader>;
-        }
+        // if (status === 'pending') {
+        //     return <calcite-loader scale="s" inline></calcite-loader>;
+        // }
 
-        if (status === 'finished') {
-            return <calcite-icon icon="check" scale="s" />;
-        }
+        // if (status === 'finished') {
+        //     return <calcite-icon icon="check" scale="s" />;
+        // }
 
         return (
             <calcite-icon
@@ -105,6 +106,7 @@ export const DownloadJobCard: FC<Props> = ({
                 style={{
                     cursor: 'pointer',
                 }}
+                title="Cancel"
                 onClick={removeButtonOnClick.bind(null, id)}
             />
         );
@@ -121,10 +123,28 @@ export const DownloadJobCard: FC<Props> = ({
     const getButtonLable = () => {
         if (status === 'finished' && outputTilePackageInfo !== undefined) {
             const sizeInMB = (outputTilePackageInfo.size / 1000000).toFixed(1);
-            return `Download - ${sizeInMB}MB`;
+            return `Tiles Ready to Download - ${sizeInMB}MB`;
         }
 
         return ButtonLableByStatus[status] || status;
+    };
+
+    /**
+     * get formatted total number of title. Use comma separated if total is less than 1 million,
+     * otherwise, use abbreviation instead
+     * @param total
+     * @returns
+     */
+    const formatTotalNumOfTiles = (total: number) => {
+        if (!total) {
+            return 0;
+        }
+
+        if (total < 1e6) {
+            return numberFns.numberWithCommas(total);
+        }
+
+        return numberFns.abbreviateNumber(total);
     };
 
     const shouldDisableActionButton = () => {
@@ -140,6 +160,13 @@ export const DownloadJobCard: FC<Props> = ({
             return true;
         }
 
+        if (
+            status === 'not started' &&
+            totalTiles > MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
+        ) {
+            return true;
+        }
+
         return false;
     };
 
@@ -147,9 +174,14 @@ export const DownloadJobCard: FC<Props> = ({
         sliderRef.current.addEventListener(
             'calciteSliderChange',
             (evt: any) => {
-                const userSelectedMaxZoomLevel = +evt.target.value;
+                const userSelectedMinZoomLevel = +evt.target.minValue;
+                const userSelectedMaxZoomLevel = +evt.target.maxValue;
+                // console.log(evt.target.minValue,evt.target.maxValue)
 
-                levelsOnChange(id, [levels[0], userSelectedMaxZoomLevel]);
+                levelsOnChange(id, [
+                    userSelectedMinZoomLevel,
+                    userSelectedMaxZoomLevel,
+                ]);
             }
         );
     }, []);
@@ -160,7 +192,7 @@ export const DownloadJobCard: FC<Props> = ({
 
     return (
         <div className="w-full flex items-stretch">
-            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 px-4 flex-grow">
+            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 pl-4 pr-2 flex-grow">
                 <div className="w-4 text-white mr-2 flex items-center">
                     {getStatusIcon()}
                 </div>
@@ -182,14 +214,16 @@ export const DownloadJobCard: FC<Props> = ({
                                 : maxZoomLevel
                         }
                         min={minZoomLevel}
-                        value={levels[1]}
+                        // value={levels[1]}
+                        min-value={levels[0]}
+                        max-value={levels[1]}
                         step="1"
                         ticks="1"
                         {...sliderProp}
                     ></calcite-slider>
                 </div>
 
-                <div className="text-sm text-white">
+                <div className="text-sm text-white w-[96px] shrink-0">
                     <div className="leading-none mb-[2px]">
                         <span>
                             Level {levels[0]} - {levels[1]}
@@ -197,22 +231,23 @@ export const DownloadJobCard: FC<Props> = ({
                     </div>
 
                     <div className="leading-none">
-                        <span>
-                            ~{numberFns.numberWithCommas(totalTiles)} tiles
-                        </span>
+                        <span>~{formatTotalNumOfTiles(totalTiles)} tiles</span>
                     </div>
                 </div>
             </div>
 
             <div
                 className={classnames(
-                    'flex justify-center items-center w-52  bg-custom-theme-blue text-white cursor-pointer shrink-0',
+                    'flex justify-center items-center w-52  bg-custom-theme-blue text-white text-center cursor-pointer shrink-0',
                     {
                         disabled: shouldDisableActionButton(),
                     }
                 )}
                 onClick={buttonOnClickHandler}
             >
+                {status === 'pending' && (
+                    <calcite-loader scale="s" inline></calcite-loader>
+                )}
                 <span className="uppercase">{getButtonLable()}</span>
             </div>
         </div>

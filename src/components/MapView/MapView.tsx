@@ -1,4 +1,3 @@
-import '@arcgis/core/assets/esri/themes/dark/main.css';
 import React, { useEffect, useRef } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
@@ -79,11 +78,11 @@ const MapViewComponent: React.FC<Props> = ({
         setMapView(view);
 
         view.when(() => {
-            initWatchUtils(view);
+            initEventHandlers(view);
         });
     };
 
-    const initWatchUtils = async (view: MapView) => {
+    const initEventHandlers = async (view: MapView) => {
         // whenTrue(mapView, 'stationary', mapViewUpdateEndHandler);
         when(
             () => view.stationary === true,
@@ -139,12 +138,6 @@ const MapViewComponent: React.FC<Props> = ({
         // loadCss();
         initMapView();
     }, []);
-
-    // useEffect(() => {
-    //     if (mapView) {
-    //         initWatchUtils();
-    //     }
-    // }, [mapView]);
 
     return (
         <>

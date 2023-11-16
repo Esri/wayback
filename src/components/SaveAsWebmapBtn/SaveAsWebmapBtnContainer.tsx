@@ -35,8 +35,12 @@ const SaveAsWebmapBtnContainer = () => {
     const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
 
     const isDisabled = useMemo(() => {
-        return isSwipeWidgetOpen || isAnimationModeOn;
-    }, [isSwipeWidgetOpen, isAnimationModeOn]);
+        return (
+            isSwipeWidgetOpen ||
+            isAnimationModeOn ||
+            rNum4SelectedWaybackItems?.length === 0
+        );
+    }, [isSwipeWidgetOpen, isAnimationModeOn, rNum4SelectedWaybackItems]);
 
     const clearAllBtnOnClick = () => {
         dispatch(releaseNum4SelectedItemsCleaned());

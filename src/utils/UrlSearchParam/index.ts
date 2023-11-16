@@ -136,7 +136,7 @@ const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
 
 export const saveMapCenterToHashParams = (center: MapCenter, zoom: number) => {
     const { lon, lat } = center;
-    const value = `${lon.toFixed(3)},${lat.toFixed(3)},${zoom}`;
+    const value = `${lon.toFixed(5)},${lat.toFixed(5)},${zoom}`;
     updateHashParams('mapCenter', value);
     // remove ext from URL as it is no longer needed
     updateHashParams('ext', null);

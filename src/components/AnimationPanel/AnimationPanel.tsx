@@ -10,7 +10,7 @@ import LoadingIndicator from './LoadingIndicator';
 import DownloadGIFDialog from './DownloadGIFDialog';
 import CloseBtn from './CloseBtn';
 
-import { whenFalse } from '@arcgis/core/core/watchUtils';
+// import { whenFalse } from '@arcgis/core/core/watchUtils';
 import { IWaybackItem } from '@typings/index';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,6 +24,7 @@ import {
     toggleIsLoadingFrameData,
 } from '@store/AnimationMode/reducer';
 import Background from './Background';
+import { watch } from '@arcgis/core/core/reactiveUtils';
 
 type Props = {
     waybackItems4Animation: IWaybackItem[];
@@ -186,15 +187,25 @@ const AnimationPanel: React.FC<Props> = ({
     }, [waybackItems4Animation]);
 
     useEffect(() => {
-        const onUpdating = whenFalse(mapView, 'stationary', () => {
-            loadingWaybackItems4AnimationRef.current = true;
-            setFrameData(null);
-        });
+        // const onUpdating = whenFalse(mapView, 'stationary', () => {
+        //     loadingWaybackItems4AnimationRef.current = true;
+        //     setFrameData(null);
+        // });
 
-        return () => {
-            // onStationary.remove();
-            onUpdating.remove();
-        };
+        watch(
+            () => mapView.stationary,
+            () => {
+                if (!mapView.stationary) {
+                    loadingWaybackItems4AnimationRef.current = true;
+                    setFrameData(null);
+                }
+            }
+        );
+
+        // return () => {
+        //     // onStationary.remove();
+        //     onUpdating.remove();
+        // };
     }, []);
 
     useEffect(() => {

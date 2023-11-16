@@ -13,7 +13,10 @@ interface IProps {
      * if true, download button should be disabled
      */
     shouldDownloadButtonBeDisabled?: boolean;
-
+    /**
+     * tooltip text for download button
+     */
+    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -73,6 +76,7 @@ class ListViewCard extends React.PureComponent<IProps> {
             isSelected,
             isHighlighted,
             shouldDownloadButtonBeDisabled,
+            downloadButtonTooltipText,
             onClick,
             onMouseEnter,
             onMouseOut,
@@ -122,7 +126,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         <calcite-icon icon="information" scale="m" />
                     </div>
 
-                    {/* <div
+                    <div
                         className={classnames(ButtonWrapperClassnames, {
                             flex: showControlButtons,
                             'hidden group-hover:flex': !showControlButtons,
@@ -136,14 +140,10 @@ class ListViewCard extends React.PureComponent<IProps> {
 
                             downloadButtonOnClick(data.releaseNum);
                         }}
-                        title={
-                            shouldDownloadButtonBeDisabled
-                                ? 'Reached the maximum limit for download jobs'
-                                : 'Download a local copy of imagery tiles'
-                        }
+                        title={downloadButtonTooltipText}
                     >
                         <calcite-icon icon="download-to" scale="m" />
-                    </div> */}
+                    </div>
 
                     <div
                         className={classnames(ButtonWrapperClassnames, {

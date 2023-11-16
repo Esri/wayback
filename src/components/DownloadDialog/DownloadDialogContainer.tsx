@@ -7,6 +7,7 @@ import {
 
 import {
     selectDownloadJobs,
+    selectIsAddingNewDownloadJob,
     selectIsDownloadDialogOpen,
     selectNumOfPendingDownloadJobs,
 } from '@store/DownloadMode/selectors';
@@ -33,17 +34,19 @@ export const DownloadDialogContainer = () => {
 
     const numPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
 
+    const isAddingNewDownloadJob = useSelector(selectIsAddingNewDownloadJob);
+
     useEffect(() => {
         // save jobs to localhost so they can be restored
         saveDownloadJobs2LocalStorage(jobs);
+
+        if (jobs?.length && isAnonymouns()) {
+            signIn();
+        }
     }, [jobs]);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);
-
-        if (isOpen && isAnonymouns()) {
-            signIn();
-        }
     }, [isOpen]);
 
     useEffect(() => {
@@ -65,6 +68,7 @@ export const DownloadDialogContainer = () => {
     return (
         <DownloadDialog
             jobs={jobs}
+            isAddingNewDownloadJob={isAddingNewDownloadJob}
             closeButtonOnClick={() => {
                 dispatch(isDownloadDialogOpenToggled());
             }}

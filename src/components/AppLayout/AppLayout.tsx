@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
     AboutThisApp,
@@ -16,7 +16,7 @@ import {
     ReferenceLayerToggle,
     Sidebar,
     SearchWidget,
-    ShareDialog,
+    // ShareDialog,
     SwipeWidget,
     SaveAsWebMapDialog,
     SwipeWidgetToggleBtn,
@@ -34,11 +34,26 @@ import {
     OpenDownloadPanelBtn,
     DownloadDialog,
 } from '..';
-import { AppContext } from '@contexts/AppContextProvider';
+// import { AppContext } from '@contexts/AppContextProvider';
 import { getServiceUrl } from '@utils/Tier';
+import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
+import { revalidateToken } from '@utils/Esri-OAuth';
 
 const AppLayout: React.FC = () => {
-    const { onPremises } = React.useContext(AppContext);
+    // const { onPremises } = React.useContext(AppContext);
+
+    const currentPageIsVisibleAgain = useCurrenPageBecomesVisible();
+
+    useEffect(() => {
+        if (!currentPageIsVisibleAgain) {
+            return;
+        }
+
+        // should re-validate when current tab becomes visible again,
+        // so that we can sign out the current user if the token is no longer valid,
+        // this can heppen when user signs out it's ArcGIS Online account from another tab
+        revalidateToken();
+    }, [currentPageIsVisibleAgain]);
 
     return (
         <>
@@ -49,7 +64,7 @@ const AppLayout: React.FC = () => {
 
                 <AnimationModeToggleBtn />
 
-                {/* <OpenDownloadPanelBtn /> */}
+                <OpenDownloadPanelBtn />
 
                 <SaveAsWebmapBtn />
             </Gutter>
@@ -91,9 +106,9 @@ const AppLayout: React.FC = () => {
 
             <SettingDialog />
 
-            {!onPremises && <ShareDialog />}
+            {/* {!onPremises && <ShareDialog />} */}
 
-            {/* <DownloadDialog /> */}
+            <DownloadDialog />
 
             <AboutThisApp />
 

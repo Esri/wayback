@@ -15,10 +15,15 @@ interface IProps {
     rNum4WaybackItemsWithLocalChanges: Array<number>;
     /**
      * if ture, the The donwload button will be disabled.
-     * the user can only have limited of number of download jobs in the list.
+     * The download button should only be enabled if
+     * - number of download jobs has not reached to the limit
+     * - map zoom level is 12+
      */
-    hasReachedLimitOfConcurrentDownloadJobs: boolean;
-
+    shouldDownloadButtonBeDisabled: boolean;
+    /**
+     * tooltip text for download button
+     */
+    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -66,7 +71,8 @@ class ListView extends React.PureComponent<IProps, IState> {
             rNum4SelectedWaybackItems,
             rNum4WaybackItemsWithLocalChanges,
             shouldOnlyShowItemsWithLocalChange,
-            hasReachedLimitOfConcurrentDownloadJobs,
+            shouldDownloadButtonBeDisabled,
+            downloadButtonTooltipText,
             toggleSelect,
             onClick,
             onMouseEnter,
@@ -104,8 +110,9 @@ class ListView extends React.PureComponent<IProps, IState> {
                     isHighlighted={isHighlighted}
                     toggleSelect={toggleSelect}
                     shouldDownloadButtonBeDisabled={
-                        hasReachedLimitOfConcurrentDownloadJobs
+                        shouldDownloadButtonBeDisabled
                     }
+                    downloadButtonTooltipText={downloadButtonTooltipText}
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}

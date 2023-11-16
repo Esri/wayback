@@ -7,15 +7,11 @@ import {
     IWaybackItem,
 } from '@typings/index';
 
-// import IMapView from 'esri/views/MapView';
-// import IWatchUtils from 'esri/core/watchUtils';
-// import IPoint from 'esri/geometry/Point';
 import WaybackManager from '../../services/wayback';
 
 import MapView from '@arcgis/core/views/MapView';
-import { watch } from '@arcgis/core/core/watchUtils';
+import { watch } from '@arcgis/core/core/reactiveUtils';
 import Point from '@arcgis/core/geometry/Point';
-// import { getCurrZoomLevel } from '../MapView/MapView';
 
 type Props = {
     waybackManager: WaybackManager;
@@ -106,44 +102,31 @@ const MetadataQueryLayer: React.FC<Props> = ({
             queryMetadata(evt.mapPoint);
         });
 
-        watch(mapView, 'zoom', () => {
-            // console.log('view zoom is on updating, should hide the popup', zoom);
-            metadataOnChange(null);
-        });
+        // watch(mapView, 'zoom', () => {
+        //     // console.log('view zoom is on updating, should hide the popup', zoom);
+        //     metadataOnChange(null);
+        // });
 
-        watch(mapView, 'center', () => {
-            // // console.log('view center is on updating, should update the popup position');
-            // // need to update the screen point for popup anchor since the map center has changed
-            // updateScreenPoint4PopupAnchor();
-            metadataOnChange(null);
-        });
+        watch(
+            () => mapView.zoom,
+            () => {
+                metadataOnChange(null);
+            }
+        );
 
-        // try {
-        //     type Modules = [typeof IWatchUtils];
+        // watch(mapView, 'center', () => {
+        //     // // console.log('view center is on updating, should update the popup position');
+        //     // // need to update the screen point for popup anchor since the map center has changed
+        //     // updateScreenPoint4PopupAnchor();
+        //     metadataOnChange(null);
+        // });
 
-        //     const [watchUtils] = await (loadModules([
-        //         'esri/core/watchUtils',
-        //     ]) as Promise<Modules>);
-
-        //     mapView.on('click', (evt) => {
-        //         console.log('view on click, should show popup', evt.mapPoint);
-        //         queryMetadata(evt.mapPoint);
-        //     });
-
-        //     watch(mapView, 'zoom', () => {
-        //         // console.log('view zoom is on updating, should hide the popup', zoom);
-        //         metadataOnChange(null);
-        //     });
-
-        //     watch(mapView, 'center', () => {
-        //         // // console.log('view center is on updating, should update the popup position');
-        //         // // need to update the screen point for popup anchor since the map center has changed
-        //         // updateScreenPoint4PopupAnchor();
-        //         metadataOnChange(null);
-        //     });
-        // } catch (err) {
-        //     console.error(err);
-        // }
+        watch(
+            () => mapView.center,
+            () => {
+                metadataOnChange(null);
+            }
+        );
     };
 
     React.useEffect(() => {

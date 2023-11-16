@@ -7,6 +7,7 @@ import {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
+    isAddingNewDownloadJobToggled,
     isDownloadDialogOpenToggled,
 } from './reducer';
 import { nanoid } from 'nanoid';
@@ -41,12 +42,24 @@ let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
 const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
-const GP_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+
+/**
+ * Min tile package level should always be 12 by default.
+ *
+ * @see https://github.com/vannizhang/wayback/issues/90
+ */
+const DEFAULT_MIN_LEVEL = 12;
 
 export const addToDownloadList =
     ({ releaseNum, zoomLevel, extent }: AddToDownloadListParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
+
+        batch(() => {
+            dispatch(isAddingNewDownloadJobToggled());
+            dispatch(isDownloadDialogOpenToggled());
+        });
 
         const { WaybackItems } = getState();
 
@@ -54,7 +67,7 @@ export const addToDownloadList =
 
         const tileEstimations = await getTileEstimationsInOutputBundle(
             extent,
-            zoomLevel,
+            DEFAULT_MIN_LEVEL,
             releaseNum
         );
 
@@ -62,16 +75,17 @@ export const addToDownloadList =
         //     return total + curr.count
         // }, 0)
 
+        const minZoomLevel = DEFAULT_MIN_LEVEL;
         const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
         const downloadJob: DownloadJob = {
             id: nanoid(),
             waybackItem: byReleaseNumber[releaseNum],
-            minZoomLevel: zoomLevel,
+            minZoomLevel,
             maxZoomLevel,
             tileEstimations,
             // totalTiles,
-            levels: [zoomLevel, maxZoomLevel],
+            levels: [minZoomLevel, maxZoomLevel],
             extent,
             status: 'not started',
             // createdTime: new Date().getTime(),
@@ -79,7 +93,7 @@ export const addToDownloadList =
 
         batch(() => {
             dispatch(downloadJobCreated(downloadJob));
-            dispatch(isDownloadDialogOpenToggled());
+            dispatch(isAddingNewDownloadJobToggled());
         });
     };
 
@@ -128,15 +142,22 @@ export const startDownloadJob =
                 layerIdentifier: waybackItem.layerIdentifier,
             });
 
-            const updatedJobData: DownloadJob = {
+            const submittedJob: DownloadJob = {
                 ...byId[id],
                 GPJobId: res.jobId,
                 status: 'pending',
             };
 
-            dispatch(downloadJobsUpdated([updatedJobData]));
+            dispatch(downloadJobsUpdated([submittedJob]));
         } catch (err) {
             console.log(err);
+
+            const failedJob: DownloadJob = {
+                ...byId[id],
+                status: 'failed',
+            };
+
+            dispatch(downloadJobsUpdated([failedJob]));
         }
     };
 
@@ -240,12 +261,22 @@ export const cleanUpDownloadJobs =
 
         // find jobs that were finished more than 1 hour ago
         const jobsToBeRemoved = jobs.filter((job) => {
-            const ageOfJobInSeconds = (now - job.finishTime) / 1000;
-            return (
-                ageOfJobInSeconds > GP_JOB_TIME_TO_LIVE_IN_SECONDS ||
-                job.status === 'downloaded' ||
-                job.status === 'failed'
-            );
+            // downloaded job should be removed
+            if (job.status === 'downloaded') {
+                return true;
+            }
+
+            // any finished job that is 1 hour old should be removed
+            if (job.finishTime) {
+                const secondsSinceJobWasFinished =
+                    (now - job.finishTime) / 1000;
+                return (
+                    secondsSinceJobWasFinished >
+                    DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
+                );
+            }
+
+            false;
         });
 
         for (const job of jobsToBeRemoved) {

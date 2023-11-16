@@ -145,6 +145,7 @@ const getPreloadedState4Downloadmode = (
     const { isDownloadDialogOpen } = urlParams;
 
     const jobs = getDownloadJobsFromLocalStorage();
+    console.log(jobs);
 
     const byId = {};
     const ids = [];
