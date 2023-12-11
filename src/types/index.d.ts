@@ -3,30 +3,36 @@
 // import Credential from '@arcgis/core/identity/Credential';
 // import Portal from '@arcgis/core/portal/Portal';
 
-interface IWaybackConfig {
-    [key: number]: {
-        itemID: string;
-        itemTitle: string;
-        itemURL: string;
-        metadataLayerItemID: string;
-        metadataLayerUrl: string;
-        itemReleaseName: string;
-        layerIdentifier?: string;
-    };
-}
+import { WaybackConfig, WaybackItem } from '@vannizhang/wayback-core';
 
-interface IWaybackItem {
-    releaseNum: number;
-    releaseDateLabel: string;
-    releaseDatetime: number;
-    itemReleaseName: string;
-    itemID: string;
-    itemTitle: string;
-    itemURL: string;
-    metadataLayerItemID: string;
-    metadataLayerUrl: string;
-    layerIdentifier?: string;
-}
+// interface IWaybackConfig {
+//     [key: number]: {
+//         itemID: string;
+//         itemTitle: string;
+//         itemURL: string;
+//         metadataLayerItemID: string;
+//         metadataLayerUrl: string;
+//         itemReleaseName: string;
+//         layerIdentifier?: string;
+//     };
+// }
+
+type IWaybackConfig = WaybackConfig;
+
+// interface IWaybackItem {
+//     releaseNum: number;
+//     releaseDateLabel: string;
+//     releaseDatetime: number;
+//     itemReleaseName: string;
+//     itemID: string;
+//     itemTitle: string;
+//     itemURL: string;
+//     metadataLayerItemID: string;
+//     metadataLayerUrl: string;
+//     layerIdentifier?: string;
+// }
+
+type IWaybackItem = WaybackItem;
 
 interface IPointGeomety {
     x: number;

@@ -22,12 +22,12 @@ import MapView from './MapView';
 import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 import { getDefaultExtent } from '@utils/LocalStorage';
-import { AppContext } from '@contexts/AppContextProvider';
 import {
     saveMapCenterToHashParams,
     saveMapExtentInURLQueryParam,
 } from '@utils/UrlSearchParam';
 import { batch } from 'react-redux';
+import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
 
 type Props = {
     children?: React.ReactNode;
@@ -58,8 +58,6 @@ const FlexGrowItemWapper: React.FC<FlexGrowItemWapperProps> = ({
 const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
-    const { waybackManager } = useContext(AppContext);
-
     const mapExtent = useSelector(mapExtentSelector);
 
     const { center, zoom } = useSelector(selectMapCenterAndZoom);
@@ -77,7 +75,17 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         mapCenterPoint: IMapPointInfo
     ) => {
         try {
-            const rNums = await waybackManager.getLocalChanges(mapCenterPoint);
+            const waybackItems = await getWaybackItemsWithLocalChanges(
+                {
+                    longitude: mapCenterPoint.longitude,
+                    latitude: mapCenterPoint.latitude,
+                },
+                mapCenterPoint.zoom
+            );
+            console.log(waybackItems);
+
+            const rNums = waybackItems.map((d) => d.releaseNum);
+
             // console.log(rNums);
             dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
         } catch (err) {

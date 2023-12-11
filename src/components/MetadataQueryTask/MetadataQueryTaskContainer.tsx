@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { AppContext } from '@contexts/AppContextProvider';
-
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 
 import {
@@ -30,8 +28,6 @@ type Props = {
 const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
     const disptach = useDispatch();
 
-    const { waybackManager } = useContext(AppContext);
-
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
     const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
@@ -46,7 +42,6 @@ const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
     return (
         <MetadataQueryTask
             mapView={mapView}
-            waybackManager={waybackManager}
             activeWaybackItem={activeWaybackItem}
             swipeWidgetLeadingLayer={swipeWidgetLeadingLayer}
             swipeWidgetTrailingLayer={swipeWidgetTrailingLayer}

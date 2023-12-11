@@ -23,6 +23,8 @@ module.exports = {
     "rules": {
         'prettier/prettier': 'error', // added,
         "@typescript-eslint/interface-name-prefix": "off",
-        "@typescript-eslint/no-namespace": "off"
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-explicit-any": "warn"
     }
 }

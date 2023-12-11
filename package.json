@@ -92,6 +92,7 @@
     "@esri/arcgis-rest-feature-service": "^4.0.4",
     "@esri/arcgis-rest-request": "^4.2.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@vannizhang/wayback-core": "file:vannizhang-wayback-core-1.0.0.tgz",
     "axios": "^1.6.2",
     "classnames": "^2.2.6",
     "d3": "^7.8.5",

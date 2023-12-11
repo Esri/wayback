@@ -7,14 +7,15 @@ import {
     IWaybackItem,
 } from '@typings/index';
 
-import WaybackManager from '../../services/wayback';
+// import WaybackManager from '../../services/wayback';
 
 import MapView from '@arcgis/core/views/MapView';
 import { watch } from '@arcgis/core/core/reactiveUtils';
 import Point from '@arcgis/core/geometry/Point';
+import { getMetadata } from '@vannizhang/wayback-core';
 
 type Props = {
-    waybackManager: WaybackManager;
+    // waybackManager: WaybackManager;
     activeWaybackItem: IWaybackItem;
     swipeWidgetLeadingLayer: IWaybackItem;
     swipeWidgetTrailingLayer: IWaybackItem;
@@ -27,7 +28,7 @@ type Props = {
 };
 
 const MetadataQueryLayer: React.FC<Props> = ({
-    waybackManager,
+    // waybackManager,
     activeWaybackItem,
     swipeWidgetLeadingLayer,
     swipeWidgetTrailingLayer,
@@ -66,10 +67,19 @@ const MetadataQueryLayer: React.FC<Props> = ({
             const { releaseNum, releaseDateLabel } =
                 getTargetWaybackItem(mapPoint);
 
-            const res = await waybackManager.getMetadata({
-                releaseNum,
-                pointGeometry: mapPoint.toJSON(),
+            // const res = await waybackManager.getMetadata({
+            //     releaseNum,
+            //     pointGeometry: mapPoint.toJSON(),
+            //     zoom: mapView.zoom, // getCurrZoomLevel(mapView)
+            // });
+
+            const res = await getMetadata({
+                point: {
+                    latitude: mapPoint.latitude,
+                    longitude: mapPoint.longitude,
+                },
                 zoom: mapView.zoom, // getCurrZoomLevel(mapView)
+                releaseNumber: releaseNum,
             });
 
             const metadata: IWaybackMetadataQueryResult = res
