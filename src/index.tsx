@@ -30,7 +30,6 @@ import {
         }
 
         const waybackItems = await getWaybackItems();
-        // console.log(waybackItems)
 
         const preloadedState = await getPreloadedState(waybackItems);
 

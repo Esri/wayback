@@ -73,14 +73,15 @@ const MetadataQueryLayer: React.FC<Props> = ({
             //     zoom: mapView.zoom, // getCurrZoomLevel(mapView)
             // });
 
-            const res = await getMetadata({
-                point: {
+            const res = await getMetadata(
+                {
                     latitude: mapPoint.latitude,
                     longitude: mapPoint.longitude,
                 },
-                zoom: mapView.zoom, // getCurrZoomLevel(mapView)
-                releaseNumber: releaseNum,
-            });
+                mapView.zoom, // getCurrZoomLevel(mapView)
+                releaseNum
+            );
+            console.log(res);
 
             const metadata: IWaybackMetadataQueryResult = res
                 ? {
