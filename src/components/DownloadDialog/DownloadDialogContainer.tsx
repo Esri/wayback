@@ -40,10 +40,12 @@ export const DownloadDialogContainer = () => {
         // save jobs to localhost so they can be restored
         saveDownloadJobs2LocalStorage(jobs);
 
-        if (jobs?.length && isAnonymouns()) {
+        // prompt anonymouns user to sign in if the user wants to open the download dialog,
+        // since exporting job requires the user token
+        if (jobs?.length && isAnonymouns() && isOpen) {
             signIn();
         }
-    }, [jobs]);
+    }, [jobs, isOpen]);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);

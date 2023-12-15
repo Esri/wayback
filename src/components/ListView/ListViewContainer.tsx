@@ -21,7 +21,10 @@ import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
 
 import ListView from './index';
 import { AppContext } from '@contexts/AppContextProvider';
-import { addToDownloadList } from '@store/DownloadMode/thunks';
+import {
+    DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+    addToDownloadList,
+} from '@store/DownloadMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
 import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/DownloadMode/selectors';
@@ -81,7 +84,7 @@ const ListViewContainer = () => {
         const text =
             'Export an imagery tile package for the current map extent';
 
-        if (zoom < 12) {
+        if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
             return text + ` (zoom in to enable)`;
         }
 
@@ -99,7 +102,8 @@ const ListViewContainer = () => {
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}
                 shouldDownloadButtonBeDisabled={
-                    hasReachedLimitOfConcurrentDownloadJobs || zoom < 12
+                    hasReachedLimitOfConcurrentDownloadJobs ||
+                    zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
                 }
                 downloadButtonTooltipText={downloadButtonTooltipText}
                 shouldOnlyShowItemsWithLocalChange={

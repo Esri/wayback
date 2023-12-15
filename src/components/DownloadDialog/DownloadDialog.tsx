@@ -85,7 +85,7 @@ export const DownloadDialog: FC<Props> = ({
                 background: `radial-gradient(circle, rgba(26,61,96,0.95) 50%, rgba(13,31,49,0.95) 100%)`,
             }}
         >
-            <div className="max-w-3xl mx-8 bg-custom-modal-content-background p-2 pb-8">
+            <div className="max-w-5xl mx-8 bg-custom-modal-content-background p-2 py-8">
                 <div className="text-right">
                     <calcite-button
                         icon-start="x"
@@ -96,7 +96,7 @@ export const DownloadDialog: FC<Props> = ({
                 </div>
 
                 <div className="px-8 max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
-                    <h3 className="text-2xl mb-2">
+                    <h3 className="text-2xl mb-8">
                         Wayback Export (
                         <a
                             href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
