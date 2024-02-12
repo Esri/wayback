@@ -12,7 +12,7 @@ Before we begin, make sure you have a fresh version of [Node.js](https://nodejs.
 To begin, clone this repository (or your fork) to your computer:
 
 ```sh
-https://github.com/Esri/world-imagery-wayback.git
+https://github.com/Esri/wayback.git
 ```
 
 From the project's root directory, install the required packages (dependencies):
