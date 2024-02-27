@@ -26,7 +26,7 @@ import {
 } from '@store/Wayback/reducer';
 
 import {
-    waybackItems4AnimationLoaded,
+    // waybackItems4AnimationLoaded,
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
     // toggleAnimationFrame,
@@ -54,8 +54,11 @@ import DonwloadGifButton from './DonwloadGifButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import PlayPauseBtn from './PlayPauseBtn';
-import { usePrevious } from '@hooks/usePrevious';
-import { saveFrames2ExcludeInURLQueryParam } from '@utils/UrlSearchParam';
+// import { usePrevious } from '@hooks/usePrevious';
+import {
+    saveAnimationSpeedInURLQueryParam,
+    saveFrames2ExcludeInURLQueryParam,
+} from '@utils/UrlSearchParam';
 
 const AnimationControls = () => {
     const dispatch = useDispatch();
@@ -63,25 +66,13 @@ const AnimationControls = () => {
     const rNum2ExcludeFromAnimation: number[] =
         useSelector(rNum2ExcludeSelector);
 
-    // const activeItem:IWaybackItem = useSelector(activeWaybackItemSelector);
-
     const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(
         waybackItemsWithLocalChangesSelector
     );
 
-    const prevWaybackItemsWithLocalChanges = usePrevious<IWaybackItem[]>(
-        waybackItemsWithLocalChanges
-    );
-
     const animationSpeed = useSelector(animationSpeedSelector);
 
-    // const isPlaying = useSelector(isAnimationPlayingSelector);
-
     const animationStatus = useSelector(selectAnimationStatus);
-
-    // const waybackItem4CurrentAnimationFrame = useSelector(
-    //     waybackItem4CurrentAnimationFrameSelector
-    // );
 
     const releaseNum4ActiveFrame = useSelector(
         selectReleaseNumberOfActiveAnimationFrame
@@ -140,8 +131,6 @@ const AnimationControls = () => {
 
                 <FramesSeletor
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}
-                    // activeItem={activeItem}
-                    // rNum4AnimationFrames={rNum4AnimationFrames}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
                     setActiveFrame={(rNum) => {
                         // dispatch(indexOfActiveAnimationFrameChanged(rNum));
@@ -158,24 +147,15 @@ const AnimationControls = () => {
     };
 
     useEffect(() => {
-        batch(() => {
-            dispatch(
-                waybackItems4AnimationLoaded(waybackItemsWithLocalChanges)
-            );
-
-            if (
-                prevWaybackItemsWithLocalChanges &&
-                prevWaybackItemsWithLocalChanges.length
-            ) {
-                dispatch(rNum2ExcludeReset());
-            }
-        });
-    }, [waybackItemsWithLocalChanges]);
-
-    useEffect(() => {
         // console.log(rNum2ExcludeFromAnimation)
         saveFrames2ExcludeInURLQueryParam(rNum2ExcludeFromAnimation);
     }, [rNum2ExcludeFromAnimation]);
+
+    useEffect(() => {
+        saveAnimationSpeedInURLQueryParam(
+            animationStatus !== null ? animationSpeed : undefined
+        );
+    }, [animationSpeed, animationStatus]);
 
     return (
         <>

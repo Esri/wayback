@@ -36,9 +36,11 @@ export type AnimationModeState = {
      * status of the Animation mode
      */
     animationStatus?: AnimationStatus;
-    // isAnimationModeOn: boolean;
+    /**
+     * if true, show download animation panel
+     */
     showDownloadAnimationPanel: boolean;
-    waybackItems4Animation: IWaybackItem[];
+    // waybackItems4Animation: IWaybackItem[];
     /**
      * array of release numbers for items to be excluded from the animation
      */
@@ -47,6 +49,9 @@ export type AnimationModeState = {
      * animation speed in second
      */
     animationSpeed: number;
+    /**
+     * release number of wayback item that is being displayed as current animation frame
+     */
     releaseNumberOfActiveAnimationFrame: number;
 };
 
@@ -79,16 +84,18 @@ const slice = createSlice({
         ) => {
             state.animationStatus = action.payload;
         },
-        showDownloadAnimationPanelToggled: (state: AnimationModeState) => {
-            state.showDownloadAnimationPanel =
-                !state.showDownloadAnimationPanel;
-        },
-        waybackItems4AnimationLoaded: (
+        showDownloadAnimationPanelToggled: (
             state: AnimationModeState,
-            action: PayloadAction<IWaybackItem[]>
+            action: PayloadAction<boolean>
         ) => {
-            state.waybackItems4Animation = action.payload;
+            state.showDownloadAnimationPanel = action.payload;
         },
+        // waybackItems4AnimationLoaded: (
+        //     state: AnimationModeState,
+        //     action: PayloadAction<IWaybackItem[]>
+        // ) => {
+        //     state.waybackItems4Animation = action.payload;
+        // },
         rNum2ExcludeToggled: (
             state: AnimationModeState,
             action: PayloadAction<number>
@@ -112,11 +119,6 @@ const slice = createSlice({
         ) => {
             state.animationSpeed = action.payload;
         },
-        resetAnimationMode: (state: AnimationModeState) => {
-            // state.isPlaying = true;
-            // state.animationSpeed = DEFAULT_ANIMATION_SPEED_IN_SECONDS;
-            state.rNum2Exclude = [];
-        },
         releaseNumberOfActiveAnimationFrameChanged: (
             state: AnimationModeState,
             action: PayloadAction<number>
@@ -132,11 +134,10 @@ export const {
     animationStatusChanged,
     // isAnimationModeOnToggled,
     showDownloadAnimationPanelToggled,
-    waybackItems4AnimationLoaded,
+    // waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
     animationSpeedChanged,
-    resetAnimationMode,
     releaseNumberOfActiveAnimationFrameChanged,
 } = slice.actions;
 
@@ -183,13 +184,13 @@ export const isAnimationModeOnSelector = createSelector(
 
 export const selectShouldShowDownloadPanel = createSelector(
     (state: RootState) => state.AnimationMode.showDownloadAnimationPanel,
-    (showDownloadAnimationPanelToggled) => showDownloadAnimationPanelToggled
+    (showDownloadAnimationPanel) => showDownloadAnimationPanel
 );
 
-export const waybackItems4AnimationSelector = createSelector(
-    (state: RootState) => state.AnimationMode.waybackItems4Animation,
-    (waybackItems4Animation) => waybackItems4Animation
-);
+// export const waybackItems4AnimationSelector = createSelector(
+//     (state: RootState) => state.AnimationMode.waybackItems4Animation,
+//     (waybackItems4Animation) => waybackItems4Animation
+// );
 
 export const rNum2ExcludeSelector = createSelector(
     (state: RootState) => state.AnimationMode.rNum2Exclude,

@@ -23,16 +23,19 @@ import {
     animationSpeedSelector,
     animationStatusChanged,
     isAnimationModeOnSelector,
+    rNum2ExcludeReset,
     // indexOfActiveAnimationFrameChanged,
     releaseNumberOfActiveAnimationFrameChanged,
     selectAnimationStatus,
+    showDownloadAnimationPanelToggled,
     toggleAnimationMode,
-    waybackItems4AnimationSelector,
+    // waybackItems4AnimationSelector,
 } from '@store/AnimationMode/reducer';
 import classNames from 'classnames';
 import { CloseButton } from '@components/CloseButton';
 import { useMediaLayerImageElement } from './useMediaLayerImageElement';
 import useMediaLayerAnimation from './useMediaLayerAnimation';
+import { waybackItemsWithLocalChangesSelector } from '@store/Wayback/reducer';
 
 type Props = {
     mapView?: MapView;
@@ -49,7 +52,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     const animationSpeed = useSelector(animationSpeedSelector);
 
-    const waybackItems = useSelector(waybackItems4AnimationSelector);
+    const waybackItems = useSelector(waybackItemsWithLocalChangesSelector);
 
     /**
      * Array of Imagery Elements for each scene in `sortedQueryParams4ScenesInAnimationMode`
@@ -117,31 +120,16 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
             dispatch(animationStatusChanged('loading'));
         } else {
             dispatch(animationStatusChanged(null));
+            dispatch(rNum2ExcludeReset());
         }
     }, [isAnimationModeOn]);
 
-    // useEffect(() => {
-    //     // We only need to save animation window information when the animation is in progress.
-    //     // Additionally, we should always reset the animation window information in the hash parameters
-    //     // when the animation stops. Resetting the animation window information is crucial
-    //     // as it ensures that the animation window information is not used if the user manually starts the animation.
-    //     // Animation window information from the hash parameters should only be utilized by users
-    //     // who open the application in animation mode through a link shared by others.
-    //     const extent = animationStatus === 'playing' ? mapView.extent : null;
-
-    //     const width = animationStatus === 'playing' ? mapView.width : null;
-
-    //     const height = animationStatus === 'playing' ? mapView.height : null;
-
-    //     saveAnimationWindowInfoToHashParams(extent, width, height);
-    // }, [animationStatus]);
-
-    // useEffect(() => {
-    //     // should close download animation panel whenever user exits the animation mode
-    //     if (animationStatus === null) {
-    //         dispatch(showDownloadAnimationPanelChanged(false));
-    //     }
-    // }, [animationStatus]);
+    useEffect(() => {
+        // should close download animation panel whenever user exits the animation mode
+        if (animationStatus === null) {
+            dispatch(showDownloadAnimationPanelToggled(false));
+        }
+    }, [animationStatus]);
 
     if (!animationStatus) {
         return null;
