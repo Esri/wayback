@@ -17,21 +17,24 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classnames from 'classnames';
 import {
-    isDownloadGIFDialogOnToggled,
-    isLoadingFrameDataSelector,
+    showDownloadAnimationPanelToggled,
+    selectAnimationStatus,
+    // isLoadingFrameDataSelector,
 } from '@store/AnimationMode/reducer';
 
 const DonwloadGifButton = () => {
     const dispatch = useDispatch();
 
-    const isLoadingFrameData = useSelector(isLoadingFrameDataSelector);
+    // const isLoadingFrameData = useSelector(isLoadingFrameDataSelector);
+
+    const animationStatus = useSelector(selectAnimationStatus);
 
     const onClickHandler = useCallback(() => {
-        dispatch(isDownloadGIFDialogOnToggled());
+        dispatch(showDownloadAnimationPanelToggled());
     }, []);
 
     const classNames = classnames('btn btn-fill', {
-        'btn-disabled': isLoadingFrameData,
+        'btn-disabled': animationStatus === 'loading',
     });
 
     return (

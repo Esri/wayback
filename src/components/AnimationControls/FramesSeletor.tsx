@@ -24,7 +24,7 @@ type Props = {
     // rNum4AnimationFrames: number[];
     waybackItemsWithLocalChanges: IWaybackItem[];
     rNum2Exclude: number[];
-    waybackItem4CurrentAnimationFrame: IWaybackItem;
+    releaseNum4ActiveFrame: number;
     // activeItem: IWaybackItem;
     isButtonDisabled: boolean;
     setActiveFrame: (rNum: number) => void;
@@ -36,7 +36,7 @@ const FramesSeletor: React.FC<Props> = ({
     // rNum4AnimationFrames,
     waybackItemsWithLocalChanges,
     rNum2Exclude,
-    waybackItem4CurrentAnimationFrame,
+    releaseNum4ActiveFrame,
     // activeItem,
     isButtonDisabled,
     setActiveFrame,
@@ -95,9 +95,7 @@ const FramesSeletor: React.FC<Props> = ({
                         // onClick={onSelect.bind(this, d)}
                         onClick={setActiveFrame.bind(this, releaseNum)}
                         showBoarderOnLeft={
-                            waybackItem4CurrentAnimationFrame &&
-                            waybackItem4CurrentAnimationFrame.releaseNum ===
-                                releaseNum
+                            releaseNum4ActiveFrame === releaseNum
                         }
                         disableCursorPointer={isButtonDisabled}
                     >

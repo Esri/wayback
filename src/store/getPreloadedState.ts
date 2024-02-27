@@ -147,6 +147,7 @@ const getPreloadedState4AnimationMode = (
     const state: AnimationModeState = {
         ...initialAnimationModeState,
         isAnimationModeOn: true,
+        animationStatus: 'loading',
         animationSpeed,
         rNum2Exclude: rNum4FramesToExclude,
     };

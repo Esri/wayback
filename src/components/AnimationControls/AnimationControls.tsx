@@ -38,12 +38,13 @@ import {
     // startAnimation,
     // stopAnimation,
     // updateAnimationSpeed,
-    indexOfCurrentAnimationFrameSelector,
-    waybackItem4CurrentAnimationFrameSelector,
+    // indexOfCurrentAnimationFrameSelector,
+    // waybackItem4CurrentAnimationFrameSelector,
     animationSpeedChanged,
     selectAnimationStatus,
     animationStatusChanged,
-    indexOfActiveAnimationFrameChanged,
+    // indexOfActiveAnimationFrameChanged,
+    selectReleaseNumberOfActiveAnimationFrame,
     // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
 
@@ -78,8 +79,12 @@ const AnimationControls = () => {
 
     const animationStatus = useSelector(selectAnimationStatus);
 
-    const waybackItem4CurrentAnimationFrame = useSelector(
-        waybackItem4CurrentAnimationFrameSelector
+    // const waybackItem4CurrentAnimationFrame = useSelector(
+    //     waybackItem4CurrentAnimationFrameSelector
+    // );
+
+    const releaseNum4ActiveFrame = useSelector(
+        selectReleaseNumberOfActiveAnimationFrame
     );
 
     const speedOnChange = useCallback((speed: number) => {
@@ -139,14 +144,13 @@ const AnimationControls = () => {
                     // rNum4AnimationFrames={rNum4AnimationFrames}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
                     setActiveFrame={(rNum) => {
-                        dispatch(indexOfActiveAnimationFrameChanged(rNum));
+                        // dispatch(indexOfActiveAnimationFrameChanged(rNum));
+                        console.log(rNum);
                     }}
                     toggleFrame={(rNum) => {
                         // dispatch(toggleAnimationFrame(rNum));
                     }}
-                    waybackItem4CurrentAnimationFrame={
-                        waybackItem4CurrentAnimationFrame
-                    }
+                    releaseNum4ActiveFrame={releaseNum4ActiveFrame}
                     isButtonDisabled={animationStatus === 'playing'}
                 />
             </>

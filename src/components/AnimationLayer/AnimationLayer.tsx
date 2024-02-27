@@ -19,9 +19,11 @@ import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {
-    animationSpeedChanged,
+    // animationSpeedChanged,
     animationSpeedSelector,
     animationStatusChanged,
+    // indexOfActiveAnimationFrameChanged,
+    releaseNumberOfActiveAnimationFrameChanged,
     selectAnimationStatus,
     toggleAnimationMode,
     waybackItems4AnimationSelector,
@@ -60,16 +62,13 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
      */
     const activeFrameOnChange = useCallback(
         (indexOfActiveFrame: number) => {
-            console.log(`activeFrameOnChange`, indexOfActiveFrame);
+            dispatch(
+                releaseNumberOfActiveAnimationFrameChanged(
+                    waybackItems[indexOfActiveFrame]?.releaseNum
+                )
+            );
 
-            // const queryParamsOfActiveFrame =
-            //     sortedQueryParams4ScenesInAnimationMode[indexOfActiveFrame];
-
-            // dispatch(
-            //     selectedItemIdOfQueryParamsListChanged(
-            //         queryParamsOfActiveFrame?.uniqueId
-            //     )
-            // );
+            // console.log(waybackItems[indexOfActiveFrame])
         },
         [waybackItems]
     );
