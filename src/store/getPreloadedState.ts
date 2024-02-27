@@ -19,7 +19,7 @@ import { initialUIState, UIState } from './UI/reducer';
 import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
 import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IURLParamData, IWaybackItem } from '../types';
-import { initialMapState, MapState } from './Map/reducer';
+import { initialMapState, MapMode, MapState } from './Map/reducer';
 import {
     decodeURLParams,
     getMapCenterFromHashParams,
@@ -47,10 +47,6 @@ import {
 const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
-    // const shouldOnlyShowItemsWithLocalChange = true
-    // urlParams.shouldOnlyShowItemsWithLocalChange ||
-    // getShouldShowUpdatesWithLocalChanges();
-
     const state: UIState = {
         ...initialUIState,
         // shouldOnlyShowItemsWithLocalChange,
@@ -103,7 +99,7 @@ const getPreloadedState4SwipeView = (
 
     const state: SwipeViewState = {
         ...initialSwipeViewState,
-        isSwipeWidgetOpen,
+        // isSwipeWidgetOpen,
         releaseNum4LeadingLayer:
             rNum4SwipeWidgetLeadingLayer ||
             rNum4ActiveWaybackItem ||
@@ -117,12 +113,21 @@ const getPreloadedState4SwipeView = (
 };
 
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
-    const { mapExtent } = urlParams;
+    const { mapExtent, animationSpeed, isSwipeWidgetOpen } = urlParams;
 
     const { center, zoom } = getMapCenterFromHashParams() || {};
 
+    let mode: MapMode = 'explore';
+
+    if (isSwipeWidgetOpen) {
+        mode = 'swipe';
+    } else if (animationSpeed) {
+        mode = 'animation';
+    }
+
     const state: MapState = {
         ...initialMapState,
+        mode,
         mapExtent,
         center,
         zoom,
@@ -146,7 +151,7 @@ const getPreloadedState4AnimationMode = (
 
     const state: AnimationModeState = {
         ...initialAnimationModeState,
-        isAnimationModeOn: true,
+        // isAnimationModeOn: true,
         animationStatus: 'loading',
         animationSpeed,
         rNum2Exclude: rNum4FramesToExclude,

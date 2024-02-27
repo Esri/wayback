@@ -32,7 +32,10 @@ export type MapCenter = {
     lat: number;
 };
 
+export type MapMode = 'explore' | 'swipe' | 'animation';
+
 export type MapState = {
+    mode: MapMode;
     mapExtent: IExtentGeomety;
     metadataQueryResult: IWaybackMetadataQueryResult;
     metadataPopupAnchor: IScreenPoint;
@@ -48,6 +51,7 @@ export type MapState = {
 };
 
 export const initialMapState: MapState = {
+    mode: 'explore',
     mapExtent: null,
     metadataQueryResult: null,
     metadataPopupAnchor: null,
@@ -60,6 +64,9 @@ const slice = createSlice({
     name: 'Map',
     initialState: initialMapState,
     reducers: {
+        mapModeChanged: (state: MapState, action: PayloadAction<MapMode>) => {
+            state.mode = action.payload;
+        },
         mapExtentUpdated: (
             state: MapState,
             action: PayloadAction<IExtentGeomety>
@@ -93,6 +100,7 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
+    mapModeChanged,
     mapExtentUpdated,
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
@@ -100,6 +108,11 @@ export const {
     mapCenterUpdated,
     zoomUpdated,
 } = slice.actions;
+
+export const selectMapMode = createSelector(
+    (state: RootState) => state.Map.mode,
+    (mode) => mode
+);
 
 export const mapExtentSelector = createSelector(
     (state: RootState) => state.Map.mapExtent,

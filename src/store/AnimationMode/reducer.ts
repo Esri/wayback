@@ -25,8 +25,9 @@ import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
 // import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
 
-import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
+// import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
 
 export type AnimationStatus = 'loading' | 'playing' | 'pausing';
 
@@ -35,7 +36,7 @@ export type AnimationModeState = {
      * status of the Animation mode
      */
     animationStatus?: AnimationStatus;
-    isAnimationModeOn: boolean;
+    // isAnimationModeOn: boolean;
     showDownloadAnimationPanel: boolean;
     waybackItems4Animation: IWaybackItem[];
     /**
@@ -53,7 +54,7 @@ export const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1;
 
 export const initialAnimationModeState = {
     animationStatus: null,
-    isAnimationModeOn: false,
+    // isAnimationModeOn: false,
     showDownloadAnimationPanel: false,
     // rNum4AnimationFrames: [],
     waybackItems4Animation: [],
@@ -69,9 +70,9 @@ const slice = createSlice({
     name: 'AnimationMode',
     initialState: initialAnimationModeState,
     reducers: {
-        isAnimationModeOnToggled: (state: AnimationModeState) => {
-            state.isAnimationModeOn = !state.isAnimationModeOn;
-        },
+        // isAnimationModeOnToggled: (state: AnimationModeState) => {
+        //     state.isAnimationModeOn = !state.isAnimationModeOn;
+        // },
         animationStatusChanged: (
             state,
             action: PayloadAction<AnimationStatus>
@@ -129,7 +130,7 @@ const { reducer } = slice;
 
 export const {
     animationStatusChanged,
-    isAnimationModeOnToggled,
+    // isAnimationModeOnToggled,
     showDownloadAnimationPanelToggled,
     waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
@@ -141,27 +142,33 @@ export const {
 
 export const toggleAnimationMode =
     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { SwipeView, AnimationMode } = getState();
+        const mode = selectMapMode(getState());
 
-        const { isAnimationModeOn, animationSpeed } = AnimationMode;
+        const newMode: MapMode = mode === 'animation' ? 'explore' : 'animation';
 
-        const willAnimationModeBeTurnedOn = !isAnimationModeOn;
+        dispatch(mapModeChanged(newMode));
 
-        if (SwipeView.isSwipeWidgetOpen && willAnimationModeBeTurnedOn) {
-            dispatch(isSwipeWidgetOpenToggled());
-        }
+        // const { SwipeView, AnimationMode } = getState();
 
-        if (isAnimationModeOn) {
-            console.log('reset animation mode');
-            dispatch(resetAnimationMode());
-        }
+        // const { isAnimationModeOn, animationSpeed } = AnimationMode;
 
-        saveAnimationSpeedInURLQueryParam(
-            willAnimationModeBeTurnedOn,
-            animationSpeed
-        );
+        // const willAnimationModeBeTurnedOn = !isAnimationModeOn;
 
-        dispatch(isAnimationModeOnToggled());
+        // if (SwipeView.isSwipeWidgetOpen && willAnimationModeBeTurnedOn) {
+        //     dispatch(isSwipeWidgetOpenToggled());
+        // }
+
+        // if (isAnimationModeOn) {
+        //     console.log('reset animation mode');
+        //     dispatch(resetAnimationMode());
+        // }
+
+        // saveAnimationSpeedInURLQueryParam(
+        //     willAnimationModeBeTurnedOn,
+        //     animationSpeed
+        // );
+
+        // dispatch(isAnimationModeOnToggled());
     };
 
 export const selectAnimationStatus = createSelector(
@@ -170,8 +177,8 @@ export const selectAnimationStatus = createSelector(
 );
 
 export const isAnimationModeOnSelector = createSelector(
-    (state: RootState) => state.AnimationMode.isAnimationModeOn,
-    (isAnimationModeOn) => isAnimationModeOn
+    (state: RootState) => state.Map.mode,
+    (mode) => mode === 'animation'
 );
 
 export const selectShouldShowDownloadPanel = createSelector(

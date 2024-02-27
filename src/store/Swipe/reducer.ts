@@ -24,16 +24,17 @@ import {
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
 import { toggleAnimationMode } from '../AnimationMode/reducer';
+import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
 
 export type SwipeViewState = {
-    isSwipeWidgetOpen: boolean;
+    // isSwipeWidgetOpen: boolean;
     releaseNum4LeadingLayer: number;
     releaseNum4TrailingLayer: number;
     swipePosition: number;
 };
 
 export const initialSwipeViewState = {
-    isSwipeWidgetOpen: false,
+    // isSwipeWidgetOpen: false,
     releaseNum4LeadingLayer: null,
     releaseNum4TrailingLayer: null,
     swipePosition: 50,
@@ -43,9 +44,9 @@ const slice = createSlice({
     name: 'SwipeView',
     initialState: initialSwipeViewState,
     reducers: {
-        isSwipeWidgetOpenToggled: (state: SwipeViewState) => {
-            state.isSwipeWidgetOpen = !state.isSwipeWidgetOpen;
-        },
+        // isSwipeWidgetOpenToggled: (state: SwipeViewState) => {
+        //     state.isSwipeWidgetOpen = !state.isSwipeWidgetOpen;
+        // },
         releaseNum4LeadingLayerUpdated: (
             state: SwipeViewState,
             action: PayloadAction<number>
@@ -70,7 +71,7 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
-    isSwipeWidgetOpenToggled,
+    // isSwipeWidgetOpenToggled,
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
     swipePositionUpdated,
@@ -78,18 +79,24 @@ export const {
 
 export const toggleSwipeWidget =
     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
+        const mode = selectMapMode(getState());
 
-        if (AnimationMode.isAnimationModeOn) {
-            dispatch(toggleAnimationMode());
-        }
+        const newMode: MapMode = mode === 'swipe' ? 'explore' : 'swipe';
 
-        dispatch(isSwipeWidgetOpenToggled());
+        dispatch(mapModeChanged(newMode));
+
+        // const { AnimationMode } = getState();
+
+        // if (AnimationMode.isAnimationModeOn) {
+        //     dispatch(toggleAnimationMode());
+        // }
+
+        // dispatch(isSwipeWidgetOpenToggled());
     };
 
 export const isSwipeWidgetOpenSelector = createSelector(
-    (state: RootState) => state.SwipeView.isSwipeWidgetOpen,
-    (isSwipeWidgetOpen) => isSwipeWidgetOpen
+    (state: RootState) => state.Map.mode,
+    (mode) => mode === 'swipe'
 );
 
 export const swipeWidgetLeadingLayerSelector = createSelector(

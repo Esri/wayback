@@ -22,6 +22,7 @@ import {
     // animationSpeedChanged,
     animationSpeedSelector,
     animationStatusChanged,
+    isAnimationModeOnSelector,
     // indexOfActiveAnimationFrameChanged,
     releaseNumberOfActiveAnimationFrameChanged,
     selectAnimationStatus,
@@ -41,6 +42,8 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const dispatch = useDispatch();
 
     const mediaLayerRef = useRef<MediaLayer>();
+
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     const animationStatus = useSelector(selectAnimationStatus);
 
@@ -108,6 +111,14 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
             dispatch(animationStatusChanged('playing'));
         }
     }, [mediaLayerElements, mapView]);
+
+    useEffect(() => {
+        if (isAnimationModeOn) {
+            dispatch(animationStatusChanged('loading'));
+        } else {
+            dispatch(animationStatusChanged(null));
+        }
+    }, [isAnimationModeOn]);
 
     // useEffect(() => {
     //     // We only need to save animation window information when the animation is in progress.
