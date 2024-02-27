@@ -39,12 +39,16 @@ const AnimationPanelContainer: React.FC<Props> = ({ mapView }: Props) => {
         waybackItems4AnimationSelector
     );
 
-    return isAnimationModeOn && waybackItems4Animation.length ? (
+    if (!isAnimationModeOn || !waybackItems4Animation.length) {
+        return null;
+    }
+
+    return (
         <AnimationPanel
             waybackItems4Animation={waybackItems4Animation}
             mapView={mapView}
         />
-    ) : null;
+    );
 };
 
 export default AnimationPanelContainer;
