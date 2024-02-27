@@ -20,11 +20,9 @@ import ImageElement from '@arcgis/core/layers/support/ImageElement';
 import ExtentAndRotationGeoreference from '@arcgis/core/layers/support/ExtentAndRotationGeoreference';
 import { IWaybackItem } from '@typings/index';
 import { getNormalizedExtent } from '@utils/snippets/getNormalizedExtent';
-import {
-    FrameData,
-    generateFrames,
-} from '@components/AnimationPanel/generateFrames4GIF';
-import { PARENT_CONTAINER_LEFT_OFFSET } from '@components/AnimationPanel/AnimationPanel';
+import { generateAnimationFrames, FrameData } from './generateAnimationFrames';
+
+export const MAP_CONTAINER_LEFT_OFFSET = 350;
 
 type Props = {
     mapView?: MapView;
@@ -64,9 +62,9 @@ export const useMediaLayerImageElement = ({
             const elemRect = container.getBoundingClientRect();
             // console.log(elemRect)
 
-            const frameData = await generateFrames({
+            const frameData = await generateAnimationFrames({
                 frameRect: {
-                    screenX: elemRect.left - PARENT_CONTAINER_LEFT_OFFSET,
+                    screenX: elemRect.left - MAP_CONTAINER_LEFT_OFFSET,
                     screenY: elemRect.top,
                     width,
                     height,

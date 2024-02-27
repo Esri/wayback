@@ -55,19 +55,19 @@ type CenterLocationForFrameRect = {
 };
 
 export type FrameData = {
-    releaseNum: number;
-    waybackItem: IWaybackItem;
+    // releaseNum: number;
+    // waybackItem: IWaybackItem;
     frameCanvas: HTMLCanvasElement;
-    frameDataURI?: string;
     frameBlob: Blob;
-    height: number;
-    width: number;
-    center: CenterLocationForFrameRect;
+    // frameDataURI?: string;
+    // height: number;
+    // width: number;
+    // center: CenterLocationForFrameRect;
 };
 
 const WaybackImageBaseURL = getServiceUrl('wayback-imagery-base');
 
-export const generateFrames = async ({
+export const generateAnimationFrames = async ({
     frameRect,
     mapView,
     waybackItems,
@@ -95,14 +95,14 @@ export const generateFrames = async ({
         });
 
         frames.push({
-            releaseNum,
-            waybackItem: item,
+            // releaseNum,
+            // waybackItem: item,
             frameCanvas,
-            frameDataURI: '',
+            // frameDataURI: '',
             frameBlob,
-            width: frameRect.width,
-            height: frameRect.height,
-            center,
+            // width: frameRect.width,
+            // height: frameRect.height,
+            // center,
         });
     }
 
