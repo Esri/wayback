@@ -45,6 +45,7 @@ import {
     animationStatusChanged,
     // indexOfActiveAnimationFrameChanged,
     selectReleaseNumberOfActiveAnimationFrame,
+    rNum2ExcludeToggled,
     // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
 
@@ -120,6 +121,7 @@ const AnimationControls = () => {
                 >
                     <PlayPauseBtn
                         isPlaying={animationStatus === 'playing'}
+                        isLoading={animationStatus === 'loading'}
                         onClick={playPauseBtnOnClick}
                     />
 
@@ -137,7 +139,7 @@ const AnimationControls = () => {
                         console.log(rNum);
                     }}
                     toggleFrame={(rNum) => {
-                        // dispatch(toggleAnimationFrame(rNum));
+                        dispatch(rNum2ExcludeToggled(rNum));
                     }}
                     releaseNum4ActiveFrame={releaseNum4ActiveFrame}
                     isButtonDisabled={animationStatus === 'playing'}
