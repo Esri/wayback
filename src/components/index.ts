@@ -47,7 +47,7 @@ export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
-export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
+// export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
 
 export { OpenDownloadPanelBtn } from './OpenDownloadPanelBtn/OpenDownloadPanelBtn';
 export { DownloadDialog } from './DownloadDialog';

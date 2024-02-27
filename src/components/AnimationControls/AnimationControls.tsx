@@ -29,18 +29,22 @@ import {
     waybackItems4AnimationLoaded,
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
-    toggleAnimationFrame,
+    // toggleAnimationFrame,
     rNum2ExcludeReset,
     // animationSpeedChanged,
     animationSpeedSelector,
-    isAnimationPlayingToggled,
-    isAnimationPlayingSelector,
-    startAnimation,
-    stopAnimation,
-    updateAnimationSpeed,
+    // isAnimationPlayingToggled,
+    // isAnimationPlayingSelector,
+    // startAnimation,
+    // stopAnimation,
+    // updateAnimationSpeed,
     indexOfCurrentAnimationFrameSelector,
     waybackItem4CurrentAnimationFrameSelector,
-    setActiveFrameByReleaseNum,
+    animationSpeedChanged,
+    selectAnimationStatus,
+    animationStatusChanged,
+    indexOfActiveAnimationFrameChanged,
+    // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
 
 import { IWaybackItem } from '@typings/index';
@@ -70,23 +74,25 @@ const AnimationControls = () => {
 
     const animationSpeed = useSelector(animationSpeedSelector);
 
-    const isPlaying = useSelector(isAnimationPlayingSelector);
+    // const isPlaying = useSelector(isAnimationPlayingSelector);
+
+    const animationStatus = useSelector(selectAnimationStatus);
 
     const waybackItem4CurrentAnimationFrame = useSelector(
         waybackItem4CurrentAnimationFrameSelector
     );
 
     const speedOnChange = useCallback((speed: number) => {
-        dispatch(updateAnimationSpeed(speed));
+        dispatch(animationSpeedChanged(speed));
     }, []);
 
     const playPauseBtnOnClick = useCallback(() => {
-        if (isPlaying) {
-            dispatch(stopAnimation());
+        if (animationStatus === 'playing') {
+            dispatch(animationStatusChanged('pausing'));
         } else {
-            dispatch(startAnimation());
+            dispatch(animationStatusChanged('playing'));
         }
-    }, [isPlaying]);
+    }, [animationStatus]);
 
     const getContent = () => {
         if (
@@ -117,7 +123,7 @@ const AnimationControls = () => {
                     }}
                 >
                     <PlayPauseBtn
-                        isPlaying={isPlaying}
+                        isPlaying={animationStatus === 'playing'}
                         onClick={playPauseBtnOnClick}
                     />
 
@@ -133,15 +139,15 @@ const AnimationControls = () => {
                     // rNum4AnimationFrames={rNum4AnimationFrames}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
                     setActiveFrame={(rNum) => {
-                        dispatch(setActiveFrameByReleaseNum(rNum));
+                        dispatch(indexOfActiveAnimationFrameChanged(rNum));
                     }}
                     toggleFrame={(rNum) => {
-                        dispatch(toggleAnimationFrame(rNum));
+                        // dispatch(toggleAnimationFrame(rNum));
                     }}
                     waybackItem4CurrentAnimationFrame={
                         waybackItem4CurrentAnimationFrame
                     }
-                    isButtonDisabled={isPlaying}
+                    isButtonDisabled={animationStatus === 'playing'}
                 />
             </>
         );

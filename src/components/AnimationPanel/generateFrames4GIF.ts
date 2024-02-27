@@ -58,7 +58,8 @@ export type FrameData = {
     releaseNum: number;
     waybackItem: IWaybackItem;
     frameCanvas: HTMLCanvasElement;
-    frameDataURI: string;
+    frameDataURI?: string;
+    frameBlob: Blob;
     height: number;
     width: number;
     center: CenterLocationForFrameRect;
@@ -87,7 +88,7 @@ export const generateFrames = async ({
     for (const item of waybackItems) {
         const { releaseNum } = item;
 
-        const { frameCanvas, frameDataURI } = await generateFrame({
+        const { frameCanvas, frameBlob } = await generateFrame({
             frameRect,
             tiles,
             releaseNum,
@@ -97,7 +98,8 @@ export const generateFrames = async ({
             releaseNum,
             waybackItem: item,
             frameCanvas,
-            frameDataURI,
+            frameDataURI: '',
+            frameBlob,
             width: frameRect.width,
             height: frameRect.height,
             center,
@@ -119,7 +121,7 @@ const generateFrame = async ({
     releaseNum: number;
 }): Promise<{
     frameCanvas: HTMLCanvasElement;
-    frameDataURI: string;
+    frameBlob: Blob;
 }> => {
     return new Promise((resolve, reject) => {
         const { screenX, screenY, height, width } = frameRect;
@@ -160,9 +162,16 @@ const generateFrame = async ({
                 // all tiles are drawn to canvas, return the canvas as D
                 if (tilesProcessed === tiles.length) {
                     // resolve(canvas.toDataURL('image/png'));
-                    resolve({
-                        frameCanvas: canvas,
-                        frameDataURI: canvas.toDataURL('image/png'),
+                    // resolve({
+                    //     frameCanvas: canvas,
+                    //     frameDataURI: canvas.toDataURL('image/png'),
+                    // });
+
+                    canvas.toBlob((frameBlob: Blob) => {
+                        resolve({
+                            frameCanvas: canvas,
+                            frameBlob,
+                        });
                     });
                 }
             });

@@ -43,7 +43,7 @@ import {
     TilePreviewWindow,
     // Title4ActiveItem,
     WaybackLayer,
-    AnimationPanel,
+    // AnimationPanel,
     AnimationModeToggleBtn,
     ZoomWidget,
     OpenDownloadPanelBtn,
@@ -53,6 +53,7 @@ import {
 import { getServiceUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
+import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -102,7 +103,8 @@ const AppLayout: React.FC = () => {
 
                     <SwipeWidget />
 
-                    <AnimationPanel />
+                    {/* <AnimationPanel /> */}
+                    <AnimationLayer />
 
                     <ReferenceLayerToggle />
 
