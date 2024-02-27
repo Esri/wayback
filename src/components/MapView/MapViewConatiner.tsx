@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import './CustomMapViewStyle.css';
 import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,6 +43,10 @@ import {
 } from '@utils/UrlSearchParam';
 import { batch } from 'react-redux';
 import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+import {
+    isAnimationModeOnSelector,
+    selectAnimationStatus,
+} from '@store/AnimationMode/reducer';
 
 type Props = {
     children?: React.ReactNode;
@@ -74,6 +78,8 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
     const mapExtent = useSelector(mapExtentSelector);
+
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
     const { center, zoom } = useSelector(selectMapCenterAndZoom);
 
@@ -123,6 +129,11 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
         saveMapCenterToHashParams(center, zoom);
     }, [center, zoom]);
+
+    useEffect(() => {
+        // adding this class will hide map zoom widget when animation mode is on
+        document.body.classList.toggle('hide-map-control', isAnimationModeOn);
+    }, [isAnimationModeOn]);
 
     return (
         <FlexGrowItemWapper>

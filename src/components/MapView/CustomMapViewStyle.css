@@ -1,0 +1,4 @@
+.hide-map-control .esri-zoom,
+.hide-map-control .esri-search {
+    display: none;
+}
