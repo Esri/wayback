@@ -55,7 +55,7 @@ type CenterLocationForFrameRect = {
 };
 
 export type FrameData = {
-    // releaseNum: number;
+    releaseNum: number;
     // waybackItem: IWaybackItem;
     frameCanvas: HTMLCanvasElement;
     frameBlob: Blob;
@@ -95,7 +95,7 @@ export const generateAnimationFrames = async ({
         });
 
         frames.push({
-            // releaseNum,
+            releaseNum,
             // waybackItem: item,
             frameCanvas,
             // frameDataURI: '',

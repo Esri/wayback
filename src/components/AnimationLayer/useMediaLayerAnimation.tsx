@@ -16,6 +16,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import IImageElement from '@arcgis/core/layers/support/ImageElement';
 import { AnimationStatus } from '@store/AnimationMode/reducer';
+import { ImageElementData } from './useMediaLayerImageElement';
 
 type Props = {
     /**
@@ -29,7 +30,7 @@ type Props = {
     /**
      * array of image elements to be animated
      */
-    mediaLayerElements: IImageElement[];
+    imageElementsData: ImageElementData[];
     /**
      * Fires when the active frame changes
      * @param indexOfActiveFrame index of the active frame
@@ -46,7 +47,7 @@ type Props = {
 const useMediaLayerAnimation = ({
     animationStatus,
     animationSpeed,
-    mediaLayerElements,
+    imageElementsData,
     activeFrameOnChange,
 }: Props) => {
     const isPlayingRef = useRef<boolean>(false);
@@ -80,21 +81,21 @@ const useMediaLayerAnimation = ({
 
         // reset index of next frame to 0 if it is out of range.
         // this can happen when a frame gets removed after previous animation is stopped
-        if (indexOfNextFrame.current >= mediaLayerElements.length) {
+        if (indexOfNextFrame.current >= imageElementsData.length) {
             indexOfNextFrame.current = 0;
         }
 
         activeFrameOnChangeRef.current(indexOfNextFrame.current);
 
-        for (let i = 0; i < mediaLayerElements.length; i++) {
+        for (let i = 0; i < imageElementsData.length; i++) {
             const opacity = i === indexOfNextFrame.current ? 1 : 0;
-            mediaLayerElements[i].opacity = opacity;
+            imageElementsData[i].imageElement.opacity = opacity;
         }
 
         // update indexOfNextFrame using the index of next element
         // when hit the end of the array, use 0 instead
         indexOfNextFrame.current =
-            (indexOfNextFrame.current + 1) % mediaLayerElements.length;
+            (indexOfNextFrame.current + 1) % imageElementsData.length;
 
         // call showNextFrame recursively to play the animation as long as
         // animationMode is 'playing'
@@ -105,14 +106,14 @@ const useMediaLayerAnimation = ({
         isPlayingRef.current = animationStatus === 'playing';
 
         // cannot animate layers if the list is empty
-        if (!mediaLayerElements || !mediaLayerElements?.length) {
+        if (!imageElementsData || !imageElementsData?.length) {
             return;
         }
 
-        if (mediaLayerElements && animationStatus === 'playing') {
+        if (imageElementsData?.length && animationStatus === 'playing') {
             requestAnimationFrame(showNextFrame);
         }
-    }, [animationStatus, mediaLayerElements]);
+    }, [animationStatus, imageElementsData]);
 
     useEffect(() => {
         activeFrameOnChangeRef.current = activeFrameOnChange;

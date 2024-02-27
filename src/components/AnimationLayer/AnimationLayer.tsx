@@ -24,6 +24,7 @@ import {
     animationStatusChanged,
     isAnimationModeOnSelector,
     rNum2ExcludeReset,
+    rNum2ExcludeSelector,
     // indexOfActiveAnimationFrameChanged,
     releaseNumberOfActiveAnimationFrameChanged,
     selectAnimationStatus,
@@ -55,9 +56,14 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const waybackItems = useSelector(waybackItemsWithLocalChangesSelector);
 
     /**
-     * Array of Imagery Elements for each scene in `sortedQueryParams4ScenesInAnimationMode`
+     * release num of wayback items to be excluded from the animation
      */
-    const mediaLayerElements = useMediaLayerImageElement({
+    const releaseNumOfItems2Exclude = useSelector(rNum2ExcludeSelector);
+
+    /**
+     * Array of Imagery Element Data
+     */
+    const imageElementsData = useMediaLayerImageElement({
         mapView,
         animationStatus,
         waybackItems,
@@ -82,7 +88,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     useMediaLayerAnimation({
         animationStatus,
         animationSpeed: animationSpeed * 1000,
-        mediaLayerElements,
+        imageElementsData,
         activeFrameOnChange,
     });
 
@@ -104,16 +110,18 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
         const source = mediaLayerRef.current.source as any;
 
-        if (!mediaLayerElements) {
+        if (!imageElementsData) {
             // animation is not started or just stopped
             // just clear all elements in media layer
             source.elements.removeAll();
         } else {
-            source.elements.addMany(mediaLayerElements);
+            source.elements.addMany(
+                imageElementsData.map((d) => d.imageElement)
+            );
             // media layer elements are ready, change animation mode to playing to start the animation
             dispatch(animationStatusChanged('playing'));
         }
-    }, [mediaLayerElements, mapView]);
+    }, [imageElementsData, mapView]);
 
     useEffect(() => {
         if (isAnimationModeOn) {

@@ -30,12 +30,24 @@ type Props = {
     waybackItems: IWaybackItem[];
 };
 
+export type ImageElementData = {
+    /**
+     * wayback release number associated with this image element
+     */
+    releaseNumber: number;
+    /**
+     * image element to be used in the media layer
+     */
+    imageElement: ImageElement;
+};
+
 export const useMediaLayerImageElement = ({
     mapView,
     animationStatus,
     waybackItems,
 }: Props) => {
-    const [imageElements, setImageElements] = useState<ImageElement[]>(null);
+    const [imageElements, setImageElements] =
+        useState<ImageElementData[]>(null);
 
     const abortControllerRef = useRef<AbortController>();
 
@@ -75,7 +87,7 @@ export const useMediaLayerImageElement = ({
 
             // once responses are received, get array of image elements using the binary data returned from export image requests
             const imageElements = frameData.map((d: FrameData) => {
-                return new ImageElement({
+                const imageElement = new ImageElement({
                     image: URL.createObjectURL(d.frameBlob),
                     georeference: new ExtentAndRotationGeoreference({
                         extent: {
@@ -90,6 +102,11 @@ export const useMediaLayerImageElement = ({
                     }),
                     opacity: 1,
                 });
+
+                return {
+                    releaseNumber: d.releaseNum,
+                    imageElement,
+                } as ImageElementData;
             });
 
             setImageElements(imageElements);
@@ -108,7 +125,7 @@ export const useMediaLayerImageElement = ({
             // call revokeObjectURL so these image elements can be freed from the memory
             if (imageElements) {
                 for (const elem of imageElements) {
-                    URL.revokeObjectURL(elem.image as string);
+                    URL.revokeObjectURL(elem.imageElement.image as string);
                 }
             }
 
