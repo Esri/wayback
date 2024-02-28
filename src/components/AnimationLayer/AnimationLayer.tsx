@@ -152,7 +152,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         }
     }, [animationStatus]);
 
-    if (!animationStatus) {
+    if (!isAnimationModeOn) {
         return null;
     }
 
