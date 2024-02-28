@@ -137,6 +137,11 @@ const useMediaLayerAnimation = ({
     useEffect(() => {
         isPlayingRef.current = animationStatus === 'playing';
 
+        // reset the index of active frame when animation is stopped
+        if (animationStatus === null) {
+            indexOfActiveFrame.current = 0;
+        }
+
         // cannot animate layers if the list is empty
         if (!imageElementsData || !imageElementsData?.length) {
             return;

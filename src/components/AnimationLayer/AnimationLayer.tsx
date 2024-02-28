@@ -130,6 +130,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         } else {
             dispatch(animationStatusChanged(null));
             dispatch(rNum2ExcludeReset());
+            dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
         }
     }, [isAnimationModeOn]);
 

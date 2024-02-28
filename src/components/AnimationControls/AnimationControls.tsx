@@ -30,7 +30,7 @@ import {
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
     // toggleAnimationFrame,
-    rNum2ExcludeReset,
+    // rNum2ExcludeReset,
     // animationSpeedChanged,
     animationSpeedSelector,
     // isAnimationPlayingToggled,
@@ -46,6 +46,7 @@ import {
     // indexOfActiveAnimationFrameChanged,
     selectReleaseNumberOfActiveAnimationFrame,
     rNum2ExcludeToggled,
+    // releaseNumberOfActiveAnimationFrameChanged,
     // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
 
@@ -135,8 +136,8 @@ const AnimationControls = () => {
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
                     setActiveFrame={(rNum) => {
-                        // dispatch(indexOfActiveAnimationFrameChanged(rNum));
-                        console.log(rNum);
+                        // dispatch(releaseNumberOfActiveAnimationFrameChanged(rNum));
+                        // console.log(rNum);
                     }}
                     toggleFrame={(rNum) => {
                         dispatch(rNum2ExcludeToggled(rNum));
