@@ -21,24 +21,38 @@ import {
 } from './reducer';
 import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
 
+let abortController: AbortController = null;
+
 export const queryLocalChanges =
     (point: Point, zoom: number) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        dispatch(isLoadingWaybackItemsToggled(true));
+        try {
+            if (abortController) {
+                abortController.abort();
+            }
 
-        const waybackItems = await getWaybackItemsWithLocalChanges(
-            {
-                longitude: point.longitude,
-                latitude: point.latitude,
-            },
-            zoom
-        );
-        // console.log(waybackItems);
+            abortController = new AbortController();
 
-        const rNums = waybackItems.map((d) => d.releaseNum);
+            dispatch(isLoadingWaybackItemsToggled(true));
 
-        // console.log(rNums);
-        dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
+            const waybackItems = await getWaybackItemsWithLocalChanges(
+                {
+                    longitude: point.longitude,
+                    latitude: point.latitude,
+                },
+                zoom,
+                abortController
+            );
 
-        dispatch(isLoadingWaybackItemsToggled(false));
+            // console.log(waybackItems);
+
+            const rNums = waybackItems.map((d) => d.releaseNum);
+
+            // console.log(rNums);
+            dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
+
+            dispatch(isLoadingWaybackItemsToggled(false));
+        } catch (err) {
+            console.log(err);
+        }
     };
