@@ -47,6 +47,7 @@ type GenerateFramesParams = {
     frameRect: FrameRectInfo;
     mapView: MapView;
     waybackItems: IWaybackItem[];
+    abortController?: AbortController;
 };
 
 type CenterLocationForFrameRect = {
@@ -71,6 +72,7 @@ export const generateAnimationFrames = async ({
     frameRect,
     mapView,
     waybackItems,
+    abortController,
 }: GenerateFramesParams): Promise<FrameData[]> => {
     const frames: FrameData[] = [];
 
@@ -80,34 +82,39 @@ export const generateAnimationFrames = async ({
         mapView,
     });
 
-    const center = getCenterLocationForFrameRect({
-        frameRect,
-        mapView,
-    });
-
-    for (const item of waybackItems) {
+    const generateFrameRequests = waybackItems.map((item) => {
         const { releaseNum } = item;
 
-        const { frameCanvas, frameBlob } = await generateFrame({
+        return generateFrame({
             frameRect,
             tiles,
             releaseNum,
+            abortController,
         });
+    });
+
+    const responses = await Promise.all(generateFrameRequests);
+
+    for (let i = 0; i < responses.length; i++) {
+        const res = responses[i];
+
+        const { releaseNum } = waybackItems[i];
 
         frames.push({
+            ...res,
             releaseNum,
-            // waybackItem: item,
-            frameCanvas,
-            // frameDataURI: '',
-            frameBlob,
-            // width: frameRect.width,
-            // height: frameRect.height,
-            // center,
         });
     }
 
-    // console.log(frameDataURL)
-    return frames;
+    return new Promise((resolve, reject) => {
+        if (abortController && abortController.signal.aborted) {
+            reject(
+                'The task to generate animation frames has been cancelled by the user'
+            );
+        }
+
+        resolve(frames);
+    });
 };
 
 // get data URL from canvas with map tiles that conver the entire container
@@ -115,10 +122,12 @@ const generateFrame = async ({
     frameRect,
     tiles,
     releaseNum,
+    abortController,
 }: {
     frameRect: FrameRectInfo;
     tiles: TileInfo[];
     releaseNum: number;
+    abortController: AbortController;
 }): Promise<{
     frameCanvas: HTMLCanvasElement;
     frameBlob: Blob;

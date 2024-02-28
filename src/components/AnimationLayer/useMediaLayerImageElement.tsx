@@ -88,6 +88,7 @@ export const useMediaLayerImageElement = ({
                 },
                 mapView,
                 waybackItems,
+                abortController: abortControllerRef.current,
             });
 
             // once responses are received, get array of image elements using the binary data returned from export image requests
