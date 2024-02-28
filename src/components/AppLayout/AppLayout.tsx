@@ -54,11 +54,14 @@ import { getServiceUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
+import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
 
     const currentPageIsVisibleAgain = useCurrenPageBecomesVisible();
+
+    useSaveAppState2URLHashParams();
 
     useEffect(() => {
         if (!currentPageIsVisibleAgain) {

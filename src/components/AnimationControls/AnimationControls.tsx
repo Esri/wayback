@@ -153,12 +153,6 @@ const AnimationControls = () => {
         saveFrames2ExcludeInURLQueryParam(rNum2ExcludeFromAnimation);
     }, [rNum2ExcludeFromAnimation]);
 
-    useEffect(() => {
-        saveAnimationSpeedInURLQueryParam(
-            animationStatus !== null ? animationSpeed : undefined
-        );
-    }, [animationSpeed, animationStatus]);
-
     return (
         <>
             <div
