@@ -28,6 +28,7 @@ import {
     // indexOfActiveAnimationFrameChanged,
     releaseNumberOfActiveAnimationFrameChanged,
     selectAnimationStatus,
+    selectReleaseNumberOfActiveAnimationFrame,
     showDownloadAnimationPanelToggled,
     toggleAnimationMode,
     // waybackItems4AnimationSelector,
@@ -70,6 +71,10 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         selectIsLoadingWaybackItems
     );
 
+    const releaseNumOfActiveFrame = useSelector(
+        selectReleaseNumberOfActiveAnimationFrame
+    );
+
     /**
      * Array of Imagery Element Data
      */
@@ -101,6 +106,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         animationSpeed: animationSpeed * 1000,
         imageElementsData,
         releaseNumOfItems2Exclude,
+        releaseNumOfActiveFrame,
         activeFrameOnChange,
     });
 

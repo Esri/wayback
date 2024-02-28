@@ -35,6 +35,8 @@ type Props = {
      * list of release number of wayback items to exclude from the animation
      */
     releaseNumOfItems2Exclude: number[];
+
+    releaseNumOfActiveFrame: number;
     /**
      * Fires when the active frame changes
      * @param indexOfActiveFrame index of the active frame
@@ -53,6 +55,7 @@ const useMediaLayerAnimation = ({
     animationSpeed,
     imageElementsData,
     releaseNumOfItems2Exclude,
+    releaseNumOfActiveFrame,
     activeFrameOnChange,
 }: Props) => {
     const isPlayingRef = useRef<boolean>(false);
@@ -163,6 +166,27 @@ const useMediaLayerAnimation = ({
     useEffect(() => {
         releaseNumOfItems2ExcludeRef.current = releaseNumOfItems2Exclude;
     }, [releaseNumOfItems2Exclude]);
+
+    useEffect(() => {
+        // should not do anything if the animation is playing or loading
+        if (animationStatus !== 'pausing') {
+            return;
+        }
+
+        // find the index of active frame using the release number
+        // why is this necessary? when the animation is paused, the user can click on the
+        // frame list card to view a frame and decide whether or not to include this frame
+        // in the animation
+        indexOfActiveFrame.current = imageElementsData.findIndex(
+            (d) => d.releaseNumber === releaseNumOfActiveFrame
+        );
+
+        // adjust opacity of image elements to show the one that is currently active
+        for (let i = 0; i < imageElementsData.length; i++) {
+            const opacity = i === indexOfActiveFrame.current ? 1 : 0;
+            imageElementsData[i].imageElement.opacity = opacity;
+        }
+    }, [animationStatus, releaseNumOfActiveFrame, imageElementsData]);
 };
 
 export default useMediaLayerAnimation;
