@@ -52,7 +52,7 @@ import {
 
 import { IWaybackItem } from '@typings/index';
 
-import DonwloadGifButton from './DonwloadGifButton';
+import { DonwloadAnimationButton } from './DonwloadAnimationButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import PlayPauseBtn from './PlayPauseBtn';
@@ -108,7 +108,7 @@ const AnimationControls = () => {
 
         return (
             <>
-                <DonwloadGifButton />
+                <DonwloadAnimationButton />
 
                 <div className="leader-half">
                     <span className="font-size--3">Animation Speed</span>

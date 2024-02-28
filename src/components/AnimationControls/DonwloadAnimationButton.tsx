@@ -22,7 +22,7 @@ import {
     // isLoadingFrameDataSelector,
 } from '@store/AnimationMode/reducer';
 
-const DonwloadGifButton = () => {
+export const DonwloadAnimationButton = () => {
     const dispatch = useDispatch();
 
     // const isLoadingFrameData = useSelector(isLoadingFrameDataSelector);
@@ -39,9 +39,7 @@ const DonwloadGifButton = () => {
 
     return (
         <div className={classNames} onClick={onClickHandler}>
-            Download GIF
+            Download Animation
         </div>
     );
 };
-
-export default DonwloadGifButton;
