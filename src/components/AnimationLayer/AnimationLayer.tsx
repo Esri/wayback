@@ -89,6 +89,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         animationStatus,
         animationSpeed: animationSpeed * 1000,
         imageElementsData,
+        releaseNumOfItems2Exclude,
         activeFrameOnChange,
     });
 

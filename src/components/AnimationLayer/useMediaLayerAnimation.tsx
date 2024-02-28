@@ -32,6 +32,10 @@ type Props = {
      */
     imageElementsData: ImageElementData[];
     /**
+     * list of release number of wayback items to exclude from the animation
+     */
+    releaseNumOfItems2Exclude: number[];
+    /**
      * Fires when the active frame changes
      * @param indexOfActiveFrame index of the active frame
      * @returns void
@@ -48,17 +52,20 @@ const useMediaLayerAnimation = ({
     animationStatus,
     animationSpeed,
     imageElementsData,
+    releaseNumOfItems2Exclude,
     activeFrameOnChange,
 }: Props) => {
     const isPlayingRef = useRef<boolean>(false);
 
     const timeLastFrameDisplayed = useRef<number>(performance.now());
 
-    const indexOfNextFrame = useRef<number>(0);
+    const indexOfActiveFrame = useRef<number>(0);
 
     const activeFrameOnChangeRef = useRef<any>();
 
     const animationSpeedRef = useRef<number>(animationSpeed);
+
+    const releaseNumOfItems2ExcludeRef = useRef<number[]>([]);
 
     const showNextFrame = () => {
         // use has stopped animation, no need to show next frame
@@ -81,21 +88,23 @@ const useMediaLayerAnimation = ({
 
         // reset index of next frame to 0 if it is out of range.
         // this can happen when a frame gets removed after previous animation is stopped
-        if (indexOfNextFrame.current >= imageElementsData.length) {
-            indexOfNextFrame.current = 0;
+        if (indexOfActiveFrame.current >= imageElementsData.length) {
+            indexOfActiveFrame.current = 0;
         }
 
-        activeFrameOnChangeRef.current(indexOfNextFrame.current);
+        activeFrameOnChangeRef.current(indexOfActiveFrame.current);
 
         for (let i = 0; i < imageElementsData.length; i++) {
-            const opacity = i === indexOfNextFrame.current ? 1 : 0;
+            const opacity = i === indexOfActiveFrame.current ? 1 : 0;
             imageElementsData[i].imageElement.opacity = opacity;
         }
 
+        const indexOfNextFrame =
+            (indexOfActiveFrame.current + 1) % imageElementsData.length;
+
         // update indexOfNextFrame using the index of next element
         // when hit the end of the array, use 0 instead
-        indexOfNextFrame.current =
-            (indexOfNextFrame.current + 1) % imageElementsData.length;
+        indexOfActiveFrame.current = indexOfNextFrame;
 
         // call showNextFrame recursively to play the animation as long as
         // animationMode is 'playing'
@@ -122,6 +131,10 @@ const useMediaLayerAnimation = ({
     useEffect(() => {
         animationSpeedRef.current = animationSpeed;
     }, [animationSpeed]);
+
+    useEffect(() => {
+        releaseNumOfItems2ExcludeRef.current = releaseNumOfItems2Exclude;
+    }, [releaseNumOfItems2Exclude]);
 };
 
 export default useMediaLayerAnimation;
