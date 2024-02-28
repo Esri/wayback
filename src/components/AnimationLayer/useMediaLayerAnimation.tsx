@@ -99,8 +99,31 @@ const useMediaLayerAnimation = ({
             imageElementsData[i].imageElement.opacity = opacity;
         }
 
-        const indexOfNextFrame =
+        // set index of active frame to -1 so that all frames wil be exclude from the animation
+        if (
+            releaseNumOfItems2ExcludeRef.current.length ===
+            imageElementsData.length
+        ) {
+            indexOfActiveFrame.current = -1;
+            requestAnimationFrame(showNextFrame);
+            return;
+        }
+
+        // get the index of animation frame that will become active next
+        let indexOfNextFrame =
             (indexOfActiveFrame.current + 1) % imageElementsData.length;
+
+        // check if the next frame should be excluded from the animation,
+        // if so, update the indexOfNextFrame to skip the frame that should be excluded
+        while (
+            indexOfNextFrame !== indexOfActiveFrame.current &&
+            releaseNumOfItems2ExcludeRef.current.includes(
+                imageElementsData[indexOfNextFrame].releaseNumber
+            )
+        ) {
+            indexOfNextFrame =
+                (indexOfNextFrame + 1) % imageElementsData.length;
+        }
 
         // update indexOfNextFrame using the index of next element
         // when hit the end of the array, use 0 instead
