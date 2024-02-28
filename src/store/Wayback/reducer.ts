@@ -43,6 +43,10 @@ export type WaybackItemsState = {
     releaseNum4ActiveWaybackItem: number;
     releaseNum4PreviewWaybackItem: number;
     releaseNum4AlternativePreviewWaybackItem: number;
+    /**
+     * if ture, it is in process of loading wayback items or items with local changes
+     */
+    isLoading: boolean;
 };
 
 export const initialWaybackItemsState = {
@@ -53,6 +57,7 @@ export const initialWaybackItemsState = {
     releaseNum4ActiveWaybackItem: null,
     releaseNum4PreviewWaybackItem: null,
     releaseNum4AlternativePreviewWaybackItem: null,
+    isLoading: false,
 } as WaybackItemsState;
 
 const slice = createSlice({
@@ -127,6 +132,12 @@ const slice = createSlice({
         ) => {
             state.releaseNum4AlternativePreviewWaybackItem = action.payload;
         },
+        isLoadingWaybackItemsToggled: (
+            state: WaybackItemsState,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isLoading = action.payload;
+        },
     },
 });
 
@@ -140,6 +151,7 @@ export const {
     releaseNum4ActiveWaybackItemUpdated,
     releaseNum4PreviewWaybackItemUpdated,
     releaseNum4AlternativePreviewWaybackItemUpdated,
+    isLoadingWaybackItemsToggled,
 } = slice.actions;
 
 let delay4SetPreviewWaybackItem: NodeJS.Timeout;
@@ -269,6 +281,11 @@ export const releaseNum4AlternativePreviewWaybackItemSelector = createSelector(
 export const selectWaybackItemsByReleaseNum = createSelector(
     (state: RootState) => state.WaybackItems.byReleaseNumber,
     (byReleaseNumber) => byReleaseNumber
+);
+
+export const selectIsLoadingWaybackItems = createSelector(
+    (state: RootState) => state.WaybackItems.isLoading,
+    (isLoading) => isLoading
 );
 
 export default reducer;

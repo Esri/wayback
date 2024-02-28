@@ -27,6 +27,7 @@ import {
 } from '@store/Map/reducer';
 
 import {
+    isLoadingWaybackItemsToggled,
     // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
@@ -47,6 +48,8 @@ import {
     isAnimationModeOnSelector,
     selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
+import { queryLocalChanges } from '@store/Wayback/thunks';
+import { Point } from '@arcgis/core/geometry';
 
 type Props = {
     children?: React.ReactNode;
@@ -96,19 +99,14 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         mapCenterPoint: IMapPointInfo
     ) => {
         try {
-            const waybackItems = await getWaybackItemsWithLocalChanges(
-                {
-                    longitude: mapCenterPoint.longitude,
-                    latitude: mapCenterPoint.latitude,
-                },
-                mapCenterPoint.zoom
-            );
-            console.log(waybackItems);
+            const { longitude, latitude, zoom } = mapCenterPoint;
 
-            const rNums = waybackItems.map((d) => d.releaseNum);
+            const point = new Point({
+                longitude,
+                latitude,
+            });
 
-            // console.log(rNums);
-            dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
+            dispatch(queryLocalChanges(point, zoom));
         } catch (err) {
             console.error('failed to query local changes', err);
         }

@@ -36,7 +36,10 @@ import classNames from 'classnames';
 import { CloseButton } from '@components/CloseButton';
 import { useMediaLayerImageElement } from './useMediaLayerImageElement';
 import useMediaLayerAnimation from './useMediaLayerAnimation';
-import { waybackItemsWithLocalChangesSelector } from '@store/Wayback/reducer';
+import {
+    selectIsLoadingWaybackItems,
+    waybackItemsWithLocalChangesSelector,
+} from '@store/Wayback/reducer';
 
 type Props = {
     mapView?: MapView;
@@ -53,12 +56,19 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     const animationSpeed = useSelector(animationSpeedSelector);
 
+    /**
+     * wayback items with local changes
+     */
     const waybackItems = useSelector(waybackItemsWithLocalChangesSelector);
 
     /**
      * release num of wayback items to be excluded from the animation
      */
     const releaseNumOfItems2Exclude = useSelector(rNum2ExcludeSelector);
+
+    const isLoadingWaybackItemsWithLoalChanges = useSelector(
+        selectIsLoadingWaybackItems
+    );
 
     /**
      * Array of Imagery Element Data
@@ -67,6 +77,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         mapView,
         animationStatus,
         waybackItems,
+        isLoading: isLoadingWaybackItemsWithLoalChanges,
     });
 
     /**
