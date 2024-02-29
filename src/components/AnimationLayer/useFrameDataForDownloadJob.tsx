@@ -50,6 +50,7 @@ type Props = {
 export const useFrameDataForDownloadJob = ({
     waybackItems,
     imageElements,
+    releaseNumOfItems2Exclude,
 }: Props) => {
     const { lon, lat } = useSelector(selectMapCenter) || {};
 
@@ -62,27 +63,34 @@ export const useFrameDataForDownloadJob = ({
                 return;
             }
 
-            // load media layer elements as an array of HTML Image Elements
-            const images = await Promise.all(
-                imageElements.map((d) =>
-                    loadImageAsHTMLIMageElement(d.imageElement.image as string)
-                )
-            );
+            const data: AnimationFrameData[] = [];
 
-            const data: AnimationFrameData[] = images.map((image, index) => {
-                const item = waybackItems[index];
+            for (let i = 0; i < imageElements.length; i++) {
+                const item = waybackItems[i];
 
-                return {
+                // should not include the frame of the items in the exlusion list
+                if (releaseNumOfItems2Exclude.includes(item.releaseNum)) {
+                    continue;
+                }
+
+                // load media layer elements as an array of HTML Image Elements
+                const image = await loadImageAsHTMLIMageElement(
+                    imageElements[i].imageElement.image as string
+                );
+
+                const frameData = {
                     image,
                     imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
                         3
                     )} y ${lat.toFixed(3)}`,
                 } as AnimationFrameData;
-            });
+
+                data.push(frameData);
+            }
 
             setFrameData(data);
         })();
-    }, [imageElements]);
+    }, [imageElements, releaseNumOfItems2Exclude]);
 
     return frameData;
 };

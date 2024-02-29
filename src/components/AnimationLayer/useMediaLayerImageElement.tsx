@@ -51,8 +51,7 @@ export const useMediaLayerImageElement = ({
     waybackItems,
     isLoading,
 }: Props) => {
-    const [imageElements, setImageElements] =
-        useState<ImageElementData[]>(null);
+    const [imageElements, setImageElements] = useState<ImageElementData[]>([]);
 
     const abortControllerRef = useRef<AbortController>();
 
@@ -135,7 +134,7 @@ export const useMediaLayerImageElement = ({
                 }
             }
 
-            setImageElements(null);
+            setImageElements([]);
         } else if (animationStatus === 'loading') {
             loadFrameData();
         }
