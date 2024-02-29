@@ -99,7 +99,7 @@ export const DownloadOptionsList: FC<Props> = ({
     return (
         <div
             className={classNames(
-                'absolute top-0 right-0 w-48 pt-16 theme-background'
+                'absolute top-0 right-0 w-48 pt-16 bg-custom-background text-custom-foreground'
             )}
         >
             <div className="relative w-full p-2">

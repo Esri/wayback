@@ -20,6 +20,12 @@ module.exports = {
             'light': '#56a5d8',
             'dark': '#1A3D60'
           }
+        },
+        'background': {
+          DEFAULT: '#121212'
+        },
+        'foreground': {
+          DEFAULT: '#ccc'
         }
       }
     },

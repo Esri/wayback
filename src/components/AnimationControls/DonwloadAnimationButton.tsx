@@ -30,7 +30,7 @@ export const DonwloadAnimationButton = () => {
     const animationStatus = useSelector(selectAnimationStatus);
 
     const onClickHandler = useCallback(() => {
-        dispatch(showDownloadAnimationPanelToggled());
+        dispatch(showDownloadAnimationPanelToggled(true));
     }, []);
 
     const classNames = classnames('btn btn-fill', {
