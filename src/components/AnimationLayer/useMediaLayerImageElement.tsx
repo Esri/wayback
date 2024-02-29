@@ -26,12 +26,18 @@ export const MAP_CONTAINER_LEFT_OFFSET = 350;
 
 type Props = {
     mapView?: MapView;
+    /**
+     * status of the animation
+     */
     animationStatus: AnimationStatus;
+    /**
+     * wayback items with local changes
+     */
     waybackItems: IWaybackItem[];
     /**
      * if true, it is in process of loading wayback items
      */
-    isLoading: boolean;
+    isLoadingWaybackItemsWithLoalChanges: boolean;
 };
 
 export type ImageElementData = {
@@ -49,7 +55,7 @@ export const useMediaLayerImageElement = ({
     mapView,
     animationStatus,
     waybackItems,
-    isLoading,
+    isLoadingWaybackItemsWithLoalChanges,
 }: Props) => {
     const [imageElements, setImageElements] = useState<ImageElementData[]>([]);
 
@@ -121,7 +127,11 @@ export const useMediaLayerImageElement = ({
     };
 
     useEffect(() => {
-        if (!animationStatus || !waybackItems.length || isLoading) {
+        if (isLoadingWaybackItemsWithLoalChanges) {
+            return;
+        }
+
+        if (!animationStatus || !waybackItems.length) {
             // call abort so all pending requests can be cancelled
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
@@ -138,7 +148,7 @@ export const useMediaLayerImageElement = ({
         } else if (animationStatus === 'loading') {
             loadFrameData();
         }
-    }, [animationStatus, waybackItems, isLoading]);
+    }, [animationStatus, waybackItems, isLoadingWaybackItemsWithLoalChanges]);
 
     return imageElements;
 };

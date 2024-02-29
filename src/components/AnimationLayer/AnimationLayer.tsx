@@ -86,7 +86,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         mapView,
         animationStatus,
         waybackItems,
-        isLoading: isLoadingWaybackItemsWithLoalChanges,
+        isLoadingWaybackItemsWithLoalChanges,
     });
 
     const frameData = useFrameDataForDownloadJob({
@@ -138,7 +138,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
         const source = mediaLayerRef.current.source as any;
 
-        if (!imageElementsData) {
+        if (!imageElementsData || !imageElementsData?.length) {
             // animation is not started or just stopped
             // just clear all elements in media layer
             source.elements.removeAll();
