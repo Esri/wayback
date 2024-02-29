@@ -19,9 +19,9 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
-import { IWaybackItem } from '@typings/index';
-import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
+// import { batch } from 'react-redux';
+// import { IWaybackItem } from '@typings/index';
+// import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
 // import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';

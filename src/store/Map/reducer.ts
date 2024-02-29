@@ -150,4 +150,9 @@ export const selectMapCenterAndZoom = createSelector(
     }
 );
 
+export const selectMapCenter = createSelector(
+    (state: RootState) => state.Map.center,
+    (center) => center
+);
+
 export default reducer;

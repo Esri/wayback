@@ -41,6 +41,8 @@ import {
     selectIsLoadingWaybackItems,
     waybackItemsWithLocalChangesSelector,
 } from '@store/Wayback/reducer';
+import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
+import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 
 type Props = {
     mapView?: MapView;
@@ -55,7 +57,9 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     const animationStatus = useSelector(selectAnimationStatus);
 
-    const animationSpeed = useSelector(animationSpeedSelector);
+    const animationSpeedInSeconds = useSelector(animationSpeedSelector);
+
+    const animationSpeedInMilliseconds = animationSpeedInSeconds * 1000;
 
     /**
      * wayback items with local changes
@@ -85,6 +89,12 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         isLoading: isLoadingWaybackItemsWithLoalChanges,
     });
 
+    const frameData = useFrameDataForDownloadJob({
+        waybackItems,
+        imageElements: imageElementsData,
+        releaseNumOfItems2Exclude,
+    });
+
     /**
      * This is a callback function that will be called each time the active frame (Image Element) in the animation layer is changed.
      */
@@ -103,7 +113,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     useMediaLayerAnimation({
         animationStatus,
-        animationSpeed: animationSpeed * 1000,
+        animationSpeed: animationSpeedInMilliseconds,
         imageElementsData,
         releaseNumOfItems2Exclude,
         releaseNumOfActiveFrame,
@@ -178,14 +188,14 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
                 }}
             />
 
-            {/* <AnimationDownloadPanel
-                frameData4DownloadJob={frameData4DownloadJob}
-                animationSpeed={animationSpeed}
+            <AnimationDownloadPanel
+                frameData4DownloadJob={frameData}
+                animationSpeed={animationSpeedInMilliseconds}
                 mapViewWindowSize={{
                     width: mapView.width,
                     height: mapView.height,
                 }}
-            /> */}
+            />
         </div>
     );
 };

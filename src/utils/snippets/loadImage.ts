@@ -13,4 +13,15 @@
  * limitations under the License.
  */
 
-export const APP_TITLE = 'ESRI | World Imagery Wayback';
+export const loadImageAsHTMLIMageElement = async (
+    imageURL: string
+): Promise<HTMLImageElement> => {
+    const image = new Image();
+    image.src = imageURL;
+
+    return new Promise((resolve) => {
+        image.onload = () => {
+            resolve(image);
+        };
+    });
+};
