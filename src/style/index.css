@@ -51,5 +51,5 @@ input, textarea {
 }
 
 svg.with-drop-shadow {
-    filter: drop-shadow(0px 0px 4px #000000);
+    filter: drop-shadow(0px 0px 8px #000000);
 }

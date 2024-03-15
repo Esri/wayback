@@ -33,6 +33,8 @@ import {
     selectShouldShowDownloadPanel,
     showDownloadAnimationPanelToggled,
 } from '@store/AnimationMode/reducer';
+import { CopyLinkButton } from './CopyLinkButton';
+import { CopiedLinkMessage } from './CopiedLinkMessage';
 
 // /**
 //  * This object contains the data for each animation frame.
@@ -141,7 +143,11 @@ export const AnimationDownloadPanel: FC<Props> = ({
             <div className="absolute top-0 right-0 text-custom-light-blue z-10">
                 {/* Download Button that opens the Download Animation Panel */}
                 {shouldShowDownloadPanel === false && (
-                    <OpenDownloadPanelButton />
+                    <>
+                        <OpenDownloadPanelButton />
+                        <CopyLinkButton />
+                        <CopiedLinkMessage />
+                    </>
                 )}
 
                 {downloadJobStatus !== null && (

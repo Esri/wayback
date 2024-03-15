@@ -52,6 +52,10 @@ export type AnimationModeState = {
      * release number of wayback item that is being displayed as current animation frame
      */
     releaseNumberOfActiveAnimationFrame: number;
+    /**
+     * if true, the link of the current animiation has been copied to the clipboard
+     */
+    animationLinkIsCopied: boolean;
 };
 
 /**
@@ -73,6 +77,7 @@ export const initialAnimationModeState = {
     rNum2Exclude: [],
     animationSpeed: DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
     releaseNumberOfActiveAnimationFrame: null,
+    animationLinkIsCopied: false,
 } as AnimationModeState;
 
 const slice = createSlice({
@@ -90,6 +95,12 @@ const slice = createSlice({
             action: PayloadAction<boolean>
         ) => {
             state.showDownloadAnimationPanel = action.payload;
+        },
+        animationLinkIsCopiedChanged: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.animationLinkIsCopied = action.payload;
         },
         rNum2ExcludeToggled: (
             state: AnimationModeState,
@@ -134,6 +145,7 @@ export const {
     rNum2ExcludeReset,
     animationSpeedChanged,
     releaseNumberOfActiveAnimationFrameChanged,
+    animationLinkIsCopiedChanged,
 } = slice.actions;
 
 export const toggleAnimationMode =
@@ -174,6 +186,11 @@ export const selectReleaseNumberOfActiveAnimationFrame = createSelector(
     (state: RootState) =>
         state.AnimationMode.releaseNumberOfActiveAnimationFrame,
     (releaseNumberOfActiveAnimationFrame) => releaseNumberOfActiveAnimationFrame
+);
+
+export const selectAnimationLinkIsCopied = createSelector(
+    (state: RootState) => state.AnimationMode.animationLinkIsCopied,
+    (animationLinkIsCopied) => animationLinkIsCopied
 );
 
 export default reducer;

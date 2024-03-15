@@ -13,14 +13,8 @@
  * limitations under the License.
  */
 
-export const SIDEBAR_WIDTH = 300;
-export const SIDEBAR_HEIGHT_MOBILE = 300;
-export const GUTTER_WIDTH = 50;
-export const MOBILE_HEADER_HEIGHT = 45;
-
-export const DEFAULT_BACKGROUND_COLOR = '#121212';
-
-/**
- * milliseconds to wait before turn off the copy link message
- */
-export const COPIED_LINK_MESSAGE_TIME_TO_STAY_OPEN_IN_MILLISECONDS = 3000;
+export const delay = (milliseconds: number): Promise<void> => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, milliseconds);
+    });
+};
