@@ -54,6 +54,15 @@ const PopUp: FC<IProps> = (props: IProps) => {
         return `${month} ${day}, ${year}`;
     };
 
+    const copyQueryLocation = () => {
+        const { queryLocation } = metadata;
+
+        const text = `${queryLocation.latitude.toFixed(
+            5
+        )} ${queryLocation.longitude.toFixed(5)}`;
+        navigator.clipboard.writeText(text);
+    };
+
     if (!metadataAnchorScreenPoint) {
         return null;
     }
@@ -127,8 +136,9 @@ const PopUp: FC<IProps> = (props: IProps) => {
                     </p>
 
                     <p
-                        className="cursor-pointer"
-                        title="click to copy the longitude and latitude"
+                        className="cursor-pointer hover:underline"
+                        title="click to copy the coordinates of this location"
+                        onClick={copyQueryLocation}
                     >
                         x: {queryLocation.longitude.toFixed(4)}
                         {'  '}y: {queryLocation.latitude.toFixed(4)}
