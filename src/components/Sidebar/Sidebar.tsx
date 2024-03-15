@@ -41,7 +41,7 @@ const Sidebar: React.FC<Props> = ({
             right: 0,
             left: isGutterHide ? 0 : GUTTER_WIDTH,
             width: isGutterHide ? '100%' : 'calc(100% - 50px)',
-            maxHeight: 300,
+            maxHeight: 400,
             padding: '.5rem 0',
         };
 
@@ -65,15 +65,21 @@ const Sidebar: React.FC<Props> = ({
             alignItems: 'stretch',
         };
 
-        return isMobile
-            ? ({
-                  ...defaultStyle,
-                  ...mobileStyle,
-              } as React.CSSProperties)
-            : defaultStyle;
+        if (isMobile) {
+            return {
+                ...defaultStyle,
+                ...mobileStyle,
+            } as React.CSSProperties;
+        }
+
+        return defaultStyle;
     };
 
-    return !isHide ? <div style={getStyle()}>{children}</div> : null;
+    if (isHide) {
+        return null;
+    }
+
+    return <div style={getStyle()}>{children}</div>;
 };
 
 export default Sidebar;

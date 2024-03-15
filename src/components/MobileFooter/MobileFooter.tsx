@@ -28,6 +28,7 @@ const MobileFooter: React.FC<Props> = ({ isGutterHide, OnClick }: Props) => {
     return (
         <MobileShow>
             <div
+                className="flex items-center"
                 style={{
                     position: 'absolute',
                     bottom: 0,
@@ -35,18 +36,20 @@ const MobileFooter: React.FC<Props> = ({ isGutterHide, OnClick }: Props) => {
                     // width: '100%',
                     right: 0,
                     background: DEFAULT_BACKGROUND_COLOR,
-                    // height: '50px'
+                    minHeight: '100px',
                     padding: '.5rem 0',
                 }}
                 onClick={OnClick}
             >
-                <Title4ActiveItem />
+                <div className="flex-grow">
+                    <Title4ActiveItem />
+                </div>
 
                 <div
                     style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: '.25rem',
+                        // position: 'absolute',
+                        // top: 0,
+                        // right: '.25rem',
                         height: '100%',
                         display: 'flex',
                         alignItems: 'center',

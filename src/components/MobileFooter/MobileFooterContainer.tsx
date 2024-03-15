@@ -29,14 +29,18 @@ const MobileFooterContainer = () => {
     const isGutterHide = useSelector(isGutterHideSelector);
     const isSideBarHide = useSelector(isSideBarHideSelector);
 
-    return isSideBarHide ? (
+    if (!isSideBarHide) {
+        return null;
+    }
+
+    return (
         <MobileFooter
             isGutterHide={isGutterHide}
             OnClick={() => {
                 dispatch(isSideBarHideToggled());
             }}
         />
-    ) : null;
+    );
 };
 
 export default MobileFooterContainer;
