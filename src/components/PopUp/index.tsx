@@ -25,6 +25,10 @@ import {
 } from '@typings/index';
 
 interface IProps {
+    /**
+     * if true, it is in process of querying metadata
+     */
+    isQueryingMetadata: boolean;
     metadata: IWaybackMetadataQueryResult;
     metadataAnchorScreenPoint: IScreenPoint;
     onClose: () => void;
@@ -54,9 +58,14 @@ class PopUp extends React.PureComponent<IProps> {
     render() {
         // const { targetLayer } = this.props;
 
-        const { metadata, metadataAnchorScreenPoint } = this.props;
+        const { metadata, isQueryingMetadata, metadataAnchorScreenPoint } =
+            this.props;
 
-        if (!metadata || !metadataAnchorScreenPoint) {
+        if (!metadataAnchorScreenPoint) {
+            return null;
+        }
+
+        if (!metadata && !isQueryingMetadata) {
             return null;
         }
 
@@ -66,6 +75,18 @@ class PopUp extends React.PureComponent<IProps> {
             left: metadataAnchorScreenPoint.x - this.PositionOffset,
             width: this.Width,
         } as React.CSSProperties;
+
+        if (isQueryingMetadata) {
+            return (
+                <div className="popup-container" style={containerStyle}>
+                    <div className="reticle-wrap"></div>
+
+                    <div className="content-wrap text-white">
+                        <calcite-loader text="Fetching Metadata..." />
+                    </div>
+                </div>
+            );
+        }
 
         const { provider, source, resolution, accuracy, releaseDate, date } =
             metadata;

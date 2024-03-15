@@ -37,6 +37,10 @@ export type MapMode = 'explore' | 'swipe' | 'animation';
 export type MapState = {
     mode: MapMode;
     mapExtent: IExtentGeomety;
+    /**
+     * if true, it is in process of querying metadata
+     */
+    isQueryingMetadata: boolean;
     metadataQueryResult: IWaybackMetadataQueryResult;
     metadataPopupAnchor: IScreenPoint;
     isReferenceLayerVisible: boolean;
@@ -53,6 +57,7 @@ export type MapState = {
 export const initialMapState: MapState = {
     mode: 'explore',
     mapExtent: null,
+    isQueryingMetadata: false,
     metadataQueryResult: null,
     metadataPopupAnchor: null,
     isReferenceLayerVisible: true,
@@ -78,6 +83,7 @@ const slice = createSlice({
             action: PayloadAction<IWaybackMetadataQueryResult>
         ) => {
             state.metadataQueryResult = action.payload;
+            state.isQueryingMetadata = false;
         },
         metadataPopupAnchorUpdated: (
             state: MapState,
@@ -87,6 +93,12 @@ const slice = createSlice({
         },
         isReferenceLayerVisibleToggled: (state: MapState) => {
             state.isReferenceLayerVisible = !state.isReferenceLayerVisible;
+        },
+        isQueryingMetadataToggled: (
+            state: MapState,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isQueryingMetadata = action.payload;
         },
         mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
             state.center = action.payload;
@@ -105,6 +117,7 @@ export const {
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
     isReferenceLayerVisibleToggled,
+    isQueryingMetadataToggled,
     mapCenterUpdated,
     zoomUpdated,
 } = slice.actions;
@@ -122,6 +135,11 @@ export const mapExtentSelector = createSelector(
 export const isReferenceLayerVisibleSelector = createSelector(
     (state: RootState) => state.Map.isReferenceLayerVisible,
     (isReferenceLayerVisible) => isReferenceLayerVisible
+);
+
+export const selectIsQueringMetadata = createSelector(
+    (state: RootState) => state.Map.isQueryingMetadata,
+    (isQueryingMetadata) => isQueryingMetadata
 );
 
 export const metadataQueryResultSelector = createSelector(

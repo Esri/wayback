@@ -22,6 +22,7 @@ import {
     metadataPopupAnchorSelector,
     metadataQueryResultSelector,
     metadataQueryResultUpdated,
+    selectIsQueringMetadata,
 } from '@store/Map/reducer';
 
 import MetadataPopUp from './index';
@@ -33,17 +34,24 @@ const MetadataPopupContainer = () => {
 
     const anchorPoint = useSelector(metadataPopupAnchorSelector);
 
+    const isQueryingMetadata = useSelector(selectIsQueringMetadata);
+
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
-    return !isAnimationModeOn ? (
+    if (isAnimationModeOn) {
+        return null;
+    }
+
+    return (
         <MetadataPopUp
             metadata={metadata}
+            isQueryingMetadata={isQueryingMetadata}
             metadataAnchorScreenPoint={anchorPoint}
             onClose={() => {
                 dispatch(metadataQueryResultUpdated(null));
             }}
         />
-    ) : null;
+    );
 };
 
 export default MetadataPopupContainer;
