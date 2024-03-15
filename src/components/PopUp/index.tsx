@@ -15,7 +15,7 @@
 
 // import { loadModules } from 'esri-loader';
 import './style.css';
-import React from 'react';
+import React, { FC } from 'react';
 import { dateFns } from 'helper-toolkit-ts';
 
 import {
@@ -34,16 +34,15 @@ interface IProps {
     onClose: () => void;
 }
 
-class PopUp extends React.PureComponent<IProps> {
-    private readonly Width = 360;
-    private readonly PositionOffset = 22.5;
+const Width = 360;
+const PositionOffset = 22.5;
 
-    constructor(props: IProps) {
-        super(props);
-    }
+const PopUp: FC<IProps> = (props: IProps) => {
+    const { metadata, isQueryingMetadata, metadataAnchorScreenPoint, onClose } =
+        props;
 
-    formatMetadataDate() {
-        const { metadata } = this.props;
+    const formatMetadataDate = () => {
+        const { metadata } = props;
         const { date } = metadata;
 
         const metadataDate = new Date(date);
@@ -53,93 +52,98 @@ class PopUp extends React.PureComponent<IProps> {
         const day = metadataDate.getDate();
 
         return `${month} ${day}, ${year}`;
+    };
+
+    if (!metadataAnchorScreenPoint) {
+        return null;
     }
 
-    render() {
-        // const { targetLayer } = this.props;
+    if (!metadata && !isQueryingMetadata) {
+        return null;
+    }
 
-        const { metadata, isQueryingMetadata, metadataAnchorScreenPoint } =
-            this.props;
+    const containerStyle = {
+        position: 'absolute',
+        top: metadataAnchorScreenPoint.y - PositionOffset,
+        left: metadataAnchorScreenPoint.x - PositionOffset,
+        width: Width,
+    } as React.CSSProperties;
 
-        if (!metadataAnchorScreenPoint) {
-            return null;
-        }
-
-        if (!metadata && !isQueryingMetadata) {
-            return null;
-        }
-
-        const containerStyle = {
-            position: 'absolute',
-            top: metadataAnchorScreenPoint.y - this.PositionOffset,
-            left: metadataAnchorScreenPoint.x - this.PositionOffset,
-            width: this.Width,
-        } as React.CSSProperties;
-
-        if (isQueryingMetadata) {
-            return (
-                <div className="popup-container" style={containerStyle}>
-                    <div className="reticle-wrap"></div>
-
-                    <div className="content-wrap text-white">
-                        <calcite-loader text="Fetching Metadata..." />
-                    </div>
-                </div>
-            );
-        }
-
-        const { provider, source, resolution, accuracy, releaseDate, date } =
-            metadata;
-
-        // const releaseDate = 'targetLayer.releaseDateLabel';
-        const formattedDate = this.formatMetadataDate();
-
-        const providerAndCaptureDateInfo = date ? (
-            <span>
-                {provider} ({source}) image captured on <b>{formattedDate}</b>{' '}
-                as shown in the <b>{releaseDate}</b> version of the World
-                Imagery map.
-            </span>
-        ) : (
-            <span>
-                {provider} ({source}) imagery as shown in the{' '}
-                <b>{releaseDate}</b> version of the World Imagery map.
-            </span>
-        );
-
+    if (isQueryingMetadata) {
         return (
             <div className="popup-container" style={containerStyle}>
                 <div className="reticle-wrap"></div>
 
                 <div className="content-wrap text-white">
-                    <div className="text-wrap">
-                        <p className="trailer-half">
-                            {providerAndCaptureDateInfo}
-                        </p>
-                        <p className="trailer-half">
-                            <b>Resolution</b>: Pixels in the source image
-                            <br />
-                            represent a ground distance of{' '}
-                            <b>{+resolution.toFixed(2)} meters</b>.
-                        </p>
-                        <p className="trailer-0">
-                            <b>Accuracy</b>: Objects displayed in this image
-                            <br />
-                            are within <b>{+accuracy.toFixed(2)} meters</b> of
-                            true location.
-                        </p>
-                    </div>
-
-                    <div
-                        className="close-btn text-white text-center cursor-pointer"
-                        onClick={this.props.onClose}
-                    >
-                        <span className="icon-ui-close"></span>
-                    </div>
+                    <calcite-loader text="Fetching Metadata..." />
                 </div>
             </div>
         );
     }
-}
+
+    const {
+        provider,
+        source,
+        resolution,
+        accuracy,
+        releaseDate,
+        date,
+        queryLocation,
+    } = metadata;
+
+    // const releaseDate = 'targetLayer.releaseDateLabel';
+    const formattedDate = formatMetadataDate();
+
+    const providerAndCaptureDateInfo = date ? (
+        <span>
+            {provider} ({source}) image captured on <b>{formattedDate}</b> as
+            shown in the <b>{releaseDate}</b> version of the World Imagery map.
+        </span>
+    ) : (
+        <span>
+            {provider} ({source}) imagery as shown in the <b>{releaseDate}</b>{' '}
+            version of the World Imagery map.
+        </span>
+    );
+
+    return (
+        <div className="popup-container" style={containerStyle}>
+            <div className="reticle-wrap"></div>
+
+            <div className="content-wrap text-white">
+                <div className="text-wrap">
+                    <p className="mb-2">{providerAndCaptureDateInfo}</p>
+                    <p className="mb-2">
+                        <b>Resolution</b>: Pixels in the source image
+                        <br />
+                        represent a ground distance of{' '}
+                        <b>{+resolution.toFixed(2)} meters</b>.
+                    </p>
+                    <p className="mb-2">
+                        <b>Accuracy</b>: Objects displayed in this image
+                        <br />
+                        are within <b>{+accuracy.toFixed(2)} meters</b> of true
+                        location.
+                    </p>
+
+                    <p
+                        className="cursor-pointer"
+                        title="click to copy the longitude and latitude"
+                    >
+                        x: {queryLocation.longitude.toFixed(4)}
+                        {'  '}y: {queryLocation.latitude.toFixed(4)}
+                    </p>
+                </div>
+
+                <div
+                    className="close-btn text-white text-center cursor-pointer"
+                    onClick={onClose}
+                >
+                    <span className="icon-ui-close"></span>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default PopUp;
