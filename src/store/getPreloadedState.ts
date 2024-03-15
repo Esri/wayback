@@ -33,8 +33,10 @@ import {
     getDownloadJobsFromLocalStorage,
 } from '../utils/LocalStorage';
 import {
+    ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,
-    DEFAULT_ANIMATION_SPEED_IN_SECONDS,
+    DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
+    // DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
     initialAnimationModeState,
 } from './AnimationMode/reducer';
 
@@ -139,7 +141,8 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 const getPreloadedState4AnimationMode = (
     urlParams: IURLParamData
 ): AnimationModeState => {
-    const { animationSpeed, rNum4FramesToExclude } = urlParams;
+    let { animationSpeed } = urlParams;
+    const { rNum4FramesToExclude } = urlParams;
 
     if (
         animationSpeed === null ||
@@ -147,6 +150,14 @@ const getPreloadedState4AnimationMode = (
         isMobile
     ) {
         return initialAnimationModeState;
+    }
+
+    // use default animation speed if the value from hash params is not in the list of options
+    if (
+        ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.includes(+animationSpeed) ===
+        false
+    ) {
+        animationSpeed = DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS;
     }
 
     const state: AnimationModeState = {

@@ -45,7 +45,7 @@ export type AnimationModeState = {
      */
     rNum2Exclude: number[];
     /**
-     * animation speed in second
+     * animation speed in milliseconds
      */
     animationSpeed: number;
     /**
@@ -54,14 +54,24 @@ export type AnimationModeState = {
     releaseNumberOfActiveAnimationFrame: number;
 };
 
-export const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1;
+/**
+ * list of animation speed in milliseconds
+ */
+export const ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS = [
+    2000, 1000, 800, 600, 400, 200, 100, 20, 0,
+];
+
+export const DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS =
+    ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[
+        Math.floor(ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length / 2)
+    ];
 
 export const initialAnimationModeState = {
     animationStatus: null,
     showDownloadAnimationPanel: false,
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: DEFAULT_ANIMATION_SPEED_IN_SECONDS,
+    animationSpeed: DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
     releaseNumberOfActiveAnimationFrame: null,
 } as AnimationModeState;
 

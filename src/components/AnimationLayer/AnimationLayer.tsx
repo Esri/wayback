@@ -57,9 +57,9 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     const animationStatus = useSelector(selectAnimationStatus);
 
-    const animationSpeedInSeconds = useSelector(animationSpeedSelector);
+    // const animationSpeedInSeconds = useSelector(animationSpeedSelector);
 
-    const animationSpeedInMilliseconds = animationSpeedInSeconds * 1000;
+    const animationSpeedInMilliseconds = useSelector(animationSpeedSelector);
 
     /**
      * wayback items with local changes
