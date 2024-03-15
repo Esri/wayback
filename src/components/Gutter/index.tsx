@@ -94,7 +94,7 @@ export const Gutter: FC<IProps> = ({
                         }, 3000);
                     }}
                 >
-                    <calcite-icon icon="linK" scale="l" />
+                    <calcite-icon icon="link" scale="l" />
                 </div>
 
                 <div
