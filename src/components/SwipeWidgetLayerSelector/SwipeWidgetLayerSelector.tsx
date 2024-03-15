@@ -20,7 +20,7 @@ import classnames from 'classnames';
 
 import { LayerSelector } from '../';
 
-export const SwipeWidgetLayerSelectorWidth = 210;
+export const SwipeWidgetLayerSelectorWidth = 220;
 
 export type SwipeWidgetLayer = 'leading' | 'trailing';
 
@@ -54,43 +54,6 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 const { releaseDateLabel, itemID } = d;
                 const isSelected =
                     selectedItem && selectedItem.itemID === itemID;
-                const classNames = classnames(
-                    'swipe-widget-layer-selector-item',
-                    {
-                        'is-selected': isSelected,
-                        'is-arrow-on-left': targetLayerType === 'trailing',
-                    }
-                );
-                // return (
-                //     <div
-                //         className={classNames}
-                //         key={itemID}
-                //         style={{
-                //             position: 'relative',
-                //             display: 'flex',
-                //             alignItems: 'center',
-                //             width: '100%',
-                //             height: '38px',
-                //             margin: '.5rem 0',
-                //             padding: '0 .5rem',
-                //             backgroundColor: isSelected ? '#2267AE' : '#1C1C1C',
-                //             color: isSelected ? '#fff' : 'unset',
-                //             borderLeft:
-                //                 targetLayerType === 'leading' && isSelected
-                //                     ? ' 4px solid #fff'
-                //                     : '4px solid transparent',
-                //             borderRight:
-                //                 targetLayerType === 'trailing' && isSelected
-                //                     ? ' 4px solid #fff'
-                //                     : '4px solid transparent',
-                //             boxSizing: 'border-box',
-                //             cursor: 'pointer',
-                //         }}
-                //         onClick={onSelect.bind(this, d)}
-                //     >
-                //         {releaseDateLabel}
-                //     </div>
-                // );
 
                 return (
                     <LayerSelector
@@ -105,11 +68,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
             });
 
         return (
-            <div
-                style={{
-                    width: '100%',
-                }}
-            >
+            <div className="flex-grow pt-12">
                 <div>
                     <span className="font-size--2">
                         Versions with{' '}
@@ -127,13 +86,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div
-                className="text-center text-blue"
-                style={{
-                    position: 'absolute',
-                    top: '1rem',
-                }}
-            >
+            <div className="text-center text-blue shrink-0">
                 <h4 className="font-size-2 avenir-light trailer-0">
                     {targetLayerType === 'leading' ? 'Left' : 'Right'} Selection
                 </h4>
@@ -170,6 +123,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
 
     return (
         <div
+            className=" flex flex-col overflow-y-auto overflow-x-hidden fancy-scrollbar"
             style={{
                 // position: 'absolute',
                 height: '100%',
@@ -180,8 +134,8 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 backgroundColor: '#121212',
                 padding: '1rem',
                 boxSizing: 'border-box',
-                display: 'flex',
-                alignItems: 'center',
+                // display: 'flex',
+                // alignItems: 'center',
             }}
         >
             {getTitle()}
