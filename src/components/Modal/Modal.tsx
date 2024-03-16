@@ -59,7 +59,7 @@ export const Modal: FC<Props> = ({
                     />
                 </div>
 
-                <div className="px-8 max-h-[500px] min-h-[300px] overflow-y-auto fancy-scrollbar">
+                <div className="px-8 max-h-[500px] overflow-y-auto fancy-scrollbar">
                     {children}
                 </div>
             </div>
