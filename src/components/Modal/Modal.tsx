@@ -18,7 +18,7 @@ import classnames from 'classnames';
 
 type Props = {
     isOpen: boolean;
-    width: 's' | 'm' | 'l';
+    width?: 's' | 'm' | 'l';
     onClose: () => void;
     children?: React.ReactNode;
 };
@@ -59,7 +59,7 @@ export const Modal: FC<Props> = ({
                     />
                 </div>
 
-                <div className="px-8 max-h-[500px] overflow-y-auto fancy-scrollbar">
+                <div className="px-8 pb-2 w-auto max-h-[500px] overflow-y-auto overflow-x-hidden fancy-scrollbar">
                     {children}
                 </div>
             </div>
