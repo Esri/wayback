@@ -33,13 +33,25 @@ export const DonwloadAnimationButton = () => {
         dispatch(showDownloadAnimationPanelToggled(true));
     }, []);
 
-    const classNames = classnames('btn btn-fill', {
-        'btn-disabled': animationStatus === 'loading',
-    });
+    // const classNames = classnames('btn btn-fill', {
+    //     'btn-disabled': animationStatus === 'loading',
+    // });
 
     return (
-        <div className={classNames} onClick={onClickHandler}>
-            Download Animation
+        <div
+            className={classnames({
+                disabled: animationStatus === 'loading',
+            })}
+        >
+            <calcite-button
+                width="full"
+                onClick={onClickHandler}
+                style={{
+                    '--calcite-color-text-inverse': '#efefef',
+                }}
+            >
+                Download Animation
+            </calcite-button>
         </div>
     );
 };

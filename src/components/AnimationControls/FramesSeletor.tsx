@@ -106,11 +106,11 @@ const FramesSeletor: React.FC<Props> = ({
                             }}
                         >
                             <div
-                                className="margin-right-half cursor-pointer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
+                                className="flex items-center mr-2 cursor-pointer"
+                                // style={{
+                                //     display: 'flex',
+                                //     alignItems: 'center',
+                                // }}
                                 onClick={(evt) => {
                                     evt.stopPropagation();
                                     toggleFrame(releaseNum);
@@ -127,10 +127,11 @@ const FramesSeletor: React.FC<Props> = ({
 
         return (
             <div
-                style={{
-                    width: '100%',
-                    marginTop: '.5rem',
-                }}
+                // style={{
+                //     width: '100%',
+                //     marginTop: '.5rem',
+                // }}
+                className="w-full mt-2"
             >
                 {/* <div>
                     <span className="font-size--3">

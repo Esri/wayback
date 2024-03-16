@@ -100,7 +100,7 @@ const AnimationControls = () => {
         ) {
             return (
                 <div className="text-center">
-                    <p className="leader-1 font-size--2">
+                    <p className="mt-4 text-sm">
                         Loading versions with local changes.
                     </p>
                 </div>
@@ -111,8 +111,8 @@ const AnimationControls = () => {
             <>
                 <DonwloadAnimationButton />
 
-                <div className="leader-half">
-                    <span className="font-size--3">Animation Speed</span>
+                <div className=" mt-2">
+                    <span className=" text-xs">Animation Speed</span>
                 </div>
 
                 <div
@@ -164,10 +164,11 @@ const AnimationControls = () => {
     return (
         <>
             <div
-                style={{
-                    padding: '0 1rem',
-                    marginTop: '.5rem',
-                }}
+                className="px-4 py-0 mt-2"
+                // style={{
+                //     padding: '0 1rem',
+                //     marginTop: '.5rem',
+                // }}
             >
                 {getContent()}
             </div>

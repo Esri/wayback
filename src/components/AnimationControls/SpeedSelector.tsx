@@ -86,7 +86,7 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
             }}
             className="calcite-theme-dark"
         >
-            <span className="margin-right-half avenir-demi">-</span>
+            <span className="mr-2 font-semibold">-</span>
 
             <div
                 style={{
@@ -104,7 +104,7 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
                 ></calcite-slider>
             </div>
 
-            <span className="margin-left-half avenir-demi">+</span>
+            <span className="ml-2 font-semibold">+</span>
         </div>
     );
 };

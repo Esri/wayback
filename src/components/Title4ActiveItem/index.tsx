@@ -43,7 +43,7 @@ class Title4ActiveItem extends React.PureComponent<IProps> {
 
         return (
             <div className="flex text-custom-theme-blue justify-center items-center">
-                <div className="leading-none">
+                <div className="">
                     <span className="text-xs">Selected release</span>
                     <br />
                     <span className="text-xl font-medium">{releaseDate}</span>

@@ -70,7 +70,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         return (
             <div className="flex-grow pt-12">
                 <div>
-                    <span className="font-size--2">
+                    <span className="text-sm">
                         Versions with{' '}
                         <span className="text-white">local changes</span>
                     </span>
@@ -86,14 +86,14 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div className="text-center text-blue shrink-0">
-                <h4 className="font-size-2 avenir-light trailer-0">
+            <div className="text-center text-custom-theme-blue-brand shrink-0">
+                <h4 className="text-2xl font-light mb-0">
                     {targetLayerType === 'leading' ? 'Left' : 'Right'} Selection
                 </h4>
                 <div>
                     <span>{selectedItem.releaseDateLabel}</span>
                     <br />
-                    <span className="font-size--3">
+                    <span className="text-xs">
                         Click map for imagery details
                     </span>
                 </div>
@@ -108,15 +108,17 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
 
         return (
             <div
-                style={{
-                    position: 'absolute',
-                    top: '0.25rem',
-                    right: '0',
-                    cursor: 'pointer',
-                }}
+                className="absolute top-1 right-1 cursor-pointer text-white"
+                // style={{
+                //     position: 'absolute',
+                //     top: '0.25rem',
+                //     right: '0',
+                //     cursor: 'pointer',
+                // }}
                 onClick={onClose}
             >
-                <span className="icon-ui-close text-white"></span>
+                {/* <span className="icon-ui-close text-white"></span> */}
+                <calcite-icon icon="x" scale="l" />
             </div>
         );
     };

@@ -59,7 +59,7 @@ const PlayPauseBtn: React.FC<Props> = ({
     };
     return (
         <div
-            className="margin-right-half cursor-pointer"
+            className="mr-2 cursor-pointer"
             style={{
                 display: 'flex',
             }}

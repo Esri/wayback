@@ -53,10 +53,7 @@ class ReferenceLayerToggle extends React.PureComponent<IProps> {
 
         return (
             <div className="reference-layer-toggle text-white">
-                <div
-                    className="margin-left-half margin-right-quarter cursor-pointer"
-                    onClick={onClick}
-                >
+                <div className="mx-2 cursor-pointer" onClick={onClick}>
                     {icon}
                 </div>
                 <div className="">reference label overlay</div>

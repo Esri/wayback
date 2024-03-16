@@ -149,7 +149,8 @@ const PopUp: FC<IProps> = (props: IProps) => {
                     className="close-btn text-white text-center cursor-pointer"
                     onClick={onClose}
                 >
-                    <span className="icon-ui-close"></span>
+                    {/* <span className="icon-ui-close"></span> */}
+                    <calcite-icon icon="x" />
                 </div>
             </div>
         </div>

@@ -123,7 +123,7 @@ class ListViewCard extends React.PureComponent<IProps> {
                         onClick={onClick.bind(this, data.releaseNum)}
                     >
                         <a
-                            className="margin-left-half link-light-gray cursor-pointer"
+                            className="ml-2 text-gray-400 hover:text-gray-300 cursor-pointer"
                             // onClick={onClick.bind(this, data.releaseNum)}
                         >
                             {data.releaseDateLabel}
