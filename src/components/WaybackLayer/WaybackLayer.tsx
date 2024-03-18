@@ -26,11 +26,16 @@ import { IWaybackItem } from '@typings/index';
 import { getWaybackLayer } from './getWaybackLayer';
 
 type Props = {
+    isVisible: boolean;
     activeWaybackItem: IWaybackItem;
     mapView?: MapView;
 };
 
-const WaybackLayer: React.FC<Props> = ({ activeWaybackItem, mapView }) => {
+const WaybackLayer: React.FC<Props> = ({
+    isVisible,
+    activeWaybackItem,
+    mapView,
+}) => {
     const waybackLayerRef = useRef<WebTileLayer>();
 
     const updateWaybackLayer = () => {
@@ -70,6 +75,14 @@ const WaybackLayer: React.FC<Props> = ({ activeWaybackItem, mapView }) => {
             updateWaybackLayer();
         }
     }, [mapView, activeWaybackItem]);
+
+    useEffect(() => {
+        if (!waybackLayerRef.current) {
+            return;
+        }
+
+        waybackLayerRef.current.visible = isVisible;
+    }, [isVisible]);
 
     return null;
 };

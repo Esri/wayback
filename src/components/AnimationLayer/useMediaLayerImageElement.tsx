@@ -111,7 +111,7 @@ export const useMediaLayerImageElement = ({
                             ymax,
                         },
                     }),
-                    opacity: 1,
+                    opacity: 0,
                 });
 
                 return {

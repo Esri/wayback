@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -24,6 +24,7 @@ import WaybackLayer from './WaybackLayer';
 
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';
+import { selectAnimationStatus } from '@store/AnimationMode/reducer';
 
 type Props = {
     mapView?: MapView;
@@ -32,6 +33,16 @@ type Props = {
 const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
     const activeWaybackItem = useSelector(activeWaybackItemSelector);
 
+    const animationStatus = useSelector(selectAnimationStatus);
+
+    const isVisible = useMemo(() => {
+        // if(animationStatus !== null){
+        //     return false
+        // }
+
+        return true;
+    }, [animationStatus]);
+
     useEffect(() => {
         saveReleaseNum4ActiveWaybackItemInURLQueryParam(
             activeWaybackItem.releaseNum
@@ -39,7 +50,11 @@ const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
     }, [activeWaybackItem]);
 
     return (
-        <WaybackLayer mapView={mapView} activeWaybackItem={activeWaybackItem} />
+        <WaybackLayer
+            mapView={mapView}
+            isVisible={isVisible}
+            activeWaybackItem={activeWaybackItem}
+        />
     );
 };
 
