@@ -28,16 +28,15 @@ const MobileFooter: React.FC<Props> = ({ isGutterHide, OnClick }: Props) => {
     return (
         <MobileShow>
             <div
-                className="flex items-center"
+                className="fixed bottom-0 right-0 py-2 flex items-center bg-custom-background"
                 style={{
-                    position: 'absolute',
-                    bottom: 0,
+                    // position: 'fixed',
+                    // bottom: 0,
                     left: isGutterHide ? 0 : GUTTER_WIDTH,
                     // width: '100%',
-                    right: 0,
-                    background: DEFAULT_BACKGROUND_COLOR,
-                    minHeight: '100px',
-                    padding: '.5rem 0',
+                    // right: 0,
+                    minHeight: '80px',
+                    // padding: '.5rem 0',
                 }}
                 onClick={OnClick}
             >
