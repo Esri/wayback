@@ -43,6 +43,7 @@ import {
 } from '@store/Wayback/reducer';
 import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
 import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
+import { delay } from '@utils/snippets/delay';
 
 type Props = {
     mapView?: MapView;
@@ -131,24 +132,31 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     };
 
     useEffect(() => {
-        if (!mediaLayerRef.current) {
-            initMediaLayer();
-            return;
-        }
+        (async () => {
+            if (!mediaLayerRef.current) {
+                initMediaLayer();
+                return;
+            }
 
-        const source = mediaLayerRef.current.source as any;
+            const source = mediaLayerRef.current.source as any;
 
-        if (!imageElementsData || !imageElementsData?.length) {
-            // animation is not started or just stopped
-            // just clear all elements in media layer
-            source.elements.removeAll();
-        } else {
-            source.elements.addMany(
-                imageElementsData.map((d) => d.imageElement)
-            );
-            // media layer elements are ready, change animation mode to playing to start the animation
-            dispatch(animationStatusChanged('playing'));
-        }
+            if (!imageElementsData || !imageElementsData?.length) {
+                // animation is not started or just stopped
+                // just clear all elements in media layer
+                source.elements.removeAll();
+            } else {
+                source.elements.addMany(
+                    imageElementsData.map((d) => d.imageElement)
+                );
+
+                // wait for one second before starting playing the animation,
+                // to give the media layer enough time to add all image elements
+                await delay(1000);
+
+                // media layer elements are ready, change animation mode to playing to start the animation
+                dispatch(animationStatusChanged('playing'));
+            }
+        })();
     }, [imageElementsData, mapView]);
 
     useEffect(() => {
