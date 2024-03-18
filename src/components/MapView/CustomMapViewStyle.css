@@ -2,3 +2,8 @@
 .hide-map-control .esri-search {
     display: none;
 }
+
+#appRootDiv .esri-widget,
+#appRootDiv .esri-input {
+    @apply  bg-custom-background;
+}

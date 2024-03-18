@@ -52,7 +52,7 @@ class ReferenceLayerToggle extends React.PureComponent<IProps> {
         );
 
         return (
-            <div className="reference-layer-toggle text-white">
+            <div className="reference-layer-toggle bg-custom-background text-custom-foreground">
                 <div className="mx-2 cursor-pointer" onClick={onClick}>
                     {icon}
                 </div>
