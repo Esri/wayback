@@ -125,7 +125,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
 
     return (
         <div
-            className=" flex flex-col overflow-y-auto overflow-x-hidden fancy-scrollbar"
+            className=" flex flex-col overflow-y-auto overflow-x-hidden bg-custom-background p-4 fancy-scrollbar"
             style={{
                 // position: 'absolute',
                 height: '100%',
@@ -133,8 +133,6 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 top: 0,
                 left: targetLayerType === 'leading' ? 0 : 'unset',
                 right: targetLayerType === 'trailing' ? 0 : 'unset',
-                backgroundColor: '#121212',
-                padding: '1rem',
                 boxSizing: 'border-box',
                 // display: 'flex',
                 // alignItems: 'center',

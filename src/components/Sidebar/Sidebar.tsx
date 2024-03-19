@@ -14,11 +14,7 @@
  */
 
 import React from 'react';
-import {
-    DEFAULT_BACKGROUND_COLOR,
-    GUTTER_WIDTH,
-    SIDEBAR_WIDTH,
-} from '@constants/UI';
+import { GUTTER_WIDTH, SIDEBAR_WIDTH } from '@constants/UI';
 
 type Props = {
     isHide: boolean;
@@ -52,7 +48,6 @@ const Sidebar: React.FC<Props> = ({
             width: SIDEBAR_WIDTH,
             height: '100%',
             padding: '1rem 0',
-            backgroundColor: DEFAULT_BACKGROUND_COLOR,
             // overflow: hidden;
             boxSizing: 'border-box',
             zIndex: 1,
@@ -79,7 +74,11 @@ const Sidebar: React.FC<Props> = ({
         return null;
     }
 
-    return <div style={getStyle()}>{children}</div>;
+    return (
+        <div className=" bg-custom-background" style={getStyle()}>
+            {children}
+        </div>
+    );
 };
 
 export default Sidebar;

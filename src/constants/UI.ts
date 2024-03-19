@@ -18,7 +18,7 @@ export const SIDEBAR_HEIGHT_MOBILE = 300;
 export const GUTTER_WIDTH = 50;
 export const MOBILE_HEADER_HEIGHT = 45;
 
-export const DEFAULT_BACKGROUND_COLOR = '#121212';
+// export const DEFAULT_BACKGROUND_COLOR = '#121212';
 
 /**
  * milliseconds to wait before turn off the copy link message

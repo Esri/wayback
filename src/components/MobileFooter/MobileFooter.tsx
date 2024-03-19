@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { DEFAULT_BACKGROUND_COLOR, GUTTER_WIDTH } from '@constants/UI';
+import { GUTTER_WIDTH } from '@constants/UI';
 import { MobileShow } from '../MobileVisibility';
 
 import Title4ActiveItem from '../Title4ActiveItem/Title4ActiveItemContainer';
