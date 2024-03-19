@@ -57,9 +57,9 @@ const PopUp: FC<IProps> = (props: IProps) => {
     const copyQueryLocation = () => {
         const { queryLocation } = metadata;
 
-        const text = `${queryLocation.latitude.toFixed(
+        const text = `x: ${queryLocation.longitude.toFixed(
             5
-        )} ${queryLocation.longitude.toFixed(5)}`;
+        )} y:${queryLocation.latitude.toFixed(5)}`;
         navigator.clipboard.writeText(text);
     };
 
