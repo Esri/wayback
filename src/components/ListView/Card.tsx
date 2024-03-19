@@ -106,6 +106,9 @@ class ListViewCard extends React.PureComponent<IProps> {
                 className="py-1"
                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
                 onMouseLeave={onMouseOut}
+                // this "data-element" and "data-release-num" attributes will be used by the script
+                // that monitors the health of this app
+                data-element="list-card"
                 data-release-num={data.releaseNum}
             >
                 <div
