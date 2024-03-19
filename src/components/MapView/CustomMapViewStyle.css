@@ -3,7 +3,9 @@
     display: none;
 }
 
-#appRootDiv .esri-widget,
-#appRootDiv .esri-input {
-    @apply  bg-custom-background;
+.esri-input, 
+.esri-widget--button, 
+.esri-menu {
+    @apply bg-custom-background;
+    /* color: var(--custom-light-blue); */
 }
