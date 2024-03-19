@@ -18,7 +18,7 @@ import React from 'react';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 
-import Card from './Card';
+import { ListViewCard as Card } from './Card';
 import StaticTooltip from '../StaticTooltip';
 
 interface IProps {

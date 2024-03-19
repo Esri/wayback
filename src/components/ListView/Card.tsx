@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 import { getServiceUrl } from '@utils/Tier';
+import { AppContext } from '@contexts/AppContextProvider';
 
-interface IProps {
+interface Props {
     data: IWaybackItem;
     isActive: boolean;
     isSelected: boolean;
@@ -47,18 +48,24 @@ interface IProps {
 
 const ButtonWrapperClassnames = `relative h-full items-center px-2 cursor-pointer text-white`;
 
-class ListViewCard extends React.PureComponent<IProps> {
-    constructor(props: IProps) {
-        super(props);
+export const ListViewCard: FC<Props> = ({
+    data,
+    isActive,
+    isSelected,
+    isHighlighted,
+    shouldDownloadButtonBeDisabled,
+    downloadButtonTooltipText,
+    onClick,
+    onMouseEnter,
+    onMouseOut,
+    toggleSelect,
+    downloadButtonOnClick,
+}: Props) => {
+    const { isMobile } = useContext(AppContext);
 
-        this.openItem = this.openItem.bind(this);
-        // this.showTooltip = this.showTooltip.bind(this);
-        this.hideTooltip = this.hideTooltip.bind(this);
-    }
+    const showControlButtons = isActive || isSelected;
 
-    openItem() {
-        const { data } = this.props;
-
+    const openItem = () => {
         const itemId = data.itemID;
 
         const agolHost = getServiceUrl('portal-url');
@@ -66,130 +73,246 @@ class ListViewCard extends React.PureComponent<IProps> {
         const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
 
         window.open(itemUrl, '_blank');
-    }
+    };
 
-    // showTooltip(evt: React.MouseEvent) {
-    //     const { toggleTooltip } = this.props;
-    //     const boundingRect = evt.currentTarget.getBoundingClientRect();
-
-    //     toggleTooltip({
-    //         content: evt.currentTarget.getAttribute('data-tooltip-content'),
-    //         left: boundingRect.left + evt.currentTarget.clientWidth + 5,
-    //         top: boundingRect.top + 3,
-    //     });
-    // }
-
-    hideTooltip() {
-        const { toggleTooltip } = this.props;
-        toggleTooltip();
-    }
-
-    render() {
-        const {
-            data,
-            isActive,
-            isSelected,
-            isHighlighted,
-            shouldDownloadButtonBeDisabled,
-            downloadButtonTooltipText,
-            onClick,
-            onMouseEnter,
-            onMouseOut,
-            toggleSelect,
-            downloadButtonOnClick,
-        } = this.props;
-
-        const showControlButtons = isActive || isSelected;
-
-        return (
+    return (
+        <div
+            className="py-1"
+            onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
+            onMouseLeave={onMouseOut}
+            // this "data-element" and "data-release-num" attributes will be used by the script
+            // that monitors the health of this app
+            data-element="list-card"
+            data-release-num={data.releaseNum}
+        >
             <div
-                className="py-1"
-                onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
-                onMouseLeave={onMouseOut}
-                // this "data-element" and "data-release-num" attributes will be used by the script
-                // that monitors the health of this app
-                data-element="list-card"
-                data-release-num={data.releaseNum}
+                className={classnames('list-card group', {
+                    // 'is-active' indicates if is viewing this release on map
+                    'is-active': isActive,
+                    // 'is-highlighted' indicates if this release has local change
+                    'is-highlighted': isHighlighted,
+                    // 'is-selected' indicates if this release is being selected
+                    'is-selected': isSelected,
+                })}
             >
                 <div
-                    className={classnames('list-card group', {
-                        // 'is-active' indicates if is viewing this release on map
-                        'is-active': isActive,
-                        // 'is-highlighted' indicates if this release has local change
-                        'is-highlighted': isHighlighted,
-                        // 'is-selected' indicates if this release is being selected
-                        'is-selected': isSelected,
-                    })}
+                    className="is-flexy cursor-pointer"
+                    onClick={onClick.bind(this, data.releaseNum)}
                 >
-                    <div
-                        className="is-flexy cursor-pointer"
-                        onClick={onClick.bind(this, data.releaseNum)}
+                    <a
+                        className="ml-2 text-gray-400 hover:text-gray-300 cursor-pointer"
+                        // onClick={onClick.bind(this, data.releaseNum)}
                     >
-                        <a
-                            className="ml-2 text-gray-400 hover:text-gray-300 cursor-pointer"
-                            // onClick={onClick.bind(this, data.releaseNum)}
-                        >
-                            {data.releaseDateLabel}
-                        </a>
-                    </div>
-
-                    <div
-                        className={classnames(ButtonWrapperClassnames, {
-                            flex: showControlButtons,
-                            'hidden group-hover:flex': !showControlButtons,
-                        })}
-                        onClick={this.openItem}
-                        title="Learn more about this release..."
-                    >
-                        <calcite-icon icon="information" scale="m" />
-                    </div>
-
-                    <div
-                        className={classnames(ButtonWrapperClassnames, {
-                            flex: showControlButtons,
-                            'hidden group-hover:flex': !showControlButtons,
-                            'cursor-default opacity-50':
-                                shouldDownloadButtonBeDisabled,
-                        })}
-                        onClick={() => {
-                            if (shouldDownloadButtonBeDisabled) {
-                                return;
-                            }
-
-                            downloadButtonOnClick(data.releaseNum);
-                        }}
-                        title={downloadButtonTooltipText}
-                    >
-                        <calcite-icon icon="download-to" scale="m" />
-                    </div>
-
-                    <div
-                        className={classnames(ButtonWrapperClassnames, {
-                            flex: showControlButtons,
-                            'hidden group-hover:flex': !showControlButtons,
-                            'bg-white bg-opacity-20': isSelected,
-                        })}
-                        onClick={toggleSelect.bind(this, data.releaseNum)}
-                        title={
-                            isSelected
-                                ? 'Remove this release from your ArcGIS Online Map'
-                                : 'Add this release to an ArcGIS Online Map'
-                        }
-                    >
-                        <calcite-icon icon="arcgis-online" scale="m" />
-                    </div>
-
-                    {/* <div
-                        className="add-to-webmap-btn cursor-pointer"
-                        // onMouseOver={this.showTooltip}
-                        // onMouseOut={this.hideTooltip}
-                        onClick={toggleSelect.bind(this, data.releaseNum)}
-                        title={tooltipContentAdd2WebmapBtn}
-                    ></div> */}
+                        {data.releaseDateLabel}
+                    </a>
                 </div>
-            </div>
-        );
-    }
-}
 
-export default ListViewCard;
+                <div
+                    className={classnames(ButtonWrapperClassnames, {
+                        flex: showControlButtons,
+                        'hidden group-hover:flex': !showControlButtons,
+                    })}
+                    onClick={openItem}
+                    title="Learn more about this release..."
+                >
+                    <calcite-icon icon="information" scale="m" />
+                </div>
+
+                {/* The download and save web map buttons should not be displayed in mobile view */}
+                {isMobile === false && (
+                    <>
+                        <div
+                            className={classnames(ButtonWrapperClassnames, {
+                                flex: showControlButtons,
+                                'hidden group-hover:flex': !showControlButtons,
+                                'cursor-default opacity-50':
+                                    shouldDownloadButtonBeDisabled,
+                            })}
+                            onClick={() => {
+                                if (shouldDownloadButtonBeDisabled) {
+                                    return;
+                                }
+
+                                downloadButtonOnClick(data.releaseNum);
+                            }}
+                            title={downloadButtonTooltipText}
+                        >
+                            <calcite-icon icon="download-to" scale="m" />
+                        </div>
+
+                        <div
+                            className={classnames(ButtonWrapperClassnames, {
+                                flex: showControlButtons,
+                                'hidden group-hover:flex': !showControlButtons,
+                                'bg-white bg-opacity-20': isSelected,
+                            })}
+                            onClick={toggleSelect.bind(this, data.releaseNum)}
+                            title={
+                                isSelected
+                                    ? 'Remove this release from your ArcGIS Online Map'
+                                    : 'Add this release to an ArcGIS Online Map'
+                            }
+                        >
+                            <calcite-icon icon="arcgis-online" scale="m" />
+                        </div>
+                    </>
+                )}
+
+                {/* <div
+                    className="add-to-webmap-btn cursor-pointer"
+                    // onMouseOver={this.showTooltip}
+                    // onMouseOut={this.hideTooltip}
+                    onClick={toggleSelect.bind(this, data.releaseNum)}
+                    title={tooltipContentAdd2WebmapBtn}
+                ></div> */}
+            </div>
+        </div>
+    );
+};
+
+// class ListViewCard extends React.PureComponent<IProps> {
+//     constructor(props: IProps) {
+//         super(props);
+
+//         this.openItem = this.openItem.bind(this);
+//         // this.showTooltip = this.showTooltip.bind(this);
+//         this.hideTooltip = this.hideTooltip.bind(this);
+//     }
+
+//     openItem() {
+//         const { data } = this.props;
+
+//         const itemId = data.itemID;
+
+//         const agolHost = getServiceUrl('portal-url');
+
+//         const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
+
+//         window.open(itemUrl, '_blank');
+//     }
+
+//     // showTooltip(evt: React.MouseEvent) {
+//     //     const { toggleTooltip } = this.props;
+//     //     const boundingRect = evt.currentTarget.getBoundingClientRect();
+
+//     //     toggleTooltip({
+//     //         content: evt.currentTarget.getAttribute('data-tooltip-content'),
+//     //         left: boundingRect.left + evt.currentTarget.clientWidth + 5,
+//     //         top: boundingRect.top + 3,
+//     //     });
+//     // }
+
+//     hideTooltip() {
+//         const { toggleTooltip } = this.props;
+//         toggleTooltip();
+//     }
+
+//     render() {
+//         const {
+//             data,
+//             isActive,
+//             isSelected,
+//             isHighlighted,
+//             shouldDownloadButtonBeDisabled,
+//             downloadButtonTooltipText,
+//             onClick,
+//             onMouseEnter,
+//             onMouseOut,
+//             toggleSelect,
+//             downloadButtonOnClick,
+//         } = this.props;
+
+//         const showControlButtons = isActive || isSelected;
+
+//         return (
+//             <div
+//                 className="py-1"
+//                 onMouseEnter={onMouseEnter.bind(this, data.releaseNum, false)}
+//                 onMouseLeave={onMouseOut}
+//                 // this "data-element" and "data-release-num" attributes will be used by the script
+//                 // that monitors the health of this app
+//                 data-element="list-card"
+//                 data-release-num={data.releaseNum}
+//             >
+//                 <div
+//                     className={classnames('list-card group', {
+//                         // 'is-active' indicates if is viewing this release on map
+//                         'is-active': isActive,
+//                         // 'is-highlighted' indicates if this release has local change
+//                         'is-highlighted': isHighlighted,
+//                         // 'is-selected' indicates if this release is being selected
+//                         'is-selected': isSelected,
+//                     })}
+//                 >
+//                     <div
+//                         className="is-flexy cursor-pointer"
+//                         onClick={onClick.bind(this, data.releaseNum)}
+//                     >
+//                         <a
+//                             className="ml-2 text-gray-400 hover:text-gray-300 cursor-pointer"
+//                             // onClick={onClick.bind(this, data.releaseNum)}
+//                         >
+//                             {data.releaseDateLabel}
+//                         </a>
+//                     </div>
+
+//                     <div
+//                         className={classnames(ButtonWrapperClassnames, {
+//                             flex: showControlButtons,
+//                             'hidden group-hover:flex': !showControlButtons,
+//                         })}
+//                         onClick={this.openItem}
+//                         title="Learn more about this release..."
+//                     >
+//                         <calcite-icon icon="information" scale="m" />
+//                     </div>
+
+//                     <div
+//                         className={classnames(ButtonWrapperClassnames, {
+//                             flex: showControlButtons,
+//                             'hidden group-hover:flex': !showControlButtons,
+//                             'cursor-default opacity-50':
+//                                 shouldDownloadButtonBeDisabled,
+//                         })}
+//                         onClick={() => {
+//                             if (shouldDownloadButtonBeDisabled) {
+//                                 return;
+//                             }
+
+//                             downloadButtonOnClick(data.releaseNum);
+//                         }}
+//                         title={downloadButtonTooltipText}
+//                     >
+//                         <calcite-icon icon="download-to" scale="m" />
+//                     </div>
+
+//                     <div
+//                         className={classnames(ButtonWrapperClassnames, {
+//                             flex: showControlButtons,
+//                             'hidden group-hover:flex': !showControlButtons,
+//                             'bg-white bg-opacity-20': isSelected,
+//                         })}
+//                         onClick={toggleSelect.bind(this, data.releaseNum)}
+//                         title={
+//                             isSelected
+//                                 ? 'Remove this release from your ArcGIS Online Map'
+//                                 : 'Add this release to an ArcGIS Online Map'
+//                         }
+//                     >
+//                         <calcite-icon icon="arcgis-online" scale="m" />
+//                     </div>
+
+//                     {/* <div
+//                         className="add-to-webmap-btn cursor-pointer"
+//                         // onMouseOver={this.showTooltip}
+//                         // onMouseOut={this.hideTooltip}
+//                         onClick={toggleSelect.bind(this, data.releaseNum)}
+//                         title={tooltipContentAdd2WebmapBtn}
+//                     ></div> */}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// export default ListViewCard;
