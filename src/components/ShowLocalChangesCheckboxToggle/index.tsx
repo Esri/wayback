@@ -31,7 +31,7 @@ class CheckboxToggle extends React.PureComponent<IProps> {
 
         return (
             <div
-                className="flex items-center justify-center cursor-pointer my-1"
+                className="hidden md:flex items-center justify-center cursor-pointer my-1"
                 onClick={onChange}
             >
                 {isActive ? (

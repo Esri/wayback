@@ -42,7 +42,7 @@ class Title4ActiveItem extends React.PureComponent<IProps> {
             : activeWaybackItem.releaseDateLabel;
 
         return (
-            <div className="flex text-custom-theme-blue justify-center items-center">
+            <div className="flex text-custom-theme-blue justify-center items-center text-center md:text-left">
                 <div className="">
                     <span className="text-xs">Selected release</span>
                     <br />
