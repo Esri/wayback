@@ -65,6 +65,12 @@ export const useFrameDataForDownloadJob = ({
 
             const data: AnimationFrameData[] = [];
 
+            const images = await Promise.all(
+                imageElements.map((d) =>
+                    loadImageAsHTMLIMageElement(d.imageElement.image as string)
+                )
+            );
+
             for (let i = 0; i < imageElements.length; i++) {
                 const item = waybackItems[i];
 
@@ -73,13 +79,13 @@ export const useFrameDataForDownloadJob = ({
                     continue;
                 }
 
-                // load media layer elements as an array of HTML Image Elements
-                const image = await loadImageAsHTMLIMageElement(
-                    imageElements[i].imageElement.image as string
-                );
+                // // load media layer elements as an array of HTML Image Elements
+                // const image = await loadImageAsHTMLIMageElement(
+                //     imageElements[i].imageElement.image as string
+                // );
 
                 const frameData = {
-                    image,
+                    image: images[i],
                     imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
                         3
                     )} y ${lat.toFixed(3)}`,
