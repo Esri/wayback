@@ -158,7 +158,9 @@ class ListView extends React.PureComponent<IProps, IState> {
 
         return (
             <>
-                <div className="list-view-container">{cards}</div>
+                <div className="list-view-container" data-testid="card-list">
+                    {cards}
+                </div>
                 {staticTooltip}
             </>
         );
