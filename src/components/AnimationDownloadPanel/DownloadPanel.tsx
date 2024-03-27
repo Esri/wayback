@@ -107,7 +107,7 @@ export const AnimationDownloadPanel: FC<Props> = ({
                 abortController: abortController.current,
             });
 
-            downloadBlob(fileContent, filename);
+            downloadBlob(fileContent, 'wayback-animation-' + filename);
 
             setDownloadJobStatus('finished');
         } catch (err) {
