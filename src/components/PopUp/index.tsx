@@ -121,8 +121,8 @@ const PopUp: FC<IProps> = (props: IProps) => {
 
             <div
                 className="content-wrap text-white"
-                // this "data-element" attribute will be used by the script that monitors the health of this app
-                data-element="popup-content"
+                // this "data-testid" attribute will be used by the script that monitors the health of this app
+                data-testid="popup-content"
             >
                 <div className="text-wrap">
                     <p className="mb-2">{providerAndCaptureDateInfo}</p>
