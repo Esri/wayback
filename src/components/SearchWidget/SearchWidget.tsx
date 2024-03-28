@@ -27,16 +27,16 @@ import Graphic from '@arcgis/core/Graphic';
 import Search from '@arcgis/core/widgets/Search';
 import Portal from '@arcgis/core/portal/Portal';
 
-type UIAddPosition =
-    | 'bottom-leading'
-    | 'bottom-left'
-    | 'bottom-right'
-    | 'bottom-trailing'
-    | 'top-leading'
-    | 'top-left'
-    | 'top-right'
-    | 'top-trailing'
-    | 'manual';
+// type UIAddPosition =
+//     | 'bottom-leading'
+//     | 'bottom-left'
+//     | 'bottom-right'
+//     | 'bottom-trailing'
+//     | 'top-leading'
+//     | 'top-left'
+//     | 'top-right'
+//     | 'top-trailing'
+//     | 'manual';
 
 type SearchResult = {
     extent: Extent;
@@ -46,7 +46,7 @@ type SearchResult = {
 };
 
 type Props = {
-    position?: UIAddPosition;
+    // position?: UIAddPosition;
     containerId?: string;
     portalUrl?: string;
     mapView?: MapView;
@@ -54,8 +54,8 @@ type Props = {
 };
 
 const SearchWidget: React.FC<Props> = ({
-    position,
-    containerId,
+    // position,
+    // containerId,
     portalUrl,
     mapView,
     searchCompletedHandler,
@@ -67,13 +67,13 @@ const SearchWidget: React.FC<Props> = ({
         //     return;
         // }
 
-        const portal = portalUrl ? new Portal({ url: portalUrl }) : null;
+        // const portal = portalUrl ? new Portal({ url: portalUrl }) : null;
 
         const searchWidget = new Search({
             view: mapView,
             resultGraphicEnabled: false,
             popupEnabled: false,
-            portal,
+            // portal,
             container: containerRef.current,
         });
 

@@ -50,7 +50,7 @@ export const Gutter: FC<IProps> = ({
         >
             {/* gradient effect on right side of gutter */}
             <div
-                className="absolute top-0 lef-0 z-0 w-full h-full"
+                className="absolute top-0 left-0 z-0 w-full h-full"
                 style={{
                     background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
                 }}
@@ -94,7 +94,7 @@ export const Gutter: FC<IProps> = ({
                         }, 3000);
                     }}
                 >
-                    <calcite-icon icon="copy-to-clipboard" scale="l" />
+                    <calcite-icon icon="link" scale="l" />
                 </div>
 
                 <div

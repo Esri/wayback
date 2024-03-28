@@ -16,6 +16,7 @@
 import React, { useEffect } from 'react';
 
 type Props = {
+    isLoading: boolean;
     isPlaying: boolean;
     onClick: () => void;
 };
@@ -44,16 +45,27 @@ const PauseBtn = (
     </svg>
 );
 
-const PlayPauseBtn: React.FC<Props> = ({ isPlaying, onClick }: Props) => {
+const PlayPauseBtn: React.FC<Props> = ({
+    isLoading,
+    isPlaying,
+    onClick,
+}: Props) => {
+    const getIcon = () => {
+        if (isLoading) {
+            return <calcite-loader inline />;
+        }
+
+        return isPlaying ? PauseBtn : PlayBtn;
+    };
     return (
         <div
-            className="margin-right-half cursor-pointer"
+            className="mr-2 cursor-pointer"
             style={{
                 display: 'flex',
             }}
             onClick={onClick}
         >
-            {isPlaying ? PauseBtn : PlayBtn}
+            {getIcon()}
         </div>
     );
 };

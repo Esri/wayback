@@ -29,7 +29,7 @@ export { default as ReferenceLayer } from './ReferenceLayer/ReferenceLayerContai
 export { default as ReferenceLayerToggle } from './ReferenceLayerToggle/ReferenceLayerToggleContainer';
 export { default as Sidebar } from './Sidebar/SidebarContainer';
 export { default as SearchWidget } from './SearchWidget/SearchWidget';
-export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
+// export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
 export { default as SwipeWidget } from './SwipeWidget/SwipeWidgetContainer';
 export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
 export { default as SwipeWidgetToggleBtn } from './SwipeWidgetToggleBtn/SwipeWidgetToggleBtnContainer';
@@ -47,7 +47,7 @@ export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
-export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
+// export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
 
 export { OpenDownloadPanelBtn } from './OpenDownloadPanelBtn/OpenDownloadPanelBtn';
 export { DownloadDialog } from './DownloadDialog';

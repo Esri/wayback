@@ -17,8 +17,6 @@ import React, { useContext } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import SetttingDialog from './index';
-
 import {
     isSettingModalOpenSelector,
     isSettingModalOpenToggled,
@@ -29,6 +27,8 @@ import { mapExtentSelector } from '@store/Map/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
 import { isAnonymouns, signIn, signOut } from '@utils/Esri-OAuth';
+import SettingDialogContent from './SettingDialogContent';
+import { Modal } from '@components/Modal/Modal';
 
 const SettingDialogContainer = () => {
     const dispatch = useDispatch();
@@ -55,17 +55,27 @@ const SettingDialogContainer = () => {
     //     dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
     // };
 
-    return isOpen ? (
-        <SetttingDialog
-            mapExtent={mapExtent}
-            signedInAlready={isAnonymouns() === false}
-            toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-            // shouldShowLocalChangesByDefaultOnClick={
-            //     shouldShowLocalChangesByDefaultOnClick
-            // }
-            onClose={onCloseHandler}
-        />
-    ) : null;
+    // return isOpen ? (
+    //     <SetttingDialog
+    //         mapExtent={mapExtent}
+    //         signedInAlready={isAnonymouns() === false}
+    //         toggleSignInBtnOnClick={toggleSignInBtnOnClick}
+    //         // shouldShowLocalChangesByDefaultOnClick={
+    //         //     shouldShowLocalChangesByDefaultOnClick
+    //         // }
+    //         onClose={onCloseHandler}
+    //     />
+    // ) : null;
+
+    return (
+        <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
+            <SettingDialogContent
+                mapExtent={mapExtent}
+                signedInAlready={isAnonymouns() === false}
+                toggleSignInBtnOnClick={toggleSignInBtnOnClick}
+            />
+        </Modal>
+    );
 };
 
 export default SettingDialogContainer;

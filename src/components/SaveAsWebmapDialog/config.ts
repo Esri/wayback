@@ -14,7 +14,7 @@
  */
 
 export default {
-    'modal-id': 'save-as-webmap-dialog',
+    // 'modal-id': 'save-as-webmap-dialog',
     title: 'Custom Wayback Imagery Web Map',
     tags: 'wayback',
     description:

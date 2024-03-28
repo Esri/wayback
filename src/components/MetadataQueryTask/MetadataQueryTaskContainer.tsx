@@ -29,6 +29,7 @@ import {
 import {
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
+    isQueryingMetadataToggled,
 } from '@store/Map/reducer';
 
 import MetadataQueryTask from './MetadataQueryTask';
@@ -62,6 +63,9 @@ const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
             swipeWidgetTrailingLayer={swipeWidgetTrailingLayer}
             isSwipeWidgetOpen={isSwipeWidgetOpen}
             swipeWidgetPosition={swipeWidgetPosition}
+            metadataQueryOnStart={() => {
+                disptach(isQueryingMetadataToggled(true));
+            }}
             metadataOnChange={(metadata) => {
                 // console.log(metadata)
                 disptach(metadataQueryResultUpdated(metadata));

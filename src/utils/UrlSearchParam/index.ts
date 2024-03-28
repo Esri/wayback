@@ -132,12 +132,9 @@ const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
         updateHashParams(key, value);
     };
 
-const saveAnimationSpeedInURLQueryParam = (
-    isAnimationOn: boolean,
-    speed: number
-): void => {
+const saveAnimationSpeedInURLQueryParam = (speed?: number): void => {
     const key: ParamKey = 'animationSpeed';
-    const value = isAnimationOn ? speed.toString() : null;
+    const value = speed !== undefined ? speed.toString() : null;
 
     updateHashParams(key, value);
 };

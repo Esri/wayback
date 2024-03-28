@@ -22,7 +22,8 @@ import {
     isAboutThisAppModalOpenToggled,
 } from '@store/UI/reducer';
 
-import AboutThisApp from './index';
+import { AboutThiAppContent } from './AboutThisAppContent';
+import { Modal } from '@components/Modal/Modal';
 
 const AboutThisAppContainer = () => {
     const isOpen = useSelector(isAboutThisAppModalOpenSelector);
@@ -33,7 +34,13 @@ const AboutThisAppContainer = () => {
         dispatch(isAboutThisAppModalOpenToggled());
     };
 
-    return isOpen ? <AboutThisApp onClose={onCloseHandler} /> : null;
+    return (
+        <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
+            <AboutThiAppContent />
+        </Modal>
+    );
+
+    // return isOpen ? <AboutThisApp onClose={onCloseHandler} /> : null;
 };
 
 export default AboutThisAppContainer;

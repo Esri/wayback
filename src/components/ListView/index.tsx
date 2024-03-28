@@ -18,7 +18,7 @@ import React from 'react';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 
-import Card from './Card';
+import { ListViewCard as Card } from './Card';
 import StaticTooltip from '../StaticTooltip';
 
 interface IProps {
@@ -158,7 +158,9 @@ class ListView extends React.PureComponent<IProps, IState> {
 
         return (
             <>
-                <div className="list-view-container">{cards}</div>
+                <div className="list-view-container" data-testid="card-list">
+                    {cards}
+                </div>
                 {staticTooltip}
             </>
         );

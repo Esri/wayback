@@ -37,7 +37,7 @@ type Props = {
     isSwipeWidgetOpen: boolean;
     swipeWidgetPosition: number;
     mapView?: MapView;
-
+    metadataQueryOnStart: () => void;
     metadataOnChange: (data: IWaybackMetadataQueryResult) => void;
     anchorPointOnChange: (data: IScreenPoint) => void;
 };
@@ -50,6 +50,7 @@ const MetadataQueryLayer: React.FC<Props> = ({
     isSwipeWidgetOpen,
     swipeWidgetPosition,
     mapView,
+    metadataQueryOnStart,
     metadataOnChange,
     anchorPointOnChange,
 }) => {
@@ -88,28 +89,34 @@ const MetadataQueryLayer: React.FC<Props> = ({
             //     zoom: mapView.zoom, // getCurrZoomLevel(mapView)
             // });
 
+            updateScreenPoint4PopupAnchor();
+
+            metadataQueryOnStart();
+
+            const queryLocation = {
+                latitude: mapPoint.latitude,
+                longitude: mapPoint.longitude,
+            };
+
             const res = await getMetadata(
-                {
-                    latitude: mapPoint.latitude,
-                    longitude: mapPoint.longitude,
-                },
+                queryLocation,
                 mapView.zoom, // getCurrZoomLevel(mapView)
                 releaseNum
             );
-            console.log(res);
+            // console.log(res);
 
             const metadata: IWaybackMetadataQueryResult = res
                 ? {
                       ...res,
                       releaseDate: releaseDateLabel,
+                      queryLocation,
                   }
                 : null;
-
-            updateScreenPoint4PopupAnchor();
 
             metadataOnChange(metadata);
         } catch (err) {
             console.error(err);
+            metadataOnChange(null);
         }
     };
 

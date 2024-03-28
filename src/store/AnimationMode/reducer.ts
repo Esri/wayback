@@ -19,61 +19,88 @@ import {
     PayloadAction,
     // createAsyncThunk
 } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
-import { IWaybackItem } from '@typings/index';
-import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
+// import { batch } from 'react-redux';
+// import { IWaybackItem } from '@typings/index';
+// import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
 // import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
 
-import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
+// import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
+
+export type AnimationStatus = 'loading' | 'playing' | 'pausing';
 
 export type AnimationModeState = {
-    isAnimationModeOn: boolean;
-    isDownloadGIFDialogOn: boolean;
-    // rNum4AnimationFrames: number[],
-    waybackItems4Animation: IWaybackItem[];
-    // array of release numbers for items to be excluded from the animation
+    /**
+     * status of the Animation mode
+     */
+    animationStatus?: AnimationStatus;
+    /**
+     * if true, show download animation panel
+     */
+    showDownloadAnimationPanel: boolean;
+    /**
+     * array of release numbers for items to be excluded from the animation
+     */
     rNum2Exclude: number[];
-    // animation speed in second
+    /**
+     * animation speed in milliseconds
+     */
     animationSpeed: number;
-    isPlaying: boolean;
-    indexOfCurrentFrame: number;
-    isLoadingFrameData: boolean;
+    /**
+     * release number of wayback item that is being displayed as current animation frame
+     */
+    releaseNumberOfActiveAnimationFrame: number;
+    /**
+     * if true, the link of the current animiation has been copied to the clipboard
+     */
+    animationLinkIsCopied: boolean;
 };
 
-export const DEFAULT_ANIMATION_SPEED_IN_SECONDS = 1;
+/**
+ * list of animation speed in milliseconds
+ */
+export const ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS = [
+    2000, 1000, 800, 600, 400, 200, 100, 20, 0,
+];
+
+export const DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS =
+    ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[
+        Math.floor(ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length / 2)
+    ];
 
 export const initialAnimationModeState = {
-    isAnimationModeOn: false,
-    isDownloadGIFDialogOn: false,
-    // rNum4AnimationFrames: [],
+    animationStatus: null,
+    showDownloadAnimationPanel: false,
     waybackItems4Animation: [],
     rNum2Exclude: [],
-    animationSpeed: DEFAULT_ANIMATION_SPEED_IN_SECONDS,
-    isPlaying: true,
-    indexOfCurrentFrame: 0,
-    isLoadingFrameData: true,
+    animationSpeed: DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
+    releaseNumberOfActiveAnimationFrame: null,
+    animationLinkIsCopied: false,
 } as AnimationModeState;
 
 const slice = createSlice({
     name: 'AnimationMode',
     initialState: initialAnimationModeState,
     reducers: {
-        isAnimationModeOnToggled: (state: AnimationModeState) => {
-            state.isAnimationModeOn = !state.isAnimationModeOn;
-        },
-        isDownloadGIFDialogOnToggled: (state: AnimationModeState) => {
-            state.isDownloadGIFDialogOn = !state.isDownloadGIFDialogOn;
-        },
-        // rNum4AnimationFramesLoaded: (state:AnimationModeState, action:PayloadAction<number[]>)=>{
-        //     state.rNum4AnimationFrames = action.payload
-        // },
-        waybackItems4AnimationLoaded: (
-            state: AnimationModeState,
-            action: PayloadAction<IWaybackItem[]>
+        animationStatusChanged: (
+            state,
+            action: PayloadAction<AnimationStatus>
         ) => {
-            state.waybackItems4Animation = action.payload;
+            state.animationStatus = action.payload;
+        },
+        showDownloadAnimationPanelToggled: (
+            state: AnimationModeState,
+            action: PayloadAction<boolean>
+        ) => {
+            state.showDownloadAnimationPanel = action.payload;
+        },
+        animationLinkIsCopiedChanged: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.animationLinkIsCopied = action.payload;
         },
         rNum2ExcludeToggled: (
             state: AnimationModeState,
@@ -98,28 +125,11 @@ const slice = createSlice({
         ) => {
             state.animationSpeed = action.payload;
         },
-        isAnimationPlayingToggled: (
-            state: AnimationModeState,
-            action: PayloadAction<boolean>
-        ) => {
-            state.isPlaying = action.payload;
-        },
-        indexOfCurrentFrameChanged: (
+        releaseNumberOfActiveAnimationFrameChanged: (
             state: AnimationModeState,
             action: PayloadAction<number>
         ) => {
-            state.indexOfCurrentFrame = action.payload;
-        },
-        isLoadingFrameDataToggled: (
-            state: AnimationModeState,
-            action: PayloadAction<boolean>
-        ) => {
-            state.isLoadingFrameData = action.payload;
-        },
-        resetAnimationMode: (state: AnimationModeState) => {
-            state.isPlaying = true;
-            state.animationSpeed = DEFAULT_ANIMATION_SPEED_IN_SECONDS;
-            state.rNum2Exclude = [];
+            state.releaseNumberOfActiveAnimationFrame = action.payload;
         },
     },
 });
@@ -127,201 +137,39 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
-    isAnimationModeOnToggled,
-    isDownloadGIFDialogOnToggled,
-    waybackItems4AnimationLoaded,
+    animationStatusChanged,
+    // isAnimationModeOnToggled,
+    showDownloadAnimationPanelToggled,
+    // waybackItems4AnimationLoaded,
     rNum2ExcludeToggled,
     rNum2ExcludeReset,
     animationSpeedChanged,
-    isAnimationPlayingToggled,
-    indexOfCurrentFrameChanged,
-    isLoadingFrameDataToggled,
-    resetAnimationMode,
+    releaseNumberOfActiveAnimationFrameChanged,
+    animationLinkIsCopiedChanged,
 } = slice.actions;
-
-export const toggleIsLoadingFrameData =
-    (isLoading: boolean) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        const { isPlaying } = AnimationMode;
-
-        batch(() => {
-            dispatch(isLoadingFrameDataToggled(isLoading));
-
-            if (isLoading) {
-                dispatch(indexOfCurrentFrameChanged(0));
-            }
-
-            if (!isLoading && isPlaying) {
-                dispatch(startAnimation());
-            }
-        });
-    };
 
 export const toggleAnimationMode =
     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { SwipeView, AnimationMode } = getState();
+        const mode = selectMapMode(getState());
 
-        const { isAnimationModeOn, animationSpeed } = AnimationMode;
+        const newMode: MapMode = mode === 'animation' ? 'explore' : 'animation';
 
-        const willAnimationModeBeTurnedOn = !isAnimationModeOn;
-
-        if (SwipeView.isSwipeWidgetOpen && willAnimationModeBeTurnedOn) {
-            dispatch(isSwipeWidgetOpenToggled());
-        }
-
-        if (isAnimationModeOn) {
-            console.log('reset animation mode');
-            dispatch(resetAnimationMode());
-        }
-
-        saveAnimationSpeedInURLQueryParam(
-            willAnimationModeBeTurnedOn,
-            animationSpeed
-        );
-
-        dispatch(isAnimationModeOnToggled());
+        dispatch(mapModeChanged(newMode));
     };
 
-let interval4Animation: NodeJS.Timeout;
-
-export const startAnimation =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        let { animationSpeed } = AnimationMode;
-
-        animationSpeed = animationSpeed || 0.1;
-
-        dispatch(isAnimationPlayingToggled(true));
-
-        clearInterval(interval4Animation);
-
-        interval4Animation = setInterval(() => {
-            dispatch(showNextFrame());
-        }, animationSpeed * 1000);
-    };
-
-export const stopAnimation =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        dispatch(isAnimationPlayingToggled(false));
-        clearInterval(interval4Animation);
-    };
-
-export const setActiveFrameByReleaseNum =
-    (releaseNum: number) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        const { isPlaying, isLoadingFrameData, waybackItems4Animation } =
-            AnimationMode;
-
-        if (isPlaying || isLoadingFrameData) {
-            return;
-        }
-
-        let targetIdx = 0;
-
-        for (let i = 0; i < waybackItems4Animation.length; i++) {
-            if (waybackItems4Animation[i].releaseNum === releaseNum) {
-                targetIdx = i;
-                break;
-            }
-        }
-
-        dispatch(indexOfCurrentFrameChanged(targetIdx));
-    };
-
-const showNextFrame =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        const {
-            rNum2Exclude,
-            waybackItems4Animation,
-            indexOfCurrentFrame,
-            isLoadingFrameData,
-        } = AnimationMode;
-
-        if (isLoadingFrameData) {
-            return;
-        }
-
-        const rNum2ExcludeSet = new Set(rNum2Exclude);
-
-        let idx4NextFrame = indexOfCurrentFrame;
-
-        // loop through the circular array to find next item to show
-        for (
-            let i = indexOfCurrentFrame + 1;
-            i < indexOfCurrentFrame + waybackItems4Animation.length;
-            i++
-        ) {
-            const targetIdx = i % waybackItems4Animation.length;
-
-            const targetItem = waybackItems4Animation[targetIdx];
-
-            if (!rNum2ExcludeSet.has(targetItem.releaseNum)) {
-                idx4NextFrame = targetIdx;
-                break;
-            }
-        }
-
-        dispatch(indexOfCurrentFrameChanged(idx4NextFrame));
-    };
-
-export const updateAnimationSpeed =
-    (speedInSeconds: number) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        const { isPlaying, animationSpeed } = AnimationMode;
-
-        if (speedInSeconds == animationSpeed) {
-            return;
-        }
-
-        saveAnimationSpeedInURLQueryParam(true, speedInSeconds);
-
-        batch(() => {
-            dispatch(animationSpeedChanged(speedInSeconds));
-
-            if (isPlaying) {
-                dispatch(startAnimation());
-            }
-        });
-    };
-
-export const toggleAnimationFrame =
-    (releaseNum: number) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { AnimationMode } = getState();
-
-        const { isPlaying } = AnimationMode;
-
-        batch(() => {
-            dispatch(rNum2ExcludeToggled(releaseNum));
-
-            if (isPlaying) {
-                dispatch(startAnimation());
-            }
-        });
-    };
+export const selectAnimationStatus = createSelector(
+    (state: RootState) => state.AnimationMode.animationStatus,
+    (animationStatus) => animationStatus
+);
 
 export const isAnimationModeOnSelector = createSelector(
-    (state: RootState) => state.AnimationMode.isAnimationModeOn,
-    (isAnimationModeOn) => isAnimationModeOn
+    (state: RootState) => state.Map.mode,
+    (mode) => mode === 'animation'
 );
 
-export const isDownloadGIFDialogOnSelector = createSelector(
-    (state: RootState) => state.AnimationMode.isDownloadGIFDialogOn,
-    (isDownloadGIFDialogOn) => isDownloadGIFDialogOn
-);
-
-export const waybackItems4AnimationSelector = createSelector(
-    (state: RootState) => state.AnimationMode.waybackItems4Animation,
-    (waybackItems4Animation) => waybackItems4Animation
+export const selectShouldShowDownloadPanel = createSelector(
+    (state: RootState) => state.AnimationMode.showDownloadAnimationPanel,
+    (showDownloadAnimationPanel) => showDownloadAnimationPanel
 );
 
 export const rNum2ExcludeSelector = createSelector(
@@ -334,32 +182,15 @@ export const animationSpeedSelector = createSelector(
     (animationSpeed) => animationSpeed
 );
 
-export const isAnimationPlayingSelector = createSelector(
-    (state: RootState) => state.AnimationMode.isPlaying,
-    (isPlaying) => isPlaying
+export const selectReleaseNumberOfActiveAnimationFrame = createSelector(
+    (state: RootState) =>
+        state.AnimationMode.releaseNumberOfActiveAnimationFrame,
+    (releaseNumberOfActiveAnimationFrame) => releaseNumberOfActiveAnimationFrame
 );
 
-export const indexOfCurrentAnimationFrameSelector = createSelector(
-    (state: RootState) => state.AnimationMode.indexOfCurrentFrame,
-    (indexOfCurrentFrame) => indexOfCurrentFrame
-);
-
-export const waybackItem4CurrentAnimationFrameSelector = createSelector(
-    (state: RootState) => state.AnimationMode.indexOfCurrentFrame,
-    (state: RootState) => state.AnimationMode.waybackItems4Animation,
-    (state: RootState) => state.AnimationMode.isLoadingFrameData,
-    (indexOfCurrentFrame, waybackItems4Animation, isLoadingFrameData) => {
-        if (!waybackItems4Animation.length || isLoadingFrameData) {
-            return null;
-        }
-
-        return waybackItems4Animation[indexOfCurrentFrame];
-    }
-);
-
-export const isLoadingFrameDataSelector = createSelector(
-    (state: RootState) => state.AnimationMode.isLoadingFrameData,
-    (isLoadingFrameData) => isLoadingFrameData
+export const selectAnimationLinkIsCopied = createSelector(
+    (state: RootState) => state.AnimationMode.animationLinkIsCopied,
+    (animationLinkIsCopied) => animationLinkIsCopied
 );
 
 export default reducer;

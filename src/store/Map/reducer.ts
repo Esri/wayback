@@ -32,8 +32,15 @@ export type MapCenter = {
     lat: number;
 };
 
+export type MapMode = 'explore' | 'swipe' | 'animation';
+
 export type MapState = {
+    mode: MapMode;
     mapExtent: IExtentGeomety;
+    /**
+     * if true, it is in process of querying metadata
+     */
+    isQueryingMetadata: boolean;
     metadataQueryResult: IWaybackMetadataQueryResult;
     metadataPopupAnchor: IScreenPoint;
     isReferenceLayerVisible: boolean;
@@ -48,7 +55,9 @@ export type MapState = {
 };
 
 export const initialMapState: MapState = {
+    mode: 'explore',
     mapExtent: null,
+    isQueryingMetadata: false,
     metadataQueryResult: null,
     metadataPopupAnchor: null,
     isReferenceLayerVisible: true,
@@ -60,6 +69,9 @@ const slice = createSlice({
     name: 'Map',
     initialState: initialMapState,
     reducers: {
+        mapModeChanged: (state: MapState, action: PayloadAction<MapMode>) => {
+            state.mode = action.payload;
+        },
         mapExtentUpdated: (
             state: MapState,
             action: PayloadAction<IExtentGeomety>
@@ -71,6 +83,7 @@ const slice = createSlice({
             action: PayloadAction<IWaybackMetadataQueryResult>
         ) => {
             state.metadataQueryResult = action.payload;
+            state.isQueryingMetadata = false;
         },
         metadataPopupAnchorUpdated: (
             state: MapState,
@@ -80,6 +93,12 @@ const slice = createSlice({
         },
         isReferenceLayerVisibleToggled: (state: MapState) => {
             state.isReferenceLayerVisible = !state.isReferenceLayerVisible;
+        },
+        isQueryingMetadataToggled: (
+            state: MapState,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isQueryingMetadata = action.payload;
         },
         mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
             state.center = action.payload;
@@ -93,13 +112,20 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
+    mapModeChanged,
     mapExtentUpdated,
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
     isReferenceLayerVisibleToggled,
+    isQueryingMetadataToggled,
     mapCenterUpdated,
     zoomUpdated,
 } = slice.actions;
+
+export const selectMapMode = createSelector(
+    (state: RootState) => state.Map.mode,
+    (mode) => mode
+);
 
 export const mapExtentSelector = createSelector(
     (state: RootState) => state.Map.mapExtent,
@@ -109,6 +135,11 @@ export const mapExtentSelector = createSelector(
 export const isReferenceLayerVisibleSelector = createSelector(
     (state: RootState) => state.Map.isReferenceLayerVisible,
     (isReferenceLayerVisible) => isReferenceLayerVisible
+);
+
+export const selectIsQueringMetadata = createSelector(
+    (state: RootState) => state.Map.isQueryingMetadata,
+    (isQueryingMetadata) => isQueryingMetadata
 );
 
 export const metadataQueryResultSelector = createSelector(
@@ -135,6 +166,11 @@ export const selectMapCenterAndZoom = createSelector(
             center,
         };
     }
+);
+
+export const selectMapCenter = createSelector(
+    (state: RootState) => state.Map.center,
+    (center) => center
 );
 
 export default reducer;

@@ -1,0 +1,11 @@
+.hide-map-control .esri-zoom,
+.hide-map-control .esri-search {
+    display: none;
+}
+
+.esri-input, 
+.esri-widget--button, 
+.esri-menu {
+    @apply bg-custom-background;
+    /* color: var(--custom-light-blue); */
+}

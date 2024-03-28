@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './calcite-web/css/calcite-web.min.css';
+/* @import './calcite-web/css/calcite-web.min.css'; */
 @import './variables.css';
 @import './customized-modal.css';
 @import './customized-tooltip.css';
@@ -48,4 +48,12 @@ a {
 
 input, textarea { 
     @apply text-gray-600 text-sm px-1;
+}
+
+svg.with-drop-shadow {
+    filter: drop-shadow(0px 0px 8px #000000);
+}
+
+.disabled {
+    @apply pointer-events-none opacity-50;
 }

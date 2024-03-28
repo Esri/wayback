@@ -57,7 +57,7 @@ class TitleText extends React.PureComponent<IProps> {
         return (
             <div className="mobile-header">
                 <div
-                    className="header-nav-btn margin-right-1"
+                    className="header-nav-btn mr-4"
                     onClick={leftNavBtnOnClick}
                 >
                     {leftNavBtnIcon}

@@ -40,6 +40,7 @@ import {
     isAnonymouns,
     signInUsingDifferentAccount,
 } from '@utils/Esri-OAuth';
+import { Modal } from '@components/Modal/Modal';
 
 const SaveAsWebmapDialogContainer = () => {
     const dispatch = useDispatch();
@@ -64,21 +65,39 @@ const SaveAsWebmapDialogContainer = () => {
     //     console.log(isOpen);
     // }, [isOpen]);
 
-    return isOpen ? (
-        <SaveAsWebMapDialog
-            waybackItems={waybackItems}
-            rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-            hasSignedInAlready={isAnonymouns() === false}
-            portalBaseURL={getPortalBaseUrl()}
-            token={getToken()}
-            userRole={getUserRole()}
-            mapExtent={mapExtent}
-            onClose={onCloseHandler}
-            signInButtonOnClick={() => {
-                signInUsingDifferentAccount();
-            }}
-        />
-    ) : null;
+    return (
+        <Modal isOpen={isOpen} onClose={onCloseHandler}>
+            <SaveAsWebMapDialog
+                waybackItems={waybackItems}
+                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+                hasSignedInAlready={isAnonymouns() === false}
+                portalBaseURL={getPortalBaseUrl()}
+                token={getToken()}
+                userRole={getUserRole()}
+                mapExtent={mapExtent}
+                // onClose={onCloseHandler}
+                signInButtonOnClick={() => {
+                    signInUsingDifferentAccount();
+                }}
+            />
+        </Modal>
+    );
+
+    // return isOpen ? (
+    //     <SaveAsWebMapDialog
+    //         waybackItems={waybackItems}
+    //         rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+    //         hasSignedInAlready={isAnonymouns() === false}
+    //         portalBaseURL={getPortalBaseUrl()}
+    //         token={getToken()}
+    //         userRole={getUserRole()}
+    //         mapExtent={mapExtent}
+    //         // onClose={onCloseHandler}
+    //         signInButtonOnClick={() => {
+    //             signInUsingDifferentAccount();
+    //         }}
+    //     />
+    // ) : null;
 };
 
 export default SaveAsWebmapDialogContainer;

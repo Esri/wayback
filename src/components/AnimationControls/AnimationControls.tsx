@@ -26,31 +26,42 @@ import {
 } from '@store/Wayback/reducer';
 
 import {
-    waybackItems4AnimationLoaded,
+    // waybackItems4AnimationLoaded,
     // rNum4AnimationFramesSelector,
     rNum2ExcludeSelector,
-    toggleAnimationFrame,
-    rNum2ExcludeReset,
+    // toggleAnimationFrame,
+    // rNum2ExcludeReset,
     // animationSpeedChanged,
     animationSpeedSelector,
-    isAnimationPlayingToggled,
-    isAnimationPlayingSelector,
-    startAnimation,
-    stopAnimation,
-    updateAnimationSpeed,
-    indexOfCurrentAnimationFrameSelector,
-    waybackItem4CurrentAnimationFrameSelector,
-    setActiveFrameByReleaseNum,
+    // isAnimationPlayingToggled,
+    // isAnimationPlayingSelector,
+    // startAnimation,
+    // stopAnimation,
+    // updateAnimationSpeed,
+    // indexOfCurrentAnimationFrameSelector,
+    // waybackItem4CurrentAnimationFrameSelector,
+    animationSpeedChanged,
+    selectAnimationStatus,
+    animationStatusChanged,
+    // indexOfActiveAnimationFrameChanged,
+    selectReleaseNumberOfActiveAnimationFrame,
+    rNum2ExcludeToggled,
+    releaseNumberOfActiveAnimationFrameChanged,
+    // releaseNumberOfActiveAnimationFrameChanged,
+    // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
 
 import { IWaybackItem } from '@typings/index';
 
-import DonwloadGifButton from './DonwloadGifButton';
+import { DonwloadAnimationButton } from './DonwloadAnimationButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import PlayPauseBtn from './PlayPauseBtn';
-import { usePrevious } from '@hooks/usePrevious';
-import { saveFrames2ExcludeInURLQueryParam } from '@utils/UrlSearchParam';
+// import { usePrevious } from '@hooks/usePrevious';
+import {
+    saveAnimationSpeedInURLQueryParam,
+    saveFrames2ExcludeInURLQueryParam,
+} from '@utils/UrlSearchParam';
 
 const AnimationControls = () => {
     const dispatch = useDispatch();
@@ -58,35 +69,29 @@ const AnimationControls = () => {
     const rNum2ExcludeFromAnimation: number[] =
         useSelector(rNum2ExcludeSelector);
 
-    // const activeItem:IWaybackItem = useSelector(activeWaybackItemSelector);
-
     const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(
         waybackItemsWithLocalChangesSelector
     );
 
-    const prevWaybackItemsWithLocalChanges = usePrevious<IWaybackItem[]>(
-        waybackItemsWithLocalChanges
-    );
-
     const animationSpeed = useSelector(animationSpeedSelector);
 
-    const isPlaying = useSelector(isAnimationPlayingSelector);
+    const animationStatus = useSelector(selectAnimationStatus);
 
-    const waybackItem4CurrentAnimationFrame = useSelector(
-        waybackItem4CurrentAnimationFrameSelector
+    const releaseNum4ActiveFrame = useSelector(
+        selectReleaseNumberOfActiveAnimationFrame
     );
 
     const speedOnChange = useCallback((speed: number) => {
-        dispatch(updateAnimationSpeed(speed));
+        dispatch(animationSpeedChanged(speed));
     }, []);
 
     const playPauseBtnOnClick = useCallback(() => {
-        if (isPlaying) {
-            dispatch(stopAnimation());
+        if (animationStatus === 'playing') {
+            dispatch(animationStatusChanged('pausing'));
         } else {
-            dispatch(startAnimation());
+            dispatch(animationStatusChanged('playing'));
         }
-    }, [isPlaying]);
+    }, [animationStatus]);
 
     const getContent = () => {
         if (
@@ -95,7 +100,7 @@ const AnimationControls = () => {
         ) {
             return (
                 <div className="text-center">
-                    <p className="leader-1 font-size--2">
+                    <p className="mt-4 text-sm">
                         Loading versions with local changes.
                     </p>
                 </div>
@@ -104,10 +109,10 @@ const AnimationControls = () => {
 
         return (
             <>
-                <DonwloadGifButton />
+                <DonwloadAnimationButton />
 
-                <div className="leader-half">
-                    <span className="font-size--3">Animation Speed</span>
+                <div className=" mt-2">
+                    <span className=" text-xs">Animation Speed</span>
                 </div>
 
                 <div
@@ -117,7 +122,8 @@ const AnimationControls = () => {
                     }}
                 >
                     <PlayPauseBtn
-                        isPlaying={isPlaying}
+                        isPlaying={animationStatus === 'playing'}
+                        isLoading={animationStatus === 'loading'}
                         onClick={playPauseBtnOnClick}
                     />
 
@@ -129,38 +135,26 @@ const AnimationControls = () => {
 
                 <FramesSeletor
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}
-                    // activeItem={activeItem}
-                    // rNum4AnimationFrames={rNum4AnimationFrames}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
                     setActiveFrame={(rNum) => {
-                        dispatch(setActiveFrameByReleaseNum(rNum));
+                        if (animationStatus !== 'pausing') {
+                            return;
+                        }
+
+                        dispatch(
+                            releaseNumberOfActiveAnimationFrameChanged(rNum)
+                        );
+                        // console.log(rNum);
                     }}
                     toggleFrame={(rNum) => {
-                        dispatch(toggleAnimationFrame(rNum));
+                        dispatch(rNum2ExcludeToggled(rNum));
                     }}
-                    waybackItem4CurrentAnimationFrame={
-                        waybackItem4CurrentAnimationFrame
-                    }
-                    isButtonDisabled={isPlaying}
+                    releaseNum4ActiveFrame={releaseNum4ActiveFrame}
+                    isButtonDisabled={animationStatus === 'playing'}
                 />
             </>
         );
     };
-
-    useEffect(() => {
-        batch(() => {
-            dispatch(
-                waybackItems4AnimationLoaded(waybackItemsWithLocalChanges)
-            );
-
-            if (
-                prevWaybackItemsWithLocalChanges &&
-                prevWaybackItemsWithLocalChanges.length
-            ) {
-                dispatch(rNum2ExcludeReset());
-            }
-        });
-    }, [waybackItemsWithLocalChanges]);
 
     useEffect(() => {
         // console.log(rNum2ExcludeFromAnimation)
@@ -170,10 +164,11 @@ const AnimationControls = () => {
     return (
         <>
             <div
-                style={{
-                    padding: '0 1rem',
-                    marginTop: '.5rem',
-                }}
+                className="px-4 py-0 mt-2"
+                // style={{
+                //     padding: '0 1rem',
+                //     marginTop: '.5rem',
+                // }}
             >
                 {getContent()}
             </div>

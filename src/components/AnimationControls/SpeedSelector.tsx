@@ -13,21 +13,34 @@
  * limitations under the License.
  */
 
+import { ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS } from '@store/AnimationMode/reducer';
 import React from 'react';
 
 type Props = {
     defaultVal: number;
-    onChange: (speed: number) => void;
+    onChange: (speedInMilliseonds: number) => void;
 };
 
-const MIN_VAL = 0.0; // min animation speed is .5 second
-const MAX_VAL = 2; // max animation speed is 3 second
-const SLIDER_STEP = 0.25;
+// const MIN_VAL = 0.0; // min animation speed is .5 second
+// const MAX_VAL = 2; // max animation speed is 3 second
+// const SLIDER_STEP = 0.25;
 
 const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
     const sliderRef = React.useRef<any>();
 
     const onChangeDely = React.useRef<NodeJS.Timeout>();
+
+    const calcSliderDefaultValue = () => {
+        const idx = ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.indexOf(defaultVal);
+
+        if (idx === -1) {
+            return Math.floor(
+                ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length / 2
+            );
+        }
+
+        return idx;
+    };
 
     React.useEffect(() => {
         sliderRef.current.addEventListener(
@@ -39,13 +52,18 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
                     // console.log('slider on change', evt.target.value)
                     // onChange(+evt.target.value)
 
-                    const tickVal = Math.floor(+evt.target.value * 100) / 100;
+                    // const tickVal = Math.floor(+evt.target.value * 100) / 100;
 
-                    // the max val indciates fastes time and min val indicates slowest, therefore we need to use max val to minus the tick val
-                    // to get the actual animation speed, let's say the tick val is 2 and max val is 3, that gives a current speed of 1 second
-                    const val = MAX_VAL - tickVal;
+                    // // the max val indciates fastes time and min val indicates slowest, therefore we need to use max val to minus the tick val
+                    // // to get the actual animation speed, let's say the tick val is 2 and max val is 3, that gives a current speed of 1 second
+                    // const val = MAX_VAL - tickVal;
 
-                    onChange(val);
+                    const index = evt.target.value;
+
+                    const speed =
+                        ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[index];
+
+                    onChange(speed);
                 }, 500);
             }
         );
@@ -68,7 +86,7 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
             }}
             className="calcite-theme-dark"
         >
-            <span className="margin-right-half avenir-demi">-</span>
+            <span className="mr-2 font-semibold">-</span>
 
             <div
                 style={{
@@ -77,16 +95,16 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
             >
                 <calcite-slider
                     ref={sliderRef}
-                    min={MIN_VAL}
-                    max={MAX_VAL}
+                    min={0}
+                    max={ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length - 1}
                     snap
-                    ticks={SLIDER_STEP.toString()}
-                    step={SLIDER_STEP}
-                    value={MAX_VAL - defaultVal}
+                    ticks={1}
+                    step={1}
+                    value={calcSliderDefaultValue()}
                 ></calcite-slider>
             </div>
 
-            <span className="margin-left-half avenir-demi">+</span>
+            <span className="ml-2 font-semibold">+</span>
         </div>
     );
 };

@@ -14,11 +14,7 @@
  */
 
 import React from 'react';
-import {
-    DEFAULT_BACKGROUND_COLOR,
-    GUTTER_WIDTH,
-    SIDEBAR_WIDTH,
-} from '@constants/UI';
+import { GUTTER_WIDTH, SIDEBAR_WIDTH } from '@constants/UI';
 
 type Props = {
     isHide: boolean;
@@ -41,7 +37,7 @@ const Sidebar: React.FC<Props> = ({
             right: 0,
             left: isGutterHide ? 0 : GUTTER_WIDTH,
             width: isGutterHide ? '100%' : 'calc(100% - 50px)',
-            maxHeight: 300,
+            maxHeight: 400,
             padding: '.5rem 0',
         };
 
@@ -52,7 +48,6 @@ const Sidebar: React.FC<Props> = ({
             width: SIDEBAR_WIDTH,
             height: '100%',
             padding: '1rem 0',
-            backgroundColor: DEFAULT_BACKGROUND_COLOR,
             // overflow: hidden;
             boxSizing: 'border-box',
             zIndex: 1,
@@ -65,15 +60,25 @@ const Sidebar: React.FC<Props> = ({
             alignItems: 'stretch',
         };
 
-        return isMobile
-            ? ({
-                  ...defaultStyle,
-                  ...mobileStyle,
-              } as React.CSSProperties)
-            : defaultStyle;
+        if (isMobile) {
+            return {
+                ...defaultStyle,
+                ...mobileStyle,
+            } as React.CSSProperties;
+        }
+
+        return defaultStyle;
     };
 
-    return !isHide ? <div style={getStyle()}>{children}</div> : null;
+    if (isHide) {
+        return null;
+    }
+
+    return (
+        <div className=" bg-custom-background" style={getStyle()}>
+            {children}
+        </div>
+    );
 };
 
 export default Sidebar;

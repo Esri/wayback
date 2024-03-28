@@ -1,0 +1,5 @@
+.close-button::before {
+    @apply absolute top-0 right-0 w-52 h-52 pointer-events-none;
+    content: ' ';
+    background: linear-gradient(215deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 40%);
+}

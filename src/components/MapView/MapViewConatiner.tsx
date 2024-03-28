@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import './CustomMapViewStyle.css';
 import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,6 +27,7 @@ import {
 } from '@store/Map/reducer';
 
 import {
+    isLoadingWaybackItemsToggled,
     // activeWaybackItemSelector,
     releaseNum4ItemsWithLocalChangesUpdated,
     // previewWaybackItemSelector
@@ -43,6 +44,12 @@ import {
 } from '@utils/UrlSearchParam';
 import { batch } from 'react-redux';
 import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+import {
+    isAnimationModeOnSelector,
+    selectAnimationStatus,
+} from '@store/AnimationMode/reducer';
+import { queryLocalChanges } from '@store/Wayback/thunks';
+import { Point } from '@arcgis/core/geometry';
 
 type Props = {
     children?: React.ReactNode;
@@ -75,6 +82,8 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const mapExtent = useSelector(mapExtentSelector);
 
+    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+
     const { center, zoom } = useSelector(selectMapCenterAndZoom);
 
     const defaultMapExtent = useMemo((): IExtentGeomety => {
@@ -90,19 +99,14 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         mapCenterPoint: IMapPointInfo
     ) => {
         try {
-            const waybackItems = await getWaybackItemsWithLocalChanges(
-                {
-                    longitude: mapCenterPoint.longitude,
-                    latitude: mapCenterPoint.latitude,
-                },
-                mapCenterPoint.zoom
-            );
-            console.log(waybackItems);
+            const { longitude, latitude, zoom } = mapCenterPoint;
 
-            const rNums = waybackItems.map((d) => d.releaseNum);
+            const point = new Point({
+                longitude,
+                latitude,
+            });
 
-            // console.log(rNums);
-            dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
+            dispatch(queryLocalChanges(point, zoom));
         } catch (err) {
             console.error('failed to query local changes', err);
         }
@@ -123,6 +127,11 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
         saveMapCenterToHashParams(center, zoom);
     }, [center, zoom]);
+
+    useEffect(() => {
+        // adding this class will hide map zoom widget when animation mode is on
+        document.body.classList.toggle('hide-map-control', isAnimationModeOn);
+    }, [isAnimationModeOn]);
 
     return (
         <FlexGrowItemWapper>

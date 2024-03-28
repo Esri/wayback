@@ -39,7 +39,7 @@ interface IProps {
     portalBaseURL: string;
     mapExtent: IExtentGeomety;
 
-    onClose: (val: boolean) => void;
+    // onClose: (val: boolean) => void;
     signInButtonOnClick: () => void;
 }
 
@@ -195,41 +195,49 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
         } = this.state;
 
         const creatingIndicator = isCreatingWebmap ? (
-            <span className="font-size--2 margin-right-quarter web-map-on-creating-indicator">
+            <span className="text-sm mr-1 web-map-on-creating-indicator">
                 Creating Web Map...
             </span>
         ) : null;
 
-        const creatWebMapBtnClasses = classnames('btn upload-webmap-btn', {
-            'btn-disabled': isRequiredFieldMissing,
+        const creatWebMapBtnClasses = classnames({
+            disabled: isRequiredFieldMissing,
         });
 
         const creatWebMapBtn = !isCreatingWebmap ? (
             <div className={creatWebMapBtnClasses} onClick={this.saveAsWebmap}>
-                Create Wayback Map
+                <calcite-button>Create Wayback Map</calcite-button>
             </div>
         ) : null;
 
         return (
             <div className="dialog-content">
-                <h5 className="text-xl mb-3">Wayback Map Settings:</h5>
-                <label>
-                    Title
+                <h5 className="text-xl mb-4">Wayback Map Settings:</h5>
+
+                <div className="w-full mb-2">
+                    <h5>Title</h5>
                     <input
                         type="text"
                         placeholder="Tilte is required"
-                        className={title ? 'input-success' : 'input-error'}
+                        spellCheck="false"
+                        // className={title ? 'input-success' : 'input-error'}
+                        className={classnames('w-full outline-none p-1', {
+                            outline: !title,
+                            'outline-red-400': !title,
+                        })}
                         value={title}
                         onChange={this.setTitle}
                         required={true}
                         disabled={isCreatingWebmap ? true : false}
                     />
-                </label>
+                </div>
 
-                <label>
-                    Tags
+                <div className="w-full mb-2">
+                    <h5>Tags</h5>
                     <input
                         type="text"
+                        className="w-full outline-none p-1"
+                        spellCheck="false"
                         placeholder="tags are optional"
                         // className={tags ? 'input-success' : 'input-error'}
                         value={tags}
@@ -237,18 +245,20 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                         // required={true}
                         disabled={isCreatingWebmap ? true : false}
                     />
-                </label>
+                </div>
 
-                <label>
-                    Description: (Optional)
+                <div className="w-full mb-2">
+                    <h5>Description: (Optional)</h5>
                     <textarea
+                        className="w-full outline-none p-1"
+                        spellCheck="false"
                         value={description}
                         onChange={this.setDescription}
                         disabled={isCreatingWebmap ? true : false}
                     ></textarea>
-                </label>
+                </div>
 
-                <div className="leader-half text-right">
+                <div className="mt-4 text-right w-full">
                     {creatingIndicator}
                     {creatWebMapBtn}
                 </div>
@@ -258,12 +268,15 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
 
     getOpenWebmapContent() {
         return (
-            <div>
-                <p className="message-webamap-is-ready">
+            <div className="w-full">
+                <p className="message-webamap-is-ready mb-4">
                     Your Wayback Map is ready!
                 </p>
-                <div className="btn btn-fill" onClick={this.openWebmap}>
-                    Open Wayback Map
+                <div onClick={this.openWebmap}>
+                    <calcite-button width="full">
+                        {' '}
+                        Open Wayback Map
+                    </calcite-button>
                 </div>
             </div>
         );
@@ -284,7 +297,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
                 <p>
                     Please{' '}
                     <span
-                        className="text-blue cursor-pointer"
+                        className=" text-custom-theme-blue-brand cursor-pointer"
                         onClick={signInButtonOnClick}
                     >
                         sign in
@@ -307,7 +320,7 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        const { onClose, userRole } = this.props;
+        const { userRole } = this.props;
 
         const { isWebmapReady } = this.state;
 
@@ -331,36 +344,10 @@ class SaveAsWebmapDialog extends React.PureComponent<IProps, IState> {
             : null;
 
         return (
-            <div className="modal-overlay customized-modal is-active">
-                <div
-                    className="modal-content column-6"
-                    role="dialog"
-                    aria-labelledby="modal"
-                >
-                    <div className="trailer-0 text-right">
-                        <span
-                            className="cursor-pointer"
-                            aria-label="close-modal"
-                            onClick={onClose.bind(this, false)}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="21"
-                                height="21"
-                                viewBox="0 0 32 32"
-                                className="svg-icon"
-                            >
-                                <path d="M18.404 16l9.9 9.9-2.404 2.404-9.9-9.9-9.9 9.9L3.696 25.9l9.9-9.9-9.9-9.898L6.1 3.698l9.9 9.899 9.9-9.9 2.404 2.406-9.9 9.898z" />
-                            </svg>
-                        </span>
-                    </div>
-
-                    {editDialogContent}
-
-                    {openWebmapContent}
-
-                    {warningMessage4OrgUser}
-                </div>
+            <div className="w-80">
+                {editDialogContent}
+                {openWebmapContent}
+                {warningMessage4OrgUser}
             </div>
         );
     }

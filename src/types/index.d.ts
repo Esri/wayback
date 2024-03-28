@@ -83,6 +83,10 @@ interface IWaybackMetadataQueryResult {
     resolution: number;
     accuracy: number;
     releaseDate?: string;
+    queryLocation: {
+        longitude: number;
+        latitude: number;
+    };
 }
 
 interface IScreenPoint {

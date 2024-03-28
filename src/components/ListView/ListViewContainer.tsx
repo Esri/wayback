@@ -51,7 +51,7 @@ type Props = {
 const ListViewWrapper: React.FC<Props> = ({ children }) => {
     return (
         <div
-            className="leader-half fancy-scrollbar"
+            className="mt-2 fancy-scrollbar"
             style={{
                 position: 'relative',
                 flexGrow: 1,
