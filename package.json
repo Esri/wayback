@@ -88,7 +88,6 @@
   },
   "dependencies": {
     "@arcgis/core": "4.28",
-    "@entryline/gifstream": "^1.2.1",
     "@esri/arcgis-rest-feature-service": "^4.0.4",
     "@esri/arcgis-rest-request": "^4.2.0",
     "@reduxjs/toolkit": "^1.9.5",
