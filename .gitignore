@@ -70,3 +70,5 @@ dist
 /src/old
 
 *.http
+
+/temp
