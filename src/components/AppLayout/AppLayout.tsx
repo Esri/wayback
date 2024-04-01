@@ -55,24 +55,14 @@ import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
+import { useRevalidateToken } from '@hooks/useRevalidateToken';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
 
-    const currentPageIsVisibleAgain = useCurrenPageBecomesVisible();
-
     useSaveAppState2URLHashParams();
 
-    useEffect(() => {
-        if (!currentPageIsVisibleAgain) {
-            return;
-        }
-
-        // should re-validate when current tab becomes visible again,
-        // so that we can sign out the current user if the token is no longer valid,
-        // this can heppen when user signs out it's ArcGIS Online account from another tab
-        revalidateToken();
-    }, [currentPageIsVisibleAgain]);
+    useRevalidateToken();
 
     return (
         <>
