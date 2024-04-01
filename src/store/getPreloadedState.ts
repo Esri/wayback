@@ -45,6 +45,7 @@ import {
     DownloadModeState,
     initialDownloadModeState,
 } from './DownloadMode/reducer';
+import { isAnonymouns } from '@utils/Esri-OAuth';
 
 const isMobile = miscFns.isMobileDevice();
 
@@ -52,7 +53,8 @@ const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const state: UIState = {
         ...initialUIState,
         // shouldOnlyShowItemsWithLocalChange,
-        isSaveAsWebmapDialogOpen: getShouldOpenSaveWebMapDialog(),
+        isSaveAsWebmapDialogOpen:
+            getShouldOpenSaveWebMapDialog() && isAnonymouns() === false,
     };
 
     return state;
