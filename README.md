@@ -29,6 +29,24 @@ Now you can start the webpack dev server to test the app on your local machine:
 npm run start
 ```
 
+If you have errors run:
+
+```sh
+# This command will automatically fix any vulnerabilities found in your dependencies
+npm audit fix
+```
+
+```sh
+$ npm run start
+
+> world-imagery-wayback@1.0.0 start
+> webpack-dev-server --mode development --open
+
+sh: 1: webpack-dev-server: not found
+#If you see the above error, run the following command to install webpack-dev-server:
+npm install webpack-dev-server --save-dev
+```
+
 ## Deployment
 To build/deploye the app, you can simply run:
 
