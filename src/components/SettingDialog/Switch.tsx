@@ -19,12 +19,10 @@ type Props = {
 export const Switch: FC<Props> = ({ label, checked, onChange }) => {
     const switchRef = useRef<HTMLInputElement>();
 
-    /*const props = {}; /*Element implicitly has an 'any' type because expression of type '"checked"' can't be used to index type '{}'.
-        Property 'checked' does not exist on type '{}'.ts(7053)*/
     const props: { [key: string]: any } = {};
 
     if (checked) {
-        props['checked'] = true; 
+        props['checked'] = true;
     }
 
     useEffect(() => {
