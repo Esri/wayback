@@ -41,7 +41,7 @@ import { miscFns } from 'helper-toolkit-ts';
 import {
     DownloadModeState,
     initialDownloadModeState,
-    DownloadJob
+    DownloadJob,
 } from './DownloadMode/reducer';
 import { isAnonymouns } from '@utils/Esri-OAuth';
 
