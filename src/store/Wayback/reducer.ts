@@ -49,7 +49,7 @@ export type WaybackItemsState = {
     isLoading: boolean;
 };
 
-export const initialWaybackItemsState = {
+/*export const initialWaybackItemsState = {
     byReleaseNumber: {},
     allReleaseNumbers: [],
     releaseNum4SelectedItems: [],
@@ -58,8 +58,20 @@ export const initialWaybackItemsState = {
     releaseNum4PreviewWaybackItem: null,
     releaseNum4AlternativePreviewWaybackItem: null,
     isLoading: false,
-} as WaybackItemsState;
+} as WaybackItemsState;*/
 
+export const initialWaybackItemsState: WaybackItemsState = {
+    byReleaseNumber: {} as { [key: number]: IWaybackItem },
+    allReleaseNumbers: [],
+    releaseNum4SelectedItems: [],
+    releaseNum4ItemsWithLocalChanges: [],
+    releaseNum4ActiveWaybackItem: null,
+    releaseNum4PreviewWaybackItem: null,
+    releaseNum4AlternativePreviewWaybackItem: null,
+    isLoading: false,
+};
+
+/*
 const slice = createSlice({
     name: 'waybackItems',
     initialState: initialWaybackItemsState,
@@ -139,7 +151,97 @@ const slice = createSlice({
             state.isLoading = action.payload;
         },
     },
+});*/
+
+/*
+ERROR in ./src/store/Wayback/reducer.ts:341:14
+TS7006: Parameter 'rNum' implicitly has an 'any' type.
+    339 |     (byReleaseNumber, releaseNum4ItemsWithLocalChanges) => {
+    340 |         return releaseNum4ItemsWithLocalChanges.map(
+  > 341 |             (rNum) => byReleaseNumber[rNum]
+        |              ^^^^
+    342 |         );
+    343 |     }
+    344 | );
+
+*/
+
+const slice = createSlice({
+    name: 'waybackItems',
+    initialState: initialWaybackItemsState,
+    reducers: {
+        itemsLoaded: (
+            state: WaybackItemsState,
+            action: PayloadAction<IWaybackItem[]>
+        ) => {
+            const items = action.payload;
+
+            const byReleaseNumber: { [key: number]: IWaybackItem } = {};
+            const allReleaseNumbers: number[] = [];
+
+            for (const item of items) {
+                const { releaseNum } = item;
+                byReleaseNumber[releaseNum] = item;
+                allReleaseNumbers.push(releaseNum);
+            }
+
+            state.byReleaseNumber = byReleaseNumber;
+            state.allReleaseNumbers = allReleaseNumbers;
+        },
+        releaseNum4SelectedItemsAdded: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            const releaseNum4Item2Add = action.payload;
+            state.releaseNum4SelectedItems.push(releaseNum4Item2Add);
+        },
+        releaseNum4SelectedItemsRemoved: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            const releaseNum4Item2Remove = action.payload;
+            const index = state.releaseNum4SelectedItems.indexOf(
+                releaseNum4Item2Remove
+            );
+            state.releaseNum4SelectedItems.splice(index, 1);
+        },
+        releaseNum4SelectedItemsCleaned: (state: WaybackItemsState) => {
+            state.releaseNum4SelectedItems = [];
+        },
+        releaseNum4ItemsWithLocalChangesUpdated: (
+            state: WaybackItemsState,
+            action: PayloadAction<number[]>
+        ) => {
+            state.releaseNum4ItemsWithLocalChanges = [...action.payload];
+        },
+        releaseNum4ActiveWaybackItemUpdated: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            state.releaseNum4ActiveWaybackItem = action.payload;
+        },
+        releaseNum4PreviewWaybackItemUpdated: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            state.releaseNum4PreviewWaybackItem = action.payload;
+        },
+        releaseNum4AlternativePreviewWaybackItemUpdated: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            state.releaseNum4AlternativePreviewWaybackItem = action.payload;
+        },
+        isLoadingWaybackItemsToggled: (
+            state: WaybackItemsState,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isLoading = action.payload;
+        },
+    },
 });
+
+
 
 const { reducer } = slice;
 
