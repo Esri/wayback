@@ -26,9 +26,6 @@ import {
 } from '../utils/UrlSearchParam';
 
 import {
-    // getDefaultExtent,
-    // getCustomPortalUrl,
-    // getShouldShowUpdatesWithLocalChanges,
     getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
 } from '../utils/LocalStorage';
@@ -36,14 +33,15 @@ import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,
     DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
-    // DEFAULT_ANIMATION_SPEED_IN_MILLISECONDS,
     initialAnimationModeState,
 } from './AnimationMode/reducer';
 
+//npm install helper-toolkit-ts
 import { miscFns } from 'helper-toolkit-ts';
 import {
     DownloadModeState,
     initialDownloadModeState,
+    DownloadJob
 } from './DownloadMode/reducer';
 import { isAnonymouns } from '@utils/Esri-OAuth';
 
@@ -52,7 +50,6 @@ const isMobile = miscFns.isMobileDevice();
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const state: UIState = {
         ...initialUIState,
-        // shouldOnlyShowItemsWithLocalChange,
         isSaveAsWebmapDialogOpen:
             getShouldOpenSaveWebMapDialog() && isAnonymouns() === false,
     };
@@ -103,7 +100,6 @@ const getPreloadedState4SwipeView = (
 
     const state: SwipeViewState = {
         ...initialSwipeViewState,
-        // isSwipeWidgetOpen,
         releaseNum4LeadingLayer:
             rNum4SwipeWidgetLeadingLayer ||
             rNum4ActiveWaybackItem ||
@@ -164,7 +160,6 @@ const getPreloadedState4AnimationMode = (
 
     const state: AnimationModeState = {
         ...initialAnimationModeState,
-        // isAnimationModeOn: true,
         animationStatus: 'loading',
         animationSpeed,
         rNum2Exclude: rNum4FramesToExclude,
@@ -178,11 +173,10 @@ const getPreloadedState4Downloadmode = (
 ): DownloadModeState => {
     const { isDownloadDialogOpen } = urlParams;
 
-    const jobs = getDownloadJobsFromLocalStorage();
-    console.log(jobs);
+    const jobs: DownloadJob[] = getDownloadJobsFromLocalStorage();
 
-    const byId = {};
-    const ids = [];
+    const byId: { [key: string]: DownloadJob } = {};
+    const ids: string[] = [];
 
     for (const job of jobs) {
         const { id } = job;
@@ -206,21 +200,6 @@ const getPreloadedState = async (
     waybackItems: IWaybackItem[]
 ): Promise<PartialRootState> => {
     const urlParams: IURLParamData = decodeURLParams();
-
-    // const uiState: UIState = getPreloadedState4UI(urlParams);
-
-    // const waybackItemsState: WaybackItemsState = getPreloadedState4WaybackItems(
-    //     waybackItems,
-    //     urlParams
-    // );
-    // const swipeViewState: SwipeViewState = getPreloadedState4SwipeView(
-    //     urlParams,
-    //     waybackItems
-    // );
-    // const mapState: MapState = getPreloadedState4Map(urlParams);
-
-    // const animationModeState: AnimationModeState =
-    //     getPreloadedState4AnimationMode(urlParams);
 
     const preloadedState = {
         UI: getPreloadedState4UI(urlParams),

@@ -11,7 +11,7 @@
         "sourceMap": false,
         "target": "es5",
         "resolveJsonModule": true,
-        "suppressImplicitAnyIndexErrors": true,
+        //"suppressImplicitAnyIndexErrors": true, Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.ts
         "typeRoots": [ "./src/types", "./node_modules/@types"],
         "lib": [ "es2020", "dom" ],
         "paths": {

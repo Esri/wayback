@@ -173,7 +173,7 @@ const createWebmap = async ({
 
     const formData = new FormData();
 
-    const uploadRequestContent = {
+    /*const uploadRequestContent = {
         title,
         description,
         tags,
@@ -195,7 +195,48 @@ const createWebmap = async ({
 
     Object.keys(uploadRequestContent).map((key) => {
         formData.append(key, uploadRequestContent[key]);
+    });*/
+    /*
+        Object.keys(uploadRequestContent).map((key) => {
+            formData.append(key, uploadRequestContent[key]);
+            }); Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ title: string; description: string; tags: string; extent: string; snippet: string; text: string; type: string; overwrite: string; f: string; token: string; }'.
+        No index signature with a parameter of type 'string' was found on type '{ title: string; description: string; tags: string; extent: string; snippet: string; text: string; type: string; overwrite: string; f: string; token: string; }'.ts(7053)
+    */
+    const uploadRequestContent: {
+        title: string;
+        description: string;
+        tags: string;
+        extent: string;
+        snippet: string;
+        text: string;
+        type: string;
+        overwrite: string;
+        f: string;
+        token: string;
+    } = {
+        title,
+        description,
+        tags,
+        extent: mapExtent
+            ? [
+                  mapExtent.xmin,
+                  mapExtent.ymin,
+                  mapExtent.xmax,
+                  mapExtent.ymax,
+              ].join(',')
+            : null,
+        snippet: getSnippetStr(waybackItemsToSave),
+        text: getRequestText(waybackItemsToSave),
+        type: 'Web Map',
+        overwrite: 'true',
+        f: 'json',
+        token: getToken(),
+    };
+    
+    Object.keys(uploadRequestContent).map((key) => {
+        formData.append(key, (uploadRequestContent as { [key: string]: any })[key]);
     });
+    
 
     try {
         const createWebmapResponse = await esriRequest(requestUrl, {
