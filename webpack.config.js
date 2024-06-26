@@ -1,5 +1,6 @@
+require('dotenv').config({ path: './.env' }); 
+
 const path = require('path');
-const os = require('os');
 const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -8,18 +9,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-
-const computerName = os.hostname();
-
-/**
- * the App ID `WaybackImagery` of this app only works with `arcgis.com` domain, 
- * therefore I need to run the webpack dev server using the host name below `${computerName}.arcgis.com` instead of `localhost`.
- * 
- * You should update `appId` in `./src/app-config.ts` to use your onw App ID.
- */
-const hostname = computerName.includes('Esri') 
-    ? `${computerName}.arcgis.com` 
-    : 'localhost';
 
 const {
     title,
@@ -38,7 +27,7 @@ module.exports = (env, options)=> {
     return {
         devServer: {
             server: 'https',
-            host: hostname,
+            host: process.env.WEBPACK_DEV_SERVER_HOSTNAME || 'localhost',
             allowedHosts: "all"
         },
         entry: path.resolve(__dirname, './src/index.tsx'),
