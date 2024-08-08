@@ -86,28 +86,16 @@ module.exports = (env, options)=> {
                 },
                 { 
                     test: /\.(woff|woff2|ttf|eot)$/,  
-                    loader: "file-loader" 
-                },
-                // { test: /\.svg$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
-                { 
-                    test: /\.svg$/,  
-                    loader: "url-loader",
+                    loader: "file-loader",
                     options: {
-                        limit: 10000,
-                        fallback: {
-                            loader: "file-loader"
-                        }
+                        name: '[name].[contenthash].[ext]',
                     }
                 },
-                // { test: /\.(png|jpg|gif)$/,  loader: "file-loader" },
-                {   
-                    test: /\.(png|jpg|gif)$/,  
-                    loader: "url-loader",
+                { 
+                    test: /\.(png|jpg|gif|svg)$/,  
+                    loader: "file-loader",
                     options: {
-                        limit: 10000,
-                        fallback: {
-                            loader: "file-loader"
-                        }
+                        name: '[name].[contenthash].[ext]',
                     }
                 },
             ]
@@ -130,6 +118,7 @@ module.exports = (env, options)=> {
                 // hash: true,
                 template: './public/index.html',
                 filename: 'index.html',
+                favicon: './public/favicon.ico',
                 meta: {
                     title,
                     description,
