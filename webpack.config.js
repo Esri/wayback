@@ -36,6 +36,7 @@ module.exports = (env, options)=> {
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].[contenthash].js',
             publicPath: '',
+            assetModuleFilename: `[name][contenthash][ext][query]`
         },
         devtool: devMode ? 'source-map' : false,
         resolve: {
@@ -84,19 +85,27 @@ module.exports = (env, options)=> {
                         }
                     ]
                 },
-                { 
-                    test: /\.(woff|woff2|ttf|eot)$/,  
-                    loader: "file-loader",
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                    }
+                // { 
+                //     test: /\.(woff|woff2|ttf|eot)$/,  
+                //     loader: "file-loader",
+                //     options: {
+                //         name: '[name].[contenthash].[ext]',
+                //     }
+                // },
+                {
+                    test: /\.(woff|woff2|ttf|eot)$/,
+                    type: 'asset/resource',
                 },
-                { 
-                    test: /\.(png|jpg|gif|svg)$/,  
-                    loader: "file-loader",
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                    }
+                // { 
+                //     test: /\.(png|jpg|gif|svg)$/,  
+                //     loader: "file-loader",
+                //     options: {
+                //         name: '[name].[contenthash].[ext]',
+                //     }
+                // },
+                {
+                    test: /\.(png|jpg|gif|svg)$/,
+                    type: 'asset/resource',
                 },
             ]
         },
