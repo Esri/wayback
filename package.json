@@ -89,7 +89,7 @@
     "@esri/arcgis-rest-request": "^4.2.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@vannizhang/images-to-video-converter-client": "^1.1.13",
-    "@vannizhang/wayback-core": "^1.0.6",
+    "@vannizhang/wayback-core": "^1.0.8",
     "axios": "^1.6.2",
     "classnames": "^2.2.6",
     "d3": "^7.8.5",
