@@ -36,7 +36,7 @@ import {
     AnimationControls,
 } from '../';
 
-import { MobileHide } from '../MobileVisibility';
+// import { MobileHide } from '../MobileVisibility';
 
 type Props = {
     children?: React.ReactNode;
@@ -81,9 +81,9 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
         >
             <SidebarToggleBtn />
 
-            <MobileHide>
+            <div className="hidden md:block">
                 <AppTitleText />
-            </MobileHide>
+            </div>
 
             {getContent()}
         </Sidebar>

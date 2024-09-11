@@ -19,23 +19,35 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 
-import { MobileShow } from '../MobileVisibility';
+// import { MobileShow } from '../MobileVisibility';
 import MobileHeader from './index';
+import { IS_MOBILE } from '@constants/UI';
 
 const MobileHeaderContainer = () => {
     const isGutterHide = useSelector(isGutterHideSelector);
 
     const dispatch = useDispatch();
 
+    if (IS_MOBILE === false) {
+        return null;
+    }
+
     return (
-        <MobileShow>
-            <MobileHeader
-                isGutterHide={isGutterHide}
-                leftNavBtnOnClick={() => {
-                    dispatch(isGutterHideToggled());
-                }}
-            />
-        </MobileShow>
+        // <MobileShow>
+        //     <MobileHeader
+        //         isGutterHide={isGutterHide}
+        //         leftNavBtnOnClick={() => {
+        //             dispatch(isGutterHideToggled());
+        //         }}
+        //     />
+        // </MobileShow>
+
+        <MobileHeader
+            isGutterHide={isGutterHide}
+            leftNavBtnOnClick={() => {
+                dispatch(isGutterHideToggled());
+            }}
+        />
     );
 };
 

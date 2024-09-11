@@ -27,9 +27,6 @@ import {
 import { metadataQueryResultUpdated } from '@store/Map/reducer';
 
 import SwipeWidget from './SwipeWidget';
-
-import { MobileHide } from '../MobileVisibility';
-
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';
 import { IWaybackItem } from '@typings/index';
@@ -67,15 +64,13 @@ const SwipeWidgetContainer: React.FC<Props> = ({ mapView }: Props) => {
     }, [isOpen, waybackItem4LeadingLayer, waybackItem4TrailingLayer]);
 
     return (
-        <MobileHide>
-            <SwipeWidget
-                mapView={mapView}
-                waybackItem4LeadingLayer={waybackItem4LeadingLayer}
-                waybackItem4TrailingLayer={waybackItem4TrailingLayer}
-                isOpen={isOpen}
-                positionOnChange={positionOnChangeHandler}
-            />
-        </MobileHide>
+        <SwipeWidget
+            mapView={mapView}
+            waybackItem4LeadingLayer={waybackItem4LeadingLayer}
+            waybackItem4TrailingLayer={waybackItem4TrailingLayer}
+            isOpen={isOpen}
+            positionOnChange={positionOnChangeHandler}
+        />
     );
 };
 

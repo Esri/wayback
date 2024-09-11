@@ -19,8 +19,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { isSideBarHideSelector, isSideBarHideToggled } from '@store/UI/reducer';
 
-import SidebarToggleBtn from './index';
-import { MobileShow } from '../MobileVisibility';
+import { SidebarToggleBtn } from './index';
+// import { MobileShow } from '../MobileVisibility';
 
 const SidebarToogleBtnContainer = () => {
     const dispatch = useDispatch();
@@ -31,11 +31,7 @@ const SidebarToogleBtnContainer = () => {
         dispatch(isSideBarHideToggled());
     }, []);
 
-    return (
-        <MobileShow>
-            <SidebarToggleBtn isSideBarHide={isHide} onClick={onClickHandler} />
-        </MobileShow>
-    );
+    return <SidebarToggleBtn isSideBarHide={isHide} onClick={onClickHandler} />;
 };
 
 export default SidebarToogleBtnContainer;

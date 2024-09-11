@@ -23,13 +23,14 @@ import {
 } from '@store/UI/reducer';
 
 import MobileFooter from './MobileFooter';
+import { IS_MOBILE } from '@constants/UI';
 
 const MobileFooterContainer = () => {
     const dispatch = useDispatch();
     const isGutterHide = useSelector(isGutterHideSelector);
     const isSideBarHide = useSelector(isSideBarHideSelector);
 
-    if (!isSideBarHide) {
+    if (!isSideBarHide || IS_MOBILE === false) {
         return null;
     }
 

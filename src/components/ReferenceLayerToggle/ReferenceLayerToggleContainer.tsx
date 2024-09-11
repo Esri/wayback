@@ -21,9 +21,10 @@ import {
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
 } from '@store/Map/reducer';
-import { MobileHide } from '../MobileVisibility';
+// import { MobileHide } from '../MobileVisibility';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
+import { IS_MOBILE } from '@constants/UI';
 
 const ReferenceLayerToggleContainer = () => {
     const dispatch = useDispatch();
@@ -37,15 +38,15 @@ const ReferenceLayerToggleContainer = () => {
 
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
 
+    if (isAnimationModeOn || IS_MOBILE) {
+        return null;
+    }
+
     return (
-        <MobileHide>
-            {!isAnimationModeOn ? (
-                <ReferenceLayerToggle
-                    isActive={isReferenceLayerVisible}
-                    onClick={toggleReferenceLayer}
-                />
-            ) : null}
-        </MobileHide>
+        <ReferenceLayerToggle
+            isActive={isReferenceLayerVisible}
+            onClick={toggleReferenceLayer}
+        />
     );
 };
 
