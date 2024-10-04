@@ -200,9 +200,11 @@ const decodeURLParams = (): IURLParamData => {
               .map((d) => +d)
         : [];
 
-    const animationSpeed = getHashParamValueByKey('animationSpeed')
-        ? +getHashParamValueByKey('animationSpeed')
-        : null;
+    const animationSpeed =
+        getHashParamValueByKey('animationSpeed') &&
+        /\d/.test(getHashParamValueByKey('animationSpeed'))
+            ? +getHashParamValueByKey('animationSpeed')
+            : null;
 
     const rNum4FramesToExclude = getHashParamValueByKey('framesToExclude')
         ? getHashParamValueByKey('framesToExclude')

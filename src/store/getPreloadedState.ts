@@ -121,7 +121,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 
     if (isSwipeWidgetOpen) {
         mode = 'swipe';
-    } else if (animationSpeed) {
+    } else if (animationSpeed !== null) {
         mode = 'animation';
     }
 
