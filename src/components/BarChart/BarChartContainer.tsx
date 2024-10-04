@@ -32,7 +32,7 @@ import {
 import BarChart from './index';
 import { IWaybackItem } from '@typings/index';
 
-import { MobileHide } from '../MobileVisibility';
+// import { MobileHide } from '../MobileVisibility';
 
 const BarChartContainer: React.FC = () => {
     const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const BarChartContainer: React.FC = () => {
     };
 
     return (
-        <MobileHide>
+        <div className="hidden md:block">
             <BarChart
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}
@@ -78,7 +78,7 @@ const BarChartContainer: React.FC = () => {
                 onMouseEnter={onMouseEnterHandler}
                 onMouseOut={onMouseOutHandler}
             />
-        </MobileHide>
+        </div>
     );
 };
 
