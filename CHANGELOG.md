@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [2024-11-20]
+
+### Changed
+- update reference layer URLs to use the [Hybrid Reference Layer](https://www.arcgis.com/home/item.html?id=30d6b8271e1849cd9c3042060001f425) in English, instead of localized.
+
 ## [2024-10-04]
 
 ### Fixed
