@@ -26,6 +26,7 @@ import {
 } from '@typings/index';
 
 import { RootState } from '../configureStore';
+import { ReferenceLayerLanguage } from '@constants/map';
 
 export type MapCenter = {
     lon: number;
@@ -52,6 +53,10 @@ export type MapState = {
      * Represents the view's center point
      */
     center?: MapCenter;
+    /**
+     * The locale of the reference layer that is set by the user
+     */
+    referenceLayerLocale: ReferenceLayerLanguage;
 };
 
 export const initialMapState: MapState = {
@@ -63,6 +68,7 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
+    referenceLayerLocale: ReferenceLayerLanguage.LocalLanguage,
 };
 
 const slice = createSlice({
@@ -106,6 +112,12 @@ const slice = createSlice({
         zoomUpdated: (state, action: PayloadAction<number>) => {
             state.zoom = action.payload;
         },
+        referenceLayerLocaleUpdated: (
+            state,
+            action: PayloadAction<ReferenceLayerLanguage>
+        ) => {
+            state.referenceLayerLocale = action.payload;
+        },
     },
 });
 
@@ -120,6 +132,7 @@ export const {
     isQueryingMetadataToggled,
     mapCenterUpdated,
     zoomUpdated,
+    referenceLayerLocaleUpdated,
 } = slice.actions;
 
 export const selectMapMode = createSelector(
@@ -171,6 +184,11 @@ export const selectMapCenterAndZoom = createSelector(
 export const selectMapCenter = createSelector(
     (state: RootState) => state.Map.center,
     (center) => center
+);
+
+export const selectReferenceLayerLocale = createSelector(
+    (state: RootState) => state.Map.referenceLayerLocale,
+    (referenceLayerLocale) => referenceLayerLocale
 );
 
 export default reducer;

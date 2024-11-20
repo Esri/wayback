@@ -76,6 +76,16 @@ const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
         }
     }, [isVisible]);
 
+    useEffect(() => {
+        if (!mapView || !referenceLayerRef.current) {
+            return;
+        }
+
+        mapView.map.remove(referenceLayerRef.current);
+
+        init();
+    }, [url]);
+
     return null;
 };
 

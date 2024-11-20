@@ -37,7 +37,10 @@ module.exports = {
         },
         'foreground': {
           DEFAULT: '#ccc'
-        }
+        },
+        'list-card-background': {
+          DEFAULT: 'var(--list-card-background)'
+        },
       }
     },
     extend: {},

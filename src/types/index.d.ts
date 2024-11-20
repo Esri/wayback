@@ -123,7 +123,7 @@ type ValidServiceUrlNames =
     | 'wayback-imagery-base'
     | 'wayback-config'
     | 'wayback-change-detector-layer'
-    | 'reference-layer'
+    // | 'reference-layer'
     | 'world-imagery-basemap'
     | 'wayback-export-base';
 

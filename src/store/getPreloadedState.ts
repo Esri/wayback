@@ -28,6 +28,7 @@ import {
 import {
     getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
+    getPreferredReferenceLayerLocale,
 } from '../utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
@@ -44,6 +45,7 @@ import {
     DownloadJob,
 } from './DownloadMode/reducer';
 import { isAnonymouns } from '@utils/Esri-OAuth';
+import { ReferenceLayerLanguage } from '@constants/map';
 
 const isMobile = miscFns.isMobileDevice();
 
@@ -131,6 +133,9 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         mapExtent,
         center,
         zoom,
+        referenceLayerLocale:
+            getPreferredReferenceLayerLocale() ||
+            ReferenceLayerLanguage.LocalLanguage,
     };
 
     return state;

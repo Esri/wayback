@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
@@ -25,9 +25,14 @@ import {
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 import { IS_MOBILE } from '@constants/UI';
+import { LocaleSwitch } from './LocaleSwitch';
+import useOnClickOutside from '@hooks/useOnClickOutside';
 
 const ReferenceLayerToggleContainer = () => {
     const dispatch = useDispatch();
+
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
     const isReferenceLayerVisible = useSelector(
         isReferenceLayerVisibleSelector
     );
@@ -36,17 +41,33 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
+    const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+
     const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+
+    useOnClickOutside(containerRef, () => {
+        setIsLocaleSwitchOpen(false);
+    });
 
     if (isAnimationModeOn || IS_MOBILE) {
         return null;
     }
 
     return (
-        <ReferenceLayerToggle
-            isActive={isReferenceLayerVisible}
-            onClick={toggleReferenceLayer}
-        />
+        <div
+            ref={containerRef}
+            className="absolute top-[15px] right-[15px] h-[32px] w-[240px] bg-custom-background text-custom-foreground"
+        >
+            <ReferenceLayerToggle
+                isActive={isReferenceLayerVisible}
+                onClick={toggleReferenceLayer}
+                localeSwitchButtonOnClick={() => {
+                    setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                }}
+            />
+
+            {isLocaleSwitchOpen && <LocaleSwitch />}
+        </div>
     );
 };
 
