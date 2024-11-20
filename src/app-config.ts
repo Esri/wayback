@@ -32,7 +32,7 @@ const config: IAppConfig = {
                 'https://metadatadev.maptiles.arcgis.com/arcgis/rest/services/Wayback_Footprints/MapServer/0',
             // the vector tile layer provides a detailed reference layer, including transporation and labels for the world.
             'reference-layer':
-                'https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json',
+                'https://www.arcgis.com/sharing/rest/content/items/30d6b8271e1849cd9c3042060001f425/resources/styles/root.json',
             // this world imagery basemap will be used when user saves selected Wayback items into a new webmap
             'world-imagery-basemap':
                 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/',
@@ -51,7 +51,7 @@ const config: IAppConfig = {
             'wayback-change-detector-layer':
                 'https://metadatadev.maptiles.arcgis.com/arcgis/rest/services/Wayback_Footprints/MapServer/0',
             'reference-layer':
-                'https://devext.arcgis.com/sharing/rest/content/items/2155f4cadf454b9a973b12dc73d1ffaf/resources/styles/root.json?f=pjson',
+                'https://www.arcgis.com/sharing/rest/content/items/30d6b8271e1849cd9c3042060001f425/resources/styles/root.json',
             'world-imagery-basemap':
                 'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/',
             'wayback-export-base':
