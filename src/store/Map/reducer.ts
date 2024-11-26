@@ -57,6 +57,10 @@ export type MapState = {
      * The locale of the reference layer that is set by the user
      */
     referenceLayerLocale: ReferenceLayerLanguage;
+    /**
+     * The locale of the reference layer that is suggested by the app
+     */
+    suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
 };
 
 export const initialMapState: MapState = {
@@ -69,6 +73,7 @@ export const initialMapState: MapState = {
     zoom: null,
     center: null,
     referenceLayerLocale: ReferenceLayerLanguage.English,
+    suggestedReferenceLayerLocale: null,
 };
 
 const slice = createSlice({
@@ -118,6 +123,12 @@ const slice = createSlice({
         ) => {
             state.referenceLayerLocale = action.payload;
         },
+        suggestedReferenceLayerLocaleUpdated: (
+            state,
+            action: PayloadAction<ReferenceLayerLanguage | null>
+        ) => {
+            state.suggestedReferenceLayerLocale = action.payload;
+        },
     },
 });
 
@@ -133,6 +144,7 @@ export const {
     mapCenterUpdated,
     zoomUpdated,
     referenceLayerLocaleUpdated,
+    suggestedReferenceLayerLocaleUpdated,
 } = slice.actions;
 
 export const selectMapMode = createSelector(
@@ -189,6 +201,11 @@ export const selectMapCenter = createSelector(
 export const selectReferenceLayerLocale = createSelector(
     (state: RootState) => state.Map.referenceLayerLocale,
     (referenceLayerLocale) => referenceLayerLocale
+);
+
+export const selectSuggestedReferenceLayerLocale = createSelector(
+    (state: RootState) => state.Map.suggestedReferenceLayerLocale,
+    (suggestedReferenceLayerLocale) => suggestedReferenceLayerLocale
 );
 
 export default reducer;

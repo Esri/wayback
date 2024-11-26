@@ -41,6 +41,51 @@ export enum ReferenceLayerLanguage {
     // LocalLanguage = 'Local Language',
 }
 
+export const navigatorLanguageToReferenceLayerLanguage: {
+    [key: string]: ReferenceLayerLanguage;
+} = {
+    ar: ReferenceLayerLanguage.Arabic,
+    bs: ReferenceLayerLanguage.Bosnian,
+    ca: ReferenceLayerLanguage.Catalan,
+    'zh-CN': ReferenceLayerLanguage.ChineseSimplified,
+    'zh-TW': ReferenceLayerLanguage.ChineseTaiwan,
+    'zh-HK': ReferenceLayerLanguage.ChineseHongKong,
+    cs: ReferenceLayerLanguage.Czech,
+    da: ReferenceLayerLanguage.Danish,
+    nl: ReferenceLayerLanguage.Dutch,
+    et: ReferenceLayerLanguage.Estonian,
+    en: ReferenceLayerLanguage.English,
+    fi: ReferenceLayerLanguage.Finnish,
+    fr: ReferenceLayerLanguage.French,
+    de: ReferenceLayerLanguage.German,
+    el: ReferenceLayerLanguage.Greek,
+    hu: ReferenceLayerLanguage.Hungarian,
+    id: ReferenceLayerLanguage.Indonesian,
+    it: ReferenceLayerLanguage.Italian,
+    ja: ReferenceLayerLanguage.Japanese,
+    ko: ReferenceLayerLanguage.Korean,
+    lv: ReferenceLayerLanguage.Latvian,
+    lt: ReferenceLayerLanguage.Lithuanian,
+    no: ReferenceLayerLanguage.Norwegian,
+    pl: ReferenceLayerLanguage.Polish,
+    'pt-BR': ReferenceLayerLanguage.PortugueseBrazil,
+    'pt-PT': ReferenceLayerLanguage.PortuguesePortugal,
+    ro: ReferenceLayerLanguage.Romanian,
+    ru: ReferenceLayerLanguage.Russian,
+    sr: ReferenceLayerLanguage.Serbian,
+    sk: ReferenceLayerLanguage.Slovak,
+    sl: ReferenceLayerLanguage.Slovenian,
+    es: ReferenceLayerLanguage.Spanish,
+    sv: ReferenceLayerLanguage.Swedish,
+    th: ReferenceLayerLanguage.Thai,
+    tr: ReferenceLayerLanguage.Turkish,
+    uk: ReferenceLayerLanguage.Ukrainian,
+    vi: ReferenceLayerLanguage.Vietnamese,
+    he: ReferenceLayerLanguage.Hebrew,
+    bg: ReferenceLayerLanguage.Bulgarian,
+    // Add more mappings as needed
+};
+
 export type ReferenceLayerData = {
     id: string;
     title: string;

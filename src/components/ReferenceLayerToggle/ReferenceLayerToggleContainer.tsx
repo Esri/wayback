@@ -27,6 +27,7 @@ import ReferenceLayerToggle from './ReferenceLayerToggle';
 import { IS_MOBILE } from '@constants/UI';
 import { LocaleSwitch } from './LocaleSwitch';
 import useOnClickOutside from '@hooks/useOnClickOutside';
+import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
 
 const ReferenceLayerToggleContainer = () => {
     const dispatch = useDispatch();
@@ -48,6 +49,8 @@ const ReferenceLayerToggleContainer = () => {
     useOnClickOutside(containerRef, () => {
         setIsLocaleSwitchOpen(false);
     });
+
+    useSuggestReferenceLayerLocale();
 
     if (isAnimationModeOn || IS_MOBILE) {
         return null;
