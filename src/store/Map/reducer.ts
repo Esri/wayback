@@ -68,7 +68,7 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
-    referenceLayerLocale: ReferenceLayerLanguage.LocalLanguage,
+    referenceLayerLocale: ReferenceLayerLanguage.English,
 };
 
 const slice = createSlice({

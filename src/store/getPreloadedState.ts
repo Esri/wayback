@@ -135,7 +135,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         zoom,
         referenceLayerLocale:
             getPreferredReferenceLayerLocale() ||
-            ReferenceLayerLanguage.LocalLanguage,
+            ReferenceLayerLanguage.English,
     };
 
     return state;

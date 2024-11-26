@@ -38,7 +38,7 @@ export enum ReferenceLayerLanguage {
     Vietnamese = 'Vietnamese',
     Hebrew = 'Hebrew',
     Bulgarian = 'Bulgarian',
-    LocalLanguage = 'Local Language',
+    // LocalLanguage = 'Local Language',
 }
 
 export type ReferenceLayerData = {
@@ -52,12 +52,12 @@ export type ReferenceLayerData = {
  * list of hybrid reference layers in different languages
  */
 export const HYBRID_REFERENCE_LAYERS: ReferenceLayerData[] = [
-    {
-        id: '2a2e806e6e654ea78ecb705149ceae9f',
-        title: 'Hybrid Reference Layer (Local Language)',
-        language: ReferenceLayerLanguage.LocalLanguage,
-        url: `https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json`,
-    },
+    // {
+    //     id: '2a2e806e6e654ea78ecb705149ceae9f',
+    //     title: 'Hybrid Reference Layer (Local Language)',
+    //     language: ReferenceLayerLanguage.LocalLanguage,
+    //     url: `https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json`,
+    // },
     {
         id: 'd759386cc27342c580ff2ac5eb60ea9b',
         title: 'Hybrid Reference Layer (Arabic)',
