@@ -46,14 +46,15 @@ export const useSuggestReferenceLayerLocale = () => {
     );
 
     useEffect(() => {
-        // const preferredReferenceLayerLocale = getPreferredReferenceLayerLocale()
+        const preferredReferenceLayerLocale =
+            getPreferredReferenceLayerLocale();
 
         // Determine if a suggestion update is necessary
         if (
-            // preferredReferenceLayerLocale || // User already has a preferred language
             !suggestReferenceLayerLocale || // Browser language is unsupported
             suggestReferenceLayerLocale === ReferenceLayerLanguage.English || // English is default, no need to suggest
-            suggestReferenceLayerLocale === selectedReferenceLayerLanguage // Already using the suggested language
+            suggestReferenceLayerLocale === selectedReferenceLayerLanguage || // Already using the suggested language
+            preferredReferenceLayerLocale // User already has a preferred language
         ) {
             dispatch(suggestedReferenceLayerLocaleUpdated(null)); // Clear the suggestion
             return;

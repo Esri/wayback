@@ -100,7 +100,7 @@ const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
 export const setPreferredReferenceLayerLocale = (
     locale: ReferenceLayerLanguage
 ) => {
-    if (locale && locale !== ReferenceLayerLanguage.English) {
+    if (locale) {
         setItem(KEYS.referenceLayerLocale, locale);
     } else {
         removeItem(KEYS.referenceLayerLocale);
