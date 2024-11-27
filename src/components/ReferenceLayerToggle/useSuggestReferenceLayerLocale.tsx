@@ -6,6 +6,7 @@ import {
     selectReferenceLayerLocale,
     suggestedReferenceLayerLocaleUpdated,
 } from '@store/Map/reducer';
+import { getPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -24,6 +25,9 @@ const getReferenceLayerLanguage = (
     return navigatorLanguageToReferenceLayerLanguage[baseLanguage];
 };
 
+/**
+ * Custom React hook designed to manage and suggest a locale for reference layers based on the user's browser settings and preferences.
+ */
 export const useSuggestReferenceLayerLocale = () => {
     const dispatch = useDispatch();
 
@@ -42,17 +46,16 @@ export const useSuggestReferenceLayerLocale = () => {
     );
 
     useEffect(() => {
-        if (!suggestReferenceLayerLocale) {
-            return;
-        }
+        // const preferredReferenceLayerLocale = getPreferredReferenceLayerLocale()
 
-        // English is the default language so we don't need to suggest it
-        if (suggestReferenceLayerLocale === ReferenceLayerLanguage.English) {
-            return;
-        }
-
-        // If the suggested language is the same as the selected language, we don't need to do anything
-        if (suggestReferenceLayerLocale === selectedReferenceLayerLanguage) {
+        // Determine if a suggestion update is necessary
+        if (
+            // preferredReferenceLayerLocale || // User already has a preferred language
+            !suggestReferenceLayerLocale || // Browser language is unsupported
+            suggestReferenceLayerLocale === ReferenceLayerLanguage.English || // English is default, no need to suggest
+            suggestReferenceLayerLocale === selectedReferenceLayerLanguage // Already using the suggested language
+        ) {
+            dispatch(suggestedReferenceLayerLocaleUpdated(null)); // Clear the suggestion
             return;
         }
 

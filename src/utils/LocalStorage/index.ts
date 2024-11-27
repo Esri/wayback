@@ -109,9 +109,7 @@ export const setPreferredReferenceLayerLocale = (
 
 export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
     const val = getItem(KEYS.referenceLayerLocale);
-    return val
-        ? (val as ReferenceLayerLanguage)
-        : ReferenceLayerLanguage.English;
+    return val as ReferenceLayerLanguage;
 };
 
 export {

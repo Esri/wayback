@@ -55,28 +55,6 @@ type Props = {
     children?: React.ReactNode;
 };
 
-type FlexGrowItemWapperProps = {
-    children?: React.ReactNode;
-};
-
-// wrap the MapView and it's children into this flex grow container,
-// so it can adjust it's width depends on the visibility of swipe widget layers selector components on left and right side
-const FlexGrowItemWapper: React.FC<FlexGrowItemWapperProps> = ({
-    children,
-}) => {
-    return (
-        <div
-            style={{
-                position: 'relative',
-                flexGrow: 1,
-                flexShrink: 0,
-            }}
-        >
-            {children}
-        </div>
-    );
-};
-
 const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useDispatch();
 
@@ -134,7 +112,7 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [isAnimationModeOn]);
 
     return (
-        <FlexGrowItemWapper>
+        <div className=" relative shrink-0 grow">
             <MapView
                 initialExtent={defaultMapExtent}
                 center={center}
@@ -156,7 +134,7 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
             >
                 {children}
             </MapView>
-        </FlexGrowItemWapper>
+        </div>
     );
 };
 

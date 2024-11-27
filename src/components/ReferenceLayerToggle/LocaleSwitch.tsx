@@ -3,7 +3,8 @@ import {
     referenceLayerLocaleUpdated,
     selectReferenceLayerLocale,
 } from '@store/Map/reducer';
-import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
+import { updateReferenceLayerLocale } from '@store/Map/thunks';
+// import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,9 +13,9 @@ export const LocaleSwitch = () => {
 
     const selectedLocale = useSelector(selectReferenceLayerLocale);
 
-    useEffect(() => {
-        setPreferredReferenceLayerLocale(selectedLocale);
-    }, [selectedLocale]);
+    // useEffect(() => {
+    //     setPreferredReferenceLayerLocale(selectedLocale);
+    // }, [selectedLocale]);
 
     return (
         <div className="absolute w-full top-full px-2 text-sm bg-custom-background text-custom-foreground overflow-y-auto fancy-scrollbar max-h-[420px]">
@@ -27,7 +28,7 @@ export const LocaleSwitch = () => {
                         className="flex items-center my-2 text-xs bg-custom-list-card-background cursor-pointer p-1"
                         onClick={() => {
                             dispatch(
-                                referenceLayerLocaleUpdated(layer.language)
+                                updateReferenceLayerLocale(layer.language)
                             );
                         }}
                     >
