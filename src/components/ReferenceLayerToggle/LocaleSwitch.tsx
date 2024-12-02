@@ -1,4 +1,7 @@
-import { HYBRID_REFERENCE_LAYERS } from '@constants/map';
+import {
+    HYBRID_REFERENCE_LAYERS,
+    ReferenceLayerLanguage,
+} from '@constants/map';
 import {
     referenceLayerLocaleUpdated,
     selectReferenceLayerLocale,
@@ -20,7 +23,10 @@ export const LocaleSwitch = () => {
     return (
         <div className="absolute w-full top-full px-2 text-sm bg-custom-background text-custom-foreground overflow-y-auto fancy-scrollbar max-h-[420px]">
             {HYBRID_REFERENCE_LAYERS.map((layer, index) => {
-                const isSelected = layer.language === selectedLocale;
+                const isSelected =
+                    selectedLocale !== null
+                        ? layer.language === selectedLocale
+                        : layer.language === ReferenceLayerLanguage.English;
 
                 return (
                     <div

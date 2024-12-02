@@ -104,6 +104,12 @@ export const HYBRID_REFERENCE_LAYERS: ReferenceLayerData[] = [
     //     url: `https://www.arcgis.com/sharing/rest/content/items/2a2e806e6e654ea78ecb705149ceae9f/resources/styles/root.json`,
     // },
     {
+        id: 'cd1d774669c741699063fe6b13f7dbe9',
+        title: 'Hybrid Reference Layer (English)',
+        language: ReferenceLayerLanguage.English,
+        url: `https://www.arcgis.com/sharing/rest/content/items/cd1d774669c741699063fe6b13f7dbe9/resources/styles/root.json`,
+    },
+    {
         id: 'd759386cc27342c580ff2ac5eb60ea9b',
         title: 'Hybrid Reference Layer (Arabic)',
         language: ReferenceLayerLanguage.Arabic,
@@ -162,12 +168,6 @@ export const HYBRID_REFERENCE_LAYERS: ReferenceLayerData[] = [
         title: 'Hybrid Reference Layer (Estonian)',
         language: ReferenceLayerLanguage.Estonian,
         url: `https://www.arcgis.com/sharing/rest/content/items/aca754de522b48c1a76924156bb8ea0e/resources/styles/root.json`,
-    },
-    {
-        id: 'cd1d774669c741699063fe6b13f7dbe9',
-        title: 'Hybrid Reference Layer (English)',
-        language: ReferenceLayerLanguage.English,
-        url: `https://www.arcgis.com/sharing/rest/content/items/cd1d774669c741699063fe6b13f7dbe9/resources/styles/root.json`,
     },
     {
         id: '787fe34427ea40d9aa7e7a09fe67dccf',
