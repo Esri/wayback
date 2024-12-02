@@ -5,6 +5,7 @@ import {
 } from '@store/Map/reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateReferenceLayerLocale } from '@store/Map/thunks';
+import { ReferenceLayerLanguage } from '@constants/map';
 
 export const NotificationSetReferenceLayerLocale: FC = () => {
     const dispatch = useDispatch();
@@ -36,7 +37,19 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
                 .
             </p>
 
-            <calcite-icon icon="x" />
+            <calcite-button
+                icon-start="x"
+                appearance="transparent"
+                kind="neutral"
+                onClick={() => {
+                    // Set the reference layer locale to English when the close button is clicked to mute this notification.
+                    dispatch(
+                        updateReferenceLayerLocale(
+                            ReferenceLayerLanguage.English
+                        )
+                    );
+                }}
+            />
         </div>
     );
 };

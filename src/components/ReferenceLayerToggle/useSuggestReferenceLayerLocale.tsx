@@ -33,7 +33,7 @@ export const useSuggestReferenceLayerLocale = () => {
 
     const borswerLanguage = navigator.language;
 
-    const suggestReferenceLayerLocale = useMemo(() => {
+    const suggestedReferenceLayerLocale = useMemo(() => {
         const referenceLayerLanguage =
             getReferenceLayerLanguage(borswerLanguage);
         console.log('suggested referenceLayerLanguage', referenceLayerLanguage);
@@ -51,9 +51,9 @@ export const useSuggestReferenceLayerLocale = () => {
 
         // Determine if a suggestion update is necessary
         if (
-            !suggestReferenceLayerLocale || // Browser language is unsupported
-            suggestReferenceLayerLocale === ReferenceLayerLanguage.English || // English is default, no need to suggest
-            suggestReferenceLayerLocale === selectedReferenceLayerLanguage || // Already using the suggested language
+            !suggestedReferenceLayerLocale || // Browser language is unsupported
+            suggestedReferenceLayerLocale === ReferenceLayerLanguage.English || // English is default, no need to suggest
+            suggestedReferenceLayerLocale === selectedReferenceLayerLanguage || // Already using the suggested language
             preferredReferenceLayerLocale // User already has a preferred language
         ) {
             dispatch(suggestedReferenceLayerLocaleUpdated(null)); // Clear the suggestion
@@ -61,7 +61,7 @@ export const useSuggestReferenceLayerLocale = () => {
         }
 
         dispatch(
-            suggestedReferenceLayerLocaleUpdated(suggestReferenceLayerLocale)
+            suggestedReferenceLayerLocaleUpdated(suggestedReferenceLayerLocale)
         );
-    }, [suggestReferenceLayerLocale, selectedReferenceLayerLanguage]);
+    }, [suggestedReferenceLayerLocale, selectedReferenceLayerLanguage]);
 };
