@@ -15,7 +15,7 @@
 
 import React, { useContext } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { AppContext } from '@contexts/AppContextProvider';
 
 import {
@@ -48,21 +48,23 @@ type Props = {
 const SwipeWidgetLayerSelectorContainer: React.FC<Props> = ({
     targetLayer,
 }: Props) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const { isMobile } = useContext(AppContext);
 
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
-    const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
-    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
+    const waybackItems: IWaybackItem[] = useAppSelector(
+        allWaybackItemsSelector
+    );
+    const rNum4WaybackItemsWithLocalChanges: number[] = useAppSelector(
         releaseNum4ItemsWithLocalChangesSelector
     );
 
-    const leadingLayer: IWaybackItem = useSelector(
+    const leadingLayer: IWaybackItem = useAppSelector(
         swipeWidgetLeadingLayerSelector
     );
-    const trailingLayer: IWaybackItem = useSelector(
+    const trailingLayer: IWaybackItem = useAppSelector(
         swipeWidgetTrailingLayerSelector
     );
 

@@ -19,7 +19,7 @@ import config from './config';
 
 import { IWaybackItem, IExtentGeomety } from '@typings/index';
 import createWebmap from './createWebmap';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
 
 interface IProps {

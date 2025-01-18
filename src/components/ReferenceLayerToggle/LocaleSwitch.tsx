@@ -9,12 +9,12 @@ import {
 import { updateReferenceLayerLocale } from '@store/Map/thunks';
 // import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 export const LocaleSwitch = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const selectedLocale = useSelector(selectReferenceLayerLocale);
+    const selectedLocale = useAppSelector(selectReferenceLayerLocale);
 
     // useEffect(() => {
     //     setPreferredReferenceLayerLocale(selectedLocale);

@@ -15,11 +15,7 @@
 
 import React, { useEffect } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    // batch
-} from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     shouldOnlyShowItemsWithLocalChangeSelector,
@@ -30,9 +26,9 @@ import {
 import ShowLocalChangesCheckboxToggle from './index';
 
 const ShowLocalChangesCheckboxToggleContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const shouldOnlyShowItemsWithLocalChange = useSelector(
+    const shouldOnlyShowItemsWithLocalChange = useAppSelector(
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 

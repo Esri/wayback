@@ -15,7 +15,7 @@
 
 import React, { useContext, useEffect, useMemo } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
@@ -38,16 +38,20 @@ import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 
 const SaveAsWebmapBtnContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
 
-    const rNum4SelectedWaybackItems: number[] = useSelector(
+    const rNum4SelectedWaybackItems: number[] = useAppSelector(
         releaseNum4SelectedItemsSelector
     );
 
-    const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
-    const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
+    const isSwipeWidgetOpen: boolean = useAppSelector(
+        isSwipeWidgetOpenSelector
+    );
+    const isAnimationModeOn: boolean = useAppSelector(
+        isAnimationModeOnSelector
+    );
 
     const isDisabled = useMemo(() => {
         return (

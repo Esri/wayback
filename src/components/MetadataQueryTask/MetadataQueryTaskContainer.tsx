@@ -15,7 +15,7 @@
 
 import React, { useContext } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 
@@ -42,16 +42,16 @@ type Props = {
 };
 
 const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
-    const disptach = useDispatch();
+    const disptach = useAppDispatch();
 
-    const activeWaybackItem = useSelector(activeWaybackItemSelector);
+    const activeWaybackItem = useAppSelector(activeWaybackItemSelector);
 
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
-    const swipeWidgetPosition = useSelector(swipePositionSelector);
-    const swipeWidgetLeadingLayer = useSelector(
+    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
+    const swipeWidgetPosition = useAppSelector(swipePositionSelector);
+    const swipeWidgetLeadingLayer = useAppSelector(
         swipeWidgetLeadingLayerSelector
     );
-    const swipeWidgetTrailingLayer = useSelector(
+    const swipeWidgetTrailingLayer = useAppSelector(
         swipeWidgetTrailingLayerSelector
     );
 

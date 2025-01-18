@@ -17,7 +17,7 @@ import React, { useContext, useMemo } from 'react';
 
 import { Gutter } from './index';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
@@ -36,16 +36,20 @@ type Props = {
 };
 
 const GutterContainer: React.FC<Props> = ({ children }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const isSwipeWidgetOpen: boolean = useSelector(isSwipeWidgetOpenSelector);
-    const isAnimationModeOn: boolean = useSelector(isAnimationModeOnSelector);
+    const isSwipeWidgetOpen: boolean = useAppSelector(
+        isSwipeWidgetOpenSelector
+    );
+    const isAnimationModeOn: boolean = useAppSelector(
+        isAnimationModeOnSelector
+    );
 
     const settingsBtnDisabled = useMemo(() => {
         return isSwipeWidgetOpen || isAnimationModeOn;
     }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
-    const isHide = useSelector(isGutterHideSelector);
+    const isHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
 

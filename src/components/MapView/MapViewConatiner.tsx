@@ -15,7 +15,7 @@
 import './CustomMapViewStyle.css';
 import React, { useContext, useEffect, useMemo } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     mapCenterUpdated,
@@ -56,13 +56,13 @@ type Props = {
 };
 
 const MapViewConatiner: React.FC<Props> = ({ children }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const mapExtent = useSelector(mapExtentSelector);
+    const mapExtent = useAppSelector(mapExtentSelector);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
-    const { center, zoom } = useSelector(selectMapCenterAndZoom);
+    const { center, zoom } = useAppSelector(selectMapCenterAndZoom);
 
     const defaultMapExtent = useMemo((): IExtentGeomety => {
         // no need to use default map extent if center and zoom are already defined

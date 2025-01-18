@@ -15,13 +15,6 @@
 
 import React, { useContext } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    batch,
-    // batch
-} from 'react-redux';
-
 import { AppContext } from '@contexts/AppContextProvider';
 
 import {
@@ -32,15 +25,16 @@ import {
 import { shouldShowPreviewItemTitleSelector } from '@store/UI/reducer';
 
 import Title4ActiveItem from './index';
+import { useAppSelector } from '@store/configureStore';
 
 const Title4ActiveItemContainer = () => {
     const { isMobile } = useContext(AppContext);
 
-    const activeWaybackItem = useSelector(activeWaybackItemSelector);
+    const activeWaybackItem = useAppSelector(activeWaybackItemSelector);
 
-    const previewWaybackItem = useSelector(previewWaybackItemSelector);
+    const previewWaybackItem = useAppSelector(previewWaybackItemSelector);
 
-    const shouldShowPreviewItemTitle = useSelector(
+    const shouldShowPreviewItemTitle = useAppSelector(
         shouldShowPreviewItemTitleSelector
     );
 

@@ -15,7 +15,7 @@
 
 import React from 'react';
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 import { isReferenceLayerVisibleSelector } from '@store/Map/reducer';
 
@@ -29,11 +29,11 @@ type Props = {
 };
 
 const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
-    const isReferenceLayerVisible = useSelector(
+    const isReferenceLayerVisible = useAppSelector(
         isReferenceLayerVisibleSelector
     );
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     const referenceLayer = useSelecteReferenceLayer();
 

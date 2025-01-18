@@ -15,7 +15,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     // releaseNum4ItemsWithLocalChangesSelector,
@@ -64,20 +64,20 @@ import {
 } from '@utils/UrlSearchParam';
 
 const AnimationControls = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const rNum2ExcludeFromAnimation: number[] =
-        useSelector(rNum2ExcludeSelector);
+        useAppSelector(rNum2ExcludeSelector);
 
-    const waybackItemsWithLocalChanges: IWaybackItem[] = useSelector(
+    const waybackItemsWithLocalChanges: IWaybackItem[] = useAppSelector(
         waybackItemsWithLocalChangesSelector
     );
 
-    const animationSpeed = useSelector(animationSpeedSelector);
+    const animationSpeed = useAppSelector(animationSpeedSelector);
 
-    const animationStatus = useSelector(selectAnimationStatus);
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
-    const releaseNum4ActiveFrame = useSelector(
+    const releaseNum4ActiveFrame = useAppSelector(
         selectReleaseNumberOfActiveAnimationFrame
     );
 

@@ -14,7 +14,7 @@
  */
 
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import classnames from 'classnames';
 import {
     showDownloadAnimationPanelToggled,
@@ -23,11 +23,11 @@ import {
 } from '@store/AnimationMode/reducer';
 
 export const DonwloadAnimationButton = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    // const isLoadingFrameData = useSelector(isLoadingFrameDataSelector);
+    // const isLoadingFrameData = useAppSelector(isLoadingFrameDataSelector);
 
-    const animationStatus = useSelector(selectAnimationStatus);
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
     const onClickHandler = useCallback(() => {
         dispatch(showDownloadAnimationPanelToggled(true));

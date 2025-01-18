@@ -18,10 +18,10 @@ import IImageElement from '@arcgis/core/layers/support/ImageElement';
 import { downloadBlob } from '@utils/snippets/downloadBlob';
 import { DownloadOptionsList } from './DownloadOptionsList';
 import { Dimension, PreviewWindow } from './PreviewWindow';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 import { DownloadJobStatusInfo } from './DownloadJobStatus';
 import { CloseButton } from '../CloseButton';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@store/configureStore';
 // import { selectMapCenter } from '@shared/store/Map/selectors';
 import { OpenDownloadPanelButton } from './OpenDownloadPanelButton';
 import {
@@ -75,9 +75,11 @@ export const AnimationDownloadPanel: FC<Props> = ({
     animationSpeed,
     mapViewWindowSize,
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const shouldShowDownloadPanel = useSelector(selectShouldShowDownloadPanel);
+    const shouldShowDownloadPanel = useAppSelector(
+        selectShouldShowDownloadPanel
+    );
 
     const [previewWindowSize, setPreviewWindowSize] = useState<Dimension>(null);
 

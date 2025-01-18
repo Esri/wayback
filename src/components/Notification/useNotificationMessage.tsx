@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 import { selectSuggestedReferenceLayerLocale } from '@store/Map/reducer';
 
 export enum NotificationType {
@@ -12,7 +12,7 @@ export enum NotificationType {
  * @returns {NotificationType} The type of notification to display.
  */
 export const useNotificationMessage2Display = (): NotificationType => {
-    const suggestedReferenceLayerLocale = useSelector(
+    const suggestedReferenceLayerLocale = useAppSelector(
         selectSuggestedReferenceLayerLocale
     );
 

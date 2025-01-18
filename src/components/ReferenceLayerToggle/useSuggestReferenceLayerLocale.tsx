@@ -8,8 +8,8 @@ import {
 } from '@store/Map/reducer';
 import { getPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
+import { useAppDispatch } from '@store/configureStore';
 
 // Function to map navigator.language to the ReferenceLayerLanguage enum
 const getReferenceLayerLanguage = (
@@ -29,7 +29,7 @@ const getReferenceLayerLanguage = (
  * Custom React hook designed to manage and suggest a locale for reference layers based on the user's browser settings and preferences.
  */
 export const useSuggestReferenceLayerLocale = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const borswerLanguage = navigator.language;
 
@@ -41,7 +41,7 @@ export const useSuggestReferenceLayerLocale = () => {
         return referenceLayerLanguage;
     }, [borswerLanguage]);
 
-    const selectedReferenceLayerLanguage = useSelector(
+    const selectedReferenceLayerLanguage = useAppSelector(
         selectReferenceLayerLocale
     );
 

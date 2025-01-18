@@ -15,11 +15,7 @@
 
 import React, { useContext, useEffect } from 'react';
 
-import {
-    useSelector,
-    // useDispatch,
-    // batch
-} from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     previewWaybackItemSelector,
@@ -39,9 +35,9 @@ type Props = {
 const PreviewWindowContainer: React.FC<Props> = ({ mapView }: Props) => {
     const { isMobile } = useContext(AppContext);
 
-    const previewWaybackItem = useSelector(previewWaybackItemSelector);
+    const previewWaybackItem = useAppSelector(previewWaybackItemSelector);
 
-    const releaseNum4AlternativePreviewWaybackItem = useSelector(
+    const releaseNum4AlternativePreviewWaybackItem = useAppSelector(
         releaseNum4AlternativePreviewWaybackItemSelector
     );
 

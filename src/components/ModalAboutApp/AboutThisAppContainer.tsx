@@ -15,7 +15,7 @@
 
 import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isAboutThisAppModalOpenSelector,
@@ -26,9 +26,9 @@ import { AboutThiAppContent } from './AboutThisAppContent';
 import { Modal } from '@components/Modal/Modal';
 
 const AboutThisAppContainer = () => {
-    const isOpen = useSelector(isAboutThisAppModalOpenSelector);
+    const isOpen = useAppSelector(isAboutThisAppModalOpenSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const onCloseHandler = () => {
         dispatch(isAboutThisAppModalOpenToggled());

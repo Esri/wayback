@@ -15,7 +15,7 @@
 
 import React, { useContext, useEffect } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isSaveAsWebmapDialogOpenSelector,
@@ -43,19 +43,21 @@ import {
 import { Modal } from '@components/Modal/Modal';
 
 const SaveAsWebmapDialogContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
 
-    const mapExtent: IExtentGeomety = useSelector(mapExtentSelector);
+    const mapExtent: IExtentGeomety = useAppSelector(mapExtentSelector);
 
-    const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
+    const waybackItems: IWaybackItem[] = useAppSelector(
+        allWaybackItemsSelector
+    );
 
-    const rNum4SelectedWaybackItems: number[] = useSelector(
+    const rNum4SelectedWaybackItems: number[] = useAppSelector(
         releaseNum4SelectedItemsSelector
     );
 
-    const isOpen: boolean = useSelector(isSaveAsWebmapDialogOpenSelector);
+    const isOpen: boolean = useAppSelector(isSaveAsWebmapDialogOpenSelector);
 
     const onCloseHandler = () => {
         dispatch(isSaveAsWebmapDialogOpenToggled());

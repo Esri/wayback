@@ -3,14 +3,14 @@ import {
     referenceLayerLocaleUpdated,
     selectSuggestedReferenceLayerLocale,
 } from '@store/Map/reducer';
-import { useDispatch, useSelector } from 'react-redux';
 import { updateReferenceLayerLocale } from '@store/Map/thunks';
 import { ReferenceLayerLanguage } from '@constants/map';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 export const NotificationSetReferenceLayerLocale: FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const suggestedReferenceLayerLocale = useSelector(
+    const suggestedReferenceLayerLocale = useAppSelector(
         selectSuggestedReferenceLayerLocale
     );
 

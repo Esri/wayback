@@ -1,10 +1,10 @@
 import { HYBRID_REFERENCE_LAYERS } from '@constants/map';
 import { selectReferenceLayerLocale } from '@store/Map/reducer';
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 export const useSelecteReferenceLayer = () => {
-    const selectedReferenceLayerLanguage = useSelector(
+    const selectedReferenceLayerLanguage = useAppSelector(
         selectReferenceLayerLocale
     );
 

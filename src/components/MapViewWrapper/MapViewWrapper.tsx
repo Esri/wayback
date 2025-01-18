@@ -15,7 +15,7 @@
 
 import React, { useContext } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
@@ -29,9 +29,9 @@ type Props = {
 };
 
 const MapViewWrapper: React.FC<Props> = ({ children }) => {
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
-    const isGutterHide = useSelector(isGutterHideSelector);
+    const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
 

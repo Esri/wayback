@@ -15,7 +15,7 @@
 
 import React, { useCallback, useState } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import {
     isReferenceLayerVisibleSelector,
@@ -30,11 +30,11 @@ import useOnClickOutside from '@hooks/useOnClickOutside';
 import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
 
 const ReferenceLayerToggleContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    const isReferenceLayerVisible = useSelector(
+    const isReferenceLayerVisible = useAppSelector(
         isReferenceLayerVisibleSelector
     );
 
@@ -44,7 +44,7 @@ const ReferenceLayerToggleContainer = () => {
 
     const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     useOnClickOutside(containerRef, () => {
         setIsLocaleSwitchOpen(false);

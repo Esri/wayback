@@ -15,7 +15,7 @@
 
 import React, { useEffect, useMemo } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '@utils/UrlSearchParam';
@@ -31,9 +31,9 @@ type Props = {
 };
 
 const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
-    const activeWaybackItem = useSelector(activeWaybackItemSelector);
+    const activeWaybackItem = useAppSelector(activeWaybackItemSelector);
 
-    const animationStatus = useSelector(selectAnimationStatus);
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
     const isVisible = useMemo(() => {
         // if(animationStatus !== null){
