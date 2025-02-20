@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import {
+    isReferenceLayerSwitcherOpenToggled,
     referenceLayerLocaleUpdated,
     selectSuggestedReferenceLayerLocale,
 } from '@store/Map/reducer';
@@ -30,6 +31,8 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
                                 suggestedReferenceLayerLocale
                             )
                         );
+
+                        dispatch(isReferenceLayerSwitcherOpenToggled(true));
                     }}
                 >
                     {suggestedReferenceLayerLocale}

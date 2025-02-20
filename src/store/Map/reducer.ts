@@ -61,6 +61,10 @@ export type MapState = {
      * The locale of the reference layer that is suggested by the app
      */
     suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
+    /**
+     * if true, the reference layer switcher is open
+     */
+    isReferenceLayerSwitcherOpen: boolean;
 };
 
 export const initialMapState: MapState = {
@@ -74,6 +78,7 @@ export const initialMapState: MapState = {
     center: null,
     referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
     suggestedReferenceLayerLocale: null,
+    isReferenceLayerSwitcherOpen: false,
 };
 
 const slice = createSlice({
@@ -129,6 +134,12 @@ const slice = createSlice({
         ) => {
             state.suggestedReferenceLayerLocale = action.payload;
         },
+        isReferenceLayerSwitcherOpenToggled: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isReferenceLayerSwitcherOpen = action.payload;
+        },
     },
 });
 
@@ -145,37 +156,35 @@ export const {
     zoomUpdated,
     referenceLayerLocaleUpdated,
     suggestedReferenceLayerLocaleUpdated,
+    isReferenceLayerSwitcherOpenToggled,
 } = slice.actions;
 
-export const selectMapMode = createSelector(
-    (state: RootState) => state.Map.mode,
-    (mode) => mode
-);
+export const selectMapMode = (state: RootState) => state.Map.mode;
 
-export const mapExtentSelector = createSelector(
-    (state: RootState) => state.Map.mapExtent,
-    (mapExtent) => mapExtent
-);
+export const mapExtentSelector = (state: RootState) => state.Map.mapExtent;
 
-export const isReferenceLayerVisibleSelector = createSelector(
-    (state: RootState) => state.Map.isReferenceLayerVisible,
-    (isReferenceLayerVisible) => isReferenceLayerVisible
-);
+export const isReferenceLayerVisibleSelector = (state: RootState) =>
+    state.Map.isReferenceLayerVisible;
 
-export const selectIsQueringMetadata = createSelector(
-    (state: RootState) => state.Map.isQueryingMetadata,
-    (isQueryingMetadata) => isQueryingMetadata
-);
+export const selectIsQueringMetadata = (state: RootState) =>
+    state.Map.isQueryingMetadata;
 
-export const metadataQueryResultSelector = createSelector(
-    (state: RootState) => state.Map.metadataQueryResult,
-    (metadataQueryResult) => metadataQueryResult
-);
+export const metadataQueryResultSelector = (state: RootState) =>
+    state.Map.metadataQueryResult;
 
-export const metadataPopupAnchorSelector = createSelector(
-    (state: RootState) => state.Map.metadataPopupAnchor,
-    (metadataPopupAnchor) => metadataPopupAnchor
-);
+export const metadataPopupAnchorSelector = (state: RootState) =>
+    state.Map.metadataPopupAnchor;
+
+export const selectMapCenter = (state: RootState) => state.Map.center;
+
+export const selectReferenceLayerLocale = (state: RootState) =>
+    state.Map.referenceLayerLocale;
+
+export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
+    state.Map.suggestedReferenceLayerLocale;
+
+export const selectIsReferenceLayerSwitcherOpen = (state: RootState) =>
+    state.Map.isReferenceLayerSwitcherOpen;
 
 /**
  * Select center and zoom of the map
@@ -191,21 +200,6 @@ export const selectMapCenterAndZoom = createSelector(
             center,
         };
     }
-);
-
-export const selectMapCenter = createSelector(
-    (state: RootState) => state.Map.center,
-    (center) => center
-);
-
-export const selectReferenceLayerLocale = createSelector(
-    (state: RootState) => state.Map.referenceLayerLocale,
-    (referenceLayerLocale) => referenceLayerLocale
-);
-
-export const selectSuggestedReferenceLayerLocale = createSelector(
-    (state: RootState) => state.Map.suggestedReferenceLayerLocale,
-    (suggestedReferenceLayerLocale) => suggestedReferenceLayerLocale
 );
 
 export default reducer;

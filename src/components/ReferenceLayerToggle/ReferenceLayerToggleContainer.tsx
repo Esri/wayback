@@ -18,8 +18,10 @@ import React, { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import {
+    isReferenceLayerSwitcherOpenToggled,
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
+    selectIsReferenceLayerSwitcherOpen,
 } from '@store/Map/reducer';
 // import { MobileHide } from '../MobileVisibility';
 
@@ -42,12 +44,17 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
-    const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+    // const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+
+    const isLocaleSwitchOpen = useAppSelector(
+        selectIsReferenceLayerSwitcherOpen
+    );
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     useOnClickOutside(containerRef, () => {
-        setIsLocaleSwitchOpen(false);
+        // setIsLocaleSwitchOpen(false);
+        dispatch(isReferenceLayerSwitcherOpenToggled(false));
     });
 
     useSuggestReferenceLayerLocale();
@@ -65,7 +72,8 @@ const ReferenceLayerToggleContainer = () => {
                 isActive={isReferenceLayerVisible}
                 onClick={toggleReferenceLayer}
                 localeSwitchButtonOnClick={() => {
-                    setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                    // setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                    dispatch(isReferenceLayerSwitcherOpenToggled(true));
                 }}
             />
 
