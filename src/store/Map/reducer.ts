@@ -72,7 +72,7 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
-    referenceLayerLocale: ReferenceLayerLanguage.English,
+    referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
     suggestedReferenceLayerLocale: null,
 };
 

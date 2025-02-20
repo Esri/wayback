@@ -26,7 +26,7 @@ export const LocaleSwitch = () => {
                 const isSelected =
                     selectedLocale !== null
                         ? layer.language === selectedLocale
-                        : layer.language === ReferenceLayerLanguage.English;
+                        : layer.language === ReferenceLayerLanguage.EnglishUS;
 
                 return (
                     <div

@@ -53,6 +53,8 @@ export const useSuggestReferenceLayerLocale = () => {
         if (
             !suggestedReferenceLayerLocale || // Browser language is unsupported
             suggestedReferenceLayerLocale === ReferenceLayerLanguage.English || // English is default, no need to suggest
+            suggestedReferenceLayerLocale ===
+                ReferenceLayerLanguage.EnglishUS ||
             suggestedReferenceLayerLocale === selectedReferenceLayerLanguage || // Already using the suggested language
             preferredReferenceLayerLocale // User already has a preferred language
         ) {

@@ -45,7 +45,7 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
                     // Set the reference layer locale to English when the close button is clicked to mute this notification.
                     dispatch(
                         updateReferenceLayerLocale(
-                            ReferenceLayerLanguage.English
+                            ReferenceLayerLanguage.EnglishUS
                         )
                     );
                 }}
