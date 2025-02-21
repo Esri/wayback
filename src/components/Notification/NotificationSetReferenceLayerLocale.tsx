@@ -20,7 +20,7 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
     }
 
     return (
-        <div className="flex items-center bg-black md:bg-opacity-85 text-white pointer-events-auto p-2 md:text-sm ">
+        <div className="flex items-center bg-black md:bg-opacity-85 text-white pointer-events-auto p-2 md:text-sm">
             <p>
                 You can set your reference layer language to{' '}
                 <span
@@ -44,6 +44,7 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
                 icon-start="x"
                 appearance="transparent"
                 kind="neutral"
+                scale="l"
                 onClick={() => {
                     // Set the reference layer locale to English when the close button is clicked to mute this notification.
                     dispatch(
