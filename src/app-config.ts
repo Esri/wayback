@@ -59,10 +59,10 @@ const config: IAppConfig = {
         },
     },
     defaultMapExtent: {
-        xmin: -105.3528830956993,
-        ymin: 39.58307818944723,
-        xmax: -104.59413980956668,
-        ymax: 39.92067381651016,
+        xmin: -115.332,
+        ymin: 36.048,
+        xmax: -115.265,
+        ymax: 36.08,
         spatialReference: {
             wkid: 4326,
         },
