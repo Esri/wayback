@@ -138,6 +138,7 @@ module.exports = (env, options)=> {
                     'og:title': title,
                     'og:description': description,
                     'og:url': homepage,
+                    "last-modified": new Date().toString()
                 },
                 minify: {
                     html5                          : true,
