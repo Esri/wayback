@@ -15,7 +15,7 @@
 
 import React, { useCallback } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import { isSideBarHideSelector, isSideBarHideToggled } from '@store/UI/reducer';
 
@@ -23,9 +23,9 @@ import { SidebarToggleBtn } from './index';
 // import { MobileShow } from '../MobileVisibility';
 
 const SidebarToogleBtnContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const isHide = useSelector(isSideBarHideSelector);
+    const isHide = useAppSelector(isSideBarHideSelector);
 
     const onClickHandler = useCallback(() => {
         dispatch(isSideBarHideToggled());

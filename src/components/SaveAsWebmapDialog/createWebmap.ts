@@ -22,6 +22,7 @@ import { getServiceUrl } from '@utils/Tier';
 // import esriRequest from '@arcgis/core/request';
 import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
+import { ReferenceLayerData } from '@constants/map';
 
 interface ICreateWebmapParams {
     title: string;
@@ -29,6 +30,7 @@ interface ICreateWebmapParams {
     description: string;
     mapExtent: IExtentGeomety;
     waybackItemsToSave?: Array<IWaybackItem>;
+    referenceLayer: ReferenceLayerData;
 }
 
 interface IWaybackLayerInfo {
@@ -104,7 +106,10 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     return operationalLayers;
 };
 
-const getRequestText = (waybackItems: Array<IWaybackItem>) => {
+const getRequestText = (
+    waybackItems: Array<IWaybackItem>,
+    referenceLayer: ReferenceLayerData
+) => {
     const requestText = {
         operationalLayers: getOperationalLayers(waybackItems),
         baseMap: {
@@ -120,8 +125,8 @@ const getRequestText = (waybackItems: Array<IWaybackItem>) => {
                 {
                     type: 'VectorTileLayer',
                     layerType: 'VectorTileLayer',
-                    title: 'Hybrid Reference Layer (Local Language)',
-                    styleUrl: getServiceUrl('reference-layer'),
+                    title: referenceLayer.title, //'Hybrid Reference Layer (Local Language)',
+                    styleUrl: referenceLayer.url, //getServiceUrl('reference-layer'),
                     // itemId: '2a2e806e6e654ea78ecb705149ceae9f',
                     visibility: true,
                     isReference: true,
@@ -158,6 +163,7 @@ const createWebmap = async ({
     description = '',
     mapExtent = null,
     waybackItemsToSave = [],
+    referenceLayer,
 }: ICreateWebmapParams): Promise<ICreateWebmapResponse> => {
     if (!waybackItemsToSave.length) {
         return null;
@@ -184,7 +190,7 @@ const createWebmap = async ({
               ].join(',')
             : null,
         snippet: getSnippetStr(waybackItemsToSave),
-        text: getRequestText(waybackItemsToSave),
+        text: getRequestText(waybackItemsToSave, referenceLayer),
         type: 'Web Map',
         overwrite: 'true',
         f: 'json',

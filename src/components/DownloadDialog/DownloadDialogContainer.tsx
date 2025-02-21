@@ -14,7 +14,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
     isDownloadDialogOpenToggled,
@@ -28,7 +28,7 @@ import {
 } from '@store/DownloadMode/selectors';
 
 import { DownloadDialog } from './DownloadDialog';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@store/configureStore';
 import { updateHashParams } from '@utils/UrlSearchParam';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
@@ -41,15 +41,15 @@ import {
 } from '@store/DownloadMode/thunks';
 
 export const DownloadDialogContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const isOpen = useSelector(selectIsDownloadDialogOpen);
+    const isOpen = useAppSelector(selectIsDownloadDialogOpen);
 
-    const jobs = useSelector(selectDownloadJobs);
+    const jobs = useAppSelector(selectDownloadJobs);
 
-    const numPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
+    const numPendingJobs = useAppSelector(selectNumOfPendingDownloadJobs);
 
-    const isAddingNewDownloadJob = useSelector(selectIsAddingNewDownloadJob);
+    const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
 
     useEffect(() => {
         // save jobs to localhost so they can be restored

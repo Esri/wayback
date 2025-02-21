@@ -19,7 +19,7 @@ import { IWaybackItem } from '@typings/index';
 import { loadImageAsHTMLIMageElement } from '@utils/snippets/loadImage';
 import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 import { ImageElementData } from './useMediaLayerImageElement';
 // import { AnimationFrameData4DownloadJob } from '../AnimationDownloadPanel/DownloadPanel';
 
@@ -52,7 +52,7 @@ export const useFrameDataForDownloadJob = ({
     imageElements,
     releaseNumOfItems2Exclude,
 }: Props) => {
-    const { lon, lat } = useSelector(selectMapCenter) || {};
+    const { lon, lat } = useAppSelector(selectMapCenter) || {};
 
     const [frameData, setFrameData] = useState<AnimationFrameData[]>([]);
 

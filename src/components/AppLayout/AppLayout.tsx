@@ -56,6 +56,7 @@ import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
+import { Notification } from '@components/Notification';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -107,6 +108,8 @@ const AppLayout: React.FC = () => {
                     />
 
                     <ZoomWidget />
+
+                    <Notification />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />

@@ -15,7 +15,7 @@
 
 import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 import {
@@ -28,15 +28,15 @@ import {
 import MetadataPopUp from './index';
 
 const MetadataPopupContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const metadata = useSelector(metadataQueryResultSelector);
+    const metadata = useAppSelector(metadataQueryResultSelector);
 
-    const anchorPoint = useSelector(metadataPopupAnchorSelector);
+    const anchorPoint = useAppSelector(metadataPopupAnchorSelector);
 
-    const isQueryingMetadata = useSelector(selectIsQueringMetadata);
+    const isQueryingMetadata = useAppSelector(selectIsQueringMetadata);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     if (isAnimationModeOn) {
         return null;

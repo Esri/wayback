@@ -14,7 +14,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 import {
     animationSpeedSelector,
@@ -23,9 +23,9 @@ import {
 import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
 
 export const useSaveAppState2URLHashParams = () => {
-    const animationSpeed = useSelector(animationSpeedSelector);
+    const animationSpeed = useAppSelector(animationSpeedSelector);
 
-    const animationStatus = useSelector(selectAnimationStatus);
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
     useEffect(() => {
         saveAnimationSpeedInURLQueryParam(

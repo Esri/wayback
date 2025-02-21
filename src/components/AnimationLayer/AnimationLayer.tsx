@@ -16,8 +16,8 @@
 import MapView from '@arcgis/core/views/MapView';
 import MediaLayer from '@arcgis/core/layers/MediaLayer';
 import React, { FC, useCallback, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@store/configureStore';
+import { useAppSelector } from '@store/configureStore';
 import {
     // animationSpeedChanged,
     animationSpeedSelector,
@@ -50,33 +50,33 @@ type Props = {
 };
 
 export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const mediaLayerRef = useRef<MediaLayer>();
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
-    const animationStatus = useSelector(selectAnimationStatus);
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
-    // const animationSpeedInSeconds = useSelector(animationSpeedSelector);
+    // const animationSpeedInSeconds = useAppSelector(animationSpeedSelector);
 
-    const animationSpeedInMilliseconds = useSelector(animationSpeedSelector);
+    const animationSpeedInMilliseconds = useAppSelector(animationSpeedSelector);
 
     /**
      * wayback items with local changes
      */
-    const waybackItems = useSelector(waybackItemsWithLocalChangesSelector);
+    const waybackItems = useAppSelector(waybackItemsWithLocalChangesSelector);
 
     /**
      * release num of wayback items to be excluded from the animation
      */
-    const releaseNumOfItems2Exclude = useSelector(rNum2ExcludeSelector);
+    const releaseNumOfItems2Exclude = useAppSelector(rNum2ExcludeSelector);
 
-    const isLoadingWaybackItemsWithLoalChanges = useSelector(
+    const isLoadingWaybackItemsWithLoalChanges = useAppSelector(
         selectIsLoadingWaybackItems
     );
 
-    const releaseNumOfActiveFrame = useSelector(
+    const releaseNumOfActiveFrame = useAppSelector(
         selectReleaseNumberOfActiveAnimationFrame
     );
 

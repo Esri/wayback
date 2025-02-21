@@ -15,11 +15,7 @@
 
 import React, { useContext, useMemo } from 'react';
 
-import {
-    useSelector,
-    useDispatch,
-    // batch
-} from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     releaseNum4SelectedItemsSelector,
@@ -67,33 +63,35 @@ const ListViewWrapper: React.FC<Props> = ({ children }) => {
 };
 
 const ListViewContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const { isMobile } = useContext(AppContext);
 
-    const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
-    const activeWaybackItem: IWaybackItem = useSelector(
+    const waybackItems: IWaybackItem[] = useAppSelector(
+        allWaybackItemsSelector
+    );
+    const activeWaybackItem: IWaybackItem = useAppSelector(
         activeWaybackItemSelector
     );
 
-    const rNum4SelectedWaybackItems: number[] = useSelector(
+    const rNum4SelectedWaybackItems: number[] = useAppSelector(
         releaseNum4SelectedItemsSelector
     );
-    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
+    const rNum4WaybackItemsWithLocalChanges: number[] = useAppSelector(
         releaseNum4ItemsWithLocalChangesSelector
     );
 
-    const shouldOnlyShowItemsWithLocalChange = useSelector(
+    const shouldOnlyShowItemsWithLocalChange = useAppSelector(
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
-    const hasReachedLimitOfConcurrentDownloadJobs = useSelector(
+    const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
         selectHasReachedLimitOfConcurrentDownloadJobs
     );
 
-    const { zoom } = useSelector(selectMapCenterAndZoom);
+    const { zoom } = useAppSelector(selectMapCenterAndZoom);
 
-    const mapExtent = useSelector(mapExtentSelector);
+    const mapExtent = useAppSelector(mapExtentSelector);
 
     const downloadButtonTooltipText = useMemo(() => {
         const text =

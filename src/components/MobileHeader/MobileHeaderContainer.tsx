@@ -15,7 +15,7 @@
 
 import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 
@@ -24,9 +24,9 @@ import MobileHeader from './index';
 import { IS_MOBILE } from '@constants/UI';
 
 const MobileHeaderContainer = () => {
-    const isGutterHide = useSelector(isGutterHideSelector);
+    const isGutterHide = useAppSelector(isGutterHideSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     if (IS_MOBILE === false) {
         return null;

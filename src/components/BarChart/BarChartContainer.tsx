@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     allWaybackItemsSelector,
@@ -35,19 +35,21 @@ import { IWaybackItem } from '@typings/index';
 // import { MobileHide } from '../MobileVisibility';
 
 const BarChartContainer: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const waybackItems: IWaybackItem[] = useSelector(allWaybackItemsSelector);
+    const waybackItems: IWaybackItem[] = useAppSelector(
+        allWaybackItemsSelector
+    );
 
-    const activeWaybackItem: IWaybackItem = useSelector(
+    const activeWaybackItem: IWaybackItem = useAppSelector(
         activeWaybackItemSelector
     );
 
-    const rNum4WaybackItemsWithLocalChanges: number[] = useSelector(
+    const rNum4WaybackItemsWithLocalChanges: number[] = useAppSelector(
         releaseNum4ItemsWithLocalChangesSelector
     );
 
-    const shouldOnlyShowItemsWithLocalChange: boolean = useSelector(
+    const shouldOnlyShowItemsWithLocalChange: boolean = useAppSelector(
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 

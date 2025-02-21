@@ -15,29 +15,31 @@
 
 import React from 'react';
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 import { isReferenceLayerVisibleSelector } from '@store/Map/reducer';
 
 import ReferenceLayer from './ReferenceLayer';
-import { getServiceUrl } from '@utils/Tier';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import MapView from '@arcgis/core/views/MapView';
+import { useSelecteReferenceLayer } from './useSelectedReferenceLayer';
 
 type Props = {
     mapView?: MapView;
 };
 
 const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
-    const isReferenceLayerVisible = useSelector(
+    const isReferenceLayerVisible = useAppSelector(
         isReferenceLayerVisibleSelector
     );
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    const referenceLayer = useSelecteReferenceLayer();
 
     return (
         <ReferenceLayer
-            url={getServiceUrl('reference-layer')}
+            url={referenceLayer.url}
             mapView={mapView}
             isVisible={isReferenceLayerVisible && !isAnimationModeOn}
         />

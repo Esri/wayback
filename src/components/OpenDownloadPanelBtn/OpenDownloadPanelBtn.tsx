@@ -20,19 +20,19 @@ import {
     selectNumOfPendingDownloadJobs,
 } from '@store/DownloadMode/selectors';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
+import { useAppDispatch } from '@store/configureStore';
 import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 
 export const OpenDownloadPanelBtn = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const numOfJobs = useSelector(selectNumOfDownloadJobs);
+    const numOfJobs = useAppSelector(selectNumOfDownloadJobs);
 
-    // const numOfPendingJobs = useSelector(selectNumOfPendingDownloadJobs);
+    // const numOfPendingJobs = useAppSelector(selectNumOfPendingDownloadJobs);
 
-    const numOfFinishedJobs = useSelector(selectNumOfFinishedDownloadJobs);
+    const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
 
     const getIndicator = () => {
         if (!numOfJobs) {

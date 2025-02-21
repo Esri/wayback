@@ -15,7 +15,7 @@
 
 import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
     isGutterHideSelector,
     isSideBarHideSelector,
@@ -26,9 +26,9 @@ import MobileFooter from './MobileFooter';
 import { IS_MOBILE } from '@constants/UI';
 
 const MobileFooterContainer = () => {
-    const dispatch = useDispatch();
-    const isGutterHide = useSelector(isGutterHideSelector);
-    const isSideBarHide = useSelector(isSideBarHideSelector);
+    const dispatch = useAppDispatch();
+    const isGutterHide = useAppSelector(isGutterHideSelector);
+    const isSideBarHide = useAppSelector(isSideBarHideSelector);
 
     if (!isSideBarHide || IS_MOBILE === false) {
         return null;

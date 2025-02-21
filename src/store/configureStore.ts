@@ -13,11 +13,8 @@
  * limitations under the License.
  */
 
-import {
-    configureStore,
-    getDefaultMiddleware,
-    DeepPartial,
-} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
 
 import rootReducer from './rootReducer';
 
@@ -25,13 +22,12 @@ import getPreloadedState from './getPreloadedState';
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export type PartialRootState = DeepPartial<RootState>;
+export type PartialRootState = Partial<RootState>;
 
 const configureAppStore = (preloadedState: PartialRootState = {}) => {
     const store = configureStore({
         reducer: rootReducer,
-        middleware: [...getDefaultMiddleware<RootState>()],
-        preloadedState: preloadedState as any,
+        preloadedState,
     });
 
     return store;
@@ -40,6 +36,9 @@ const configureAppStore = (preloadedState: PartialRootState = {}) => {
 export type StoreDispatch = ReturnType<typeof configureAppStore>['dispatch'];
 
 export type StoreGetState = ReturnType<typeof configureAppStore>['getState'];
+
+export const useAppDispatch = useDispatch.withTypes<StoreDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
 
 export { getPreloadedState };
 

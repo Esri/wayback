@@ -16,10 +16,10 @@
 import { showDownloadAnimationPanelToggled } from '@store/AnimationMode/reducer';
 import classNames from 'classnames';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@store/configureStore';
 
 export const OpenDownloadPanelButton = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     return (
         <div

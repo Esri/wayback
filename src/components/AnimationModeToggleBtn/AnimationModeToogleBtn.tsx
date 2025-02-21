@@ -18,7 +18,7 @@ import React, { useCallback, useContext } from 'react';
 
 import classnames from 'classnames';
 
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isAnimationModeOnSelector,
@@ -28,14 +28,14 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 const AnimationModeToogleBtn = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const { isMobile } = useContext(AppContext);
 
-    const isAnimationModeOn = useSelector(isAnimationModeOnSelector);
+    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     // if swipe widget is on, the animation button should be set to semi-transparent
-    const isSwipeWidgetOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
     const onClickHandler = useCallback(() => {
         dispatch(toggleAnimationMode());

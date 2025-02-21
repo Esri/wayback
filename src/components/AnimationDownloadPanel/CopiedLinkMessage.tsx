@@ -16,10 +16,10 @@
 import { selectAnimationLinkIsCopied } from '@store/AnimationMode/reducer';
 import classNames from 'classnames';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@store/configureStore';
 
 export const CopiedLinkMessage = () => {
-    const linkIsCopied = useSelector(selectAnimationLinkIsCopied);
+    const linkIsCopied = useAppSelector(selectAnimationLinkIsCopied);
 
     if (!linkIsCopied) {
         return null;

@@ -15,7 +15,7 @@
 
 import React, { useContext } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isSettingModalOpenSelector,
@@ -31,13 +31,13 @@ import SettingDialogContent from './SettingDialogContent';
 import { Modal } from '@components/Modal/Modal';
 
 const SettingDialogContainer = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
 
-    const mapExtent = useSelector(mapExtentSelector);
+    const mapExtent = useAppSelector(mapExtentSelector);
 
-    const isOpen = useSelector(isSettingModalOpenSelector);
+    const isOpen = useAppSelector(isSettingModalOpenSelector);
 
     const onCloseHandler = () => {
         dispatch(isSettingModalOpenToggled());

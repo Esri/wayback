@@ -15,7 +15,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isSwipeWidgetOpenSelector,
@@ -37,22 +37,20 @@ type Props = {
 };
 
 const SwipeWidgetContainer: React.FC<Props> = ({ mapView }: Props) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const isOpen = useSelector(isSwipeWidgetOpenSelector);
+    const isOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
-    const waybackItem4LeadingLayer: IWaybackItem = useSelector(
+    const waybackItem4LeadingLayer: IWaybackItem = useAppSelector(
         swipeWidgetLeadingLayerSelector
     );
-    const waybackItem4TrailingLayer: IWaybackItem = useSelector(
+    const waybackItem4TrailingLayer: IWaybackItem = useAppSelector(
         swipeWidgetTrailingLayerSelector
     );
 
     const positionOnChangeHandler = useCallback((position: number) => {
-        batch(() => {
-            dispatch(swipePositionUpdated(position));
-            dispatch(metadataQueryResultUpdated(null));
-        });
+        dispatch(swipePositionUpdated(position));
+        dispatch(metadataQueryResultUpdated(null));
     }, []);
 
     useEffect(() => {

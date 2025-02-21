@@ -13,32 +13,30 @@
  * limitations under the License.
  */
 
+import { ReferenceLayerLanguage } from '@constants/map';
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import { IExtentGeomety } from '@typings/index';
 
-const KEYS = {
-    defaultExtent: 'WaybackAppDefaultExtent',
-    showUpdatesWithLocalChanges: 'WaybackAppShouldShowUpdatesWithLocalChanges',
-    shouldOpenSaveWebMapDialog: 'WaybackAppShouldOpenSaveWebMapDialog',
-    customPortalUrl: 'WaybackAppCustomPortalUrl',
-    hashParams: 'WaybackAppHashParam',
-    downloadJobs: `WaybackAppDownloadJobs`,
+enum KEYS {
+    defaultExtent = 'WaybackAppDefaultExtent',
+    showUpdatesWithLocalChanges = 'WaybackAppShouldShowUpdatesWithLocalChanges',
+    shouldOpenSaveWebMapDialog = 'WaybackAppShouldOpenSaveWebMapDialog',
+    customPortalUrl = 'WaybackAppCustomPortalUrl',
+    hashParams = 'WaybackAppHashParam',
+    downloadJobs = 'WaybackAppDownloadJobs',
+    referenceLayerLocale = 'WaybackAppPreferredReferenceLayerLocale',
+}
+
+const setItem = (key: KEYS, value = '') => {
+    localStorage.setItem(key, value);
 };
 
-const setItem = (key?: string, value = '') => {
-    if (key) {
-        localStorage.setItem(key, value);
-    }
+const getItem = (key: KEYS) => {
+    return localStorage.getItem(key) || null;
 };
 
-const getItem = (key?: string) => {
-    return key ? localStorage.getItem(key) : null;
-};
-
-const removeItem = (key?: string) => {
-    if (key) {
-        localStorage.removeItem(key);
-    }
+const removeItem = (key: KEYS) => {
+    localStorage.removeItem(key);
 };
 
 const saveDefaultExtent = (extent: IExtentGeomety) => {
@@ -99,25 +97,20 @@ const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
     return val ? JSON.parse(val) : [];
 };
 
-// const saveHashParams = () => {
-//     const hash = location.hash.toString();
+export const setPreferredReferenceLayerLocale = (
+    locale: ReferenceLayerLanguage
+) => {
+    if (locale) {
+        setItem(KEYS.referenceLayerLocale, locale);
+    } else {
+        removeItem(KEYS.referenceLayerLocale);
+    }
+};
 
-//     if (!hash) {
-//         return;
-//     }
-
-//     setItem(KEYS.hashParams, hash.slice(1));
-// };
-
-// const getHashParamsFromLocalStorage = () => {
-//     const val = getItem(KEYS.hashParams);
-
-//     if (val) {
-//         removeItem(KEYS.hashParams);
-//     }
-
-//     return val;
-// };
+export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
+    const val = getItem(KEYS.referenceLayerLocale);
+    return val as ReferenceLayerLanguage;
+};
 
 export {
     saveDefaultExtent,
