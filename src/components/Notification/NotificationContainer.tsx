@@ -15,7 +15,7 @@ export const NotificationContainer: FC = () => {
     }
 
     return (
-        <div className=" absolute bottom-6 z-10 w-full flex justify-center pointer-events-none">
+        <div className=" absolute bottom-0 md:bottom-6 z-10 w-full flex justify-center pointer-events-none">
             {notification2Display ===
                 NotificationType.SET_REFERENCE_LAYER_LOCALE && (
                 <NotificationSetReferenceLayerLocale />

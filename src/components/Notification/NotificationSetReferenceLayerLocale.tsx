@@ -20,7 +20,7 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
     }
 
     return (
-        <div className="flex items-center bg-black bg-opacity-75 text-white pointer-events-auto p-2 text-sm ">
+        <div className="flex items-center bg-black md:bg-opacity-85 text-white pointer-events-auto p-2 md:text-sm ">
             <p>
                 You can set your reference layer language to{' '}
                 <span
