@@ -14,7 +14,7 @@
  */
 
 // import './AnimationModeToogleBtn.css';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 
 import classnames from 'classnames';
 
@@ -26,16 +26,23 @@ import {
 } from '@store/AnimationMode/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
+import { selectMapMode } from '@store/Map/reducer';
 
 const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
 
     const { isMobile } = useContext(AppContext);
 
-    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+    const mode = useAppSelector(selectMapMode);
 
-    // if swipe widget is on, the animation button should be set to semi-transparent
-    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
+    // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    // // if swipe widget is on, the animation button should be set to semi-transparent
+    // const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
+
+    const isActive = useMemo(() => {
+        return mode === 'animation';
+    }, [mode]);
 
     const onClickHandler = useCallback(() => {
         dispatch(toggleAnimationMode());
@@ -44,10 +51,11 @@ const AnimationModeToogleBtn = () => {
     return !isMobile ? (
         <div
             className={classnames(
-                'relative w-full cursor-pointer my-3 text-center',
+                'relative w-full cursor-pointer py-2 text-center flex items-center justify-center',
                 {
-                    'opacity-50': isSwipeWidgetOpen,
-                    'text-white': isAnimationModeOn,
+                    'opacity-50': !isActive,
+                    'text-white': isActive,
+                    'bg-black': isActive,
                 }
             )}
             // style={{

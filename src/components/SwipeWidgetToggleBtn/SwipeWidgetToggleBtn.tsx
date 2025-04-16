@@ -37,11 +37,13 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
 }: Props) => {
     return (
         <div
+            data-testid="swipe-widget-toggle-button"
             className={classnames(
-                'relative w-full text-center my-3 cursor-pointer',
+                'relative w-full text-center cursor-pointer flex items-center justify-center py-2',
                 {
                     'opacity-50': useDisabledStyle,
                     'text-white': active,
+                    'bg-black': active,
                 }
             )}
             onClick={onClickHandler}

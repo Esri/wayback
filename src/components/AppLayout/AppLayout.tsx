@@ -57,6 +57,7 @@ import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
 import { Notification } from '@components/Notification';
+import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -70,6 +71,8 @@ const AppLayout: React.FC = () => {
             <MobileHeader />
 
             <Gutter>
+                <ExploreModeToggleButton />
+
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
