@@ -247,15 +247,11 @@ export const waybackItemsWithLocalChangesSelector = createSelector(
     }
 );
 
-export const releaseNum4ItemsWithLocalChangesSelector = createSelector(
-    (state: RootState) => state.WaybackItems.releaseNum4ItemsWithLocalChanges,
-    (releaseNum4ItemsWithLocalChanges) => releaseNum4ItemsWithLocalChanges
-);
+export const releaseNum4ItemsWithLocalChangesSelector = (state: RootState) =>
+    state.WaybackItems.releaseNum4ItemsWithLocalChanges;
 
-export const releaseNum4SelectedItemsSelector = createSelector(
-    (state: RootState) => state.WaybackItems.releaseNum4SelectedItems,
-    (releaseNum4SelectedItems) => releaseNum4SelectedItems
-);
+export const releaseNum4SelectedItemsSelector = (state: RootState) =>
+    state.WaybackItems.releaseNum4SelectedItems;
 
 export const previewWaybackItemSelector = createSelector(
     (state: RootState) => state.WaybackItems.byReleaseNumber,
@@ -264,21 +260,14 @@ export const previewWaybackItemSelector = createSelector(
         byReleaseNumber[releaseNum4PreviewWaybackItem]
 );
 
-export const releaseNum4AlternativePreviewWaybackItemSelector = createSelector(
-    (state: RootState) =>
-        state.WaybackItems.releaseNum4AlternativePreviewWaybackItem,
-    (releaseNum4AlternativePreviewWaybackItem) =>
-        releaseNum4AlternativePreviewWaybackItem
-);
+export const releaseNum4AlternativePreviewWaybackItemSelector = (
+    state: RootState
+) => state.WaybackItems.releaseNum4AlternativePreviewWaybackItem;
 
-export const selectWaybackItemsByReleaseNum = createSelector(
-    (state: RootState) => state.WaybackItems.byReleaseNumber,
-    (byReleaseNumber) => byReleaseNumber
-);
+export const selectWaybackItemsByReleaseNum = (state: RootState) =>
+    state.WaybackItems.byReleaseNumber;
 
-export const selectIsLoadingWaybackItems = createSelector(
-    (state: RootState) => state.WaybackItems.isLoading,
-    (isLoading) => isLoading
-);
+export const selectIsLoadingWaybackItems = (state: RootState) =>
+    state.WaybackItems.isLoading;
 
 export default reducer;

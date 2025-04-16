@@ -99,44 +99,27 @@ export const {
     isSettingModalOpenToggled,
 } = slice.actions;
 
-export const isSaveAsWebmapDialogOpenSelector = createSelector(
-    (state: RootState) => state.UI.isSaveAsWebmapDialogOpen,
-    (isSaveAsWebmapDialogOpen) => isSaveAsWebmapDialogOpen
-);
+export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
+    state.UI.isSaveAsWebmapDialogOpen;
 
-export const shouldOnlyShowItemsWithLocalChangeSelector = createSelector(
-    (state: RootState) => state.UI.shouldOnlyShowItemsWithLocalChange,
-    (shouldOnlyShowItemsWithLocalChange) => shouldOnlyShowItemsWithLocalChange
-);
+export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
+    state.UI.shouldOnlyShowItemsWithLocalChange;
 
-export const shouldShowPreviewItemTitleSelector = createSelector(
-    (state: RootState) => state.UI.shouldShowPreviewItemTitle,
-    (shouldShowPreviewItemTitle) => shouldShowPreviewItemTitle
-);
+export const shouldShowPreviewItemTitleSelector = (state: RootState) =>
+    state.UI.shouldShowPreviewItemTitle;
 
-export const isGutterHideSelector = createSelector(
-    (state: RootState) => state.UI.isGutterHide,
-    (isGutterHide) => isGutterHide
-);
+export const isGutterHideSelector = (state: RootState) => state.UI.isGutterHide;
 
-export const isSideBarHideSelector = createSelector(
-    (state: RootState) => state.UI.isSideBarHide,
-    (isSideBarHide) => isSideBarHide
-);
+export const isSideBarHideSelector = (state: RootState) =>
+    state.UI.isSideBarHide;
 
-export const isShareModalOpenSelector = createSelector(
-    (state: RootState) => state.UI.isShareModalOpen,
-    (isShareModalOpen) => isShareModalOpen
-);
+export const isShareModalOpenSelector = (state: RootState) =>
+    state.UI.isShareModalOpen;
 
-export const isAboutThisAppModalOpenSelector = createSelector(
-    (state: RootState) => state.UI.isAboutThisAppModalOpen,
-    (isAboutThisAppModalOpen) => isAboutThisAppModalOpen
-);
+export const isAboutThisAppModalOpenSelector = (state: RootState) =>
+    state.UI.isAboutThisAppModalOpen;
 
-export const isSettingModalOpenSelector = createSelector(
-    (state: RootState) => state.UI.isSettingModalOpen,
-    (isSettingModalOpen) => isSettingModalOpen
-);
+export const isSettingModalOpenSelector = (state: RootState) =>
+    state.UI.isSettingModalOpen;
 
 export default reducer;
