@@ -43,7 +43,7 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
                 {
                     'opacity-50': useDisabledStyle,
                     'text-white': active,
-                    'bg-black': active,
+                    'bg-custom-background': active,
                 }
             )}
             onClick={onClickHandler}

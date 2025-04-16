@@ -43,7 +43,13 @@ module.exports = {
         },
       }
     },
-    extend: {},
+    extend: {
+      spacing: {
+        'header-height': '45px',
+        'gutter-width': '50px',
+        'sidebar-width': '300px',
+      }
+    },
   },
   variants: {
     extend: {},

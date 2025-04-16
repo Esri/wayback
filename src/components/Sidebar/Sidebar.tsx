@@ -43,7 +43,6 @@ const Sidebar: React.FC<Props> = ({
 
         const defaultStyle: React.CSSProperties = {
             position: 'absolute',
-            top: 0,
             left: GUTTER_WIDTH,
             width: SIDEBAR_WIDTH,
             height: '100%',
@@ -75,7 +74,10 @@ const Sidebar: React.FC<Props> = ({
     }
 
     return (
-        <div className=" bg-custom-background" style={getStyle()}>
+        <div
+            className=" bg-custom-background top-header-height "
+            style={getStyle()}
+        >
             {children}
         </div>
     );

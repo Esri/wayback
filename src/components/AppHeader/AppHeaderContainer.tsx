@@ -20,35 +20,29 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 
 // import { MobileShow } from '../MobileVisibility';
-import MobileHeader from './index';
+import MobileHeader from './MobileHeader';
 import { IS_MOBILE } from '@constants/UI';
+import { AppHeaderText } from './AppHeaderText';
 
-const MobileHeaderContainer = () => {
+export const AppHeaderContainer = () => {
     const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const dispatch = useAppDispatch();
 
-    if (IS_MOBILE === false) {
-        return null;
+    if (IS_MOBILE) {
+        return (
+            <MobileHeader
+                isGutterHide={isGutterHide}
+                leftNavBtnOnClick={() => {
+                    dispatch(isGutterHideToggled());
+                }}
+            />
+        );
     }
 
     return (
-        // <MobileShow>
-        //     <MobileHeader
-        //         isGutterHide={isGutterHide}
-        //         leftNavBtnOnClick={() => {
-        //             dispatch(isGutterHideToggled());
-        //         }}
-        //     />
-        // </MobileShow>
-
-        <MobileHeader
-            isGutterHide={isGutterHide}
-            leftNavBtnOnClick={() => {
-                dispatch(isGutterHideToggled());
-            }}
-        />
+        <div className="absolute top-0 left-gutter-width h-header-height w-sidebar-width bg-black z-10 flex items-center justify-center">
+            <AppHeaderText />
+        </div>
     );
 };
-
-export default MobileHeaderContainer;

@@ -25,7 +25,6 @@ import {
     MapViewWrapper,
     MetadataPopup,
     MetadataQueryTask,
-    MobileHeader,
     MobileFooter,
     ReferenceLayer,
     ReferenceLayerToggle,
@@ -58,6 +57,7 @@ import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashPar
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
 import { Notification } from '@components/Notification';
 import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
+import { AppHeader } from '@components/AppHeader';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -68,7 +68,7 @@ const AppLayout: React.FC = () => {
 
     return (
         <>
-            <MobileHeader />
+            <AppHeader />
 
             <Gutter>
                 <ExploreModeToggleButton />

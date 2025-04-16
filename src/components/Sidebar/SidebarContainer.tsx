@@ -28,7 +28,6 @@ import { AppContext } from '@contexts/AppContextProvider';
 
 import {
     SidebarToggleBtn,
-    AppTitleText,
     BarChart,
     Title4ActiveItem,
     ShowLocalChangesCheckboxToggle,
@@ -81,9 +80,9 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
         >
             <SidebarToggleBtn />
 
-            <div className="hidden md:block">
+            {/* <div className="hidden md:block">
                 <AppTitleText />
-            </div>
+            </div> */}
 
             {getContent()}
         </Sidebar>

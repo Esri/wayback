@@ -15,7 +15,6 @@
 
 export { default as AppLayout } from './AppLayout/AppLayout';
 export { default as AboutThisApp } from './ModalAboutApp/AboutThisAppContainer';
-export { default as AppTitleText } from './TitleText';
 export { default as BarChart } from './BarChart/BarChartContainer';
 export { default as Gutter } from './Gutter/GutterContainer';
 export { default as ListView } from './ListView/ListViewContainer';
@@ -23,7 +22,6 @@ export { default as MapView } from './MapView/MapViewConatiner';
 export { default as MapViewWrapper } from './MapViewWrapper/MapViewWrapper';
 export { default as MetadataPopup } from './PopUp/MetadataPopupContainer';
 export { default as MetadataQueryTask } from './MetadataQueryTask/MetadataQueryTaskContainer';
-export { default as MobileHeader } from './MobileHeader/MobileHeaderContainer';
 export { default as MobileFooter } from './MobileFooter/MobileFooterContainer';
 export { default as ReferenceLayer } from './ReferenceLayer/ReferenceLayerContainer';
 export { default as ReferenceLayerToggle } from './ReferenceLayerToggle/ReferenceLayerToggleContainer';

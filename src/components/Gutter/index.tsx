@@ -56,7 +56,7 @@ export const Gutter: FC<IProps> = ({
                 }}
             ></div>
 
-            <div className="py-2">
+            <div className="py-1">
                 <div
                     className="gutter-nav-btn mb-2"
                     // data-modal={AboutThisAppModalConfig['modal-id']}

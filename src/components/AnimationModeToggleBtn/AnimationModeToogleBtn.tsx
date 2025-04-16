@@ -55,7 +55,7 @@ const AnimationModeToogleBtn = () => {
                 {
                     'opacity-50': !isActive,
                     'text-white': isActive,
-                    'bg-black': isActive,
+                    'bg-custom-background': isActive,
                 }
             )}
             // style={{

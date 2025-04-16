@@ -15,7 +15,7 @@
 
 import './MobileHeader.css';
 import React from 'react';
-import AppTitleText from '../TitleText';
+import { AppHeaderText } from './AppHeaderText';
 
 interface IProps {
     isGutterHide?: boolean;
@@ -62,7 +62,7 @@ class TitleText extends React.PureComponent<IProps> {
                 >
                     {leftNavBtnIcon}
                 </div>
-                <AppTitleText />
+                <AppHeaderText />
             </div>
         );
     }

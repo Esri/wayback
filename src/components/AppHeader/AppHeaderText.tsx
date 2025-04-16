@@ -15,9 +15,9 @@
 
 import React from 'react';
 
-const TitleText = () => {
+export const AppHeaderText = () => {
     return (
-        <div className="text-center mb-2">
+        <div className="text-white text-center">
             <span className="text-xl font-light">
                 Esri | World Imagery{' '}
                 <span className="text-white font-medium">Wayback</span>
@@ -25,5 +25,3 @@ const TitleText = () => {
         </div>
     );
 };
-
-export default TitleText;
