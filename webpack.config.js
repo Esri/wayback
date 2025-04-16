@@ -138,6 +138,7 @@ module.exports = (env, options)=> {
                     'og:title': title,
                     'og:description': description,
                     'og:url': homepage,
+                    'og:image': `${homepage}/public/screenshot.jpg`,
                     "last-modified": new Date().toString()
                 },
                 minify: {
