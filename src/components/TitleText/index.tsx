@@ -19,7 +19,7 @@ const TitleText = () => {
     return (
         <div className="text-center mb-2">
             <span className="text-xl font-light">
-                ESRI | World Imagery{' '}
+                Esri | World Imagery{' '}
                 <span className="text-white font-medium">Wayback</span>
             </span>
         </div>
