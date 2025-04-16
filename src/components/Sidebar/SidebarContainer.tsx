@@ -34,6 +34,8 @@ import {
     ListView,
     AnimationControls,
 } from '../';
+import { selectMapMode } from '@store/Map/reducer';
+import { UpdatesInfo } from '@components/UpdatesPanel';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -48,6 +50,8 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
+    const mode = useAppSelector(selectMapMode);
+
     const isHide = useAppSelector(isSideBarHideSelector);
 
     const isGutterHide = useAppSelector(isGutterHideSelector);
@@ -55,6 +59,10 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
     const getContent = () => {
         if (isAnimationModeOn) {
             return <AnimationControls />;
+        }
+
+        if (mode === 'updates') {
+            return <UpdatesInfo />;
         }
 
         return (
@@ -79,11 +87,6 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
             isMobile={isMobile}
         >
             <SidebarToggleBtn />
-
-            {/* <div className="hidden md:block">
-                <AppTitleText />
-            </div> */}
-
             {getContent()}
         </Sidebar>
     );

@@ -58,6 +58,7 @@ import { useRevalidateToken } from '@hooks/useRevalidateToken';
 import { Notification } from '@components/Notification';
 import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
 import { AppHeader } from '@components/AppHeader';
+import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -73,6 +74,8 @@ const AppLayout: React.FC = () => {
             <Gutter>
                 <ExploreModeToggleButton />
 
+                <UpdatesModeToggleButton />
+
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
@@ -82,7 +85,7 @@ const AppLayout: React.FC = () => {
                 <SaveAsWebmapBtn />
             </Gutter>
 
-            <Sidebar></Sidebar>
+            <Sidebar />
 
             <MapViewWrapper>
                 <SwipeWidgetLayerSelector targetLayer="leading" />
