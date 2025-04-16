@@ -30,17 +30,6 @@ const Sidebar: React.FC<Props> = ({
     children,
 }: Props) => {
     const getStyle = (): React.CSSProperties => {
-        const mobileStyle: React.CSSProperties = {
-            position: 'absolute',
-            top: 'auto',
-            bottom: 0,
-            right: 0,
-            left: isGutterHide ? 0 : GUTTER_WIDTH,
-            width: isGutterHide ? '100%' : 'calc(100% - 50px)',
-            maxHeight: 400,
-            padding: '.5rem 0',
-        };
-
         const defaultStyle: React.CSSProperties = {
             position: 'absolute',
             left: GUTTER_WIDTH,
@@ -50,7 +39,7 @@ const Sidebar: React.FC<Props> = ({
             paddingTop: '.5rem',
             // overflow: hidden;
             boxSizing: 'border-box',
-            zIndex: 1,
+            zIndex: 10,
             // padding: 1rem;
             display: 'flex',
             flexDirection: 'column',
@@ -58,12 +47,26 @@ const Sidebar: React.FC<Props> = ({
             justifyContent: 'flex-start',
             alignContent: 'stretch',
             alignItems: 'stretch',
+            /**
+             * stack two tight shadows for extra depth
+             * First one is a a sharp inner glow,
+             * second one is a slightly wider, softer halo
+             */
+            boxShadow: ` 0 0 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.4)`,
         };
 
         if (isMobile) {
             return {
                 ...defaultStyle,
-                ...mobileStyle,
+                position: 'absolute',
+                top: 'auto',
+                bottom: 0,
+                right: 0,
+                left: isGutterHide ? 0 : GUTTER_WIDTH,
+                width: isGutterHide ? '100%' : 'calc(100% - 50px)',
+                maxHeight: 400,
+                padding: '.5rem 0',
+                boxShadow: 'none',
             } as React.CSSProperties;
         }
 

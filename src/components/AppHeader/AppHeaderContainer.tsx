@@ -23,11 +23,18 @@ import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 import MobileHeader from './MobileHeader';
 import { IS_MOBILE } from '@constants/UI';
 import { AppHeaderText } from './AppHeaderText';
+import { selectMapMode } from '@store/Map/reducer';
 
 export const AppHeaderContainer = () => {
     const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const dispatch = useAppDispatch();
+
+    const mode = useAppSelector(selectMapMode);
+
+    if (mode === 'swipe') {
+        return null;
+    }
 
     if (IS_MOBILE) {
         return (
