@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import '@arcgis/core/assets/esri/themes/dark/main.css';
+// import '@arcgis/core/assets/esri/themes/dark/main.css';
 import './style/index.css';
 
 import React from 'react';

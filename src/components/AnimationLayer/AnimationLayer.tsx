@@ -52,7 +52,7 @@ type Props = {
 export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const dispatch = useAppDispatch();
 
-    const mediaLayerRef = useRef<MediaLayer>();
+    const mediaLayerRef = useRef<MediaLayer>(null);
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 

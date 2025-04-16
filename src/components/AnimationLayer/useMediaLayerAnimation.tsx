@@ -64,7 +64,7 @@ const useMediaLayerAnimation = ({
 
     const indexOfActiveFrame = useRef<number>(0);
 
-    const activeFrameOnChangeRef = useRef<any>();
+    const activeFrameOnChangeRef = useRef<any>(null);
 
     const animationSpeedRef = useRef<number>(animationSpeed);
 

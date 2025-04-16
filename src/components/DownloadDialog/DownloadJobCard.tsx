@@ -62,7 +62,7 @@ export const DownloadJobCard: FC<Props> = ({
     removeButtonOnClick,
     levelsOnChange,
 }) => {
-    const sliderRef = React.useRef<any>();
+    const sliderRef = React.useRef<any>(null);
 
     const {
         id,

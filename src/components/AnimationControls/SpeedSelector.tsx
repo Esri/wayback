@@ -26,9 +26,9 @@ type Props = {
 // const SLIDER_STEP = 0.25;
 
 const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
-    const sliderRef = React.useRef<any>();
+    const sliderRef = React.useRef<any>(null);
 
-    const onChangeDely = React.useRef<NodeJS.Timeout>();
+    const onChangeDely = React.useRef<NodeJS.Timeout>(null);
 
     const calcSliderDefaultValue = () => {
         const idx = ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.indexOf(defaultVal);

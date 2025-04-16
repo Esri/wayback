@@ -54,7 +54,7 @@ const MapViewComponent: React.FC<Props> = ({
 }: Props) => {
     // const stringifiedMapExtentRef = useRef<string>();
 
-    const mapDivRef = React.useRef<HTMLDivElement>();
+    const mapDivRef = React.useRef<HTMLDivElement>(null);
 
     const [mapView, setMapView] = React.useState<MapView>(null);
 

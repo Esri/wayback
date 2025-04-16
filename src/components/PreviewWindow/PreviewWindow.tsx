@@ -36,7 +36,7 @@ const PreviewWindow: React.FC<Props> = ({
     alternativeRNum4RreviewWaybackItem,
     mapView,
 }: Props) => {
-    const containerRef = useRef<HTMLDivElement>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const [imageUrl, setImageUrl] = useState<string>();
 

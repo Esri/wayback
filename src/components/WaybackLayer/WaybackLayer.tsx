@@ -36,7 +36,7 @@ const WaybackLayer: React.FC<Props> = ({
     activeWaybackItem,
     mapView,
 }) => {
-    const waybackLayerRef = useRef<WebTileLayer>();
+    const waybackLayerRef = useRef<WebTileLayer>(null);
 
     const updateWaybackLayer = () => {
         if (waybackLayerRef.current) {

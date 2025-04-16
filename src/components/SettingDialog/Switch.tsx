@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const Switch: FC<Props> = ({ label, checked, onChange }) => {
-    const switchRef = useRef<HTMLInputElement>();
+    const switchRef = useRef<HTMLInputElement>(null);
 
     const props: { [key: string]: any } = {};
 

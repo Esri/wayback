@@ -54,13 +54,13 @@ const MetadataQueryLayer: React.FC<Props> = ({
     metadataOnChange,
     anchorPointOnChange,
 }) => {
-    const anchorPointRef = React.useRef<Point>();
+    const anchorPointRef = React.useRef<Point>(null);
 
-    const activeWaybackItemRef = React.useRef<IWaybackItem>();
-    const swipeWidgetLeadingLayerRef = React.useRef<IWaybackItem>();
-    const swipeWidgetTrailingLayerRef = React.useRef<IWaybackItem>();
-    const isSwipeWidgetOpenRef = React.useRef<boolean>();
-    const swipeWidgetPositionRef = React.useRef<number>();
+    const activeWaybackItemRef = React.useRef<IWaybackItem>(null);
+    const swipeWidgetLeadingLayerRef = React.useRef<IWaybackItem>(null);
+    const swipeWidgetTrailingLayerRef = React.useRef<IWaybackItem>(null);
+    const isSwipeWidgetOpenRef = React.useRef<boolean>(null);
+    const swipeWidgetPositionRef = React.useRef<number>(null);
 
     const getTargetWaybackItem = (mapPoint: Point): IWaybackItem => {
         if (!isSwipeWidgetOpenRef.current) {
