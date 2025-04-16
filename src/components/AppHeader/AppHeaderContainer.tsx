@@ -41,7 +41,7 @@ export const AppHeaderContainer = () => {
     }
 
     return (
-        <div className="absolute top-0 left-gutter-width h-header-height w-sidebar-width bg-black z-10 flex items-center justify-center">
+        <div className="absolute top-0 left-gutter-width h-header-height w-sidebar-width flex items-center justify-center background-theme-blue-diagonal-pattern z-10">
             <AppHeaderText />
         </div>
     );

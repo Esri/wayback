@@ -43,18 +43,18 @@ export const Gutter: FC<IProps> = ({
 
     return (
         <div
-            className="gutter-container"
+            className="gutter-container background-theme-blue-diagonal-pattern"
             style={{
                 top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
             }}
         >
             {/* gradient effect on right side of gutter */}
-            <div
-                className="absolute top-0 left-0 z-0 w-full h-full"
+            {/* <div
+                className="absolute top-header-height left-0 z-0 w-full h-full"
                 style={{
                     background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
                 }}
-            ></div>
+            ></div> */}
 
             <div className="py-1">
                 <div

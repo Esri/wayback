@@ -47,6 +47,7 @@ const Sidebar: React.FC<Props> = ({
             width: SIDEBAR_WIDTH,
             height: '100%',
             padding: '1rem 0',
+            paddingTop: '.5rem',
             // overflow: hidden;
             boxSizing: 'border-box',
             zIndex: 1,
@@ -75,7 +76,7 @@ const Sidebar: React.FC<Props> = ({
 
     return (
         <div
-            className=" bg-custom-background top-header-height "
+            className=" bg-custom-background top-header-height"
             style={getStyle()}
         >
             {children}
