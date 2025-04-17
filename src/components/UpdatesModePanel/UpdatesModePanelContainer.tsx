@@ -7,7 +7,7 @@ import { RegionFilter } from './Filters/RegionFilter';
 
 export const UpdatesPanelContainer = () => {
     return (
-        <div className="p-2">
+        <div className="p-2 pb-4 overflow-y-auto fancy-scrollbar">
             <UpdatesModeHeader />
             <StatusFilter />
             <CategoryFilter />
