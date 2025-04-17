@@ -16,7 +16,8 @@
 import React from 'react';
 // import './style.css';
 
-import classnames from 'classnames';
+// import classnames from 'classnames';
+import { ModeToggleButton } from '@components/ModeToggleButton';
 
 type Props = {
     /**
@@ -36,21 +37,28 @@ const SwipeWidgetToggleBtn: React.FC<Props> = ({
     onClickHandler,
 }: Props) => {
     return (
-        <div
-            data-testid="swipe-widget-toggle-button"
-            className={classnames(
-                'relative w-full text-center cursor-pointer flex items-center justify-center py-2',
-                {
-                    'opacity-50': useDisabledStyle,
-                    'text-white': active,
-                    'bg-custom-background': active,
-                }
-            )}
+        <ModeToggleButton
+            isActive={active}
+            tooltip="Toggle Swipe Mode"
+            icon="compare"
+            testId="swipe-widget-toggle-btn"
             onClick={onClickHandler}
-            title="Toggle Swipe Mode"
-        >
-            <calcite-icon icon="compare" scale="l" />
-        </div>
+        />
+        // <div
+        //     data-testid="swipe-widget-toggle-button"
+        //     className={classnames(
+        //         'relative w-full text-center cursor-pointer flex items-center justify-center py-2',
+        //         {
+        //             'opacity-50': useDisabledStyle,
+        //             'text-white': active,
+        //             'bg-custom-background': active,
+        //         }
+        //     )}
+        //     onClick={onClickHandler}
+        //     title="Toggle Swipe Mode"
+        // >
+        //     <calcite-icon icon="compare" scale="l" />
+        // </div>
     );
 };
 

@@ -111,7 +111,7 @@ export const Gutter: FC<IProps> = ({
 
             {/* divider with shadow effect */}
             <div
-                className="w-full h-2"
+                className="w-full h-2 mb-2"
                 style={{
                     background: `linear-gradient(5deg, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 100%)`,
                 }}
