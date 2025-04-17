@@ -59,6 +59,8 @@ import { Notification } from '@components/Notification';
 import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
 import { AppHeader } from '@components/AppHeader';
 import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
+import { ErrorThrowingComponent } from '@components/ErrorBoundary/ErrorThrowingComponent';
 
 const AppLayout: React.FC = () => {
     // const { onPremises } = React.useContext(AppContext);
@@ -68,7 +70,7 @@ const AppLayout: React.FC = () => {
     useRevalidateToken();
 
     return (
-        <>
+        <ErrorBoundary>
             <AppHeader />
 
             <Gutter>
@@ -132,7 +134,7 @@ const AppLayout: React.FC = () => {
             <AboutThisApp />
 
             <MobileFooter />
-        </>
+        </ErrorBoundary>
     );
 };
 
