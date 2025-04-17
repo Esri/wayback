@@ -100,7 +100,7 @@ const PreviewWindow: React.FC<Props> = ({
                 height: `${PREVIEW_WINDOW_HEIGHT}px`,
             }}
         >
-            <img src={imageUrl} />
+            {imageUrl && <img src={imageUrl} />}
             <div className="preview-item-info">
                 <span
                     style={{
