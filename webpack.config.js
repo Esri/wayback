@@ -127,7 +127,7 @@ module.exports = (env, options)=> {
                 // hash: true,
                 template: './public/index.html',
                 filename: 'index.html',
-                favicon: './public/favicon.ico',
+                favicon: './public/esri-favicon-light-32.png',
                 meta: {
                     title,
                     description,
@@ -139,7 +139,7 @@ module.exports = (env, options)=> {
                     'og:description': description,
                     'og:url': homepage,
                     'og:image': `${homepage}/public/screenshot.jpg`,
-                    "last-modified": new Date().toString()
+                    "last-modified": new Date().getTime().toString(),
                 },
                 minify: {
                     html5                          : true,

@@ -30,6 +30,7 @@ import {
     getWaybackItems,
     setDefaultWaybackOptions,
 } from '@vannizhang/wayback-core';
+import { initI18next } from '@utils/i18n';
 
 (async () => {
     try {
@@ -37,6 +38,8 @@ import {
             appId: config.appId,
             portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
         });
+
+        await initI18next();
 
         if (isDevMode) {
             setDefaultWaybackOptions({

@@ -4,9 +4,12 @@ import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { mapModeChanged, selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/ModeToggleButton';
+import { useTranslation } from 'react-i18next';
 
 export const UpdatesModeToggleButton = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     const { isMobile } = useContext(AppContext);
 
@@ -21,7 +24,7 @@ export const UpdatesModeToggleButton = () => {
     return (
         <ModeToggleButton
             isActive={isActive}
-            tooltip="Open Updates Mode"
+            tooltip={t('open_updates_mode')}
             icon="date-time"
             testId="updates-mode-toggle-btn"
             onClick={() => dispatch(mapModeChanged('updates'))}

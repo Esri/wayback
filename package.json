@@ -100,10 +100,14 @@
     "axios": "^1.6.2",
     "classnames": "^2.2.6",
     "d3": "^7.8.5",
+    "date-fns": "^4.1.0",
     "helper-toolkit-ts": "^1.1.14",
+    "i18next": "^25.0.0",
+    "i18next-http-backend": "^3.0.2",
     "nanoid": "^5.0.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^15.4.1",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1"
   }
