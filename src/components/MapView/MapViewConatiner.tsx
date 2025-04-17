@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import './CustomMapViewStyle.css';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -23,6 +23,7 @@ import {
     mapExtentSelector,
     mapExtentUpdated,
     selectMapCenterAndZoom,
+    selectMapMode,
     zoomUpdated,
 } from '@store/Map/reducer';
 
@@ -42,7 +43,6 @@ import {
     saveMapCenterToHashParams,
     saveMapExtentInURLQueryParam,
 } from '@utils/UrlSearchParam';
-import { batch } from 'react-redux';
 import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
 import {
     isAnimationModeOnSelector,
@@ -73,22 +73,45 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         return mapExtent || getDefaultExtent() || AppConfig.defaultMapExtent;
     }, []);
 
-    const queryVersionsWithLocalChanges = async (
-        mapCenterPoint: IMapPointInfo
-    ) => {
-        try {
-            const { longitude, latitude, zoom } = mapCenterPoint;
+    const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
-            const point = new Point({
-                longitude,
-                latitude,
-            });
+    const appMode = useAppSelector(selectMapMode);
 
-            dispatch(queryLocalChanges(point, zoom));
-        } catch (err) {
-            console.error('failed to query local changes', err);
+    useEffect(() => {
+        if (!queryLocation) {
+            return;
         }
-    };
+
+        if (appMode === 'updates') {
+            return;
+        }
+
+        const { longitude, latitude, zoom } = queryLocation;
+
+        const point = new Point({
+            longitude,
+            latitude,
+        });
+
+        dispatch(queryLocalChanges(point, zoom));
+    }, [queryLocation, appMode]);
+
+    // const queryVersionsWithLocalChanges = async (
+    //     mapCenterPoint: IMapPointInfo
+    // ) => {
+    //     try {
+    //         const { longitude, latitude, zoom } = mapCenterPoint;
+
+    //         const point = new Point({
+    //             longitude,
+    //             latitude,
+    //         });
+
+    //         dispatch(queryLocalChanges(point, zoom));
+    //     } catch (err) {
+    //         console.error('failed to query local changes', err);
+    //     }
+    // };
 
     const onExtentChange = (extent: IExtentGeomety) => {
         dispatch(mapExtentUpdated(extent));
@@ -118,17 +141,16 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                 center={center}
                 zoom={zoom}
                 onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
-                    queryVersionsWithLocalChanges(mapCenterPoint);
+                    // queryVersionsWithLocalChanges(mapCenterPoint);
+                    setQueryLocation(mapCenterPoint);
 
-                    batch(() => {
-                        dispatch(
-                            mapCenterUpdated({
-                                lon: mapCenterPoint.longitude,
-                                lat: mapCenterPoint.latitude,
-                            })
-                        );
-                        dispatch(zoomUpdated(mapCenterPoint.zoom));
-                    });
+                    dispatch(
+                        mapCenterUpdated({
+                            lon: mapCenterPoint.longitude,
+                            lat: mapCenterPoint.latitude,
+                        })
+                    );
+                    dispatch(zoomUpdated(mapCenterPoint.zoom));
                 }}
                 onExtentChange={onExtentChange}
             >
