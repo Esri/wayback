@@ -4,6 +4,7 @@
     --sidebar-height-mobile: 300px;
     --list-card-height: 38px;
     --list-card-background: #1c1c1c;
+    --card-background: #1c1c1c;
 
     --default-text-color: #ccc;
     --gutter-bgColor: #444444;
@@ -14,4 +15,7 @@
     --color-highlight-item: #fff;
     --color-highlight-item-hover: #56a5d8;
     --color-hover-item: #1A3D60;
+
+    --updates-status-pending-color: #FFC900;
+    --updates-status-published-color: #36DA43;
 }

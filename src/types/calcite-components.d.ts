@@ -25,5 +25,6 @@ declare namespace React.JSX {
         'calcite-button': any;
         'calcite-slider': any;
         'calcite-switch': any;
+        'calcite-checkbox': any;
     }
 }

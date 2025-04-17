@@ -33,12 +33,12 @@ module.exports = {
           }
         },
         'background': {
-          DEFAULT: '#121212'
+          DEFAULT: '#121212',
         },
         'foreground': {
           DEFAULT: '#ccc'
         },
-        'list-card-background': {
+        'card-background': {
           DEFAULT: 'var(--list-card-background)'
         },
       }

@@ -31,7 +31,7 @@ export const LocaleSwitch = () => {
                 return (
                     <div
                         key={layer.id}
-                        className="flex items-center my-2 text-xs bg-custom-list-card-background cursor-pointer p-1"
+                        className="flex items-center my-2 text-xs bg-custom-card-background cursor-pointer p-1"
                         onClick={() => {
                             dispatch(
                                 updateReferenceLayerLocale(layer.language)

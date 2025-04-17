@@ -35,7 +35,7 @@ import {
     AnimationControls,
 } from '../';
 import { selectMapMode } from '@store/Map/reducer';
-import { UpdatesInfo } from '@components/UpdatesPanel';
+import { UpdatesModePanel } from '@components/UpdatesModePanel';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -62,7 +62,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
         }
 
         if (mode === 'updates') {
-            return <UpdatesInfo />;
+            return <UpdatesModePanel />;
         }
 
         return (
