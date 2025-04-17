@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { MapCenter } from '@store/Map/reducer';
+import { MapCenter, MapMode } from '@store/Map/reducer';
 import { IURLParamData, IExtentGeomety } from '@typings/index';
 
 type ParamKey =
@@ -25,7 +25,8 @@ type ParamKey =
     | 'swipeWidget'
     | 'framesToExclude'
     | 'downloadMode'
-    | 'mapCenter';
+    | 'mapCenter'
+    | 'mode';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -229,6 +230,27 @@ const decodeURLParams = (): IURLParamData => {
     };
 
     return urlParams;
+};
+
+export const saveMapModeInURLQueryParam = (mode: MapMode): void => {
+    const key: ParamKey = 'mode';
+    const value = mode ? mode : null;
+    updateHashParams(key, value);
+};
+
+export const getMapModeFromHashParams = (): MapMode => {
+    const value = getHashParamValueByKey('mode');
+    if (!value) {
+        return 'explore';
+    }
+
+    const validModes: MapMode[] = ['explore', 'updates', 'swipe', 'animation'];
+
+    if (!validModes.includes(value as MapMode)) {
+        return 'explore'; // default mode
+    }
+
+    return value as MapMode;
 };
 
 export {

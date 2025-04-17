@@ -23,6 +23,7 @@ import { initialMapState, MapMode, MapState } from './Map/reducer';
 import {
     decodeURLParams,
     getMapCenterFromHashParams,
+    getMapModeFromHashParams,
 } from '../utils/UrlSearchParam';
 
 import {
@@ -119,7 +120,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 
     const { center, zoom } = getMapCenterFromHashParams() || {};
 
-    let mode: MapMode = 'explore';
+    let mode: MapMode = getMapModeFromHashParams();
 
     if (isSwipeWidgetOpen) {
         mode = 'swipe';

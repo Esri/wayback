@@ -20,16 +20,26 @@ import {
     animationSpeedSelector,
     selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
-import { saveAnimationSpeedInURLQueryParam } from '@utils/UrlSearchParam';
+import {
+    saveAnimationSpeedInURLQueryParam,
+    saveMapModeInURLQueryParam,
+} from '@utils/UrlSearchParam';
+import { selectMapMode } from '@store/Map/reducer';
 
 export const useSaveAppState2URLHashParams = () => {
     const animationSpeed = useAppSelector(animationSpeedSelector);
 
     const animationStatus = useAppSelector(selectAnimationStatus);
 
+    const mode = useAppSelector(selectMapMode);
+
     useEffect(() => {
         saveAnimationSpeedInURLQueryParam(
             animationStatus !== null ? animationSpeed : undefined
         );
     }, [animationSpeed, animationStatus]);
+
+    useEffect(() => {
+        saveMapModeInURLQueryParam(mode);
+    }, [mode]);
 };
