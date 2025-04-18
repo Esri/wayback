@@ -8,7 +8,7 @@ The World Imagery Wayback App provides a dynamic browsing experience where previ
 ## Prerequisites
 
 ### Clone the repository
-To run this application locally, you need to clone the repository, it is recommended to fork it first, then clone your forked repository to your local machine. You can do this using the following command:
+To run this application locally, you need to clone the repository, it is recommended to fork it first, then clone your forked repository to your local machine.
 
 ### Node.js and NPM
 Ensure you have Node.js and NPM installed on your machine. You can download them from the [Node.js website](https://nodejs.org/en/). The current Long Term Support (LTS) release is recommended for this project.
@@ -32,7 +32,9 @@ WEBPACK_DEV_SERVER_HOSTNAME=my-custom-hostname.com
 
 Make sure to replace `your-client-id` with your actual ArcGIS OAuth Client ID.
 
-## Getting Started 
+## Usage
+
+### Installing Dependencies
 
 From the project's root directory, install the required packages (dependencies):
 
@@ -40,19 +42,21 @@ From the project's root directory, install the required packages (dependencies):
 npm install
 ```
 
-## Running the app 
-Now you can start the webpack dev server to test the app on your local machine:
+### Running the App
+
+To test the app on your local machine, start the webpack dev server:
 
 ```sh
-# it will start a server instance and begin listening for connections from localhost on port 8080
+# This will start a server instance and begin listening for connections from localhost on port 8080
 npm run start
 ```
 
-## Deployment
-To build/deploye the app, you can simply run:
+### Building for Deployment
+
+To build and prepare the app for deployment, run:
 
 ```sh
-# it will place all files needed for deployment into the /build directory 
+# This will place all files needed for deployment into the /build directory
 npm run build
 ```
 
