@@ -62,8 +62,6 @@ import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 
 const AppLayout: React.FC = () => {
-    // const { onPremises } = React.useContext(AppContext);
-
     useSaveAppState2URLHashParams();
 
     useRevalidateToken();
@@ -125,8 +123,6 @@ const AppLayout: React.FC = () => {
             <SaveAsWebMapDialog />
 
             <SettingDialog />
-
-            {/* {!onPremises && <ShareDialog />} */}
 
             <DownloadDialog />
 

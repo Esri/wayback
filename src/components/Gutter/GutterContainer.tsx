@@ -69,7 +69,6 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         <Gutter
             isMobile={isMobile}
             settingsBtnDisabled={settingsBtnDisabled}
-            // shareBtnDisabled={onPremises}
             aboutButtonOnClick={aboutButtonOnClick}
             copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}

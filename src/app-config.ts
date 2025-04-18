@@ -16,9 +16,6 @@
 import { IAppConfig } from './types';
 
 const config: IAppConfig = {
-    // shouldUseWaybackFootprintsLayer: false,
-    // if on-premises is true, some functionalities (share app to social media and etc) will be disabled
-    onPremises: false,
     defaultMapExtent: {
         xmin: -115.332,
         ymin: 36.048,

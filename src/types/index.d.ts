@@ -127,19 +127,6 @@ interface IStaticTooltipData {
 // | 'world-imagery-basemap'
 
 interface IAppConfig {
-    // appId: string;
-    // shouldUseWaybackFootprintsLayer: boolean;
-    onPremises: boolean;
-    // productionEnv: {
-    //     serviceUrls: {
-    //         [name in ValidServiceUrlNames]: string;
-    //     };
-    // };
-    // developmentEnv?: {
-    //     serviceUrls: {
-    //         [name in ValidServiceUrlNames]: string;
-    //     };
-    // };
     defaultMapExtent?: {
         xmin: number;
         ymin: number;

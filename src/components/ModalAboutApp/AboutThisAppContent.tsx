@@ -22,8 +22,6 @@ import { AppContext } from '@contexts/AppContextProvider';
 // interface IState {}
 
 export const AboutThiAppContent: React.FC = () => {
-    const { onPremises } = useContext(AppContext);
-
     const githubRepoInfo = (
         <>
             The source code for this app is available on{' '}
@@ -65,7 +63,7 @@ export const AboutThiAppContent: React.FC = () => {
                 >
                     Wayback Imagery group
                 </a>
-                . {!onPremises ? githubRepoInfo : null}
+                . {githubRepoInfo}
             </p>
 
             <h5 className="text-xl mb-3">WHY</h5>
