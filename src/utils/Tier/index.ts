@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { TIER, ValidServiceUrlNames } from '@typings/index';
-import config from '../../app-config';
+import { TIER } from '@typings/index';
+// import config from '../../app-config';
 
 const isHostedOnArcGisDomain = (() => {
     return window.location.hostname.match(/arcgis.com/gi) ? true : false;
@@ -27,9 +27,9 @@ export const isHostedOnLivingAtlasDomain = (() => {
 // the wayback app is hosted on bothe Living Atlas dev and production server so the Living Atlas team can test the dev services using the dev app before we release them to production
 // however, if the app is hosted on somewhere else, then just return false so the app will always use the production services
 export const isDevMode = (() => {
-    if (!config.developmentEnv) {
-        return false;
-    }
+    // if (!config.developmentEnv) {
+    //     return false;
+    // }
 
     if (!isHostedOnArcGisDomain && !isHostedOnLivingAtlasDomain) {
         return false;
@@ -59,12 +59,12 @@ export const getArcGISOnlinePortalUrl = () => {
     return 'https://www.arcgis.com';
 };
 
-const getServiceUrl = (key?: ValidServiceUrlNames) => {
-    const serviceUrls =
-        isDevMode && config.developmentEnv.serviceUrls
-            ? config.developmentEnv.serviceUrls
-            : config.productionEnv.serviceUrls;
-    return serviceUrls[key] || '';
-};
+// const getServiceUrl = (key?: ValidServiceUrlNames) => {
+//     const serviceUrls =
+//         isDevMode && config.developmentEnv.serviceUrls
+//             ? config.developmentEnv.serviceUrls
+//             : config.productionEnv.serviceUrls;
+//     return serviceUrls[key] || '';
+// };
 
-export { getServiceUrl };
+// export { getServiceUrl };

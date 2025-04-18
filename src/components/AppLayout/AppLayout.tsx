@@ -49,7 +49,7 @@ import {
     DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
-import { getArcGISOnlinePortalUrl, getServiceUrl } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';

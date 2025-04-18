@@ -21,19 +21,6 @@ const config: IAppConfig = {
     // shouldUseWaybackFootprintsLayer: false,
     // if on-premises is true, some functionalities (share app to social media and etc) will be disabled
     onPremises: false,
-    productionEnv: {
-        serviceUrls: {
-            'wayback-imagery-base':
-                'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer',
-        },
-    },
-    // The dev enivornment is optional, please comment out the dev section below if don't need the dev enivornment
-    developmentEnv: {
-        serviceUrls: {
-            'wayback-imagery-base':
-                'https://waybackdev.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer',
-        },
-    },
     defaultMapExtent: {
         xmin: -115.332,
         ymin: 36.048,

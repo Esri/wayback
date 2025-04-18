@@ -17,7 +17,8 @@ import MapView from '@arcgis/core/views/MapView';
 import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
-import { getServiceUrl } from '@utils/Tier';
+// import { getServiceUrl } from '@utils/Tier';
+import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
 
 const TILE_SIZE = 256;
 
@@ -45,8 +46,6 @@ type GenerateFramesParams = {
     mapView: MapView;
     releaseNums: string[];
 };
-
-const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base');
 
 export const generateFrames = async ({
     frameRect,
@@ -102,7 +101,9 @@ const generateFrame = async ({
             const img = new Image(TILE_SIZE, TILE_SIZE);
             img.crossOrigin = 'anonymous';
 
-            const imageURL = `${WaybackImagerBaseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
+            const baseURL = getWaybackServiceBaseURL();
+
+            const imageURL = `${baseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
 
             img.src = imageURL;
 

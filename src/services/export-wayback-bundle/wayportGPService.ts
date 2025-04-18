@@ -86,8 +86,6 @@ const WAYPORT_GP_SERVICE_ROOT_PROD =
 const WAYPORT_GP_SERVICE_ROOT_DEV =
     'https://wayportdev.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport';
 
-// const WAYPORT_GP_SERVICE_ROOT = getServiceUrl('wayback-export-base');
-
 /**
  * The root URL of the Wayport GP service.
  */

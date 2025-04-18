@@ -18,9 +18,6 @@ import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 
 import { IWaybackItem } from '@typings/index';
 import { getWaybackSubDomains } from '@vannizhang/wayback-core';
-// import { getServiceUrl } from '@utils/Tier';
-// export const WAYBACK_LAYER_ID = 'waybackWMTSLayer'
-// const WaybackImagerBaseURL = getServiceUrl('wayback-imagery-base')
 
 /**
  * Get urlTemplate string that contains a `{subDomain}` place holder
