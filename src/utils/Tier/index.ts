@@ -16,30 +16,45 @@
 import { TIER } from '@typings/index';
 // import config from '../../app-config';
 
-const isHostedOnArcGisDomain = (() => {
-    return window.location.hostname.match(/arcgis.com/gi) ? true : false;
-})();
+// const isHostedOnArcGisDomain = (() => {
+//     return window.location.hostname.match(/arcgis.com/gi) ? true : false;
+// })();
 
-export const isHostedOnLivingAtlasDomain = (() => {
-    return window.location.hostname.match(/livingatlas/gi) ? true : false;
-})();
+// export const isHostedOnLivingAtlasDomain = (() => {
+//     return window.location.hostname.match(/livingatlas/gi) ? true : false;
+// })();
 
-// the wayback app is hosted on bothe Living Atlas dev and production server so the Living Atlas team can test the dev services using the dev app before we release them to production
-// however, if the app is hosted on somewhere else, then just return false so the app will always use the production services
-export const isDevMode = (() => {
-    // if (!config.developmentEnv) {
-    //     return false;
-    // }
+// // the wayback app is hosted on bothe Living Atlas dev and production server so the Living Atlas team can test the dev services using the dev app before we release them to production
+// // however, if the app is hosted on somewhere else, then just return false so the app will always use the production services
+// export const isDevMode = (() => {
+//     // if (!config.developmentEnv) {
+//     //     return false;
+//     // }
 
-    if (!isHostedOnArcGisDomain && !isHostedOnLivingAtlasDomain) {
-        return false;
-    }
+//     if (!isHostedOnArcGisDomain && !isHostedOnLivingAtlasDomain) {
+//         return false;
+//     }
 
-    const isDev =
-        window.location.hostname !== 'livingatlas.arcgis.com' ? true : false;
+//     const isDev =
+//         window.location.hostname !== 'livingatlas.arcgis.com' ? true : false;
 
-    return isDev;
-})();
+//     return isDev;
+// })();
+
+/**
+ * Determines the current tier of the application based on the hostname.
+ * If the hostname is 'livingatlas.arcgis.com' or 'livingatlasstg.arcgis.com',
+ * it is considered production; otherwise, it is considered development.
+ */
+const isPROD =
+    window.location.hostname === 'livingatlas.arcgis.com' ||
+    window.location.hostname === 'livingatlasstg.arcgis.com';
+
+/**
+ * Indicates whether the application is running in development mode.
+ * It is true if the application is not in production.
+ */
+export const isDevMode = !isPROD;
 
 /**
  * The current tier of the application, either 'development' or 'production'.
