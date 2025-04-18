@@ -119,17 +119,16 @@ interface IStaticTooltipData {
 }
 
 type ValidServiceUrlNames =
-    | 'portal-url'
-    | 'wayback-imagery-base'
-    | 'wayback-config'
-    | 'wayback-change-detector-layer'
-    // | 'reference-layer'
-    | 'world-imagery-basemap'
-    | 'wayback-export-base';
+    // | 'portal-url'
+    'wayback-imagery-base';
+// | 'wayback-config'
+// | 'wayback-change-detector-layer'
+// | 'reference-layer'
+// | 'world-imagery-basemap'
 
 interface IAppConfig {
     appId: string;
-    shouldUseWaybackFootprintsLayer: boolean;
+    // shouldUseWaybackFootprintsLayer: boolean;
     onPremises: boolean;
     productionEnv: {
         serviceUrls: {
@@ -152,6 +151,8 @@ interface IAppConfig {
     };
 }
 
+type TIER = 'production' | 'development';
+
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -165,4 +166,5 @@ export {
     IStaticTooltipData,
     ValidServiceUrlNames,
     IAppConfig,
+    TIER,
 };

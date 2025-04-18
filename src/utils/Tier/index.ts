@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { ValidServiceUrlNames } from '@typings/index';
+import { TIER, ValidServiceUrlNames } from '@typings/index';
 import config from '../../app-config';
 
 const isHostedOnArcGisDomain = (() => {
@@ -40,6 +40,24 @@ export const isDevMode = (() => {
 
     return isDev;
 })();
+
+/**
+ * The current tier of the application, either 'development' or 'production'.
+ */
+export const tier: TIER = isDevMode ? 'development' : 'production';
+
+/**
+ * Returns the ArcGIS Online portal URL based on the current tier.
+ * If the tier is 'development', it returns the development portal URL.
+ * Otherwise, it returns the production portal URL.
+ */
+export const getArcGISOnlinePortalUrl = () => {
+    if (tier === 'development') {
+        return 'https://devext.arcgis.com';
+    }
+
+    return 'https://www.arcgis.com';
+};
 
 const getServiceUrl = (key?: ValidServiceUrlNames) => {
     const serviceUrls =

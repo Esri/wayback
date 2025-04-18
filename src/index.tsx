@@ -25,7 +25,11 @@ import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import config from './app-config';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
-import { getServiceUrl, isDevMode } from '@utils/Tier';
+import {
+    getArcGISOnlinePortalUrl,
+    getServiceUrl,
+    isDevMode,
+} from '@utils/Tier';
 import {
     getWaybackItems,
     setDefaultWaybackOptions,
@@ -36,7 +40,7 @@ import { initI18next } from '@utils/i18n';
     try {
         await initEsriOAuth({
             appId: config.appId,
-            portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
+            portalUrl: getCustomPortalUrl() || getArcGISOnlinePortalUrl(),
         });
         await initI18next();
 

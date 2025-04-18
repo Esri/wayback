@@ -17,7 +17,7 @@ import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
-import { getServiceUrl } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl, getServiceUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
 
 interface Props {
@@ -68,7 +68,7 @@ export const ListViewCard: FC<Props> = ({
     const openItem = () => {
         const itemId = data.itemID;
 
-        const agolHost = getServiceUrl('portal-url');
+        const agolHost = getArcGISOnlinePortalUrl(); //getServiceUrl('portal-url');
 
         const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
 

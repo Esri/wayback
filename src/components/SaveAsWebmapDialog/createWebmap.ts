@@ -16,7 +16,7 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
 import { IWaybackItem, IExtentGeomety } from '@typings/index';
-import { getServiceUrl } from '@utils/Tier';
+import { getServiceUrl, tier } from '@utils/Tier';
 // import EsriRquest from 'esri/request';
 
 // import esriRequest from '@arcgis/core/request';
@@ -69,6 +69,16 @@ const getRequestUrl = () => {
         : '';
 };
 
+const WORLD_IMAGERY_BASEMAP_URL_PROD =
+    'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/';
+const WORLD_IMAGERY_BASEMAP_URL_DEV =
+    'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
+
+const WORLD_IMAGERY_BASEMAP_URL =
+    tier === 'production'
+        ? WORLD_IMAGERY_BASEMAP_URL_PROD
+        : WORLD_IMAGERY_BASEMAP_URL_DEV;
+
 const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     const operationalLayers: Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];
 
@@ -117,7 +127,7 @@ const getRequestText = (
                 {
                     id: 'defaultBasemap',
                     layerType: 'ArcGISTiledMapServiceLayer',
-                    url: getServiceUrl('world-imagery-basemap'),
+                    url: WORLD_IMAGERY_BASEMAP_URL, //getServiceUrl('world-imagery-basemap'),
                     visibility: true,
                     opacity: 1,
                     title: 'World Imagery',

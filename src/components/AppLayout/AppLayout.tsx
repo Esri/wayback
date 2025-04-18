@@ -49,7 +49,7 @@ import {
     DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
-import { getServiceUrl } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl, getServiceUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
@@ -110,7 +110,7 @@ const AppLayout: React.FC = () => {
                     <ReferenceLayerToggle />
 
                     <SearchWidget
-                        portalUrl={getServiceUrl('portal-url')}
+                        portalUrl={getArcGISOnlinePortalUrl()}
                         // position={'top-left'}
                     />
 
