@@ -75,11 +75,11 @@ const AppLayout: React.FC = () => {
             <Gutter>
                 <ExploreModeToggleButton />
 
-                <UpdatesModeToggleButton />
-
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
+
+                <UpdatesModeToggleButton />
 
                 <OpenDownloadPanelBtn />
 

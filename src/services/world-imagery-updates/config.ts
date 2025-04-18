@@ -79,7 +79,7 @@ export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
  * ]
  * ```
  */
-export const IMAGERY_UPDATES_FIELDS = {
+export const IMAGERY_UPDATES_LAYER_FIELDS = {
     OBJECTID: 'OBJECTID',
     AREA_NAME: 'AreaName',
     COUNTRY_NAME: 'CountryName',
@@ -91,3 +91,23 @@ export const IMAGERY_UPDATES_FIELDS = {
     PUB_STATE: 'PubState',
     PUB_DATE: 'PubDate',
 };
+
+/**
+ * Imagery Updates Statuses
+ *
+ * - `pending`: Imagery updates that are not yet published.
+ * - `published`: Imagery updates that have been published.
+ */
+export type ImageryUpdatesStatus = 'pending' | 'published';
+
+/**
+ * Imagery Updates Categories
+ *
+ * - `vivid-advanced`: Imagery updates from Maxar's Vivid Advanced basemap product.
+ * - `vivid-standard`: Imagery updates from Maxar's Vivid Standard basemap product.
+ * - `community-contributed`: Imagery updates contributed by the GIS User Community.
+ */
+export type ImageryUpdatesCategory =
+    | 'vivid-advanced'
+    | 'vivid-standard'
+    | 'community-contributed';

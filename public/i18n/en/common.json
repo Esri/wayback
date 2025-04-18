@@ -21,5 +21,6 @@
     "search": "Search",
     "select_all": "Select All",
     "unselect_all": "Unselect All",
-    "all": "All"
+    "all": "All",
+    "loading": "Loading..."
 }

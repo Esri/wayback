@@ -2,9 +2,12 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
+import { useAppDispatch } from '@store/configureStore';
 
 export const CategoryFilter = () => {
     const { t } = useTranslation();
+
+    const dispatch = useAppDispatch();
 
     const data: RadioButtonData[] = useMemo(() => {
         const options = [
@@ -34,6 +37,8 @@ export const CategoryFilter = () => {
                 onClick={(value: string) => {
                     console.log(`Selected category: ${value}`);
                     // Handle the category selection change here
+
+                    // dispatch()
                 }}
             />
         </div>

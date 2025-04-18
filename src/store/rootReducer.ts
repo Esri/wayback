@@ -20,6 +20,7 @@ import SwipeView from './Swipe/reducer';
 import WaybackItems from './Wayback/reducer';
 import AnimationMode from './AnimationMode/reducer';
 import DownloadMode from './DownloadMode/reducer';
+import UpdatesMode from './UpdatesMode/reducer';
 
 export default combineReducers({
     UI,
@@ -28,4 +29,5 @@ export default combineReducers({
     WaybackItems,
     AnimationMode,
     DownloadMode,
+    UpdatesMode,
 });
