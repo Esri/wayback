@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 const {
     title,
@@ -23,6 +24,15 @@ module.exports = (env, options)=> {
     const devMode = options.mode === 'development' ? true : false;
 
     process.env.NODE_ENV = options.mode;
+
+    if(!process.env.ARCGIS_OAUTH_CLIENT_ID) {
+        console.error(
+            `Failed to start/build the application:\n` +
+            `Please ensure that the environment variable ARCGIS_OAUTH_CLIENT_ID is set in your .env file.\n` + 
+            `Please refer to the Prerequisites section in README for more information on how to set up your environment variables.`
+        );
+        process.exit(1);
+    }
 
     return {
         devServer: {
@@ -111,6 +121,9 @@ module.exports = (env, options)=> {
         },
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
+            new DefinePlugin({
+                ARCGIS_OAUTH_CLIENT_ID: JSON.stringify(process.env.ARCGIS_OAUTH_CLIENT_ID),
+            }),
             // copy static files from public folder to build directory
             new CopyPlugin({
                 patterns: [

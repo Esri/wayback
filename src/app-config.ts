@@ -16,8 +16,6 @@
 import { IAppConfig } from './types';
 
 const config: IAppConfig = {
-    // The registered application id used for authentication, this appId below only works for the app hosted on arcgis.com domain
-    appId: 'WaybackImagery',
     // shouldUseWaybackFootprintsLayer: false,
     // if on-premises is true, some functionalities (share app to social media and etc) will be disabled
     onPremises: false,

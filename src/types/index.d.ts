@@ -127,7 +127,7 @@ interface IStaticTooltipData {
 // | 'world-imagery-basemap'
 
 interface IAppConfig {
-    appId: string;
+    // appId: string;
     // shouldUseWaybackFootprintsLayer: boolean;
     onPremises: boolean;
     // productionEnv: {

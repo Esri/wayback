@@ -23,7 +23,6 @@ import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
 import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
-import config from './app-config';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
 import { getArcGISOnlinePortalUrl, isDevMode } from '@utils/Tier';
 import {
@@ -31,11 +30,14 @@ import {
     setDefaultWaybackOptions,
 } from '@vannizhang/wayback-core';
 import { initI18next } from '@utils/i18n';
+import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 
 (async () => {
+    const root = createRoot(document.getElementById('appRootDiv'));
+
     try {
         await initEsriOAuth({
-            appId: config.appId,
+            appId: ARCGIS_OAUTH_CLIENT_ID,
             portalUrl: getCustomPortalUrl() || getArcGISOnlinePortalUrl(),
         });
 
@@ -51,8 +53,6 @@ import { initI18next } from '@utils/i18n';
 
         const preloadedState = await getPreloadedState(waybackItems);
 
-        const root = createRoot(document.getElementById('appRootDiv'));
-
         root.render(
             <ReduxProvider store={configureAppStore(preloadedState)}>
                 <AppContextProvider>
@@ -61,6 +61,14 @@ import { initI18next } from '@utils/i18n';
             </ReduxProvider>
         );
     } catch (err) {
-        console.error(err);
+        // console.error(err);
+        root.render(
+            <ErrorPage
+                errorMessage={
+                    err.message ||
+                    'An error occurred while initializing the application.'
+                }
+            />
+        );
     }
 })();
