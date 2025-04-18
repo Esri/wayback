@@ -24,7 +24,7 @@ import AppContextProvider from './contexts/AppContextProvider';
 import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
-import { getArcGISOnlinePortalUrl, isDevMode } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl, tier } from '@utils/Tier';
 import {
     getWaybackItems,
     setDefaultWaybackOptions,
@@ -43,7 +43,8 @@ import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 
         await initI18next();
 
-        if (isDevMode) {
+        if (tier === 'development') {
+            // Set the default wayback options for development mode
             setDefaultWaybackOptions({
                 useDevServices: true,
             });

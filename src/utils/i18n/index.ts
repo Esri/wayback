@@ -14,7 +14,7 @@ export const initI18next = async (language = 'en') => {
     const lastModifiedMetaTag = document.querySelector(
         'meta[name="last-modified"]'
     );
-    console.log('lastModifiedMetaTag', lastModifiedMetaTag);
+    // console.log('lastModifiedMetaTag', lastModifiedMetaTag);
 
     // get the content from 'last-modified' meta tag or use a placeholder value in case the "last-modified" meta tag is not found.
     const lastModifiedTimestamp =
