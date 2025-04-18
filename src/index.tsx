@@ -38,7 +38,6 @@ import { initI18next } from '@utils/i18n';
             appId: config.appId,
             portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
         });
-
         await initI18next();
 
         if (isDevMode) {
