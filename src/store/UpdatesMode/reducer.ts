@@ -61,19 +61,19 @@ export const updatesModeSlice = createSlice({
     name: 'updatesMode',
     initialState: initialUpdatesModeState,
     reducers: {
-        statusChanged: (
+        updatesModeStatusChanged: (
             state,
             action: PayloadAction<ImageryUpdatesStatus[]>
         ) => {
             state.status = action.payload;
         },
-        categoryChanged: (
+        updatesModeCategoryChanged: (
             state,
             action: PayloadAction<ImageryUpdatesCategory>
         ) => {
             state.category = action.payload;
         },
-        regionChanged: (state, action: PayloadAction<string>) => {
+        updatesModeRegionChanged: (state, action: PayloadAction<string>) => {
             state.region = action.payload;
         },
         allRegionsChanged: (
@@ -82,7 +82,7 @@ export const updatesModeSlice = createSlice({
         ) => {
             state.allRegions = action.payload;
         },
-        dateRangeChanged: (
+        updatesModeDateRangeChanged: (
             state,
             action: PayloadAction<UpdatesModeDateFilter>
         ) => {
@@ -94,11 +94,11 @@ export const updatesModeSlice = createSlice({
 const { reducer } = updatesModeSlice;
 
 export const {
-    statusChanged,
-    categoryChanged,
-    regionChanged,
+    updatesModeStatusChanged,
+    updatesModeCategoryChanged,
+    updatesModeRegionChanged,
     allRegionsChanged,
-    dateRangeChanged,
+    updatesModeDateRangeChanged,
 } = updatesModeSlice.actions;
 
 export default reducer;

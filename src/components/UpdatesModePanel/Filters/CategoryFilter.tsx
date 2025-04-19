@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
 import { useAppDispatch } from '@store/configureStore';
+import { updatesModeCategoryChanged } from '@store/UpdatesMode/reducer';
+import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';
 
 export const CategoryFilter = () => {
     const { t } = useTranslation();
@@ -10,19 +12,27 @@ export const CategoryFilter = () => {
     const dispatch = useAppDispatch();
 
     const data: RadioButtonData[] = useMemo(() => {
-        const options = [
+        const options: {
+            value: ImageryUpdatesCategory;
+            label: string;
+            checked: boolean;
+        }[] = [
             {
-                value: 'metropolitan',
                 label: t('metropolitan_updates'),
+                value: 'vivid-advanced',
                 checked: true,
             },
-            { value: 'regional', label: t('regional_updates'), checked: false },
             {
-                value: 'community',
-                label: t('community_contributions'),
+                label: t('regional_updates'),
+                value: 'vivid-standard',
                 checked: false,
             },
-        ];
+            {
+                label: t('community_contributions'),
+                value: 'community-contributed',
+                checked: false,
+            },
+        ]
 
         return options;
     }, []);
@@ -38,7 +48,7 @@ export const CategoryFilter = () => {
                     console.log(`Selected category: ${value}`);
                     // Handle the category selection change here
 
-                    // dispatch()
+                    dispatch(updatesModeCategoryChanged(value as ImageryUpdatesCategory));
                 }}
             />
         </div>
