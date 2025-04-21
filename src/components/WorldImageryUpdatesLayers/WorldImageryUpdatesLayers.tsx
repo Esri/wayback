@@ -8,9 +8,12 @@ import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
     VIVID_ADVANCED_FROM_MAXAR_URL,
     VIVID_STANDARD_FROM_MAXAR_URL,
+    WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
+    WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useQueryWhereClause';
+import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 
 type Props = {
     mapView?: MapView;
@@ -61,12 +64,53 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             popupTemplate: {
                 title: t('world_imagery_updates_popup_title'),
                 content: `
-                    <div class="text-white">
-                        <p>${t('world_imagery_updates_popup_content')}</p>
-                    </div>
-                `,
+                <div class="text-white">
+                <p>${t('world_imagery_updates_popup_content')}</p>
+                </div>
+            `,
             },
             definitionExpression: whereClause,
+            renderer: {
+                type: 'unique-value',
+                field: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+                uniqueValueInfos: [
+                    {
+                        value: WorldImageryUpdatesStatusEnum.published,
+                        label: WorldImageryUpdatesStatusEnum.published,
+                        symbol: {
+                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                .published.fill, // Converted to RGB
+                            type: 'simple-fill',
+                            style: 'solid',
+                            outline: {
+                                type: 'simple-line',
+                                color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                    .published.outline,
+                                width: '3px',
+                                style: 'solid',
+                            },
+                        },
+                    },
+                    {
+                        value: WorldImageryUpdatesStatusEnum.pending,
+                        label: WorldImageryUpdatesStatusEnum.pending,
+                        symbol: {
+                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                .pending.fill, // Converted to RGB
+                            type: 'simple-fill',
+                            style: 'solid',
+                            outline: {
+                                type: 'simple-line',
+                                color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                    .pending.outline,
+                                width: '3px',
+                                style: 'solid',
+                            },
+                        },
+                    },
+                ],
+            },
+            effect: 'drop-shadow(0px 0px 5px #000)',
         });
 
         worldImageryUpdatesLayerRef.current = worldImageryUpdatesLayer;

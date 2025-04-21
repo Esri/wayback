@@ -1,6 +1,6 @@
 import {
     WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
-    WorldImageryUpdatesStatus,
+    WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import { useAppSelector } from '@store/configureStore';
 import { UpdatesModeDateFilter } from '@store/UpdatesMode/reducer';
@@ -61,13 +61,13 @@ export const useWorldImageryUpdatesLayerWhereClause = () => {
 
             const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtract[dateFilter]} AND CURRENT_TIMESTAMP)`;
 
-            if (status.includes('pending')) {
+            if (status.includes(WorldImageryUpdatesStatusEnum.pending)) {
                 whereClauses.push(
-                    `${dateQuery} OR ${
-                        WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-                    } = '${'Pending' as WorldImageryUpdatesStatus}'`
+                    `${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`
                 );
-            } else if (status.includes('published')) {
+            } else if (
+                status.includes(WorldImageryUpdatesStatusEnum.published)
+            ) {
                 whereClauses.push(dateQuery);
             }
         }

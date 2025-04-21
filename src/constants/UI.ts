@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { color } from 'd3';
 import { isMobileDevice } from 'helper-toolkit-ts/dist/misc';
 
 export const SIDEBAR_WIDTH = 300;
@@ -28,3 +29,19 @@ export const MOBILE_HEADER_HEIGHT = 45;
 export const COPIED_LINK_MESSAGE_TIME_TO_STAY_OPEN_IN_MILLISECONDS = 3000;
 
 export const IS_MOBILE = isMobileDevice();
+
+/**
+ * Color for world imagery updates layer based on the status of the update
+ */
+export const WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS = {
+    pending: {
+        color: 'rgba(54, 218, 67, 1)',
+        fill: 'rgba(54, 218, 67, .5)',
+        outline: 'rgba(54, 218, 67, .9)',
+    },
+    published: {
+        color: 'rgba(255, 201, 0, 1)',
+        fill: 'rgba(255, 201, 0, .5)',
+        outline: 'rgba(255, 201, 0, .9)',
+    },
+};

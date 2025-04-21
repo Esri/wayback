@@ -121,7 +121,12 @@ export const WORLD_IMAGERY_UPDATES_LAYER_FIELDS = {
  * - `pending`: Imagery updates that are not yet published.
  * - `published`: Imagery updates that have been published.
  */
-export type WorldImageryUpdatesStatus = 'pending' | 'published';
+// export type WorldImageryUpdatesStatus = 'pending' | 'published';
+
+export enum WorldImageryUpdatesStatusEnum {
+    pending = 'Pending',
+    published = 'Published',
+}
 
 /**
  * Imagery Updates Categories

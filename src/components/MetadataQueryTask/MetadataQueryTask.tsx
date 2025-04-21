@@ -37,6 +37,10 @@ type Props = {
     isSwipeWidgetOpen: boolean;
     swipeWidgetPosition: number;
     mapView?: MapView;
+    /**
+     * if true, the metadata query task is disabled
+     */
+    disabled: boolean;
     metadataQueryOnStart: () => void;
     metadataOnChange: (data: IWaybackMetadataQueryResult) => void;
     anchorPointOnChange: (data: IScreenPoint) => void;
@@ -50,6 +54,7 @@ const MetadataQueryLayer: React.FC<Props> = ({
     isSwipeWidgetOpen,
     swipeWidgetPosition,
     mapView,
+    disabled,
     metadataQueryOnStart,
     metadataOnChange,
     anchorPointOnChange,
@@ -61,6 +66,8 @@ const MetadataQueryLayer: React.FC<Props> = ({
     const swipeWidgetTrailingLayerRef = React.useRef<IWaybackItem>(null);
     const isSwipeWidgetOpenRef = React.useRef<boolean>(null);
     const swipeWidgetPositionRef = React.useRef<number>(null);
+
+    const disabledRef = React.useRef<boolean>(null);
 
     const getTargetWaybackItem = (mapPoint: Point): IWaybackItem => {
         if (!isSwipeWidgetOpenRef.current) {
@@ -77,6 +84,10 @@ const MetadataQueryLayer: React.FC<Props> = ({
     };
 
     const queryMetadata = async (mapPoint: Point) => {
+        if (disabledRef.current !== null && disabledRef.current === true) {
+            return;
+        }
+
         try {
             anchorPointRef.current = mapPoint;
 
@@ -187,6 +198,10 @@ const MetadataQueryLayer: React.FC<Props> = ({
     React.useEffect(() => {
         swipeWidgetPositionRef.current = swipeWidgetPosition;
     }, [swipeWidgetPosition]);
+
+    React.useEffect(() => {
+        disabledRef.current = disabled;
+    }, [disabled]);
 
     return null;
 };

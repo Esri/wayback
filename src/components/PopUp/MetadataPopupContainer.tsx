@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
@@ -23,6 +23,7 @@ import {
     metadataQueryResultSelector,
     metadataQueryResultUpdated,
     selectIsQueringMetadata,
+    selectMapMode,
 } from '@store/Map/reducer';
 
 import MetadataPopUp from './index';
@@ -37,6 +38,12 @@ const MetadataPopupContainer = () => {
     const isQueryingMetadata = useAppSelector(selectIsQueringMetadata);
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    const mode = useAppSelector(selectMapMode);
+
+    useEffect(() => {
+        dispatch(metadataQueryResultUpdated(null));
+    }, [mode]);
 
     if (isAnimationModeOn) {
         return null;

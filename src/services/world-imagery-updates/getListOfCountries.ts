@@ -2,7 +2,7 @@ import { getToken } from '@utils/Esri-OAuth';
 import {
     WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
     ImageryUpdatesCategory,
-    WorldImageryUpdatesStatus,
+    WorldImageryUpdatesStatusEnum,
 } from './config';
 import { getImageryUpdatesUrl } from './helpers';
 import { IFeature } from '@esri/arcgis-rest-request';
@@ -41,11 +41,7 @@ export const getListOfCountries = async (
         f: 'json',
         token: token,
         returnGeometry: 'false',
-        where: `(${
-            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE
-        } BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${
-            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-        } = '${'Pending' as WorldImageryUpdatesStatus}'`, // Fetch all records
+        where: `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`, // Fetch all records
         outFields: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME,
         returnDistinctValues: 'true', // Ensure we get distinct country names,
     });

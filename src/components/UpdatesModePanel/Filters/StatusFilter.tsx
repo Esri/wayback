@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 import { HeaderText } from './HeaderText';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { WorldImageryUpdatesStatus } from '@services/world-imagery-updates/config';
+import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
 import { selectUpdatesModeStatus } from '@store/UpdatesMode/selectors';
 import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
+import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 
 type StatusCheckboxProps = {
     /**
@@ -14,7 +15,7 @@ type StatusCheckboxProps = {
     /**
      * Status of the data associated with the checkbox.
      */
-    status: WorldImageryUpdatesStatus;
+    status: WorldImageryUpdatesStatusEnum;
     /**
      * The number of sites associated with the checkbox.
      */
@@ -83,7 +84,7 @@ export const StatusFilter = () => {
 
     const status = useAppSelector(selectUpdatesModeStatus);
 
-    const onChange = (status2Toggle: WorldImageryUpdatesStatus) => {
+    const onChange = (status2Toggle: WorldImageryUpdatesStatusEnum) => {
         // Toggle the status
         // If the status is already in the list, remove it
         // If the status is not in the list, add it
@@ -100,19 +101,21 @@ export const StatusFilter = () => {
 
             <StatusCheckbox
                 checked={true}
-                status="pending"
+                status={WorldImageryUpdatesStatusEnum.pending}
                 count={5}
                 area={100}
-                color="var(--updates-status-pending-color)"
-                onChange={() => onChange('pending')}
+                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
+                onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
             />
             <StatusCheckbox
                 checked={true}
-                status="published"
+                status={WorldImageryUpdatesStatusEnum.published}
                 count={3}
                 area={50}
-                color="var(--updates-status-published-color)"
-                onChange={() => onChange('published')}
+                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published.color}
+                onChange={() =>
+                    onChange(WorldImageryUpdatesStatusEnum.published)
+                }
             />
         </div>
     );
