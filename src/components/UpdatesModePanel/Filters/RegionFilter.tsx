@@ -42,7 +42,7 @@ export const RegionFilter = () => {
     }, [listOfRegions, error, updatesModeRegion]);
 
     return (
-        <div className="bg-custom-card-background p-2 mb-2 text-white">
+        <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow overflow-y-auto fancy-scrollbar">
             <HeaderText title={t('region')} />
 
             {isLoading && (
