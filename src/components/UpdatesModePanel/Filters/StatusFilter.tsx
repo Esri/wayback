@@ -3,9 +3,13 @@ import { HeaderText } from './HeaderText';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
-import { selectUpdatesModeStatus } from '@store/UpdatesMode/selectors';
+import {
+    selectUpdatesModeStatus,
+    selectWorldImageryUpdatesOutStatistics,
+} from '@store/UpdatesMode/selectors';
 import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+import { numberWithCommas } from 'helper-toolkit-ts/dist/number';
 
 type StatusCheckboxProps = {
     /**
@@ -33,6 +37,18 @@ type StatusCheckboxProps = {
      * @returns void
      */
     onChange?: () => void;
+};
+
+const formatArea = (areaInSqKm: number) => {
+    if (areaInSqKm >= 1000000) {
+        return `${(areaInSqKm / 1000000).toFixed(1)}M`;
+    }
+
+    if (areaInSqKm >= 1000) {
+        return `${(areaInSqKm / 1000).toFixed(0)}K`;
+    }
+
+    return `${areaInSqKm.toFixed(0)}`;
 };
 
 const StatusCheckbox: FC<StatusCheckboxProps> = ({
@@ -68,8 +84,8 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                     <span className="ml-1 mr-2">|</span>
                     <span className="text-sm">
                         {t('status_message', {
-                            num_sites: count,
-                            area,
+                            num_sites: numberWithCommas(count),
+                            area: formatArea(area),
                         })}
                     </span>
                 </div>
@@ -83,6 +99,10 @@ export const StatusFilter = () => {
     const dispatch = useAppDispatch();
 
     const status = useAppSelector(selectUpdatesModeStatus);
+
+    const outStatistics = useAppSelector(
+        selectWorldImageryUpdatesOutStatistics
+    );
 
     const onChange = (status2Toggle: WorldImageryUpdatesStatusEnum) => {
         // Toggle the status
@@ -102,16 +122,16 @@ export const StatusFilter = () => {
             <StatusCheckbox
                 checked={true}
                 status={WorldImageryUpdatesStatusEnum.pending}
-                count={5}
-                area={100}
+                count={outStatistics?.countOfPending || 0}
+                area={outStatistics?.areaOfPending || 0}
                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
                 onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
             />
             <StatusCheckbox
                 checked={true}
                 status={WorldImageryUpdatesStatusEnum.published}
-                count={3}
-                area={50}
+                count={outStatistics?.countOfPublished || 0}
+                area={outStatistics?.areaOfPublished || 0}
                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published.color}
                 onChange={() =>
                     onChange(WorldImageryUpdatesStatusEnum.published)

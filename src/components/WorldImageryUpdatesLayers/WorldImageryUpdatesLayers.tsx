@@ -1,7 +1,7 @@
 import MapView from '@arcgis/core/views/MapView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import React, { FC, use, useEffect, useMemo, useRef } from 'react';
-import { useAppSelector } from '@store/configureStore';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { selectMapMode } from '@store/Map/reducer';
 import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
 import {
@@ -14,6 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useQueryWhereClause';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
 
 type Props = {
     mapView?: MapView;
@@ -21,6 +22,8 @@ type Props = {
 
 export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     const { t } = useTranslation();
+
+    const dispatch = useAppDispatch();
 
     const worldImageryUpdatesLayerRef = useRef<FeatureLayer>(null);
 
@@ -135,20 +138,41 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             return;
         }
 
+        const outStatisticFieldName4Count = 'totalCount';
+        const outStatisticFieldName4Area = 'totalArea';
+
         // query the features in the world imagery updates layer to get the count and area of pending and published updates
         // that meet the where clause
         worldImageryUpdatesLayerRef.current
             .queryFeatures({
                 where: whereClause,
                 returnGeometry: false,
-                outFields: [
-                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+                // outFields: [
+                //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+                //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+                // ],
+                outStatistics: [
+                    {
+                        statisticType: 'sum',
+                        onStatisticField:
+                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+                        outStatisticFieldName: outStatisticFieldName4Area,
+                    },
+                    {
+                        statisticType: 'count',
+                        onStatisticField:
+                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.OBJECTID,
+                        outStatisticFieldName: outStatisticFieldName4Count,
+                    },
+                ],
+                groupByFieldsForStatistics: [
                     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
                 ],
+                cacheHint: true,
             })
             .then((result) => {
                 const features = result.features;
-                // console.log('Features:', features);
+                // console.log('result:', result);
 
                 let countOfPending = 0;
                 let countOfPublished = 0;
@@ -156,10 +180,6 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
                 let areaOfPublished = 0;
 
                 for (const feature of features) {
-                    const area =
-                        feature.attributes[
-                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM
-                        ];
                     const pubState =
                         feature.attributes[
                             WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
@@ -167,20 +187,33 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
                     // console.log(`Area: ${area}, PubState: ${pubState}`);
 
                     if (pubState === WorldImageryUpdatesStatusEnum.pending) {
-                        countOfPending++;
-                        areaOfPending += area;
+                        countOfPending =
+                            feature.attributes[outStatisticFieldName4Count];
+                        areaOfPending =
+                            feature.attributes[outStatisticFieldName4Area];
                     } else if (
                         pubState === WorldImageryUpdatesStatusEnum.published
                     ) {
-                        countOfPublished++;
-                        areaOfPublished += area;
+                        countOfPublished =
+                            feature.attributes[outStatisticFieldName4Count];
+                        areaOfPublished =
+                            feature.attributes[outStatisticFieldName4Area];
                     }
                 }
 
-                console.log('Count of Pending:', countOfPending);
-                console.log('Count of Published:', countOfPublished);
-                console.log('Area of Pending:', areaOfPending);
-                console.log('Area of Published:', areaOfPublished);
+                // console.log('Count of Pending:', countOfPending);
+                // console.log('Count of Published:', countOfPublished);
+                // console.log('Area of Pending:', areaOfPending);
+                // console.log('Area of Published:', areaOfPublished);
+
+                dispatch(
+                    worldImageryUpdatesOutStatisticsChanged({
+                        countOfPending,
+                        countOfPublished,
+                        areaOfPending,
+                        areaOfPublished,
+                    })
+                );
             })
             .catch((error) => {
                 console.error('Error querying features:', error);

@@ -12,3 +12,6 @@ export const selectUpdatesModeStatus = (state: RootState) =>
 
 export const selectUpdatesModeDate = (state: RootState) =>
     state.UpdatesMode.dateRange;
+
+export const selectWorldImageryUpdatesOutStatistics = (state: RootState) =>
+    state.UpdatesMode.outStatistics;

@@ -14,9 +14,9 @@ export const useListOfRegions = () => {
     useEffect(() => {
         (async () => {
             try {
-                console.log('Fetching list of regions for category:', category);
+                // console.log('Fetching list of regions for category:', category);
                 const regions = await execute(category);
-                console.log('Fetched regions:', regions);
+                // console.log('Fetched regions:', regions);
                 setListOfRegions(regions);
             } catch (e) {
                 console.error('Error fetching list of regions:', e);

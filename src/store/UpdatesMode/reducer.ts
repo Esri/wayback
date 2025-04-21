@@ -19,6 +19,28 @@ export type UpdatesModeDateFilter =
     | 'last-year-and-pending'
     | 'custom';
 
+/**
+ * The object containing the out statistics for world imagery updates grouped by status.
+ */
+export type WorldImageryUpdatesOutStatistics = {
+    /**
+     * The number of pending updates.
+     */
+    countOfPending: number;
+    /**
+     * The number of published updates.
+     */
+    countOfPublished: number;
+    /**
+     * The area of pending updates in square kilometers.
+     */
+    areaOfPending: number;
+    /**
+     * The area of published updates in square kilometers.
+     */
+    areaOfPublished: number;
+};
+
 export type UpdatesModeState = {
     /**
      * selected status for imagery updates
@@ -47,6 +69,10 @@ export type UpdatesModeState = {
      * date range filter for imagery updates
      */
     dateRange: UpdatesModeDateFilter;
+    /**
+     * out statistics for world imagery updates
+     */
+    outStatistics: WorldImageryUpdatesOutStatistics;
 };
 
 export const initialUpdatesModeState: UpdatesModeState = {
@@ -58,6 +84,12 @@ export const initialUpdatesModeState: UpdatesModeState = {
     region: '',
     allRegions: [],
     dateRange: 'last-year-and-pending',
+    outStatistics: {
+        countOfPending: 0,
+        countOfPublished: 0,
+        areaOfPending: 0,
+        areaOfPublished: 0,
+    },
 };
 
 export const updatesModeSlice = createSlice({
@@ -91,6 +123,12 @@ export const updatesModeSlice = createSlice({
         ) => {
             state.dateRange = action.payload;
         },
+        worldImageryUpdatesOutStatisticsChanged: (
+            state,
+            action: PayloadAction<WorldImageryUpdatesOutStatistics>
+        ) => {
+            state.outStatistics = action.payload;
+        },
     },
 });
 
@@ -102,6 +140,7 @@ export const {
     updatesModeRegionChanged,
     allRegionsChanged,
     updatesModeDateRangeChanged,
+    worldImageryUpdatesOutStatisticsChanged,
 } = updatesModeSlice.actions;
 
 export default reducer;
