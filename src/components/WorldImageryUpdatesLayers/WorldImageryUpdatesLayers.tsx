@@ -66,11 +66,30 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             visible: isVisible,
             popupTemplate: {
                 title: t('world_imagery_updates_popup_title'),
+                expressionInfos: [
+                    {
+                        name: 'pub_date_formatted',
+                        title: 'Published Date',
+                        expression: `Date($feature.${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE})`,
+                    },
+                    {
+                        name: 'GSD_formatted',
+                        title: 'GSD',
+                        expression: `Round($feature.${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.GSD}, 2)`,
+                    },
+                ],
+                //   content: "In {NAME} county, {expression/participation-rate}% of the population"
+                //     + " participates in the labor force."
                 content: `
-                <div class="text-white">
-                <p>${t('world_imagery_updates_popup_content')}</p>
-                </div>
-            `,
+                    <div class="text-sm">
+                        <div class="mb-2">
+                            <span>Maxar Vivid Advanced imagery for this area was published on {expression/pub_date_formatted}.</span>
+                        </div>
+                        <div class="mb-2">
+                        <span>Area: Pixels in this imagery represent a ground distance of {expression/GSD_formatted} meters.</span>
+                        </div>
+                    </div>
+                `,
             },
             definitionExpression: whereClause,
             renderer: {
