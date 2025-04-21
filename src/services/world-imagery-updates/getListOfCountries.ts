@@ -1,5 +1,9 @@
 import { getToken } from '@utils/Esri-OAuth';
-import { IMAGERY_UPDATES_LAYER_FIELDS, ImageryUpdatesCategory } from './config';
+import {
+    WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
+    ImageryUpdatesCategory,
+    WorldImageryUpdatesStatus,
+} from './config';
 import { getImageryUpdatesUrl } from './helpers';
 import { IFeature } from '@esri/arcgis-rest-request';
 
@@ -37,9 +41,13 @@ export const getListOfCountries = async (
         f: 'json',
         token: token,
         returnGeometry: 'false',
-        where: '1=1', // Fetch all records
-        outFields: IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME,
-        returnDistinctValues: 'true', // Ensure we get distinct country names
+        where: `(${
+            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE
+        } BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${
+            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
+        } = '${'Pending' as WorldImageryUpdatesStatus}'`, // Fetch all records
+        outFields: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME,
+        returnDistinctValues: 'true', // Ensure we get distinct country names,
     });
 
     const url = `${serviceUrl}/query?${params.toString()}`;
@@ -67,7 +75,7 @@ export const getListOfCountries = async (
 
     for (const feature of features) {
         const countryName = feature.attributes[
-            IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME
+            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME
         ] as string;
 
         if (countryName) {

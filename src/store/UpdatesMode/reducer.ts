@@ -7,11 +7,11 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import {
-    ImageryUpdatesStatus,
+    WorldImageryUpdatesStatus,
     ImageryUpdatesCategory,
 } from '@services/world-imagery-updates/config';
 
-type UpdatesModeDateFilter =
+export type UpdatesModeDateFilter =
     | 'last-week'
     | 'last-month'
     | 'last-3-months'
@@ -25,7 +25,7 @@ export type UpdatesModeState = {
      * - `pending`: Imagery updates that are not yet published.
      * - `published`: Imagery updates that have been published.
      */
-    status: ImageryUpdatesStatus[];
+    status: WorldImageryUpdatesStatus[];
     /**
      * category filter for imagery updates
      * - `vivid-advanced`: Imagery updates from Maxar's Vivid Advanced basemap product.
@@ -63,7 +63,7 @@ export const updatesModeSlice = createSlice({
     reducers: {
         updatesModeStatusChanged: (
             state,
-            action: PayloadAction<ImageryUpdatesStatus[]>
+            action: PayloadAction<WorldImageryUpdatesStatus[]>
         ) => {
             state.status = action.payload;
         },

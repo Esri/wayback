@@ -32,11 +32,11 @@ export const RadioButtonGroup: FC<Props> = ({ name, data, onClick }) => {
                 <calcite-label
                     layout="inline"
                     key={item.value + index}
-                    class="text-xs"
+                    class="text-xs cursor-pointer"
+                    onClick={onClick.bind(null, item.value)}
                 >
                     <calcite-radio-button
                         value={item.value}
-                        onClick={onClick.bind(null, item.value)}
                         checked={item.checked || undefined}
                     ></calcite-radio-button>
                     {item.label}

@@ -1,6 +1,10 @@
 import React, { FC } from 'react';
 import { HeaderText } from './HeaderText';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import { WorldImageryUpdatesStatus } from '@services/world-imagery-updates/config';
+import { selectUpdatesModeStatus } from '@store/UpdatesMode/selectors';
+import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
 
 type StatusCheckboxProps = {
     /**
@@ -10,7 +14,7 @@ type StatusCheckboxProps = {
     /**
      * Status of the data associated with the checkbox.
      */
-    status: 'pending' | 'published';
+    status: WorldImageryUpdatesStatus;
     /**
      * The number of sites associated with the checkbox.
      */
@@ -75,6 +79,21 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
 
 export const StatusFilter = () => {
     const { t } = useTranslation();
+    const dispatch = useAppDispatch();
+
+    const status = useAppSelector(selectUpdatesModeStatus);
+
+    const onChange = (status2Toggle: WorldImageryUpdatesStatus) => {
+        // Toggle the status
+        // If the status is already in the list, remove it
+        // If the status is not in the list, add it
+        const newStatus = status.includes(status2Toggle)
+            ? status.filter((s) => s !== status2Toggle)
+            : [...status, status2Toggle];
+
+        dispatch(updatesModeStatusChanged(newStatus));
+    };
+
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
             <HeaderText title={t('status')} />
@@ -85,7 +104,7 @@ export const StatusFilter = () => {
                 count={5}
                 area={100}
                 color="var(--updates-status-pending-color)"
-                onChange={() => console.log('Pending status changed')}
+                onChange={() => onChange('pending')}
             />
             <StatusCheckbox
                 checked={true}
@@ -93,7 +112,7 @@ export const StatusFilter = () => {
                 count={3}
                 area={50}
                 color="var(--updates-status-published-color)"
-                onChange={() => console.log('Updated status changed')}
+                onChange={() => onChange('published')}
             />
         </div>
     );

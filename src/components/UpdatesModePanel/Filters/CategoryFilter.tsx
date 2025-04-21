@@ -2,14 +2,20 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
-import { useAppDispatch } from '@store/configureStore';
-import { updatesModeCategoryChanged } from '@store/UpdatesMode/reducer';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import {
+    updatesModeCategoryChanged,
+    updatesModeRegionChanged,
+} from '@store/UpdatesMode/reducer';
 import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';
+import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
 
 export const CategoryFilter = () => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
+
+    const updatesModeCategory = useAppSelector(selectUpdatesModeCategory);
 
     const data: RadioButtonData[] = useMemo(() => {
         const options: {
@@ -20,7 +26,7 @@ export const CategoryFilter = () => {
             {
                 label: t('metropolitan_updates'),
                 value: 'vivid-advanced',
-                checked: true,
+                checked: false,
             },
             {
                 label: t('regional_updates'),
@@ -32,9 +38,14 @@ export const CategoryFilter = () => {
                 value: 'community-contributed',
                 checked: false,
             },
-        ]
+        ];
 
-        return options;
+        return options.map((option) => {
+            return {
+                ...option,
+                checked: option.value === updatesModeCategory,
+            };
+        });
     }, []);
 
     return (
@@ -48,7 +59,16 @@ export const CategoryFilter = () => {
                     console.log(`Selected category: ${value}`);
                     // Handle the category selection change here
 
-                    dispatch(updatesModeCategoryChanged(value as ImageryUpdatesCategory));
+                    // Reset the region to '' when the category changes
+                    // This is to ensure that the region filter is reset when the category changes
+                    // as the options in the region filter are dependent on the selected category
+                    dispatch(updatesModeRegionChanged(''));
+
+                    dispatch(
+                        updatesModeCategoryChanged(
+                            value as ImageryUpdatesCategory
+                        )
+                    );
                 }}
             />
         </div>

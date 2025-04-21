@@ -22,5 +22,6 @@
     "select_all": "Select All",
     "unselect_all": "Unselect All",
     "all": "All",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "world_imagery_updates": "World Imagery Updates"
 }

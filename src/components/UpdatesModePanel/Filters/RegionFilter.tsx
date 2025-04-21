@@ -3,18 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
 import { useListOfRegions } from '../hooks/useListOfRegions';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import { updatesModeRegionChanged } from '@store/UpdatesMode/reducer';
+import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
 
 export const RegionFilter = () => {
     const { t } = useTranslation();
 
+    const dispatch = useAppDispatch();
+
     const { listOfRegions, isLoading, error } = useListOfRegions();
+
+    const updatesModeRegion = useAppSelector(selectUpdatesModeRegion);
 
     const data: RadioButtonData[] = useMemo(() => {
         const options: RadioButtonData[] = [
             {
                 label: t('all'),
-                value: 'all',
-                checked: true, // Default to checked for "All" option
+                value: '',
+                checked: !updatesModeRegion,
             },
         ];
 
@@ -27,12 +34,12 @@ export const RegionFilter = () => {
             options.push({
                 label: region,
                 value: region,
-                checked: false, // Default to unchecked
+                checked: updatesModeRegion === region, // Default to unchecked
             });
         }
 
         return options;
-    }, [listOfRegions, error]);
+    }, [listOfRegions, error, updatesModeRegion]);
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
@@ -51,6 +58,8 @@ export const RegionFilter = () => {
                     onClick={(value: string) => {
                         console.log(`Selected region: ${value}`);
                         // Handle the region selection change here
+
+                        dispatch(updatesModeRegionChanged(value));
                     }}
                 />
             )}

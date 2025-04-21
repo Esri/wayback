@@ -60,6 +60,7 @@ import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
 import { AppHeader } from '@components/AppHeader';
 import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
+import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -115,6 +116,8 @@ const AppLayout: React.FC = () => {
                     <ZoomWidget />
 
                     <Notification />
+
+                    <WorldImageryUpdatesLayers />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
