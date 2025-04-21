@@ -130,5 +130,62 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         worldImageryUpdatesLayerRef.current.definitionExpression = whereClause;
     }, [whereClause]);
 
+    useEffect(() => {
+        if (!worldImageryUpdatesLayerRef.current) {
+            return;
+        }
+
+        // query the features in the world imagery updates layer to get the count and area of pending and published updates
+        // that meet the where clause
+        worldImageryUpdatesLayerRef.current
+            .queryFeatures({
+                where: whereClause,
+                returnGeometry: false,
+                outFields: [
+                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+                ],
+            })
+            .then((result) => {
+                const features = result.features;
+                // console.log('Features:', features);
+
+                let countOfPending = 0;
+                let countOfPublished = 0;
+                let areaOfPending = 0;
+                let areaOfPublished = 0;
+
+                for (const feature of features) {
+                    const area =
+                        feature.attributes[
+                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM
+                        ];
+                    const pubState =
+                        feature.attributes[
+                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
+                        ];
+                    // console.log(`Area: ${area}, PubState: ${pubState}`);
+
+                    if (pubState === WorldImageryUpdatesStatusEnum.pending) {
+                        countOfPending++;
+                        areaOfPending += area;
+                    } else if (
+                        pubState === WorldImageryUpdatesStatusEnum.published
+                    ) {
+                        countOfPublished++;
+                        areaOfPublished += area;
+                    }
+                }
+
+                console.log('Count of Pending:', countOfPending);
+                console.log('Count of Published:', countOfPublished);
+                console.log('Area of Pending:', areaOfPending);
+                console.log('Area of Published:', areaOfPublished);
+            })
+            .catch((error) => {
+                console.error('Error querying features:', error);
+            });
+    }, [whereClause, layerURL]);
+
     return null;
 };
