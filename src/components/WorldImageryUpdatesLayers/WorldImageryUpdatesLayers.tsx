@@ -34,6 +34,9 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
 
     const worldImageryUpdatesLayerRef = useRef<FeatureLayer>(null);
 
+    const worldImageryUpdatesLayer4InnerGlowPatternsRef =
+        useRef<FeatureLayer>(null);
+
     const mode = useAppSelector(selectMapMode);
 
     const catgegory = useAppSelector(selectUpdatesModeCategory);
@@ -71,10 +74,10 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         }
 
         if (worldImageryUpdatesLayerRef.current) {
-            groupLayerRef.current.remove(worldImageryUpdatesLayerRef.current);
+            groupLayerRef.current.removeAll();
         }
 
-        const worldImageryUpdatesLayer = new FeatureLayer({
+        worldImageryUpdatesLayerRef.current = new FeatureLayer({
             url: layerURL,
             title: t('world_imagery_updates'),
             visible: isVisible,
@@ -84,9 +87,37 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             // effect: 'drop-shadow(0px 0px 5px #000)',
         });
 
-        worldImageryUpdatesLayerRef.current = worldImageryUpdatesLayer;
+        /**
+         * This layer is used for rendering inner glow patterns
+         * in the world imagery updates visualization.
+         *
+         * @see https://www.esri.com/arcgis-blog/products/arcgis-online/mapping/inner-glow-patterns-for-polygons-in-arcgis-online
+         */
+        worldImageryUpdatesLayer4InnerGlowPatternsRef.current =
+            new FeatureLayer({
+                url: layerURL,
+                title: t('world_imagery_updates'),
+                visible: isVisible,
+                definitionExpression: whereClause,
+                blendMode: 'destination-in',
+                effect: 'blur(12px)',
+                renderer: {
+                    type: 'simple',
+                    symbol: {
+                        type: 'simple-fill',
+                        color: [0, 0, 0, 0],
+                        outline: {
+                            color: [0, 0, 0, 255],
+                            width: 14,
+                        },
+                    },
+                },
+            });
 
-        groupLayerRef.current.add(worldImageryUpdatesLayer);
+        groupLayerRef.current.addMany([
+            worldImageryUpdatesLayerRef.current,
+            worldImageryUpdatesLayer4InnerGlowPatternsRef.current,
+        ]);
     }, [mapView, layerURL]);
 
     useEffect(() => {
@@ -99,6 +130,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         if (!worldImageryUpdatesLayerRef.current) return;
 
         worldImageryUpdatesLayerRef.current.definitionExpression = whereClause;
+        worldImageryUpdatesLayer4InnerGlowPatternsRef.current.definitionExpression =
+            whereClause;
     }, [whereClause]);
 
     useEffect(() => {
