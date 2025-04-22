@@ -6,6 +6,8 @@
     --list-card-background: #1c1c1c;
     --card-background: #1c1c1c;
 
+    --default-text-color-50: rgba(204, 204, 204, 0.5);
+    --default-text-color-hover: #fff;
     --default-text-color: #ccc;
     --gutter-bgColor: #444444;
     --default-ui-bgColor: #121212;
@@ -17,4 +19,5 @@
     --color-hover-item: #1A3D60;
 
     --theme-blue-dark:#1A3D60;
+    --popup-background: rgba(44, 103, 172, 0.9);
 }

@@ -32,7 +32,9 @@ export const useWorldImageryUpdatesLayerWhereClause = () => {
     const region = useAppSelector(selectUpdatesModeRegion);
 
     const whereClause: string = useMemo(() => {
-        const whereClauses: string[] = [];
+        const whereClauses: string[] = [
+            `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} IS NOT NULL`,
+        ];
 
         if (status && status.length > 0) {
             whereClauses.push(

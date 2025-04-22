@@ -9,3 +9,11 @@
     @apply bg-custom-background;
     /* color: var(--custom-light-blue); */
 }
+
+.calcite-mode-dark #appRootDiv .esri-popup .esri-popup__main-container {
+    --calcite-color-foreground-1: var(--popup-background);
+    --calcite-color-foreground-2: var(--theme-blue-dark);
+    --calcite-color-foreground-3: var(--theme-blue-dark);
+    --calcite-color-border-3: var(--theme-blue-dark);
+    --calcite-color-text-3: var(--default-text-color);
+}
