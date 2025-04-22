@@ -68,7 +68,9 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
 
         // if the group layer is not created yet, create it and add it to the map
         if (!groupLayerRef.current) {
-            const groupLayer = new GroupLayer();
+            const groupLayer = new GroupLayer({
+                effect: 'drop-shadow(0px 0px 5px #000)',
+            });
             groupLayerRef.current = groupLayer;
             mapView.map.add(groupLayer);
         }
