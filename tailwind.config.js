@@ -29,7 +29,7 @@ module.exports = {
             DEFAULT: '#2267AE',
             'brand': '#0079c1',
             'light': '#56a5d8',
-            'dark': '#1A3D60'
+            'dark': 'var(--theme-blue-dark)'
           }
         },
         'background': {

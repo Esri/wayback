@@ -19,7 +19,7 @@
 html, body {
     @apply p-0 m-0 w-full h-full overflow-hidden;
     color: var(--default-text-color);
-    background: #000;
+    background: var(--theme-blue-dark);
 }
 #appRootDiv {
     @apply relative w-full h-full;

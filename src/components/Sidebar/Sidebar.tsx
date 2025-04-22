@@ -53,6 +53,7 @@ const Sidebar: React.FC<Props> = ({
              * second one is a slightly wider, softer halo
              */
             boxShadow: ` 0 0 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.4)`,
+            borderTopLeftRadius: '10px 10px',
         };
 
         if (isMobile) {
@@ -79,7 +80,7 @@ const Sidebar: React.FC<Props> = ({
 
     return (
         <div
-            className=" bg-custom-background top-header-height"
+            className="bg-custom-background top-header-height"
             style={getStyle()}
         >
             {children}

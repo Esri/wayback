@@ -135,7 +135,7 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [isAnimationModeOn]);
 
     return (
-        <div className=" relative shrink-0 grow">
+        <div className="relative shrink-0 grow bg-black">
             <MapView
                 initialExtent={defaultMapExtent}
                 center={center}
