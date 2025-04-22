@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useQueryWhereClause';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
+import { getPopupTemplate } from './helpers';
 
 type Props = {
     mapView?: MapView;
@@ -64,33 +65,7 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             url: layerURL,
             title: t('world_imagery_updates'),
             visible: isVisible,
-            popupTemplate: {
-                title: t('world_imagery_updates_popup_title'),
-                expressionInfos: [
-                    {
-                        name: 'pub_date_formatted',
-                        title: 'Published Date',
-                        expression: `Date($feature.${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE})`,
-                    },
-                    {
-                        name: 'GSD_formatted',
-                        title: 'GSD',
-                        expression: `Round($feature.${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.GSD}, 2)`,
-                    },
-                ],
-                //   content: "In {NAME} county, {expression/participation-rate}% of the population"
-                //     + " participates in the labor force."
-                content: `
-                    <div class="text-sm">
-                        <div class="mb-2">
-                            <span>Maxar Vivid Advanced imagery for this area was published on {expression/pub_date_formatted}.</span>
-                        </div>
-                        <div class="mb-2">
-                        <span>Area: Pixels in this imagery represent a ground distance of {expression/GSD_formatted} meters.</span>
-                        </div>
-                    </div>
-                `,
-            },
+            popupTemplate: getPopupTemplate(catgegory),
             definitionExpression: whereClause,
             renderer: {
                 type: 'unique-value',
