@@ -37,11 +37,13 @@ export const WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS = {
     pending: {
         color: 'rgba(54, 218, 67, 1)',
         fill: 'rgba(54, 218, 67, .5)',
+        fillColorArray: [54, 218, 67, 255],
         outline: 'rgba(54, 218, 67, .9)',
     },
     published: {
         color: 'rgba(255, 201, 0, 1)',
         fill: 'rgba(255, 201, 0, .5)',
+        fillColorArray: [255, 201, 0, 255],
         outline: 'rgba(255, 201, 0, .9)',
     },
 };

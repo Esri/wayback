@@ -4,6 +4,7 @@ import {
     WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol.js';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
@@ -72,36 +73,123 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                 {
                     value: WorldImageryUpdatesStatusEnum.published,
                     label: WorldImageryUpdatesStatusEnum.published,
-                    symbol: {
-                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published
-                            .fill, // Converted to RGB
-                        type: 'simple-fill',
-                        style: 'solid',
-                        outline: {
-                            type: 'simple-line',
-                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                .published.outline,
-                            width: '3px',
-                            style: 'solid',
+                    // symbol: {
+                    //     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published
+                    //         .fill, // Converted to RGB
+                    //     type: 'simple-fill',
+                    //     style: 'solid',
+                    //     outline: {
+                    //         type: 'simple-line',
+                    //         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                    //             .published.outline,
+                    //         width: '3px',
+                    //         style: 'solid',
+                    //     },
+                    // },
+                    symbol: new CIMSymbol({
+                        data: {
+                            type: 'CIMSymbolReference',
+                            symbol: {
+                                type: 'CIMPolygonSymbol',
+                                symbolLayers: [
+                                    {
+                                        type: 'CIMSolidStroke',
+                                        enable: true,
+                                        capStyle: 'Round',
+                                        joinStyle: 'Round',
+                                        // "lineStyle3D": "Strip",
+                                        miterLimit: 10,
+                                        width: 1.5,
+                                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                            .published.fillColorArray,
+                                    },
+                                    {
+                                        type: 'CIMHatchFill',
+                                        enable: true,
+                                        lineSymbol: {
+                                            type: 'CIMLineSymbol',
+                                            symbolLayers: [
+                                                {
+                                                    type: 'CIMSolidStroke',
+                                                    enable: true,
+                                                    capStyle: 'Butt',
+                                                    joinStyle: 'Miter',
+                                                    // "lineStyle3D": "Strip",
+                                                    miterLimit: 10,
+                                                    width: 1.5,
+                                                    color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                                        .published
+                                                        .fillColorArray,
+                                                },
+                                            ],
+                                        },
+                                        rotation: 45,
+                                        separation: 5,
+                                    },
+                                ],
+                            },
                         },
-                    },
+                    }),
                 },
                 {
                     value: WorldImageryUpdatesStatusEnum.pending,
                     label: WorldImageryUpdatesStatusEnum.pending,
-                    symbol: {
-                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending
-                            .fill, // Converted to RGB
-                        type: 'simple-fill',
-                        style: 'solid',
-                        outline: {
-                            type: 'simple-line',
-                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                .pending.outline,
-                            width: '3px',
-                            style: 'solid',
+                    // symbol: {
+                    //     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending
+                    //         .fill, // Converted to RGB
+                    //     type: 'simple-fill',
+                    //     style: 'solid',
+                    //     outline: {
+                    //         type: 'simple-line',
+                    //         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                    //             .pending.outline,
+                    //         width: '3px',
+                    //         style: 'solid',
+                    //     },
+                    // },
+                    symbol: new CIMSymbol({
+                        data: {
+                            type: 'CIMSymbolReference',
+                            symbol: {
+                                type: 'CIMPolygonSymbol',
+                                symbolLayers: [
+                                    {
+                                        type: 'CIMSolidStroke',
+                                        enable: true,
+                                        capStyle: 'Round',
+                                        joinStyle: 'Round',
+                                        // "lineStyle3D": "Strip",
+                                        miterLimit: 10,
+                                        width: 1.5,
+                                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                            .pending.fillColorArray,
+                                    },
+                                    {
+                                        type: 'CIMHatchFill',
+                                        enable: true,
+                                        lineSymbol: {
+                                            type: 'CIMLineSymbol',
+                                            symbolLayers: [
+                                                {
+                                                    type: 'CIMSolidStroke',
+                                                    enable: true,
+                                                    capStyle: 'Butt',
+                                                    joinStyle: 'Miter',
+                                                    // "lineStyle3D": "Strip",
+                                                    miterLimit: 10,
+                                                    width: 1.5,
+                                                    color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                                        .pending.fillColorArray,
+                                                },
+                                            ],
+                                        },
+                                        rotation: 315,
+                                        separation: 5,
+                                    },
+                                ],
+                            },
                         },
-                    },
+                    }),
                 },
             ],
         });
