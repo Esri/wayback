@@ -1,4 +1,10 @@
-import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';
+import {
+    ImageryUpdatesCategory,
+    WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
+    WorldImageryUpdatesStatusEnum,
+} from '@services/world-imagery-updates/config';
+import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
+import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
     'vivid-advanced': 'Maxar Vivid Advanced imagery',
@@ -57,3 +63,46 @@ export const getPopupTemplate = (
         content: `<p><strong><u>Publication</u>:</strong>&nbsp;&nbsp;{expression/expr1}<br /><strong><u>Resolution</u>:</strong>&nbsp; &nbsp;{expression/expr2}</p>`,
     };
 };
+
+export const getUniqueValueRenderer4WorldImageryUpdates =
+    (): UniqueValueRenderer => {
+        return new UniqueValueRenderer({
+            field: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+            uniqueValueInfos: [
+                {
+                    value: WorldImageryUpdatesStatusEnum.published,
+                    label: WorldImageryUpdatesStatusEnum.published,
+                    symbol: {
+                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published
+                            .fill, // Converted to RGB
+                        type: 'simple-fill',
+                        style: 'solid',
+                        outline: {
+                            type: 'simple-line',
+                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                .published.outline,
+                            width: '3px',
+                            style: 'solid',
+                        },
+                    },
+                },
+                {
+                    value: WorldImageryUpdatesStatusEnum.pending,
+                    label: WorldImageryUpdatesStatusEnum.pending,
+                    symbol: {
+                        color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending
+                            .fill, // Converted to RGB
+                        type: 'simple-fill',
+                        style: 'solid',
+                        outline: {
+                            type: 'simple-line',
+                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                .pending.outline,
+                            width: '3px',
+                            style: 'solid',
+                        },
+                    },
+                },
+            ],
+        });
+    };

@@ -1,0 +1,291 @@
+{
+    "operationalLayers": [
+        {
+            "id": "1965ea31203-layer-65",
+            "title": "Group Layer",
+            "layers": [
+                {
+                    "id": "1965e9f780a-layer-63",
+                    "title": "symbology",
+                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0",
+                    "visibility": true,
+                    "itemId": "8f5bccc72f384427ba35f4dfbcf3cf36",
+                    "layerType": "ArcGISFeatureLayer",
+                    "featureEffect": null,
+                    "layerDefinition": {
+                        "definitionExpression": "PubState <> 'Cancelled'",
+                        "drawingInfo": {
+                            "renderer": {
+                                "type": "uniqueValue",
+                                "field1": "PubState",
+                                "uniqueValueGroups": [
+                                    {
+                                        "classes": [
+                                            {
+                                                "label": "Published",
+                                                "symbol": {
+                                                    "type": "CIMSymbolReference",
+                                                    "symbol": {
+                                                        "type": "CIMPolygonSymbol",
+                                                        "symbolLayers": [
+                                                            {
+                                                                "type": "CIMSolidStroke",
+                                                                "enable": true,
+                                                                "capStyle": "Round",
+                                                                "joinStyle": "Round",
+                                                                "lineStyle3D": "Strip",
+                                                                "miterLimit": 10,
+                                                                "width": 1.5,
+                                                                "color": [
+                                                                    255, 181, 8,
+                                                                    255
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "CIMHatchFill",
+                                                                "enable": true,
+                                                                "lineSymbol": {
+                                                                    "type": "CIMLineSymbol",
+                                                                    "symbolLayers": [
+                                                                        {
+                                                                            "type": "CIMSolidStroke",
+                                                                            "enable": true,
+                                                                            "capStyle": "Butt",
+                                                                            "joinStyle": "Miter",
+                                                                            "lineStyle3D": "Strip",
+                                                                            "miterLimit": 10,
+                                                                            "width": 1.5,
+                                                                            "color": [
+                                                                                255,
+                                                                                181,
+                                                                                8,
+                                                                                255
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "rotation": 45,
+                                                                "separation": 5
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "values": [["Published"]]
+                                            },
+                                            {
+                                                "label": "Cancelled",
+                                                "symbol": {
+                                                    "type": "esriSFS",
+                                                    "color": [
+                                                        126, 176, 213, 255
+                                                    ],
+                                                    "outline": {
+                                                        "type": "esriSLS",
+                                                        "color": [
+                                                            153, 153, 153, 64
+                                                        ],
+                                                        "width": 0.75,
+                                                        "style": "esriSLSSolid"
+                                                    },
+                                                    "style": "esriSFSSolid"
+                                                },
+                                                "values": [["Cancelled"]]
+                                            },
+                                            {
+                                                "label": "Pending",
+                                                "symbol": {
+                                                    "type": "CIMSymbolReference",
+                                                    "symbol": {
+                                                        "type": "CIMPolygonSymbol",
+                                                        "symbolLayers": [
+                                                            {
+                                                                "type": "CIMSolidStroke",
+                                                                "enable": true,
+                                                                "capStyle": "Round",
+                                                                "joinStyle": "Round",
+                                                                "lineStyle3D": "Strip",
+                                                                "miterLimit": 10,
+                                                                "width": 1.5,
+                                                                "color": [
+                                                                    79, 250, 0,
+                                                                    255
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "CIMHatchFill",
+                                                                "enable": true,
+                                                                "lineSymbol": {
+                                                                    "type": "CIMLineSymbol",
+                                                                    "symbolLayers": [
+                                                                        {
+                                                                            "type": "CIMSolidStroke",
+                                                                            "enable": true,
+                                                                            "capStyle": "Butt",
+                                                                            "joinStyle": "Miter",
+                                                                            "lineStyle3D": "Strip",
+                                                                            "miterLimit": 10,
+                                                                            "width": 1.5,
+                                                                            "color": [
+                                                                                79,
+                                                                                250,
+                                                                                0,
+                                                                                255
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "rotation": 315,
+                                                                "separation": 5
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "values": [["Pending"]]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "uniqueValueInfos": [
+                                    {
+                                        "label": "Published",
+                                        "symbol": {
+                                            "type": "CIMSymbolReference",
+                                            "symbol": {
+                                                "type": "CIMPolygonSymbol",
+                                                "symbolLayers": [
+                                                    {
+                                                        "type": "CIMSolidStroke",
+                                                        "enable": true,
+                                                        "capStyle": "Round",
+                                                        "joinStyle": "Round",
+                                                        "lineStyle3D": "Strip",
+                                                        "miterLimit": 10,
+                                                        "width": 1.5,
+                                                        "color": [
+                                                            255, 181, 8, 255
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "CIMHatchFill",
+                                                        "enable": true,
+                                                        "lineSymbol": {
+                                                            "type": "CIMLineSymbol",
+                                                            "symbolLayers": [
+                                                                {
+                                                                    "type": "CIMSolidStroke",
+                                                                    "enable": true,
+                                                                    "capStyle": "Butt",
+                                                                    "joinStyle": "Miter",
+                                                                    "lineStyle3D": "Strip",
+                                                                    "miterLimit": 10,
+                                                                    "width": 1.5,
+                                                                    "color": [
+                                                                        255,
+                                                                        181, 8,
+                                                                        255
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        "rotation": 45,
+                                                        "separation": 5
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "value": "Published"
+                                    },
+                                    {
+                                        "label": "Pending",
+                                        "symbol": {
+                                            "type": "CIMSymbolReference",
+                                            "symbol": {
+                                                "type": "CIMPolygonSymbol",
+                                                "symbolLayers": [
+                                                    {
+                                                        "type": "CIMSolidStroke",
+                                                        "enable": true,
+                                                        "capStyle": "Round",
+                                                        "joinStyle": "Round",
+                                                        "lineStyle3D": "Strip",
+                                                        "miterLimit": 10,
+                                                        "width": 1.5,
+                                                        "color": [
+                                                            79, 250, 0, 255
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "CIMHatchFill",
+                                                        "enable": true,
+                                                        "lineSymbol": {
+                                                            "type": "CIMLineSymbol",
+                                                            "symbolLayers": [
+                                                                {
+                                                                    "type": "CIMSolidStroke",
+                                                                    "enable": true,
+                                                                    "capStyle": "Butt",
+                                                                    "joinStyle": "Miter",
+                                                                    "lineStyle3D": "Strip",
+                                                                    "miterLimit": 10,
+                                                                    "width": 1.5,
+                                                                    "color": [
+                                                                        79, 250,
+                                                                        0, 255
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        "rotation": 315,
+                                                        "separation": 5
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "value": "Pending"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "1965ea2fb22-layer-64",
+                    "title": "Thick stroke, blur, destination in",
+                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0",
+                    "visibility": true,
+                    "itemId": "8f5bccc72f384427ba35f4dfbcf3cf36",
+                    "layerType": "ArcGISFeatureLayer",
+                    "blendMode": "destination-in",
+                    "effect": [
+                        {
+                            "type": "blur",
+                            "radius": 12
+                        }
+                    ],
+                    "featureEffect": null,
+                    "layerDefinition": {
+                        "definitionExpression": "PubState <> 'Cancelled'",
+                        "drawingInfo": {
+                            "renderer": {
+                                "type": "simple",
+                                "symbol": {
+                                    "type": "esriSFS",
+                                    "color": [0, 0, 0, 0],
+                                    "outline": {
+                                        "type": "esriSLS",
+                                        "color": [0, 0, 0, 255],
+                                        "width": 13.5,
+                                        "style": "esriSLSSolid"
+                                    },
+                                    "style": "esriSFSSolid"
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "layerType": "GroupLayer",
+            "visibilityMode": "independent"
+        }
+    ]
+}

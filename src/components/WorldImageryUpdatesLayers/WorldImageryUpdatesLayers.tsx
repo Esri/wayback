@@ -15,7 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useQueryWhereClause';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
-import { getPopupTemplate } from './helpers';
+import {
+    getPopupTemplate,
+    getUniqueValueRenderer4WorldImageryUpdates,
+} from './helpers';
+import GroupLayer from '@arcgis/core/layers/GroupLayer';
 
 type Props = {
     mapView?: MapView;
@@ -25,6 +29,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
+
+    const groupLayerRef = useRef<GroupLayer>(null);
 
     const worldImageryUpdatesLayerRef = useRef<FeatureLayer>(null);
 
@@ -57,68 +63,36 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     useEffect(() => {
         if (!mapView || !layerURL) return;
 
+        // if the group layer is not created yet, create it and add it to the map
+        if (!groupLayerRef.current) {
+            const groupLayer = new GroupLayer();
+            groupLayerRef.current = groupLayer;
+            mapView.map.add(groupLayer);
+        }
+
         if (worldImageryUpdatesLayerRef.current) {
-            mapView.map.remove(worldImageryUpdatesLayerRef.current);
+            groupLayerRef.current.remove(worldImageryUpdatesLayerRef.current);
         }
 
         const worldImageryUpdatesLayer = new FeatureLayer({
             url: layerURL,
             title: t('world_imagery_updates'),
             visible: isVisible,
-            popupTemplate: getPopupTemplate(catgegory),
             definitionExpression: whereClause,
-            renderer: {
-                type: 'unique-value',
-                field: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
-                uniqueValueInfos: [
-                    {
-                        value: WorldImageryUpdatesStatusEnum.published,
-                        label: WorldImageryUpdatesStatusEnum.published,
-                        symbol: {
-                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                .published.fill, // Converted to RGB
-                            type: 'simple-fill',
-                            style: 'solid',
-                            outline: {
-                                type: 'simple-line',
-                                color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                    .published.outline,
-                                width: '3px',
-                                style: 'solid',
-                            },
-                        },
-                    },
-                    {
-                        value: WorldImageryUpdatesStatusEnum.pending,
-                        label: WorldImageryUpdatesStatusEnum.pending,
-                        symbol: {
-                            color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                .pending.fill, // Converted to RGB
-                            type: 'simple-fill',
-                            style: 'solid',
-                            outline: {
-                                type: 'simple-line',
-                                color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                    .pending.outline,
-                                width: '3px',
-                                style: 'solid',
-                            },
-                        },
-                    },
-                ],
-            },
-            effect: 'drop-shadow(0px 0px 5px #000)',
+            popupTemplate: getPopupTemplate(catgegory),
+            renderer: getUniqueValueRenderer4WorldImageryUpdates(),
+            // effect: 'drop-shadow(0px 0px 5px #000)',
         });
 
         worldImageryUpdatesLayerRef.current = worldImageryUpdatesLayer;
 
-        mapView.map.add(worldImageryUpdatesLayer);
+        groupLayerRef.current.add(worldImageryUpdatesLayer);
     }, [mapView, layerURL]);
 
     useEffect(() => {
-        if (!worldImageryUpdatesLayerRef.current) return;
+        if (!groupLayerRef.current) return;
 
-        worldImageryUpdatesLayerRef.current.visible = isVisible;
+        groupLayerRef.current.visible = isVisible;
     }, [isVisible]);
 
     useEffect(() => {
