@@ -20,6 +20,7 @@ import {
     getUniqueValueRenderer4WorldImageryUpdates,
 } from './helpers';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
+import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatistics';
 
 type Props = {
     mapView?: MapView;
@@ -102,7 +103,7 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
                 visible: isVisible,
                 definitionExpression: whereClause,
                 blendMode: 'destination-in',
-                effect: 'blur(12px)',
+                effect: 'blur(10px)',
                 renderer: {
                     type: 'simple',
                     symbol: {
@@ -136,92 +137,98 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             whereClause;
     }, [whereClause]);
 
-    useEffect(() => {
-        if (!worldImageryUpdatesLayerRef.current) {
-            return;
-        }
+    useWorldImageryUpdatesStatistics(
+        worldImageryUpdatesLayerRef,
+        layerURL,
+        whereClause
+    );
 
-        const outStatisticFieldName4Count = 'totalCount';
-        const outStatisticFieldName4Area = 'totalArea';
+    // useEffect(() => {
+    //     if (!worldImageryUpdatesLayerRef.current) {
+    //         return;
+    //     }
 
-        // query the features in the world imagery updates layer to get the count and area of pending and published updates
-        // that meet the where clause
-        worldImageryUpdatesLayerRef.current
-            .queryFeatures({
-                where: whereClause,
-                returnGeometry: false,
-                // outFields: [
-                //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
-                //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
-                // ],
-                outStatistics: [
-                    {
-                        statisticType: 'sum',
-                        onStatisticField:
-                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
-                        outStatisticFieldName: outStatisticFieldName4Area,
-                    },
-                    {
-                        statisticType: 'count',
-                        onStatisticField:
-                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.OBJECTID,
-                        outStatisticFieldName: outStatisticFieldName4Count,
-                    },
-                ],
-                groupByFieldsForStatistics: [
-                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
-                ],
-                cacheHint: true,
-            })
-            .then((result) => {
-                const features = result.features;
-                // console.log('result:', result);
+    //     const outStatisticFieldName4Count = 'totalCount';
+    //     const outStatisticFieldName4Area = 'totalArea';
 
-                let countOfPending = 0;
-                let countOfPublished = 0;
-                let areaOfPending = 0;
-                let areaOfPublished = 0;
+    //     // query the features in the world imagery updates layer to get the count and area of pending and published updates
+    //     // that meet the where clause
+    //     worldImageryUpdatesLayerRef.current
+    //         .queryFeatures({
+    //             where: whereClause,
+    //             returnGeometry: false,
+    //             // outFields: [
+    //             //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+    //             //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+    //             // ],
+    //             outStatistics: [
+    //                 {
+    //                     statisticType: 'sum',
+    //                     onStatisticField:
+    //                         WORLD_IMAGERY_UPDATES_LAYER_FIELDS.AREA_SQKM,
+    //                     outStatisticFieldName: outStatisticFieldName4Area,
+    //                 },
+    //                 {
+    //                     statisticType: 'count',
+    //                     onStatisticField:
+    //                         WORLD_IMAGERY_UPDATES_LAYER_FIELDS.OBJECTID,
+    //                     outStatisticFieldName: outStatisticFieldName4Count,
+    //                 },
+    //             ],
+    //             groupByFieldsForStatistics: [
+    //                 WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+    //             ],
+    //             cacheHint: true,
+    //         })
+    //         .then((result) => {
+    //             const features = result.features;
+    //             // console.log('result:', result);
 
-                for (const feature of features) {
-                    const pubState =
-                        feature.attributes[
-                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-                        ];
-                    // console.log(`Area: ${area}, PubState: ${pubState}`);
+    //             let countOfPending = 0;
+    //             let countOfPublished = 0;
+    //             let areaOfPending = 0;
+    //             let areaOfPublished = 0;
 
-                    if (pubState === WorldImageryUpdatesStatusEnum.pending) {
-                        countOfPending =
-                            feature.attributes[outStatisticFieldName4Count];
-                        areaOfPending =
-                            feature.attributes[outStatisticFieldName4Area];
-                    } else if (
-                        pubState === WorldImageryUpdatesStatusEnum.published
-                    ) {
-                        countOfPublished =
-                            feature.attributes[outStatisticFieldName4Count];
-                        areaOfPublished =
-                            feature.attributes[outStatisticFieldName4Area];
-                    }
-                }
+    //             for (const feature of features) {
+    //                 const pubState =
+    //                     feature.attributes[
+    //                         WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
+    //                     ];
+    //                 // console.log(`Area: ${area}, PubState: ${pubState}`);
 
-                // console.log('Count of Pending:', countOfPending);
-                // console.log('Count of Published:', countOfPublished);
-                // console.log('Area of Pending:', areaOfPending);
-                // console.log('Area of Published:', areaOfPublished);
+    //                 if (pubState === WorldImageryUpdatesStatusEnum.pending) {
+    //                     countOfPending =
+    //                         feature.attributes[outStatisticFieldName4Count];
+    //                     areaOfPending =
+    //                         feature.attributes[outStatisticFieldName4Area];
+    //                 } else if (
+    //                     pubState === WorldImageryUpdatesStatusEnum.published
+    //                 ) {
+    //                     countOfPublished =
+    //                         feature.attributes[outStatisticFieldName4Count];
+    //                     areaOfPublished =
+    //                         feature.attributes[outStatisticFieldName4Area];
+    //                 }
+    //             }
 
-                dispatch(
-                    worldImageryUpdatesOutStatisticsChanged({
-                        countOfPending,
-                        countOfPublished,
-                        areaOfPending,
-                        areaOfPublished,
-                    })
-                );
-            })
-            .catch((error) => {
-                console.error('Error querying features:', error);
-            });
-    }, [whereClause, layerURL]);
+    //             // console.log('Count of Pending:', countOfPending);
+    //             // console.log('Count of Published:', countOfPublished);
+    //             // console.log('Area of Pending:', areaOfPending);
+    //             // console.log('Area of Published:', areaOfPublished);
+
+    //             dispatch(
+    //                 worldImageryUpdatesOutStatisticsChanged({
+    //                     countOfPending,
+    //                     countOfPublished,
+    //                     areaOfPending,
+    //                     areaOfPublished,
+    //                 })
+    //             );
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error querying features:', error);
+    //         });
+    // }, [whereClause, layerURL]);
 
     return null;
 };
