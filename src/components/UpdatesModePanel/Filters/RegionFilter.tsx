@@ -14,7 +14,7 @@ export const RegionFilter = () => {
 
     const { listOfRegions, isLoading, error } = useListOfRegions();
 
-    const updatesModeRegion = useAppSelector(selectUpdatesModeRegion);
+    const selectedRegion = useAppSelector(selectUpdatesModeRegion);
 
     const seachInputRef = React.useRef<any>(null);
 
@@ -30,7 +30,7 @@ export const RegionFilter = () => {
             {
                 label: t('all'),
                 value: '',
-                checked: !updatesModeRegion,
+                checked: !selectedRegion,
             },
         ];
 
@@ -43,12 +43,12 @@ export const RegionFilter = () => {
             options.push({
                 label: region,
                 value: region,
-                checked: updatesModeRegion === region, // Default to unchecked
+                checked: selectedRegion === region, // Default to unchecked
             });
         }
 
         return options;
-    }, [listOfRegions, error, updatesModeRegion]);
+    }, [listOfRegions, error, selectedRegion]);
 
     const filteredData = useMemo(() => {
         if (!searchTerm) {
@@ -80,6 +80,23 @@ export const RegionFilter = () => {
         <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
             <div className="flex justify-between items-center mb-2">
                 <HeaderText title={t('region')} />
+
+                {selectedRegion && (
+                    <div className="relative flex items-center gap-2 px-2 py-1 text-white rounded-lg bg-custom-theme-blue">
+                        <span className="text-sm">{selectedRegion}</span>
+
+                        <calcite-button
+                            appearance="transparent"
+                            kind="neutral"
+                            icon-start="x"
+                            scale="s"
+                            onClick={() => {
+                                dispatch(updatesModeRegionChanged(''));
+                                setSearchTerm('');
+                            }}
+                        />
+                    </div>
+                )}
             </div>
 
             {isLoading && (

@@ -73,7 +73,7 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                 onClick={onChange}
             ></calcite-checkbox>
             <div
-                className="grid items-center gap-1"
+                className="grid items-center gap-1 font-bold"
                 style={{
                     color: color ? color : 'inherit',
                     gridTemplateColumns: '62px 1fr',
