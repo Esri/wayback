@@ -84,8 +84,8 @@ export const RegionFilter = () => {
 
             {isLoading && (
                 <div className="text-center">
-                    <calcite-loader scale="s" />
-                    <p className="">{t('loading')}</p>
+                    <calcite-loader scale="s" text={t('loading')} />
+                    {/* <p className="">{t('loading')}</p> */}
                 </div>
             )}
             {!isLoading && (
