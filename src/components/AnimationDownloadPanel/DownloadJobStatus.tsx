@@ -16,6 +16,7 @@
 import React, { FC } from 'react';
 import { DownloadJobStatus } from './DownloadPanel';
 import classNames from 'classnames';
+import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
 
 type Props = {
     status: DownloadJobStatus;
@@ -50,8 +51,8 @@ export const DownloadJobStatusInfo: FC<Props> = ({
         >
             {status === 'pending' && (
                 <div className="flex items-center">
-                    <calcite-loader inline />
-                    <span className="mr-1">Creating MP4.</span>
+                    <CalciteLoader inline />
+                    <span className="mx-1">Creating MP4.</span>
                     <span
                         className="underline cursor-pointer opacity-70 hover:opacity-100"
                         onClick={cancelButtonOnClick}
@@ -69,7 +70,7 @@ export const DownloadJobStatusInfo: FC<Props> = ({
                             : 'Failed to create MP4.'}
                     </p>
 
-                    <calcite-icon
+                    <CalciteIcon
                         icon="x"
                         style={
                             {

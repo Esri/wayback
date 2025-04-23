@@ -18,6 +18,7 @@ import classnames from 'classnames';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
 
 type Props = {
     data: DownloadJob;
@@ -106,16 +107,8 @@ export const DownloadJobCard: FC<Props> = ({
     }, [tileEstimations, levels]);
 
     const getStatusIcon = () => {
-        // if (status === 'pending') {
-        //     return <calcite-loader scale="s" inline></calcite-loader>;
-        // }
-
-        // if (status === 'finished') {
-        //     return <calcite-icon icon="check" scale="s" />;
-        // }
-
         return (
-            <calcite-icon
+            <CalciteIcon
                 icon="x"
                 scale="s"
                 style={{
@@ -261,7 +254,7 @@ export const DownloadJobCard: FC<Props> = ({
                 onClick={buttonOnClickHandler}
             >
                 {status === 'pending' && (
-                    <calcite-loader scale="s" inline></calcite-loader>
+                    <CalciteLoader scale="s" inline></CalciteLoader>
                 )}
                 <span className="uppercase">{getButtonLable()}</span>
             </div>

@@ -23,6 +23,7 @@ import {
     IScreenPoint,
     // IWaybackItem,
 } from '@typings/index';
+import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
 
 interface IProps {
     /**
@@ -84,7 +85,7 @@ const PopUp: FC<IProps> = (props: IProps) => {
                 <div className="reticle-wrap"></div>
 
                 <div className="content-wrap text-white">
-                    <calcite-loader text="Fetching Metadata..." />
+                    <CalciteLoader text="Fetching Metadata..." scale="s" />
                 </div>
             </div>
         );
@@ -154,7 +155,7 @@ const PopUp: FC<IProps> = (props: IProps) => {
                     onClick={onClose}
                 >
                     {/* <span className="icon-ui-close"></span> */}
-                    <calcite-icon icon="x" />
+                    <CalciteIcon icon="x" />
                 </div>
             </div>
         </div>

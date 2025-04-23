@@ -44,6 +44,7 @@ import {
 import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
 import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 import { delay } from '@utils/snippets/delay';
+import { CalciteLoader } from '@esri/calcite-components-react';
 
 type Props = {
     mapView?: MapView;
@@ -187,7 +188,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
             )}
         >
             {animationStatus === 'loading' && (
-                <calcite-loader active scale="l"></calcite-loader>
+                <CalciteLoader scale="l"></CalciteLoader>
             )}
 
             <CloseButton

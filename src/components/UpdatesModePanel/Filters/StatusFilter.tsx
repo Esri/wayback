@@ -10,6 +10,7 @@ import {
 import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { numberWithCommas } from 'helper-toolkit-ts/dist/number';
+import { CalciteCheckbox } from '@esri/calcite-components-react';
 
 type StatusCheckboxProps = {
     /**
@@ -68,10 +69,10 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                 gridTemplateColumns: '24px 1fr',
             }}
         >
-            <calcite-checkbox
-                checked={checked ? true : undefined}
-                onClick={onChange}
-            ></calcite-checkbox>
+            <CalciteCheckbox
+                checked={checked}
+                onCalciteCheckboxChange={onChange}
+            ></CalciteCheckbox>
             <div
                 className="grid items-center gap-1 font-bold"
                 style={{
@@ -120,7 +121,7 @@ export const StatusFilter = () => {
             <HeaderText title={t('status')} />
 
             <StatusCheckbox
-                checked={true}
+                checked={status.includes(WorldImageryUpdatesStatusEnum.pending)}
                 status={WorldImageryUpdatesStatusEnum.pending}
                 count={outStatistics?.countOfPending || 0}
                 area={outStatistics?.areaOfPending || 0}
@@ -128,7 +129,9 @@ export const StatusFilter = () => {
                 onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
             />
             <StatusCheckbox
-                checked={true}
+                checked={status.includes(
+                    WorldImageryUpdatesStatusEnum.published
+                )}
                 status={WorldImageryUpdatesStatusEnum.published}
                 count={outStatistics?.countOfPublished || 0}
                 area={outStatistics?.areaOfPublished || 0}

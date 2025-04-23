@@ -18,9 +18,11 @@ import './style/index.css';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import '@components/calcite-components';
 import { Provider as ReduxProvider } from 'react-redux';
 import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
+
 import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import { getCustomPortalUrl } from '@utils/LocalStorage';

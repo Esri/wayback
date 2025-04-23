@@ -46,7 +46,7 @@ export const CategoryFilter = () => {
                 checked: option.value === updatesModeCategory,
             };
         });
-    }, []);
+    }, [updatesModeCategory]);
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">

@@ -6,6 +6,11 @@ import { useListOfRegions } from '../hooks/useListOfRegions';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { updatesModeRegionChanged } from '@store/UpdatesMode/reducer';
 import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
+import {
+    CalciteButton,
+    CalciteInputText,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
 
 export const RegionFilter = () => {
     const { t } = useTranslation();
@@ -15,13 +20,6 @@ export const RegionFilter = () => {
     const { listOfRegions, isLoading, error } = useListOfRegions();
 
     const selectedRegion = useAppSelector(selectUpdatesModeRegion);
-
-    const seachInputRef = React.useRef<any>(null);
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value || '';
-        setSearchTerm(value);
-    };
 
     const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -59,23 +57,6 @@ export const RegionFilter = () => {
         );
     }, [data, searchTerm]);
 
-    useEffect(() => {
-        if (seachInputRef.current) {
-            seachInputRef.current.addEventListener(
-                'calciteInputTextInput',
-                handleSearch
-            );
-        }
-        return () => {
-            if (seachInputRef.current) {
-                seachInputRef.current.removeEventListener(
-                    'calciteInputTextInput',
-                    handleSearch
-                );
-            }
-        };
-    }, [seachInputRef.current]);
-
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
             <div className="flex justify-between items-center mb-2">
@@ -87,7 +68,7 @@ export const RegionFilter = () => {
                             <span className="text-sm">{selectedRegion}</span>
                         </div>
 
-                        <calcite-button
+                        <CalciteButton
                             appearance="transparent"
                             kind="neutral"
                             icon-start="x"
@@ -103,20 +84,22 @@ export const RegionFilter = () => {
 
             {isLoading && (
                 <div className="text-center">
-                    <calcite-loader scale="s" text={t('loading')} />
+                    <CalciteLoader scale="s" text={t('loading')} />
                     {/* <p className="">{t('loading')}</p> */}
                 </div>
             )}
             {!isLoading && (
                 <>
                     <div className="w-full mb-2">
-                        <calcite-input-text
-                            ref={seachInputRef}
+                        <CalciteInputText
                             placeholder="Search region"
                             value={searchTerm}
-                            scales="s"
                             clearable
-                        ></calcite-input-text>
+                            onCalciteInputTextInput={(event: any) => {
+                                const value = event.target.value || '';
+                                setSearchTerm(value);
+                            }}
+                        ></CalciteInputText>
                     </div>
 
                     <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1">

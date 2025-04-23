@@ -1,3 +1,8 @@
+import {
+    CalciteLabel,
+    CalciteRadioButton,
+    CalciteRadioButtonGroup,
+} from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 
 export type RadioButtonData = {
@@ -27,21 +32,21 @@ type Props = {
 
 export const RadioButtonGroup: FC<Props> = ({ name, data, onClick }) => {
     return (
-        <calcite-radio-button-group name={name} layout="vertical">
+        <CalciteRadioButtonGroup name={name} layout="vertical">
             {data.map((item, index) => (
-                <calcite-label
+                <CalciteLabel
                     layout="inline"
                     key={item.value + index}
                     class="text-xs cursor-pointer"
                     onClick={onClick.bind(null, item.value)}
                 >
-                    <calcite-radio-button
+                    <CalciteRadioButton
                         value={item.value}
                         checked={item.checked || undefined}
-                    ></calcite-radio-button>
+                    ></CalciteRadioButton>
                     {item.label}
-                </calcite-label>
+                </CalciteLabel>
             ))}
-        </calcite-radio-button-group>
+        </CalciteRadioButtonGroup>
     );
 };

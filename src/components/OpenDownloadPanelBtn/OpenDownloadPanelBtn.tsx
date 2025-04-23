@@ -24,6 +24,7 @@ import { useAppSelector } from '@store/configureStore';
 import { useAppDispatch } from '@store/configureStore';
 import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 export const OpenDownloadPanelBtn = () => {
     const dispatch = useAppDispatch();
@@ -75,7 +76,7 @@ export const OpenDownloadPanelBtn = () => {
                 dispatch(isDownloadDialogOpenToggled());
             }}
         >
-            <calcite-icon icon="download-to" scale="l" />
+            <CalciteIcon icon="download-to" scale="l" />
             {getIndicator()}
         </div>
     );

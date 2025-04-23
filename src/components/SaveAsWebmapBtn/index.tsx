@@ -17,6 +17,7 @@ import './style.css';
 import React from 'react';
 import classNames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface IProps {
     selectedWaybackItems: Array<number>;
@@ -68,7 +69,7 @@ class SaveAsWebmapBtn extends React.PureComponent<IProps> {
                     onClick={this.onClickHandler}
                     title={tooltipContent}
                 >
-                    <calcite-icon icon="arcgis-online" scale="l" />
+                    <CalciteIcon icon="arcgis-online" scale="l" />
 
                     {isActive && (
                         // <div className="indicator-count-of-selected-items">

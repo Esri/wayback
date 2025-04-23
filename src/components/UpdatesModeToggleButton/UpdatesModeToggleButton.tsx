@@ -29,23 +29,5 @@ export const UpdatesModeToggleButton = () => {
             testId="updates-mode-toggle-btn"
             onClick={() => dispatch(mapModeChanged('updates'))}
         />
-        // Uncomment the following code if you want to use a custom div instead of ModeToggleButton
-        // <div
-        //     data-testid="updates-mode-toggle-button"
-        //     className={classNames(
-        //         'relative w-full cursor-pointer mt-3 text-center flex items-center justify-center py-2',
-        //         {
-        //             'opacity-50': !isActive,
-        //             'text-white': isActive,
-        //             'bg-custom-background': isActive,
-        //         }
-        //     )}
-        //     onClick={() => {
-        //         dispatch(mapModeChanged('updates'));
-        //     }}
-        //     title="Toggle updates Mode"
-        // >
-        //     <calcite-icon icon="date-time" scale="l" />
-        // </div>
     );
 };

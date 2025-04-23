@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 
 interface IProps {
@@ -35,9 +36,9 @@ class CheckboxToggle extends React.PureComponent<IProps> {
                 onClick={onChange}
             >
                 {isActive ? (
-                    <calcite-icon icon="check-square" scale="s" />
+                    <CalciteIcon icon="check-square" scale="s" />
                 ) : (
-                    <calcite-icon icon="square" scale="s" />
+                    <CalciteIcon icon="square" scale="s" />
                 )}
 
                 <span className="text-sm ml-1">

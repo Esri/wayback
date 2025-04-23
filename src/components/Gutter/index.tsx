@@ -16,6 +16,7 @@
 import './style.css';
 import React, { FC, useState } from 'react';
 import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface IProps {
     isMobile: boolean;
@@ -63,7 +64,7 @@ export const Gutter: FC<IProps> = ({
                     title="About this app"
                     onClick={aboutButtonOnClick}
                 >
-                    <calcite-icon icon="information" scale="l" />
+                    <CalciteIcon icon="information" scale="l" />
                 </div>
 
                 {/* {!shareBtnDisabled && (
@@ -73,7 +74,7 @@ export const Gutter: FC<IProps> = ({
                         title="Share"
                         onClick={shareButtonOnClick}
                     >
-                        <calcite-icon icon="share" scale="l" />
+                        <CalciteIcon icon="share" scale="l" />
                     </div>
                 )} */}
 
@@ -94,7 +95,7 @@ export const Gutter: FC<IProps> = ({
                         }, 3000);
                     }}
                 >
-                    <calcite-icon icon="link" scale="l" />
+                    <CalciteIcon icon="link" scale="l" />
                 </div>
 
                 <div
@@ -105,7 +106,7 @@ export const Gutter: FC<IProps> = ({
                     title="Settings"
                     onClick={settingButtonOnClick}
                 >
-                    <calcite-icon icon="gear" scale="l" />
+                    <CalciteIcon icon="gear" scale="l" />
                 </div>
             </div>
 

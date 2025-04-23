@@ -24,6 +24,7 @@ import {
 } from '@utils/LocalStorage';
 import { IExtentGeomety } from '@typings/index';
 import { Switch } from './Switch';
+import { CalciteButton } from '@esri/calcite-components-react';
 // import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
@@ -188,12 +189,12 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
         // });
 
         const signOutBtn = (
-            <calcite-button
+            <CalciteButton
                 appearance="transparent"
                 onClick={toggleSignInBtnOnClick.bind(this, false)}
             >
                 Sign Out
-            </calcite-button>
+            </CalciteButton>
         );
 
         return (
@@ -292,9 +293,9 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                             disabled: !portalUrl && !shouldSaveAsDefaultExtent,
                         })}
                     >
-                        <calcite-button onClick={this.saveSettings}>
+                        <CalciteButton onClick={this.saveSettings}>
                             {saveBtnLable}
-                        </calcite-button>
+                        </CalciteButton>
                     </div>
                     {/* <span
                         className={saveBtnClasses}

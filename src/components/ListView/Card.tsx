@@ -19,6 +19,7 @@ import classnames from 'classnames';
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
 import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface Props {
     data: IWaybackItem;
@@ -115,7 +116,7 @@ export const ListViewCard: FC<Props> = ({
                     onClick={openItem}
                     title="Learn more about this release..."
                 >
-                    <calcite-icon icon="information" scale="m" />
+                    <CalciteIcon icon="information" scale="m" />
                 </div>
 
                 {/* The download and save web map buttons should not be displayed in mobile view */}
@@ -137,7 +138,7 @@ export const ListViewCard: FC<Props> = ({
                             }}
                             title={downloadButtonTooltipText}
                         >
-                            <calcite-icon icon="download-to" scale="m" />
+                            <CalciteIcon icon="download-to" scale="m" />
                         </div>
 
                         <div
@@ -153,7 +154,7 @@ export const ListViewCard: FC<Props> = ({
                                     : 'Add this release to an ArcGIS Online Map'
                             }
                         >
-                            <calcite-icon icon="arcgis-online" scale="m" />
+                            <CalciteIcon icon="arcgis-online" scale="m" />
                         </div>
                     </>
                 )}
