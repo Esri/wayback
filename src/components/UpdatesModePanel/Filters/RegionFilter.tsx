@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
@@ -15,6 +15,15 @@ export const RegionFilter = () => {
     const { listOfRegions, isLoading, error } = useListOfRegions();
 
     const updatesModeRegion = useAppSelector(selectUpdatesModeRegion);
+
+    const seachInputRef = React.useRef<any>(null);
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value || '';
+        setSearchTerm(value);
+    };
+
+    const [searchTerm, setSearchTerm] = React.useState('');
 
     const data: RadioButtonData[] = useMemo(() => {
         const options: RadioButtonData[] = [
@@ -41,9 +50,46 @@ export const RegionFilter = () => {
         return options;
     }, [listOfRegions, error, updatesModeRegion]);
 
+    const filteredData = useMemo(() => {
+        if (!searchTerm) {
+            return data;
+        }
+        return data.filter((item) =>
+            item.label.toLowerCase().startsWith(searchTerm.toLowerCase())
+        );
+    }, [data, searchTerm]);
+
+    useEffect(() => {
+        if (seachInputRef.current) {
+            seachInputRef.current.addEventListener(
+                'calciteInputTextInput',
+                handleSearch
+            );
+        }
+        return () => {
+            if (seachInputRef.current) {
+                seachInputRef.current.removeEventListener(
+                    'calciteInputTextInput',
+                    handleSearch
+                );
+            }
+        };
+    }, [seachInputRef.current]);
+
     return (
-        <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow overflow-y-auto fancy-scrollbar">
-            <HeaderText title={t('region')} />
+        <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
+            <div className="flex justify-between items-center mb-2">
+                <HeaderText title={t('region')} />
+
+                <div className="w-[190px]">
+                    <calcite-input-text
+                        ref={seachInputRef}
+                        placeholder="Search region"
+                        value={searchTerm}
+                        clearable
+                    ></calcite-input-text>
+                </div>
+            </div>
 
             {isLoading && (
                 <div className="text-center">
@@ -52,16 +98,18 @@ export const RegionFilter = () => {
                 </div>
             )}
             {!isLoading && (
-                <RadioButtonGroup
-                    name="region-filter"
-                    data={data}
-                    onClick={(value: string) => {
-                        console.log(`Selected region: ${value}`);
-                        // Handle the region selection change here
+                <div className="overflow-y-auto fancy-scrollbar max-h-[300px] p-1">
+                    <RadioButtonGroup
+                        name="region-filter"
+                        data={filteredData}
+                        onClick={(value: string) => {
+                            console.log(`Selected region: ${value}`);
+                            // Handle the region selection change here
 
-                        dispatch(updatesModeRegionChanged(value));
-                    }}
-                />
+                            dispatch(updatesModeRegionChanged(value));
+                        }}
+                    />
+                </div>
             )}
         </div>
     );

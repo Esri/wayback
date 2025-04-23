@@ -15,9 +15,9 @@ export const UpdatesPanelContainer = () => {
 
     return (
         <div
-            className="p-2 pb-4 flex flex-col gap-1"
+            className="p-2 pb-4 flex flex-col gap-1 overflow-y-auto fancy-scrollbar"
             style={{
-                maxHeight: 'calc(100vh - 50px)',
+                maxHeight: 'calc(100vh - 60px)',
             }}
         >
             <UpdatesModeHeader />

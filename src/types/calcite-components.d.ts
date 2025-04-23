@@ -29,5 +29,6 @@ declare namespace React.JSX {
         'calcite-label': any;
         'calcite-radio-button': any;
         'calcite-radio-button-group': any;
+        'calcite-input-text': any;
     }
 }
