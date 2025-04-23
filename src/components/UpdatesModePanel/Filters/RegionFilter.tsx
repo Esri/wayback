@@ -83,7 +83,9 @@ export const RegionFilter = () => {
 
                 {selectedRegion && (
                     <div className="relative flex items-center gap-2 px-2 py-1 text-white rounded-lg bg-custom-theme-blue">
-                        <span className="text-sm">{selectedRegion}</span>
+                        <div className="max-w-[145px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            <span className="text-sm">{selectedRegion}</span>
+                        </div>
 
                         <calcite-button
                             appearance="transparent"

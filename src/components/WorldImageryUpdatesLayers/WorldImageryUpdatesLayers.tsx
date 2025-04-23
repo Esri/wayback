@@ -3,7 +3,10 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import React, { FC, use, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { selectMapMode } from '@store/Map/reducer';
-import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
+import {
+    selectUpdatesModeCategory,
+    selectUpdatesModeRegion,
+} from '@store/UpdatesMode/selectors';
 import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
     VIVID_ADVANCED_FROM_MAXAR_URL,
@@ -21,6 +24,7 @@ import {
 } from './helpers';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatistics';
+import { useZoomToSelectedRegion } from './useZoomToSelectedRegion';
 
 type Props = {
     mapView?: MapView;
@@ -61,6 +65,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
 
         return null;
     }, [catgegory]);
+
+    const selectedRegion = useAppSelector(selectUpdatesModeRegion);
 
     const whereClause = useWorldImageryUpdatesLayerWhereClause();
 
@@ -141,6 +147,13 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         worldImageryUpdatesLayerRef,
         layerURL,
         whereClause
+    );
+
+    useZoomToSelectedRegion(
+        worldImageryUpdatesLayerRef,
+        selectedRegion,
+        whereClause,
+        mapView
     );
 
     // useEffect(() => {
