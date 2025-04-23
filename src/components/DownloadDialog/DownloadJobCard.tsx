@@ -18,7 +18,11 @@ import classnames from 'classnames';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
-import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
+import {
+    CalciteIcon,
+    CalciteLoader,
+    CalciteSlider,
+} from '@esri/calcite-components-react';
 
 type Props = {
     data: DownloadJob;
@@ -63,7 +67,7 @@ export const DownloadJobCard: FC<Props> = ({
     removeButtonOnClick,
     levelsOnChange,
 }) => {
-    const sliderRef = React.useRef<any>(null);
+    // const sliderRef = React.useRef<any>(null);
 
     const {
         id,
@@ -178,21 +182,21 @@ export const DownloadJobCard: FC<Props> = ({
         return false;
     };
 
-    useEffect(() => {
-        sliderRef.current.addEventListener(
-            'calciteSliderChange',
-            (evt: any) => {
-                const userSelectedMinZoomLevel = +evt.target.minValue;
-                const userSelectedMaxZoomLevel = +evt.target.maxValue;
-                // console.log(evt.target.minValue,evt.target.maxValue)
+    // useEffect(() => {
+    //     sliderRef.current.addEventListener(
+    //         'calciteSliderChange',
+    //         (evt: any) => {
+    //             const userSelectedMinZoomLevel = +evt.target.minValue;
+    //             const userSelectedMaxZoomLevel = +evt.target.maxValue;
+    //             // console.log(evt.target.minValue,evt.target.maxValue)
 
-                levelsOnChange(id, [
-                    userSelectedMinZoomLevel,
-                    userSelectedMaxZoomLevel,
-                ]);
-            }
-        );
-    }, []);
+    //             levelsOnChange(id, [
+    //                 userSelectedMinZoomLevel,
+    //                 userSelectedMaxZoomLevel,
+    //             ]);
+    //         }
+    //     );
+    // }, []);
 
     if (!data) {
         return null;
@@ -212,8 +216,8 @@ export const DownloadJobCard: FC<Props> = ({
                 </div>
 
                 <div className="flex-grow px-4">
-                    <calcite-slider
-                        ref={sliderRef}
+                    <CalciteSlider
+                        // ref={sliderRef}
                         label-ticks
                         snap
                         max={
@@ -225,10 +229,22 @@ export const DownloadJobCard: FC<Props> = ({
                         // value={levels[1]}
                         min-value={levels[0]}
                         max-value={levels[1]}
-                        step="1"
-                        ticks="1"
+                        step={1}
+                        ticks={1}
                         {...sliderProp}
-                    ></calcite-slider>
+                        onCalciteSliderInput={(evt: any) => {
+                            const userSelectedMinZoomLevel =
+                                +evt.target.minValue;
+                            const userSelectedMaxZoomLevel =
+                                +evt.target.maxValue;
+                            // console.log(evt.target.minValue,evt.target.maxValue)
+
+                            levelsOnChange(id, [
+                                userSelectedMinZoomLevel,
+                                userSelectedMaxZoomLevel,
+                            ]);
+                        }}
+                    ></CalciteSlider>
                 </div>
 
                 <div className="text-sm text-white w-[96px] shrink-0">

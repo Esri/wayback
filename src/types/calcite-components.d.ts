@@ -14,22 +14,22 @@
 //  */
 
 // import React from 'react';
-/**
- * Intrinsic elements are looked up on the special interface JSX.IntrinsicElements.
- * @see https://www.typescriptlang.org/docs/handbook/jsx.html#intrinsic-elements
- */
-declare namespace React.JSX {
-    export interface IntrinsicElements {
-        // 'calcite-loader': any;
-        // 'calcite-icon': any;
-        // 'calcite-button': any;
-        'calcite-slider': any;
-        'calcite-switch': any;
-        // 'calcite-checkbox': any;
-        // 'calcite-label': any;
-        // 'calcite-radio-button': any;
-        // 'calcite-radio-button-group': any;
-        // 'calcite-input-text': any;
-        // 'calcite-chip': any;
-    }
-}
+// /**
+//  * Intrinsic elements are looked up on the special interface JSX.IntrinsicElements.
+//  * @see https://www.typescriptlang.org/docs/handbook/jsx.html#intrinsic-elements
+//  */
+// declare namespace React.JSX {
+//     export interface IntrinsicElements {
+//         // 'calcite-loader': any;
+//         // 'calcite-icon': any;
+//         // 'calcite-button': any;
+//         // 'calcite-slider': any;
+//         // 'calcite-switch': any;
+//         // 'calcite-checkbox': any;
+//         // 'calcite-label': any;
+//         // 'calcite-radio-button': any;
+//         // 'calcite-radio-button-group': any;
+//         // 'calcite-input-text': any;
+//         // 'calcite-chip': any;
+//     }
+// }
