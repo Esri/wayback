@@ -80,15 +80,6 @@ export const RegionFilter = () => {
         <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
             <div className="flex justify-between items-center mb-2">
                 <HeaderText title={t('region')} />
-
-                <div className="w-[190px]">
-                    <calcite-input-text
-                        ref={seachInputRef}
-                        placeholder="Search region"
-                        value={searchTerm}
-                        clearable
-                    ></calcite-input-text>
-                </div>
             </div>
 
             {isLoading && (
@@ -98,18 +89,30 @@ export const RegionFilter = () => {
                 </div>
             )}
             {!isLoading && (
-                <div className="overflow-y-auto fancy-scrollbar max-h-[300px] p-1">
-                    <RadioButtonGroup
-                        name="region-filter"
-                        data={filteredData}
-                        onClick={(value: string) => {
-                            console.log(`Selected region: ${value}`);
-                            // Handle the region selection change here
+                <>
+                    <div className="w-full mb-2">
+                        <calcite-input-text
+                            ref={seachInputRef}
+                            placeholder="Search region"
+                            value={searchTerm}
+                            scales="s"
+                            clearable
+                        ></calcite-input-text>
+                    </div>
 
-                            dispatch(updatesModeRegionChanged(value));
-                        }}
-                    />
-                </div>
+                    <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1">
+                        <RadioButtonGroup
+                            name="region-filter"
+                            data={filteredData}
+                            onClick={(value: string) => {
+                                console.log(`Selected region: ${value}`);
+                                // Handle the region selection change here
+
+                                dispatch(updatesModeRegionChanged(value));
+                            }}
+                        />
+                    </div>
+                </>
             )}
         </div>
     );
