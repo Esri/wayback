@@ -66,9 +66,15 @@ export type UpdatesModeState = {
         name: string;
     }[];
     /**
-     * date range filter for imagery updates
+     * date filter for imagery updates
      */
-    dateRange: UpdatesModeDateFilter;
+    dateFilter: UpdatesModeDateFilter;
+    /**
+     * custom date range for imagery updates, should the custom date filter be selected
+     * - `null`: No custom date range selected.
+     * - `[string, string]`: An array containing two date strings in ISO format (YYYY-MM-DD) representing the start and end dates of the custom range.
+     */
+    customDateRange: [string, string] | null;
     /**
      * out statistics for world imagery updates
      */
@@ -83,7 +89,8 @@ export const initialUpdatesModeState: UpdatesModeState = {
     category: 'vivid-advanced',
     region: '',
     allRegions: [],
-    dateRange: 'last-year-and-pending',
+    dateFilter: 'last-year-and-pending',
+    customDateRange: null,
     outStatistics: {
         countOfPending: 0,
         countOfPublished: 0,
@@ -117,11 +124,22 @@ export const updatesModeSlice = createSlice({
         ) => {
             state.allRegions = action.payload;
         },
-        updatesModeDateRangeChanged: (
+        updatesModeDateFilterChanged: (
             state,
             action: PayloadAction<UpdatesModeDateFilter>
         ) => {
-            state.dateRange = action.payload;
+            state.dateFilter = action.payload;
+        },
+        /**
+         * Updates the custom date range for imagery updates.
+         * @param state - The current state of the updates mode.
+         * @param action - The action containing the new custom date range.
+         */
+        updatesModeCustomDateRangeChanged: (
+            state,
+            action: PayloadAction<[string, string] | null>
+        ) => {
+            state.customDateRange = action.payload;
         },
         worldImageryUpdatesOutStatisticsChanged: (
             state,
@@ -139,7 +157,8 @@ export const {
     updatesModeCategoryChanged,
     updatesModeRegionChanged,
     allRegionsChanged,
-    updatesModeDateRangeChanged,
+    updatesModeDateFilterChanged,
+    updatesModeCustomDateRangeChanged,
     worldImageryUpdatesOutStatisticsChanged,
 } = updatesModeSlice.actions;
 
