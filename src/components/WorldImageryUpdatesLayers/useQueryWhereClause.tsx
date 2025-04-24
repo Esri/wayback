@@ -5,6 +5,7 @@ import {
 import { useAppSelector } from '@store/configureStore';
 import { UpdatesModeDateFilter } from '@store/UpdatesMode/reducer';
 import {
+    selectUpdatesModeCustomDateRange,
     selectUpdatesModeDate,
     selectUpdatesModeRegion,
     selectUpdatesModeStatus,
@@ -28,6 +29,8 @@ export const useWorldImageryUpdatesLayerWhereClause = () => {
     const status = useAppSelector(selectUpdatesModeStatus);
 
     const dateFilter = useAppSelector(selectUpdatesModeDate);
+
+    const customDateRange = useAppSelector(selectUpdatesModeCustomDateRange);
 
     const region = useAppSelector(selectUpdatesModeRegion);
 
@@ -74,8 +77,17 @@ export const useWorldImageryUpdatesLayerWhereClause = () => {
             }
         }
 
+        if (dateFilter === 'custom' && customDateRange) {
+            const [startDate, endDate] = customDateRange;
+            if (startDate && endDate) {
+                whereClauses.push(
+                    `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN '${startDate}' AND '${endDate}')`
+                );
+            }
+        }
+
         return whereClauses.map((clause) => `(${clause})`).join(' AND ');
-    }, [status, dateFilter, region]);
+    }, [status, dateFilter, region, customDateRange]);
 
     return whereClause;
 };
