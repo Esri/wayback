@@ -23,8 +23,11 @@ import {
 import {
     saveAnimationSpeedInURLQueryParam,
     saveMapModeInURLQueryParam,
+    updateHashParams,
 } from '@utils/UrlSearchParam';
 import { selectMapMode } from '@store/Map/reducer';
+import { selectUpdatesModeState } from '@store/UpdatesMode/selectors';
+import { saveUpdatesModeDataInURLHashParams } from '@store/UpdatesMode/getPreloadedState';
 
 export const useSaveAppState2URLHashParams = () => {
     const animationSpeed = useAppSelector(animationSpeedSelector);
@@ -32,6 +35,8 @@ export const useSaveAppState2URLHashParams = () => {
     const animationStatus = useAppSelector(selectAnimationStatus);
 
     const mode = useAppSelector(selectMapMode);
+
+    const updatesModeData = useAppSelector(selectUpdatesModeState);
 
     useEffect(() => {
         saveAnimationSpeedInURLQueryParam(
@@ -42,4 +47,12 @@ export const useSaveAppState2URLHashParams = () => {
     useEffect(() => {
         saveMapModeInURLQueryParam(mode);
     }, [mode]);
+
+    useEffect(() => {
+        if (mode !== 'updates') {
+            updateHashParams('updatesLayer', undefined);
+        } else {
+            saveUpdatesModeDataInURLHashParams(updatesModeData);
+        }
+    }, [updatesModeData, mode]);
 };

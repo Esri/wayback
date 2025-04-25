@@ -26,7 +26,8 @@ type ParamKey =
     | 'framesToExclude'
     | 'downloadMode'
     | 'mapCenter'
-    | 'mode';
+    | 'mode'
+    | 'updatesLayer';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;

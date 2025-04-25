@@ -48,6 +48,7 @@ import {
 import { isAnonymouns } from '@utils/Esri-OAuth';
 import { ReferenceLayerLanguage } from '@constants/map';
 import { IS_MOBILE } from '@constants/UI';
+import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 
 // const isMobile = miscFns.isMobileDevice();
 
@@ -219,6 +220,7 @@ const getPreloadedState = async (
         Map: getPreloadedState4Map(urlParams),
         AnimationMode: getPreloadedState4AnimationMode(urlParams),
         DownloadMode: getPreloadedState4Downloadmode(urlParams),
+        UpdatesMode: getPreloadedState4UpdatesMode(),
     } as PartialRootState;
 
     return preloadedState;
