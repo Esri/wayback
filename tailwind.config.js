@@ -46,8 +46,8 @@ module.exports = {
     extend: {
       spacing: {
         'header-height': '45px',
-        'gutter-width': '50px',
-        'sidebar-width': '300px',
+        'gutter-width': 'var(--gutter-width)',
+        'sidebar-width': 'var(--sidebar-width)',
       }
     },
   },
