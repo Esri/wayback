@@ -15,7 +15,7 @@
 
 import './style.css';
 import React, { FC, useState } from 'react';
-import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
+// import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
 import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface IProps {
@@ -45,9 +45,9 @@ export const Gutter: FC<IProps> = ({
     return (
         <div
             className="gutter-container background-theme-blue-diagonal-pattern"
-            style={{
-                top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
-            }}
+            // style={{
+            //     top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
+            // }}
         >
             {/* gradient effect on right side of gutter */}
             {/* <div

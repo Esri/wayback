@@ -47,8 +47,9 @@ import {
 } from './DownloadMode/reducer';
 import { isAnonymouns } from '@utils/Esri-OAuth';
 import { ReferenceLayerLanguage } from '@constants/map';
+import { IS_MOBILE } from '@constants/UI';
 
-const isMobile = miscFns.isMobileDevice();
+// const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const state: UIState = {
@@ -128,6 +129,12 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         mode = 'animation';
     }
 
+    // we need to set the mode to 'explore' if the device is mobile
+    // because the swipe mode and animation mode is not supported on mobile devices
+    if (IS_MOBILE) {
+        mode = 'explore';
+    }
+
     const state: MapState = {
         ...initialMapState,
         mode,
@@ -149,7 +156,7 @@ const getPreloadedState4AnimationMode = (
     if (
         animationSpeed === null ||
         typeof animationSpeed !== 'number' ||
-        isMobile
+        IS_MOBILE
     ) {
         return initialAnimationModeState;
     }
