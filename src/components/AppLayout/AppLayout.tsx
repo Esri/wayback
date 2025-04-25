@@ -69,23 +69,27 @@ const AppLayout: React.FC = () => {
 
     return (
         <ErrorBoundary>
-            <AppHeader />
+            <div className="absolute top-0 left-0 w-screen h-screen overflow-hidden">
+                <div className="absolute top-0 left-0 h-screen w-gutter-sidebar-width">
+                    <AppHeader />
 
-            <Gutter>
-                <ExploreModeToggleButton />
+                    <Gutter>
+                        <ExploreModeToggleButton />
 
-                <SwipeWidgetToggleBtn />
+                        <SwipeWidgetToggleBtn />
 
-                <AnimationModeToggleBtn />
+                        <AnimationModeToggleBtn />
 
-                <UpdatesModeToggleButton />
+                        <UpdatesModeToggleButton />
 
-                <OpenDownloadPanelBtn />
+                        <OpenDownloadPanelBtn />
 
-                <SaveAsWebmapBtn />
-            </Gutter>
+                        <SaveAsWebmapBtn />
+                    </Gutter>
 
-            <Sidebar />
+                    <Sidebar />
+                </div>
+            </div>
 
             <MapViewWrapper>
                 <SwipeWidgetLayerSelector targetLayer="leading" />

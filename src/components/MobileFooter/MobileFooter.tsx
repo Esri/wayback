@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { GUTTER_WIDTH } from '@constants/UI';
+// import { GUTTER_WIDTH } from '@constants/UI';
 // import { MobileShow } from '../MobileVisibility';
 
 import Title4ActiveItem from '../Title4ActiveItem/Title4ActiveItemContainer';
@@ -31,7 +31,7 @@ const MobileFooter: React.FC<Props> = ({ isGutterHide, OnClick }: Props) => {
             style={{
                 // position: 'fixed',
                 // bottom: 0,
-                left: isGutterHide ? 0 : GUTTER_WIDTH,
+                left: isGutterHide ? 0 : 'var(--gutter-width)',
                 // width: '100%',
                 // right: 0,
                 minHeight: '80px',

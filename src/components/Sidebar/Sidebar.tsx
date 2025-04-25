@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { GUTTER_WIDTH, SIDEBAR_WIDTH } from '@constants/UI';
+// import { GUTTER_WIDTH, SIDEBAR_WIDTH } from '@constants/UI';
 
 type Props = {
     isHide: boolean;
@@ -32,8 +32,8 @@ const Sidebar: React.FC<Props> = ({
     const getStyle = (): React.CSSProperties => {
         const defaultStyle: React.CSSProperties = {
             position: 'absolute',
-            left: GUTTER_WIDTH,
-            width: SIDEBAR_WIDTH,
+            left: 'var(--gutter-width)',
+            width: 'var(--sidebar-width)',
             height: '100%',
             padding: '1rem 0',
             paddingTop: '.5rem',
@@ -63,7 +63,7 @@ const Sidebar: React.FC<Props> = ({
                 top: 'auto',
                 bottom: 0,
                 right: 0,
-                left: isGutterHide ? 0 : GUTTER_WIDTH,
+                left: isGutterHide ? 0 : 'var(--gutter-width)',
                 width: isGutterHide ? '100%' : 'calc(100% - 50px)',
                 maxHeight: 400,
                 padding: '.5rem 0',

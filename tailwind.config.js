@@ -48,6 +48,7 @@ module.exports = {
         'header-height': '45px',
         'gutter-width': 'var(--gutter-width)',
         'sidebar-width': 'var(--sidebar-width)',
+        'gutter-sidebar-width': 'var(--gutter-sidebar-width)',
       }
     },
   },

@@ -1,6 +1,7 @@
 :root {
     --gutter-width: 50px;
     --sidebar-width: 300px;
+    --gutter-sidebar-width: calc(var(--gutter-width) + var(--sidebar-width));
     --sidebar-height-mobile: 300px;
     --list-card-height: 38px;
     --list-card-background: #1c1c1c;
