@@ -21,7 +21,7 @@ import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
-import { isGutterHideSelector, isSideBarHideSelector } from '@store/UI/reducer';
+import { isSideBarHideSelector } from '@store/UI/reducer';
 
 import Sidebar from './Sidebar';
 import { AppContext } from '@contexts/AppContextProvider';
@@ -54,7 +54,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
     const isHide = useAppSelector(isSideBarHideSelector);
 
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const getContent = () => {
         if (isAnimationModeOn) {
@@ -83,7 +83,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
     return (
         <Sidebar
             isHide={isHide || isSwipeWidgetOpen}
-            isGutterHide={isGutterHide}
+            // isGutterHide={isGutterHide}
             isMobile={isMobile}
         >
             <SidebarToggleBtn />

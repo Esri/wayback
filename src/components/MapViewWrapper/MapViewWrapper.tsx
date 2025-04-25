@@ -20,7 +20,7 @@ import { useAppSelector } from '@store/configureStore';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import { AppContext } from '@contexts/AppContextProvider';
-import { isGutterHideSelector } from '@store/UI/reducer';
+// import { isGutterHideSelector } from '@store/UI/reducer';
 
 type Props = {
     children?: React.ReactNode;
@@ -29,13 +29,13 @@ type Props = {
 const MapViewWrapper: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
 
     const getLeftPosition = (): string => {
         if (isMobile) {
-            return isGutterHide ? '0' : 'var(--gutter-width)';
+            return '0';
         }
 
         if (isSwipeWidgetOpen) {

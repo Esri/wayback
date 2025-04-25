@@ -18,14 +18,14 @@ import React from 'react';
 
 type Props = {
     isHide: boolean;
-    isGutterHide: boolean;
+    // isGutterHide: boolean;
     isMobile: boolean;
     children: React.ReactNode;
 };
 
 const Sidebar: React.FC<Props> = ({
     isHide,
-    isGutterHide,
+    // isGutterHide,
     isMobile,
     children,
 }: Props) => {
@@ -63,8 +63,8 @@ const Sidebar: React.FC<Props> = ({
                 top: 'auto',
                 bottom: 0,
                 right: 0,
-                left: isGutterHide ? 0 : 'var(--gutter-width)',
-                width: isGutterHide ? '100%' : 'calc(100% - 50px)',
+                left: 0,
+                width: '100%',
                 maxHeight: 400,
                 padding: '.5rem 0',
                 boxShadow: 'none',

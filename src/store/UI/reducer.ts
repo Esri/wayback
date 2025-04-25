@@ -26,7 +26,7 @@ export type UIState = {
     isSaveAsWebmapDialogOpen: boolean;
     shouldOnlyShowItemsWithLocalChange: boolean;
     shouldShowPreviewItemTitle: boolean;
-    isGutterHide: boolean;
+    // isGutterHide: boolean;
     isSideBarHide: boolean;
     isShareModalOpen: boolean;
     isAboutThisAppModalOpen: boolean;
@@ -37,7 +37,7 @@ export const initialUIState = {
     isSaveAsWebmapDialogOpen: false,
     shouldOnlyShowItemsWithLocalChange: true,
     shouldShowPreviewItemTitle: false,
-    isGutterHide: false,
+    // isGutterHide: false,
     isSideBarHide: false,
     isShareModalOpen: false,
     isAboutThisAppModalOpen: false,
@@ -68,9 +68,9 @@ const slice = createSlice({
         ) => {
             state.shouldShowPreviewItemTitle = action.payload;
         },
-        isGutterHideToggled: (state) => {
-            state.isGutterHide = !state.isGutterHide;
-        },
+        // isGutterHideToggled: (state) => {
+        //     state.isGutterHide = !state.isGutterHide;
+        // },
         isSideBarHideToggled: (state) => {
             state.isSideBarHide = !state.isSideBarHide;
         },
@@ -92,7 +92,7 @@ export const {
     isSaveAsWebmapDialogOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
     shouldShowPreviewItemTitleToggled,
-    isGutterHideToggled,
+    // isGutterHideToggled,
     isSideBarHideToggled,
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
@@ -108,7 +108,7 @@ export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
 export const shouldShowPreviewItemTitleSelector = (state: RootState) =>
     state.UI.shouldShowPreviewItemTitle;
 
-export const isGutterHideSelector = (state: RootState) => state.UI.isGutterHide;
+// export const isGutterHideSelector = (state: RootState) => state.UI.isGutterHide;
 
 export const isSideBarHideSelector = (state: RootState) =>
     state.UI.isSideBarHide;

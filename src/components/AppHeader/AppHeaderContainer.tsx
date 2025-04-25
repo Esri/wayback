@@ -17,16 +17,17 @@ import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
+// import { isGutterHideSelector, isGutterHideToggled } from '@store/UI/reducer';
 
 // import { MobileShow } from '../MobileVisibility';
 import MobileHeader from './MobileHeader';
 import { IS_MOBILE } from '@constants/UI';
 import { AppHeaderText } from './AppHeaderText';
 import { selectMapMode } from '@store/Map/reducer';
+import { isAboutThisAppModalOpenToggled } from '@store/UI/reducer';
 
 export const AppHeaderContainer = () => {
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const dispatch = useAppDispatch();
 
@@ -39,9 +40,12 @@ export const AppHeaderContainer = () => {
     if (IS_MOBILE) {
         return (
             <MobileHeader
-                isGutterHide={isGutterHide}
-                leftNavBtnOnClick={() => {
-                    dispatch(isGutterHideToggled());
+                // isGutterHide={isGutterHide}
+                // leftNavBtnOnClick={() => {
+                //     dispatch(isGutterHideToggled());
+                // }}
+                infoButtonOnClick={() => {
+                    dispatch(isAboutThisAppModalOpenToggled());
                 }}
             />
         );
