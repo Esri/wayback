@@ -71,7 +71,7 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     const whereClause = useWorldImageryUpdatesLayerWhereClause();
 
     useEffect(() => {
-        if (!mapView || !layerURL) return;
+        if (!mapView || !layerURL || mode !== 'updates') return;
 
         // if the group layer is not created yet, create it and add it to the map
         if (!groupLayerRef.current) {
@@ -127,7 +127,7 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
             worldImageryUpdatesLayerRef.current,
             worldImageryUpdatesLayer4InnerGlowPatternsRef.current,
         ]);
-    }, [mapView, layerURL]);
+    }, [mapView, layerURL, mode]);
 
     useEffect(() => {
         if (!groupLayerRef.current) return;
