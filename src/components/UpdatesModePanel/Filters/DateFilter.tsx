@@ -122,7 +122,13 @@ export const DateFilter = () => {
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
-            <HeaderText title={t('date')} />
+            <div className="mb-2">
+                <HeaderText
+                    title={t('published_date')}
+                    tooltip={t('published_date_filter_tooltip')}
+                />
+            </div>
+
             <RadioButtonGroup
                 name="date-filter"
                 data={data}

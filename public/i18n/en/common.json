@@ -3,14 +3,14 @@
     "updates_mode_header": "Highlight where imagery has been updated or is planned to be updated.",
     "status": "Status",
     "category": "Category",
-    "date": "Date",
+    "published_date": "Published Date",
     "region": "Region",
     "published": "Published",
     "pending": "Pending",
     "status_message": "{{num_sites}} sites, {{area}} km²",
     "metropolitan_updates": "Metropolitan Updates",
     "regional_updates": "Regional Updates",
-    "community_contributions": "Community Contributions",
+    "community_contributions": "Community Updates",
     "recency": "Recency",
     "calendar_range": "Calendar Range",
     "within_last_week": "Within the last week",
@@ -26,5 +26,9 @@
     "all": "All",
     "loading": "Loading...",
     "world_imagery_updates": "World Imagery Updates",
-    "zoom_to_full_extent": "Zoom to Global Extent"
+    "zoom_to_full_extent": "Zoom to Global Extent",
+    "status_filter_tooltip": "Filter by status",
+    "category_filter_tooltip": "Filter by category",
+    "region_filter_tooltip": "Filter by region",
+    "published_date_filter_tooltip": "Filter by published date"
 }

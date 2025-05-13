@@ -60,11 +60,14 @@ export const RegionFilter = () => {
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
             <div className="flex justify-between items-center mb-2">
-                <HeaderText title={t('region')} />
+                <HeaderText
+                    title={t('region')}
+                    tooltip={t('region_filter_tooltip')}
+                />
 
                 {selectedRegion && (
                     <div className="relative flex items-center gap-2 px-2 py-1 text-white rounded-lg bg-custom-theme-blue">
-                        <div className="max-w-[145px] overflow-hidden text-ellipsis whitespace-nowrap">
+                        <div className="max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
                             <span className="text-sm">{selectedRegion}</span>
                         </div>
 

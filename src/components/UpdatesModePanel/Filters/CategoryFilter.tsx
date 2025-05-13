@@ -50,7 +50,12 @@ export const CategoryFilter = () => {
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
-            <HeaderText title={t('category')} />
+            <div className="mb-2">
+                <HeaderText
+                    title={t('category')}
+                    tooltip={t('category_filter_tooltip')}
+                />
+            </div>
 
             <RadioButtonGroup
                 name="category-filter"

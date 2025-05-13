@@ -118,7 +118,12 @@ export const StatusFilter = () => {
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
-            <HeaderText title={t('status')} />
+            <div className="mb-2">
+                <HeaderText
+                    title={t('status')}
+                    tooltip={t('status_filter_tooltip')}
+                />
+            </div>
 
             <StatusCheckbox
                 checked={status.includes(
