@@ -121,14 +121,6 @@ export const StatusFilter = () => {
             <HeaderText title={t('status')} />
 
             <StatusCheckbox
-                checked={status.includes(WorldImageryUpdatesStatusEnum.pending)}
-                status={WorldImageryUpdatesStatusEnum.pending}
-                count={outStatistics?.countOfPending || 0}
-                area={outStatistics?.areaOfPending || 0}
-                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
-                onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
-            />
-            <StatusCheckbox
                 checked={status.includes(
                     WorldImageryUpdatesStatusEnum.published
                 )}
@@ -139,6 +131,14 @@ export const StatusFilter = () => {
                 onChange={() =>
                     onChange(WorldImageryUpdatesStatusEnum.published)
                 }
+            />
+            <StatusCheckbox
+                checked={status.includes(WorldImageryUpdatesStatusEnum.pending)}
+                status={WorldImageryUpdatesStatusEnum.pending}
+                count={outStatistics?.countOfPending || 0}
+                area={outStatistics?.areaOfPending || 0}
+                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
+                onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
             />
         </div>
     );

@@ -49,6 +49,7 @@ module.exports = {
         'gutter-width': 'var(--gutter-width)',
         'sidebar-width': 'var(--sidebar-width)',
         'gutter-sidebar-width': 'var(--gutter-sidebar-width)',
+        'map-action-button-size': '32px'
       }
     },
   },

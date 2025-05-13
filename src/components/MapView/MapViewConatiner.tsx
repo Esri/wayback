@@ -50,6 +50,7 @@ import {
 } from '@store/AnimationMode/reducer';
 import { queryLocalChanges } from '@store/Wayback/thunks';
 import { Point } from '@arcgis/core/geometry';
+import { MapActionButtonGroup } from './MapActionButtonGroup';
 
 type Props = {
     children?: React.ReactNode;
@@ -155,6 +156,8 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                 onExtentChange={onExtentChange}
             >
                 {children}
+
+                <MapActionButtonGroup />
             </MapView>
         </div>
     );

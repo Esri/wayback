@@ -25,5 +25,6 @@
     "unselect_all": "Unselect All",
     "all": "All",
     "loading": "Loading...",
-    "world_imagery_updates": "World Imagery Updates"
+    "world_imagery_updates": "World Imagery Updates",
+    "zoom_to_full_extent": "Zoom to Global Extent"
 }
