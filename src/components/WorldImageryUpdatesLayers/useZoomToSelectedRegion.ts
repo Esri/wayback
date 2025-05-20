@@ -13,9 +13,9 @@ export const useZoomToSelectedRegion = (
             return;
         }
 
-        if (!region) {
-            return;
-        }
+        // if (!region) {
+        //     return;
+        // }
 
         worldImageryUpdatesLayerRef.current
             .queryExtent({
