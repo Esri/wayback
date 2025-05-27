@@ -18,6 +18,11 @@
 //     selectIsAnimationPlaying,
 // } from '@shared/store/UI/selectors';
 import { CalciteLoader } from '@esri/calcite-components-react';
+import {
+    selectAnimationStatus,
+    selectIsAnimationPlaying,
+} from '@store/AnimationMode/reducer';
+import { useAppSelector } from '@store/configureStore';
 import classNames from 'classnames';
 import React, { FC } from 'react';
 type Props = {
@@ -56,10 +61,12 @@ export const MapActionButton: FC<Props> = ({
     children,
     onClickHandler,
 }) => {
+    const isAnimationPlaying = useAppSelector(selectIsAnimationPlaying);
+
     return (
         <div
             className={classNames('relative z-10', {
-                // hidden: isAnimationPlaying,
+                hidden: isAnimationPlaying,
                 'is-disabled': disabled,
             })}
             style={{

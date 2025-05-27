@@ -160,6 +160,13 @@ export const toggleAnimationMode =
 export const selectAnimationStatus = (state: RootState) =>
     state.AnimationMode.animationStatus;
 
+export const selectIsAnimationPlaying = createSelector(
+    (state: RootState) => state.AnimationMode.animationStatus,
+    (state: RootState) => state.Map.mode,
+    (animationStatus, mapMode) =>
+        animationStatus !== null && mapMode === 'animation'
+);
+
 export const isAnimationModeOnSelector = (state: RootState) =>
     state.Map.mode === 'animation';
 
