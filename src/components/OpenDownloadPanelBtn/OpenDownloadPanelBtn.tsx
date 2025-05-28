@@ -25,15 +25,20 @@ import { useAppDispatch } from '@store/configureStore';
 import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 export const OpenDownloadPanelBtn = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     const numOfJobs = useAppSelector(selectNumOfDownloadJobs);
 
     // const numOfPendingJobs = useAppSelector(selectNumOfPendingDownloadJobs);
 
     const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
+
+    const shouldBeDisabled = numOfJobs === 0;
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -67,12 +72,22 @@ export const OpenDownloadPanelBtn = () => {
         <div
             className={classnames(
                 'relative w-full text-center my-3 cursor-pointer z-10',
+                // {
+                //     disabled: numOfJobs === 0,
+                // }
                 {
-                    disabled: numOfJobs === 0,
+                    'opacity-50': shouldBeDisabled,
                 }
             )}
-            title={'Choose a version from the list to export a tile package'}
+            title={
+                shouldBeDisabled
+                    ? t('open_download_panel_button_tooltip_disabled')
+                    : t('open_download_panel_button_tooltip')
+            }
             onClick={() => {
+                if (shouldBeDisabled) {
+                    return;
+                }
                 dispatch(isDownloadDialogOpenToggled());
             }}
         >
