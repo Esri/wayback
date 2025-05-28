@@ -7,24 +7,8 @@ type InterestingPlace = {
 };
 
 /**
- * 
-
-Dubai (Canal)
-https://livingatlasdev.arcgis.com/wayback/#active=60013&mapCenter=55.28008%2C25.19028%2C14
-
-
-Tokyo (Olympic venue)
-https://livingatlasdev.arcgis.com/wayback/#active=60013&mapCenter=139.71797%2C35.67775%2C16
-
-
-Beijing Daxing International Airport
-https://livingatlasdev.arcgis.com/wayback/#active=60013&mapCenter=116.40978%2C39.51004%2C14.
-
-Neom
-https://livingatlasdev.arcgis.com/wayback/#active=20337&mapCenter=35.23566%2C28.09952%2C13
-
-Hong Kong-Zhuhai-Macao Bridge
-https://livingatlasdev.arcgis.com/wayback/#active=47963&mapCenter=113.58475%2C22.21209%2C15
+ * List of interesting places with their coordinates and zoom levels.
+ * These places can be used to set the initial map view or for random selection.
  */
 const interestingPlaces: InterestingPlace[] = [
     {
