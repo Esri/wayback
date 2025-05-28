@@ -7,7 +7,7 @@ import {
 import { getImageryUpdatesUrl } from './helpers';
 import { IFeature } from '@esri/arcgis-rest-request';
 
-const cachedResults: Map<ImageryUpdatesCategory, string[]> = new Map();
+const cachedResults: Map<string, string[]> = new Map();
 
 /**
  * Fetches a list of distinct country names for a given imagery updates category.
@@ -21,10 +21,13 @@ const cachedResults: Map<ImageryUpdatesCategory, string[]> = new Map();
  * @throws {Error} If the response data is invalid or contains an error.
  */
 export const getListOfCountries = async (
-    category: ImageryUpdatesCategory
+    category: ImageryUpdatesCategory,
+    whereClause: string
 ): Promise<string[]> => {
-    if (cachedResults.has(category)) {
-        return cachedResults.get(category) as string[];
+    const key = `${category}-${whereClause}`;
+
+    if (cachedResults.has(key)) {
+        return cachedResults.get(key) as string[];
     }
 
     const serviceUrl = getImageryUpdatesUrl(category);
@@ -41,7 +44,8 @@ export const getListOfCountries = async (
         f: 'json',
         token: token,
         returnGeometry: 'false',
-        where: `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`, // Fetch all records
+        // where: `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`, // Fetch all records
+        where: whereClause, // Use the provided where clause
         outFields: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME,
         returnDistinctValues: 'true', // Ensure we get distinct country names,
     });
@@ -82,7 +86,7 @@ export const getListOfCountries = async (
     // Remove duplicates and sort the country names
     const distinctCountries = Array.from(new Set(countries)).sort(); // Remove duplicates and sort
 
-    cachedResults.set(category, distinctCountries);
+    cachedResults.set(key, distinctCountries);
 
     return distinctCountries;
 };

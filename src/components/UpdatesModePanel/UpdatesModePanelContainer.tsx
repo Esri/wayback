@@ -21,8 +21,8 @@ export const UpdatesPanelContainer = () => {
             }}
         >
             <UpdatesModeHeader />
-            <StatusFilter />
             <CategoryFilter />
+            <StatusFilter />
             <DateFilter />
             <RegionFilter />
         </div>

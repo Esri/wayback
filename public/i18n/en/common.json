@@ -34,5 +34,7 @@
     "open_download_panel_button_tooltip": "Choose a version from the list to export a tile package.",
     "open_download_panel_button_tooltip_disabled": "Releases selected for tile export can be managed here.",
     "open_save_webmap_button_tooltip": "Save these releses in a new Web Map.",
-    "open_save_webmap_button_tooltip_disabled": "Choose releses from the list to build a set of Wayback layers for use in a new Web Map."
+    "open_save_webmap_button_tooltip_disabled": "Choose releses from the list to build a set of Wayback layers for use in a new Web Map.",
+    "no_regions_found": "No regions found that match the selected filters.",
+    "error_fetching_regions": "Error fetching regions."
 }

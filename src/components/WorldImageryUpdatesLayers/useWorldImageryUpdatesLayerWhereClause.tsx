@@ -25,7 +25,9 @@ const daysToSubtract: Record<UpdatesModeDateFilter, number> = {
  * This hook generates the where clause for the world imagery updates layer based on state of the redux stor.
  * @returns where clause for the world imagery updates layer
  */
-export const useWorldImageryUpdatesLayerWhereClause = () => {
+export const useWorldImageryUpdatesLayerWhereClause = (
+    shouldIgnoreRegionFilter = false
+) => {
     const status = useAppSelector(selectUpdatesModeStatus);
 
     const dateFilter = useAppSelector(selectUpdatesModeDate);
@@ -51,7 +53,12 @@ export const useWorldImageryUpdatesLayerWhereClause = () => {
             );
         }
 
-        if (region && region !== null && region !== '') {
+        if (
+            region &&
+            region !== null &&
+            region !== '' &&
+            shouldIgnoreRegionFilter === false
+        ) {
             whereClauses.push(
                 `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME} = '${region}'`
             );

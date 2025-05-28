@@ -15,7 +15,7 @@ import {
     WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import { useTranslation } from 'react-i18next';
-import { useWorldImageryUpdatesLayerWhereClause } from './useQueryWhereClause';
+import { useWorldImageryUpdatesLayerWhereClause } from './useWorldImageryUpdatesLayerWhereClause';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
 import {
