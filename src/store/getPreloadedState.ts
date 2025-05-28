@@ -49,6 +49,7 @@ import { isAnonymouns } from '@utils/Esri-OAuth';
 import { ReferenceLayerLanguage } from '@constants/map';
 import { IS_MOBILE } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
+import { getRandomInterestingPlace } from '@utils/interesting-places';
 
 // const isMobile = miscFns.isMobileDevice();
 
@@ -120,7 +121,20 @@ const getPreloadedState4SwipeView = (
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     const { mapExtent, animationSpeed, isSwipeWidgetOpen } = urlParams;
 
-    const { center, zoom } = getMapCenterFromHashParams() || {};
+    let initialMapCenter = getMapCenterFromHashParams();
+
+    // if the map center and mapExtent is not set in the hash params, we will use a random interesting place
+    if (!initialMapCenter && !mapExtent) {
+        const interestingPlace = getRandomInterestingPlace();
+
+        initialMapCenter = {
+            center: {
+                lon: interestingPlace.longitude,
+                lat: interestingPlace.latitude,
+            },
+            zoom: interestingPlace.zoom,
+        };
+    }
 
     let mode: MapMode = getMapModeFromHashParams();
 
@@ -140,8 +154,8 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         ...initialMapState,
         mode,
         mapExtent,
-        center,
-        zoom,
+        center: initialMapCenter.center,
+        zoom: initialMapCenter.zoom,
         referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
     };
 

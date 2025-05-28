@@ -36,17 +36,17 @@ import {
 
 import MapView from './MapView';
 
-import AppConfig from '../../app-config';
+// import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
-import { getDefaultExtent } from '@utils/LocalStorage';
+// import { getDefaultExtent } from '@utils/LocalStorage';
 import {
     saveMapCenterToHashParams,
-    saveMapExtentInURLQueryParam,
+    // saveMapExtentInURLQueryParam,
 } from '@utils/UrlSearchParam';
-import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+// import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
 import {
     isAnimationModeOnSelector,
-    selectAnimationStatus,
+    // selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
 import { queryLocalChanges } from '@store/Wayback/thunks';
 import { Point } from '@arcgis/core/geometry';
@@ -65,13 +65,14 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const { center, zoom } = useAppSelector(selectMapCenterAndZoom);
 
+    // still need to use default map extent as some old urls may still have it
     const defaultMapExtent = useMemo((): IExtentGeomety => {
         // no need to use default map extent if center and zoom are already defined
         if (center && zoom) {
             return null;
         }
 
-        return mapExtent || getDefaultExtent() || AppConfig.defaultMapExtent;
+        return mapExtent;
     }, []);
 
     const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
