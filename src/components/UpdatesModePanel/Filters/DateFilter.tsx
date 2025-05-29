@@ -148,6 +148,7 @@ export const DateFilter = () => {
             {selectedDateOption === 'custom' && (
                 <CalciteLabel>
                     <CalciteInputDatePicker
+                        scale="s"
                         range
                         value={customDateRange}
                         min={allowedDateRange[0]} // Set the minimum date to today minus 1 year
