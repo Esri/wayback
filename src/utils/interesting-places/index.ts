@@ -47,6 +47,18 @@ const interestingPlaces: InterestingPlace[] = [
         latitude: 33.95311,
         zoom: 16,
     },
+    {
+        name: 'Redlands, California',
+        longitude: -117.17945,
+        latitude: 34.056,
+        zoom: 15,
+    },
+    {
+        name: 'West Las Vegas, Nevada',
+        longitude: -115.2985,
+        latitude: 36.064,
+        zoom: 15,
+    },
 ];
 
 export const getRandomInterestingPlace = (): InterestingPlace => {
