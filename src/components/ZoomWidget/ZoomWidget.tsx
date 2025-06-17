@@ -23,7 +23,7 @@ type Props = {
 };
 
 const SearchWidget: React.FC<Props> = ({ mapView }: Props) => {
-    const containerRef = useRef<HTMLDivElement>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const init = () => {
         const zoom = new Zoom({

@@ -1,3 +1,4 @@
+import { CalciteSwitch } from '@esri/calcite-components-react';
 import React, { FC, useEffect, useRef } from 'react';
 
 type Props = {
@@ -17,26 +18,19 @@ type Props = {
 };
 
 export const Switch: FC<Props> = ({ label, checked, onChange }) => {
-    const switchRef = useRef<HTMLInputElement>();
-
     const props: { [key: string]: any } = {};
 
     if (checked) {
         props['checked'] = true;
     }
 
-    useEffect(() => {
-        switchRef.current.addEventListener(
-            'calciteSwitchChange',
-            (evt: any) => {
-                onChange(evt.target?.checked);
-            }
-        );
-    }, []);
-
     return (
         <div>
-            <calcite-switch ref={switchRef} {...props}></calcite-switch>
+            <CalciteSwitch
+                onCalciteSwitchChange={(evt: any) => {
+                    onChange(evt.target?.checked);
+                }}
+            />
             <span className="text-sm ml-2">{label}</span>
         </div>
     );

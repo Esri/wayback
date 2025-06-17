@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { CalciteLoader } from '@esri/calcite-components-react';
 import React, { useEffect } from 'react';
 
 type Props = {
@@ -52,7 +53,7 @@ const PlayPauseBtn: React.FC<Props> = ({
 }: Props) => {
     const getIcon = () => {
         if (isLoading) {
-            return <calcite-loader inline />;
+            return <CalciteLoader inline />;
         }
 
         return isPlaying ? PauseBtn : PlayBtn;

@@ -31,6 +31,7 @@ import {
 
 import BarChart from './index';
 import { IWaybackItem } from '@typings/index';
+import { IS_MOBILE } from '@constants/UI';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -64,6 +65,10 @@ const BarChartContainer: React.FC = () => {
     const onMouseOutHandler = () => {
         dispatch(setPreviewWaybackItem());
     };
+
+    if (IS_MOBILE) {
+        return null;
+    }
 
     return (
         <div className="hidden md:block">

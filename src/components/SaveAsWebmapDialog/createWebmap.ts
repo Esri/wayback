@@ -16,13 +16,14 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
 import { IWaybackItem, IExtentGeomety } from '@typings/index';
-import { getServiceUrl } from '@utils/Tier';
+import { tier } from '@utils/Tier';
 // import EsriRquest from 'esri/request';
 
 // import esriRequest from '@arcgis/core/request';
 import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
+import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
 
 interface ICreateWebmapParams {
     title: string;
@@ -69,6 +70,16 @@ const getRequestUrl = () => {
         : '';
 };
 
+const WORLD_IMAGERY_BASEMAP_URL_PROD =
+    'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/';
+const WORLD_IMAGERY_BASEMAP_URL_DEV =
+    'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
+
+const WORLD_IMAGERY_BASEMAP_URL =
+    tier === 'production'
+        ? WORLD_IMAGERY_BASEMAP_URL_PROD
+        : WORLD_IMAGERY_BASEMAP_URL_DEV;
+
 const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     const operationalLayers: Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];
 
@@ -78,7 +89,7 @@ const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
         const waybackLayerInfo: IWaybackLayerInfo = {
             templateUrl: waybackItem.itemURL,
             wmtsInfo: {
-                url: getServiceUrl('wayback-imagery-base'),
+                url: getWaybackServiceBaseURL(),
                 // layerIdentifier: waybackItem.itemReleaseName || '',
                 tileMatrixSet: 'default028mm',
             },
@@ -117,7 +128,7 @@ const getRequestText = (
                 {
                     id: 'defaultBasemap',
                     layerType: 'ArcGISTiledMapServiceLayer',
-                    url: getServiceUrl('world-imagery-basemap'),
+                    url: WORLD_IMAGERY_BASEMAP_URL,
                     visibility: true,
                     opacity: 1,
                     title: 'World Imagery',
@@ -126,7 +137,7 @@ const getRequestText = (
                     type: 'VectorTileLayer',
                     layerType: 'VectorTileLayer',
                     title: referenceLayer.title, //'Hybrid Reference Layer (Local Language)',
-                    styleUrl: referenceLayer.url, //getServiceUrl('reference-layer'),
+                    styleUrl: referenceLayer.url,
                     // itemId: '2a2e806e6e654ea78ecb705149ceae9f',
                     visibility: true,
                     isReference: true,

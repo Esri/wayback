@@ -29,7 +29,7 @@ type Props = {
 };
 
 const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
-    const referenceLayerRef = useRef<VectorTileLayer>();
+    const referenceLayerRef = useRef<VectorTileLayer>(null);
 
     const init = () => {
         // try {

@@ -25,7 +25,7 @@ import {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
-    isGutterHideSelector,
+    // isGutterHideSelector,
 } from '@store/UI/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
@@ -49,7 +49,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         return isSwipeWidgetOpen || isAnimationModeOn;
     }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
-    const isHide = useAppSelector(isGutterHideSelector);
+    // const isHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
 
@@ -65,18 +65,21 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         copy2clipboard(window.location.href);
     };
 
-    return !isHide ? (
+    if (isMobile) {
+        return null;
+    }
+
+    return (
         <Gutter
             isMobile={isMobile}
             settingsBtnDisabled={settingsBtnDisabled}
-            // shareBtnDisabled={onPremises}
             aboutButtonOnClick={aboutButtonOnClick}
             copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
             {children}
         </Gutter>
-    ) : null;
+    );
 };
 
 export default GutterContainer;

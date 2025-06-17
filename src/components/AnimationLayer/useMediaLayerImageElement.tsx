@@ -59,7 +59,7 @@ export const useMediaLayerImageElement = ({
 }: Props) => {
     const [imageElements, setImageElements] = useState<ImageElementData[]>([]);
 
-    const abortControllerRef = useRef<AbortController>();
+    const abortControllerRef = useRef<AbortController>(null);
 
     // const animationStatus = useAppSelector(selectAnimationStatus);
 

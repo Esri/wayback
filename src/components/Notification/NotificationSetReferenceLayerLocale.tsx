@@ -7,6 +7,7 @@ import {
 import { updateReferenceLayerLocale } from '@store/Map/thunks';
 import { ReferenceLayerLanguage } from '@constants/map';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 export const NotificationSetReferenceLayerLocale: FC = () => {
     const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ export const NotificationSetReferenceLayerLocale: FC = () => {
                 .
             </p>
 
-            <calcite-button
+            <CalciteButton
                 icon-start="x"
                 appearance="transparent"
                 kind="neutral"

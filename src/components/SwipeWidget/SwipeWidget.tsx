@@ -44,7 +44,7 @@ const SwipeWidget: React.FC<Props> = ({
     positionOnChange,
     // onLoaded
 }) => {
-    const swipeWidgetRef = useRef<Swipe>();
+    const swipeWidgetRef = useRef<Swipe>(null);
     const layersRef = useRef<WebTileLayer[]>([]);
 
     const init = async () => {

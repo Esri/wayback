@@ -157,40 +157,32 @@ export const toggleAnimationMode =
         dispatch(mapModeChanged(newMode));
     };
 
-export const selectAnimationStatus = createSelector(
+export const selectAnimationStatus = (state: RootState) =>
+    state.AnimationMode.animationStatus;
+
+export const selectIsAnimationPlaying = createSelector(
     (state: RootState) => state.AnimationMode.animationStatus,
-    (animationStatus) => animationStatus
-);
-
-export const isAnimationModeOnSelector = createSelector(
     (state: RootState) => state.Map.mode,
-    (mode) => mode === 'animation'
+    (animationStatus, mapMode) =>
+        animationStatus !== null && mapMode === 'animation'
 );
 
-export const selectShouldShowDownloadPanel = createSelector(
-    (state: RootState) => state.AnimationMode.showDownloadAnimationPanel,
-    (showDownloadAnimationPanel) => showDownloadAnimationPanel
-);
+export const isAnimationModeOnSelector = (state: RootState) =>
+    state.Map.mode === 'animation';
 
-export const rNum2ExcludeSelector = createSelector(
-    (state: RootState) => state.AnimationMode.rNum2Exclude,
-    (rNum2Exclude) => rNum2Exclude
-);
+export const selectShouldShowDownloadPanel = (state: RootState) =>
+    state.AnimationMode.showDownloadAnimationPanel;
 
-export const animationSpeedSelector = createSelector(
-    (state: RootState) => state.AnimationMode.animationSpeed,
-    (animationSpeed) => animationSpeed
-);
+export const rNum2ExcludeSelector = (state: RootState) =>
+    state.AnimationMode.rNum2Exclude;
 
-export const selectReleaseNumberOfActiveAnimationFrame = createSelector(
-    (state: RootState) =>
-        state.AnimationMode.releaseNumberOfActiveAnimationFrame,
-    (releaseNumberOfActiveAnimationFrame) => releaseNumberOfActiveAnimationFrame
-);
+export const animationSpeedSelector = (state: RootState) =>
+    state.AnimationMode.animationSpeed;
 
-export const selectAnimationLinkIsCopied = createSelector(
-    (state: RootState) => state.AnimationMode.animationLinkIsCopied,
-    (animationLinkIsCopied) => animationLinkIsCopied
-);
+export const selectReleaseNumberOfActiveAnimationFrame = (state: RootState) =>
+    state.AnimationMode.releaseNumberOfActiveAnimationFrame;
+
+export const selectAnimationLinkIsCopied = (state: RootState) =>
+    state.AnimationMode.animationLinkIsCopied;
 
 export default reducer;

@@ -14,7 +14,8 @@
  */
 
 import { IExtent } from '@esri/arcgis-rest-request';
-import { getServiceUrl } from '@utils/Tier';
+// import { getServiceUrl } from '@utils/Tier';
+import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
 import axios from 'axios';
 import { geometryFns } from 'helper-toolkit-ts';
 
@@ -28,8 +29,6 @@ export type TileEstimation = {
      */
     count: number;
 };
-
-const WaybackImageBaseURL = getServiceUrl('wayback-imagery-base');
 
 /**
  * maximum number of tiles allowed by the service
@@ -141,7 +140,9 @@ const hasWaybackImageTile = async (
     const row = geometryFns.lat2tile(centerY, level);
     const column = geometryFns.long2tile(centerX, level);
 
-    const imageURL = `${WaybackImageBaseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
+    const baseURL = getWaybackServiceBaseURL();
+
+    const imageURL = `${baseURL}/tile/${releaseNum}/${level}/${row}/${column}`;
 
     try {
         // the axios.head request would throw an eror if the tile image dose not exist

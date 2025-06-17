@@ -19,6 +19,7 @@ import { IWaybackItem } from '@typings/index';
 import classnames from 'classnames';
 
 import { LayerSelector } from '../';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 export const SwipeWidgetLayerSelectorWidth = 220;
 
@@ -118,7 +119,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 onClick={onClose}
             >
                 {/* <span className="icon-ui-close text-white"></span> */}
-                <calcite-icon icon="x" scale="l" />
+                <CalciteIcon icon="x" scale="l" />
             </div>
         );
     };

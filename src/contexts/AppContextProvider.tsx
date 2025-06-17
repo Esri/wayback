@@ -15,11 +15,10 @@
 
 import React, { useState, createContext } from 'react';
 import { miscFns } from 'helper-toolkit-ts';
-import config from '../app-config';
+// import config from '../app-config';
 
 type AppContextValue = {
     isMobile: boolean;
-    onPremises: boolean;
 };
 
 type AppContextProviderProps = {
@@ -36,7 +35,6 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
     const init = async () => {
         const contextValue: AppContextValue = {
             isMobile: miscFns.isMobileDevice(),
-            onPremises: config.onPremises,
         };
 
         setValue(contextValue);

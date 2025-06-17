@@ -118,29 +118,15 @@ interface IStaticTooltipData {
     left: number;
 }
 
-type ValidServiceUrlNames =
-    | 'portal-url'
-    | 'wayback-imagery-base'
-    | 'wayback-config'
-    | 'wayback-change-detector-layer'
-    // | 'reference-layer'
-    | 'world-imagery-basemap'
-    | 'wayback-export-base';
+// type ValidServiceUrlNames =
+// | 'portal-url'
+// 'wayback-imagery-base';
+// | 'wayback-config'
+// | 'wayback-change-detector-layer'
+// | 'reference-layer'
+// | 'world-imagery-basemap'
 
 interface IAppConfig {
-    appId: string;
-    shouldUseWaybackFootprintsLayer: boolean;
-    onPremises: boolean;
-    productionEnv: {
-        serviceUrls: {
-            [name in ValidServiceUrlNames]: string;
-        };
-    };
-    developmentEnv?: {
-        serviceUrls: {
-            [name in ValidServiceUrlNames]: string;
-        };
-    };
     defaultMapExtent?: {
         xmin: number;
         ymin: number;
@@ -151,6 +137,8 @@ interface IAppConfig {
         };
     };
 }
+
+type TIER = 'production' | 'development';
 
 export {
     IWaybackConfig,
@@ -163,6 +151,7 @@ export {
     IExtentGeomety,
     IURLParamData,
     IStaticTooltipData,
-    ValidServiceUrlNames,
+    // ValidServiceUrlNames,
     IAppConfig,
+    TIER,
 };

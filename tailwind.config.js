@@ -29,21 +29,29 @@ module.exports = {
             DEFAULT: '#2267AE',
             'brand': '#0079c1',
             'light': '#56a5d8',
-            'dark': '#1A3D60'
+            'dark': 'var(--theme-blue-dark)'
           }
         },
         'background': {
-          DEFAULT: '#121212'
+          DEFAULT: '#121212',
         },
         'foreground': {
           DEFAULT: '#ccc'
         },
-        'list-card-background': {
+        'card-background': {
           DEFAULT: 'var(--list-card-background)'
         },
       }
     },
-    extend: {},
+    extend: {
+      spacing: {
+        'header-height': '45px',
+        'gutter-width': 'var(--gutter-width)',
+        'sidebar-width': 'var(--sidebar-width)',
+        'gutter-sidebar-width': 'var(--gutter-sidebar-width)',
+        'map-action-button-size': '32px'
+      }
+    },
   },
   variants: {
     extend: {},

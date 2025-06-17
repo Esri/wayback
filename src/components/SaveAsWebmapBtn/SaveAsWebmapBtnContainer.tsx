@@ -66,6 +66,10 @@ const SaveAsWebmapBtnContainer = () => {
     };
 
     const onClickHandler = () => {
+        if (isDisabled) {
+            return;
+        }
+
         if (isAnonymouns()) {
             // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
             setShouldOpenSaveWebMapDialog();

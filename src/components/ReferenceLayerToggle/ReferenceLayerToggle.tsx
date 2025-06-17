@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 
 interface IProps {
@@ -65,7 +66,7 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 title="Choose label language"
                 onClick={localeSwitchButtonOnClick}
             >
-                <calcite-icon icon="speech-bubble" scale="s"></calcite-icon>
+                <CalciteIcon icon="speech-bubble" scale="s"></CalciteIcon>
             </div>
         </div>
     );

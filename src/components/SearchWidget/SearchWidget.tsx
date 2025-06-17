@@ -60,7 +60,7 @@ const SearchWidget: React.FC<Props> = ({
     mapView,
     searchCompletedHandler,
 }: Props) => {
-    const containerRef = useRef<HTMLDivElement>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const init = () => {
         // if (!position && !containerId) {

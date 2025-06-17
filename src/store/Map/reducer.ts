@@ -33,7 +33,7 @@ export type MapCenter = {
     lat: number;
 };
 
-export type MapMode = 'explore' | 'swipe' | 'animation';
+export type MapMode = 'explore' | 'swipe' | 'animation' | 'updates';
 
 export type MapState = {
     mode: MapMode;

@@ -19,10 +19,8 @@ import { useAppSelector } from '@store/configureStore';
 
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
-import { SIDEBAR_WIDTH, GUTTER_WIDTH } from '@constants/UI';
-
 import { AppContext } from '@contexts/AppContextProvider';
-import { isGutterHideSelector } from '@store/UI/reducer';
+// import { isGutterHideSelector } from '@store/UI/reducer';
 
 type Props = {
     children?: React.ReactNode;
@@ -31,20 +29,20 @@ type Props = {
 const MapViewWrapper: React.FC<Props> = ({ children }) => {
     const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
 
-    const getLeftPosition = (): number => {
+    const getLeftPosition = (): string => {
         if (isMobile) {
-            return isGutterHide ? 0 : GUTTER_WIDTH;
+            return '0';
         }
 
         if (isSwipeWidgetOpen) {
-            return GUTTER_WIDTH;
+            return 'var(--gutter-width)';
         }
 
-        return SIDEBAR_WIDTH + GUTTER_WIDTH;
+        return 'var(--gutter-sidebar-width)';
     };
 
     return (

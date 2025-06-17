@@ -15,6 +15,7 @@
 
 import React, { FC } from 'react';
 import classnames from 'classnames';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 type Props = {
     isOpen: boolean;
@@ -50,7 +51,7 @@ export const Modal: FC<Props> = ({
                 )}
             >
                 <div className="absolute right-1 top-1">
-                    <calcite-button
+                    <CalciteButton
                         icon-start="x"
                         scale="l"
                         appearance="transparent"

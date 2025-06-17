@@ -13,32 +13,40 @@
  * limitations under the License.
  */
 
-import '@arcgis/core/assets/esri/themes/dark/main.css';
+// import '@arcgis/core/assets/esri/themes/dark/main.css';
 import './style/index.css';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import '@components/calcite-components';
 import { Provider as ReduxProvider } from 'react-redux';
 import configureAppStore, { getPreloadedState } from '@store/configureStore';
 import AppContextProvider from './contexts/AppContextProvider';
+
 import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
-import config from './app-config';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
-import { getServiceUrl, isDevMode } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl, tier } from '@utils/Tier';
 import {
     getWaybackItems,
     setDefaultWaybackOptions,
 } from '@vannizhang/wayback-core';
+import { initI18next } from '@utils/i18n';
+import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 
 (async () => {
+    const root = createRoot(document.getElementById('appRootDiv'));
+
     try {
         await initEsriOAuth({
-            appId: config.appId,
-            portalUrl: getCustomPortalUrl() || getServiceUrl('portal-url'),
+            appId: ARCGIS_OAUTH_CLIENT_ID,
+            portalUrl: getCustomPortalUrl() || getArcGISOnlinePortalUrl(),
         });
 
-        if (isDevMode) {
+        await initI18next();
+
+        if (tier === 'development') {
+            // Set the default wayback options for development mode
             setDefaultWaybackOptions({
                 useDevServices: true,
             });
@@ -48,8 +56,6 @@ import {
 
         const preloadedState = await getPreloadedState(waybackItems);
 
-        const root = createRoot(document.getElementById('appRootDiv'));
-
         root.render(
             <ReduxProvider store={configureAppStore(preloadedState)}>
                 <AppContextProvider>
@@ -58,6 +64,14 @@ import {
             </ReduxProvider>
         );
     } catch (err) {
-        console.error(err);
+        // console.error(err);
+        root.render(
+            <ErrorPage
+                errorMessage={
+                    err.message ||
+                    'An error occurred while initializing the application.'
+                }
+            />
+        );
     }
 })();

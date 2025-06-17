@@ -14,7 +14,7 @@
  */
 
 import { IExtent } from '@esri/arcgis-rest-request';
-import { getServiceUrl } from '@utils/Tier';
+import { tier } from '@utils/Tier';
 import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
 import axios from 'axios';
@@ -81,7 +81,18 @@ export type WayportTilePackageInfo = {
     size: number;
 };
 
-const WAYPORT_GP_SERVICE_ROOT = getServiceUrl('wayback-export-base');
+const WAYPORT_GP_SERVICE_ROOT_PROD =
+    'https://wayport.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport';
+const WAYPORT_GP_SERVICE_ROOT_DEV =
+    'https://wayportdev.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport';
+
+/**
+ * The root URL of the Wayport GP service.
+ */
+const WAYPORT_GP_SERVICE_ROOT =
+    tier === 'production'
+        ? WAYPORT_GP_SERVICE_ROOT_PROD
+        : WAYPORT_GP_SERVICE_ROOT_DEV;
 
 /**
  *

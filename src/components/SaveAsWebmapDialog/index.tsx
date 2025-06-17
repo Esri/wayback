@@ -21,6 +21,7 @@ import { IWaybackItem, IExtentGeomety } from '@typings/index';
 import createWebmap from './createWebmap';
 import { useAppSelector } from '@store/configureStore';
 import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 interface IProps {
     // isVisible?: boolean;
@@ -128,9 +129,9 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
 
         const creatWebMapBtn = !isCreatingWebmap ? (
             <div className={creatWebMapBtnClasses}>
-                <calcite-button onClick={saveAsWebmap}>
+                <CalciteButton onClick={saveAsWebmap}>
                     Create Wayback Map
-                </calcite-button>
+                </CalciteButton>
             </div>
         ) : null;
 
@@ -193,7 +194,7 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                 Your Wayback Map is ready!
             </p>
             <div onClick={openWebmap}>
-                <calcite-button width="full">Open Wayback Map</calcite-button>
+                <CalciteButton width="full">Open Wayback Map</CalciteButton>
             </div>
         </div>
     );

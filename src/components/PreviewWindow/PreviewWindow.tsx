@@ -36,7 +36,7 @@ const PreviewWindow: React.FC<Props> = ({
     alternativeRNum4RreviewWaybackItem,
     mapView,
 }: Props) => {
-    const containerRef = useRef<HTMLDivElement>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const [imageUrl, setImageUrl] = useState<string>();
 
@@ -100,7 +100,7 @@ const PreviewWindow: React.FC<Props> = ({
                 height: `${PREVIEW_WINDOW_HEIGHT}px`,
             }}
         >
-            <img src={imageUrl} />
+            {imageUrl && <img src={imageUrl} />}
             <div className="preview-item-info">
                 <span
                     style={{

@@ -15,7 +15,8 @@
 
 import './style.css';
 import React, { FC, useState } from 'react';
-import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
+// import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface IProps {
     isMobile: boolean;
@@ -43,27 +44,27 @@ export const Gutter: FC<IProps> = ({
 
     return (
         <div
-            className="gutter-container"
-            style={{
-                top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
-            }}
+            className="gutter-container background-theme-blue-diagonal-pattern"
+            // style={{
+            //     top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
+            // }}
         >
             {/* gradient effect on right side of gutter */}
-            <div
-                className="absolute top-0 left-0 z-0 w-full h-full"
+            {/* <div
+                className="absolute top-header-height left-0 z-0 w-full h-full"
                 style={{
                     background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
                 }}
-            ></div>
+            ></div> */}
 
-            <div className="py-2">
+            <div className="py-1">
                 <div
                     className="gutter-nav-btn mb-2"
                     // data-modal={AboutThisAppModalConfig['modal-id']}
                     title="About this app"
                     onClick={aboutButtonOnClick}
                 >
-                    <calcite-icon icon="information" scale="l" />
+                    <CalciteIcon icon="information" scale="l" />
                 </div>
 
                 {/* {!shareBtnDisabled && (
@@ -73,7 +74,7 @@ export const Gutter: FC<IProps> = ({
                         title="Share"
                         onClick={shareButtonOnClick}
                     >
-                        <calcite-icon icon="share" scale="l" />
+                        <CalciteIcon icon="share" scale="l" />
                     </div>
                 )} */}
 
@@ -94,7 +95,7 @@ export const Gutter: FC<IProps> = ({
                         }, 3000);
                     }}
                 >
-                    <calcite-icon icon="link" scale="l" />
+                    <CalciteIcon icon="link" scale="l" />
                 </div>
 
                 <div
@@ -105,13 +106,13 @@ export const Gutter: FC<IProps> = ({
                     title="Settings"
                     onClick={settingButtonOnClick}
                 >
-                    <calcite-icon icon="gear" scale="l" />
+                    <CalciteIcon icon="gear" scale="l" />
                 </div>
             </div>
 
             {/* divider with shadow effect */}
             <div
-                className="w-full h-2"
+                className="w-full h-2 mb-2"
                 style={{
                     background: `linear-gradient(5deg, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 100%)`,
                 }}

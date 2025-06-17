@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import './CustomMapViewStyle.css';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -23,6 +23,7 @@ import {
     mapExtentSelector,
     mapExtentUpdated,
     selectMapCenterAndZoom,
+    selectMapMode,
     zoomUpdated,
 } from '@store/Map/reducer';
 
@@ -35,21 +36,21 @@ import {
 
 import MapView from './MapView';
 
-import AppConfig from '../../app-config';
+// import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
-import { getDefaultExtent } from '@utils/LocalStorage';
+// import { getDefaultExtent } from '@utils/LocalStorage';
 import {
     saveMapCenterToHashParams,
-    saveMapExtentInURLQueryParam,
+    // saveMapExtentInURLQueryParam,
 } from '@utils/UrlSearchParam';
-import { batch } from 'react-redux';
-import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+// import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
 import {
     isAnimationModeOnSelector,
-    selectAnimationStatus,
+    // selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
 import { queryLocalChanges } from '@store/Wayback/thunks';
 import { Point } from '@arcgis/core/geometry';
+import { MapActionButtonGroup } from './MapActionButtonGroup';
 
 type Props = {
     children?: React.ReactNode;
@@ -64,31 +65,55 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const { center, zoom } = useAppSelector(selectMapCenterAndZoom);
 
+    // still need to use default map extent as some old urls may still have it
     const defaultMapExtent = useMemo((): IExtentGeomety => {
         // no need to use default map extent if center and zoom are already defined
         if (center && zoom) {
             return null;
         }
 
-        return mapExtent || getDefaultExtent() || AppConfig.defaultMapExtent;
+        return mapExtent;
     }, []);
 
-    const queryVersionsWithLocalChanges = async (
-        mapCenterPoint: IMapPointInfo
-    ) => {
-        try {
-            const { longitude, latitude, zoom } = mapCenterPoint;
+    const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
-            const point = new Point({
-                longitude,
-                latitude,
-            });
+    const appMode = useAppSelector(selectMapMode);
 
-            dispatch(queryLocalChanges(point, zoom));
-        } catch (err) {
-            console.error('failed to query local changes', err);
+    useEffect(() => {
+        if (!queryLocation) {
+            return;
         }
-    };
+
+        if (appMode === 'updates') {
+            return;
+        }
+
+        const { longitude, latitude, zoom } = queryLocation;
+
+        const point = new Point({
+            longitude,
+            latitude,
+        });
+
+        dispatch(queryLocalChanges(point, zoom));
+    }, [queryLocation, appMode]);
+
+    // const queryVersionsWithLocalChanges = async (
+    //     mapCenterPoint: IMapPointInfo
+    // ) => {
+    //     try {
+    //         const { longitude, latitude, zoom } = mapCenterPoint;
+
+    //         const point = new Point({
+    //             longitude,
+    //             latitude,
+    //         });
+
+    //         dispatch(queryLocalChanges(point, zoom));
+    //     } catch (err) {
+    //         console.error('failed to query local changes', err);
+    //     }
+    // };
 
     const onExtentChange = (extent: IExtentGeomety) => {
         dispatch(mapExtentUpdated(extent));
@@ -112,27 +137,28 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [isAnimationModeOn]);
 
     return (
-        <div className=" relative shrink-0 grow">
+        <div className="relative shrink-0 grow bg-black">
             <MapView
                 initialExtent={defaultMapExtent}
                 center={center}
                 zoom={zoom}
                 onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
-                    queryVersionsWithLocalChanges(mapCenterPoint);
+                    // queryVersionsWithLocalChanges(mapCenterPoint);
+                    setQueryLocation(mapCenterPoint);
 
-                    batch(() => {
-                        dispatch(
-                            mapCenterUpdated({
-                                lon: mapCenterPoint.longitude,
-                                lat: mapCenterPoint.latitude,
-                            })
-                        );
-                        dispatch(zoomUpdated(mapCenterPoint.zoom));
-                    });
+                    dispatch(
+                        mapCenterUpdated({
+                            lon: mapCenterPoint.longitude,
+                            lat: mapCenterPoint.latitude,
+                        })
+                    );
+                    dispatch(zoomUpdated(mapCenterPoint.zoom));
                 }}
                 onExtentChange={onExtentChange}
             >
                 {children}
+
+                <MapActionButtonGroup />
             </MapView>
         </div>
     );

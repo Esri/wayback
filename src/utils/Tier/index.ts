@@ -13,40 +13,46 @@
  * limitations under the License.
  */
 
-import { ValidServiceUrlNames } from '@typings/index';
-import config from '../../app-config';
+import { TIER } from '@typings/index';
 
-const isHostedOnArcGisDomain = (() => {
-    return window.location.hostname.match(/arcgis.com/gi) ? true : false;
-})();
+/**
+ * Determines if the application is running in development mode.
+ * Development mode is identified by specific hostnames or patterns.
+ * If the hostname is 'livingatlasdev.arcgis.com' or matches the pattern '*.arcgis.com' with a port,
+ * it is considered to be in development mode.
+ */
+const isDevMode =
+    window.location.hostname === 'livingatlasdev.arcgis.com' ||
+    /.*\.arcgis\.com:\d+/.test(window.location.host);
+console.log(`Is development mode: ${isDevMode}`);
 
-export const isHostedOnLivingAtlasDomain = (() => {
-    return window.location.hostname.match(/livingatlas/gi) ? true : false;
-})();
+/**
+ * The current tier of the application, either 'development' or 'production'.
+ * In development mode, it is set to 'development',
+ * otherwise it is set to 'production'.
+ */
+export const tier: TIER = isDevMode ? 'development' : 'production';
+console.log(`Current tier: ${tier}`);
 
-// the wayback app is hosted on bothe Living Atlas dev and production server so the Living Atlas team can test the dev services using the dev app before we release them to production
-// however, if the app is hosted on somewhere else, then just return false so the app will always use the production services
-export const isDevMode = (() => {
-    if (!config.developmentEnv) {
-        return false;
+/**
+ * Returns the ArcGIS Online portal URL based on the current tier.
+ * If the tier is 'development', it returns the development portal URL.
+ * Otherwise, it returns the production portal URL.
+ */
+export const getArcGISOnlinePortalUrl = () => {
+    if (tier === 'development') {
+        return 'https://devext.arcgis.com';
     }
 
-    if (!isHostedOnArcGisDomain && !isHostedOnLivingAtlasDomain) {
-        return false;
-    }
-
-    const isDev =
-        window.location.hostname !== 'livingatlas.arcgis.com' ? true : false;
-
-    return isDev;
-})();
-
-const getServiceUrl = (key?: ValidServiceUrlNames) => {
-    const serviceUrls =
-        isDevMode && config.developmentEnv.serviceUrls
-            ? config.developmentEnv.serviceUrls
-            : config.productionEnv.serviceUrls;
-    return serviceUrls[key] || '';
+    return 'https://www.arcgis.com';
 };
 
-export { getServiceUrl };
+// const getServiceUrl = (key?: ValidServiceUrlNames) => {
+//     const serviceUrls =
+//         isDevMode && config.developmentEnv.serviceUrls
+//             ? config.developmentEnv.serviceUrls
+//             : config.productionEnv.serviceUrls;
+//     return serviceUrls[key] || '';
+// };
+
+// export { getServiceUrl };

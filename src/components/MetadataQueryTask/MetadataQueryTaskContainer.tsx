@@ -30,6 +30,7 @@ import {
     metadataQueryResultUpdated,
     metadataPopupAnchorUpdated,
     isQueryingMetadataToggled,
+    selectMapMode,
 } from '@store/Map/reducer';
 
 import MetadataQueryTask from './MetadataQueryTask';
@@ -55,6 +56,8 @@ const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
         swipeWidgetTrailingLayerSelector
     );
 
+    const mode = useAppSelector(selectMapMode);
+
     return (
         <MetadataQueryTask
             mapView={mapView}
@@ -63,6 +66,7 @@ const MetadataQueryTaskContainer: React.FC<Props> = ({ mapView }: Props) => {
             swipeWidgetTrailingLayer={swipeWidgetTrailingLayer}
             isSwipeWidgetOpen={isSwipeWidgetOpen}
             swipeWidgetPosition={swipeWidgetPosition}
+            disabled={mode !== 'explore' && mode !== 'swipe'}
             metadataQueryOnStart={() => {
                 disptach(isQueryingMetadataToggled(true));
             }}

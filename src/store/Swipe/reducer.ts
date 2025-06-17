@@ -94,10 +94,11 @@ export const toggleSwipeWidget =
         // dispatch(isSwipeWidgetOpenToggled());
     };
 
-export const isSwipeWidgetOpenSelector = createSelector(
-    (state: RootState) => state.Map.mode,
-    (mode) => mode === 'swipe'
-);
+export const isSwipeWidgetOpenSelector = (state: RootState) =>
+    state.Map.mode === 'swipe';
+
+export const swipePositionSelector = (state: RootState) =>
+    state.SwipeView.swipePosition;
 
 export const swipeWidgetLeadingLayerSelector = createSelector(
     (state: RootState) => state.WaybackItems.byReleaseNumber,
@@ -111,11 +112,6 @@ export const swipeWidgetTrailingLayerSelector = createSelector(
     (state: RootState) => state.SwipeView.releaseNum4TrailingLayer,
     (byReleaseNumber, releaseNum4TrailingLayer) =>
         byReleaseNumber[releaseNum4TrailingLayer]
-);
-
-export const swipePositionSelector = createSelector(
-    (state: RootState) => state.SwipeView.swipePosition,
-    (swipePosition) => swipePosition
 );
 
 export default reducer;

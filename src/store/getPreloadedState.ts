@@ -23,6 +23,7 @@ import { initialMapState, MapMode, MapState } from './Map/reducer';
 import {
     decodeURLParams,
     getMapCenterFromHashParams,
+    getMapModeFromHashParams,
 } from '../utils/UrlSearchParam';
 
 import {
@@ -46,8 +47,11 @@ import {
 } from './DownloadMode/reducer';
 import { isAnonymouns } from '@utils/Esri-OAuth';
 import { ReferenceLayerLanguage } from '@constants/map';
+import { IS_MOBILE } from '@constants/UI';
+import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
+import { getRandomInterestingPlace } from '@utils/interesting-places';
 
-const isMobile = miscFns.isMobileDevice();
+// const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
     const state: UIState = {
@@ -117,9 +121,22 @@ const getPreloadedState4SwipeView = (
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     const { mapExtent, animationSpeed, isSwipeWidgetOpen } = urlParams;
 
-    const { center, zoom } = getMapCenterFromHashParams() || {};
+    let initialMapCenter = getMapCenterFromHashParams();
 
-    let mode: MapMode = 'explore';
+    // if the map center and mapExtent is not set in the hash params, we will use a random interesting place
+    if (!initialMapCenter && !mapExtent) {
+        const interestingPlace = getRandomInterestingPlace();
+
+        initialMapCenter = {
+            center: {
+                lon: interestingPlace.longitude,
+                lat: interestingPlace.latitude,
+            },
+            zoom: interestingPlace.zoom,
+        };
+    }
+
+    let mode: MapMode = getMapModeFromHashParams();
 
     if (isSwipeWidgetOpen) {
         mode = 'swipe';
@@ -127,12 +144,18 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         mode = 'animation';
     }
 
+    // we need to set the mode to 'explore' if the device is mobile
+    // because the swipe mode and animation mode is not supported on mobile devices
+    if (IS_MOBILE) {
+        mode = 'explore';
+    }
+
     const state: MapState = {
         ...initialMapState,
         mode,
         mapExtent,
-        center,
-        zoom,
+        center: initialMapCenter.center,
+        zoom: initialMapCenter.zoom,
         referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
     };
 
@@ -148,7 +171,7 @@ const getPreloadedState4AnimationMode = (
     if (
         animationSpeed === null ||
         typeof animationSpeed !== 'number' ||
-        isMobile
+        IS_MOBILE
     ) {
         return initialAnimationModeState;
     }
@@ -211,6 +234,7 @@ const getPreloadedState = async (
         Map: getPreloadedState4Map(urlParams),
         AnimationMode: getPreloadedState4AnimationMode(urlParams),
         DownloadMode: getPreloadedState4Downloadmode(urlParams),
+        UpdatesMode: getPreloadedState4UpdatesMode(),
     } as PartialRootState;
 
     return preloadedState;

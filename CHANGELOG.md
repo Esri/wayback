@@ -9,11 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Fixed
-
 ### Changed
 
+### Fixed
+
 ### Removed
+
+## [2025-06-17]
+
+### Added
+- Introduced Updates Mode to explore World Imagery updates from the past 12 months and view pending updates for the next 12 months.
+- Added internationalization support using i18next.
+
+### Changed
+- Default app location now selects a random entry from the list of interesting places.
+- Migrated to `calcite-components-react` and upgraded to `calcite-components` v3.1.0.
+- Updated React components to use typed Calcite components from `calcite-components-react`.
+- Refined side panel layout and styles.
+- Simplified the app configuration file by removing unnecessary settings.
+
+### Fixed
+
+### Removed
+
+## [2025-02-20]
+
+### Added
+- Introduced a Locale Switch component for changing the Reference Layer's language.
+- Added a notification message to inform users when a Reference Layer is available in their selected locale.
 
 ## [2024-10-04]
 

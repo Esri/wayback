@@ -21,20 +21,21 @@ import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
-import { isGutterHideSelector, isSideBarHideSelector } from '@store/UI/reducer';
+import { isSideBarHideSelector } from '@store/UI/reducer';
 
 import Sidebar from './Sidebar';
 import { AppContext } from '@contexts/AppContextProvider';
 
 import {
     SidebarToggleBtn,
-    AppTitleText,
     BarChart,
     Title4ActiveItem,
     ShowLocalChangesCheckboxToggle,
     ListView,
     AnimationControls,
 } from '../';
+import { selectMapMode } from '@store/Map/reducer';
+import { UpdatesModePanel } from '@components/UpdatesModePanel';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -49,13 +50,19 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
+    const mode = useAppSelector(selectMapMode);
+
     const isHide = useAppSelector(isSideBarHideSelector);
 
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
 
     const getContent = () => {
         if (isAnimationModeOn) {
             return <AnimationControls />;
+        }
+
+        if (mode === 'updates') {
+            return <UpdatesModePanel />;
         }
 
         return (
@@ -76,15 +83,10 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
     return (
         <Sidebar
             isHide={isHide || isSwipeWidgetOpen}
-            isGutterHide={isGutterHide}
+            // isGutterHide={isGutterHide}
             isMobile={isMobile}
         >
             <SidebarToggleBtn />
-
-            <div className="hidden md:block">
-                <AppTitleText />
-            </div>
-
             {getContent()}
         </Sidebar>
     );

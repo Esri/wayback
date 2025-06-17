@@ -25,7 +25,6 @@ import {
     MapViewWrapper,
     MetadataPopup,
     MetadataQueryTask,
-    MobileHeader,
     MobileFooter,
     ReferenceLayer,
     ReferenceLayerToggle,
@@ -50,36 +49,43 @@ import {
     DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
-import { getServiceUrl } from '@utils/Tier';
+import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
 import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
 import { Notification } from '@components/Notification';
+import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
+import { AppHeader } from '@components/AppHeader';
+import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
+import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
 
 const AppLayout: React.FC = () => {
-    // const { onPremises } = React.useContext(AppContext);
-
     useSaveAppState2URLHashParams();
 
     useRevalidateToken();
 
     return (
-        <>
-            <MobileHeader />
+        <ErrorBoundary>
+            <AppHeader />
 
             <Gutter>
+                <ExploreModeToggleButton />
+
                 <SwipeWidgetToggleBtn />
 
                 <AnimationModeToggleBtn />
+
+                <UpdatesModeToggleButton />
 
                 <OpenDownloadPanelBtn />
 
                 <SaveAsWebmapBtn />
             </Gutter>
 
-            <Sidebar></Sidebar>
+            <Sidebar />
 
             <MapViewWrapper>
                 <SwipeWidgetLayerSelector targetLayer="leading" />
@@ -103,13 +109,15 @@ const AppLayout: React.FC = () => {
                     <ReferenceLayerToggle />
 
                     <SearchWidget
-                        portalUrl={getServiceUrl('portal-url')}
+                        portalUrl={getArcGISOnlinePortalUrl()}
                         // position={'top-left'}
                     />
 
                     <ZoomWidget />
 
                     <Notification />
+
+                    <WorldImageryUpdatesLayers />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
@@ -119,14 +127,12 @@ const AppLayout: React.FC = () => {
 
             <SettingDialog />
 
-            {/* {!onPremises && <ShareDialog />} */}
-
             <DownloadDialog />
 
             <AboutThisApp />
 
             <MobileFooter />
-        </>
+        </ErrorBoundary>
     );
 };
 

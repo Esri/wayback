@@ -17,6 +17,7 @@ import { DownloadJob } from '@store/DownloadMode/reducer';
 import React, { FC } from 'react';
 import { DownloadJobCard } from './DownloadJobCard';
 import { DownloadJobPlaceholder } from './DownloadJobPlaceholder';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 type Props = {
     /**
@@ -102,10 +103,11 @@ export const DownloadDialog: FC<Props> = ({
         >
             <div className="max-w-5xl mx-8 bg-custom-modal-content-background p-2 py-8">
                 <div className="text-right">
-                    <calcite-button
+                    <CalciteButton
                         icon-start="x"
                         appearance="transparent"
                         kind="neutral"
+                        scale="l"
                         onClick={closeButtonOnClick}
                     />
                 </div>

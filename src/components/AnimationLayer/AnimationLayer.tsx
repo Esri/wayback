@@ -44,6 +44,7 @@ import {
 import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
 import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 import { delay } from '@utils/snippets/delay';
+import { CalciteLoader } from '@esri/calcite-components-react';
 
 type Props = {
     mapView?: MapView;
@@ -52,7 +53,7 @@ type Props = {
 export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const dispatch = useAppDispatch();
 
-    const mediaLayerRef = useRef<MediaLayer>();
+    const mediaLayerRef = useRef<MediaLayer>(null);
 
     const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
@@ -140,7 +141,11 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
             const source = mediaLayerRef.current.source as any;
 
-            if (!imageElementsData || !imageElementsData?.length) {
+            if (
+                !imageElementsData ||
+                !imageElementsData?.length ||
+                !isAnimationModeOn
+            ) {
                 // animation is not started or just stopped
                 // just clear all elements in media layer
                 source.elements.removeAll();
@@ -153,11 +158,15 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
                 // to give the media layer enough time to add all image elements
                 await delay(1000);
 
+                console.log(
+                    'media layer elements are ready, starting animation...'
+                );
+
                 // media layer elements are ready, change animation mode to playing to start the animation
                 dispatch(animationStatusChanged('playing'));
             }
         })();
-    }, [imageElementsData, mapView]);
+    }, [imageElementsData, isAnimationModeOn, mapView]);
 
     useEffect(() => {
         if (isAnimationModeOn) {
@@ -187,7 +196,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
             )}
         >
             {animationStatus === 'loading' && (
-                <calcite-loader active scale="l"></calcite-loader>
+                <CalciteLoader scale="l"></CalciteLoader>
             )}
 
             <CloseButton

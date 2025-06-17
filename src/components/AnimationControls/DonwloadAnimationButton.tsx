@@ -21,6 +21,7 @@ import {
     selectAnimationStatus,
     // isLoadingFrameDataSelector,
 } from '@store/AnimationMode/reducer';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 export const DonwloadAnimationButton = () => {
     const dispatch = useAppDispatch();
@@ -43,7 +44,7 @@ export const DonwloadAnimationButton = () => {
                 disabled: animationStatus === 'loading',
             })}
         >
-            <calcite-button
+            <CalciteButton
                 width="full"
                 onClick={onClickHandler}
                 style={{
@@ -51,7 +52,7 @@ export const DonwloadAnimationButton = () => {
                 }}
             >
                 Download Animation
-            </calcite-button>
+            </CalciteButton>
         </div>
     );
 };

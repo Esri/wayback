@@ -17,7 +17,7 @@ import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    isGutterHideSelector,
+    // isGutterHideSelector,
     isSideBarHideSelector,
     isSideBarHideToggled,
 } from '@store/UI/reducer';
@@ -27,7 +27,7 @@ import { IS_MOBILE } from '@constants/UI';
 
 const MobileFooterContainer = () => {
     const dispatch = useAppDispatch();
-    const isGutterHide = useAppSelector(isGutterHideSelector);
+    // const isGutterHide = useAppSelector(isGutterHideSelector);
     const isSideBarHide = useAppSelector(isSideBarHideSelector);
 
     if (!isSideBarHide || IS_MOBILE === false) {
@@ -36,7 +36,7 @@ const MobileFooterContainer = () => {
 
     return (
         <MobileFooter
-            isGutterHide={isGutterHide}
+            // isGutterHide={isGutterHide}
             OnClick={() => {
                 dispatch(isSideBarHideToggled());
             }}
