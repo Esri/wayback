@@ -32,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [2025-02-20]
+
+### Added
+- Introduced a Locale Switch component for changing the Reference Layer's language.
+- Added a notification message to inform users when a Reference Layer is available in their selected locale.
+
 ## [2024-10-04]
 
 ### Fixed
