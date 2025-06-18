@@ -29,12 +29,12 @@ const interestingPlaces: InterestingPlace[] = [
         latitude: 39.51004,
         zoom: 14,
     },
-    {
-        name: 'Neom',
-        longitude: 35.23566,
-        latitude: 28.09952,
-        zoom: 13,
-    },
+    // {
+    //     name: 'Neom',
+    //     longitude: 35.23566,
+    //     latitude: 28.09952,
+    //     zoom: 13,
+    // },
     {
         name: 'Hong Kong-Zhuhai-Macao Bridge',
         longitude: 113.58475,
