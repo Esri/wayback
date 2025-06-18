@@ -49,7 +49,7 @@ const interestingPlaces: InterestingPlace[] = [
     },
     {
         name: 'Redlands, California',
-        longitude: 117.19584,
+        longitude: -117.19584,
         latitude: 34.0576,
         zoom: 18,
     },
