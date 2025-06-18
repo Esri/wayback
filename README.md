@@ -64,6 +64,7 @@ npm run build
 - [Wayback - 81 Flavors of World Imagery](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/wayback-81-flavors-of-world-imagery/)
 - [A Fresh Look for Wayback](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/a-fresh-look-for-wayback/)
 - [World Imagery Wayback Export](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/wayback-export/)
+- [World Imagery Wayback - 2025 Enhancements](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/world-imagery-wayback-2025-updates)
 - [Wayback Imagery group](http://esri.maps.arcgis.com/home/group.html?id=0f3189e1d1414edfad860b697b7d8311&start=1&view=list#content)
 - [ArcGIS Living Atlas of the World](https://livingatlas.arcgis.com/en/browse/#d=2&categories=Imagery:1111)
 
