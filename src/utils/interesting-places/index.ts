@@ -49,9 +49,9 @@ const interestingPlaces: InterestingPlace[] = [
     },
     {
         name: 'Redlands, California',
-        longitude: -117.17945,
-        latitude: 34.056,
-        zoom: 15,
+        longitude: 117.19584,
+        latitude: 34.0576,
+        zoom: 18,
     },
     {
         name: 'West Las Vegas, Nevada',
