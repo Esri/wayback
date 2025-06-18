@@ -154,8 +154,8 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         ...initialMapState,
         mode,
         mapExtent,
-        center: initialMapCenter.center,
-        zoom: initialMapCenter.zoom,
+        center: initialMapCenter?.center,
+        zoom: initialMapCenter?.zoom,
         referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
     };
 
