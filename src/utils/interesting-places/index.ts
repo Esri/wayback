@@ -12,10 +12,10 @@ type InterestingPlace = {
  */
 const interestingPlaces: InterestingPlace[] = [
     {
-        name: 'Dubai (Canal)',
-        longitude: 55.28008,
-        latitude: 25.19028,
-        zoom: 14,
+        name: 'Dubai (World Islands)',
+        longitude: 55.14363,
+        latitude: 25.09182,
+        zoom: 15,
     },
     {
         name: 'Tokyo (Olympic venue)',
@@ -29,16 +29,16 @@ const interestingPlaces: InterestingPlace[] = [
         latitude: 39.51004,
         zoom: 14,
     },
-    {
-        name: 'Neom',
-        longitude: 35.23566,
-        latitude: 28.09952,
-        zoom: 13,
-    },
+    // {
+    //     name: 'Neom',
+    //     longitude: 35.23566,
+    //     latitude: 28.09952,
+    //     zoom: 13,
+    // },
     {
         name: 'Hong Kong-Zhuhai-Macao Bridge',
-        longitude: 113.58475,
-        latitude: 22.21209,
+        longitude: 113.5695,
+        latitude: 22.20162,
         zoom: 15,
     },
     {
@@ -49,9 +49,9 @@ const interestingPlaces: InterestingPlace[] = [
     },
     {
         name: 'Redlands, California',
-        longitude: -117.17945,
-        latitude: 34.056,
-        zoom: 15,
+        longitude: -117.19584,
+        latitude: 34.0576,
+        zoom: 18,
     },
     {
         name: 'West Las Vegas, Nevada',

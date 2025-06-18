@@ -20,11 +20,7 @@ export const MapActionButtonGroup: FC<Props> = ({ mapView }) => {
     }
 
     return (
-        <div
-            className={classNames(
-                'absolute left-4 top-16 md:top-[116px] z-10 '
-            )}
-        >
+        <div className={classNames('absolute left-4 top-[116px] z-10 ')}>
             <ZoomToExtent
                 tooltip={t('zoom_to_full_extent')}
                 onClick={() => {
