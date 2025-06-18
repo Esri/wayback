@@ -12,10 +12,10 @@ type InterestingPlace = {
  */
 const interestingPlaces: InterestingPlace[] = [
     {
-        name: 'Dubai (Canal)',
-        longitude: 55.28008,
-        latitude: 25.19028,
-        zoom: 14,
+        name: 'Dubai (World Islands)',
+        longitude: 55.14363,
+        latitude: 25.09182,
+        zoom: 15,
     },
     {
         name: 'Tokyo (Olympic venue)',
@@ -37,8 +37,8 @@ const interestingPlaces: InterestingPlace[] = [
     // },
     {
         name: 'Hong Kong-Zhuhai-Macao Bridge',
-        longitude: 113.58475,
-        latitude: 22.21209,
+        longitude: 113.5695,
+        latitude: 22.20162,
         zoom: 15,
     },
     {
