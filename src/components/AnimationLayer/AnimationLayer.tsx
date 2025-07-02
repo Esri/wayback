@@ -45,6 +45,7 @@ import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
 import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 import { delay } from '@utils/snippets/delay';
 import { CalciteLoader } from '@esri/calcite-components-react';
+import { once } from '@arcgis/core/core/reactiveUtils';
 
 type Props = {
     mapView?: MapView;
@@ -150,20 +151,48 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
                 // just clear all elements in media layer
                 source.elements.removeAll();
             } else {
-                source.elements.addMany(
-                    imageElementsData.map((d) => d.imageElement)
-                );
+                // source.elements.addMany(
+                //     imageElementsData.map((d) => d.imageElement)
+                // );
 
-                // wait for one second before starting playing the animation,
-                // to give the media layer enough time to add all image elements
-                await delay(1000);
+                // // wait for one second before starting playing the animation,
+                // // to give the media layer enough time to add all image elements
+                // await delay(1000);
 
-                console.log(
-                    'media layer elements are ready, starting animation...'
-                );
+                // console.log(
+                //     'media layer elements are ready, starting animation...'
+                // );
 
-                // media layer elements are ready, change animation mode to playing to start the animation
-                dispatch(animationStatusChanged('playing'));
+                try {
+                    const mediaLayerElements = imageElementsData.map(
+                        (d) => d.imageElement
+                    );
+
+                    for (const element of mediaLayerElements) {
+                        source.elements.add(element);
+
+                        // Wait for each element to load before proceeding
+                        await once(
+                            () =>
+                                element.loadStatus === 'loaded' ||
+                                element.loadStatus === 'failed'
+                        );
+
+                        if (element.loadStatus === 'failed') {
+                            throw new Error(
+                                `Element failed to load: ${element}`
+                            );
+                        }
+
+                        console.log(`Element loaded: ${element.loadStatus}`);
+                    }
+
+                    // media layer elements are ready, change animation mode to playing to start the animation
+                    dispatch(animationStatusChanged('playing'));
+                } catch (error) {
+                    console.error('Error loading media layer elements:', error);
+                    dispatch(animationStatusChanged('failed'));
+                }
             }
         })();
     }, [imageElementsData, isAnimationModeOn, mapView]);

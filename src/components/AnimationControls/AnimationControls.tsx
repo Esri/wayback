@@ -86,6 +86,15 @@ const AnimationControls = () => {
     }, []);
 
     const playPauseBtnOnClick = useCallback(() => {
+        if (animationStatus === 'loading') {
+            return;
+        }
+
+        if (animationStatus === 'failed') {
+            dispatch(animationStatusChanged('loading'));
+            return;
+        }
+
         if (animationStatus === 'playing') {
             dispatch(animationStatusChanged('pausing'));
         } else {
@@ -111,9 +120,16 @@ const AnimationControls = () => {
             <>
                 <DonwloadAnimationButton />
 
-                <div className=" mt-2">
-                    <span className=" text-xs">Animation Speed</span>
-                </div>
+                {animationStatus === 'failed' ? (
+                    <div className="text-red-400 text-xs mt-4">
+                        Failed to load animation frames. Click the Play button
+                        below to try again.
+                    </div>
+                ) : (
+                    <div className=" mt-2">
+                        <span className=" text-xs">Animation Speed</span>
+                    </div>
+                )}
 
                 <div
                     style={{

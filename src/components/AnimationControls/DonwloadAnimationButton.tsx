@@ -41,7 +41,9 @@ export const DonwloadAnimationButton = () => {
     return (
         <div
             className={classnames({
-                disabled: animationStatus === 'loading',
+                disabled:
+                    animationStatus === 'loading' ||
+                    animationStatus === 'failed',
             })}
         >
             <CalciteButton
