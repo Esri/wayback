@@ -29,7 +29,12 @@ import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
 
 // import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
 
-export type AnimationStatus = 'loading' | 'playing' | 'pausing';
+export type AnimationStatus =
+    | 'loading'
+    | 'playing'
+    | 'pausing'
+    | 'failed'
+    | null;
 
 export type AnimationModeState = {
     /**
