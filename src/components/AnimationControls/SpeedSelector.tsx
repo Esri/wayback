@@ -39,9 +39,8 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
         return idx;
     };
 
-    const [sliderValue, setSliderValue] = React.useState<number>(
-        calcSliderValue()
-    );
+    const [sliderValue, setSliderValue] =
+        React.useState<number>(calcSliderValue());
 
     useEffect(() => {
         clearTimeout(onChangeDely.current);
