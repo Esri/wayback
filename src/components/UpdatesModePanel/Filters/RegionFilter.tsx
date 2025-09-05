@@ -4,7 +4,10 @@ import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
 import { useListOfRegions } from '../hooks/useListOfRegions';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { updatesModeRegionChanged } from '@store/UpdatesMode/reducer';
+import {
+    shouldZoomToSelectedRegionChanged,
+    updatesModeRegionChanged,
+} from '@store/UpdatesMode/reducer';
 import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
 import {
     CalciteButton,
@@ -113,6 +116,9 @@ export const RegionFilter = () => {
                         onClick={(value: string) => {
                             console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
+
+                            // set the flag to zoom to the selected region
+                            dispatch(shouldZoomToSelectedRegionChanged(true));
 
                             dispatch(updatesModeRegionChanged(value));
                         }}

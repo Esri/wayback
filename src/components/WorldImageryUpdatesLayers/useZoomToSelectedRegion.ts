@@ -1,5 +1,8 @@
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import MapView from '@arcgis/core/views/MapView';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import { shouldZoomToSelectedRegionChanged } from '@store/UpdatesMode/reducer';
+import { selectShouldZoomToSelectedRegion } from '@store/UpdatesMode/selectors';
 import React, { useEffect } from 'react';
 
 export const useZoomToSelectedRegion = (
@@ -8,8 +11,18 @@ export const useZoomToSelectedRegion = (
     whereClause: string,
     mapView?: MapView
 ): void => {
+    const dispatch = useAppDispatch();
+
+    const shouldZoomToSelectedRegion = useAppSelector(
+        selectShouldZoomToSelectedRegion
+    );
+
     useEffect(() => {
-        if (!worldImageryUpdatesLayerRef.current || !mapView) {
+        if (
+            !worldImageryUpdatesLayerRef.current ||
+            !mapView ||
+            !shouldZoomToSelectedRegion
+        ) {
             return;
         }
 
@@ -31,7 +44,14 @@ export const useZoomToSelectedRegion = (
             .catch((error) => {
                 console.error('Error querying features:', error);
             });
-    }, [worldImageryUpdatesLayerRef.current, region]);
+
+        // reset the flag to prevent zooming on subsequent region changes
+        dispatch(shouldZoomToSelectedRegionChanged(false));
+    }, [
+        worldImageryUpdatesLayerRef.current,
+        region,
+        shouldZoomToSelectedRegion,
+    ]);
 
     return null;
 };
