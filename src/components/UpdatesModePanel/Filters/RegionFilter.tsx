@@ -14,6 +14,7 @@ import {
     CalciteInputText,
     CalciteLoader,
 } from '@esri/calcite-components-react';
+import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
 
 export const RegionFilter = () => {
     const { t } = useTranslation();
@@ -117,10 +118,10 @@ export const RegionFilter = () => {
                             console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
 
-                            // set the flag to zoom to the selected region
-                            dispatch(shouldZoomToSelectedRegionChanged(true));
+                            // // set the flag to zoom to the selected region
+                            // dispatch(shouldZoomToSelectedRegionChanged(true));
 
-                            dispatch(updatesModeRegionChanged(value));
+                            dispatch(changeSelectedRegionForUpdatesMode(value));
                         }}
                     />
                 </div>
@@ -148,7 +149,9 @@ export const RegionFilter = () => {
                             icon-start="x"
                             scale="s"
                             onClick={() => {
-                                dispatch(updatesModeRegionChanged(''));
+                                dispatch(
+                                    changeSelectedRegionForUpdatesMode('')
+                                );
                                 setSearchTerm('');
                             }}
                         />
