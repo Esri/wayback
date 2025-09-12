@@ -219,15 +219,19 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
     );
 
     const { portalUser } = props;
-    const { role, privileges } = portalUser || {};
+    const { role, privileges, orgId } = portalUser || {};
     // const hasNoPrivilege2CreateContent = userRole === 'org_user';
 
-    // determine if user can create webmap, check the role first, in case this user has custome role,
-    // then check the privileges to see if user has privilige to create content
+    // Determine if the user has privileges to create a web map
+    // Org admins and publishers can create content by default
+    // Other roles need to have 'createItem' privilege
+    // Public accounts (orgId is null) can also create web map (https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor34)
     const canCreateWebmap =
         role === 'org_admin' ||
         role === 'org_publisher' ||
-        (privileges && privileges.some((p) => p.endsWith('createItem')));
+        (privileges && privileges.some((p) => p.endsWith('createItem'))) ||
+        orgId === null ||
+        orgId === undefined; // for public account, orgId is null
 
     return (
         <div className="w-80">
