@@ -233,11 +233,13 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
         orgId === null ||
         orgId === undefined; // for public account, orgId is null
 
+    if (!canCreateWebmap) {
+        return <div className="w-80">{getWarningMessage4OrgUser()}</div>;
+    }
+
     return (
         <div className="w-80">
-            {!isWebmapReady && canCreateWebmap && getEditDialog()}
-            {isWebmapReady && canCreateWebmap && getOpenWebmapContent()}
-            {!canCreateWebmap && getWarningMessage4OrgUser()}
+            {isWebmapReady ? getOpenWebmapContent() : getEditDialog()}
         </div>
     );
 };
