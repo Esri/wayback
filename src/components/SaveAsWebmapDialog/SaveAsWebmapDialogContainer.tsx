@@ -35,8 +35,9 @@ import SaveAsWebMapDialog from './index';
 import { IExtentGeomety, IWaybackItem } from '@typings/index';
 import {
     getPortalBaseUrl,
+    getSignedInUser,
     getToken,
-    getUserRole,
+    // getUserRole,
     isAnonymouns,
     signInUsingDifferentAccount,
 } from '@utils/Esri-OAuth';
@@ -59,6 +60,8 @@ const SaveAsWebmapDialogContainer = () => {
 
     const isOpen: boolean = useAppSelector(isSaveAsWebmapDialogOpenSelector);
 
+    const portalUser = getSignedInUser();
+
     const onCloseHandler = () => {
         dispatch(isSaveAsWebmapDialogOpenToggled());
     };
@@ -75,7 +78,8 @@ const SaveAsWebmapDialogContainer = () => {
                 hasSignedInAlready={isAnonymouns() === false}
                 portalBaseURL={getPortalBaseUrl()}
                 token={getToken()}
-                userRole={getUserRole()}
+                // userRole={getUserRole()}
+                portalUser={portalUser}
                 mapExtent={mapExtent}
                 // onClose={onCloseHandler}
                 signInButtonOnClick={() => {

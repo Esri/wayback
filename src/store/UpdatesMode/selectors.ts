@@ -20,3 +20,6 @@ export const selectWorldImageryUpdatesOutStatistics = (state: RootState) =>
     state.UpdatesMode.outStatistics;
 
 export const selectUpdatesModeState = (state: RootState) => state.UpdatesMode;
+
+export const selectShouldZoomToSelectedRegion = (state: RootState) =>
+    state.UpdatesMode.shouldZoomToSelectedRegion;

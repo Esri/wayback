@@ -79,6 +79,12 @@ export type UpdatesModeState = {
      * out statistics for world imagery updates
      */
     outStatistics: WorldImageryUpdatesOutStatistics;
+    /**
+     * flag to indicate whether to zoom to the selected region when the region changes.
+     * this is used to prevent zooming when the region is changed programmatically (e.g., when the region list is loaded),
+     * should only zoom when the user selects a region from the dropdown.
+     */
+    shouldZoomToSelectedRegion: boolean;
 };
 
 export const initialUpdatesModeState: UpdatesModeState = {
@@ -97,6 +103,7 @@ export const initialUpdatesModeState: UpdatesModeState = {
         areaOfPending: 0,
         areaOfPublished: 0,
     },
+    shouldZoomToSelectedRegion: false,
 };
 
 export const updatesModeSlice = createSlice({
@@ -147,6 +154,12 @@ export const updatesModeSlice = createSlice({
         ) => {
             state.outStatistics = action.payload;
         },
+        shouldZoomToSelectedRegionChanged: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.shouldZoomToSelectedRegion = action.payload;
+        },
     },
 });
 
@@ -160,6 +173,7 @@ export const {
     updatesModeDateFilterChanged,
     updatesModeCustomDateRangeChanged,
     worldImageryUpdatesOutStatisticsChanged,
+    shouldZoomToSelectedRegionChanged,
 } = updatesModeSlice.actions;
 
 export default reducer;

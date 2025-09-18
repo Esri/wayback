@@ -4,13 +4,17 @@ import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
 import { useListOfRegions } from '../hooks/useListOfRegions';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { updatesModeRegionChanged } from '@store/UpdatesMode/reducer';
+import {
+    shouldZoomToSelectedRegionChanged,
+    updatesModeRegionChanged,
+} from '@store/UpdatesMode/reducer';
 import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
 import {
     CalciteButton,
     CalciteInputText,
     CalciteLoader,
 } from '@esri/calcite-components-react';
+import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
 
 export const RegionFilter = () => {
     const { t } = useTranslation();
@@ -114,7 +118,10 @@ export const RegionFilter = () => {
                             console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
 
-                            dispatch(updatesModeRegionChanged(value));
+                            // // set the flag to zoom to the selected region
+                            // dispatch(shouldZoomToSelectedRegionChanged(true));
+
+                            dispatch(changeSelectedRegionForUpdatesMode(value));
                         }}
                     />
                 </div>
@@ -142,7 +149,9 @@ export const RegionFilter = () => {
                             icon-start="x"
                             scale="s"
                             onClick={() => {
-                                dispatch(updatesModeRegionChanged(''));
+                                dispatch(
+                                    changeSelectedRegionForUpdatesMode('')
+                                );
                                 setSearchTerm('');
                             }}
                         />

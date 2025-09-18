@@ -32,9 +32,9 @@ interface IProps {
      */
     hasSignedInAlready: boolean;
     /**
-     * role of signed in user
+     * privileges of signed in user
      */
-    userRole: string;
+    portalUser: __esri.PortalUser;
     /**
      * access token of signe in user
      */
@@ -218,16 +218,28 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
         </div>
     );
 
-    const { userRole } = props;
-    const hasNoPrivilege2CreateContent = userRole === 'org_user';
+    const { portalUser } = props;
+    const { role, privileges, orgId } = portalUser || {};
+    // const hasNoPrivilege2CreateContent = userRole === 'org_user';
+
+    // Determine if the user has privileges to create a web map
+    // Org admins and publishers can create content by default
+    // Other roles need to have 'createItem' privilege
+    // Public accounts (orgId is null) can also create web map (https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor34)
+    const canCreateWebmap =
+        role === 'org_admin' ||
+        role === 'org_publisher' ||
+        (privileges && privileges.some((p) => p.endsWith('createItem'))) ||
+        orgId === null ||
+        orgId === undefined; // for public account, orgId is null
+
+    if (!canCreateWebmap) {
+        return <div className="w-80">{getWarningMessage4OrgUser()}</div>;
+    }
 
     return (
         <div className="w-80">
-            {!isWebmapReady && !hasNoPrivilege2CreateContent && getEditDialog()}
-            {isWebmapReady &&
-                !hasNoPrivilege2CreateContent &&
-                getOpenWebmapContent()}
-            {hasNoPrivilege2CreateContent && getWarningMessage4OrgUser()}
+            {isWebmapReady ? getOpenWebmapContent() : getEditDialog()}
         </div>
     );
 };

@@ -24,7 +24,7 @@ import {
 } from '@utils/LocalStorage';
 import { IExtentGeomety } from '@typings/index';
 import { Switch } from './Switch';
-import { CalciteButton } from '@esri/calcite-components-react';
+import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 // import config from './config';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
@@ -32,6 +32,7 @@ type SaveBtnLabelValue = 'Save' | 'Saved';
 interface IProps {
     mapExtent?: IExtentGeomety;
     signedInAlready?: boolean;
+    signedInUser?: __esri.PortalUser;
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
     // shouldShowLocalChangesByDefaultOnClick: (
     //     shouldShowLocalChangesByDefault: boolean
@@ -171,7 +172,8 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
     // }
 
     render() {
-        const { signedInAlready, toggleSignInBtnOnClick } = this.props;
+        const { signedInAlready, signedInUser, toggleSignInBtnOnClick } =
+            this.props;
         const {
             portalUrl,
             shouldUseCustomPortalUrl,
@@ -194,6 +196,15 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                 onClick={toggleSignInBtnOnClick.bind(this, false)}
             >
                 Sign Out
+            </CalciteButton>
+        );
+
+        const signInBtn = (
+            <CalciteButton
+                appearance="outline"
+                onClick={toggleSignInBtnOnClick.bind(this, true)}
+            >
+                Sign In
             </CalciteButton>
         );
 
@@ -283,9 +294,22 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                     ) : null}
                 </div>
 
+                {signedInUser ? (
+                    <div
+                        className="mb-4 text-sm flex items-center"
+                        data-agol-user-role={signedInUser?.role}
+                    >
+                        <CalciteIcon icon="user" />
+                        <span className="ml-1">
+                            Signed in as{' '}
+                            <strong>{signedInUser?.username}</strong>
+                        </span>
+                    </div>
+                ) : null}
+
                 <div className="flex justify-end">
                     <span className="mr-4">
-                        {signedInAlready ? signOutBtn : null}
+                        {signedInAlready ? signOutBtn : signInBtn}
                     </span>
 
                     <div

@@ -26,7 +26,12 @@ import {
 import { mapExtentSelector } from '@store/Map/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
-import { isAnonymouns, signIn, signOut } from '@utils/Esri-OAuth';
+import {
+    getSignedInUser,
+    isAnonymouns,
+    signIn,
+    signOut,
+} from '@utils/Esri-OAuth';
 import SettingDialogContent from './SettingDialogContent';
 import { Modal } from '@components/Modal/Modal';
 
@@ -38,6 +43,8 @@ const SettingDialogContainer = () => {
     const mapExtent = useAppSelector(mapExtentSelector);
 
     const isOpen = useAppSelector(isSettingModalOpenSelector);
+
+    const user = getSignedInUser();
 
     const onCloseHandler = () => {
         dispatch(isSettingModalOpenToggled());
@@ -71,6 +78,7 @@ const SettingDialogContainer = () => {
         <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
             <SettingDialogContent
                 mapExtent={mapExtent}
+                signedInUser={user}
                 signedInAlready={isAnonymouns() === false}
                 toggleSignInBtnOnClick={toggleSignInBtnOnClick}
             />
