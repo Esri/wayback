@@ -36,5 +36,9 @@
     "open_save_webmap_button_tooltip": "Save these releses in a new Web Map.",
     "open_save_webmap_button_tooltip_disabled": "Choose releses from the list to build a set of Wayback layers for use in a new Web Map.",
     "no_regions_found": "No regions found that match the selected filters.",
-    "error_fetching_regions": "Error fetching regions."
+    "error_fetching_regions": "Error fetching regions.",
+    "sign_out": "Sign out",
+    "sign_in": "Sign in",
+    "signed_in_as": "Signed in as {{user}}",
+    "close": "Close"
 }

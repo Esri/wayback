@@ -61,6 +61,7 @@ import { AppHeader } from '@components/AppHeader';
 import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
+import { UserAccount } from '@components/UserAccount/UserAccount';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -72,17 +73,23 @@ const AppLayout: React.FC = () => {
             <AppHeader />
 
             <Gutter>
-                <ExploreModeToggleButton />
+                <div className="relatice">
+                    <ExploreModeToggleButton />
 
-                <SwipeWidgetToggleBtn />
+                    <SwipeWidgetToggleBtn />
 
-                <AnimationModeToggleBtn />
+                    <AnimationModeToggleBtn />
 
-                <UpdatesModeToggleButton />
+                    <UpdatesModeToggleButton />
 
-                <OpenDownloadPanelBtn />
+                    <OpenDownloadPanelBtn />
 
-                <SaveAsWebmapBtn />
+                    <SaveAsWebmapBtn />
+
+                    <div className="absolute bottom-0 left-0 w-full">
+                        <UserAccount />
+                    </div>
+                </div>
             </Gutter>
 
             <Sidebar />

@@ -39,7 +39,7 @@ const Sidebar: React.FC<Props> = ({
             paddingTop: '.5rem',
             // overflow: hidden;
             boxSizing: 'border-box',
-            zIndex: 10,
+            zIndex: 1,
             // padding: 1rem;
             display: 'flex',
             flexDirection: 'column',
