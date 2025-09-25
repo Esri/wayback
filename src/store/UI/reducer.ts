@@ -31,6 +31,10 @@ export type UIState = {
     isShareModalOpen: boolean;
     isAboutThisAppModalOpen: boolean;
     isSettingModalOpen: boolean;
+    /**
+     * Whether the user profile card is open or not
+     */
+    isUserProfileCardOpen: boolean;
 };
 
 export const initialUIState = {
@@ -42,6 +46,7 @@ export const initialUIState = {
     isShareModalOpen: false,
     isAboutThisAppModalOpen: false,
     isSettingModalOpen: false,
+    isUserProfileCardOpen: false,
 } as UIState;
 
 const slice = createSlice({
@@ -83,6 +88,12 @@ const slice = createSlice({
         isSettingModalOpenToggled: (state) => {
             state.isSettingModalOpen = !state.isSettingModalOpen;
         },
+        userProfileCardOpenToggled: (state, action: PayloadAction<boolean>) => {
+            state.isUserProfileCardOpen =
+                typeof action.payload === 'boolean'
+                    ? action.payload
+                    : !state.isUserProfileCardOpen;
+        },
     },
 });
 
@@ -97,6 +108,7 @@ export const {
     isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
+    userProfileCardOpenToggled,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
@@ -121,5 +133,8 @@ export const isAboutThisAppModalOpenSelector = (state: RootState) =>
 
 export const isSettingModalOpenSelector = (state: RootState) =>
     state.UI.isSettingModalOpen;
+
+export const isUserProfileCardOpenSelector = (state: RootState) =>
+    state.UI.isUserProfileCardOpen;
 
 export default reducer;

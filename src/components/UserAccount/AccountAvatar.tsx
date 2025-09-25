@@ -1,7 +1,7 @@
 import { CalciteIcon } from '@esri/calcite-components-react';
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import { UserData } from './UserAccount';
+import { UserData } from './useUserData';
 import { useTranslation } from 'react-i18next';
 
 // Props for the AccountAvatar component

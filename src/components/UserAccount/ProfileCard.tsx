@@ -2,7 +2,7 @@ import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import useOnClickOutside from '@hooks/useOnClickOutside';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UserData } from './UserAccount';
+import { UserData } from './useUserData';
 
 // Props for the AccountAvatar component
 type Props = {
@@ -19,13 +19,13 @@ type Props = {
      * Emits when the user clicks the avatar to toggle the profile card visibility.
      * @returns Function to toggle the profile card visibility
      */
-    toggleOpenProfileCard: () => void;
+    closeProfileCard: () => void;
 };
 
 export const ProfileCard: FC<Props> = ({
     userData,
     signOutOnClick,
-    toggleOpenProfileCard,
+    closeProfileCard,
 }) => {
     const { t } = useTranslation();
 
@@ -34,13 +34,13 @@ export const ProfileCard: FC<Props> = ({
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     useOnClickOutside(containerRef, () => {
-        toggleOpenProfileCard();
+        closeProfileCard();
     });
 
     return (
         <div
             ref={containerRef}
-            className="absolute left-[115%] bottom-0 w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4 z-20"
+            className="w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4"
         >
             <p className="text-sm " title={userName}>
                 <CalciteIcon icon="user" scale="s" className="mr-1" />
@@ -81,7 +81,7 @@ export const ProfileCard: FC<Props> = ({
                     iconStart="x"
                     scale="s"
                     onClick={() => {
-                        toggleOpenProfileCard();
+                        closeProfileCard();
                     }}
                     label={t('close')}
                 ></CalciteButton>

@@ -61,7 +61,7 @@ import { AppHeader } from '@components/AppHeader';
 import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
-import { UserAccount } from '@components/UserAccount/UserAccount';
+import { AccountAvatar, ProfileCard } from '@components/UserAccount';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -87,7 +87,7 @@ const AppLayout: React.FC = () => {
                     <SaveAsWebmapBtn />
 
                     <div className="absolute bottom-0 left-0 w-full">
-                        <UserAccount />
+                        <AccountAvatar />
                     </div>
                 </div>
             </Gutter>
@@ -135,6 +135,8 @@ const AppLayout: React.FC = () => {
             <SettingDialog />
 
             <DownloadDialog />
+
+            <ProfileCard />
 
             <AboutThisApp />
 
