@@ -36,7 +36,12 @@ const AboutThisAppContainer = () => {
     };
 
     return (
-        <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
+        <Modal
+            title={'World Imagery Wayback'}
+            isOpen={isOpen}
+            width="m"
+            onClose={onCloseHandler}
+        >
             <AboutThiAppContent />
         </Modal>
     );

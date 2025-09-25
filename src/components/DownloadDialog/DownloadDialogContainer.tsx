@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
@@ -43,6 +43,7 @@ import {
     activeDialogUpdated,
     isDownloadTilePackageDialogOpenSelector,
 } from '@store/UI/reducer';
+import { Modal } from '@components/Modal/Modal';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useAppDispatch();
@@ -82,30 +83,56 @@ export const DownloadDialogContainer = () => {
         }
     }, [isOpen]);
 
+    const getTitle = () => {
+        return (
+            <span className="text-2xl mb-8">
+                Wayback Export (
+                <a
+                    href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    beta
+                </a>
+                )
+            </span>
+        );
+    };
+
     if (!isOpen) {
         return null;
     }
 
     return (
-        <DownloadDialog
-            jobs={jobs}
-            isAddingNewDownloadJob={isAddingNewDownloadJob}
-            closeButtonOnClick={() => {
+        <Modal
+            title={getTitle()}
+            isOpen={isOpen}
+            // title="Download Tile Package"
+            onClose={() => {
                 dispatch(activeDialogUpdated());
             }}
-            removeButtonOnClick={(id) => {
-                dispatch(downloadJobRemoved(id));
-            }}
-            levelsOnChange={(id, levels) => {
-                // console.log(id, levels);
-                dispatch(updateUserSelectedZoomLevels(id, levels));
-            }}
-            createTilePackageButtonOnClick={(id: string) => {
-                dispatch(startDownloadJob(id));
-            }}
-            downloadTilePackageButtonOnClick={(id: string) => {
-                dispatch(downloadOutputTilePackage(id));
-            }}
-        />
+            width="xl"
+        >
+            <DownloadDialog
+                jobs={jobs}
+                isAddingNewDownloadJob={isAddingNewDownloadJob}
+                closeButtonOnClick={() => {
+                    dispatch(activeDialogUpdated());
+                }}
+                removeButtonOnClick={(id) => {
+                    dispatch(downloadJobRemoved(id));
+                }}
+                levelsOnChange={(id, levels) => {
+                    // console.log(id, levels);
+                    dispatch(updateUserSelectedZoomLevels(id, levels));
+                }}
+                createTilePackageButtonOnClick={(id: string) => {
+                    dispatch(startDownloadJob(id));
+                }}
+                downloadTilePackageButtonOnClick={(id: string) => {
+                    dispatch(downloadOutputTilePackage(id));
+                }}
+            />
+        </Modal>
     );
 };

@@ -210,7 +210,7 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
 
         return (
             <>
-                <h2 className="text-3xl text-center mb-4">Settings</h2>
+                {/* <h2 className="text-3xl text-center mb-4">Settings</h2> */}
 
                 <div className="mt-2 mb-4">
                     {/* <label className="toggle-switch">

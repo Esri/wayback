@@ -72,7 +72,11 @@ const SaveAsWebmapDialogContainer = () => {
     // }, [isOpen]);
 
     return (
-        <Modal isOpen={isOpen} onClose={onCloseHandler}>
+        <Modal
+            title="Wayback Map Settings:"
+            isOpen={isOpen}
+            onClose={onCloseHandler}
+        >
             <SaveAsWebMapDialog
                 waybackItems={waybackItems}
                 rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}

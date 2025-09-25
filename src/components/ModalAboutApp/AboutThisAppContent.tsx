@@ -38,7 +38,7 @@ export const AboutThiAppContent: React.FC = () => {
 
     return (
         <>
-            <h2 className="text-3xl mb-4 text-center">World Imagery Wayback</h2>
+            {/* <h2 className="text-3xl mb-4 text-center">World Imagery Wayback</h2> */}
             <h5 className="text-xl mb-3">WHAT</h5>
             <p className="mb-6">
                 Wayback is a digital archive, providing users with access to the

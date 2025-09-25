@@ -76,7 +76,12 @@ const SettingDialogContainer = () => {
     // ) : null;
 
     return (
-        <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
+        <Modal
+            title="Settings"
+            isOpen={isOpen}
+            width="m"
+            onClose={onCloseHandler}
+        >
             <SettingDialogContent
                 mapExtent={mapExtent}
                 signedInUser={user}

@@ -13,18 +13,23 @@
  * limitations under the License.
  */
 
-import React, { FC } from 'react';
+import React, { FC, JSX, ReactNode } from 'react';
 import classnames from 'classnames';
 import { CalciteButton } from '@esri/calcite-components-react';
 
 type Props = {
+    /**
+     * Modal title
+     */
+    title: string | JSX.Element | ReactNode;
     isOpen: boolean;
-    width?: 's' | 'm' | 'l';
+    width?: 's' | 'm' | 'l' | 'xl';
     onClose: () => void;
     children?: React.ReactNode;
 };
 
 export const Modal: FC<Props> = ({
+    title,
     isOpen,
     width = 'm',
     children,
@@ -42,15 +47,21 @@ export const Modal: FC<Props> = ({
         >
             <div
                 className={classnames(
-                    'relative mx-8 bg-custom-modal-content-background p-2 py-8',
+                    'relative max-w-full h-auto bg-custom-modal-content-background ',
                     {
-                        'max-w-5xl': width === 'l',
-                        'max-w-3xl': width === 'm',
-                        'max-w-xl': width === 's',
+                        'md:max-w-6xl': width === 'xl',
+                        'md:max-w-5xl': width === 'l',
+                        'md:max-w-3xl': width === 'm',
+                        'md:max-w-xl': width === 's',
                     }
                 )}
             >
-                <div className="absolute right-1 top-1">
+                <div className="flex items-center justify-between pl-4 md:pl-8 pr-4 py-2 border-b border-b-white/10">
+                    <header className="">
+                        <span className="text-3xl">
+                            {title || 'This is the Title'}
+                        </span>
+                    </header>
                     <CalciteButton
                         icon-start="x"
                         scale="l"
@@ -60,7 +71,7 @@ export const Modal: FC<Props> = ({
                     />
                 </div>
 
-                <div className="px-8 pb-2 w-auto max-h-[500px] overflow-y-auto overflow-x-hidden fancy-scrollbar">
+                <div className="px-4 md:px-8 pb-8 pt-2 md:pt-4 max-h-[80vh] overflow-y-auto overflow-x-hidden fancy-scrollbar">
                     {children}
                 </div>
             </div>

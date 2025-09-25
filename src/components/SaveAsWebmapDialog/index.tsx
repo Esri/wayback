@@ -136,8 +136,8 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
         ) : null;
 
         return (
-            <div className="dialog-content">
-                <h5 className="text-xl mb-4">Wayback Map Settings:</h5>
+            <div>
+                {/* <h5 className="text-xl mb-4">Wayback Map Settings:</h5> */}
 
                 <div className="w-full mb-2">
                     <h5>Title</h5>
@@ -234,11 +234,11 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
         orgId === undefined; // for public account, orgId is null
 
     if (!canCreateWebmap) {
-        return <div className="w-80">{getWarningMessage4OrgUser()}</div>;
+        return <div className="w-96">{getWarningMessage4OrgUser()}</div>;
     }
 
     return (
-        <div className="w-80">
+        <div className="w-96">
             {isWebmapReady ? getOpenWebmapContent() : getEditDialog()}
         </div>
     );
