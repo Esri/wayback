@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
+    activeDialogSelector,
     // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
@@ -62,6 +63,8 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
     const { isMobile } = useContext(AppContext);
 
+    const activeDialog = useAppSelector(activeDialogSelector);
+
     const aboutButtonOnClick = () => {
         dispatch(isAboutThisAppModalOpenToggled());
     };
@@ -80,7 +83,8 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
     return (
         <Gutter
-            isMobile={isMobile}
+            // isMobile={isMobile}
+            activeDialog={activeDialog}
             settingsBtnDisabled={settingsBtnDisabled}
             aboutButtonOnClick={aboutButtonOnClick}
             copyButtonOnClick={copyButtonOnClick}

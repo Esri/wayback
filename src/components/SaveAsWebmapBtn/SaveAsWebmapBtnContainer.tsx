@@ -106,6 +106,7 @@ const SaveAsWebmapBtnContainer = () => {
     return (
         <SaveAsWebmapBtn
             selectedWaybackItems={rNum4SelectedWaybackItems}
+            active={isSaveAsWebmapDialogOpen}
             disabled={isDisabled}
             onClick={onClickHandler}
             clearAll={clearAllBtnOnClick}

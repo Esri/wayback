@@ -3,7 +3,7 @@
 }
 
 .gutter-container .gutter-nav-btn {
-    @apply relative cursor-pointer text-center my-1 w-full;
+    @apply relative cursor-pointer text-center py-1 mb-1 w-full flex items-center justify-center;
 }
 
 .is-mobile .gutter-container {

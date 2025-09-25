@@ -17,9 +17,12 @@ import './style.css';
 import React, { FC, useState } from 'react';
 // import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { AppDialogName } from '@store/UI/reducer';
+import classNames from 'classnames';
 
 interface IProps {
-    isMobile: boolean;
+    // isMobile: boolean;
+    activeDialog: AppDialogName;
     settingsBtnDisabled: boolean;
     // shareBtnDisabled: boolean;
     // children: JSX.Element[] | JSX.Element;
@@ -32,8 +35,9 @@ interface IProps {
 }
 
 export const Gutter: FC<IProps> = ({
-    isMobile,
+    // isMobile,
     // shareBtnDisabled,
+    activeDialog,
     settingsBtnDisabled,
     copyButtonOnClick,
     aboutButtonOnClick,
@@ -57,9 +61,11 @@ export const Gutter: FC<IProps> = ({
                 }}
             ></div> */}
 
-            <div className="py-1">
+            <div className="">
                 <div
-                    className="gutter-nav-btn mb-2"
+                    className={classNames('gutter-nav-btn mt-1', {
+                        'bg-black text-white': activeDialog === 'about',
+                    })}
                     // data-modal={AboutThisAppModalConfig['modal-id']}
                     title="About this app"
                     onClick={aboutButtonOnClick}
@@ -67,19 +73,20 @@ export const Gutter: FC<IProps> = ({
                     <CalciteIcon icon="information" scale="l" />
                 </div>
 
-                {/* {!shareBtnDisabled && (
-                    <div
-                        className="gutter-nav-btn mb-1"
-                        // data-modal={ShareModalConfig['modal-id']}
-                        title="Share"
-                        onClick={shareButtonOnClick}
-                    >
-                        <CalciteIcon icon="share" scale="l" />
-                    </div>
-                )} */}
+                <div
+                    className={classNames('gutter-nav-btn', {
+                        disabled: settingsBtnDisabled,
+                        'bg-black text-white': activeDialog === 'setting',
+                    })}
+                    // data-modal={SettingModalConfig['modal-id']}
+                    title="Settings"
+                    onClick={settingButtonOnClick}
+                >
+                    <CalciteIcon icon="gear" scale="l" />
+                </div>
 
                 <div
-                    className="gutter-nav-btn mb-2"
+                    className="gutter-nav-btn mb-0"
                     title={
                         hasCopied2Clipboard
                             ? 'Copied link to clipboard'
@@ -96,17 +103,6 @@ export const Gutter: FC<IProps> = ({
                     }}
                 >
                     <CalciteIcon icon="link" scale="l" />
-                </div>
-
-                <div
-                    className={`gutter-nav-btn ${
-                        settingsBtnDisabled ? 'btn-disabled' : ''
-                    }`}
-                    // data-modal={SettingModalConfig['modal-id']}
-                    title="Settings"
-                    onClick={settingButtonOnClick}
-                >
-                    <CalciteIcon icon="gear" scale="l" />
                 </div>
             </div>
 

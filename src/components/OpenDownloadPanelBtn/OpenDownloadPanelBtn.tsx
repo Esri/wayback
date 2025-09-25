@@ -26,7 +26,10 @@ import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
-import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
+import {
+    isDownloadDialogOpenToggled,
+    isDownloadTilePackageDialogOpenSelector,
+} from '@store/UI/reducer';
 
 export const OpenDownloadPanelBtn = () => {
     const dispatch = useAppDispatch();
@@ -40,6 +43,10 @@ export const OpenDownloadPanelBtn = () => {
     const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
 
     const shouldBeDisabled = numOfJobs === 0;
+
+    const isDownloadDialogOpen = useAppSelector(
+        isDownloadTilePackageDialogOpenSelector
+    );
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -72,12 +79,13 @@ export const OpenDownloadPanelBtn = () => {
     return (
         <div
             className={classnames(
-                'relative w-full text-center my-3 cursor-pointer z-10',
+                'relative w-full text-center my-2 cursor-pointer z-10',
                 // {
                 //     disabled: numOfJobs === 0,
                 // }
                 {
                     'opacity-50': shouldBeDisabled,
+                    'bg-black text-white': isDownloadDialogOpen,
                 }
             )}
             title={
