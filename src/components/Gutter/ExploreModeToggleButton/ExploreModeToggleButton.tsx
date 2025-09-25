@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { selectMapMode } from '@store/Map/reducer';
-import { ModeToggleButton } from '@components/ModeToggleButton';
+import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { updateMapMode } from '@store/Map/thunks';
 

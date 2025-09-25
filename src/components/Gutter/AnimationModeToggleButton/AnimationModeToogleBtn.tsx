@@ -27,7 +27,7 @@ import {
 import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 import { selectMapMode } from '@store/Map/reducer';
-import { ModeToggleButton } from '@components/ModeToggleButton';
+import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { activeDialogSelector } from '@store/UI/reducer';
 
 export const AnimationModeToogleBtn = () => {

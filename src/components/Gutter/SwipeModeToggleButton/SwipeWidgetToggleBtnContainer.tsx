@@ -28,7 +28,7 @@ import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 // import MobileHide from '../MobileVisibility/MobileHide';
 // import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { activeDialogSelector } from '@store/UI/reducer';
-import { ModeToggleButton } from '@components/ModeToggleButton';
+import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 
 export const SwipeModeToggleBtnContainer = () => {
     const dispatch = useAppDispatch();
