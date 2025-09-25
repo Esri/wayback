@@ -1,5 +1,5 @@
 {
-    "open_updates_mode": "Open Updates Mode",
+    "open_updates_mode": "Toggle Updates Mode",
     "updates_mode_header": "Highlight where imagery has been updated or is planned to be updated.",
     "status": "Status",
     "category": "Category",
@@ -40,5 +40,10 @@
     "sign_out": "Sign out",
     "sign_in": "Sign in",
     "signed_in_as": "Signed in as {{user}}",
-    "close": "Close"
+    "close": "Close",
+    "toggle_animation_mode": "Toggle Animation Mode",
+    "toggle_download_panel": "Toggle Open Download Panel",
+    "toggle_save_webmap_panel": "Toggle Open Save Web Map Panel",
+    "toggle_swipe_mode": "Toggle Swipe Mode",
+    "open_explore_mode": "Open Explore Mode"
 }

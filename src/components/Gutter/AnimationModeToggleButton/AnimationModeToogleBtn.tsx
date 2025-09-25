@@ -29,9 +29,12 @@ import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 import { selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { activeDialogSelector } from '@store/UI/reducer';
+import { useTranslation } from 'react-i18next';
 
 export const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     const { isMobile } = useContext(AppContext);
 
@@ -55,7 +58,8 @@ export const AnimationModeToogleBtn = () => {
     return !isMobile ? (
         <ModeToggleButton
             isActive={isActive}
-            tooltip="Toggle Animation Mode"
+            tooltip={t('toggle_animation_mode')}
+            label={t('toggle_animation_mode')}
             icon="play"
             testId="animation-mode-toggle-btn"
             onClick={onClickHandler}

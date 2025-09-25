@@ -52,11 +52,11 @@ export const Modal: FC<Props> = ({
                         'md:max-w-6xl': width === 'xl',
                         'md:max-w-5xl': width === 'l',
                         'md:max-w-3xl': width === 'm',
-                        'md:max-w-xl': width === 's',
+                        'md:max-w-2xl': width === 's',
                     }
                 )}
             >
-                <div className="flex items-center justify-between pl-4 md:pl-8 pr-4 py-2 border-b border-b-white/10">
+                <div className="flex items-center justify-between pl-4 md:pl-8 pr-4 py-3 border-b border-b-white/10">
                     <header className="">
                         <span className="text-3xl">
                             {title || 'This is the Title'}

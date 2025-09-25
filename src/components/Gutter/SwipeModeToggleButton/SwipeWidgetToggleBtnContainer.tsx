@@ -29,9 +29,12 @@ import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 // import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
+import { useTranslation } from 'react-i18next';
 
 export const SwipeModeToggleBtnContainer = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
@@ -54,7 +57,8 @@ export const SwipeModeToggleBtnContainer = () => {
     return (
         <ModeToggleButton
             isActive={active}
-            tooltip="Toggle Swipe Mode"
+            tooltip={t('toggle_swipe_mode')}
+            label={t('toggle_swipe_mode')}
             icon="compare"
             testId="swipe-widget-toggle-btn"
             onClick={onClickHandler}

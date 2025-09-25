@@ -82,7 +82,7 @@ export const DownloadTilePackageDialogToggleButton = () => {
     };
 
     return (
-        <div
+        <button
             className={classnames(
                 'relative w-full text-center my-2 cursor-pointer z-10',
                 // {
@@ -99,6 +99,7 @@ export const DownloadTilePackageDialogToggleButton = () => {
                     ? t('open_download_panel_button_tooltip_disabled')
                     : t('open_download_panel_button_tooltip')
             }
+            aria-label={t('toggle_download_panel')}
             onClick={() => {
                 if (shouldBeDisabled) {
                     return;
@@ -108,6 +109,6 @@ export const DownloadTilePackageDialogToggleButton = () => {
         >
             <CalciteIcon icon="download-to" scale="l" />
             {getIndicator()}
-        </div>
+        </button>
     );
 };

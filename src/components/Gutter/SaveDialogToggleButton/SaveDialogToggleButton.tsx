@@ -63,10 +63,11 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                 }
             )}
         >
-            <div
-                className={classNames('relative', {
+            <button
+                className={classNames('relative w-full', {
                     'cursor-pointer': isActive,
                 })}
+                aria-label={'save as web map'}
                 onClick={onClickHandler}
                 title={tooltipContent}
             >
@@ -77,15 +78,16 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                         <span>{selectedWaybackItems.length}</span>
                     </IndicatorBubble>
                 )}
-            </div>
+            </button>
 
             {isActive && (
-                <div
-                    className="text-center cursor-pointer text-xs"
+                <button
+                    className="w-full text-center cursor-pointer text-xs"
+                    aria-label="clear all selected items"
                     onClick={clearAll}
                 >
                     clear all
-                </div>
+                </button>
             )}
         </div>
     );

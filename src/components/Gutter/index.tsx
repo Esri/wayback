@@ -40,28 +40,30 @@ export const Gutter: FC<IProps> = ({
     return (
         <div className="gutter-container background-theme-blue-diagonal-pattern">
             <div className="pt-1">
-                <div
+                <button
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'about',
                     })}
                     title="About this app"
+                    aria-label="About this app"
                     onClick={aboutButtonOnClick}
                 >
                     <CalciteIcon icon="information" scale="l" />
-                </div>
+                </button>
 
-                <div
+                <button
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'setting',
                     })}
                     // data-modal={SettingModalConfig['modal-id']}
                     title="Settings"
+                    aria-label="Settings"
                     onClick={settingButtonOnClick}
                 >
                     <CalciteIcon icon="gear" scale="l" />
-                </div>
+                </button>
 
                 {/* <div
                     className="gutter-nav-btn mb-0"
