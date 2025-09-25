@@ -35,7 +35,7 @@ export const Modal: FC<Props> = ({
     }
     return (
         <div
-            className="absolute top-0 left-0 lg:left-gutter-width w-full h-full overflow-hidden flex items-center justify-center z-20"
+            className="absolute top-0 left-0 lg:left-gutter-width w-full h-full overflow-hidden flex items-center justify-center z-20 backdrop-blur-sm"
             style={{
                 background: `radial-gradient(circle, rgba(26,61,96,0.95) 50%, rgba(13,31,49,0.95) 100%)`,
             }}

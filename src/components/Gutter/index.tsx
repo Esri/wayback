@@ -23,12 +23,12 @@ import classNames from 'classnames';
 interface IProps {
     // isMobile: boolean;
     activeDialog: AppDialogName;
-    settingsBtnDisabled: boolean;
+    shouldDisableActionButton: boolean;
     // shareBtnDisabled: boolean;
     // children: JSX.Element[] | JSX.Element;
 
     aboutButtonOnClick: () => void;
-    copyButtonOnClick: () => void;
+    // copyButtonOnClick: () => void;
     settingButtonOnClick: () => void;
 
     children?: React.ReactNode;
@@ -38,13 +38,13 @@ export const Gutter: FC<IProps> = ({
     // isMobile,
     // shareBtnDisabled,
     activeDialog,
-    settingsBtnDisabled,
-    copyButtonOnClick,
+    shouldDisableActionButton,
+    // copyButtonOnClick,
     aboutButtonOnClick,
     settingButtonOnClick,
     children,
 }) => {
-    const [hasCopied2Clipboard, setHasCopied2Clipboard] = useState(false);
+    // const [hasCopied2Clipboard, setHasCopied2Clipboard] = useState(false);
 
     return (
         <div
@@ -61,12 +61,12 @@ export const Gutter: FC<IProps> = ({
                 }}
             ></div> */}
 
-            <div className="">
+            <div className="pt-1">
                 <div
-                    className={classNames('gutter-nav-btn mt-1', {
+                    className={classNames('gutter-nav-btn', {
+                        disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'about',
                     })}
-                    // data-modal={AboutThisAppModalConfig['modal-id']}
                     title="About this app"
                     onClick={aboutButtonOnClick}
                 >
@@ -75,7 +75,7 @@ export const Gutter: FC<IProps> = ({
 
                 <div
                     className={classNames('gutter-nav-btn', {
-                        disabled: settingsBtnDisabled,
+                        disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'setting',
                     })}
                     // data-modal={SettingModalConfig['modal-id']}
@@ -85,7 +85,7 @@ export const Gutter: FC<IProps> = ({
                     <CalciteIcon icon="gear" scale="l" />
                 </div>
 
-                <div
+                {/* <div
                     className="gutter-nav-btn mb-0"
                     title={
                         hasCopied2Clipboard
@@ -103,7 +103,7 @@ export const Gutter: FC<IProps> = ({
                     }}
                 >
                     <CalciteIcon icon="link" scale="l" />
-                </div>
+                </div> */}
             </div>
 
             {/* divider with shadow effect */}

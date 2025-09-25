@@ -30,6 +30,7 @@ import {
     isDownloadDialogOpenToggled,
     isDownloadTilePackageDialogOpenSelector,
 } from '@store/UI/reducer';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
 export const OpenDownloadPanelBtn = () => {
     const dispatch = useAppDispatch();
@@ -47,6 +48,10 @@ export const OpenDownloadPanelBtn = () => {
     const isDownloadDialogOpen = useAppSelector(
         isDownloadTilePackageDialogOpenSelector
     );
+
+    const animationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    const shouldDisableActionButton = animationModeOn;
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -84,8 +89,9 @@ export const OpenDownloadPanelBtn = () => {
                 //     disabled: numOfJobs === 0,
                 // }
                 {
-                    'opacity-50': shouldBeDisabled,
+                    'opacity-50 pointer-events-none': shouldBeDisabled,
                     'bg-black text-white': isDownloadDialogOpen,
+                    disabled: shouldDisableActionButton,
                 }
             )}
             title={

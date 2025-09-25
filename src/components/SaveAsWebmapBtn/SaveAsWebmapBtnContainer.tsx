@@ -50,20 +50,19 @@ const SaveAsWebmapBtnContainer = () => {
         releaseNum4SelectedItemsSelector
     );
 
-    const isSwipeWidgetOpen: boolean = useAppSelector(
-        isSwipeWidgetOpenSelector
-    );
+    // const isSwipeWidgetOpen: boolean = useAppSelector(
+    //     isSwipeWidgetOpenSelector
+    // );
     const isAnimationModeOn: boolean = useAppSelector(
         isAnimationModeOnSelector
     );
 
     const isDisabled = useMemo(() => {
         return (
-            isSwipeWidgetOpen ||
-            isAnimationModeOn ||
-            rNum4SelectedWaybackItems?.length === 0
+            // isSwipeWidgetOpen ||
+            isAnimationModeOn || rNum4SelectedWaybackItems?.length === 0
         );
-    }, [isSwipeWidgetOpen, isAnimationModeOn, rNum4SelectedWaybackItems]);
+    }, [isAnimationModeOn, rNum4SelectedWaybackItems]);
 
     const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
         isSaveAsWebmapDialogOpenSelector

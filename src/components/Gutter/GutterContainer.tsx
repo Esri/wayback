@@ -48,16 +48,16 @@ type Props = {
 const GutterContainer: React.FC<Props> = ({ children }) => {
     const dispatch = useAppDispatch();
 
-    const isSwipeWidgetOpen: boolean = useAppSelector(
-        isSwipeWidgetOpenSelector
-    );
+    // const isSwipeWidgetOpen: boolean = useAppSelector(
+    //     isSwipeWidgetOpenSelector
+    // );
     const isAnimationModeOn: boolean = useAppSelector(
         isAnimationModeOnSelector
     );
 
-    const settingsBtnDisabled = useMemo(() => {
-        return isSwipeWidgetOpen || isAnimationModeOn;
-    }, [isSwipeWidgetOpen, isAnimationModeOn]);
+    // const settingsBtnDisabled = useMemo(() => {
+    //     return isSwipeWidgetOpen || isAnimationModeOn;
+    // }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
     // const isHide = useAppSelector(isGutterHideSelector);
 
@@ -85,9 +85,9 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         <Gutter
             // isMobile={isMobile}
             activeDialog={activeDialog}
-            settingsBtnDisabled={settingsBtnDisabled}
+            shouldDisableActionButton={isAnimationModeOn}
             aboutButtonOnClick={aboutButtonOnClick}
-            copyButtonOnClick={copyButtonOnClick}
+            // copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
             <div className="relatice">

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import MapView from '@arcgis/core/views/MapView';
 import { ZoomToExtent } from '@components/ZoomToExtent/ZoomToExtent';
 import { useTranslation } from 'react-i18next';
+import { CopyLink } from '@components/CopyLink/CopyLink';
 
 type Props = {
     mapView?: MapView;
@@ -27,6 +28,8 @@ export const MapActionButtonGroup: FC<Props> = ({ mapView }) => {
                     mapView.zoom = 3;
                 }}
             />
+
+            <CopyLink />
         </div>
     );
 };
