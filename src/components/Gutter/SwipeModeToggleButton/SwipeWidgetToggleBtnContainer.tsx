@@ -30,7 +30,7 @@ import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { ModeToggleButton } from '@components/ModeToggleButton';
 
-const SwipeWidgetToggleBtnContainer = () => {
+export const SwipeModeToggleBtnContainer = () => {
     const dispatch = useAppDispatch();
 
     // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
@@ -62,4 +62,4 @@ const SwipeWidgetToggleBtnContainer = () => {
     );
 };
 
-export default SwipeWidgetToggleBtnContainer;
+// export default SwipeWidgetToggleBtnContainer;

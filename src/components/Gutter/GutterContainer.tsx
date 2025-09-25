@@ -31,15 +31,13 @@ import {
 import { AppContext } from '@contexts/AppContextProvider';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { copy2clipboard } from '@utils/snippets/copy2clipborad';
-import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
-import {
-    AnimationModeToggleBtn,
-    OpenDownloadPanelBtn,
-    SaveAsWebmapBtn,
-    SwipeWidgetToggleBtn,
-} from '..';
-import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
+import { ExploreModeToggleButton } from '@components/Gutter/ExploreModeToggleButton';
+import { UpdatesModeToggleButton } from '@components/Gutter/UpdatesModeToggleButton';
 import { AccountAvatar } from '@components/UserAccount';
+import { SwipeModeToggleBtnContainerButton } from './SwipeModeToggleButton';
+import { AnimationModeToggleButton } from './AnimationModeToggleButton';
+import { DownloadTilePackageDialogToggleButton } from './DownloadTilePackageDialogToggleButton';
+import { SaveWebmapDialogToggleButton } from './SaveDialogToggleButton';
 
 type Props = {
     children?: React.ReactNode;
@@ -90,22 +88,20 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
             // copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
-            <div className="relatice">
-                <ExploreModeToggleButton />
+            <ExploreModeToggleButton />
 
-                <SwipeWidgetToggleBtn />
+            <SwipeModeToggleBtnContainerButton />
 
-                <AnimationModeToggleBtn />
+            <AnimationModeToggleButton />
 
-                <UpdatesModeToggleButton />
+            <UpdatesModeToggleButton />
 
-                <OpenDownloadPanelBtn />
+            <DownloadTilePackageDialogToggleButton />
 
-                <SaveAsWebmapBtn />
+            <SaveWebmapDialogToggleButton />
 
-                <div className="absolute bottom-0 left-0 w-full">
-                    <AccountAvatar />
-                </div>
+            <div className="absolute bottom-0 left-0 w-full">
+                <AccountAvatar />
             </div>
         </Gutter>
     );

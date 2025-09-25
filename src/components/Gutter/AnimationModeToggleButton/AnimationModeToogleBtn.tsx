@@ -30,7 +30,7 @@ import { selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/ModeToggleButton';
 import { activeDialogSelector } from '@store/UI/reducer';
 
-const AnimationModeToogleBtn = () => {
+export const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
 
     const { isMobile } = useContext(AppContext);
@@ -64,4 +64,4 @@ const AnimationModeToogleBtn = () => {
     null;
 };
 
-export default AnimationModeToogleBtn;
+// export default AnimationModeToogleBtn;

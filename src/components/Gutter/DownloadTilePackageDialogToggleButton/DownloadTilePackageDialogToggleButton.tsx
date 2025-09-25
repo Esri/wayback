@@ -32,7 +32,7 @@ import {
 } from '@store/UI/reducer';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
-export const OpenDownloadPanelBtn = () => {
+export const DownloadTilePackageDialogToggleButton = () => {
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();

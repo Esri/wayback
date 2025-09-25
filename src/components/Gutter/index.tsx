@@ -15,22 +15,15 @@
 
 import './style.css';
 import React, { FC, useState } from 'react';
-// import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { AppDialogName } from '@store/UI/reducer';
 import classNames from 'classnames';
 
 interface IProps {
-    // isMobile: boolean;
     activeDialog: AppDialogName;
     shouldDisableActionButton: boolean;
-    // shareBtnDisabled: boolean;
-    // children: JSX.Element[] | JSX.Element;
-
     aboutButtonOnClick: () => void;
-    // copyButtonOnClick: () => void;
     settingButtonOnClick: () => void;
-
     children?: React.ReactNode;
 }
 
@@ -44,23 +37,8 @@ export const Gutter: FC<IProps> = ({
     settingButtonOnClick,
     children,
 }) => {
-    // const [hasCopied2Clipboard, setHasCopied2Clipboard] = useState(false);
-
     return (
-        <div
-            className="gutter-container background-theme-blue-diagonal-pattern"
-            // style={{
-            //     top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
-            // }}
-        >
-            {/* gradient effect on right side of gutter */}
-            {/* <div
-                className="absolute top-header-height left-0 z-0 w-full h-full"
-                style={{
-                    background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
-                }}
-            ></div> */}
-
+        <div className="gutter-container background-theme-blue-diagonal-pattern">
             <div className="pt-1">
                 <div
                     className={classNames('gutter-nav-btn', {

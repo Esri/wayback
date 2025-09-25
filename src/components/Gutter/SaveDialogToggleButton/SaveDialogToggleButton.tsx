@@ -32,7 +32,7 @@ interface IProps {
 }
 
 // interface IState {}
-const SaveAsWebmapBtn: React.FC<IProps> = ({
+export const SaveAsWebmapBtn: React.FC<IProps> = ({
     selectedWaybackItems,
     disabled,
     active,
@@ -91,4 +91,4 @@ const SaveAsWebmapBtn: React.FC<IProps> = ({
     );
 };
 
-export default SaveAsWebmapBtn;
+// export default SaveAsWebmapBtn;

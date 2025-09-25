@@ -6,8 +6,8 @@
     @apply relative cursor-pointer text-center py-[6px] mb-1 w-full flex items-center justify-center;
 }
 
-.is-mobile .gutter-container {
+/* .is-mobile .gutter-container {
     display: block;
     top: 45px;
-}
+} */
 

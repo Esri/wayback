@@ -31,7 +31,7 @@ import {
     setShouldOpenSaveWebMapDialog,
 } from '@utils/LocalStorage';
 
-import SaveAsWebmapBtn from './index';
+import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
 import {
     isSaveAsWebmapDialogOpenSelector,
     isSaveAsWebmapDialogOpenToggled,
@@ -41,7 +41,7 @@ import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import { activeDialogUpdated } from '@store/UI/reducer';
 
-const SaveAsWebmapBtnContainer = () => {
+export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
@@ -112,5 +112,3 @@ const SaveAsWebmapBtnContainer = () => {
         />
     );
 };
-
-export default SaveAsWebmapBtnContainer;
