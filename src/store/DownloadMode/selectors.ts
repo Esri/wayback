@@ -16,8 +16,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../configureStore';
 
-export const selectIsDownloadDialogOpen = (state: RootState) =>
-    state.DownloadMode.isDownloadDialogOpen;
+// export const selectIsDownloadDialogOpen = (state: RootState) =>
+//     state.DownloadMode.isDownloadDialogOpen;
 
 export const selectIsAddingNewDownloadJob = (state: RootState) =>
     state.DownloadMode.isAddingNewDownloadJob;

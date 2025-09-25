@@ -104,6 +104,12 @@ const slice = createSlice({
             state.activeDialog =
                 state.activeDialog === 'setting' ? null : 'setting';
         },
+        isDownloadDialogOpenToggled: (state) => {
+            state.activeDialog =
+                state.activeDialog === 'download-tile-package'
+                    ? null
+                    : 'download-tile-package';
+        },
         userProfileCardOpenToggled: (state, action: PayloadAction<boolean>) => {
             state.isUserProfileCardOpen =
                 typeof action.payload === 'boolean'
@@ -132,10 +138,14 @@ export const {
     isSettingModalOpenToggled,
     userProfileCardOpenToggled,
     activeDialogUpdated,
+    isDownloadDialogOpenToggled,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
     state.UI.activeDialog === 'save';
+
+export const isDownloadTilePackageDialogOpenSelector = (state: RootState) =>
+    state.UI.activeDialog === 'download-tile-package';
 
 export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
     state.UI.shouldOnlyShowItemsWithLocalChange;

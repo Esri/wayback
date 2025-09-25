@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
+// import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
 import {
     selectNumOfDownloadJobs,
     selectNumOfFinishedDownloadJobs,
@@ -26,6 +26,7 @@ import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
+import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
 
 export const OpenDownloadPanelBtn = () => {
     const dispatch = useAppDispatch();

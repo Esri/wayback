@@ -17,13 +17,13 @@ import React, { useEffect } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
-    isDownloadDialogOpenToggled,
+    // isDownloadDialogOpenToggled,
 } from '@store/DownloadMode/reducer';
 
 import {
     selectDownloadJobs,
     selectIsAddingNewDownloadJob,
-    selectIsDownloadDialogOpen,
+    // selectIsDownloadDialogOpen,
     selectNumOfPendingDownloadJobs,
 } from '@store/DownloadMode/selectors';
 
@@ -39,11 +39,15 @@ import {
     downloadOutputTilePackage,
     cleanUpDownloadJobs,
 } from '@store/DownloadMode/thunks';
+import {
+    activeDialogUpdated,
+    isDownloadTilePackageDialogOpenSelector,
+} from '@store/UI/reducer';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useAppDispatch();
 
-    const isOpen = useAppSelector(selectIsDownloadDialogOpen);
+    const isOpen = useAppSelector(isDownloadTilePackageDialogOpenSelector);
 
     const jobs = useAppSelector(selectDownloadJobs);
 
@@ -87,7 +91,7 @@ export const DownloadDialogContainer = () => {
             jobs={jobs}
             isAddingNewDownloadJob={isAddingNewDownloadJob}
             closeButtonOnClick={() => {
-                dispatch(isDownloadDialogOpenToggled());
+                dispatch(activeDialogUpdated());
             }}
             removeButtonOnClick={(id) => {
                 dispatch(downloadJobRemoved(id));

@@ -190,23 +190,23 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
         //     'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent,
         // });
 
-        const signOutBtn = (
-            <CalciteButton
-                appearance="transparent"
-                onClick={toggleSignInBtnOnClick.bind(this, false)}
-            >
-                Sign Out
-            </CalciteButton>
-        );
+        // const signOutBtn = (
+        //     <CalciteButton
+        //         appearance="transparent"
+        //         onClick={toggleSignInBtnOnClick.bind(this, false)}
+        //     >
+        //         Sign Out
+        //     </CalciteButton>
+        // );
 
-        const signInBtn = (
-            <CalciteButton
-                appearance="outline"
-                onClick={toggleSignInBtnOnClick.bind(this, true)}
-            >
-                Sign In
-            </CalciteButton>
-        );
+        // const signInBtn = (
+        //     <CalciteButton
+        //         appearance="outline"
+        //         onClick={toggleSignInBtnOnClick.bind(this, true)}
+        //     >
+        //         Sign In
+        //     </CalciteButton>
+        // );
 
         return (
             <>
@@ -294,7 +294,7 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                     ) : null}
                 </div>
 
-                {signedInUser ? (
+                {/* {signedInUser ? (
                     <div
                         className="mb-4 text-sm flex items-center"
                         data-agol-user-role={signedInUser?.role}
@@ -305,12 +305,12 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                             <strong>{signedInUser?.username}</strong>
                         </span>
                     </div>
-                ) : null}
+                ) : null} */}
 
                 <div className="flex justify-end">
-                    <span className="mr-4">
+                    {/* <span className="mr-4">
                         {signedInAlready ? signOutBtn : signInBtn}
-                    </span>
+                    </span> */}
 
                     <div
                         className={classnames({
