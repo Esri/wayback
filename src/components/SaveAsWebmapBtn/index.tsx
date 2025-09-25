@@ -53,7 +53,7 @@ const SaveAsWebmapBtn: React.FC<IProps> = ({
             className={classNames(
                 'save-as-webmap-btn-container relative w-full text-center',
                 {
-                    'opacity-50': disabled,
+                    'opacity-50 pointer-events-none': disabled,
                 }
             )}
         >

@@ -15,7 +15,7 @@
 
 import { PartialRootState } from './configureStore';
 
-import { initialUIState, UIState } from './UI/reducer';
+import { AppDialogName, initialUIState, UIState } from './UI/reducer';
 import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
 import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IURLParamData, IWaybackItem } from '../types';
@@ -54,10 +54,15 @@ import { getRandomInterestingPlace } from '@utils/interesting-places';
 // const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
+    let activeDialog: AppDialogName | null = null;
+
+    if (getShouldOpenSaveWebMapDialog() && isAnonymouns() === false) {
+        activeDialog = 'save';
+    }
+
     const state: UIState = {
         ...initialUIState,
-        isSaveAsWebmapDialogOpen:
-            getShouldOpenSaveWebMapDialog() && isAnonymouns() === false,
+        activeDialog,
     };
 
     return state;

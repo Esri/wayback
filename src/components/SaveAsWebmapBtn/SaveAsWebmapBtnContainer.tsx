@@ -32,10 +32,14 @@ import {
 } from '@utils/LocalStorage';
 
 import SaveAsWebmapBtn from './index';
-import { isSaveAsWebmapDialogOpenToggled } from '@store/UI/reducer';
+import {
+    isSaveAsWebmapDialogOpenSelector,
+    isSaveAsWebmapDialogOpenToggled,
+} from '@store/UI/reducer';
 import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '@utils/UrlSearchParam';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import { activeDialogUpdated } from '@store/UI/reducer';
 
 const SaveAsWebmapBtnContainer = () => {
     const dispatch = useAppDispatch();
@@ -61,8 +65,17 @@ const SaveAsWebmapBtnContainer = () => {
         );
     }, [isSwipeWidgetOpen, isAnimationModeOn, rNum4SelectedWaybackItems]);
 
+    const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
+        isSaveAsWebmapDialogOpenSelector
+    );
+
     const clearAllBtnOnClick = () => {
         dispatch(releaseNum4SelectedItemsCleaned());
+
+        // close the SaveAsWebmapDialog if it's open since there is no selected items
+        if (isSaveAsWebmapDialogOpen) {
+            dispatch(activeDialogUpdated());
+        }
     };
 
     const onClickHandler = () => {

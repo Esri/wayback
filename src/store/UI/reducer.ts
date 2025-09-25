@@ -22,31 +22,42 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
+export type AppDialogName =
+    | 'about'
+    | 'setting'
+    | 'save'
+    | 'download-tile-package';
+
 export type UIState = {
-    isSaveAsWebmapDialogOpen: boolean;
+    // isSaveAsWebmapDialogOpen: boolean;
     shouldOnlyShowItemsWithLocalChange: boolean;
     shouldShowPreviewItemTitle: boolean;
     // isGutterHide: boolean;
     isSideBarHide: boolean;
-    isShareModalOpen: boolean;
-    isAboutThisAppModalOpen: boolean;
-    isSettingModalOpen: boolean;
+    // isShareModalOpen: boolean;
+    // isAboutThisAppModalOpen: boolean;
+    // isSettingModalOpen: boolean;
     /**
      * Whether the user profile card is open or not
      */
     isUserProfileCardOpen: boolean;
+    /**
+     * The name of the currently active dialog (if any)
+     */
+    activeDialog: AppDialogName | null;
 };
 
 export const initialUIState = {
-    isSaveAsWebmapDialogOpen: false,
+    // isSaveAsWebmapDialogOpen: false,
     shouldOnlyShowItemsWithLocalChange: true,
     shouldShowPreviewItemTitle: false,
     // isGutterHide: false,
     isSideBarHide: false,
-    isShareModalOpen: false,
+    // isShareModalOpen: false,
     isAboutThisAppModalOpen: false,
     isSettingModalOpen: false,
     isUserProfileCardOpen: false,
+    activeDialog: null,
 } as UIState;
 
 const slice = createSlice({
@@ -54,7 +65,8 @@ const slice = createSlice({
     initialState: initialUIState,
     reducers: {
         isSaveAsWebmapDialogOpenToggled: (state) => {
-            state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
+            // state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
+            state.activeDialog = state.activeDialog === 'save' ? null : 'save';
         },
         shouldOnlyShowItemsWithLocalChangeToggled: (
             state,
@@ -79,20 +91,30 @@ const slice = createSlice({
         isSideBarHideToggled: (state) => {
             state.isSideBarHide = !state.isSideBarHide;
         },
-        isShareModalOpenToggled: (state) => {
-            state.isShareModalOpen = !state.isShareModalOpen;
-        },
+        // isShareModalOpenToggled: (state) => {
+        //     state.isShareModalOpen = !state.isShareModalOpen;
+        // },
         isAboutThisAppModalOpenToggled: (state) => {
-            state.isAboutThisAppModalOpen = !state.isAboutThisAppModalOpen;
+            // state.isAboutThisAppModalOpen = !state.isAboutThisAppModalOpen;
+            state.activeDialog =
+                state.activeDialog === 'about' ? null : 'about';
         },
         isSettingModalOpenToggled: (state) => {
-            state.isSettingModalOpen = !state.isSettingModalOpen;
+            // state.isSettingModalOpen = !state.isSettingModalOpen;
+            state.activeDialog =
+                state.activeDialog === 'setting' ? null : 'setting';
         },
         userProfileCardOpenToggled: (state, action: PayloadAction<boolean>) => {
             state.isUserProfileCardOpen =
                 typeof action.payload === 'boolean'
                     ? action.payload
                     : !state.isUserProfileCardOpen;
+        },
+        activeDialogUpdated: (
+            state,
+            action: PayloadAction<AppDialogName | null>
+        ) => {
+            state.activeDialog = action.payload;
         },
     },
 });
@@ -105,14 +127,15 @@ export const {
     shouldShowPreviewItemTitleToggled,
     // isGutterHideToggled,
     isSideBarHideToggled,
-    isShareModalOpenToggled,
+    // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
     userProfileCardOpenToggled,
+    activeDialogUpdated,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
-    state.UI.isSaveAsWebmapDialogOpen;
+    state.UI.activeDialog === 'save';
 
 export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
     state.UI.shouldOnlyShowItemsWithLocalChange;
@@ -125,16 +148,18 @@ export const shouldShowPreviewItemTitleSelector = (state: RootState) =>
 export const isSideBarHideSelector = (state: RootState) =>
     state.UI.isSideBarHide;
 
-export const isShareModalOpenSelector = (state: RootState) =>
-    state.UI.isShareModalOpen;
+// export const isShareModalOpenSelector = (state: RootState) =>
+//     state.UI.isShareModalOpen;
 
 export const isAboutThisAppModalOpenSelector = (state: RootState) =>
-    state.UI.isAboutThisAppModalOpen;
+    state.UI.activeDialog === 'about';
 
 export const isSettingModalOpenSelector = (state: RootState) =>
-    state.UI.isSettingModalOpen;
+    state.UI.activeDialog === 'setting';
 
 export const isUserProfileCardOpenSelector = (state: RootState) =>
     state.UI.isUserProfileCardOpen;
+
+export const activeDialogSelector = (state: RootState) => state.UI.activeDialog;
 
 export default reducer;

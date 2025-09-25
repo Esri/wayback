@@ -18,8 +18,9 @@ import React, { useContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    activeDialogUpdated,
     isSaveAsWebmapDialogOpenSelector,
-    isSaveAsWebmapDialogOpenToggled,
+    // isSaveAsWebmapDialogOpenToggled,
 } from '@store/UI/reducer';
 
 import { mapExtentSelector } from '@store/Map/reducer';
@@ -63,7 +64,7 @@ const SaveAsWebmapDialogContainer = () => {
     const portalUser = getSignedInUser();
 
     const onCloseHandler = () => {
-        dispatch(isSaveAsWebmapDialogOpenToggled());
+        dispatch(activeDialogUpdated());
     };
 
     // useEffect(() => {

@@ -18,8 +18,9 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    activeDialogUpdated,
     isAboutThisAppModalOpenSelector,
-    isAboutThisAppModalOpenToggled,
+    // isAboutThisAppModalOpenToggled,
 } from '@store/UI/reducer';
 
 import { AboutThiAppContent } from './AboutThisAppContent';
@@ -31,7 +32,7 @@ const AboutThisAppContainer = () => {
     const dispatch = useAppDispatch();
 
     const onCloseHandler = () => {
-        dispatch(isAboutThisAppModalOpenToggled());
+        dispatch(activeDialogUpdated());
     };
 
     return (

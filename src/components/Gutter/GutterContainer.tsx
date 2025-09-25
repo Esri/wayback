@@ -22,7 +22,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
-    isShareModalOpenToggled,
+    // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
     // isGutterHideSelector,
