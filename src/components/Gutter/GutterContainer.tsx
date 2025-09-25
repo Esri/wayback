@@ -30,9 +30,18 @@ import {
 import { AppContext } from '@contexts/AppContextProvider';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { copy2clipboard } from '@utils/snippets/copy2clipborad';
+import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
+import {
+    AnimationModeToggleBtn,
+    OpenDownloadPanelBtn,
+    SaveAsWebmapBtn,
+    SwipeWidgetToggleBtn,
+} from '..';
+import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
+import { AccountAvatar } from '@components/UserAccount';
 
 type Props = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
 };
 
 const GutterContainer: React.FC<Props> = ({ children }) => {
@@ -77,7 +86,23 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
             copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
-            {children}
+            <div className="relatice">
+                <ExploreModeToggleButton />
+
+                <SwipeWidgetToggleBtn />
+
+                <AnimationModeToggleBtn />
+
+                <UpdatesModeToggleButton />
+
+                <OpenDownloadPanelBtn />
+
+                <SaveAsWebmapBtn />
+
+                <div className="absolute bottom-0 left-0 w-full">
+                    <AccountAvatar />
+                </div>
+            </div>
         </Gutter>
     );
 };

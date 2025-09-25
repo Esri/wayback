@@ -23,8 +23,9 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-import { toggleAnimationMode } from '../AnimationMode/reducer';
-import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
+// import { toggleAnimationMode } from '../AnimationMode/reducer';
+import { MapMode, selectMapMode } from '@store/Map/reducer';
+import { updateMapMode } from '@store/Map/thunks';
 
 export type SwipeViewState = {
     // isSwipeWidgetOpen: boolean;
@@ -83,7 +84,7 @@ export const toggleSwipeWidget =
 
         const newMode: MapMode = mode === 'swipe' ? 'explore' : 'swipe';
 
-        dispatch(mapModeChanged(newMode));
+        dispatch(updateMapMode(newMode));
 
         // const { AnimationMode } = getState();
 

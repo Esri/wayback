@@ -28,6 +28,7 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 import { selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/ModeToggleButton';
+import { activeDialogSelector } from '@store/UI/reducer';
 
 const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
@@ -41,9 +42,11 @@ const AnimationModeToogleBtn = () => {
     // // if swipe widget is on, the animation button should be set to semi-transparent
     // const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
+    const activeDialog = useAppSelector(activeDialogSelector);
+
     const isActive = useMemo(() => {
-        return mode === 'animation';
-    }, [mode]);
+        return mode === 'animation' && !activeDialog;
+    }, [mode, activeDialog]);
 
     const onClickHandler = useCallback(() => {
         dispatch(toggleAnimationMode());

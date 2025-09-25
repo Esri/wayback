@@ -25,7 +25,8 @@ import {
 // import { IWaybackItem } from '@typings/index';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
-import { MapMode, mapModeChanged, selectMapMode } from '@store/Map/reducer';
+import { MapMode, selectMapMode } from '@store/Map/reducer';
+import { updateMapMode } from '@store/Map/thunks';
 
 // import { isSwipeWidgetOpenToggled } from '../Swipe/reducer';
 
@@ -159,7 +160,7 @@ export const toggleAnimationMode =
 
         const newMode: MapMode = mode === 'animation' ? 'explore' : 'animation';
 
-        dispatch(mapModeChanged(newMode));
+        dispatch(updateMapMode(newMode));
     };
 
 export const selectAnimationStatus = (state: RootState) =>

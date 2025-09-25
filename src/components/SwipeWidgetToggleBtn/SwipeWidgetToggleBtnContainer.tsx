@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -22,32 +22,43 @@ import {
     toggleSwipeWidget,
 } from '@store/Swipe/reducer';
 
-import { metadataQueryResultUpdated } from '@store/Map/reducer';
+import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 
-import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
-import MobileHide from '../MobileVisibility/MobileHide';
-import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+// import SwipeWidgetToggleBtn from './SwipeWidgetToggleBtn';
+// import MobileHide from '../MobileVisibility/MobileHide';
+// import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+import { activeDialogSelector } from '@store/UI/reducer';
+import { ModeToggleButton } from '@components/ModeToggleButton';
 
 const SwipeWidgetToggleBtnContainer = () => {
     const dispatch = useAppDispatch();
 
-    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+    // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
-    const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
+    // const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
+
+    const mode = useAppSelector(selectMapMode);
+
+    const activeDialog = useAppSelector(activeDialogSelector);
 
     const onClickHandler = () => {
         dispatch(metadataQueryResultUpdated(null));
         dispatch(toggleSwipeWidget());
     };
 
+    const active = useMemo(
+        () => mode === 'swipe' && !activeDialog,
+        [mode, activeDialog]
+    );
+
     return (
-        <MobileHide>
-            <SwipeWidgetToggleBtn
-                useDisabledStyle={isAnimationModeOn}
-                active={isSwipeWidgetOpen}
-                onClickHandler={onClickHandler}
-            />
-        </MobileHide>
+        <ModeToggleButton
+            isActive={active}
+            tooltip="Toggle Swipe Mode"
+            icon="compare"
+            testId="swipe-widget-toggle-btn"
+            onClick={onClickHandler}
+        />
     );
 };
 

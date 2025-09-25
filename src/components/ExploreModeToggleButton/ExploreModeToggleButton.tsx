@@ -2,8 +2,10 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
-import { mapModeChanged, selectMapMode } from '@store/Map/reducer';
+import { selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/ModeToggleButton';
+import { activeDialogSelector } from '@store/UI/reducer';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const ExploreModeToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -12,7 +14,12 @@ export const ExploreModeToggleButton = () => {
 
     const mode = useAppSelector(selectMapMode);
 
-    const isActive = useMemo(() => mode === 'explore', [mode]);
+    const activeDialog = useAppSelector(activeDialogSelector);
+
+    const isActive = useMemo(
+        () => !activeDialog && mode === 'explore',
+        [mode, activeDialog]
+    );
 
     if (isMobile) {
         return null;
@@ -24,7 +31,7 @@ export const ExploreModeToggleButton = () => {
             tooltip="Open Explore Mode"
             icon="list-button"
             testId="explore-mode-toggle-btn"
-            onClick={() => dispatch(mapModeChanged('explore'))}
+            onClick={() => dispatch(updateMapMode('explore'))}
         />
     );
 };
