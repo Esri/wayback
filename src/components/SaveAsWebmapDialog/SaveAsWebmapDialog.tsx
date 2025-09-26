@@ -265,7 +265,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                         components={{
                             action: (
                                 <span
-                                    className="font-medium underline cursor-pointer text-custom-theme-blue-light"
+                                    className="font-semibold underline cursor-pointer"
                                     onClick={() => {
                                         if (props.signInButtonOnClick) {
                                             props.signInButtonOnClick();

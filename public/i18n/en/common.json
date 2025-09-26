@@ -56,5 +56,9 @@
     "creating_wayback_map": "Creating web map...",
     "arcgis_public_account": "ArcGIS Public Account with limited functionality",
     "user_of_org": "{{username}} of {{orgName}}",
-    "user_of_public_account": "{{username}} (An ArcGIS Public Account with limited functionality)"
+    "user_of_public_account": "{{username}} (An ArcGIS Public Account with limited functionality)",
+    "select_release": "Select Release {{releaseDate}}",
+    "learn_more_about_release": "Learn more about this release",
+    "remove_release_from_webmap": "Remove this release from your ArcGIS Online web map",
+    "add_release_to_webmap": "Add this release to an ArcGIS Online web map"
 }

@@ -44,8 +44,9 @@ video, img {
 }
 
 a {
-    color: #0079c1;
-    text-decoration: none;
+    /* color: #0079c1; */
+    /* text-decoration: none; */
+    @apply text-custom-theme-blue-light hover:underline;
 }
 
 input, textarea { 
