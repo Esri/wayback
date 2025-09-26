@@ -194,6 +194,18 @@ export const getCredential = (): Credential => {
     return credential;
 };
 
+/**
+ * Check and see if user is signed in with an ArcGIS Public account
+ * @returns boolean return true if signed in with an ArcGIS Public account
+ */
+export const isSignedInWithArcGISPublicAccount = (): boolean => {
+    if (!userPortal) {
+        return false;
+    }
+
+    return !userPortal?.user?.orgId;
+};
+
 export const revalidateToken = async () => {
     // abort if not signed-in yet
     if (isAnonymouns()) {
@@ -222,4 +234,22 @@ export const revalidateToken = async () => {
         // sign out if user token is invalid, means user has signed out from somewhere else
         signOut();
     }
+};
+
+/**
+ * Get URL of Profile and Settings page on ArcGIS Online
+ * @returns
+ */
+export const getProfileSettingsURL = () => {
+    if (isAnonymouns()) {
+        return '';
+    }
+
+    const portalBaseUrl = getPortalBaseUrl();
+
+    if (!portalBaseUrl) {
+        return '';
+    }
+
+    return `${portalBaseUrl}/home/user.html#settings`;
 };

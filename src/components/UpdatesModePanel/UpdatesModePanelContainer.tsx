@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UpdatesModeHeader } from './UpdatesModeHeader';
 import { StatusFilter } from './Filters/StatusFilter';
 import { CategoryFilter } from './Filters/CategoryFilter';
 import { DateFilter } from './Filters/DateFilter';
 import { RegionFilter } from './Filters/RegionFilter';
-import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import { signIn, signInUsingDifferentAccount } from '@utils/Esri-OAuth';
 import classNames from 'classnames';
+import { AppContext } from '@contexts/AppContextProvider';
 
 export const UpdatesPanelContainer = () => {
     // useEffect(() => {
@@ -14,7 +15,10 @@ export const UpdatesPanelContainer = () => {
     //     }
     // }, []);
 
-    const notSignedIn = isAnonymouns();
+    const { notSignedIn, signedInWithArcGISPublicAccount } =
+        useContext(AppContext);
+
+    const disabled = notSignedIn || signedInWithArcGISPublicAccount;
 
     return (
         <div
@@ -25,20 +29,25 @@ export const UpdatesPanelContainer = () => {
         >
             <UpdatesModeHeader
                 showSignInPrompt={notSignedIn}
+                showSignInWithOrgAccountPrompt={signedInWithArcGISPublicAccount}
                 signInButtonOnClick={() => {
-                    signIn();
+                    if (notSignedIn) {
+                        signIn();
+                    } else {
+                        signInUsingDifferentAccount();
+                    }
                 }}
             />
 
             <div
                 className={classNames({
-                    disabled: notSignedIn,
+                    disabled: disabled,
                 })}
             >
-                <CategoryFilter disabled={notSignedIn} />
-                <StatusFilter disabled={notSignedIn} />
-                <DateFilter disabled={notSignedIn} />
-                <RegionFilter disabled={notSignedIn} />
+                <CategoryFilter disabled={disabled} />
+                <StatusFilter disabled={disabled} />
+                <DateFilter disabled={disabled} />
+                <RegionFilter disabled={disabled} />
             </div>
         </div>
     );

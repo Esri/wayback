@@ -41,6 +41,11 @@ type Props = {
      */
     promptToSignIn: boolean;
     /**
+     * if true, the user is signed in with an ArcGIS public account and should be prompted to sign in with an organizational account
+     * to access download features
+     */
+    promptToSignInWithOrgAccount: boolean;
+    /**
      * fires when user clicks on the create tile package button to start the download job
      * @param id job id
      * @returns
@@ -81,6 +86,7 @@ export const DownloadDialog: FC<Props> = ({
     isAddingNewDownloadJob,
     disabled,
     promptToSignIn,
+    promptToSignInWithOrgAccount,
     createTilePackageButtonOnClick,
     downloadTilePackageButtonOnClick,
     closeButtonOnClick,
@@ -116,10 +122,14 @@ export const DownloadDialog: FC<Props> = ({
     return (
         <div className="mt-2">
             <div className="max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
-                {promptToSignIn && (
+                {(promptToSignIn || promptToSignInWithOrgAccount) && (
                     <p className="mb-4">
                         <Trans
-                            i18nKey="sign_in_prompt_download_panel"
+                            i18nKey={
+                                promptToSignIn
+                                    ? 'sign_in_prompt_download_panel'
+                                    : 'sign_in_with_org_account_prompt_download_panel'
+                            }
                             components={{
                                 action: (
                                     <span

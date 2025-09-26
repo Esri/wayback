@@ -8,31 +8,42 @@ type UpdatesModeHeaderProps = {
      */
     showSignInPrompt: boolean;
     /**
+     * If true, shows a prompt to sign in with an ArcGIS organizational account.
+     */
+    showSignInWithOrgAccountPrompt: boolean;
+    /**
      * Emits when the sign-in action is triggered.
      * @returns void
      */
     signInButtonOnClick: () => void;
 };
 
+const SignInLinkClassName =
+    'font-medium underline cursor-pointer text-custom-theme-blue-light';
+
 export const UpdatesModeHeader: FC<UpdatesModeHeaderProps> = ({
     showSignInPrompt,
+    showSignInWithOrgAccountPrompt,
     signInButtonOnClick,
 }) => {
     const { t } = useTranslation();
     return (
         <div className="text-white font-light text-sm mb-2">
-            {showSignInPrompt ? (
-                <h3 className="">
+            {showSignInPrompt || showSignInWithOrgAccountPrompt ? (
+                <p className="">
                     {/* {t('sign_in_prompt_updates_mode')} */}
 
                     <Trans
-                        i18nKey="sign_in_prompt_updates_mode"
+                        i18nKey={
+                            showSignInPrompt
+                                ? 'sign_in_prompt_updates_mode'
+                                : 'sign_in_with_org_account_prompt_updates_mode'
+                        }
                         components={{
                             action: (
                                 <span
-                                    className="font-medium underline cursor-pointer text-custom-theme-blue-light"
+                                    className={SignInLinkClassName}
                                     onClick={() => {
-                                        // console.log('Sign in clicked')
                                         if (signInButtonOnClick) {
                                             signInButtonOnClick();
                                         }
@@ -41,7 +52,7 @@ export const UpdatesModeHeader: FC<UpdatesModeHeaderProps> = ({
                             ),
                         }}
                     />
-                </h3>
+                </p>
             ) : (
                 <h3>{t('updates_mode_header')}</h3>
             )}

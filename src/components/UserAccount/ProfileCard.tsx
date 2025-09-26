@@ -29,7 +29,8 @@ export const ProfileCard: FC<Props> = ({
 }) => {
     const { t } = useTranslation();
 
-    const { userName, orgName } = userData || {};
+    const { userName, userFullName, orgName, profileSettingsPageURL } =
+        userData || {};
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -42,20 +43,35 @@ export const ProfileCard: FC<Props> = ({
             ref={containerRef}
             className="w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4"
         >
-            <p className="text-sm " title={userName}>
-                <CalciteIcon icon="user" scale="s" className="mr-1" />
-                <span>{t('signed_in_as', { user: userName })}</span>
-            </p>
-            {orgName && (
-                <p className="text-sm mb-2 " title={orgName}>
-                    <CalciteIcon
-                        icon="organization"
-                        scale="s"
-                        className="mr-1"
-                    />
-                    <span>{orgName}</span>
-                </p>
-            )}
+            <div className="flex mb-4">
+                {/* <div className='shrink-0'>
+                    <CalciteIcon icon="user" scale="s" className="mr-1" />
+                </div> */}
+
+                <div className="ml-1 break-words">
+                    <div className="flex items-center text-sm font-medium ">
+                        <a
+                            href={profileSettingsPageURL}
+                            target="_blank"
+                            className="underline text-white" rel="noreferrer"
+                        >
+                            {userFullName || userName}
+                        </a>
+                    </div>
+
+                    <p className="text-xs mb-1">
+                        {orgName
+                            ? t('user_of_org', {
+                                  orgName: orgName,
+                                  username: userName,
+                              })
+                            : t('user_of_public_account', {
+                                  username: userName,
+                              })}
+                    </p>
+                </div>
+            </div>
+
             <CalciteButton
                 appearance="outline"
                 kind="inverse"
@@ -66,7 +82,7 @@ export const ProfileCard: FC<Props> = ({
                 }}
                 label={t('sign_out')}
             >
-                <span className="underline">{t('sign_out')}</span>
+                <span>{t('sign_out')}</span>
             </CalciteButton>
 
             <div

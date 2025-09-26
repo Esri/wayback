@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useContext, useEffect, useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
@@ -30,7 +30,11 @@ import {
 import { DownloadDialog } from './DownloadDialog';
 import { useAppDispatch } from '@store/configureStore';
 import { updateHashParams } from '@utils/UrlSearchParam';
-import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import {
+    isAnonymouns,
+    signIn,
+    signInUsingDifferentAccount,
+} from '@utils/Esri-OAuth';
 import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
 import {
     checkPendingDownloadJobStatus,
@@ -44,6 +48,7 @@ import {
     isDownloadTilePackageDialogOpenSelector,
 } from '@store/UI/reducer';
 import { Modal } from '@components/Modal/Modal';
+import { AppContext } from '@contexts/AppContextProvider';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useAppDispatch();
@@ -56,11 +61,20 @@ export const DownloadDialogContainer = () => {
 
     const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
 
-    const notSignedIn = useMemo(() => isAnonymouns(), []);
+    // const notSignedIn = useMemo(() => isAnonymouns(), []);
+
+    const {
+        notSignedIn,
+        // withArcGISPublicAccount: signedInWithArcGISPublicAccount,
+        signedInWithArcGISPublicAccount,
+    } = useContext(AppContext);
 
     const isDisabled = useMemo(
-        () => notSignedIn || isAddingNewDownloadJob,
-        [notSignedIn, isAddingNewDownloadJob]
+        () =>
+            notSignedIn ||
+            signedInWithArcGISPublicAccount ||
+            isAddingNewDownloadJob,
+        [notSignedIn, signedInWithArcGISPublicAccount, isAddingNewDownloadJob]
     );
 
     useEffect(() => {
@@ -125,6 +139,7 @@ export const DownloadDialogContainer = () => {
                 isAddingNewDownloadJob={isAddingNewDownloadJob}
                 disabled={isDisabled}
                 promptToSignIn={notSignedIn}
+                promptToSignInWithOrgAccount={signedInWithArcGISPublicAccount}
                 closeButtonOnClick={() => {
                     dispatch(activeDialogUpdated());
                 }}
@@ -142,7 +157,11 @@ export const DownloadDialogContainer = () => {
                     dispatch(downloadOutputTilePackage(id));
                 }}
                 signInButtonOnClick={() => {
-                    signIn();
+                    if (notSignedIn) {
+                        signIn();
+                    } else {
+                        signInUsingDifferentAccount();
+                    }
                 }}
             />
         </Modal>

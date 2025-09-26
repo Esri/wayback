@@ -48,8 +48,13 @@
     "open_explore_mode": "Open Explore Mode",
     "regions_cannot_be_fetched": "Regions cannot be fetched at this time.",
     "sign_in_prompt_updates_mode": "<action>Sign in</action> to your ArcGIS Online account first to see where imagery has been updated or is planned to be updated.",
+    "sign_in_with_org_account_prompt_updates_mode": "You are signed in with an ArcGIS Online public account. <action>Sign in</action> with an ArcGIS organizational account to access this feature.",
     "sign_in_prompt_download_panel": "<action>Sign in</action> to your ArcGIS Online account first to use Wayback Export features.",
+    "sign_in_with_org_account_prompt_download_panel": "You are signed in with an ArcGIS Online public account. <action>Sign in</action> with an ArcGIS organizational account to access Wayback Export features.",
     "sign_in_prompt_save_webmap_panel": "<action>Sign in</action> to your ArcGIS Online account first to save Wayback layers in a new Web Map.",
     "create_wayback_map": "Create a Web Map",
-    "creating_wayback_map": "Creating web map..."
+    "creating_wayback_map": "Creating web map...",
+    "arcgis_public_account": "ArcGIS Public Account with limited functionality",
+    "user_of_org": "{{username}} of {{orgName}}",
+    "user_of_public_account": "{{username}} (An ArcGIS Public Account with limited functionality)"
 }

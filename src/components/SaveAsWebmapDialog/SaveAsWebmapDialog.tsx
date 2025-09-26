@@ -220,7 +220,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
 
     const getWarningMessage4OrgUser = () => (
         <div>
-            <p>
+            <p className="mb-2">
                 You signed in using a account that does not have privilege to
                 create content in your ArcGIS Online organization.
             </p>

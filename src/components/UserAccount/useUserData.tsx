@@ -1,4 +1,4 @@
-import { getSignedInUser } from '@utils/Esri-OAuth';
+import { getProfileSettingsURL, getSignedInUser } from '@utils/Esri-OAuth';
 import { useMemo } from 'react';
 
 export type UserData = {
@@ -6,6 +6,7 @@ export type UserData = {
     userFullName: string;
     userName: string;
     orgName: string;
+    profileSettingsPageURL: string;
 };
 
 export const useUserData = (): UserData => {
@@ -18,6 +19,7 @@ export const useUserData = (): UserData => {
                 userFullName: '',
                 userName: '',
                 orgName: '',
+                profileSettingsPageURL: '',
             };
         }
         return {
@@ -25,6 +27,7 @@ export const useUserData = (): UserData => {
             userFullName: signedInUser.fullName || '',
             userName: signedInUser.username || '',
             orgName: signedInUser.portal?.name || '',
+            profileSettingsPageURL: getProfileSettingsURL(),
         };
     }, [signedInUser]);
 
