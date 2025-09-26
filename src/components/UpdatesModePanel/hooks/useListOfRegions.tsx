@@ -3,10 +3,9 @@ import { useAsync } from '@hooks/useAsync';
 import { getListOfCountries } from '@services/world-imagery-updates/getListOfCountries';
 import { useAppSelector } from '@store/configureStore';
 import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
-import { isAnonymouns } from '@utils/Esri-OAuth';
 import React, { useEffect } from 'react';
 
-export const useListOfRegions = () => {
+export const useListOfRegions = (shouldSkipFetechRegions: boolean) => {
     const category = useAppSelector(selectUpdatesModeCategory);
 
     const [listOfRegions, setListOfRegions] = React.useState<string[]>([]);
@@ -21,11 +20,9 @@ export const useListOfRegions = () => {
     useEffect(() => {
         (async () => {
             try {
-                if (isAnonymouns()) {
-                    setListOfRegions([]);
-                    console.warn(
-                        'User is not signed in. Skipping fetch of regions.'
-                    );
+                if (shouldSkipFetechRegions) {
+                    // setListOfRegions([]);
+                    console.warn('Skipping fetch of regions.');
                     return;
                 }
 
@@ -38,7 +35,7 @@ export const useListOfRegions = () => {
                 setListOfRegions([]);
             }
         })();
-    }, [category, whereClause]);
+    }, [category, whereClause, shouldSkipFetechRegions]);
 
     return {
         listOfRegions,

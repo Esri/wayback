@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
@@ -10,7 +10,14 @@ import {
 import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';
 import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
 
-export const CategoryFilter = () => {
+type CategoryFilterProps = {
+    /**
+     * If true, the filter will be disabled and not interactable.
+     */
+    disabled: boolean;
+};
+
+export const CategoryFilter: FC<CategoryFilterProps> = ({ disabled }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -60,6 +67,7 @@ export const CategoryFilter = () => {
             <RadioButtonGroup
                 name="category-filter"
                 data={data}
+                disabled={disabled || false}
                 onClick={(value: string) => {
                     console.log(`Selected category: ${value}`);
                     // Handle the category selection change here

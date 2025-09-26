@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
@@ -17,7 +17,14 @@ import {
     CalciteLabel,
 } from '@esri/calcite-components-react';
 
-export const DateFilter = () => {
+type DateFilterProps = {
+    /**
+     * If true, the filter will be disabled and not interactable.
+     */
+    disabled?: boolean;
+};
+
+export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -132,6 +139,7 @@ export const DateFilter = () => {
             <RadioButtonGroup
                 name="date-filter"
                 data={data}
+                disabled={disabled || false}
                 onClick={(value: string) => {
                     console.log(`Selected date filter: ${value}`);
                     // Handle the date selection change here

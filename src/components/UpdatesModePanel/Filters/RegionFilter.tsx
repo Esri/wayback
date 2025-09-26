@@ -29,7 +29,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
 
     const dispatch = useAppDispatch();
 
-    const { listOfRegions, isLoading, error } = useListOfRegions();
+    const { listOfRegions, isLoading, error } = useListOfRegions(disabled);
 
     const selectedRegion = useAppSelector(selectUpdatesModeRegion);
 
@@ -130,6 +130,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                     <RadioButtonGroup
                         name="region-filter"
                         data={filteredData}
+                        disabled={disabled || false}
                         onClick={(value: string) => {
                             console.log(`Selected region: ${value}`);
                             // Handle the region selection change here

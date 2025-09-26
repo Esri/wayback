@@ -23,16 +23,21 @@ export const UpdatesPanelContainer = () => {
                 maxHeight: 'calc(100vh - 60px)',
             }}
         >
-            <UpdatesModeHeader />
+            <UpdatesModeHeader
+                showSignInPrompt={notSignedIn}
+                signInButtonOnClick={() => {
+                    signIn();
+                }}
+            />
 
             <div
                 className={classNames({
                     disabled: notSignedIn,
                 })}
             >
-                <CategoryFilter />
-                <StatusFilter />
-                <DateFilter />
+                <CategoryFilter disabled={notSignedIn} />
+                <StatusFilter disabled={notSignedIn} />
+                <DateFilter disabled={notSignedIn} />
                 <RegionFilter disabled={notSignedIn} />
             </div>
         </div>

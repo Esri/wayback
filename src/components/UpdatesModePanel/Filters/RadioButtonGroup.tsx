@@ -27,22 +27,44 @@ type Props = {
      */
     name: string;
     data: RadioButtonData[];
+    disabled: boolean;
     onClick?: (value: string) => void;
 };
 
-export const RadioButtonGroup: FC<Props> = ({ name, data, onClick }) => {
+export const RadioButtonGroup: FC<Props> = ({
+    name,
+    data,
+    disabled,
+    onClick,
+}) => {
     return (
-        <CalciteRadioButtonGroup name={name} layout="vertical">
+        <CalciteRadioButtonGroup
+            name={name}
+            layout="vertical"
+            onCalciteRadioButtonGroupChange={(event: any) => {
+                // if (onClick) {
+                //     onClick(event.target.value);
+                // }
+                // console.log('Selected radio button value:', event.target.selectedItem);
+
+                const selectedValue = event.target?.selectedItem?.value;
+
+                if (onClick && selectedValue) {
+                    onClick(selectedValue);
+                }
+            }}
+        >
             {data.map((item, index) => (
                 <CalciteLabel
                     layout="inline"
                     key={item.value + index}
                     class="text-xs cursor-pointer"
-                    onClick={onClick.bind(null, item.value)}
+                    // onClick={onClick.bind(null, item.value)}
                 >
                     <CalciteRadioButton
                         value={item.value}
                         checked={item.checked || undefined}
+                        disabled={disabled || undefined}
                     ></CalciteRadioButton>
                     {item.label}
                 </CalciteLabel>
