@@ -22,6 +22,8 @@ import createWebmap from './createWebmap';
 import { useAppSelector } from '@store/configureStore';
 import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
 import { CalciteButton } from '@esri/calcite-components-react';
+import { Trans, useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
 interface IProps {
     // isVisible?: boolean;
@@ -39,14 +41,25 @@ interface IProps {
      * access token of signe in user
      */
     token: string;
+    /** base url of the portal */
     portalBaseURL: string;
     mapExtent: IExtentGeomety;
+    /**
+     * if true, the dialog is disabled (user not signed in or no privilege to create content)
+     */
+    disabled?: boolean;
+    /**
+     * if true, the user is not signed in and should be prompted to sign in
+     */
+    promptToSignIn?: boolean;
 
     // onClose: (val: boolean) => void;
     signInButtonOnClick: () => void;
 }
 
-const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
+export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
+    const { t } = useTranslation();
+
     const [title, setTitle] = useState(config.title);
     const [tags, setTags] = useState(config.tags);
     const [description, setDescription] = useState(config.description);
@@ -117,26 +130,32 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
     };
 
     const getEditDialog = () => {
-        const creatingIndicator = isCreatingWebmap ? (
-            <span className="text-sm mr-1 web-map-on-creating-indicator">
-                Creating Web Map...
-            </span>
-        ) : null;
+        // const creatingIndicator = isCreatingWebmap ? (
+        //     <span className="text-sm mr-1 web-map-on-creating-indicator">
+        //         Creating Web Map...
+        //     </span>
+        // ) : null;
 
-        const creatWebMapBtnClasses = classnames({
-            disabled: isRequiredFieldMissing,
-        });
+        // const creatWebMapBtnClasses = classnames({
+        //     disabled: isRequiredFieldMissing || isCreatingWebmap || props.disabled,
+        // });
 
-        const creatWebMapBtn = !isCreatingWebmap ? (
-            <div className={creatWebMapBtnClasses}>
-                <CalciteButton onClick={saveAsWebmap}>
-                    Create Wayback Map
-                </CalciteButton>
-            </div>
-        ) : null;
+        const creatWebMapBtn = (
+            <CalciteButton
+                onClick={saveAsWebmap}
+                loading={isCreatingWebmap}
+                disabled={
+                    isRequiredFieldMissing || isCreatingWebmap || props.disabled
+                }
+            >
+                {isCreatingWebmap
+                    ? t('creating_wayback_map')
+                    : t('create_wayback_map')}
+            </CalciteButton>
+        );
 
         return (
-            <div>
+            <div className={classNames('w-full', { disabled: props.disabled })}>
                 {/* <h5 className="text-xl mb-4">Wayback Map Settings:</h5> */}
 
                 <div className="w-full mb-2">
@@ -181,7 +200,7 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                 </div>
 
                 <div className="mt-4 text-right w-full">
-                    {creatingIndicator}
+                    {/* {creatingIndicator} */}
                     {creatWebMapBtn}
                 </div>
             </div>
@@ -238,10 +257,29 @@ const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
     }
 
     return (
-        <div className="w-96">
+        <div className={classnames('w-96')}>
+            {props.promptToSignIn && (
+                <p className="mb-4">
+                    <Trans
+                        i18nKey="sign_in_prompt_save_webmap_panel"
+                        components={{
+                            action: (
+                                <span
+                                    className="font-medium underline cursor-pointer text-custom-theme-blue-light"
+                                    onClick={() => {
+                                        if (props.signInButtonOnClick) {
+                                            props.signInButtonOnClick();
+                                        }
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </p>
+            )}
             {isWebmapReady ? getOpenWebmapContent() : getEditDialog()}
         </div>
     );
 };
 
-export default SaveAsWebmapDialog;
+// export default SaveAsWebmapDialog;
