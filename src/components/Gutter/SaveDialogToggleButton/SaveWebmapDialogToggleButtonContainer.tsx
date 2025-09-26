@@ -17,7 +17,7 @@ import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
+// import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
     releaseNum4SelectedItemsSelector,
@@ -26,10 +26,10 @@ import {
 
 // import { AppContext } from '@contexts/AppContextProvider';
 
-import {
-    // saveHashParams,
-    setShouldOpenSaveWebMapDialog,
-} from '@utils/LocalStorage';
+// import {
+//     // saveHashParams,
+//     setShouldOpenSaveWebMapDialog,
+// } from '@utils/LocalStorage';
 
 import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
 import {
@@ -82,18 +82,20 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
             return;
         }
 
-        if (isAnonymouns()) {
-            // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
-            setShouldOpenSaveWebMapDialog();
+        dispatch(isSaveAsWebmapDialogOpenToggled());
 
-            // // save hash params in local storage so the current app state can be restored after sigining in
-            // saveHashParams();
+        // if (isAnonymouns()) {
+        //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
+        //     setShouldOpenSaveWebMapDialog();
 
-            // sign in first before opening the save as web map dialog because the userSession is required to create web map
-            signIn();
-        } else {
-            dispatch(isSaveAsWebmapDialogOpenToggled());
-        }
+        //     // // save hash params in local storage so the current app state can be restored after sigining in
+        //     // saveHashParams();
+
+        //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
+        //     signIn();
+        // } else {
+        //     dispatch(isSaveAsWebmapDialogOpenToggled());
+        // }
     };
 
     useEffect(() => {

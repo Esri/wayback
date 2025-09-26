@@ -49,5 +49,7 @@
     "regions_cannot_be_fetched": "Regions cannot be fetched at this time.",
     "sign_in_prompt_updates_mode": "<action>Sign in</action> to your ArcGIS Online account first to see where imagery has been updated or is planned to be updated.",
     "sign_in_prompt_download_panel": "<action>Sign in</action> to your ArcGIS Online account first to use Wayback Export features.",
-    "sign_in_prompt_save_webmap_panel": "<action>Sign in</action> to your ArcGIS Online account first to save Wayback layers in a new Web Map."
+    "sign_in_prompt_save_webmap_panel": "<action>Sign in</action> to your ArcGIS Online account first to save Wayback layers in a new Web Map.",
+    "create_wayback_map": "Create a Web Map",
+    "creating_wayback_map": "Creating web map..."
 }

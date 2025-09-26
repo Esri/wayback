@@ -22,11 +22,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-export type AppDialogName =
-    | 'about'
-    | 'setting'
-    | 'save'
-    | 'download-tile-package';
+export type AppDialogName = 'about' | 'setting' | 'save' | 'export';
 
 export type UIState = {
     // isSaveAsWebmapDialogOpen: boolean;
@@ -106,9 +102,7 @@ const slice = createSlice({
         },
         isDownloadDialogOpenToggled: (state) => {
             state.activeDialog =
-                state.activeDialog === 'download-tile-package'
-                    ? null
-                    : 'download-tile-package';
+                state.activeDialog === 'export' ? null : 'export';
         },
         userProfileCardOpenToggled: (state, action: PayloadAction<boolean>) => {
             state.isUserProfileCardOpen =
@@ -145,7 +139,7 @@ export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
     state.UI.activeDialog === 'save';
 
 export const isDownloadTilePackageDialogOpenSelector = (state: RootState) =>
-    state.UI.activeDialog === 'download-tile-package';
+    state.UI.activeDialog === 'export';
 
 export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
     state.UI.shouldOnlyShowItemsWithLocalChange;

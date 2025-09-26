@@ -18,6 +18,7 @@
 // import Credential from '@arcgis/core/identity/Credential';
 // import Portal from '@arcgis/core/portal/Portal';
 
+import { AppDialogName } from '@store/UI/reducer';
 import { WaybackConfig, WaybackItem } from '@vannizhang/wayback-core';
 
 // interface IWaybackConfig {
@@ -110,6 +111,7 @@ interface IURLParamData {
     animationSpeed?: number;
     rNum4FramesToExclude?: number[];
     isDownloadDialogOpen?: boolean;
+    activeDialog: AppDialogName;
 }
 
 interface IStaticTooltipData {

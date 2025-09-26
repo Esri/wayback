@@ -54,15 +54,13 @@ import { getRandomInterestingPlace } from '@utils/interesting-places';
 // const isMobile = miscFns.isMobileDevice();
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
-    const { isDownloadDialogOpen } = urlParams;
+    // const { isDownloadDialogOpen } = urlParams;
 
-    let activeDialog: AppDialogName | null = null;
+    const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
 
-    if (getShouldOpenSaveWebMapDialog() && isAnonymouns() === false) {
-        activeDialog = 'save';
-    } else if (isDownloadDialogOpen) {
-        activeDialog = 'download-tile-package';
-    }
+    // if (isDownloadDialogOpen) {
+    //     activeDialog = 'download-tile-package';
+    // }
 
     const state: UIState = {
         ...initialUIState,

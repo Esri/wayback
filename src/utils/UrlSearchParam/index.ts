@@ -14,6 +14,7 @@
  */
 
 import { MapCenter, MapMode } from '@store/Map/reducer';
+import { AppDialogName } from '@store/UI/reducer';
 import { IURLParamData, IExtentGeomety } from '@typings/index';
 
 type ParamKey =
@@ -24,10 +25,11 @@ type ParamKey =
     | 'animationSpeed'
     | 'swipeWidget'
     | 'framesToExclude'
-    | 'downloadMode'
+    // | 'downloadMode'
     | 'mapCenter'
     | 'mode'
-    | 'updatesLayer';
+    | 'updatesLayer'
+    | 'activeDialog';
 
 type SaveSwipeWidgetInfoInURLQueryParam = (params: {
     isOpen: boolean;
@@ -214,8 +216,8 @@ const decodeURLParams = (): IURLParamData => {
               .map((rNum) => +rNum)
         : [];
 
-    const isDownloadDialogOpen =
-        getHashParamValueByKey('downloadMode') === 'true' ? true : false;
+    // const isDownloadDialogOpen =
+    //     getHashParamValueByKey('downloadMode') === 'true' ? true : false;
 
     const urlParams: IURLParamData = {
         mapExtent,
@@ -227,7 +229,8 @@ const decodeURLParams = (): IURLParamData => {
         rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
         animationSpeed,
         rNum4FramesToExclude,
-        isDownloadDialogOpen,
+        // isDownloadDialogOpen,
+        activeDialog: getActiveDialogFromHashParams(),
     };
 
     return urlParams;
@@ -252,6 +255,38 @@ export const getMapModeFromHashParams = (): MapMode => {
     }
 
     return value as MapMode;
+};
+
+export const saveActiveDialogInHashParams = (
+    dialogName: AppDialogName
+): void => {
+    const key: ParamKey = 'activeDialog';
+    const value = dialogName ? dialogName : null;
+    updateHashParams(key, value);
+};
+
+/**
+ * Get the active dialog name from hash params
+ * @returns the active dialog name from hash params, or null if the value is not valid
+ */
+const getActiveDialogFromHashParams = (): AppDialogName => {
+    const value = getHashParamValueByKey('activeDialog');
+
+    if (!value) {
+        return null;
+    }
+
+    const validDialogs: AppDialogName[] = [
+        'about',
+        'export',
+        'save',
+        'setting',
+    ];
+
+    if (!validDialogs.includes(value as AppDialogName)) {
+        return null;
+    }
+    return value as AppDialogName;
 };
 
 export {

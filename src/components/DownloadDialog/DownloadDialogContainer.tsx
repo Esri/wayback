@@ -74,9 +74,9 @@ export const DownloadDialogContainer = () => {
         // }
     }, [jobs]);
 
-    useEffect(() => {
-        updateHashParams('downloadMode', isOpen ? 'true' : null);
-    }, [isOpen]);
+    // useEffect(() => {
+    //     updateHashParams('downloadMode', isOpen ? 'true' : null);
+    // }, [isOpen]);
 
     useEffect(() => {
         if (numPendingJobs) {
