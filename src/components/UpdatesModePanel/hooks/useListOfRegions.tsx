@@ -3,6 +3,7 @@ import { useAsync } from '@hooks/useAsync';
 import { getListOfCountries } from '@services/world-imagery-updates/getListOfCountries';
 import { useAppSelector } from '@store/configureStore';
 import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
+import { isAnonymouns } from '@utils/Esri-OAuth';
 import React, { useEffect } from 'react';
 
 export const useListOfRegions = () => {
@@ -20,6 +21,14 @@ export const useListOfRegions = () => {
     useEffect(() => {
         (async () => {
             try {
+                if (isAnonymouns()) {
+                    setListOfRegions([]);
+                    console.warn(
+                        'User is not signed in. Skipping fetch of regions.'
+                    );
+                    return;
+                }
+
                 // console.log('Fetching list of regions for category:', category);
                 const regions = await execute(category, whereClause);
                 // console.log('Fetched regions:', regions);

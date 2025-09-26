@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
@@ -15,8 +15,16 @@ import {
     CalciteLoader,
 } from '@esri/calcite-components-react';
 import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
+import classNames from 'classnames';
 
-export const RegionFilter = () => {
+type RegionFilterProps = {
+    /**
+     * If true, the filter will be disabled and not interactable.
+     */
+    disabled?: boolean;
+};
+
+export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -80,6 +88,14 @@ export const RegionFilter = () => {
             );
         }
 
+        if (disabled) {
+            return (
+                <div className="text-sm text-gray-500">
+                    {t('regions_cannot_be_fetched')}
+                </div>
+            );
+        }
+
         if (error) {
             return (
                 <div className="text-center text-sm text-red-500">
@@ -130,7 +146,11 @@ export const RegionFilter = () => {
     };
 
     return (
-        <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
+        <div
+            className={classNames(
+                'bg-custom-card-background p-2 mb-2 text-white flex-grow'
+            )}
+        >
             <div className="flex justify-between items-center mb-2">
                 <HeaderText
                     title={t('region')}

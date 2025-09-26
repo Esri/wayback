@@ -5,13 +5,16 @@ import { CategoryFilter } from './Filters/CategoryFilter';
 import { DateFilter } from './Filters/DateFilter';
 import { RegionFilter } from './Filters/RegionFilter';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import classNames from 'classnames';
 
 export const UpdatesPanelContainer = () => {
-    useEffect(() => {
-        if (isAnonymouns()) {
-            signIn();
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (isAnonymouns()) {
+    //         signIn();
+    //     }
+    // }, []);
+
+    const notSignedIn = isAnonymouns();
 
     return (
         <div
@@ -21,10 +24,17 @@ export const UpdatesPanelContainer = () => {
             }}
         >
             <UpdatesModeHeader />
-            <CategoryFilter />
-            <StatusFilter />
-            <DateFilter />
-            <RegionFilter />
+
+            <div
+                className={classNames({
+                    disabled: notSignedIn,
+                })}
+            >
+                <CategoryFilter />
+                <StatusFilter />
+                <DateFilter />
+                <RegionFilter disabled={notSignedIn} />
+            </div>
         </div>
     );
 };

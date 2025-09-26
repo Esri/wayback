@@ -45,5 +45,6 @@
     "toggle_download_panel": "Toggle Open Download Panel",
     "toggle_save_webmap_panel": "Toggle Open Save Web Map Panel",
     "toggle_swipe_mode": "Toggle Swipe Mode",
-    "open_explore_mode": "Open Explore Mode"
+    "open_explore_mode": "Open Explore Mode",
+    "regions_cannot_be_fetched": "Regions cannot be fetched at this time."
 }
