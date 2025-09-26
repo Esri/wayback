@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
@@ -56,16 +56,23 @@ export const DownloadDialogContainer = () => {
 
     const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
 
+    const notSignedIn = useMemo(() => isAnonymouns(), []);
+
+    const isDisabled = useMemo(
+        () => notSignedIn || isAddingNewDownloadJob,
+        [notSignedIn, isAddingNewDownloadJob]
+    );
+
     useEffect(() => {
         // save jobs to localhost so they can be restored
         saveDownloadJobs2LocalStorage(jobs);
 
-        // prompt anonymouns user to sign in if the user wants to open the download dialog,
-        // since exporting job requires the user token
-        if (jobs?.length && isAnonymouns() && isOpen) {
-            signIn();
-        }
-    }, [jobs, isOpen]);
+        // // prompt anonymouns user to sign in if the user wants to open the download dialog,
+        // // since exporting job requires the user token
+        // if (jobs?.length && isAnonymouns() && isOpen) {
+        //     signIn();
+        // }
+    }, [jobs]);
 
     useEffect(() => {
         updateHashParams('downloadMode', isOpen ? 'true' : null);
@@ -116,6 +123,8 @@ export const DownloadDialogContainer = () => {
             <DownloadDialog
                 jobs={jobs}
                 isAddingNewDownloadJob={isAddingNewDownloadJob}
+                disabled={isDisabled}
+                promptToSignIn={notSignedIn}
                 closeButtonOnClick={() => {
                     dispatch(activeDialogUpdated());
                 }}
@@ -131,6 +140,9 @@ export const DownloadDialogContainer = () => {
                 }}
                 downloadTilePackageButtonOnClick={(id: string) => {
                     dispatch(downloadOutputTilePackage(id));
+                }}
+                signInButtonOnClick={() => {
+                    signIn();
                 }}
             />
         </Modal>

@@ -19,6 +19,8 @@ import { DownloadJobCard } from './DownloadJobCard';
 import { DownloadJobPlaceholder } from './DownloadJobPlaceholder';
 import { CalciteButton } from '@esri/calcite-components-react';
 import { Modal } from '@components/Modal/Modal';
+import classNames from 'classnames';
+import { Trans } from 'react-i18next';
 
 type Props = {
     /**
@@ -30,6 +32,14 @@ type Props = {
      * a placeholder card should be displayed
      */
     isAddingNewDownloadJob: boolean;
+    /**
+     * if true, the dialog is disabled (user not signed in or adding new job)
+     */
+    disabled?: boolean;
+    /**
+     * if true, the user is not signed in and should be prompted to sign in
+     */
+    promptToSignIn: boolean;
     /**
      * fires when user clicks on the create tile package button to start the download job
      * @param id job id
@@ -59,16 +69,24 @@ type Props = {
      * @returns void
      */
     levelsOnChange: (id: string, levels: number[]) => void;
+    /**
+     * Sign in button click handler
+     * @returns void
+     */
+    signInButtonOnClick: () => void;
 };
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
     isAddingNewDownloadJob,
+    disabled,
+    promptToSignIn,
     createTilePackageButtonOnClick,
     downloadTilePackageButtonOnClick,
     closeButtonOnClick,
     removeButtonOnClick,
     levelsOnChange,
+    signInButtonOnClick,
 }: Props) => {
     const getJobsList = () => {
         if (!jobs?.length && !isAddingNewDownloadJob) {
@@ -96,9 +114,30 @@ export const DownloadDialog: FC<Props> = ({
     };
 
     return (
-        <div className="mt-4">
+        <div className="mt-2">
             <div className="max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
-                <p className="text-sm mb-4">
+                {promptToSignIn && (
+                    <p className="mb-4">
+                        <Trans
+                            i18nKey="sign_in_prompt_download_panel"
+                            components={{
+                                action: (
+                                    <span
+                                        className="font-medium underline cursor-pointer text-custom-theme-blue-light"
+                                        onClick={() => {
+                                            // console.log('Sign in clicked')
+                                            if (signInButtonOnClick) {
+                                                signInButtonOnClick();
+                                            }
+                                        }}
+                                    />
+                                ),
+                            }}
+                        />
+                    </p>
+                )}
+
+                <p className="text-sm mt-2 mb-4">
                     Exported basemap tiles are intended for offline use in
                     ArcGIS applications and{' '}
                     <a
@@ -151,7 +190,13 @@ export const DownloadDialog: FC<Props> = ({
 
                 {isAddingNewDownloadJob && <DownloadJobPlaceholder />}
 
-                <div>{getJobsList()}</div>
+                <div
+                    className={classNames({
+                        disabled: disabled,
+                    })}
+                >
+                    {getJobsList()}
+                </div>
             </div>
         </div>
     );
