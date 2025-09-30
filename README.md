@@ -5,6 +5,10 @@ The World Imagery Wayback App provides a dynamic browsing experience where previ
 
 ![App](./public/screenshot.jpg)
 
+## Looking to integrate Wayback into your own app?
+
+If you want to use the World Imagery Wayback service in your application without the full UI/UX provided by this app, check out the [wayback-core](https://github.com/Esri/wayback-core) repository. It provides the core functionality and APIs for working with Wayback imagery services that you can integrate into your own applications.
+
 ## Prerequisites
 
 ### Clone the repository
