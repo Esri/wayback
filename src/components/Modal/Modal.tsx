@@ -13,9 +13,10 @@
  * limitations under the License.
  */
 
-import React, { FC, JSX, ReactNode } from 'react';
+import React, { FC, JSX, ReactNode, useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import { CalciteButton } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     /**
@@ -35,9 +36,25 @@ export const Modal: FC<Props> = ({
     children,
     onClose,
 }) => {
+    const { t } = useTranslation();
+    const closeButtonRef = useRef<HTMLCalciteButtonElement>(null);
+    const titleId = useMemo(
+        () => `modal-title-${Math.random().toString(36).slice(2, 9)}`,
+        []
+    );
+
+    useEffect(() => {
+        if (isOpen && closeButtonRef.current) {
+            // add focus to the close button when the modal opens
+            // this is for accessibility so that keyboard users can easily close the modal
+            closeButtonRef.current.setFocus();
+        }
+    }, [isOpen]);
+
     if (!isOpen) {
         return null;
     }
+
     return (
         <div
             className="absolute top-0 left-0 lg:left-gutter-width w-full h-full overflow-hidden flex items-center justify-center z-20 backdrop-blur-sm"
@@ -46,6 +63,9 @@ export const Modal: FC<Props> = ({
             }}
         >
             <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
                 className={classnames(
                     'relative max-w-full h-auto bg-custom-modal-content-background ',
                     {
@@ -58,15 +78,17 @@ export const Modal: FC<Props> = ({
             >
                 <div className="flex items-center justify-between pl-4 md:pl-8 pr-4 py-3 border-b border-b-white/10">
                     <header className="">
-                        <span className="text-3xl">
-                            {title || 'This is the Title'}
-                        </span>
+                        <h2 id={titleId} className="text-3xl">
+                            {title || 'Dialog'}
+                        </h2>
                     </header>
                     <CalciteButton
+                        ref={closeButtonRef}
                         icon-start="x"
                         scale="l"
                         appearance="transparent"
                         kind="neutral"
+                        label={t('close')}
                         onClick={onClose}
                     />
                 </div>

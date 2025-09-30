@@ -121,7 +121,7 @@ export const DownloadDialog: FC<Props> = ({
 
     return (
         <div className="mt-2">
-            <div className="max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
+            <div className="max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar p-1">
                 {(promptToSignIn || promptToSignInWithOrgAccount) && (
                     <p className="mb-4">
                         <Trans
@@ -132,7 +132,7 @@ export const DownloadDialog: FC<Props> = ({
                             }
                             components={{
                                 action: (
-                                    <span
+                                    <button
                                         className="font-semibold underline cursor-pointer text-custom-theme-blue-light "
                                         onClick={() => {
                                             // console.log('Sign in clicked')
