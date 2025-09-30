@@ -64,8 +64,8 @@ export const MapActionButton: FC<Props> = ({
     const isAnimationPlaying = useAppSelector(selectIsAnimationPlaying);
 
     return (
-        <div
-            className={classNames('relative z-10', {
+        <button
+            className={classNames('relative block z-10', {
                 hidden: isAnimationPlaying,
                 'is-disabled': disabled,
             })}
@@ -74,6 +74,7 @@ export const MapActionButton: FC<Props> = ({
             }}
             title={tooltip}
             onClick={onClickHandler}
+            aria-label={tooltip}
         >
             <div className="w-map-action-button-size h-map-action-button-size flex items-center justify-center bg-custom-background cursor-pointer">
                 {showLoadingIndicator ? (
@@ -88,6 +89,6 @@ export const MapActionButton: FC<Props> = ({
                     children
                 )}
             </div>
-        </div>
+        </button>
     );
 };

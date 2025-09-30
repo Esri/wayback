@@ -121,7 +121,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div
+            <button
                 className="absolute top-1 right-1 cursor-pointer text-white"
                 // style={{
                 //     position: 'absolute',
@@ -133,7 +133,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
             >
                 {/* <span className="icon-ui-close text-white"></span> */}
                 <CalciteIcon icon="x" scale="l" />
-            </div>
+            </button>
         );
     };
 
