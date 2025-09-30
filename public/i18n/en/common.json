@@ -77,5 +77,6 @@
     "show_only_local_changes_with_highlight": "Only versions with <strong>local changes</strong>",
     "reference_label_overlay": "Reference label overlay",
     "choose_label_language": "Choose label language",
-    "select_label_language": "Select {{language}} label overlay"
+    "select_label_language": "Select {{language}} label overlay",
+    "close_swipe_mode": "Close Swipe Mode"
 }

@@ -100,7 +100,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div className="text-center text-custom-theme-blue-brand shrink-0">
+            <div className="text-center text-custom-theme-blue-light shrink-0">
                 <h4 className="text-2xl font-light mb-0">
                     {targetLayerType === 'leading' ? 'Left' : 'Right'} Selection
                 </h4>
@@ -130,6 +130,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 //     cursor: 'pointer',
                 // }}
                 onClick={onClose}
+                aria-label={t('close_swipe_mode')}
             >
                 {/* <span className="icon-ui-close text-white"></span> */}
                 <CalciteIcon icon="x" scale="l" />
