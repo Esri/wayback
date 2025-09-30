@@ -126,7 +126,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                     ></CalciteInputText>
                 </div>
 
-                <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1">
+                <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden">
                     <RadioButtonGroup
                         name="region-filter"
                         data={filteredData}

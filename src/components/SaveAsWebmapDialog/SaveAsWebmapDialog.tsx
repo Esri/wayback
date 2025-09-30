@@ -265,7 +265,10 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
     }
 
     return (
-        <div className={classnames('w-96 p-1')}>
+        <div
+            className={classnames('w-96 p-1')}
+            style={{ '--calcite-button-text-color': '#fff' }}
+        >
             {props.promptToSignIn && (
                 <p className="mb-4">
                     <Trans
