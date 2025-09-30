@@ -133,7 +133,7 @@ export const DownloadDialog: FC<Props> = ({
                             components={{
                                 action: (
                                     <span
-                                        className="font-semibold underline cursor-pointer "
+                                        className="font-semibold underline cursor-pointer text-custom-theme-blue-light "
                                         onClick={() => {
                                             // console.log('Sign in clicked')
                                             if (signInButtonOnClick) {
