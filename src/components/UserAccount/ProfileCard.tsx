@@ -1,6 +1,6 @@
 import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import useOnClickOutside from '@hooks/useOnClickOutside';
-import React, { FC } from 'react';
+import React, { FC, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserData } from './useUserData';
 
@@ -33,10 +33,17 @@ export const ProfileCard: FC<Props> = ({
         userData || {};
 
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const closeButtonRef = useRef<HTMLCalciteButtonElement>(null);
 
     useOnClickOutside(containerRef, () => {
         closeProfileCard();
     });
+
+    useEffect(() => {
+        if (closeButtonRef.current) {
+            closeButtonRef.current.setFocus();
+        }
+    }, []);
 
     return (
         <div
@@ -53,7 +60,8 @@ export const ProfileCard: FC<Props> = ({
                         <a
                             href={profileSettingsPageURL}
                             target="_blank"
-                            className="underline text-white" rel="noreferrer"
+                            className="underline text-white"
+                            rel="noreferrer"
                         >
                             {userFullName || userName}
                         </a>
@@ -92,6 +100,7 @@ export const ProfileCard: FC<Props> = ({
                 }}
             >
                 <CalciteButton
+                    ref={closeButtonRef}
                     appearance="transparent"
                     kind="inverse"
                     iconStart="x"

@@ -14,7 +14,8 @@
  */
 
 import { CalciteIcon } from '@esri/calcite-components-react';
-import React from 'react';
+import React, { FC } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface IProps {
     isActive: boolean;
@@ -22,32 +23,41 @@ interface IProps {
     onChange: () => void;
 }
 
-class CheckboxToggle extends React.PureComponent<IProps> {
-    constructor(props: IProps) {
-        super(props);
-    }
+const CheckboxToggle: FC<IProps> = ({ isActive, onChange }) => {
+    const { t } = useTranslation();
 
-    render() {
-        const { isActive, onChange } = this.props;
-
-        return (
-            <div
-                className="hidden md:flex items-center justify-center cursor-pointer my-1"
+    return (
+        <div
+            className="hidden md:flex items-center justify-center my-1"
+            // onClick={onChange}
+            style={
+                {
+                    // '--calcite-checkbox-icon-color': "#fff"  --- IGNORE ---
+                }
+            }
+        >
+            <button
+                className="flex justify-center items-center"
                 onClick={onChange}
+                aria-label={t('show_only_local_changes')}
             >
                 {isActive ? (
                     <CalciteIcon icon="check-square" scale="s" />
                 ) : (
                     <CalciteIcon icon="square" scale="s" />
                 )}
+            </button>
 
-                <span className="text-sm ml-1">
-                    Only versions with{' '}
-                    <span className="text-white">local changes</span>
-                </span>
-            </div>
-        );
-    }
-}
+            <span className="text-sm ml-1">
+                <Trans
+                    i18nKey="show_only_local_changes_with_highlight"
+                    components={{
+                        strong: <span className="text-white" />,
+                    }}
+                />
+            </span>
+        </div>
+    );
+};
 
-export default CheckboxToggle;
+export default React.memo(CheckboxToggle);

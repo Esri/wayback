@@ -72,5 +72,7 @@
     "webmap_ready_message": "Your Wayback Map is ready!",
     "open_wayback_map": "Open Wayback Map",
     "no_privilege_message": "You signed in using an account that does not have privilege to create content in your ArcGIS Online organization.",
-    "sign_in_again_prompt": "Please <action>sign in</action> again using a different account."
+    "sign_in_again_prompt": "Please <action>sign in</action> again using a different account.",
+    "show_only_local_changes": "Show only versions with local changes",
+    "show_only_local_changes_with_highlight": "Only versions with <strong>local changes</strong>"
 }

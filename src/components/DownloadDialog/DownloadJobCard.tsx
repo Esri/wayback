@@ -19,10 +19,12 @@ import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import { numberFns } from 'helper-toolkit-ts';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import {
+    CalciteButton,
     CalciteIcon,
     CalciteLoader,
     CalciteSlider,
 } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     data: DownloadJob;
@@ -69,6 +71,8 @@ export const DownloadJobCard: FC<Props> = ({
 }) => {
     // const sliderRef = React.useRef<any>(null);
 
+    const { t } = useTranslation();
+
     const {
         id,
         waybackItem,
@@ -110,19 +114,21 @@ export const DownloadJobCard: FC<Props> = ({
         return total;
     }, [tileEstimations, levels]);
 
-    const getStatusIcon = () => {
-        return (
-            <CalciteIcon
-                icon="x"
-                scale="s"
-                style={{
-                    cursor: 'pointer',
-                }}
-                title="Cancel"
-                onClick={removeButtonOnClick.bind(null, id)}
-            />
-        );
-    };
+    // const getStatusIcon = () => {
+    //     return (
+    //         <CalciteButton
+    //             appearance="transparent"
+    //             kind="neutral"
+    //             iconStart="x"
+    //             scale="s"
+    //             // style={{
+    //             //     cursor: 'pointer',
+    //             // }}
+    //             label={t('cancel')}
+    //             onClick={removeButtonOnClick.bind(null, id)}
+    //         />
+    //     );
+    // };
 
     const buttonOnClickHandler = () => {
         if (status === 'not started') {
@@ -204,9 +210,19 @@ export const DownloadJobCard: FC<Props> = ({
 
     return (
         <div className="w-full flex items-stretch">
-            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 pl-4 pr-2 flex-grow">
-                <div className="w-4 text-white mr-2 flex items-center">
-                    {getStatusIcon()}
+            <div className="flex items-center mr-4 bg-white bg-opacity-10 py-1 pr-2 flex-grow">
+                <div className=" text-white px-2 flex items-center">
+                    <CalciteButton
+                        appearance="transparent"
+                        kind="neutral"
+                        iconStart="x"
+                        scale="s"
+                        // style={{
+                        //     cursor: 'pointer',
+                        // }}
+                        label={t('cancel')}
+                        onClick={removeButtonOnClick.bind(null, id)}
+                    />
                 </div>
 
                 <div className="">
@@ -260,7 +276,7 @@ export const DownloadJobCard: FC<Props> = ({
                 </div>
             </div>
 
-            <div
+            <button
                 className={classnames(
                     'flex justify-center items-center w-52  bg-custom-theme-blue text-white text-center cursor-pointer shrink-0',
                     {
@@ -273,7 +289,7 @@ export const DownloadJobCard: FC<Props> = ({
                     <CalciteLoader scale="s" inline></CalciteLoader>
                 )}
                 <span className="uppercase">{getButtonLable()}</span>
-            </div>
+            </button>
         </div>
     );
 };
