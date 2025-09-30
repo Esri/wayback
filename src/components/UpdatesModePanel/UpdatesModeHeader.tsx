@@ -41,7 +41,7 @@ export const UpdatesModeHeader: FC<UpdatesModeHeaderProps> = ({
                         }
                         components={{
                             action: (
-                                <span
+                                <button
                                     className={SignInLinkClassName}
                                     onClick={() => {
                                         if (signInButtonOnClick) {

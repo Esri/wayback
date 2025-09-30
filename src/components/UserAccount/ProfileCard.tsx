@@ -50,6 +50,25 @@ export const ProfileCard: FC<Props> = ({
             ref={containerRef}
             className="w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4"
         >
+            <div
+                className="absolute top-1 right-1 cursor-pointer"
+                style={{
+                    '--calcite-color-text-inverse': 'var(--default-text-color)',
+                }}
+            >
+                <CalciteButton
+                    ref={closeButtonRef}
+                    appearance="transparent"
+                    kind="inverse"
+                    iconStart="x"
+                    scale="s"
+                    onClick={() => {
+                        closeProfileCard();
+                    }}
+                    label={t('close')}
+                ></CalciteButton>
+            </div>
+
             <div className="flex mb-4">
                 {/* <div className='shrink-0'>
                     <CalciteIcon icon="user" scale="s" className="mr-1" />
@@ -92,25 +111,6 @@ export const ProfileCard: FC<Props> = ({
             >
                 <span>{t('sign_out')}</span>
             </CalciteButton>
-
-            <div
-                className="absolute top-1 right-1 cursor-pointer"
-                style={{
-                    '--calcite-color-text-inverse': 'var(--default-text-color)',
-                }}
-            >
-                <CalciteButton
-                    ref={closeButtonRef}
-                    appearance="transparent"
-                    kind="inverse"
-                    iconStart="x"
-                    scale="s"
-                    onClick={() => {
-                        closeProfileCard();
-                    }}
-                    label={t('close')}
-                ></CalciteButton>
-            </div>
         </div>
     );
 };

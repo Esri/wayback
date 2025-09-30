@@ -35,6 +35,14 @@ export const AccountAvatar: FC<Props> = ({
 }) => {
     const { t } = useTranslation();
 
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+    React.useEffect(() => {
+        if (buttonRef.current) {
+            buttonRef.current.focus();
+        }
+    }, []);
+
     const {
         thumbnailUrl,
         userFullName,
@@ -81,6 +89,7 @@ export const AccountAvatar: FC<Props> = ({
             title={label}
         >
             <button
+                ref={buttonRef}
                 className={classNames(
                     'relative w-9 h-9 flex justify-center items-center text-center border-white border-opacity-90 rounded-full ',
                     {
