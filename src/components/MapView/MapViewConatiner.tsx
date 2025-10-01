@@ -43,7 +43,7 @@ import {
     saveMapCenterToHashParams,
     // saveMapExtentInURLQueryParam,
 } from '@utils/UrlSearchParam';
-// import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+// import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import {
     isAnimationModeOnSelector,
     // selectAnimationStatus,

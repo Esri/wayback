@@ -19,7 +19,7 @@ import {
     isLoadingWaybackItemsToggled,
     releaseNum4ItemsWithLocalChangesUpdated,
 } from './reducer';
-import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import { logger } from '@utils/IndexedDBLogger';
 
 let abortController: AbortController = null;

@@ -18,7 +18,7 @@ import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
 // import { getServiceUrl } from '@utils/Tier';
-import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
+import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 
 const TILE_SIZE = 256;
 

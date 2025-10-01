@@ -23,7 +23,7 @@ import { tier } from '@utils/Tier';
 import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
-import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
+import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 
 interface ICreateWebmapParams {
     title: string;

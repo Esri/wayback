@@ -15,7 +15,7 @@
 
 import { IExtent } from '@esri/arcgis-rest-request';
 // import { getServiceUrl } from '@utils/Tier';
-import { getWaybackServiceBaseURL } from '@vannizhang/wayback-core';
+import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 import axios from 'axios';
 import { geometryFns } from 'helper-toolkit-ts';
 

@@ -27,10 +27,7 @@ import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
 import { getArcGISOnlinePortalUrl, tier } from '@utils/Tier';
-import {
-    getWaybackItems,
-    setDefaultWaybackOptions,
-} from '@vannizhang/wayback-core';
+import { getWaybackItems, setDefaultWaybackOptions } from '@esri/wayback-core';
 import { initI18next } from '@utils/i18n';
 import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 import { initLogger } from '@utils/IndexedDBLogger';

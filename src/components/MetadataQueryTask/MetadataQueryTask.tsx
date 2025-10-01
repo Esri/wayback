@@ -27,7 +27,7 @@ import {
 import MapView from '@arcgis/core/views/MapView';
 import { watch } from '@arcgis/core/core/reactiveUtils';
 import Point from '@arcgis/core/geometry/Point';
-import { getMetadata } from '@vannizhang/wayback-core';
+import { getMetadata } from '@esri/wayback-core';
 
 type Props = {
     // waybackManager: WaybackManager;

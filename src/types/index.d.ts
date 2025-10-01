@@ -19,7 +19,7 @@
 // import Portal from '@arcgis/core/portal/Portal';
 
 import { AppDialogName } from '@store/UI/reducer';
-import { WaybackConfig, WaybackItem } from '@vannizhang/wayback-core';
+import { WaybackConfig, WaybackItem } from '@esri/wayback-core';
 
 // interface IWaybackConfig {
 //     [key: number]: {
