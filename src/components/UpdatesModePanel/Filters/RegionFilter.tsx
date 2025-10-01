@@ -99,7 +99,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
         if (error) {
             return (
                 <div className="text-center text-sm text-red-500">
-                    {t('error_fetching_regions')}
+                    {t('error_fetching_regions', { error: error.message })}
                 </div>
             );
         }

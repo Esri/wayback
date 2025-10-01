@@ -61,12 +61,8 @@ export const getListOfCountries = async (
 
     const data = await response.json();
 
-    if (!data || data.error || !data.features) {
-        throw new Error(
-            `Error fetching list of countries: ${
-                data.error?.message || 'Unknown error'
-            }`
-        );
+    if (!data || data.error) {
+        throw new Error(data.error?.message || 'Unknown error');
     }
 
     const features: IFeature[] = data?.features || [];

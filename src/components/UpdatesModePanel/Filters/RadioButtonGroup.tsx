@@ -49,7 +49,7 @@ export const RadioButtonGroup: FC<Props> = ({
 
                 const selectedValue = event.target?.selectedItem?.value;
 
-                if (onClick && selectedValue) {
+                if (onClick) {
                     onClick(selectedValue);
                 }
             }}
