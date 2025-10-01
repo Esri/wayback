@@ -63,26 +63,28 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                 }
             )}
         >
-            <button
-                className={classNames('relative w-full', {
-                    'cursor-pointer': isActive,
-                })}
-                aria-label={'save as web map'}
-                onClick={onClickHandler}
-                title={tooltipContent}
-            >
-                <CalciteIcon icon="arcgis-online" scale="l" />
+            <div className="relative">
+                <button
+                    className={classNames('relative', {
+                        'cursor-pointer': isActive,
+                    })}
+                    aria-label={'save as web map'}
+                    onClick={onClickHandler}
+                    title={tooltipContent}
+                >
+                    <CalciteIcon icon="arcgis-online" scale="l" />
+                </button>
 
                 {isActive && (
                     <IndicatorBubble>
                         <span>{selectedWaybackItems.length}</span>
                     </IndicatorBubble>
                 )}
-            </button>
+            </div>
 
             {isActive && (
                 <button
-                    className="w-full text-center cursor-pointer text-xs"
+                    className="mx-auto text-center cursor-pointer text-xs"
                     aria-label="clear all selected items"
                     onClick={clearAll}
                 >

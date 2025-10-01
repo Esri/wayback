@@ -79,12 +79,12 @@ const Sidebar: React.FC<Props> = ({
     }
 
     return (
-        <div
+        <aside
             className="bg-custom-background top-header-height"
             style={getStyle()}
         >
             {children}
-        </div>
+        </aside>
     );
 };
 

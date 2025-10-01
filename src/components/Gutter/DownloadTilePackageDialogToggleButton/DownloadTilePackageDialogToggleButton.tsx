@@ -82,9 +82,9 @@ export const DownloadTilePackageDialogToggleButton = () => {
     };
 
     return (
-        <button
+        <div
             className={classnames(
-                'relative w-full text-center my-2 cursor-pointer z-10',
+                'relative w-full text-center py-2 mb-1 px-1 cursor-pointer z-10',
                 // {
                 //     disabled: numOfJobs === 0,
                 // }
@@ -94,21 +94,25 @@ export const DownloadTilePackageDialogToggleButton = () => {
                     disabled: shouldDisableActionButton,
                 }
             )}
-            title={
-                shouldBeDisabled
-                    ? t('open_download_panel_button_tooltip_disabled')
-                    : t('open_download_panel_button_tooltip')
-            }
-            aria-label={t('toggle_download_panel')}
-            onClick={() => {
-                if (shouldBeDisabled) {
-                    return;
-                }
-                dispatch(isDownloadDialogOpenToggled());
-            }}
         >
-            <CalciteIcon icon="download-to" scale="l" />
+            <button
+                className="relative flex mx-auto items-center justify-center"
+                title={
+                    shouldBeDisabled
+                        ? t('open_download_panel_button_tooltip_disabled')
+                        : t('open_download_panel_button_tooltip')
+                }
+                aria-label={t('toggle_download_panel')}
+                onClick={() => {
+                    if (shouldBeDisabled) {
+                        return;
+                    }
+                    dispatch(isDownloadDialogOpenToggled());
+                }}
+            >
+                <CalciteIcon icon="download-to" scale="l" />
+            </button>
             {getIndicator()}
-        </button>
+        </div>
     );
 };

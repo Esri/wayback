@@ -55,6 +55,7 @@ const ListViewWrapper: React.FC<Props> = ({ children }) => {
                 flexBasis: 200,
                 overflowX: 'hidden',
                 overflowY: 'auto',
+                paddingBottom: '2rem',
             }}
         >
             <div className="mx-4">{children}</div>
