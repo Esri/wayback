@@ -53,8 +53,7 @@ export const ModeToggleButton: FC<Props> = ({
     onClick,
 }) => {
     return (
-        <button
-            data-testid={testId}
+        <div
             className={classNames(
                 'hidden md:flex relative w-full cursor-pointer text-center items-center justify-center py-2',
                 {
@@ -63,11 +62,16 @@ export const ModeToggleButton: FC<Props> = ({
                     'bg-custom-background': isActive,
                 }
             )}
-            onClick={onClick}
-            aria-label={label}
-            title={tooltip}
         >
-            <CalciteIcon icon={icon} scale="l" />
-        </button>
+            <button
+                className="flex items-center justify-center"
+                data-testid={testId}
+                onClick={onClick}
+                aria-label={label}
+                title={tooltip}
+            >
+                <CalciteIcon icon={icon} scale="l" />
+            </button>
+        </div>
     );
 };

@@ -85,16 +85,16 @@ export const AccountAvatar: FC<Props> = ({
     };
     return (
         <div
-            className="relative flex justify-center items-center w-full my-2 cursor-pointer"
+            className="relative flex justify-center items-center w-full my-2 cursor-pointer px-1"
             title={label}
         >
             <button
                 ref={buttonRef}
                 className={classNames(
-                    'relative w-9 h-9 flex justify-center items-center text-center border-white border-opacity-90 rounded-full ',
-                    {
-                        border: !thumbnailUrl,
-                    }
+                    'relative w-full flex justify-center items-center text-center '
+                    // {
+                    //     border: !thumbnailUrl,
+                    // }
                 )}
                 aria-label={label}
                 onClick={() => {
@@ -105,7 +105,16 @@ export const AccountAvatar: FC<Props> = ({
                     }
                 }}
             >
-                {getContent()}
+                <div
+                    className={classNames(
+                        'w-9 h-9 flex justify-center items-center  border-white border-opacity-90 rounded-full',
+                        {
+                            border: !thumbnailUrl,
+                        }
+                    )}
+                >
+                    {getContent()}
+                </div>
             </button>
         </div>
     );

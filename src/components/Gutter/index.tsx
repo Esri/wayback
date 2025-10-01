@@ -40,30 +40,38 @@ export const Gutter: FC<IProps> = ({
     return (
         <div className="gutter-container background-theme-blue-diagonal-pattern">
             <div className="pt-1">
-                <button
+                <div
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'about',
                     })}
-                    title="About this app"
-                    aria-label="About this app"
-                    onClick={aboutButtonOnClick}
                 >
-                    <CalciteIcon icon="information" scale="l" />
-                </button>
+                    <button
+                        className="flex justify-center items-center"
+                        title="About this app"
+                        aria-label="About this app"
+                        onClick={aboutButtonOnClick}
+                    >
+                        <CalciteIcon icon="information" scale="l" />
+                    </button>
+                </div>
 
-                <button
+                <div
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'setting',
                     })}
-                    // data-modal={SettingModalConfig['modal-id']}
-                    title="Settings"
-                    aria-label="Settings"
-                    onClick={settingButtonOnClick}
                 >
-                    <CalciteIcon icon="gear" scale="l" />
-                </button>
+                    <button
+                        className="flex justify-center items-center"
+                        // data-modal={SettingModalConfig['modal-id']}
+                        title="Settings"
+                        aria-label="Settings"
+                        onClick={settingButtonOnClick}
+                    >
+                        <CalciteIcon icon="gear" scale="l" />
+                    </button>
+                </div>
 
                 {/* <div
                     className="gutter-nav-btn mb-0"
