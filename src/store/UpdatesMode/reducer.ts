@@ -85,6 +85,11 @@ export type UpdatesModeState = {
      * should only zoom when the user selects a region from the dropdown.
      */
     shouldZoomToSelectedRegion: boolean;
+    /**
+     * flag to indicate whether the app is loading the extent for the selected region
+     * (used to show a loading indicator in the region dropdown)
+     */
+    isLoadingExtentForSelectedRegion?: boolean;
 };
 
 export const initialUpdatesModeState: UpdatesModeState = {
@@ -104,6 +109,7 @@ export const initialUpdatesModeState: UpdatesModeState = {
         areaOfPublished: 0,
     },
     shouldZoomToSelectedRegion: false,
+    isLoadingExtentForSelectedRegion: false,
 };
 
 export const updatesModeSlice = createSlice({
@@ -160,6 +166,12 @@ export const updatesModeSlice = createSlice({
         ) => {
             state.shouldZoomToSelectedRegion = action.payload;
         },
+        isLoadingExtentForSelectedRegionChanged: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.isLoadingExtentForSelectedRegion = action.payload;
+        },
     },
 });
 
@@ -174,6 +186,7 @@ export const {
     updatesModeCustomDateRangeChanged,
     worldImageryUpdatesOutStatisticsChanged,
     shouldZoomToSelectedRegionChanged,
+    isLoadingExtentForSelectedRegionChanged,
 } = updatesModeSlice.actions;
 
 export default reducer;

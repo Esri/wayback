@@ -8,7 +8,10 @@ import {
     shouldZoomToSelectedRegionChanged,
     updatesModeRegionChanged,
 } from '@store/UpdatesMode/reducer';
-import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
+import {
+    selectIsLoadingExtentForSelectedRegion,
+    selectUpdatesModeRegion,
+} from '@store/UpdatesMode/selectors';
 import {
     CalciteButton,
     CalciteInputText,
@@ -32,6 +35,10 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
     const { listOfRegions, isLoading, error } = useListOfRegions(disabled);
 
     const selectedRegion = useAppSelector(selectUpdatesModeRegion);
+
+    const isLoadingExtentForSelectedRegion = useAppSelector(
+        selectIsLoadingExtentForSelectedRegion
+    );
 
     const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -156,6 +163,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                 <HeaderText
                     title={t('region')}
                     tooltip={t('region_filter_tooltip')}
+                    showLoadingIndicator={isLoadingExtentForSelectedRegion}
                 />
 
                 {selectedRegion && (

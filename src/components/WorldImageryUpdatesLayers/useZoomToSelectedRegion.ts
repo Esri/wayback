@@ -4,7 +4,10 @@ import MapView from '@arcgis/core/views/MapView';
 import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';
 import { queryExtent } from '@services/world-imagery-updates/queryExtent';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { shouldZoomToSelectedRegionChanged } from '@store/UpdatesMode/reducer';
+import {
+    isLoadingExtentForSelectedRegionChanged,
+    shouldZoomToSelectedRegionChanged,
+} from '@store/UpdatesMode/reducer';
 import { selectShouldZoomToSelectedRegion } from '@store/UpdatesMode/selectors';
 import { logger } from '@utils/IndexedDBLogger';
 import React, { useEffect } from 'react';
@@ -35,6 +38,8 @@ export const useZoomToSelectedRegion = (
             // if (!region) {
             //     return;
             // }
+
+            dispatch(isLoadingExtentForSelectedRegionChanged(true));
 
             try {
                 const extent = await queryExtent(category, whereClause);
@@ -75,6 +80,8 @@ export const useZoomToSelectedRegion = (
                     whereClause,
                     error: (error as Error).message,
                 });
+            } finally {
+                dispatch(isLoadingExtentForSelectedRegionChanged(false));
             }
         })();
     }, [

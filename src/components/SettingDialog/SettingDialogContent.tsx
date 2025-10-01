@@ -316,6 +316,9 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                         className={classnames({
                             disabled: !portalUrl && !shouldSaveAsDefaultExtent,
                         })}
+                        style={{
+                            '--calcite-button-text-color': '#fff',
+                        }}
                     >
                         <CalciteButton onClick={this.saveSettings}>
                             {saveBtnLable}
