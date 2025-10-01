@@ -32,7 +32,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
 
     const dispatch = useAppDispatch();
 
-    const { listOfRegions, isLoading, error } = useListOfRegions(disabled);
+    const { listOfRegions, isLoading, error } = useListOfRegions();
 
     const selectedRegion = useAppSelector(selectUpdatesModeRegion);
 
