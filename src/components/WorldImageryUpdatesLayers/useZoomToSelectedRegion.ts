@@ -6,6 +6,7 @@ import { queryExtent } from '@services/world-imagery-updates/queryExtent';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { shouldZoomToSelectedRegionChanged } from '@store/UpdatesMode/reducer';
 import { selectShouldZoomToSelectedRegion } from '@store/UpdatesMode/selectors';
+import { logger } from '@utils/IndexedDBLogger';
 import React, { useEffect } from 'react';
 
 export const useZoomToSelectedRegion = (
@@ -66,7 +67,14 @@ export const useZoomToSelectedRegion = (
                 // reset the flag to prevent zooming on subsequent region changes
                 dispatch(shouldZoomToSelectedRegionChanged(false));
             } catch (error) {
-                console.error('Error querying extent:', error);
+                // console.error('Error querying extent:', error);
+
+                logger.log('error_querying_extent_for_updates_layer', {
+                    category,
+                    region,
+                    whereClause,
+                    error: (error as Error).message,
+                });
             }
         })();
     }, [

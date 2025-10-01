@@ -33,6 +33,7 @@ import {
 } from '@vannizhang/wayback-core';
 import { initI18next } from '@utils/i18n';
 import { ErrorPage } from '@components/ErrorPage/ErrorPage';
+import { initLogger } from '@utils/IndexedDBLogger';
 
 (async () => {
     const root = createRoot(document.getElementById('appRootDiv'));
@@ -44,6 +45,8 @@ import { ErrorPage } from '@components/ErrorPage/ErrorPage';
         });
 
         await initI18next();
+
+        await initLogger();
 
         if (tier === 'development') {
             // Set the default wayback options for development mode
