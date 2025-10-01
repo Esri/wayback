@@ -43,7 +43,7 @@ export const useListOfRegions = (shouldSkipFetechRegions: boolean) => {
                 setListOfRegions([]);
             }
         })();
-    }, [category, whereClause, shouldSkipFetechRegions]);
+    }, [category, whereClause]);
 
     return {
         listOfRegions,
