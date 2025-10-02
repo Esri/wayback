@@ -56,7 +56,7 @@ type Props = {
 const SearchWidget: React.FC<Props> = ({
     // position,
     // containerId,
-    portalUrl,
+    // portalUrl,
     mapView,
     searchCompletedHandler,
 }: Props) => {

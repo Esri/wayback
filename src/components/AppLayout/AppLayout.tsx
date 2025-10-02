@@ -37,7 +37,6 @@ import {
     DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
-import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
@@ -83,10 +82,7 @@ const AppLayout: React.FC = () => {
 
                     <ReferenceLayerToggle />
 
-                    <SearchWidget
-                        portalUrl={getArcGISOnlinePortalUrl()}
-                        // position={'top-left'}
-                    />
+                    <SearchWidget />
 
                     <ZoomWidget />
 
