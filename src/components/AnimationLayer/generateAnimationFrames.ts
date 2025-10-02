@@ -18,7 +18,6 @@ import Point from '@arcgis/core/geometry/Point';
 
 import { geometryFns } from 'helper-toolkit-ts';
 import { IWaybackItem } from '@typings/index';
-// import { getServiceUrl } from '@utils/Tier';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 
 // import { loadModules } from 'esri-loader';

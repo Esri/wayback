@@ -46,13 +46,3 @@ export const getArcGISOnlinePortalUrl = () => {
 
     return 'https://www.arcgis.com';
 };
-
-// const getServiceUrl = (key?: ValidServiceUrlNames) => {
-//     const serviceUrls =
-//         isDevMode && config.developmentEnv.serviceUrls
-//             ? config.developmentEnv.serviceUrls
-//             : config.productionEnv.serviceUrls;
-//     return serviceUrls[key] || '';
-// };
-
-// export { getServiceUrl };
