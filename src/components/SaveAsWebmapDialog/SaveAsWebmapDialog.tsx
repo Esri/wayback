@@ -218,7 +218,16 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                 {t('webmap_ready_message')}
             </p>
             <div onClick={openWebmap}>
-                <CalciteButton width="full">
+                <CalciteButton
+                    width="full"
+                    label={t('open_wayback_map')}
+                    ref={(el) => {
+                        if (el) {
+                            // Focus after render
+                            setTimeout(() => el.setFocus(), 0);
+                        }
+                    }}
+                >
                     {t('open_wayback_map')}
                 </CalciteButton>
             </div>

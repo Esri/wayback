@@ -79,7 +79,8 @@ svg.with-drop-shadow {
     background-size: 6px 6px;
 }
 
-button:focus-visible {
+button:focus-visible,
+div[role="button"]:focus-visible {
     outline: 2px solid #0079c1;
     outline-offset: 2px;
 }

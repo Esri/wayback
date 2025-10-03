@@ -46,7 +46,7 @@ const LayerSelector: React.FC<Props> = ({
     });
 
     return (
-        <button
+        <div
             className={classNames}
             style={{
                 position: 'relative',
@@ -71,9 +71,16 @@ const LayerSelector: React.FC<Props> = ({
             }}
             aria-label={label}
             onClick={onClick}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onClick();
+                }
+            }}
+            tabIndex={0}
+            role="button"
         >
             {children}
-        </button>
+        </div>
     );
 };
 
