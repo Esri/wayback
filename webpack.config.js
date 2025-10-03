@@ -154,6 +154,7 @@ module.exports = (env, options)=> {
                 APP_ID: JSON.stringify(envConfig.APP_ID),
                 ENV_ARCGIS_PORTAL_ROOT_URL: JSON.stringify(envConfig.ARCGIS_PORTAL_ROOT_URL),
                 ENV_WAYBACK_CONFIG_FILE_URL: JSON.stringify(envConfig.WAYBACK_CONFIG_FILE_URL),
+                ENV_WAYBACK_SUBDOMAINS: JSON.stringify(envConfig.WAYBACK_SUBDOMAINS ? envConfig.WAYBACK_SUBDOMAINS.split(',').map(s => s.trim()) : undefined),
                 ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL: JSON.stringify(envConfig.WAYBACK_EXPORT_GP_SERVICE_ROOT_URL),
                 ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.METROPOLITAN_UPDATES_FEATURE_LAYER_URL),
                 ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.REGIONAL_UPDATES_FEATURE_LAYER_URL),

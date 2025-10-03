@@ -68,8 +68,17 @@ export const initApp = async ({ appId }: InitAppParams): Promise<void> => {
 
     // If there is a custom wayback config file URL in the environment variables, use it to set up the wayback config
     if (ENV_WAYBACK_CONFIG_FILE_URL) {
+        const subDomains =
+            ENV_WAYBACK_SUBDOMAINS &&
+            Array.isArray(ENV_WAYBACK_SUBDOMAINS) &&
+            ENV_WAYBACK_SUBDOMAINS.length > 0
+                ? ENV_WAYBACK_SUBDOMAINS
+                : undefined;
+        // console.log('Using custom Wayback config file URL:', ENV_WAYBACK_CONFIG_FILE_URL);
+        // console.log('Using Wayback subdomains:', subDomains);
+
         setCustomWaybackConfig({
-            subDomains: ['waybackdev'],
+            subDomains,
             waybackConfigFileURL: ENV_WAYBACK_CONFIG_FILE_URL,
         });
     }

@@ -17,6 +17,12 @@ declare const ENV_ARCGIS_PORTAL_ROOT_URL: string;
 declare const ENV_WAYBACK_CONFIG_FILE_URL: string;
 
 /**
+ * Optional: Comma-separated list of subdomains for the Wayback tile service.
+ * Defaults to wayback,wayback-a,wayback-b if not specified.
+ */
+declare const ENV_WAYBACK_SUBDOMAINS: string;
+
+/**
  * Optional: Wayback Export GP Service Root URL.
  * Defaults to https://wayport.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport if not specified.
  */
