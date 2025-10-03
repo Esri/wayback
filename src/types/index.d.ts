@@ -95,11 +95,6 @@ interface IScreenPoint {
     y: number;
 }
 
-// interface IUserSession {
-//     portal: Portal;
-//     credential: Credential;
-// }
-
 interface IURLParamData {
     mapExtent?: IExtentGeomety;
     rNum4SelectedWaybackItems?: Array<number>;
@@ -120,28 +115,6 @@ interface IStaticTooltipData {
     left: number;
 }
 
-// type ValidServiceUrlNames =
-// | 'portal-url'
-// 'wayback-imagery-base';
-// | 'wayback-config'
-// | 'wayback-change-detector-layer'
-// | 'reference-layer'
-// | 'world-imagery-basemap'
-
-interface IAppConfig {
-    defaultMapExtent?: {
-        xmin: number;
-        ymin: number;
-        xmax: number;
-        ymax: number;
-        spatialReference: {
-            wkid: 4326;
-        };
-    };
-}
-
-// type TIER = 'production' | 'development';
-
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -149,11 +122,7 @@ export {
     IPointGeomety,
     IWaybackMetadataQueryResult,
     IScreenPoint,
-    // IUserSession,
     IExtentGeomety,
     IURLParamData,
     IStaticTooltipData,
-    // ValidServiceUrlNames,
-    IAppConfig,
-    // TIER,
 };
