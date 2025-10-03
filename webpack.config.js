@@ -150,7 +150,15 @@ module.exports = (env, options)=> {
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
+                // define environment variables to be used in the application
                 ARCGIS_OAUTH_CLIENT_ID: JSON.stringify(envConfig.ARCGIS_OAUTH_CLIENT_ID),
+                ENV_ARCGIS_PORTAL_ROOT_URL: JSON.stringify(envConfig.ARCGIS_PORTAL_ROOT_URL),
+                ENV_WAYBACK_CONFIG_FILE_URL: JSON.stringify(envConfig.WAYBACK_CONFIG_FILE_URL),
+                ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL: JSON.stringify(envConfig.WAYBACK_EXPORT_GP_SERVICE_ROOT_URL),
+                ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.METROPOLITAN_UPDATES_FEATURE_LAYER_URL),
+                ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.REGIONAL_UPDATES_FEATURE_LAYER_URL),
+                ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.COMMUNITY_UPDATES_FEATURE_LAYER_URL),
+                ENV_WORLD_IMAGERY_BASEMAP_URL: JSON.stringify(envConfig.WORLD_IMAGERY_BASEMAP_URL),
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({

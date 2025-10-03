@@ -1,4 +1,4 @@
-import { tier } from '@utils/Tier';
+// import { tier } from '@utils/Tier';
 
 /**
  * Maxar's Vivid Advanced basemap product provides committed image currency in a high-resolution,
@@ -7,12 +7,14 @@ import { tier } from '@utils/Tier';
 const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
 
-const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
+// const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
 
 export const VIVID_ADVANCED_FROM_MAXAR_URL =
-    tier === 'production'
-        ? VIVID_ADVANCED_FROM_MAXAR_URL_PROD
-        : VIVID_ADVANCED_FROM_MAXAR_URL_DEV;
+    ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL ||
+    VIVID_ADVANCED_FROM_MAXAR_URL_PROD;
+// tier === 'production'
+//     ? VIVID_ADVANCED_FROM_MAXAR_URL_PROD
+//     : VIVID_ADVANCED_FROM_MAXAR_URL_DEV;
 
 /**
  * Maxar's Vivid Standard basemap product provides a visually consistent and continuous image layer
@@ -22,12 +24,14 @@ export const VIVID_ADVANCED_FROM_MAXAR_URL =
 const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
 
-const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
+// const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
 
 export const VIVID_STANDARD_FROM_MAXAR_URL =
-    tier === 'production'
-        ? VIVID_STANDARD_FROM_MAXAR_URL_PROD
-        : VIVID_STANDARD_FROM_MAXAR_URL_DEV;
+    ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL ||
+    VIVID_STANDARD_FROM_MAXAR_URL_PROD;
+// tier === 'production'
+//     ? VIVID_STANDARD_FROM_MAXAR_URL_PROD
+//     : VIVID_STANDARD_FROM_MAXAR_URL_DEV;
 
 /**
  * The GIS User Community, including mapping agencies around the world, enhance the ArcGIS World Imagery map by contributing recent,
@@ -36,12 +40,14 @@ export const VIVID_STANDARD_FROM_MAXAR_URL =
 const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
 
-const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
+// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
 
 export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
-    tier === 'production'
-        ? COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD
-        : COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV;
+    ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL ||
+    COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD;
+// tier === 'production'
+//     ? COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD
+//     : COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV;
 
 /**
  * Fields available in the Imagery Updates layers:

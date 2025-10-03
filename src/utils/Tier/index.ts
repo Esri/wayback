@@ -34,15 +34,21 @@ console.log(`Is development mode: ${isDevMode}`);
 export const tier: TIER = isDevMode ? 'development' : 'production';
 console.log(`Current tier: ${tier}`);
 
+const ARCGIS_PROTAL_ROOT =
+    ENV_ARCGIS_PORTAL_ROOT_URL || 'https://www.arcgis.com';
+
 /**
- * Returns the ArcGIS Online portal URL based on the current tier.
- * If the tier is 'development', it returns the development portal URL.
- * Otherwise, it returns the production portal URL.
+ * Gets the ArcGIS Online portal URL. If there is a specific URL set in the environment variables,
+ * it returns that URL. Otherwise, it defaults to 'https://www.arcgis.com'.
+ *
+ * @returns {string} The ArcGIS Online portal URL.
  */
 export const getArcGISOnlinePortalUrl = () => {
-    if (tier === 'development') {
-        return 'https://devext.arcgis.com';
-    }
+    // if (tier === 'development') {
+    //     return 'https://devext.arcgis.com';
+    // }
 
-    return 'https://www.arcgis.com';
+    // return 'https://www.arcgis.com';
+
+    return ARCGIS_PROTAL_ROOT;
 };

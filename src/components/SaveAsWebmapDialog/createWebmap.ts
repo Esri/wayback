@@ -16,7 +16,6 @@
 // import IEsriConfig from 'esri/config';
 // import { loadModules } from 'esri-loader';
 import { IWaybackItem, IExtentGeomety } from '@typings/index';
-import { tier } from '@utils/Tier';
 // import EsriRquest from 'esri/request';
 
 // import esriRequest from '@arcgis/core/request';
@@ -72,13 +71,21 @@ const getRequestUrl = () => {
 
 const WORLD_IMAGERY_BASEMAP_URL_PROD =
     'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/';
-const WORLD_IMAGERY_BASEMAP_URL_DEV =
-    'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
+// const WORLD_IMAGERY_BASEMAP_URL_DEV =
+//     'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
 
+// const WORLD_IMAGERY_BASEMAP_URL =
+//     tier === 'production'
+//         ? WORLD_IMAGERY_BASEMAP_URL_PROD
+//         : WORLD_IMAGERY_BASEMAP_URL_DEV;
+
+/**
+ * Base URL for the World Imagery basemap service.
+ * If there is a specific URL set in the environment variables,
+ * it uses that URL. Otherwise, it defaults to the production URL.
+ */
 const WORLD_IMAGERY_BASEMAP_URL =
-    tier === 'production'
-        ? WORLD_IMAGERY_BASEMAP_URL_PROD
-        : WORLD_IMAGERY_BASEMAP_URL_DEV;
+    ENV_WORLD_IMAGERY_BASEMAP_URL || WORLD_IMAGERY_BASEMAP_URL_PROD;
 
 const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     const operationalLayers: Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];
