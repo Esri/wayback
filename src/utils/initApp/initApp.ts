@@ -8,6 +8,7 @@ import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 import { initLogger } from '@utils/IndexedDBLogger';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
+import { setCustomWaybackConfig } from '@esri/wayback-core';
 
 type InitAppParams = {
     /**
@@ -63,6 +64,14 @@ export const initApp = async ({ appId }: InitAppParams): Promise<void> => {
         throw new Error(
             'No appId provided for Esri OAuth initialization. Please add a valid appId in the environment variables.'
         );
+    }
+
+    // If there is a custom wayback config file URL in the environment variables, use it to set up the wayback config
+    if (ENV_WAYBACK_CONFIG_FILE_URL) {
+        setCustomWaybackConfig({
+            subDomains: ['waybackdev'],
+            waybackConfigFileURL: ENV_WAYBACK_CONFIG_FILE_URL,
+        });
     }
 
     await initI18next();
