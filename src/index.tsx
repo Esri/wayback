@@ -26,11 +26,12 @@ import AppContextProvider from './contexts/AppContextProvider';
 import { AppLayout } from '@components/index';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
 import { getCustomPortalUrl } from '@utils/LocalStorage';
-import { getArcGISOnlinePortalUrl, tier } from '@utils/Tier';
+// import { getArcGISOnlinePortalUrl, tier } from '@utils/Tier';
 import { getWaybackItems, setDefaultWaybackOptions } from '@esri/wayback-core';
 import { initI18next } from '@utils/i18n';
 import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 import { initLogger } from '@utils/IndexedDBLogger';
+import { ARCGIS_PROTAL_ROOT } from './constants';
 
 (async () => {
     const root = createRoot(document.getElementById('appRootDiv'));
@@ -38,19 +39,19 @@ import { initLogger } from '@utils/IndexedDBLogger';
     try {
         await initEsriOAuth({
             appId: ARCGIS_OAUTH_CLIENT_ID,
-            portalUrl: getCustomPortalUrl() || getArcGISOnlinePortalUrl(),
+            portalUrl: getCustomPortalUrl() || ARCGIS_PROTAL_ROOT,
         });
 
         await initI18next();
 
         await initLogger();
 
-        if (tier === 'development') {
-            // Set the default wayback options for development mode
-            setDefaultWaybackOptions({
-                useDevServices: true,
-            });
-        }
+        // if (tier === 'development') {
+        //     // Set the default wayback options for development mode
+        //     setDefaultWaybackOptions({
+        //         useDevServices: true,
+        //     });
+        // }
 
         const waybackItems = await getWaybackItems();
 

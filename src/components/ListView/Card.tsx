@@ -17,10 +17,11 @@ import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
-import { getArcGISOnlinePortalUrl } from '@utils/Tier';
+// import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
+import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 
 interface Props {
     data: IWaybackItem;
@@ -76,9 +77,9 @@ export const ListViewCard: FC<Props> = ({
     const openItem = () => {
         const itemId = data.itemID;
 
-        const agolHost = getArcGISOnlinePortalUrl();
+        // const agolHost = getArcGISOnlinePortalUrl();
 
-        const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
+        const itemUrl = `${ARCGIS_PROTAL_ROOT}/home/item.html?id=${itemId}`;
 
         window.open(itemUrl, '_blank');
     };

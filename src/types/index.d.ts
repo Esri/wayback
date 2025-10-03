@@ -140,7 +140,7 @@ interface IAppConfig {
     };
 }
 
-type TIER = 'production' | 'development';
+// type TIER = 'production' | 'development';
 
 export {
     IWaybackConfig,
@@ -155,5 +155,5 @@ export {
     IStaticTooltipData,
     // ValidServiceUrlNames,
     IAppConfig,
-    TIER,
+    // TIER,
 };
