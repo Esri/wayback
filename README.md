@@ -20,18 +20,14 @@ Ensure you have Node.js and NPM installed on your machine. You can download them
 ### Environment Variables
 Before running the application, ensure you have a `.env` file in the root directory of the project. You can create this file by copying the provided [`.env.template`](./.env.template) file.
 
-In the `.env` file, you must specify the `ARCGIS_OAUTH_CLIENT_ID`, which is required for authenticating with ArcGIS services. Follow the [How to implement user authentication](https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/how-to-implement-user-authentication/) guide to obtain your OAuth Client ID.
+In the `.env` file, you must specify the `APP_ID`, which is required for authenticating with ArcGIS services. Follow the [How to implement user authentication](https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/how-to-implement-user-authentication/) guide to obtain your OAuth Client ID.
 
 Here is an example of the `.env` file configuration:
 
 ```sh
 # ArcGIS OAuth Client ID for the application.
 # Replace 'your-client-id' with your actual ArcGIS OAuth Client ID.
-ARCGIS_OAUTH_CLIENT_ID=your-client-id
-
-# Custom hostname for starting the Webpack Dev server (optional).
-# Defaults to 'localhost' if not specified.
-WEBPACK_DEV_SERVER_HOSTNAME=my-custom-hostname.com
+APP_ID=your-client-id
 ```
 
 Make sure to replace `your-client-id` with your actual ArcGIS OAuth Client ID.
