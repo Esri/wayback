@@ -1,5 +1,5 @@
 .gutter-container {
-    @apply absolute top-0 left-0 h-full p-0 z-10  w-[var(--gutter-width)];
+    @apply absolute top-0 left-0 h-full p-0 z-10  w-[var(--gutter-width)] min-h-[450px] overflow-hidden;
 }
 
 .gutter-container .gutter-nav-btn {
