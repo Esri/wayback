@@ -40,7 +40,7 @@ export const HeaderText: FC<Props> = ({
                             closeOnClick={true}
                         >
                             <div
-                                className="max-w-[300px]"
+                                className="max-w-[260px]"
                                 dangerouslySetInnerHTML={{
                                     __html: tooltip,
                                 }}
