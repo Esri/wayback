@@ -25,7 +25,10 @@ export const MapActionButtonGroup: FC<Props> = ({ mapView }) => {
             <ZoomToExtent
                 tooltip={t('zoom_to_full_extent')}
                 onClick={() => {
-                    mapView.zoom = 3;
+                    mapView.goTo({
+                        center: [-4.8908, 25.35031],
+                        zoom: 3,
+                    });
                 }}
             />
 
