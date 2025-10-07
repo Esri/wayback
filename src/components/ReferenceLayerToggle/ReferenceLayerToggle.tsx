@@ -14,6 +14,7 @@
  */
 import { CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
     isActive: boolean;
@@ -26,6 +27,8 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
     onClick,
     localeSwitchButtonOnClick,
 }) => {
+    const { t } = useTranslation();
+
     const icon = isActive ? (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,19 +58,24 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
     return (
         <div className="relative w-full h-full flex items-center justify-between ">
             <div className="flex items-center">
-                <div className="mx-2 cursor-pointer" onClick={onClick}>
+                <button
+                    className="mx-2 cursor-pointer"
+                    onClick={onClick}
+                    aria-label={t('toggle_reference_layer')}
+                >
                     {icon}
-                </div>
-                <div className=" text-sm">reference label overlay</div>
+                </button>
+                <div className=" text-sm">{t('reference_label_overlay')}</div>
             </div>
 
-            <div
+            <button
                 className="mr-2 flex items-center cursor-pointer"
-                title="Choose label language"
+                title={t('choose_label_language')}
+                aria-label={t('choose_label_language')}
                 onClick={localeSwitchButtonOnClick}
             >
                 <CalciteIcon icon="speech-bubble" scale="s"></CalciteIcon>
-            </div>
+            </button>
         </div>
     );
 };

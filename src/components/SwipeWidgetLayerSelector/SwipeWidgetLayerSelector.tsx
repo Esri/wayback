@@ -20,6 +20,7 @@ import classnames from 'classnames';
 
 import { LayerSelector } from '../';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 export const SwipeWidgetLayerSelectorWidth = 220;
 
@@ -44,6 +45,8 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
     onSelect,
     onClose,
 }: Props) => {
+    const { t } = useTranslation();
+
     const getList = () => {
         const items = waybackItems
             .filter((d) => {
@@ -56,12 +59,22 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 const isSelected =
                     selectedItem && selectedItem.itemID === itemID;
 
+                const label =
+                    targetLayerType === 'leading'
+                        ? t('select_release_left_swipe', {
+                              releaseDate: releaseDateLabel,
+                          })
+                        : t('select_release_right_swipe', {
+                              releaseDate: releaseDateLabel,
+                          });
+
                 return (
                     <LayerSelector
                         key={itemID}
                         isSelected={isSelected}
                         showArrowOnLeft={targetLayerType === 'trailing'}
                         onClick={onSelect.bind(this, d)}
+                        label={label}
                     >
                         {releaseDateLabel}
                     </LayerSelector>
@@ -87,7 +100,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div className="text-center text-custom-theme-blue-brand shrink-0">
+            <div className="text-center text-custom-theme-blue-light shrink-0">
                 <h4 className="text-2xl font-light mb-0">
                     {targetLayerType === 'leading' ? 'Left' : 'Right'} Selection
                 </h4>
@@ -108,7 +121,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div
+            <button
                 className="absolute top-1 right-1 cursor-pointer text-white"
                 // style={{
                 //     position: 'absolute',
@@ -117,10 +130,11 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 //     cursor: 'pointer',
                 // }}
                 onClick={onClose}
+                aria-label={t('close_swipe_mode')}
             >
                 {/* <span className="icon-ui-close text-white"></span> */}
                 <CalciteIcon icon="x" scale="l" />
-            </div>
+            </button>
         );
     };
 

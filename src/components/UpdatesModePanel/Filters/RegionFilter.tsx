@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
@@ -8,15 +8,26 @@ import {
     shouldZoomToSelectedRegionChanged,
     updatesModeRegionChanged,
 } from '@store/UpdatesMode/reducer';
-import { selectUpdatesModeRegion } from '@store/UpdatesMode/selectors';
+import {
+    selectIsLoadingExtentForSelectedRegion,
+    selectUpdatesModeRegion,
+} from '@store/UpdatesMode/selectors';
 import {
     CalciteButton,
     CalciteInputText,
     CalciteLoader,
 } from '@esri/calcite-components-react';
 import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
+import classNames from 'classnames';
 
-export const RegionFilter = () => {
+type RegionFilterProps = {
+    /**
+     * If true, the filter will be disabled and not interactable.
+     */
+    disabled?: boolean;
+};
+
+export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -24,6 +35,10 @@ export const RegionFilter = () => {
     const { listOfRegions, isLoading, error } = useListOfRegions();
 
     const selectedRegion = useAppSelector(selectUpdatesModeRegion);
+
+    const isLoadingExtentForSelectedRegion = useAppSelector(
+        selectIsLoadingExtentForSelectedRegion
+    );
 
     const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -80,10 +95,18 @@ export const RegionFilter = () => {
             );
         }
 
+        if (disabled) {
+            return (
+                <div className="text-sm text-gray-500">
+                    {t('regions_cannot_be_fetched')}
+                </div>
+            );
+        }
+
         if (error) {
             return (
                 <div className="text-center text-sm text-red-500">
-                    {t('error_fetching_regions')}
+                    {t('error_fetching_regions', { error: error.message })}
                 </div>
             );
         }
@@ -110,10 +133,11 @@ export const RegionFilter = () => {
                     ></CalciteInputText>
                 </div>
 
-                <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1">
+                <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden">
                     <RadioButtonGroup
                         name="region-filter"
                         data={filteredData}
+                        disabled={disabled || false}
                         onClick={(value: string) => {
                             console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
@@ -130,11 +154,16 @@ export const RegionFilter = () => {
     };
 
     return (
-        <div className="bg-custom-card-background p-2 mb-2 text-white flex-grow">
+        <div
+            className={classNames(
+                'bg-custom-card-background p-2 mb-2 text-white flex-grow'
+            )}
+        >
             <div className="flex justify-between items-center mb-2">
                 <HeaderText
                     title={t('region')}
                     tooltip={t('region_filter_tooltip')}
+                    showLoadingIndicator={isLoadingExtentForSelectedRegion}
                 />
 
                 {selectedRegion && (

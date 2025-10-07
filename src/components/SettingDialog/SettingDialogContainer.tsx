@@ -18,8 +18,9 @@ import React, { useContext } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    activeDialogUpdated,
     isSettingModalOpenSelector,
-    isSettingModalOpenToggled,
+    // isSettingModalOpenToggled,
     // shouldOnlyShowItemsWithLocalChangeToggled,
 } from '@store/UI/reducer';
 
@@ -47,7 +48,7 @@ const SettingDialogContainer = () => {
     const user = getSignedInUser();
 
     const onCloseHandler = () => {
-        dispatch(isSettingModalOpenToggled());
+        dispatch(activeDialogUpdated());
     };
 
     const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
@@ -75,7 +76,12 @@ const SettingDialogContainer = () => {
     // ) : null;
 
     return (
-        <Modal isOpen={isOpen} width="m" onClose={onCloseHandler}>
+        <Modal
+            title="Settings"
+            isOpen={isOpen}
+            width="m"
+            onClose={onCloseHandler}
+        >
             <SettingDialogContent
                 mapExtent={mapExtent}
                 signedInUser={user}

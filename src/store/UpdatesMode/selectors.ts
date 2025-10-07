@@ -23,3 +23,6 @@ export const selectUpdatesModeState = (state: RootState) => state.UpdatesMode;
 
 export const selectShouldZoomToSelectedRegion = (state: RootState) =>
     state.UpdatesMode.shouldZoomToSelectedRegion;
+
+export const selectIsLoadingExtentForSelectedRegion = (state: RootState) =>
+    state.UpdatesMode.isLoadingExtentForSelectedRegion;

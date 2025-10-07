@@ -1,13 +1,13 @@
 .gutter-container {
-    @apply absolute top-0 left-0 h-full p-0 z-10  w-[var(--gutter-width)];
+    @apply absolute top-0 left-0 h-full p-0 z-10  w-[var(--gutter-width)] min-h-[450px] overflow-hidden;
 }
 
 .gutter-container .gutter-nav-btn {
-    @apply relative cursor-pointer text-center my-1 w-full;
+    @apply relative cursor-pointer text-center py-[6px] mb-1 w-full flex items-center justify-center;
 }
 
-.is-mobile .gutter-container {
+/* .is-mobile .gutter-container {
     display: block;
     top: 45px;
-}
+} */
 

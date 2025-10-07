@@ -108,7 +108,7 @@ export type DownloadModeState = {
         };
         ids: string[];
     };
-    isDownloadDialogOpen: boolean;
+    // isDownloadDialogOpen: boolean;
     /**
      * If true, the system is currently in the process of adding a new download job.
      *
@@ -132,9 +132,9 @@ const slice = createSlice({
     name: 'Download',
     initialState: initialDownloadModeState,
     reducers: {
-        isDownloadDialogOpenToggled: (state) => {
-            state.isDownloadDialogOpen = !state.isDownloadDialogOpen;
-        },
+        // isDownloadDialogOpenToggled: (state) => {
+        //     state.isDownloadDialogOpen = !state.isDownloadDialogOpen;
+        // },
         isAddingNewDownloadJobToggled: (state) => {
             state.isAddingNewDownloadJob = !state.isAddingNewDownloadJob;
         },
@@ -162,7 +162,7 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
-    isDownloadDialogOpenToggled,
+    // isDownloadDialogOpenToggled,
     isAddingNewDownloadJobToggled,
     downloadJobCreated,
     downloadJobRemoved,

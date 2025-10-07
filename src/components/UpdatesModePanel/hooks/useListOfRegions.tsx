@@ -3,6 +3,8 @@ import { useAsync } from '@hooks/useAsync';
 import { getListOfCountries } from '@services/world-imagery-updates/getListOfCountries';
 import { useAppSelector } from '@store/configureStore';
 import { selectUpdatesModeCategory } from '@store/UpdatesMode/selectors';
+import { isAnonymouns } from '@utils/Esri-OAuth';
+import { logger } from '@utils/IndexedDBLogger';
 import React, { useEffect } from 'react';
 
 export const useListOfRegions = () => {
@@ -20,12 +22,25 @@ export const useListOfRegions = () => {
     useEffect(() => {
         (async () => {
             try {
+                if (isAnonymouns()) {
+                    // setListOfRegions([]);
+                    console.warn('Skipping fetch of regions.');
+                    return;
+                }
+
                 // console.log('Fetching list of regions for category:', category);
                 const regions = await execute(category, whereClause);
                 // console.log('Fetched regions:', regions);
                 setListOfRegions(regions);
             } catch (e) {
                 console.error('Error fetching list of regions:', e);
+
+                logger.log('error_fetching_list_of_regions', {
+                    category,
+                    whereClause,
+                    error: (e as Error).message,
+                });
+
                 setListOfRegions([]);
             }
         })();

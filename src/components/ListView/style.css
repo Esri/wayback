@@ -16,11 +16,11 @@
     background-color: #1c1c1c;
     border-left: solid 4px #1c1c1c;
 }
-.list-view-container .list-card .is-flexy {
+/* .list-view-container .list-card .is-flexy {
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 100px;
-}
+} */
 
 /* .list-view-container .list-card .open-item-btn {
     font-size: 1rem;

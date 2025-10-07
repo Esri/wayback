@@ -17,7 +17,7 @@ import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 // import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
 
 import { IWaybackItem } from '@typings/index';
-import { getWaybackSubDomains } from '@vannizhang/wayback-core';
+import { getWaybackSubDomains } from '@esri/wayback-core';
 
 /**
  * Get urlTemplate string that contains a `{subDomain}` place holder

@@ -22,7 +22,8 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 
 import {
-    isShareModalOpenToggled,
+    activeDialogSelector,
+    // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
     isSettingModalOpenToggled,
     // isGutterHideSelector,
@@ -30,28 +31,37 @@ import {
 import { AppContext } from '@contexts/AppContextProvider';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { copy2clipboard } from '@utils/snippets/copy2clipborad';
+import { ExploreModeToggleButton } from '@components/Gutter/ExploreModeToggleButton';
+import { UpdatesModeToggleButton } from '@components/Gutter/UpdatesModeToggleButton';
+import { AccountAvatar } from '@components/UserAccount';
+import { SwipeModeToggleBtnContainerButton } from './SwipeModeToggleButton';
+import { AnimationModeToggleButton } from './AnimationModeToggleButton';
+import { DownloadTilePackageDialogToggleButton } from './DownloadTilePackageDialogToggleButton';
+import { SaveWebmapDialogToggleButton } from './SaveDialogToggleButton';
 
 type Props = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
 };
 
 const GutterContainer: React.FC<Props> = ({ children }) => {
     const dispatch = useAppDispatch();
 
-    const isSwipeWidgetOpen: boolean = useAppSelector(
-        isSwipeWidgetOpenSelector
-    );
+    // const isSwipeWidgetOpen: boolean = useAppSelector(
+    //     isSwipeWidgetOpenSelector
+    // );
     const isAnimationModeOn: boolean = useAppSelector(
         isAnimationModeOnSelector
     );
 
-    const settingsBtnDisabled = useMemo(() => {
-        return isSwipeWidgetOpen || isAnimationModeOn;
-    }, [isSwipeWidgetOpen, isAnimationModeOn]);
+    // const settingsBtnDisabled = useMemo(() => {
+    //     return isSwipeWidgetOpen || isAnimationModeOn;
+    // }, [isSwipeWidgetOpen, isAnimationModeOn]);
 
     // const isHide = useAppSelector(isGutterHideSelector);
 
     const { isMobile } = useContext(AppContext);
+
+    const activeDialog = useAppSelector(activeDialogSelector);
 
     const aboutButtonOnClick = () => {
         dispatch(isAboutThisAppModalOpenToggled());
@@ -71,13 +81,28 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
     return (
         <Gutter
-            isMobile={isMobile}
-            settingsBtnDisabled={settingsBtnDisabled}
+            // isMobile={isMobile}
+            activeDialog={activeDialog}
+            shouldDisableActionButton={isAnimationModeOn}
             aboutButtonOnClick={aboutButtonOnClick}
-            copyButtonOnClick={copyButtonOnClick}
+            // copyButtonOnClick={copyButtonOnClick}
             settingButtonOnClick={settingButtonOnClick}
         >
-            {children}
+            <ExploreModeToggleButton />
+
+            <SwipeModeToggleBtnContainerButton />
+
+            <AnimationModeToggleButton />
+
+            <UpdatesModeToggleButton />
+
+            <DownloadTilePackageDialogToggleButton />
+
+            <SaveWebmapDialogToggleButton />
+
+            <div className="absolute bottom-0 left-0 w-full">
+                <AccountAvatar />
+            </div>
         </Gutter>
     );
 };

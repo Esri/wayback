@@ -1,11 +1,12 @@
-require('dotenv').config({ path: './.env' }); 
-
+// require('dotenv').config({ path: './.env' }); 
+const dotenv = require('dotenv');
+const fs = require('fs');
 const path = require('path');
 const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -24,11 +25,38 @@ module.exports = (env, options)=> {
     const devMode = options.mode === 'development' ? true : false;
 
     process.env.NODE_ENV = options.mode;
+    
+    /**
+     * Load the environment variables from the specified environment file.
+     * The environment file name should be specified using `--env envFileName=.env.development` or `--env envFileName=.env.production`.
+     * If the environment file name is not specified, the default value will be `.env`.
+     */
+    const envFileName = env?.envFileName || '.env';
 
-    if(!process.env.ARCGIS_OAUTH_CLIENT_ID) {
+    // Get the path to the environment file
+    const envPath = path.resolve(__dirname, envFileName);
+    console.log(`Using environment file: ${envPath}`);
+
+    // check if the environment file exists
+    if (!fs.existsSync(envPath)) {
+        console.error(`Environment file ${envPath} does not exist. Please create it based on .env.template\n`);
+        process.exit(1);
+    }
+
+    // Load the environment variables
+    const envConfig = dotenv.config({ path: envPath }).parsed || {};
+    console.log(`Loaded environment variables from ${envPath}\n`);
+
+    // throw an error if the environment variables is an empty object
+    if (Object.keys(envConfig).length === 0) {
+        console.error(`No environment variables found in the environment file ${envPath}. Please check the file content or create it based on .env.template\n`);
+        process.exit(1);
+    }
+
+    if(!envConfig.APP_ID) {
         console.error(
             `Failed to start/build the application:\n` +
-            `Please ensure that the environment variable ARCGIS_OAUTH_CLIENT_ID is set in your .env file.\n` + 
+            `Please ensure that the environment variable APP_ID is set in your .env file.\n` + 
             `Please refer to the Prerequisites section in README for more information on how to set up your environment variables.`
         );
         process.exit(1);
@@ -37,7 +65,7 @@ module.exports = (env, options)=> {
     return {
         devServer: {
             server: 'https',
-            host: process.env.WEBPACK_DEV_SERVER_HOSTNAME || 'localhost',
+            host: envConfig.WEBPACK_DEV_SERVER_HOSTNAME || 'localhost',
             allowedHosts: "all"
         },
         entry: path.resolve(__dirname, './src/index.tsx'),
@@ -122,7 +150,16 @@ module.exports = (env, options)=> {
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
-                ARCGIS_OAUTH_CLIENT_ID: JSON.stringify(process.env.ARCGIS_OAUTH_CLIENT_ID),
+                // define environment variables to be used in the application
+                APP_ID: JSON.stringify(envConfig.APP_ID),
+                ENV_ARCGIS_PORTAL_ROOT_URL: JSON.stringify(envConfig.ARCGIS_PORTAL_ROOT_URL),
+                ENV_WAYBACK_CONFIG_FILE_URL: JSON.stringify(envConfig.WAYBACK_CONFIG_FILE_URL),
+                ENV_WAYBACK_SUBDOMAINS: JSON.stringify(envConfig.WAYBACK_SUBDOMAINS ? envConfig.WAYBACK_SUBDOMAINS.split(',').map(s => s.trim()) : undefined),
+                ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL: JSON.stringify(envConfig.WAYBACK_EXPORT_GP_SERVICE_ROOT_URL),
+                ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.METROPOLITAN_UPDATES_FEATURE_LAYER_URL),
+                ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.REGIONAL_UPDATES_FEATURE_LAYER_URL),
+                ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.COMMUNITY_UPDATES_FEATURE_LAYER_URL),
+                ENV_WORLD_IMAGERY_BASEMAP_URL: JSON.stringify(envConfig.WORLD_IMAGERY_BASEMAP_URL),
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({
@@ -175,7 +212,7 @@ module.exports = (env, options)=> {
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
                 chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
             }),
-            new CleanWebpackPlugin()
+            // new CleanWebpackPlugin()
         ].filter(Boolean),
         optimization: {
             // splitChunks: {

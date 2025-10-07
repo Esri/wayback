@@ -11,3 +11,4 @@ import '@esri/calcite-components/dist/components/calcite-input-text';
 import '@esri/calcite-components/dist/components/calcite-chip';
 import '@esri/calcite-components/dist/components/calcite-input-date-picker';
 import '@esri/calcite-components/dist/components/calcite-tooltip';
+import '@esri/calcite-components/dist/components/calcite-avatar';

@@ -18,7 +18,8 @@
 // import Credential from '@arcgis/core/identity/Credential';
 // import Portal from '@arcgis/core/portal/Portal';
 
-import { WaybackConfig, WaybackItem } from '@vannizhang/wayback-core';
+import { AppDialogName } from '@store/UI/reducer';
+import { WaybackConfig, WaybackItem } from '@esri/wayback-core';
 
 // interface IWaybackConfig {
 //     [key: number]: {
@@ -94,11 +95,6 @@ interface IScreenPoint {
     y: number;
 }
 
-// interface IUserSession {
-//     portal: Portal;
-//     credential: Credential;
-// }
-
 interface IURLParamData {
     mapExtent?: IExtentGeomety;
     rNum4SelectedWaybackItems?: Array<number>;
@@ -110,6 +106,7 @@ interface IURLParamData {
     animationSpeed?: number;
     rNum4FramesToExclude?: number[];
     isDownloadDialogOpen?: boolean;
+    activeDialog: AppDialogName;
 }
 
 interface IStaticTooltipData {
@@ -118,28 +115,6 @@ interface IStaticTooltipData {
     left: number;
 }
 
-// type ValidServiceUrlNames =
-// | 'portal-url'
-// 'wayback-imagery-base';
-// | 'wayback-config'
-// | 'wayback-change-detector-layer'
-// | 'reference-layer'
-// | 'world-imagery-basemap'
-
-interface IAppConfig {
-    defaultMapExtent?: {
-        xmin: number;
-        ymin: number;
-        xmax: number;
-        ymax: number;
-        spatialReference: {
-            wkid: 4326;
-        };
-    };
-}
-
-type TIER = 'production' | 'development';
-
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -147,11 +122,7 @@ export {
     IPointGeomety,
     IWaybackMetadataQueryResult,
     IScreenPoint,
-    // IUserSession,
     IExtentGeomety,
     IURLParamData,
     IStaticTooltipData,
-    // ValidServiceUrlNames,
-    IAppConfig,
-    TIER,
 };

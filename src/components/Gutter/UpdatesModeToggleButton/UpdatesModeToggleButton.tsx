@@ -2,9 +2,12 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
-import { mapModeChanged, selectMapMode } from '@store/Map/reducer';
-import { ModeToggleButton } from '@components/ModeToggleButton';
+import { selectMapMode } from '@store/Map/reducer';
+import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { useTranslation } from 'react-i18next';
+import { activeDialogSelector } from '@store/UI/reducer';
+import { updateMapMode } from '@store/Map/thunks';
+import { toggleUpdatesMode } from '@store/UpdatesMode/thunks';
 
 export const UpdatesModeToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -15,7 +18,12 @@ export const UpdatesModeToggleButton = () => {
 
     const mode = useAppSelector(selectMapMode);
 
-    const isActive = useMemo(() => mode === 'updates', [mode]);
+    const activeDialog = useAppSelector(activeDialogSelector);
+
+    const isActive = useMemo(
+        () => mode === 'updates' && !activeDialog,
+        [mode, activeDialog]
+    );
 
     if (isMobile) {
         return null;
@@ -25,9 +33,10 @@ export const UpdatesModeToggleButton = () => {
         <ModeToggleButton
             isActive={isActive}
             tooltip={t('open_updates_mode')}
+            label={t('open_updates_mode')}
             icon="date-time"
             testId="updates-mode-toggle-btn"
-            onClick={() => dispatch(mapModeChanged('updates'))}
+            onClick={() => dispatch(toggleUpdatesMode())}
         />
     );
 };

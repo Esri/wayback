@@ -15,10 +15,30 @@
 
 import React, { useState, createContext } from 'react';
 import { miscFns } from 'helper-toolkit-ts';
+import {
+    getProfileSettingsURL,
+    isAnonymouns,
+    isSignedInWithArcGISPublicAccount,
+} from '@utils/Esri-OAuth';
 // import config from '../app-config';
 
 type AppContextValue = {
+    /**
+     * True if the app is being viewed on a mobile device (phone or tablet). False otherwise.
+     */
     isMobile: boolean;
+    /**
+     * If true, user is not signed in.
+     */
+    notSignedIn: boolean;
+    /**
+     * If true, user is signed in with an ArcGIS public account.
+     */
+    signedInWithArcGISPublicAccount: boolean;
+    /**
+     * URL to the user profile settings page where user can update their account information.
+     */
+    userProfileSettingsPageURL: string;
 };
 
 type AppContextProviderProps = {
@@ -30,11 +50,15 @@ export const AppContext = createContext<AppContextValue>(null);
 const AppContextProvider: React.FC<AppContextProviderProps> = ({
     children,
 }: AppContextProviderProps) => {
-    const [value, setValue] = useState<AppContextValue>();
+    const [value, setValue] = useState<AppContextValue>(null);
 
     const init = async () => {
         const contextValue: AppContextValue = {
             isMobile: miscFns.isMobileDevice(),
+            notSignedIn: isAnonymouns(),
+            signedInWithArcGISPublicAccount:
+                isSignedInWithArcGISPublicAccount(),
+            userProfileSettingsPageURL: getProfileSettingsURL(),
         };
 
         setValue(contextValue);

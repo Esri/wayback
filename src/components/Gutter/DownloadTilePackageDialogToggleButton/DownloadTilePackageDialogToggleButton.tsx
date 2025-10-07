@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
+// import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
 import {
     selectNumOfDownloadJobs,
     selectNumOfFinishedDownloadJobs,
@@ -26,8 +26,13 @@ import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
+import {
+    isDownloadDialogOpenToggled,
+    isDownloadTilePackageDialogOpenSelector,
+} from '@store/UI/reducer';
+import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 
-export const OpenDownloadPanelBtn = () => {
+export const DownloadTilePackageDialogToggleButton = () => {
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();
@@ -39,6 +44,14 @@ export const OpenDownloadPanelBtn = () => {
     const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
 
     const shouldBeDisabled = numOfJobs === 0;
+
+    const isDownloadDialogOpen = useAppSelector(
+        isDownloadTilePackageDialogOpenSelector
+    );
+
+    const animationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    const shouldDisableActionButton = animationModeOn;
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -71,27 +84,34 @@ export const OpenDownloadPanelBtn = () => {
     return (
         <div
             className={classnames(
-                'relative w-full text-center my-3 cursor-pointer z-10',
+                'relative w-full text-center py-2 mb-1 px-1 cursor-pointer z-10',
                 // {
                 //     disabled: numOfJobs === 0,
                 // }
                 {
-                    'opacity-50': shouldBeDisabled,
+                    'opacity-50 pointer-events-none': shouldBeDisabled,
+                    'bg-black text-white': isDownloadDialogOpen,
+                    disabled: shouldDisableActionButton,
                 }
             )}
-            title={
-                shouldBeDisabled
-                    ? t('open_download_panel_button_tooltip_disabled')
-                    : t('open_download_panel_button_tooltip')
-            }
-            onClick={() => {
-                if (shouldBeDisabled) {
-                    return;
-                }
-                dispatch(isDownloadDialogOpenToggled());
-            }}
         >
-            <CalciteIcon icon="download-to" scale="l" />
+            <button
+                className="relative flex mx-auto items-center justify-center"
+                title={
+                    shouldBeDisabled
+                        ? t('open_download_panel_button_tooltip_disabled')
+                        : t('open_download_panel_button_tooltip')
+                }
+                aria-label={t('toggle_download_panel')}
+                onClick={() => {
+                    if (shouldBeDisabled) {
+                        return;
+                    }
+                    dispatch(isDownloadDialogOpenToggled());
+                }}
+            >
+                <CalciteIcon icon="download-to" scale="l" />
+            </button>
             {getIndicator()}
         </div>
     );

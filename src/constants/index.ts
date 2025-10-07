@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2025 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,9 @@
  * limitations under the License.
  */
 
-import { IAppConfig } from './types';
-
-const config: IAppConfig = {
-    defaultMapExtent: {
-        xmin: -115.332,
-        ymin: 36.048,
-        xmax: -115.265,
-        ymax: 36.08,
-        spatialReference: {
-            wkid: 4326,
-        },
-    },
-};
-
-export default config;
+/**
+ * ArcGIS Portal root URL.
+ * Defaults to https://www.arcgis.com if not specified in the environment variables.
+ */
+export const ARCGIS_PROTAL_ROOT =
+    ENV_ARCGIS_PORTAL_ROOT_URL || 'https://www.arcgis.com';

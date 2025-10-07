@@ -23,14 +23,19 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
     selectedWaybackItems: Array<number>;
     disabled: boolean;
+    /**
+     * Whether the SaveAsWebmap dialog is open or not
+     */
+    active: boolean;
     onClick?: (val: boolean) => void;
     clearAll?: () => void;
 }
 
 // interface IState {}
-const SaveAsWebmapBtn: React.FC<IProps> = ({
+export const SaveAsWebmapBtn: React.FC<IProps> = ({
     selectedWaybackItems,
     disabled,
+    active,
     onClick,
     clearAll,
 }) => {
@@ -51,20 +56,24 @@ const SaveAsWebmapBtn: React.FC<IProps> = ({
     return (
         <div
             className={classNames(
-                'save-as-webmap-btn-container relative w-full text-center',
+                'save-as-webmap-btn-container relative w-full text-center py-1',
                 {
-                    'opacity-50': disabled,
+                    'opacity-50 pointer-events-none': disabled,
+                    'bg-black text-white': active,
                 }
             )}
         >
-            <div
-                className={classNames('relative', {
-                    'cursor-pointer': isActive,
-                })}
-                onClick={onClickHandler}
-                title={tooltipContent}
-            >
-                <CalciteIcon icon="arcgis-online" scale="l" />
+            <div className="relative">
+                <button
+                    className={classNames('relative', {
+                        'cursor-pointer': isActive,
+                    })}
+                    aria-label={'save as web map'}
+                    onClick={onClickHandler}
+                    title={tooltipContent}
+                >
+                    <CalciteIcon icon="arcgis-online" scale="l" />
+                </button>
 
                 {isActive && (
                     <IndicatorBubble>
@@ -74,15 +83,16 @@ const SaveAsWebmapBtn: React.FC<IProps> = ({
             </div>
 
             {isActive && (
-                <div
-                    className="text-center cursor-pointer text-xs"
+                <button
+                    className="mx-auto text-center cursor-pointer text-xs"
+                    aria-label="clear all selected items"
                     onClick={clearAll}
                 >
                     clear all
-                </div>
+                </button>
             )}
         </div>
     );
 };
 
-export default SaveAsWebmapBtn;
+// export default SaveAsWebmapBtn;

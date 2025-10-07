@@ -19,7 +19,8 @@ import {
     isLoadingWaybackItemsToggled,
     releaseNum4ItemsWithLocalChangesUpdated,
 } from './reducer';
-import { getWaybackItemsWithLocalChanges } from '@vannizhang/wayback-core';
+import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
+import { logger } from '@utils/IndexedDBLogger';
 
 let abortController: AbortController = null;
 
@@ -53,6 +54,20 @@ export const queryLocalChanges =
 
             dispatch(isLoadingWaybackItemsToggled(false));
         } catch (err) {
-            console.log(err);
+            console.log('Error querying local changes:', err);
+
+            if (err.name === 'AbortError' || !err?.message) {
+                // Ignore abort error
+                return;
+            }
+
+            logger.log('error_querying_local_changes', {
+                point: {
+                    longitude: point.longitude,
+                    latitude: point.latitude,
+                },
+                zoom,
+                error: (err as Error).message,
+            });
         }
     };

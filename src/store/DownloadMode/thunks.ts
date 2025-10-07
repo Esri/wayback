@@ -15,7 +15,7 @@
 
 import { IExtent } from '@esri/arcgis-rest-request';
 import { StoreDispatch, StoreGetState } from '../configureStore';
-import { batch } from 'react-redux';
+// import { batch } from 'react-redux';
 import {
     DownloadJob,
     DownloadJobStatus,
@@ -23,7 +23,7 @@ import {
     downloadJobRemoved,
     downloadJobsUpdated,
     isAddingNewDownloadJobToggled,
-    isDownloadDialogOpenToggled,
+    // isDownloadDialogOpenToggled,
 } from './reducer';
 import { nanoid } from 'nanoid';
 import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
@@ -37,6 +37,7 @@ import {
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
+import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
 
 type AddToDownloadListParams = {
     /**
@@ -71,10 +72,8 @@ export const addToDownloadList =
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
 
-        batch(() => {
-            dispatch(isAddingNewDownloadJobToggled());
-            dispatch(isDownloadDialogOpenToggled());
-        });
+        dispatch(isAddingNewDownloadJobToggled());
+        dispatch(isDownloadDialogOpenToggled());
 
         const { WaybackItems } = getState();
 
@@ -106,10 +105,8 @@ export const addToDownloadList =
             // createdTime: new Date().getTime(),
         };
 
-        batch(() => {
-            dispatch(downloadJobCreated(downloadJob));
-            dispatch(isAddingNewDownloadJobToggled());
-        });
+        dispatch(downloadJobCreated(downloadJob));
+        dispatch(isAddingNewDownloadJobToggled());
     };
 
 export const updateUserSelectedZoomLevels =

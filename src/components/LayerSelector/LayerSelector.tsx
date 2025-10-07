@@ -24,6 +24,10 @@ type Props = {
     showBoarderOnLeft?: boolean;
     children?: React.ReactNode;
     disableCursorPointer?: boolean;
+    /**
+     * accessible label for the button
+     */
+    label?: string;
     onClick: () => void;
 };
 
@@ -32,6 +36,7 @@ const LayerSelector: React.FC<Props> = ({
     showArrowOnLeft = false,
     showBoarderOnLeft = false,
     disableCursorPointer = false,
+    label,
     children,
     onClick,
 }: Props) => {
@@ -64,7 +69,15 @@ const LayerSelector: React.FC<Props> = ({
                 boxSizing: 'border-box',
                 cursor: disableCursorPointer ? 'unset' : 'pointer',
             }}
+            aria-label={label}
             onClick={onClick}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onClick();
+                }
+            }}
+            tabIndex={0}
+            role="button"
         >
             {children}
         </div>

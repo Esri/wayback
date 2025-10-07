@@ -17,9 +17,11 @@ import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
 import { IWaybackItem, IStaticTooltipData } from '@typings/index';
-import { getArcGISOnlinePortalUrl } from '@utils/Tier';
+// import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
+import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 
 interface Props {
     data: IWaybackItem;
@@ -64,14 +66,20 @@ export const ListViewCard: FC<Props> = ({
 }: Props) => {
     const { isMobile } = useContext(AppContext);
 
+    const { t } = useTranslation();
+
     const showControlButtons = isActive || isSelected;
+
+    const labelForToggleAddToWebmapBtn = isSelected
+        ? t('remove_release_from_webmap')
+        : t('add_release_to_webmap');
 
     const openItem = () => {
         const itemId = data.itemID;
 
-        const agolHost = getArcGISOnlinePortalUrl();
+        // const agolHost = getArcGISOnlinePortalUrl();
 
-        const itemUrl = `${agolHost}/home/item.html?id=${itemId}`;
+        const itemUrl = `${ARCGIS_PROTAL_ROOT}/home/item.html?id=${itemId}`;
 
         window.open(itemUrl, '_blank');
     };
@@ -96,9 +104,12 @@ export const ListViewCard: FC<Props> = ({
                     'is-selected': isSelected,
                 })}
             >
-                <div
-                    className="is-flexy cursor-pointer"
+                <button
+                    className="text-left flex-grow shrink-0 cursor-pointer "
                     onClick={onClick.bind(this, data.releaseNum)}
+                    aria-label={t(`select_release`, {
+                        releaseDate: data.releaseDateLabel,
+                    })}
                 >
                     <a
                         className="ml-2 text-gray-400 hover:text-gray-300 cursor-pointer"
@@ -106,23 +117,24 @@ export const ListViewCard: FC<Props> = ({
                     >
                         {data.releaseDateLabel}
                     </a>
-                </div>
+                </button>
 
-                <div
+                <button
                     className={classnames(ButtonWrapperClassnames, {
                         flex: showControlButtons,
                         'hidden group-hover:flex': !showControlButtons,
                     })}
                     onClick={openItem}
-                    title="Learn more about this release..."
+                    title={t('learn_more_about_release')}
+                    aria-label={t('learn_more_about_release')}
                 >
                     <CalciteIcon icon="information" scale="m" />
-                </div>
+                </button>
 
                 {/* The download and save web map buttons should not be displayed in mobile view */}
                 {isMobile === false && (
                     <>
-                        <div
+                        <button
                             className={classnames(ButtonWrapperClassnames, {
                                 flex: showControlButtons,
                                 'hidden group-hover:flex': !showControlButtons,
@@ -137,25 +149,23 @@ export const ListViewCard: FC<Props> = ({
                                 downloadButtonOnClick(data.releaseNum);
                             }}
                             title={downloadButtonTooltipText}
+                            aria-label={downloadButtonTooltipText}
                         >
                             <CalciteIcon icon="download-to" scale="m" />
-                        </div>
+                        </button>
 
-                        <div
+                        <button
                             className={classnames(ButtonWrapperClassnames, {
                                 flex: showControlButtons,
                                 'hidden group-hover:flex': !showControlButtons,
                                 'bg-white bg-opacity-20': isSelected,
                             })}
                             onClick={toggleSelect.bind(this, data.releaseNum)}
-                            title={
-                                isSelected
-                                    ? 'Remove this release from your ArcGIS Online Map'
-                                    : 'Add this release to an ArcGIS Online Map'
-                            }
+                            title={labelForToggleAddToWebmapBtn}
+                            aria-label={labelForToggleAddToWebmapBtn}
                         >
                             <CalciteIcon icon="arcgis-online" scale="m" />
-                        </div>
+                        </button>
                     </>
                 )}
 

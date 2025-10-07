@@ -18,8 +18,9 @@ import React, { useContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    activeDialogUpdated,
     isSaveAsWebmapDialogOpenSelector,
-    isSaveAsWebmapDialogOpenToggled,
+    // isSaveAsWebmapDialogOpenToggled,
 } from '@store/UI/reducer';
 
 import { mapExtentSelector } from '@store/Map/reducer';
@@ -31,7 +32,7 @@ import {
 
 // import { AppContext } from '@contexts/AppContextProvider';
 
-import SaveAsWebMapDialog from './index';
+import { SaveAsWebmapDialog } from './SaveAsWebmapDialog';
 import { IExtentGeomety, IWaybackItem } from '@typings/index';
 import {
     getPortalBaseUrl,
@@ -62,8 +63,12 @@ const SaveAsWebmapDialogContainer = () => {
 
     const portalUser = getSignedInUser();
 
+    const notSignedIn = React.useMemo(() => isAnonymouns(), []);
+
+    const isDisabled = React.useMemo(() => notSignedIn, [notSignedIn]);
+
     const onCloseHandler = () => {
-        dispatch(isSaveAsWebmapDialogOpenToggled());
+        dispatch(activeDialogUpdated());
     };
 
     // useEffect(() => {
@@ -71,13 +76,19 @@ const SaveAsWebmapDialogContainer = () => {
     // }, [isOpen]);
 
     return (
-        <Modal isOpen={isOpen} onClose={onCloseHandler}>
-            <SaveAsWebMapDialog
+        <Modal
+            title="Wayback Map Settings:"
+            isOpen={isOpen}
+            onClose={onCloseHandler}
+        >
+            <SaveAsWebmapDialog
                 waybackItems={waybackItems}
                 rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
                 hasSignedInAlready={isAnonymouns() === false}
                 portalBaseURL={getPortalBaseUrl()}
                 token={getToken()}
+                disabled={isDisabled}
+                promptToSignIn={notSignedIn}
                 // userRole={getUserRole()}
                 portalUser={portalUser}
                 mapExtent={mapExtent}

@@ -15,71 +15,66 @@
 
 import './style.css';
 import React, { FC, useState } from 'react';
-// import { MOBILE_HEADER_HEIGHT } from '@constants/UI';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { AppDialogName } from '@store/UI/reducer';
+import classNames from 'classnames';
 
 interface IProps {
-    isMobile: boolean;
-    settingsBtnDisabled: boolean;
-    // shareBtnDisabled: boolean;
-    // children: JSX.Element[] | JSX.Element;
-
+    activeDialog: AppDialogName;
+    shouldDisableActionButton: boolean;
     aboutButtonOnClick: () => void;
-    copyButtonOnClick: () => void;
     settingButtonOnClick: () => void;
-
     children?: React.ReactNode;
 }
 
 export const Gutter: FC<IProps> = ({
-    isMobile,
+    // isMobile,
     // shareBtnDisabled,
-    settingsBtnDisabled,
-    copyButtonOnClick,
+    activeDialog,
+    shouldDisableActionButton,
+    // copyButtonOnClick,
     aboutButtonOnClick,
     settingButtonOnClick,
     children,
 }) => {
-    const [hasCopied2Clipboard, setHasCopied2Clipboard] = useState(false);
-
     return (
-        <div
-            className="gutter-container background-theme-blue-diagonal-pattern"
-            // style={{
-            //     top: isMobile ? MOBILE_HEADER_HEIGHT : 0,
-            // }}
-        >
-            {/* gradient effect on right side of gutter */}
-            {/* <div
-                className="absolute top-header-height left-0 z-0 w-full h-full"
-                style={{
-                    background: `linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,1) 100%)`,
-                }}
-            ></div> */}
-
-            <div className="py-1">
+        <div className="gutter-container background-theme-blue-diagonal-pattern">
+            <div className="pt-1">
                 <div
-                    className="gutter-nav-btn mb-2"
-                    // data-modal={AboutThisAppModalConfig['modal-id']}
-                    title="About this app"
-                    onClick={aboutButtonOnClick}
+                    className={classNames('gutter-nav-btn', {
+                        disabled: shouldDisableActionButton,
+                        'bg-black text-white': activeDialog === 'about',
+                    })}
                 >
-                    <CalciteIcon icon="information" scale="l" />
+                    <button
+                        className="flex justify-center items-center"
+                        title="About this app"
+                        aria-label="About this app"
+                        onClick={aboutButtonOnClick}
+                    >
+                        <CalciteIcon icon="information" scale="l" />
+                    </button>
                 </div>
 
-                {/* {!shareBtnDisabled && (
-                    <div
-                        className="gutter-nav-btn mb-1"
-                        // data-modal={ShareModalConfig['modal-id']}
-                        title="Share"
-                        onClick={shareButtonOnClick}
-                    >
-                        <CalciteIcon icon="share" scale="l" />
-                    </div>
-                )} */}
-
                 <div
-                    className="gutter-nav-btn mb-2"
+                    className={classNames('gutter-nav-btn', {
+                        disabled: shouldDisableActionButton,
+                        'bg-black text-white': activeDialog === 'setting',
+                    })}
+                >
+                    <button
+                        className="flex justify-center items-center"
+                        // data-modal={SettingModalConfig['modal-id']}
+                        title="Settings"
+                        aria-label="Settings"
+                        onClick={settingButtonOnClick}
+                    >
+                        <CalciteIcon icon="gear" scale="l" />
+                    </button>
+                </div>
+
+                {/* <div
+                    className="gutter-nav-btn mb-0"
                     title={
                         hasCopied2Clipboard
                             ? 'Copied link to clipboard'
@@ -96,18 +91,7 @@ export const Gutter: FC<IProps> = ({
                     }}
                 >
                     <CalciteIcon icon="link" scale="l" />
-                </div>
-
-                <div
-                    className={`gutter-nav-btn ${
-                        settingsBtnDisabled ? 'btn-disabled' : ''
-                    }`}
-                    // data-modal={SettingModalConfig['modal-id']}
-                    title="Settings"
-                    onClick={settingButtonOnClick}
-                >
-                    <CalciteIcon icon="gear" scale="l" />
-                </div>
+                </div> */}
             </div>
 
             {/* divider with shadow effect */}

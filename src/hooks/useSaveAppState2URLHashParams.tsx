@@ -28,6 +28,7 @@ import {
 import { selectMapMode } from '@store/Map/reducer';
 import { selectUpdatesModeState } from '@store/UpdatesMode/selectors';
 import { saveUpdatesModeDataInURLHashParams } from '@store/UpdatesMode/getPreloadedState';
+import { activeDialogSelector } from '@store/UI/reducer';
 
 export const useSaveAppState2URLHashParams = () => {
     const animationSpeed = useAppSelector(animationSpeedSelector);
@@ -37,6 +38,8 @@ export const useSaveAppState2URLHashParams = () => {
     const mode = useAppSelector(selectMapMode);
 
     const updatesModeData = useAppSelector(selectUpdatesModeState);
+
+    const activeDialog = useAppSelector(activeDialogSelector);
 
     useEffect(() => {
         saveAnimationSpeedInURLQueryParam(
@@ -55,4 +58,12 @@ export const useSaveAppState2URLHashParams = () => {
             saveUpdatesModeDataInURLHashParams(updatesModeData);
         }
     }, [updatesModeData, mode]);
+
+    useEffect(() => {
+        if (activeDialog === 'export' || activeDialog === 'save') {
+            updateHashParams('activeDialog', activeDialog);
+        } else {
+            updateHashParams('activeDialog', undefined);
+        }
+    }, [activeDialog]);
 };

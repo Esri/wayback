@@ -27,8 +27,8 @@ module.exports = {
         'theme': {
           'blue': {
             DEFAULT: '#2267AE',
-            'brand': '#0079c1',
-            'light': '#56a5d8',
+            'brand': 'var(--theme-brand)',
+            'light': 'var(--theme-blue-light)',
             'dark': 'var(--theme-blue-dark)'
           }
         },

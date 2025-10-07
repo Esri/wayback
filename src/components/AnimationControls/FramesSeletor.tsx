@@ -18,6 +18,7 @@ import React, { useCallback } from 'react';
 import { IWaybackItem } from '@typings/index';
 
 import { LayerSelector } from '../';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     // waybackItems: IWaybackItem[];
@@ -42,6 +43,8 @@ const FramesSeletor: React.FC<Props> = ({
     setActiveFrame,
     toggleFrame,
 }: Props) => {
+    const { t } = useTranslation();
+
     const getList = () => {
         if (
             !waybackItemsWithLocalChanges ||
@@ -58,6 +61,10 @@ const FramesSeletor: React.FC<Props> = ({
                 //     activeItem && activeItem.itemID === itemID;
 
                 const isExcluded = rNum2Exclude.indexOf(releaseNum) > -1;
+
+                const label = t('select_release_animation', {
+                    releaseDate: releaseDateLabel,
+                });
 
                 const checkbox = isExcluded ? (
                     <svg
@@ -105,7 +112,7 @@ const FramesSeletor: React.FC<Props> = ({
                                 alignItems: 'center',
                             }}
                         >
-                            <div
+                            <button
                                 className="flex items-center mr-2 cursor-pointer"
                                 // style={{
                                 //     display: 'flex',
@@ -115,9 +122,10 @@ const FramesSeletor: React.FC<Props> = ({
                                     evt.stopPropagation();
                                     toggleFrame(releaseNum);
                                 }}
+                                aria-label={label}
                             >
                                 {checkbox}
-                            </div>
+                            </button>
 
                             <span>{releaseDateLabel}</span>
                         </div>

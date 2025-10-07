@@ -11,8 +11,11 @@ import { updateReferenceLayerLocale } from '@store/Map/thunks';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 export const LocaleSwitch = () => {
+    const { t } = useTranslation();
+
     const dispatch = useAppDispatch();
 
     const selectedLocale = useAppSelector(selectReferenceLayerLocale);
@@ -30,14 +33,17 @@ export const LocaleSwitch = () => {
                         : layer.language === ReferenceLayerLanguage.EnglishUS;
 
                 return (
-                    <div
+                    <button
                         key={layer.id}
-                        className="flex items-center my-2 text-xs bg-custom-card-background cursor-pointer p-1"
+                        className="flex items-center my-2 w-full text-xs bg-custom-card-background cursor-pointer p-1"
                         onClick={() => {
                             dispatch(
                                 updateReferenceLayerLocale(layer.language)
                             );
                         }}
+                        aria-label={t('select_label_language', {
+                            language: layer.language,
+                        })}
                     >
                         {isSelected ? (
                             <CalciteIcon
@@ -48,7 +54,7 @@ export const LocaleSwitch = () => {
                             <CalciteIcon icon="circle" scale="s"></CalciteIcon>
                         )}
                         <span className="ml-2 mt-[2px]">{layer.language}</span>
-                    </div>
+                    </button>
                 );
             })}
         </div>

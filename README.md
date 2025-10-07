@@ -5,6 +5,10 @@ The World Imagery Wayback App provides a dynamic browsing experience where previ
 
 ![App](./public/screenshot.jpg)
 
+## Looking to integrate Wayback into your own app?
+
+If you want to use the World Imagery Wayback service in your application without the full UI/UX provided by this app, check out the [Esri/wayback-core](https://github.com/Esri/wayback-core) repository. It provides the core functionality and APIs for working with Wayback imagery services that you can integrate into your own applications.
+
 ## Prerequisites
 
 ### Clone the repository
@@ -16,18 +20,14 @@ Ensure you have Node.js and NPM installed on your machine. You can download them
 ### Environment Variables
 Before running the application, ensure you have a `.env` file in the root directory of the project. You can create this file by copying the provided [`.env.template`](./.env.template) file.
 
-In the `.env` file, you must specify the `ARCGIS_OAUTH_CLIENT_ID`, which is required for authenticating with ArcGIS services. Follow the [How to implement user authentication](https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/how-to-implement-user-authentication/) guide to obtain your OAuth Client ID.
+In the `.env` file, you must specify the `APP_ID`, which is required for authenticating with ArcGIS services. Follow the [How to implement user authentication](https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/how-to-implement-user-authentication/) guide to obtain your OAuth App ID.
 
 Here is an example of the `.env` file configuration:
 
 ```sh
-# ArcGIS OAuth Client ID for the application.
-# Replace 'your-client-id' with your actual ArcGIS OAuth Client ID.
-ARCGIS_OAUTH_CLIENT_ID=your-client-id
-
-# Custom hostname for starting the Webpack Dev server (optional).
-# Defaults to 'localhost' if not specified.
-WEBPACK_DEV_SERVER_HOSTNAME=my-custom-hostname.com
+# ArcGIS OAuth App ID for the application.
+# Replace 'your-app-id' with your actual ArcGIS OAuth App ID.
+APP_ID=your-app-id
 ```
 
 Make sure to replace `your-client-id` with your actual ArcGIS OAuth Client ID.

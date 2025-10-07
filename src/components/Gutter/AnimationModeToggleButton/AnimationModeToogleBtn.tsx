@@ -27,10 +27,14 @@ import {
 import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 import { selectMapMode } from '@store/Map/reducer';
-import { ModeToggleButton } from '@components/ModeToggleButton';
+import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
+import { activeDialogSelector } from '@store/UI/reducer';
+import { useTranslation } from 'react-i18next';
 
-const AnimationModeToogleBtn = () => {
+export const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     const { isMobile } = useContext(AppContext);
 
@@ -41,9 +45,11 @@ const AnimationModeToogleBtn = () => {
     // // if swipe widget is on, the animation button should be set to semi-transparent
     // const isSwipeWidgetOpen = useAppSelector(isSwipeWidgetOpenSelector);
 
+    const activeDialog = useAppSelector(activeDialogSelector);
+
     const isActive = useMemo(() => {
-        return mode === 'animation';
-    }, [mode]);
+        return mode === 'animation' && !activeDialog;
+    }, [mode, activeDialog]);
 
     const onClickHandler = useCallback(() => {
         dispatch(toggleAnimationMode());
@@ -52,7 +58,8 @@ const AnimationModeToogleBtn = () => {
     return !isMobile ? (
         <ModeToggleButton
             isActive={isActive}
-            tooltip="Toggle Animation Mode"
+            tooltip={t('toggle_animation_mode')}
+            label={t('toggle_animation_mode')}
             icon="play"
             testId="animation-mode-toggle-btn"
             onClick={onClickHandler}
@@ -61,4 +68,4 @@ const AnimationModeToogleBtn = () => {
     null;
 };
 
-export default AnimationModeToogleBtn;
+// export default AnimationModeToogleBtn;

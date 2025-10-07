@@ -30,22 +30,15 @@ export { default as SearchWidget } from './SearchWidget/SearchWidget';
 // export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
 export { default as SwipeWidget } from './SwipeWidget/SwipeWidgetContainer';
 export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
-export { default as SwipeWidgetToggleBtn } from './SwipeWidgetToggleBtn/SwipeWidgetToggleBtnContainer';
 export { default as SettingDialog } from './SettingDialog/SettingDialogContainer';
-export { default as SaveAsWebmapBtn } from './SaveAsWebmapBtn/SaveAsWebmapBtnContainer';
 export { default as SidebarToggleBtn } from './SidebarToggleBtn/SidebarToogleBtnContainer';
 export { default as SwipeWidgetLayerSelector } from './SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';
 export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
-export { default as AnimationModeToggleBtn } from './AnimationModeToggleBtn/AnimationModeToogleBtn';
-
 export { default as AnimationControls } from './AnimationControls/AnimationControls';
 export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
-// export { default as AnimationPanel } from './AnimationPanel/AnimationPanelContainer';
-
-export { OpenDownloadPanelBtn } from './OpenDownloadPanelBtn/OpenDownloadPanelBtn';
 export { DownloadDialog } from './DownloadDialog';

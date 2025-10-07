@@ -13,24 +13,28 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { FC, useContext, useEffect, useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import {
     downloadJobRemoved,
-    isDownloadDialogOpenToggled,
+    // isDownloadDialogOpenToggled,
 } from '@store/DownloadMode/reducer';
 
 import {
     selectDownloadJobs,
     selectIsAddingNewDownloadJob,
-    selectIsDownloadDialogOpen,
+    // selectIsDownloadDialogOpen,
     selectNumOfPendingDownloadJobs,
 } from '@store/DownloadMode/selectors';
 
 import { DownloadDialog } from './DownloadDialog';
 import { useAppDispatch } from '@store/configureStore';
 import { updateHashParams } from '@utils/UrlSearchParam';
-import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+import {
+    isAnonymouns,
+    signIn,
+    signInUsingDifferentAccount,
+} from '@utils/Esri-OAuth';
 import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
 import {
     checkPendingDownloadJobStatus,
@@ -39,11 +43,17 @@ import {
     downloadOutputTilePackage,
     cleanUpDownloadJobs,
 } from '@store/DownloadMode/thunks';
+import {
+    activeDialogUpdated,
+    isDownloadTilePackageDialogOpenSelector,
+} from '@store/UI/reducer';
+import { Modal } from '@components/Modal/Modal';
+import { AppContext } from '@contexts/AppContextProvider';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useAppDispatch();
 
-    const isOpen = useAppSelector(selectIsDownloadDialogOpen);
+    const isOpen = useAppSelector(isDownloadTilePackageDialogOpenSelector);
 
     const jobs = useAppSelector(selectDownloadJobs);
 
@@ -51,20 +61,36 @@ export const DownloadDialogContainer = () => {
 
     const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
 
+    // const notSignedIn = useMemo(() => isAnonymouns(), []);
+
+    const {
+        notSignedIn,
+        // withArcGISPublicAccount: signedInWithArcGISPublicAccount,
+        signedInWithArcGISPublicAccount,
+    } = useContext(AppContext);
+
+    const isDisabled = useMemo(
+        () =>
+            notSignedIn ||
+            signedInWithArcGISPublicAccount ||
+            isAddingNewDownloadJob,
+        [notSignedIn, signedInWithArcGISPublicAccount, isAddingNewDownloadJob]
+    );
+
     useEffect(() => {
         // save jobs to localhost so they can be restored
         saveDownloadJobs2LocalStorage(jobs);
 
-        // prompt anonymouns user to sign in if the user wants to open the download dialog,
-        // since exporting job requires the user token
-        if (jobs?.length && isAnonymouns() && isOpen) {
-            signIn();
-        }
-    }, [jobs, isOpen]);
+        // // prompt anonymouns user to sign in if the user wants to open the download dialog,
+        // // since exporting job requires the user token
+        // if (jobs?.length && isAnonymouns() && isOpen) {
+        //     signIn();
+        // }
+    }, [jobs]);
 
-    useEffect(() => {
-        updateHashParams('downloadMode', isOpen ? 'true' : null);
-    }, [isOpen]);
+    // useEffect(() => {
+    //     updateHashParams('downloadMode', isOpen ? 'true' : null);
+    // }, [isOpen]);
 
     useEffect(() => {
         if (numPendingJobs) {
@@ -78,30 +104,66 @@ export const DownloadDialogContainer = () => {
         }
     }, [isOpen]);
 
+    const getTitle = () => {
+        return (
+            <span className="text-2xl mb-8">
+                Wayback Export (
+                <a
+                    href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    beta
+                </a>
+                )
+            </span>
+        );
+    };
+
     if (!isOpen) {
         return null;
     }
 
     return (
-        <DownloadDialog
-            jobs={jobs}
-            isAddingNewDownloadJob={isAddingNewDownloadJob}
-            closeButtonOnClick={() => {
-                dispatch(isDownloadDialogOpenToggled());
+        <Modal
+            title={getTitle()}
+            isOpen={isOpen}
+            // title="Download Tile Package"
+            onClose={() => {
+                dispatch(activeDialogUpdated());
             }}
-            removeButtonOnClick={(id) => {
-                dispatch(downloadJobRemoved(id));
-            }}
-            levelsOnChange={(id, levels) => {
-                // console.log(id, levels);
-                dispatch(updateUserSelectedZoomLevels(id, levels));
-            }}
-            createTilePackageButtonOnClick={(id: string) => {
-                dispatch(startDownloadJob(id));
-            }}
-            downloadTilePackageButtonOnClick={(id: string) => {
-                dispatch(downloadOutputTilePackage(id));
-            }}
-        />
+            width="xl"
+        >
+            <DownloadDialog
+                jobs={jobs}
+                isAddingNewDownloadJob={isAddingNewDownloadJob}
+                disabled={isDisabled}
+                promptToSignIn={notSignedIn}
+                promptToSignInWithOrgAccount={signedInWithArcGISPublicAccount}
+                closeButtonOnClick={() => {
+                    dispatch(activeDialogUpdated());
+                }}
+                removeButtonOnClick={(id) => {
+                    dispatch(downloadJobRemoved(id));
+                }}
+                levelsOnChange={(id, levels) => {
+                    // console.log(id, levels);
+                    dispatch(updateUserSelectedZoomLevels(id, levels));
+                }}
+                createTilePackageButtonOnClick={(id: string) => {
+                    dispatch(startDownloadJob(id));
+                }}
+                downloadTilePackageButtonOnClick={(id: string) => {
+                    dispatch(downloadOutputTilePackage(id));
+                }}
+                signInButtonOnClick={() => {
+                    if (notSignedIn) {
+                        signIn();
+                    } else {
+                        signInUsingDifferentAccount();
+                    }
+                }}
+            />
+        </Modal>
     );
 };

@@ -20,6 +20,10 @@ type Props = {
      */
     testId: string;
     /**
+     * The label for the button, used for accessibility purposes.
+     */
+    label: string;
+    /**
      * Emitted when the button is clicked.
      * @returns void - Callback function triggered when the button is clicked.
      */
@@ -45,11 +49,11 @@ export const ModeToggleButton: FC<Props> = ({
     tooltip,
     icon,
     testId,
+    label,
     onClick,
 }) => {
     return (
         <div
-            data-testid={testId}
             className={classNames(
                 'hidden md:flex relative w-full cursor-pointer text-center items-center justify-center py-2',
                 {
@@ -58,10 +62,16 @@ export const ModeToggleButton: FC<Props> = ({
                     'bg-custom-background': isActive,
                 }
             )}
-            onClick={onClick}
-            title={tooltip}
         >
-            <CalciteIcon icon={icon} scale="l" />
+            <button
+                className="flex items-center justify-center"
+                data-testid={testId}
+                onClick={onClick}
+                aria-label={label}
+                title={tooltip}
+            >
+                <CalciteIcon icon={icon} scale="l" />
+            </button>
         </div>
     );
 };

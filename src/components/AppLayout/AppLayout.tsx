@@ -17,10 +17,7 @@ import React, { useEffect } from 'react';
 
 import {
     AboutThisApp,
-    // AppTitleText,
-    // BarChart,
     Gutter,
-    // ListView,
     MapView,
     MapViewWrapper,
     MetadataPopup,
@@ -30,37 +27,26 @@ import {
     ReferenceLayerToggle,
     Sidebar,
     SearchWidget,
-    // ShareDialog,
     SwipeWidget,
     SaveAsWebMapDialog,
-    SwipeWidgetToggleBtn,
     SettingDialog,
-    SaveAsWebmapBtn,
-    // SidebarToggleBtn,
     SwipeWidgetLayerSelector,
-    // ShowLocalChangesCheckboxToggle,
     TilePreviewWindow,
-    // Title4ActiveItem,
     WaybackLayer,
-    // AnimationPanel,
-    AnimationModeToggleBtn,
     ZoomWidget,
-    OpenDownloadPanelBtn,
     DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
-import { getArcGISOnlinePortalUrl } from '@utils/Tier';
-import useCurrenPageBecomesVisible from '@hooks/useCurrenPageBecomesVisible';
-import { revalidateToken } from '@utils/Esri-OAuth';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
 import { Notification } from '@components/Notification';
-import { ExploreModeToggleButton } from '@components/ExploreModeToggleButton';
+
 import { AppHeader } from '@components/AppHeader';
-import { UpdatesModeToggleButton } from '@components/UpdatesModeToggleButton';
+
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
+import { ProfileCard } from '@components/UserAccount';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -71,19 +57,7 @@ const AppLayout: React.FC = () => {
         <ErrorBoundary>
             <AppHeader />
 
-            <Gutter>
-                <ExploreModeToggleButton />
-
-                <SwipeWidgetToggleBtn />
-
-                <AnimationModeToggleBtn />
-
-                <UpdatesModeToggleButton />
-
-                <OpenDownloadPanelBtn />
-
-                <SaveAsWebmapBtn />
-            </Gutter>
+            <Gutter />
 
             <Sidebar />
 
@@ -108,10 +82,7 @@ const AppLayout: React.FC = () => {
 
                     <ReferenceLayerToggle />
 
-                    <SearchWidget
-                        portalUrl={getArcGISOnlinePortalUrl()}
-                        // position={'top-left'}
-                    />
+                    <SearchWidget />
 
                     <ZoomWidget />
 
@@ -128,6 +99,8 @@ const AppLayout: React.FC = () => {
             <SettingDialog />
 
             <DownloadDialog />
+
+            <ProfileCard />
 
             <AboutThisApp />
 

@@ -22,11 +22,12 @@ export const OpenDownloadPanelButton = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <div
-            className={classNames('absolute top-1 right-16', 'cursor-pointer')}
+        <button
+            className={classNames('absolute top-1 right-16')}
             onClick={() => {
                 dispatch(showDownloadAnimationPanelToggled(true));
             }}
+            aria-label="Open download animation panel"
         >
             {/* download-to icon: https://esri.github.io/calcite-ui-icons/#download-to */}
             <svg
@@ -42,6 +43,6 @@ export const OpenDownloadPanelButton = () => {
                 />
                 <path fill="none" d="M0 0h32v32H0z" />
             </svg>
-        </div>
+        </button>
     );
 };

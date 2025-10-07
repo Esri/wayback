@@ -34,6 +34,10 @@ type StatusCheckboxProps = {
      */
     color: string;
     /**
+     * If true, the checkbox will be disabled and not interactable.
+     */
+    disabled: boolean;
+    /**
      * Emits when the checkbox state changes.
      * @returns void
      */
@@ -58,6 +62,7 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
     count,
     area,
     color,
+    disabled,
     onChange,
 }) => {
     const { t } = useTranslation();
@@ -71,7 +76,9 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
         >
             <CalciteCheckbox
                 checked={checked}
+                disabled={disabled}
                 onCalciteCheckboxChange={onChange}
+                label={t(status)}
             ></CalciteCheckbox>
             <div
                 className="grid items-center gap-1 font-bold"
@@ -95,7 +102,14 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
     );
 };
 
-export const StatusFilter = () => {
+type StatusFilterProps = {
+    /**
+     * If true, the filter will be disabled and not interactable.
+     */
+    disabled: boolean;
+};
+
+export const StatusFilter: FC<StatusFilterProps> = ({ disabled }) => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
 
@@ -133,6 +147,7 @@ export const StatusFilter = () => {
                 count={outStatistics?.countOfPublished || 0}
                 area={outStatistics?.areaOfPublished || 0}
                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published.color}
+                disabled={disabled}
                 onChange={() =>
                     onChange(WorldImageryUpdatesStatusEnum.published)
                 }
@@ -143,6 +158,7 @@ export const StatusFilter = () => {
                 count={outStatistics?.countOfPending || 0}
                 area={outStatistics?.areaOfPending || 0}
                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
+                disabled={disabled}
                 onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
             />
         </div>

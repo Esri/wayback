@@ -21,11 +21,12 @@ export const CopyLinkButton = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <div
-            className={classNames('absolute top-1 right-32', 'cursor-pointer')}
+        <button
+            className={classNames('absolute top-1 right-32')}
             onClick={() => {
                 dispatch(copyAnimationLink());
             }}
+            aria-label="Copy link to clipboard"
         >
             {/* link icon: https://esri.github.io/calcite-ui-icons/#link */}
             <svg
@@ -41,6 +42,6 @@ export const CopyLinkButton = () => {
                 />
                 <path fill="none" d="M0 0h32v32H0z" />
             </svg>
-        </div>
+        </button>
     );
 };

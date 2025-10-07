@@ -18,6 +18,9 @@ import React, { FC } from 'react';
 import { DownloadJobCard } from './DownloadJobCard';
 import { DownloadJobPlaceholder } from './DownloadJobPlaceholder';
 import { CalciteButton } from '@esri/calcite-components-react';
+import { Modal } from '@components/Modal/Modal';
+import classNames from 'classnames';
+import { Trans } from 'react-i18next';
 
 type Props = {
     /**
@@ -29,6 +32,19 @@ type Props = {
      * a placeholder card should be displayed
      */
     isAddingNewDownloadJob: boolean;
+    /**
+     * if true, the dialog is disabled (user not signed in or adding new job)
+     */
+    disabled?: boolean;
+    /**
+     * if true, the user is not signed in and should be prompted to sign in
+     */
+    promptToSignIn: boolean;
+    /**
+     * if true, the user is signed in with an ArcGIS public account and should be prompted to sign in with an organizational account
+     * to access download features
+     */
+    promptToSignInWithOrgAccount: boolean;
     /**
      * fires when user clicks on the create tile package button to start the download job
      * @param id job id
@@ -58,16 +74,25 @@ type Props = {
      * @returns void
      */
     levelsOnChange: (id: string, levels: number[]) => void;
+    /**
+     * Sign in button click handler
+     * @returns void
+     */
+    signInButtonOnClick: () => void;
 };
 
 export const DownloadDialog: FC<Props> = ({
     jobs,
     isAddingNewDownloadJob,
+    disabled,
+    promptToSignIn,
+    promptToSignInWithOrgAccount,
     createTilePackageButtonOnClick,
     downloadTilePackageButtonOnClick,
     closeButtonOnClick,
     removeButtonOnClick,
     levelsOnChange,
+    signInButtonOnClick,
 }: Props) => {
     const getJobsList = () => {
         if (!jobs?.length && !isAddingNewDownloadJob) {
@@ -95,91 +120,92 @@ export const DownloadDialog: FC<Props> = ({
     };
 
     return (
-        <div
-            className="absolute top-0 left-0 w-full h-full overflow-hidden flex items-center justify-center z-50"
-            style={{
-                background: `radial-gradient(circle, rgba(26,61,96,0.95) 50%, rgba(13,31,49,0.95) 100%)`,
-            }}
-        >
-            <div className="max-w-5xl mx-8 bg-custom-modal-content-background p-2 py-8">
-                <div className="text-right">
-                    <CalciteButton
-                        icon-start="x"
-                        appearance="transparent"
-                        kind="neutral"
-                        scale="l"
-                        onClick={closeButtonOnClick}
-                    />
-                </div>
-
-                <div className="px-8 max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar">
-                    <h3 className="text-2xl mb-8">
-                        Wayback Export (
-                        <a
-                            href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            beta
-                        </a>
-                        )
-                    </h3>
-
-                    <p className="text-sm mb-4">
-                        Exported basemap tiles are intended for offline use in
-                        ArcGIS applications and{' '}
-                        <a
-                            href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            offline applications
-                        </a>{' '}
-                        built with an ArcGIS Runtime SDK in accordance with
-                        Esri’s terms of use:{' '}
-                        <a
-                            href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            View Summary
-                        </a>{' '}
-                        and{' '}
-                        <a
-                            href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            View Terms of Use
-                        </a>
-                        .
-                        {/* You can choose this window while your tiles are prepared. */}
+        <div className="mt-2">
+            <div className="max-h-[500px] min-h-[350px] overflow-y-auto fancy-scrollbar p-1">
+                {(promptToSignIn || promptToSignInWithOrgAccount) && (
+                    <p className="mb-4">
+                        <Trans
+                            i18nKey={
+                                promptToSignIn
+                                    ? 'sign_in_prompt_download_panel'
+                                    : 'sign_in_with_org_account_prompt_download_panel'
+                            }
+                            components={{
+                                action: (
+                                    <button
+                                        className="font-semibold underline cursor-pointer text-custom-theme-blue-light "
+                                        onClick={() => {
+                                            // console.log('Sign in clicked')
+                                            if (signInButtonOnClick) {
+                                                signInButtonOnClick();
+                                            }
+                                        }}
+                                    />
+                                ),
+                            }}
+                        />
                     </p>
+                )}
 
-                    <ul className="list-inside list-disc text-sm">
-                        <li>
-                            Exports are based on map extent, with a minimum zoom
-                            level of 12.
-                        </li>
-                        <li>
-                            Each export request is limited to a maximum of
-                            150,000 tiles.
-                        </li>
-                        <li>
-                            No more than five exports may be requested
-                            concurrently.
-                        </li>
-                        <li>
-                            This dialog can safely be closed while tile packages
-                            are being created.
-                        </li>
-                    </ul>
+                <p className="text-sm mt-2 mb-4">
+                    Exported basemap tiles are intended for offline use in
+                    ArcGIS applications and{' '}
+                    <a
+                        href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        offline applications
+                    </a>{' '}
+                    built with an ArcGIS Runtime SDK in accordance with Esri’s
+                    terms of use:{' '}
+                    <a
+                        href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        View Summary
+                    </a>{' '}
+                    and{' '}
+                    <a
+                        href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        View Terms of Use
+                    </a>
+                    .
+                    {/* You can choose this window while your tiles are prepared. */}
+                </p>
 
-                    <hr className="my-8 opacity-50" />
+                <ul className="list-inside list-disc text-sm">
+                    <li>
+                        Exports are based on map extent, with a minimum zoom
+                        level of 12.
+                    </li>
+                    <li>
+                        Each export request is limited to a maximum of 150,000
+                        tiles.
+                    </li>
+                    <li>
+                        No more than five exports may be requested concurrently.
+                    </li>
+                    <li>
+                        This dialog can safely be closed while tile packages are
+                        being created.
+                    </li>
+                </ul>
 
-                    {isAddingNewDownloadJob && <DownloadJobPlaceholder />}
+                <hr className="my-8 opacity-50" />
 
-                    <div>{getJobsList()}</div>
+                {isAddingNewDownloadJob && <DownloadJobPlaceholder />}
+
+                <div
+                    className={classNames({
+                        disabled: disabled,
+                    })}
+                >
+                    {getJobsList()}
                 </div>
             </div>
         </div>

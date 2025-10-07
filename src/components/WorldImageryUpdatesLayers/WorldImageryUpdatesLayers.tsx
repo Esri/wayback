@@ -1,6 +1,6 @@
 import MapView from '@arcgis/core/views/MapView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import React, { FC, use, useEffect, useMemo, useRef } from 'react';
+import React, { FC, use, useContext, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { selectMapMode } from '@store/Map/reducer';
 import {
@@ -25,6 +25,7 @@ import {
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatistics';
 import { useZoomToSelectedRegion } from './useZoomToSelectedRegion';
+import { AppContext } from '@contexts/AppContextProvider';
 
 type Props = {
     mapView?: MapView;
@@ -50,6 +51,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         return mode === 'updates';
     }, [mode]);
 
+    const { notSignedIn } = useContext(AppContext);
+
     const layerURL = useMemo(() => {
         if (catgegory === 'vivid-advanced') {
             return VIVID_ADVANCED_FROM_MAXAR_URL;
@@ -71,7 +74,7 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     const whereClause = useWorldImageryUpdatesLayerWhereClause();
 
     useEffect(() => {
-        if (!mapView || !layerURL || mode !== 'updates') return;
+        if (!mapView || !layerURL || mode !== 'updates' || notSignedIn) return;
 
         // if the group layer is not created yet, create it and add it to the map
         if (!groupLayerRef.current) {
@@ -150,7 +153,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     );
 
     useZoomToSelectedRegion(
-        worldImageryUpdatesLayerRef,
+        // worldImageryUpdatesLayerRef,
+        catgegory,
         selectedRegion,
         whereClause,
         mapView
