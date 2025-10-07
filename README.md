@@ -1,5 +1,5 @@
 # World Imagery Wayback App
-The World Imagery Wayback App provides a dynamic browsing experience where previous World Imagery versions are presented within the map, along a timeline, and as a list. Versions that resulted in local changes are dynamically presented to the user based on location and scale. Preview changes by hovering and/or selecting individual layers. When ready, one or more Wayback layers can be added to an export queue and pushed to a new ArcGIS Online web map.
+The World Imagery Wayback app provides an interactive experience for exploring historical versions of the World Imagery basemap. Users can browse versions directly on the map, along a timeline, or in a list view. Versions that include local updates are dynamically highlighted based on the user’s location and map scale.
 
 [View it live](https://livingatlas.arcgis.com/wayback/)
 
