@@ -35,10 +35,10 @@ type Props = {
      * An array of ImageElement objects representing media layer elements.
      */
     imageElements: ImageElementData[];
-    /**
-     * list of release number of wayback items to exclude from the animation.
-     */
-    releaseNumOfItems2Exclude: number[];
+    // /**
+    //  * list of release number of wayback items to exclude from the animation.
+    //  */
+    // releaseNumOfItems2Exclude: number[];
 };
 
 /**
@@ -50,7 +50,7 @@ type Props = {
 export const useFrameDataForDownloadJob = ({
     waybackItems,
     imageElements,
-    releaseNumOfItems2Exclude,
+    // releaseNumOfItems2Exclude,
 }: Props) => {
     const { lon, lat } = useAppSelector(selectMapCenter) || {};
 
@@ -74,10 +74,10 @@ export const useFrameDataForDownloadJob = ({
             for (let i = 0; i < imageElements.length; i++) {
                 const item = waybackItems[i];
 
-                // should not include the frame of the items in the exlusion list
-                if (releaseNumOfItems2Exclude.includes(item.releaseNum)) {
-                    continue;
-                }
+                // // should not include the frame of the items in the exlusion list
+                // if (releaseNumOfItems2Exclude.includes(item.releaseNum)) {
+                //     continue;
+                // }
 
                 // // load media layer elements as an array of HTML Image Elements
                 // const image = await loadImageAsHTMLIMageElement(
@@ -89,6 +89,7 @@ export const useFrameDataForDownloadJob = ({
                     imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
                         3
                     )} y ${lat.toFixed(3)}`,
+                    key: item.releaseNum.toString(),
                 } as AnimationFrameData;
 
                 data.push(frameData);
@@ -96,7 +97,7 @@ export const useFrameDataForDownloadJob = ({
 
             setFrameData(data);
         })();
-    }, [imageElements, releaseNumOfItems2Exclude]);
+    }, [imageElements]);
 
     return frameData;
 };
