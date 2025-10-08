@@ -96,6 +96,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const frameData = useFrameDataForDownloadJob({
         waybackItems,
         imageElements: imageElementsData,
+        mapView,
     });
 
     /**
@@ -152,6 +153,10 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     useEffect(() => {
         (async () => {
+            if (!mapView) {
+                return;
+            }
+
             if (!mediaLayerRef.current) {
                 initMediaLayer();
                 return;

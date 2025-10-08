@@ -14,13 +14,21 @@
  */
 
 import ImageElement from '@arcgis/core/layers/support/ImageElement';
-import { selectMapCenter } from '@store/Map/reducer';
+import {
+    isReferenceLayerVisibleSelector,
+    selectMapCenter,
+} from '@store/Map/reducer';
 import { IWaybackItem } from '@typings/index';
 import { loadImageAsHTMLIMageElement } from '@utils/snippets/loadImage';
 import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import { ImageElementData } from './useMediaLayerImageElement';
+import {
+    combineAnimationFrameImageWithMapScreenshots,
+    getScreenshotOfReferenceLayer,
+} from './helper';
+import MapView from '@arcgis/core/views/MapView';
 // import { AnimationFrameData4DownloadJob } from '../AnimationDownloadPanel/DownloadPanel';
 
 /**
@@ -39,6 +47,10 @@ type Props = {
     //  * list of release number of wayback items to exclude from the animation.
     //  */
     // releaseNumOfItems2Exclude: number[];
+    /**
+     * The MapView instance used to capture screenshots of the reference layer.
+     */
+    mapView: MapView;
 };
 
 /**
@@ -50,9 +62,13 @@ type Props = {
 export const useFrameDataForDownloadJob = ({
     waybackItems,
     imageElements,
-    // releaseNumOfItems2Exclude,
+    mapView,
 }: Props) => {
     const { lon, lat } = useAppSelector(selectMapCenter) || {};
+
+    const isReferenceLayerVisible = useAppSelector(
+        isReferenceLayerVisibleSelector
+    );
 
     const [frameData, setFrameData] = useState<AnimationFrameData[]>([]);
 
@@ -63,11 +79,28 @@ export const useFrameDataForDownloadJob = ({
                 return;
             }
 
+            const { referenceLayersScreenshot } =
+                await getScreenshotOfReferenceLayer({
+                    mapView,
+                    isReferenceLayerVisible,
+                });
+            // console.log(referenceLayersScreenshot)
+
             const data: AnimationFrameData[] = [];
+
+            // const images = await Promise.all(
+            //     imageElements.map((d) =>
+            //         loadImageAsHTMLIMageElement(d.imageElement.image as string)
+            //     )
+            // );
 
             const images = await Promise.all(
                 imageElements.map((d) =>
-                    loadImageAsHTMLIMageElement(d.imageElement.image as string)
+                    combineAnimationFrameImageWithMapScreenshots({
+                        animationFrameImageUrl: d.imageElement.image as string,
+                        referenceLayersScreenshot:
+                            referenceLayersScreenshot?.data || null,
+                    })
                 )
             );
 
