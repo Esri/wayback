@@ -45,7 +45,8 @@ import {
 } from '@utils/UrlSearchParam';
 // import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import {
-    isAnimationModeOnSelector,
+    // isAnimationModeOnSelector,
+    selectAnimationStatus,
     // selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
 import { queryLocalChanges } from '@store/Wayback/thunks';
@@ -61,7 +62,9 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
-    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+    // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    const animationStatus = useAppSelector(selectAnimationStatus);
 
     const { center, zoom } = useAppSelector(selectMapCenterAndZoom);
 
@@ -132,9 +135,12 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [center, zoom]);
 
     useEffect(() => {
-        // adding this class will hide map zoom widget when animation mode is on
-        document.body.classList.toggle('hide-map-control', isAnimationModeOn);
-    }, [isAnimationModeOn]);
+        // adding this class will hide map zoom widget when animation is playing or loading
+        document.body.classList.toggle(
+            'hide-map-control',
+            animationStatus !== null
+        );
+    }, [animationStatus]);
 
     return (
         <div className="relative shrink-0 grow bg-black">

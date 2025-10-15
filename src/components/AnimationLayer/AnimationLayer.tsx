@@ -220,9 +220,16 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     }, [imageElementsData, isAnimationModeOn, mapView]);
 
     useEffect(() => {
-        if (isAnimationModeOn) {
-            dispatch(animationStatusChanged('loading'));
-        } else {
+        // if (isAnimationModeOn) {
+        //     dispatch(animationStatusChanged('loading'));
+        // } else {
+        //     dispatch(animationStatusChanged(null));
+        //     dispatch(rNum2ExcludeReset());
+        //     dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
+        // }
+
+        // always reset these states when user exits the animation mode
+        if (!isAnimationModeOn) {
             dispatch(animationStatusChanged(null));
             dispatch(rNum2ExcludeReset());
             dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
@@ -236,7 +243,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         }
     }, [animationStatus]);
 
-    if (!isAnimationModeOn) {
+    if (!animationStatus) {
         return null;
     }
 
@@ -252,7 +259,8 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
             <CloseButton
                 onClick={() => {
-                    dispatch(toggleAnimationMode());
+                    // dispatch(toggleAnimationMode());
+                    dispatch(animationStatusChanged(null));
                 }}
             />
 

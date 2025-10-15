@@ -56,7 +56,7 @@ import { IWaybackItem } from '@typings/index';
 import { DonwloadAnimationButton } from './DonwloadAnimationButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
-import PlayPauseBtn from './PlayPauseBtn';
+import { AnimationStatusControlButtons } from './AnimationStatusControlButtons';
 // import { usePrevious } from '@hooks/usePrevious';
 import {
     saveAnimationSpeedInURLQueryParam,
@@ -85,22 +85,33 @@ const AnimationControls = () => {
         dispatch(animationSpeedChanged(speed));
     }, []);
 
-    const playPauseBtnOnClick = useCallback(() => {
-        if (animationStatus === 'loading') {
-            return;
-        }
+    // const playPauseBtnOnClick = useCallback(() => {
+    //     if (animationStatus === 'loading') {
+    //         return;
+    //     }
 
-        if (animationStatus === 'failed') {
-            dispatch(animationStatusChanged('loading'));
-            return;
-        }
+    //     if(!animationStatus) {
+    //         // if animation is not started yet, start it by setting status to 'loading'
+    //         dispatch(animationStatusChanged('loading'));
+    //         return;
+    //     }
 
-        if (animationStatus === 'playing') {
-            dispatch(animationStatusChanged('pausing'));
-        } else {
-            dispatch(animationStatusChanged('playing'));
-        }
-    }, [animationStatus]);
+    //     if (animationStatus === 'failed') {
+    //         // if animation failed to load, try loading it again by setting status to 'loading'
+    //         dispatch(animationStatusChanged('loading'));
+    //         return;
+    //     }
+
+    //     if (animationStatus === 'playing') {
+    //         dispatch(animationStatusChanged('pausing'));
+    //         return;
+    //     }
+
+    //     if (animationStatus === 'pausing') {
+    //         dispatch(animationStatusChanged('playing'));
+    //         return;
+    //     }
+    // }, [animationStatus]);
 
     const getContent = () => {
         if (
@@ -118,34 +129,32 @@ const AnimationControls = () => {
 
         return (
             <>
-                <DonwloadAnimationButton />
+                {/* <DonwloadAnimationButton /> */}
 
-                {animationStatus === 'failed' ? (
-                    <div className="text-red-400 text-xs mt-4">
+                {animationStatus === 'failed' && (
+                    <div className="text-red-400 text-xs">
                         Failed to load animation frames. Click the Play button
                         below to try again.
                     </div>
-                ) : (
-                    <div className=" mt-2">
-                        <span className=" text-xs">Animation Speed</span>
-                    </div>
                 )}
 
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
-                    <PlayPauseBtn
-                        isPlaying={animationStatus === 'playing'}
-                        isLoading={animationStatus === 'loading'}
-                        onClick={playPauseBtnOnClick}
-                    />
-
+                <div className="flex items-center mb-2">
                     <SpeedSelector
                         defaultVal={animationSpeed}
+                        disabled={
+                            animationStatus == 'loading' ||
+                            animationStatus === 'failed' ||
+                            !animationStatus
+                        }
                         onChange={speedOnChange}
+                    />
+
+                    <AnimationStatusControlButtons
+                        status={animationStatus}
+                        // onClick={playPauseBtnOnClick}
+                        statusOnChanged={(status) => {
+                            dispatch(animationStatusChanged(status));
+                        }}
                     />
                 </div>
 
