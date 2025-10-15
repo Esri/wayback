@@ -48,6 +48,7 @@ import {
     selectReleaseNumberOfActiveAnimationFrame,
     rNum2ExcludeToggled,
     releaseNumberOfActiveAnimationFrameChanged,
+    showDownloadAnimationPanelToggled,
     // releaseNumberOfActiveAnimationFrameChanged,
     // setActiveFrameByReleaseNum,
 } from '@store/AnimationMode/reducer';
@@ -63,6 +64,7 @@ import {
     saveAnimationSpeedInURLQueryParam,
     saveFrames2ExcludeInURLQueryParam,
 } from '@utils/UrlSearchParam';
+import { copyAnimationLink } from '@store/AnimationMode/thunks';
 
 const AnimationControls = () => {
     const dispatch = useAppDispatch();
@@ -155,6 +157,12 @@ const AnimationControls = () => {
                         // onClick={playPauseBtnOnClick}
                         statusOnChanged={(status) => {
                             dispatch(animationStatusChanged(status));
+                        }}
+                        downloadButtonOnClick={() => {
+                            dispatch(showDownloadAnimationPanelToggled(true));
+                        }}
+                        copyLinkButtonOnClick={() => {
+                            dispatch(copyAnimationLink());
                         }}
                     />
                 </div>

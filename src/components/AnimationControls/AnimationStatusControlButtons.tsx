@@ -20,36 +20,53 @@ import React, { useEffect } from 'react';
 type Props = {
     status: AnimationStatus | null;
     // onClick: () => void;
+    /**
+     * Emits when user clicks the download button
+     * @returns void
+     */
+    downloadButtonOnClick: () => void;
+    /**
+     * Emits when user clicks the copy link button
+     * @returns void
+     */
+    copyLinkButtonOnClick: () => void;
+    /**
+     * Emits when user clicks the play/pause/close button
+     * @param status The new status. If null, it means user wants to stop the animation.
+     * @returns void
+     */
     statusOnChanged: (status: AnimationStatus | null) => void;
 };
 
-const PlayBtn = (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 16 16"
-        height="16"
-        width="16"
-    >
-        <path d="M4 1.571l10 6.43-10 6.428z" fill="#ccc" />
-        <path fill="none" d="M0 0h16v16H0z" />
-    </svg>
-);
+// const PlayBtn = (
+//     <svg
+//         xmlns="http://www.w3.org/2000/svg"
+//         viewBox="0 0 16 16"
+//         height="16"
+//         width="16"
+//     >
+//         <path d="M4 1.571l10 6.43-10 6.428z" fill="#ccc" />
+//         <path fill="none" d="M0 0h16v16H0z" />
+//     </svg>
+// );
 
-const PauseBtn = (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 16 16"
-        height="16"
-        width="16"
-    >
-        <path d="M2 1h5v14H2zm12 0H9v14h5z" fill="#ccc" />
-        <path fill="none" d="M0 0h16v16H0z" />
-    </svg>
-);
+// const PauseBtn = (
+//     <svg
+//         xmlns="http://www.w3.org/2000/svg"
+//         viewBox="0 0 16 16"
+//         height="16"
+//         width="16"
+//     >
+//         <path d="M2 1h5v14H2zm12 0H9v14h5z" fill="#ccc" />
+//         <path fill="none" d="M0 0h16v16H0z" />
+//     </svg>
+// );
 
 export const AnimationStatusControlButtons: React.FC<Props> = ({
     status,
     statusOnChanged,
+    downloadButtonOnClick,
+    copyLinkButtonOnClick,
 }: Props) => {
     // const getIcon = () => {
     //     // if (status === 'loading') {
@@ -76,6 +93,28 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
 
     return (
         <div className="flex items-center">
+            {(status === 'playing' || status === 'pausing') && (
+                <>
+                    <CalciteButton
+                        appearance="transparent"
+                        kind="neutral"
+                        iconStart="link"
+                        label="Copy Link to Clipboard"
+                        scale="s"
+                        onClick={copyLinkButtonOnClick}
+                    />
+
+                    <CalciteButton
+                        appearance="transparent"
+                        kind="neutral"
+                        iconStart="download-to"
+                        label="Download Animation"
+                        scale="s"
+                        onClick={downloadButtonOnClick}
+                    />
+                </>
+            )}
+
             {
                 // when there is no status, show play button to start loading animation frames
                 !status && (
