@@ -18,6 +18,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    setActiveWaybackItem,
     // releaseNum4ItemsWithLocalChangesSelector,
     // allWaybackItemsSelector,
     // activeWaybackItemSelector,
@@ -161,21 +162,35 @@ const AnimationControls = () => {
                 <FramesSeletor
                     waybackItemsWithLocalChanges={waybackItemsWithLocalChanges}
                     rNum2Exclude={rNum2ExcludeFromAnimation}
-                    setActiveFrame={(rNum) => {
-                        if (animationStatus !== 'pausing') {
+                    setActiveFrame={(releaseNum) => {
+                        if (
+                            animationStatus === 'playing' ||
+                            animationStatus === 'loading'
+                        ) {
                             return;
                         }
 
                         dispatch(
-                            releaseNumberOfActiveAnimationFrameChanged(rNum)
+                            releaseNumberOfActiveAnimationFrameChanged(
+                                releaseNum
+                            )
                         );
+
+                        // also set the active wayback item in the wayback reducer
+                        // this is to keep the active item in sync when user selects a frame in animation controls
+                        // and can help user to see the selected frame's details when the animation is not started
+                        dispatch(setActiveWaybackItem(releaseNum));
+
                         // console.log(rNum);
                     }}
                     toggleFrame={(rNum) => {
                         dispatch(rNum2ExcludeToggled(rNum));
                     }}
                     releaseNum4ActiveFrame={releaseNum4ActiveFrame}
-                    isButtonDisabled={animationStatus === 'playing'}
+                    isButtonDisabled={
+                        animationStatus === 'playing' ||
+                        animationStatus === 'loading'
+                    }
                 />
             </>
         );
