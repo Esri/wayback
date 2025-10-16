@@ -88,33 +88,11 @@ const AnimationControls = () => {
         dispatch(animationSpeedChanged(speed));
     }, []);
 
-    // const playPauseBtnOnClick = useCallback(() => {
-    //     if (animationStatus === 'loading') {
-    //         return;
-    //     }
-
-    //     if(!animationStatus) {
-    //         // if animation is not started yet, start it by setting status to 'loading'
-    //         dispatch(animationStatusChanged('loading'));
-    //         return;
-    //     }
-
-    //     if (animationStatus === 'failed') {
-    //         // if animation failed to load, try loading it again by setting status to 'loading'
-    //         dispatch(animationStatusChanged('loading'));
-    //         return;
-    //     }
-
-    //     if (animationStatus === 'playing') {
-    //         dispatch(animationStatusChanged('pausing'));
-    //         return;
-    //     }
-
-    //     if (animationStatus === 'pausing') {
-    //         dispatch(animationStatusChanged('playing'));
-    //         return;
-    //     }
-    // }, [animationStatus]);
+    /**
+     * Whether the animation is playing or pausing
+     */
+    const isAnimationActive =
+        animationStatus === 'playing' || animationStatus === 'pausing';
 
     const getContent = () => {
         if (
@@ -143,15 +121,22 @@ const AnimationControls = () => {
                     )}
 
                     <div className="flex items-center">
-                        <SpeedSelector
-                            defaultVal={animationSpeed}
-                            disabled={
-                                animationStatus == 'loading' ||
-                                animationStatus === 'failed' ||
-                                !animationStatus
-                            }
-                            onChange={speedOnChange}
-                        />
+                        {isAnimationActive && (
+                            <SpeedSelector
+                                defaultVal={animationSpeed}
+                                onChange={speedOnChange}
+                            />
+                        )}
+
+                        {!isAnimationActive && (
+                            <div className="grow leading-tight">
+                                <span className="text-sm opacity-70">
+                                    {animationStatus === 'loading'
+                                        ? 'Loading animation frames...'
+                                        : 'Animate the wayback versions with local changes.'}
+                                </span>
+                            </div>
+                        )}
 
                         <AnimationStatusControlButtons
                             status={animationStatus}

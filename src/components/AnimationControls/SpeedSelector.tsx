@@ -22,7 +22,7 @@ type Props = {
     /**
      * Whether the speed selector is disabled or not. When animation is loading or failed, the speed selector should be disabled.
      */
-    disabled: boolean;
+    disabled?: boolean;
     onChange: (speedInMilliseonds: number) => void;
 };
 
