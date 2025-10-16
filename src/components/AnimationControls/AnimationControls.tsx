@@ -134,37 +134,41 @@ const AnimationControls = () => {
             <>
                 {/* <DonwloadAnimationButton /> */}
 
-                {animationStatus === 'failed' && (
-                    <div className="text-red-400 text-xs">
-                        Failed to load animation frames. Click the Play button
-                        below to try again.
+                <div className="px-4 mb-2">
+                    {animationStatus === 'failed' && (
+                        <div className="text-red-400 text-xs">
+                            Failed to load animation frames. Click the Play
+                            button below to try again.
+                        </div>
+                    )}
+
+                    <div className="flex items-center">
+                        <SpeedSelector
+                            defaultVal={animationSpeed}
+                            disabled={
+                                animationStatus == 'loading' ||
+                                animationStatus === 'failed' ||
+                                !animationStatus
+                            }
+                            onChange={speedOnChange}
+                        />
+
+                        <AnimationStatusControlButtons
+                            status={animationStatus}
+                            // onClick={playPauseBtnOnClick}
+                            statusOnChanged={(status) => {
+                                dispatch(animationStatusChanged(status));
+                            }}
+                            downloadButtonOnClick={() => {
+                                dispatch(
+                                    showDownloadAnimationPanelToggled(true)
+                                );
+                            }}
+                            copyLinkButtonOnClick={() => {
+                                dispatch(copyAnimationLink());
+                            }}
+                        />
                     </div>
-                )}
-
-                <div className="flex items-center mb-2">
-                    <SpeedSelector
-                        defaultVal={animationSpeed}
-                        disabled={
-                            animationStatus == 'loading' ||
-                            animationStatus === 'failed' ||
-                            !animationStatus
-                        }
-                        onChange={speedOnChange}
-                    />
-
-                    <AnimationStatusControlButtons
-                        status={animationStatus}
-                        // onClick={playPauseBtnOnClick}
-                        statusOnChanged={(status) => {
-                            dispatch(animationStatusChanged(status));
-                        }}
-                        downloadButtonOnClick={() => {
-                            dispatch(showDownloadAnimationPanelToggled(true));
-                        }}
-                        copyLinkButtonOnClick={() => {
-                            dispatch(copyAnimationLink());
-                        }}
-                    />
                 </div>
 
                 <FramesSeletor
@@ -212,7 +216,7 @@ const AnimationControls = () => {
     return (
         <>
             <div
-                className="px-4 py-0 mt-2"
+                className="h-full py-0 mt-2"
                 // style={{
                 //     padding: '0 1rem',
                 //     marginTop: '.5rem',
