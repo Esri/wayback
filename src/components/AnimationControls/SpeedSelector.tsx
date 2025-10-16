@@ -95,7 +95,7 @@ const SpeedSelector: React.FC<Props> = ({
             //     display: 'flex',
             //     alignItems: 'center',
             // }}
-            className="calcite-theme-dark w-full relatve h-[32px]"
+            className="calcite-theme-dark relative w-full h-[32px] mr-1"
         >
             {/* <span className="mr-2 font-semibold">-</span> */}
 
@@ -126,7 +126,7 @@ const SpeedSelector: React.FC<Props> = ({
                 ></CalciteSlider>
             </div>
 
-            <div className="absolute left-0 top-[28px] w-full text-center pointer-events-none">
+            <div className="absolute left-0 right-0 top-[12px] text-center pointer-events-none">
                 <span className="text-xs opacity-70">Animation Speed</span>
             </div>
 

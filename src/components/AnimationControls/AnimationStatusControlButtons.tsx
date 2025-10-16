@@ -13,9 +13,13 @@
  * limitations under the License.
  */
 
-import { CalciteButton, CalciteLoader } from '@esri/calcite-components-react';
+import {
+    CalciteButton,
+    CalciteIcon,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
 import { AnimationStatus } from '@store/AnimationMode/reducer';
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 
 type Props = {
     status: AnimationStatus | null;
@@ -62,6 +66,26 @@ type Props = {
 //     </svg>
 // );
 
+type ControlButtonProps = {
+    icon: string;
+    label: string;
+    onClick: () => void;
+};
+
+const ControlButton: FC<ControlButtonProps> = ({ icon, label, onClick }) => {
+    return (
+        <button
+            aria-label={label}
+            className="p-1 hover:bg-gray-50 hover:bg-opacity-5 flex items-center justify-center"
+            onClick={onClick}
+            title={label}
+            type="button"
+        >
+            <CalciteIcon icon={icon} />
+        </button>
+    );
+};
+
 export const AnimationStatusControlButtons: React.FC<Props> = ({
     status,
     statusOnChanged,
@@ -95,21 +119,32 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
         <div className="flex items-center">
             {(status === 'playing' || status === 'pausing') && (
                 <>
-                    <CalciteButton
+                    {/* <CalciteButton
                         appearance="transparent"
                         kind="neutral"
                         iconStart="link"
                         label="Copy Link to Clipboard"
                         scale="s"
                         onClick={copyLinkButtonOnClick}
+                    /> */}
+
+                    <ControlButton
+                        icon="link"
+                        label="Copy Link to Clipboard"
+                        onClick={copyLinkButtonOnClick}
                     />
 
-                    <CalciteButton
+                    {/* <CalciteButton
                         appearance="transparent"
                         kind="neutral"
                         iconStart="download-to"
                         label="Download Animation"
                         scale="s"
+                        onClick={downloadButtonOnClick}
+                    /> */}
+                    <ControlButton
+                        icon="download-to"
+                        label="Download Animation"
                         onClick={downloadButtonOnClick}
                     />
                 </>
@@ -118,12 +153,17 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is no status, show play button to start loading animation frames
                 !status && (
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="play"
+                    // <CalciteButton
+                    //     appearance="transparent"
+                    //     kind="neutral"
+                    //     iconStart="play"
+                    //     label="Start Animation"
+                    //     scale="s"
+                    //     onClick={statusOnChanged.bind(null, 'loading')}
+                    // />
+                    <ControlButton
+                        icon="play"
                         label="Start Animation"
-                        scale="s"
                         onClick={statusOnChanged.bind(null, 'loading')}
                     />
                 )
@@ -132,12 +172,17 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is playing, show pause button to pause the animation
                 status === 'playing' && (
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="pause"
+                    // <CalciteButton
+                    //     appearance="transparent"
+                    //     kind="neutral"
+                    //     iconStart="pause"
+                    //     label="Pause Animation"
+                    //     scale="s"
+                    //     onClick={statusOnChanged.bind(null, 'pausing')}
+                    // />
+                    <ControlButton
+                        icon="pause"
                         label="Pause Animation"
-                        scale="s"
                         onClick={statusOnChanged.bind(null, 'pausing')}
                     />
                 )
@@ -146,12 +191,17 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is paused, show play button to resume the animation
                 status === 'pausing' && (
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="play"
+                    // <CalciteButton
+                    //     appearance="transparent"
+                    //     kind="neutral"
+                    //     iconStart="play"
+                    //     label="Resume Animation"
+                    //     scale="s"
+                    //     onClick={statusOnChanged.bind(null, 'playing')}
+                    // />
+                    <ControlButton
+                        icon="play"
                         label="Resume Animation"
-                        scale="s"
                         onClick={statusOnChanged.bind(null, 'playing')}
                     />
                 )
@@ -162,12 +212,17 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is a status, show close button to stop the animation
                 status && (
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="x-circle"
+                    // <CalciteButton
+                    //     appearance="transparent"
+                    //     kind="neutral"
+                    //     iconStart="x-circle"
+                    //     label="Stop Animation"
+                    //     scale="s"
+                    //     onClick={statusOnChanged.bind(null, null)}
+                    // />
+                    <ControlButton
+                        icon="x-circle"
                         label="Stop Animation"
-                        scale="s"
                         onClick={statusOnChanged.bind(null, null)}
                     />
                 )
