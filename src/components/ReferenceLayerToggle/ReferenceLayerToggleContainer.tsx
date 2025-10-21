@@ -16,7 +16,10 @@
 import React, { useCallback, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+import {
+    isAnimationModeOnSelector,
+    selectIsAnimationActive,
+} from '@store/AnimationMode/reducer';
 import {
     isReferenceLayerSwitcherOpenToggled,
     isReferenceLayerVisibleSelector,
@@ -50,7 +53,7 @@ const ReferenceLayerToggleContainer = () => {
         selectIsReferenceLayerSwitcherOpen
     );
 
-    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+    const isAnimationActive = useAppSelector(selectIsAnimationActive);
 
     useOnClickOutside(containerRef, () => {
         // setIsLocaleSwitchOpen(false);
@@ -59,7 +62,7 @@ const ReferenceLayerToggleContainer = () => {
 
     useSuggestReferenceLayerLocale();
 
-    if (isAnimationModeOn || IS_MOBILE) {
+    if (isAnimationActive || IS_MOBILE) {
         return null;
     }
 

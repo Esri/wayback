@@ -176,6 +176,12 @@ export const selectIsAnimationPlaying = createSelector(
 export const isAnimationModeOnSelector = (state: RootState) =>
     state.Map.mode === 'animation';
 
+export const selectIsAnimationActive = (state: RootState) =>
+    state.Map.mode === 'animation' &&
+    (state.AnimationMode.animationStatus === 'loading' ||
+        state.AnimationMode.animationStatus === 'pausing' ||
+        state.AnimationMode.animationStatus === 'playing');
+
 export const selectShouldShowDownloadPanel = (state: RootState) =>
     state.AnimationMode.showDownloadAnimationPanel;
 
