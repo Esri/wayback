@@ -73,7 +73,7 @@ const ReferenceLayerToggleContainer = () => {
                 onClick={toggleReferenceLayer}
                 localeSwitchButtonOnClick={() => {
                     // setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
-                    dispatch(isReferenceLayerSwitcherOpenToggled(true));
+                    dispatch(isReferenceLayerSwitcherOpenToggled());
                 }}
             />
 

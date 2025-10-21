@@ -133,7 +133,7 @@ const AnimationControls = () => {
                                 <span className="text-sm opacity-70">
                                     {animationStatus === 'loading'
                                         ? 'Loading animation frames...'
-                                        : 'Animate the wayback versions with local changes.'}
+                                        : 'Chosse versions to animate.'}
                                 </span>
                             </div>
                         )}
