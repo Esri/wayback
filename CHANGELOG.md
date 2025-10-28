@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2025-10-28
+
+### Changed
+- Enhanced the animation controls by adding the download and copy link buttons to the animation controls.
+- Show reference layer in animation mode if it is turned on.
+- Integrated the reference layer screenshot into output animation MP4 video.
+- Updated the animation mode behavior to not automatically start playing when entering animation mode.
+
 ## 2025-10-06
 
 ### Added
