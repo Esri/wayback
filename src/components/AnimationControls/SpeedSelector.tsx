@@ -19,10 +19,18 @@ import React, { useEffect, useMemo } from 'react';
 
 type Props = {
     defaultVal: number;
+    /**
+     * Whether the speed selector is disabled or not. When animation is loading or failed, the speed selector should be disabled.
+     */
+    disabled?: boolean;
     onChange: (speedInMilliseonds: number) => void;
 };
 
-const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
+const SpeedSelector: React.FC<Props> = ({
+    defaultVal,
+    disabled,
+    onChange,
+}: Props) => {
     // const sliderRef = React.useRef<any>(null);
 
     const onChangeDely = React.useRef<NodeJS.Timeout>(null);
@@ -82,28 +90,30 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
 
     return (
         <div
-            style={{
-                flexGrow: 1,
-                display: 'flex',
-                alignItems: 'center',
-            }}
-            className="calcite-theme-dark"
+            // style={{
+            //     flexGrow: 1,
+            //     display: 'flex',
+            //     alignItems: 'center',
+            // }}
+            className="calcite-theme-dark relative w-full h-[32px] mr-1"
         >
-            <span className="mr-2 font-semibold">-</span>
+            {/* <span className="mr-2 font-semibold">-</span> */}
 
             <div
-                style={{
-                    flexGrow: 1,
-                }}
+            // style={{
+            //     flexGrow: 1,
+            // }}
             >
                 <CalciteSlider
                     // ref={sliderRef}
                     min={0}
                     max={ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length - 1}
                     // snap
-                    ticks={1}
+                    // ticks={1}
                     step={1}
+                    scale="s"
                     value={sliderValue}
+                    disabled={disabled}
                     onCalciteSliderInput={(evt: any) => {
                         const index = evt.target.value;
                         setSliderValue(index);
@@ -116,7 +126,11 @@ const SpeedSelector: React.FC<Props> = ({ defaultVal, onChange }: Props) => {
                 ></CalciteSlider>
             </div>
 
-            <span className="ml-2 font-semibold">+</span>
+            <div className="absolute left-0 right-0 top-[12px] text-center pointer-events-none">
+                <span className="text-xs opacity-70">Animation Speed</span>
+            </div>
+
+            {/* <span className="ml-2 font-semibold">+</span> */}
         </div>
     );
 };

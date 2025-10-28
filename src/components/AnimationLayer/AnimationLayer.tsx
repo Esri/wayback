@@ -15,7 +15,7 @@
 
 import MapView from '@arcgis/core/views/MapView';
 import MediaLayer from '@arcgis/core/layers/MediaLayer';
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch } from '@store/configureStore';
 import { useAppSelector } from '@store/configureStore';
 import {
@@ -46,6 +46,7 @@ import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 import { delay } from '@utils/snippets/delay';
 import { CalciteLoader } from '@esri/calcite-components-react';
 import { once } from '@arcgis/core/core/reactiveUtils';
+import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
 
 type Props = {
     mapView?: MapView;
@@ -95,8 +96,25 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     const frameData = useFrameDataForDownloadJob({
         waybackItems,
         imageElements: imageElementsData,
-        releaseNumOfItems2Exclude,
+        mapView,
     });
+
+    /**
+     * Filtered frame data to exclude any frames that are associated with the release numbers in the `releaseNumOfItems2Exclude` array.
+     */
+    const filteredFrameData: AnimationFrameData[] = useMemo(() => {
+        if (!frameData?.length) {
+            return [];
+        }
+
+        if (!releaseNumOfItems2Exclude?.length) {
+            return frameData;
+        }
+
+        return frameData.filter(
+            (d) => !releaseNumOfItems2Exclude.includes(Number(d.key))
+        );
+    }, [frameData, releaseNumOfItems2Exclude]);
 
     /**
      * This is a callback function that will be called each time the active frame (Image Element) in the animation layer is changed.
@@ -135,6 +153,10 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
     useEffect(() => {
         (async () => {
+            if (!mapView) {
+                return;
+            }
+
             if (!mediaLayerRef.current) {
                 initMediaLayer();
                 return;
@@ -198,9 +220,16 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     }, [imageElementsData, isAnimationModeOn, mapView]);
 
     useEffect(() => {
-        if (isAnimationModeOn) {
-            dispatch(animationStatusChanged('loading'));
-        } else {
+        // if (isAnimationModeOn) {
+        //     dispatch(animationStatusChanged('loading'));
+        // } else {
+        //     dispatch(animationStatusChanged(null));
+        //     dispatch(rNum2ExcludeReset());
+        //     dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
+        // }
+
+        // always reset these states when user exits the animation mode
+        if (!isAnimationModeOn) {
             dispatch(animationStatusChanged(null));
             dispatch(rNum2ExcludeReset());
             dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
@@ -214,7 +243,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
         }
     }, [animationStatus]);
 
-    if (!isAnimationModeOn) {
+    if (!animationStatus) {
         return null;
     }
 
@@ -230,12 +259,13 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
 
             <CloseButton
                 onClick={() => {
-                    dispatch(toggleAnimationMode());
+                    // dispatch(toggleAnimationMode());
+                    dispatch(animationStatusChanged(null));
                 }}
             />
 
             <AnimationDownloadPanel
-                frameData4DownloadJob={frameData}
+                frameData4DownloadJob={filteredFrameData}
                 animationSpeed={animationSpeedInMilliseconds}
                 mapViewWindowSize={{
                     width: mapView.width,

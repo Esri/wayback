@@ -67,6 +67,8 @@ const AppLayout: React.FC = () => {
                 <MapView>
                     <WaybackLayer />
 
+                    <AnimationLayer />
+
                     <ReferenceLayer />
 
                     <TilePreviewWindow />
@@ -78,7 +80,6 @@ const AppLayout: React.FC = () => {
                     <SwipeWidget />
 
                     {/* <AnimationPanel /> */}
-                    <AnimationLayer />
 
                     <ReferenceLayerToggle />
 

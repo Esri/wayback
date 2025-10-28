@@ -14,13 +14,21 @@
  */
 
 import ImageElement from '@arcgis/core/layers/support/ImageElement';
-import { selectMapCenter } from '@store/Map/reducer';
+import {
+    isReferenceLayerVisibleSelector,
+    selectMapCenter,
+} from '@store/Map/reducer';
 import { IWaybackItem } from '@typings/index';
 import { loadImageAsHTMLIMageElement } from '@utils/snippets/loadImage';
 import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import { ImageElementData } from './useMediaLayerImageElement';
+import {
+    combineAnimationFrameImageWithMapScreenshots,
+    getScreenshotOfReferenceLayer,
+} from './helper';
+import MapView from '@arcgis/core/views/MapView';
 // import { AnimationFrameData4DownloadJob } from '../AnimationDownloadPanel/DownloadPanel';
 
 /**
@@ -35,10 +43,14 @@ type Props = {
      * An array of ImageElement objects representing media layer elements.
      */
     imageElements: ImageElementData[];
+    // /**
+    //  * list of release number of wayback items to exclude from the animation.
+    //  */
+    // releaseNumOfItems2Exclude: number[];
     /**
-     * list of release number of wayback items to exclude from the animation.
+     * The MapView instance used to capture screenshots of the reference layer.
      */
-    releaseNumOfItems2Exclude: number[];
+    mapView: MapView;
 };
 
 /**
@@ -50,9 +62,13 @@ type Props = {
 export const useFrameDataForDownloadJob = ({
     waybackItems,
     imageElements,
-    releaseNumOfItems2Exclude,
+    mapView,
 }: Props) => {
     const { lon, lat } = useAppSelector(selectMapCenter) || {};
+
+    const isReferenceLayerVisible = useAppSelector(
+        isReferenceLayerVisibleSelector
+    );
 
     const [frameData, setFrameData] = useState<AnimationFrameData[]>([]);
 
@@ -63,21 +79,38 @@ export const useFrameDataForDownloadJob = ({
                 return;
             }
 
+            const { referenceLayersScreenshot } =
+                await getScreenshotOfReferenceLayer({
+                    mapView,
+                    isReferenceLayerVisible,
+                });
+            // console.log(referenceLayersScreenshot)
+
             const data: AnimationFrameData[] = [];
+
+            // const images = await Promise.all(
+            //     imageElements.map((d) =>
+            //         loadImageAsHTMLIMageElement(d.imageElement.image as string)
+            //     )
+            // );
 
             const images = await Promise.all(
                 imageElements.map((d) =>
-                    loadImageAsHTMLIMageElement(d.imageElement.image as string)
+                    combineAnimationFrameImageWithMapScreenshots({
+                        animationFrameImageUrl: d.imageElement.image as string,
+                        referenceLayersScreenshot:
+                            referenceLayersScreenshot?.data || null,
+                    })
                 )
             );
 
             for (let i = 0; i < imageElements.length; i++) {
                 const item = waybackItems[i];
 
-                // should not include the frame of the items in the exlusion list
-                if (releaseNumOfItems2Exclude.includes(item.releaseNum)) {
-                    continue;
-                }
+                // // should not include the frame of the items in the exlusion list
+                // if (releaseNumOfItems2Exclude.includes(item.releaseNum)) {
+                //     continue;
+                // }
 
                 // // load media layer elements as an array of HTML Image Elements
                 // const image = await loadImageAsHTMLIMageElement(
@@ -89,6 +122,7 @@ export const useFrameDataForDownloadJob = ({
                     imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
                         3
                     )} y ${lat.toFixed(3)}`,
+                    key: item.releaseNum.toString(),
                 } as AnimationFrameData;
 
                 data.push(frameData);
@@ -96,7 +130,7 @@ export const useFrameDataForDownloadJob = ({
 
             setFrameData(data);
         })();
-    }, [imageElements, releaseNumOfItems2Exclude]);
+    }, [imageElements]);
 
     return frameData;
 };

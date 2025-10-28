@@ -28,6 +28,8 @@ type Props = {
     mapView?: MapView;
 };
 
+export const REFERENCE_LAYER_TITLE = 'Reference Layer';
+
 const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
     const referenceLayerRef = useRef<VectorTileLayer>(null);
 
@@ -58,6 +60,7 @@ const ReferenceLayer: React.FC<Props> = ({ url, isVisible, mapView }) => {
         referenceLayerRef.current = new VectorTileLayer({
             url,
             visible: isVisible,
+            title: REFERENCE_LAYER_TITLE,
         });
 
         mapView.map.add(referenceLayerRef.current);

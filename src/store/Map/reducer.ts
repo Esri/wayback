@@ -138,7 +138,15 @@ const slice = createSlice({
             state,
             action: PayloadAction<boolean>
         ) => {
-            state.isReferenceLayerSwitcherOpen = action.payload;
+            if (action.payload === undefined) {
+                state.isReferenceLayerSwitcherOpen =
+                    !state.isReferenceLayerSwitcherOpen;
+                return;
+            } else {
+                state.isReferenceLayerSwitcherOpen = action.payload;
+            }
+
+            // state.isReferenceLayerSwitcherOpen = action.payload;
         },
     },
 });

@@ -33,7 +33,7 @@ const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
         isReferenceLayerVisibleSelector
     );
 
-    const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
+    // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
 
     const referenceLayer = useSelecteReferenceLayer();
 
@@ -41,7 +41,7 @@ const ReferenceLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
         <ReferenceLayer
             url={referenceLayer.url}
             mapView={mapView}
-            isVisible={isReferenceLayerVisible && !isAnimationModeOn}
+            isVisible={isReferenceLayerVisible}
         />
     );
 };

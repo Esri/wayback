@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CalciteIcon } from '@esri/calcite-components-react';
+import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -57,7 +57,7 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
 
     return (
         <div className="relative w-full h-full flex items-center justify-between ">
-            <div className="flex items-center">
+            <div className="flex items-center ml-2">
                 <button
                     className="mx-2 cursor-pointer"
                     onClick={onClick}
@@ -67,15 +67,25 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 </button>
                 <div className=" text-sm">{t('reference_label_overlay')}</div>
             </div>
-
+            {/* 
             <button
                 className="mr-2 flex items-center cursor-pointer"
                 title={t('choose_label_language')}
                 aria-label={t('choose_label_language')}
                 onClick={localeSwitchButtonOnClick}
             >
-                <CalciteIcon icon="speech-bubble" scale="s"></CalciteIcon>
-            </button>
+                <CalciteIcon icon="language" scale="s"></CalciteIcon>
+            </button> */}
+
+            <CalciteButton
+                appearance="transparent"
+                kind="neutral"
+                onClick={localeSwitchButtonOnClick}
+                label={t('choose_label_language')}
+                iconStart="language"
+            >
+                {/* <CalciteIcon icon="language" scale="s"></CalciteIcon> */}
+            </CalciteButton>
         </div>
     );
 };

@@ -135,17 +135,11 @@ const FramesSeletor: React.FC<Props> = ({
 
         return (
             <div
-                // style={{
-                //     width: '100%',
-                //     marginTop: '.5rem',
-                // }}
-                className="w-full mt-2"
+                className="w-full pb-10 px-4 fancy-scrollbar overflow-y-auto"
+                style={{
+                    height: 'calc(100% - 40px)',
+                }}
             >
-                {/* <div>
-                    <span className="font-size--3">
-                        Animation Frames
-                    </span>
-                </div> */}
                 {items}
             </div>
         );
