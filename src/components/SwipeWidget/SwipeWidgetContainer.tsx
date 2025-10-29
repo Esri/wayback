@@ -30,7 +30,7 @@ import SwipeWidget from './SwipeWidget';
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';
 import { IWaybackItem } from '@typings/index';
-import { saveSwipeWidgetInfoInURLQueryParam } from '@utils/UrlSearchParam';
+import { saveSwipeWidgetInfoToHashParams } from '@utils/urlParams';
 
 type Props = {
     mapView?: MapView;
@@ -54,7 +54,7 @@ const SwipeWidgetContainer: React.FC<Props> = ({ mapView }: Props) => {
     }, []);
 
     useEffect(() => {
-        saveSwipeWidgetInfoInURLQueryParam({
+        saveSwipeWidgetInfoToHashParams({
             isOpen,
             rNum4SwipeWidgetLeadingLayer: waybackItem4LeadingLayer.releaseNum,
             rNum4SwipeWidgetTrailingLayer: waybackItem4TrailingLayer.releaseNum,

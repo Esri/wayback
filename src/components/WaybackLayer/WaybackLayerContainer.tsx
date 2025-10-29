@@ -18,7 +18,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
 
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
-import { saveReleaseNum4ActiveWaybackItemInURLQueryParam } from '@utils/UrlSearchParam';
+import { saveReleaseNum4ActiveWaybackItemToHashParams } from '@utils/urlParams';
 
 import WaybackLayer from './WaybackLayer';
 
@@ -44,7 +44,7 @@ const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
     }, [animationStatus]);
 
     useEffect(() => {
-        saveReleaseNum4ActiveWaybackItemInURLQueryParam(
+        saveReleaseNum4ActiveWaybackItemToHashParams(
             activeWaybackItem.releaseNum
         );
     }, [activeWaybackItem]);

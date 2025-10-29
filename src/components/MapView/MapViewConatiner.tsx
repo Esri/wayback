@@ -39,10 +39,7 @@ import MapView from './MapView';
 // import AppConfig from '../../app-config';
 import { IExtentGeomety, IMapPointInfo } from '@typings/index';
 // import { getDefaultExtent } from '@utils/LocalStorage';
-import {
-    saveMapCenterToHashParams,
-    // saveMapExtentInURLQueryParam,
-} from '@utils/UrlSearchParam';
+import { saveMapCenterToHashParams } from '@utils/urlParams';
 // import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import {
     // isAnimationModeOnSelector,
@@ -121,10 +118,6 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const onExtentChange = (extent: IExtentGeomety) => {
         dispatch(mapExtentUpdated(extent));
     };
-
-    // useEffect(() => {
-    //     saveMapExtentInURLQueryParam(mapExtent);
-    // }, [mapExtent]);
 
     useEffect(() => {
         if (!center || !zoom) {
