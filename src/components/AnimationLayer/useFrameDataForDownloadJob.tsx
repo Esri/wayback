@@ -53,6 +53,10 @@ type Props = {
     mapView: MapView;
 };
 
+type AnimationFrameDataWithReleaseNumAsKey = AnimationFrameData & {
+    key: string;
+};
+
 /**
  * This custom hook returns an array of `AnimationFrameData` objects that
  * can be used by the Animation Download task.
@@ -70,7 +74,9 @@ export const useFrameDataForDownloadJob = ({
         isReferenceLayerVisibleSelector
     );
 
-    const [frameData, setFrameData] = useState<AnimationFrameData[]>([]);
+    const [frameData, setFrameData] = useState<
+        AnimationFrameDataWithReleaseNumAsKey[]
+    >([]);
 
     useEffect(() => {
         (async () => {
@@ -86,7 +92,7 @@ export const useFrameDataForDownloadJob = ({
                 });
             // console.log(referenceLayersScreenshot)
 
-            const data: AnimationFrameData[] = [];
+            const data: AnimationFrameDataWithReleaseNumAsKey[] = [];
 
             // const images = await Promise.all(
             //     imageElements.map((d) =>
@@ -117,13 +123,13 @@ export const useFrameDataForDownloadJob = ({
                 //     imageElements[i].imageElement.image as string
                 // );
 
-                const frameData = {
+                const frameData: AnimationFrameDataWithReleaseNumAsKey = {
                     image: images[i],
                     imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
                         3
                     )} y ${lat.toFixed(3)}`,
                     key: item.releaseNum.toString(),
-                } as AnimationFrameData;
+                };
 
                 data.push(frameData);
             }

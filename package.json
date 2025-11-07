@@ -99,7 +99,7 @@
     "@esri/calcite-components-react": "^3.3.3",
     "@esri/wayback-core": "^1.0.10",
     "@reduxjs/toolkit": "^2.6.1",
-    "@vannizhang/images-to-video-converter-client": "^1.1.13",
+    "@vannizhang/images-to-video-converter-client": "^1.1.14",
     "axios": "^1.6.2",
     "classnames": "^2.5.1",
     "d3": "^7.8.5",
