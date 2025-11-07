@@ -31,7 +31,7 @@ type ParamKey =
     | 'updatesLayer'
     | 'activeDialog';
 
-type SaveSwipeWidgetInfoInURLQueryParam = (params: {
+type SaveSwipeWidgetInfoToHashParams = (params: {
     isOpen: boolean;
     rNum4SwipeWidgetLeadingLayer?: number;
     rNum4SwipeWidgetTrailingLayer?: number;
@@ -49,7 +49,7 @@ export const updateHashParams = (key: ParamKey, value: string) => {
         hashParams.set(key, value);
     }
 
-    window.location.hash = hashParams.toString();
+    window.history.replaceState(null, '', '#' + hashParams.toString());
 };
 
 export const getHashParamValueByKey = (key: ParamKey): string => {
@@ -83,24 +83,24 @@ const getMapExtent = (): IExtentGeomety => {
     return mapExtent;
 };
 
-const saveMapExtentInURLQueryParam = (mapExtent: IExtentGeomety): void => {
-    const key: ParamKey = 'ext';
-    const value = mapExtent
-        ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax]
-              .map((d) => d.toFixed(5))
-              .join(',')
-        : '';
+// const saveMapExtentToHashParams = (mapExtent: IExtentGeomety): void => {
+//     const key: ParamKey = 'ext';
+//     const value = mapExtent
+//         ? [mapExtent.xmin, mapExtent.ymin, mapExtent.xmax, mapExtent.ymax]
+//               .map((d) => d.toFixed(5))
+//               .join(',')
+//         : '';
 
-    updateHashParams(key, value);
-};
+//     updateHashParams(key, value);
+// };
 
-// const saveLocalChangesOnlyInURLQueryParam = (
+// const saveLocalChangesOnlyToHashParams = (
 //     localChangesOnly: boolean
 // ): void => {
 //     updateHashParams('localChangesOnly', localChangesOnly ? 'true' : null);
 // };
 
-const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
+const saveReleaseNum4SelectedWaybackItemsToHashParams = (
     rNum4SelectedWaybackItems: number[]
 ): void => {
     const key: ParamKey = 'selected';
@@ -111,7 +111,7 @@ const saveReleaseNum4SelectedWaybackItemsInURLQueryParam = (
     updateHashParams(key, value);
 };
 
-const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
+const saveReleaseNum4ActiveWaybackItemToHashParams = (
     rNum4ActiveWaybackItem: number
 ): void => {
     const key: ParamKey = 'active';
@@ -122,28 +122,27 @@ const saveReleaseNum4ActiveWaybackItemInURLQueryParam = (
     updateHashParams(key, value);
 };
 
-const saveSwipeWidgetInfoInURLQueryParam: SaveSwipeWidgetInfoInURLQueryParam =
-    ({
-        isOpen,
-        rNum4SwipeWidgetLeadingLayer,
-        rNum4SwipeWidgetTrailingLayer,
-    }) => {
-        const key: ParamKey = 'swipeWidget';
-        const value = isOpen
-            ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
-            : null;
+const saveSwipeWidgetInfoToHashParams: SaveSwipeWidgetInfoToHashParams = ({
+    isOpen,
+    rNum4SwipeWidgetLeadingLayer,
+    rNum4SwipeWidgetTrailingLayer,
+}) => {
+    const key: ParamKey = 'swipeWidget';
+    const value = isOpen
+        ? `${rNum4SwipeWidgetLeadingLayer},${rNum4SwipeWidgetTrailingLayer}`
+        : null;
 
-        updateHashParams(key, value);
-    };
+    updateHashParams(key, value);
+};
 
-const saveAnimationSpeedInURLQueryParam = (speed?: number): void => {
+const saveAnimationSpeedToHashParams = (speed?: number): void => {
     const key: ParamKey = 'animationSpeed';
     const value = speed !== undefined ? speed.toString() : null;
 
     updateHashParams(key, value);
 };
 
-const saveFrames2ExcludeInURLQueryParam = (rNums: number[]): void => {
+const saveFrames2ExcludeToHashParams = (rNums: number[]): void => {
     const key: ParamKey = 'framesToExclude';
     const value = rNums && rNums.length ? rNums.join(',') : null;
 
@@ -236,7 +235,7 @@ const decodeURLParams = (): IURLParamData => {
     return urlParams;
 };
 
-export const saveMapModeInURLQueryParam = (mode: MapMode): void => {
+export const saveMapModeToHashParams = (mode: MapMode): void => {
     const key: ParamKey = 'mode';
     const value = mode ? mode : null;
     updateHashParams(key, value);
@@ -257,13 +256,13 @@ export const getMapModeFromHashParams = (): MapMode => {
     return value as MapMode;
 };
 
-export const saveActiveDialogInHashParams = (
-    dialogName: AppDialogName
-): void => {
-    const key: ParamKey = 'activeDialog';
-    const value = dialogName ? dialogName : null;
-    updateHashParams(key, value);
-};
+// export const saveActiveDialogInHashParams = (
+//     dialogName: AppDialogName
+// ): void => {
+//     const key: ParamKey = 'activeDialog';
+//     const value = dialogName ? dialogName : null;
+//     updateHashParams(key, value);
+// };
 
 /**
  * Get the active dialog name from hash params
@@ -291,11 +290,9 @@ const getActiveDialogFromHashParams = (): AppDialogName => {
 
 export {
     decodeURLParams,
-    saveMapExtentInURLQueryParam,
-    // saveLocalChangesOnlyInURLQueryParam,
-    saveReleaseNum4SelectedWaybackItemsInURLQueryParam,
-    saveReleaseNum4ActiveWaybackItemInURLQueryParam,
-    saveSwipeWidgetInfoInURLQueryParam,
-    saveAnimationSpeedInURLQueryParam,
-    saveFrames2ExcludeInURLQueryParam,
+    saveReleaseNum4SelectedWaybackItemsToHashParams,
+    saveReleaseNum4ActiveWaybackItemToHashParams,
+    saveSwipeWidgetInfoToHashParams,
+    saveAnimationSpeedToHashParams,
+    saveFrames2ExcludeToHashParams,
 };

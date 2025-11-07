@@ -24,13 +24,13 @@ import {
     decodeURLParams,
     getMapCenterFromHashParams,
     getMapModeFromHashParams,
-} from '../utils/UrlSearchParam';
+} from '@utils/urlParams';
 
 import {
     getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
     getPreferredReferenceLayerLocale,
-} from '../utils/LocalStorage';
+} from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,

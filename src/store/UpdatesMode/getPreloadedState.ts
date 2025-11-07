@@ -1,7 +1,4 @@
-import {
-    getHashParamValueByKey,
-    updateHashParams,
-} from '@utils/UrlSearchParam';
+import { getHashParamValueByKey, updateHashParams } from '@utils/urlParams';
 import { UpdatesModeState, initialUpdatesModeState } from './reducer';
 import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
 

@@ -61,9 +61,9 @@ import SpeedSelector from './SpeedSelector';
 import { AnimationStatusControlButtons } from './AnimationStatusControlButtons';
 // import { usePrevious } from '@hooks/usePrevious';
 import {
-    saveAnimationSpeedInURLQueryParam,
-    saveFrames2ExcludeInURLQueryParam,
-} from '@utils/UrlSearchParam';
+    saveAnimationSpeedToHashParams,
+    saveFrames2ExcludeToHashParams,
+} from '@utils/urlParams';
 import { copyAnimationLink } from '@store/AnimationMode/thunks';
 
 const AnimationControls = () => {
@@ -195,7 +195,7 @@ const AnimationControls = () => {
 
     useEffect(() => {
         // console.log(rNum2ExcludeFromAnimation)
-        saveFrames2ExcludeInURLQueryParam(rNum2ExcludeFromAnimation);
+        saveFrames2ExcludeToHashParams(rNum2ExcludeFromAnimation);
     }, [rNum2ExcludeFromAnimation]);
 
     return (

@@ -29,7 +29,6 @@ import {
 
 import { DownloadDialog } from './DownloadDialog';
 import { useAppDispatch } from '@store/configureStore';
-import { updateHashParams } from '@utils/UrlSearchParam';
 import {
     isAnonymouns,
     signIn,

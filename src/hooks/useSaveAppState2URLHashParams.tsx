@@ -21,10 +21,10 @@ import {
     selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
 import {
-    saveAnimationSpeedInURLQueryParam,
-    saveMapModeInURLQueryParam,
+    saveAnimationSpeedToHashParams,
+    saveMapModeToHashParams,
     updateHashParams,
-} from '@utils/UrlSearchParam';
+} from '@utils/urlParams';
 import { selectMapMode } from '@store/Map/reducer';
 import { selectUpdatesModeState } from '@store/UpdatesMode/selectors';
 import { saveUpdatesModeDataInURLHashParams } from '@store/UpdatesMode/getPreloadedState';
@@ -42,13 +42,13 @@ export const useSaveAppState2URLHashParams = () => {
     const activeDialog = useAppSelector(activeDialogSelector);
 
     useEffect(() => {
-        saveAnimationSpeedInURLQueryParam(
+        saveAnimationSpeedToHashParams(
             animationStatus !== null ? animationSpeed : undefined
         );
     }, [animationSpeed, animationStatus]);
 
     useEffect(() => {
-        saveMapModeInURLQueryParam(mode);
+        saveMapModeToHashParams(mode);
     }, [mode]);
 
     useEffect(() => {

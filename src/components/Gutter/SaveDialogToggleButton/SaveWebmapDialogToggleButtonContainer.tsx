@@ -36,7 +36,7 @@ import {
     isSaveAsWebmapDialogOpenSelector,
     isSaveAsWebmapDialogOpenToggled,
 } from '@store/UI/reducer';
-import { saveReleaseNum4SelectedWaybackItemsInURLQueryParam } from '@utils/UrlSearchParam';
+import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 import { activeDialogUpdated } from '@store/UI/reducer';
@@ -99,7 +99,7 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     };
 
     useEffect(() => {
-        saveReleaseNum4SelectedWaybackItemsInURLQueryParam(
+        saveReleaseNum4SelectedWaybackItemsToHashParams(
             rNum4SelectedWaybackItems
         );
     }, [rNum4SelectedWaybackItems]);
