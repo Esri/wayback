@@ -8,8 +8,8 @@ import CIMSymbol from '@arcgis/core/symbols/CIMSymbol.js';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
-    'vivid-advanced': 'Maxar Vivid Advanced imagery',
-    'vivid-standard': 'Maxar Vivid Standard imagery',
+    'vivid-advanced': 'Vantor Vivid Advanced imagery',
+    'vivid-standard': 'Vantor Vivid Standard imagery',
     'community-contributed': 'Community Maps imagery',
 };
 
