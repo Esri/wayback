@@ -14,6 +14,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -55,7 +56,7 @@ import {
 
 import { IWaybackItem } from '@typings/index';
 
-import { DonwloadAnimationButton } from './DonwloadAnimationButton';
+// import { DonwloadAnimationButton } from './DonwloadAnimationButton';
 import FramesSeletor from './FramesSeletor';
 import SpeedSelector from './SpeedSelector';
 import { AnimationStatusControlButtons } from './AnimationStatusControlButtons';
@@ -68,6 +69,7 @@ import { copyAnimationLink } from '@store/AnimationMode/thunks';
 
 const AnimationControls = () => {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const rNum2ExcludeFromAnimation: number[] =
         useAppSelector(rNum2ExcludeSelector);
@@ -102,7 +104,7 @@ const AnimationControls = () => {
             return (
                 <div className="text-center">
                     <p className="mt-4 text-sm">
-                        Loading versions with local changes.
+                        {t('loading_versions_with_local_changes')}
                     </p>
                 </div>
             );
@@ -115,8 +117,7 @@ const AnimationControls = () => {
                 <div className="px-4 mb-2">
                     {animationStatus === 'failed' && (
                         <div className="text-red-400 text-xs">
-                            Failed to load animation frames. Click the Play
-                            button below to try again.
+                            {t('animation_failed_message')}
                         </div>
                     )}
 
@@ -132,8 +133,8 @@ const AnimationControls = () => {
                             <div className="grow leading-tight">
                                 <span className="text-sm opacity-70">
                                     {animationStatus === 'loading'
-                                        ? 'Loading animation frames...'
-                                        : 'Chosse versions to animate.'}
+                                        ? t('loading_animation_frames')
+                                        : t('choose_versions_to_animate')}
                                 </span>
                             </div>
                         )}

@@ -20,6 +20,7 @@ import {
 } from '@esri/calcite-components-react';
 import { AnimationStatus } from '@store/AnimationMode/reducer';
 import React, { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     status: AnimationStatus | null;
@@ -92,6 +93,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
     downloadButtonOnClick,
     copyLinkButtonOnClick,
 }: Props) => {
+    const { t } = useTranslation();
     // const getIcon = () => {
     //     // if (status === 'loading') {
     //     //     return <CalciteLoader inline />;
@@ -130,7 +132,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
 
                     <ControlButton
                         icon="link"
-                        label="Copy Link to Clipboard"
+                        label={t('copyLinkToClipboard')}
                         onClick={copyLinkButtonOnClick}
                     />
 
@@ -144,7 +146,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                     /> */}
                     <ControlButton
                         icon="download-to"
-                        label="Download Animation"
+                        label={t('downloadAnimation')}
                         onClick={downloadButtonOnClick}
                     />
                 </>
@@ -163,7 +165,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                     // />
                     <ControlButton
                         icon="play"
-                        label="Start Animation"
+                        label={t('startAnimation')}
                         onClick={statusOnChanged.bind(null, 'loading')}
                     />
                 )
@@ -182,7 +184,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                     // />
                     <ControlButton
                         icon="pause"
-                        label="Pause Animation"
+                        label={t('pauseAnimation')}
                         onClick={statusOnChanged.bind(null, 'pausing')}
                     />
                 )
@@ -201,7 +203,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                     // />
                     <ControlButton
                         icon="play"
-                        label="Resume Animation"
+                        label={t('resumeAnimation')}
                         onClick={statusOnChanged.bind(null, 'playing')}
                     />
                 )
@@ -222,7 +224,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                     // />
                     <ControlButton
                         icon="x-circle"
-                        label="Stop Animation"
+                        label={t('stopAnimation')}
                         onClick={statusOnChanged.bind(null, null)}
                     />
                 )
