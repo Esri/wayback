@@ -14,7 +14,6 @@
  */
 
 import React, { FC, useMemo, useRef } from 'react';
-import { VIDEO_SIZE_OPTIONS } from './config';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 

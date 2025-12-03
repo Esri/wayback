@@ -93,5 +93,10 @@
     "animation_speed": "__Animation Speed",
     "horizontal": "__Horizontal",
     "square": "__Square",
-    "vertical": "__Vertical"
+    "vertical": "__Vertical",
+    "link_copied_to_clipboard": "__Link copied to clipboard",
+    "creating_mp4": "__Creating MP4.",
+    "cancel": "__Cancel",
+    "download_complete_message": "__Complete! Check browser downloads for the MP4 file.",
+    "failed_to_create_mp4": "__Failed to create MP4."
 }
