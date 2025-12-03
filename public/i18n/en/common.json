@@ -117,5 +117,7 @@
     "clear_all": "__clear all",
     "export_tile_package_tooltip": "__Export an imagery tile package for the current map extent",
     "zoom_in_to_enable": "(zoom in to enable)",
-    "concurrent_export_limit_reached": "__Reached the maximum limit of 5 concurrent export jobs"
+    "concurrent_export_limit_reached": "__Reached the maximum limit of 5 concurrent export jobs",
+    "selected_version": "__Selected version",
+    "click_map_for_imagery_details": "__Click map for imagery details"
 }

@@ -14,6 +14,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IWaybackItem } from '@typings/index';
 
@@ -24,43 +25,37 @@ interface IProps {
     shouldShowPreviewItemTitle: boolean;
 }
 
-class Title4ActiveItem extends React.PureComponent<IProps> {
-    constructor(props: IProps) {
-        super(props);
-    }
+const Title4ActiveItem: React.FC<IProps> = ({
+    activeWaybackItem,
+    previewWaybackItem,
+    shouldShowPreviewItemTitle,
+    isMobile,
+}) => {
+    const { t } = useTranslation();
 
-    render() {
-        const {
-            activeWaybackItem,
-            previewWaybackItem,
-            shouldShowPreviewItemTitle,
-            isMobile,
-        } = this.props;
+    const releaseDate = shouldShowPreviewItemTitle
+        ? previewWaybackItem.releaseDateLabel
+        : activeWaybackItem.releaseDateLabel;
 
-        const releaseDate = shouldShowPreviewItemTitle
-            ? previewWaybackItem.releaseDateLabel
-            : activeWaybackItem.releaseDateLabel;
-
-        return (
-            <div className="flex text-custom-theme-blue-light justify-center items-center text-center md:text-left">
-                <div className="">
-                    <span className="text-xs">Selected version</span>
-                    <br />
-                    <span className="text-xl font-medium">{releaseDate}</span>
-                </div>
-
-                {!isMobile && (
-                    <>
-                        <div className="ml-3 pl-3 border-l border-custom-theme-blue-dark w-2/5 leading-none">
-                            <span className="text-xs">
-                                Click map for imagery details
-                            </span>
-                        </div>
-                    </>
-                )}
+    return (
+        <div className="flex text-custom-theme-blue-light justify-center items-center text-center md:text-left">
+            <div className="">
+                <span className="text-xs">{t('selected_version')}</span>
+                <br />
+                <span className="text-xl font-medium">{releaseDate}</span>
             </div>
-        );
-    }
-}
+
+            {!isMobile && (
+                <>
+                    <div className="ml-3 pl-3 border-l border-custom-theme-blue-dark w-2/5 leading-none">
+                        <span className="text-xs">
+                            {t('click_map_for_imagery_details')}
+                        </span>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
 
 export default Title4ActiveItem;
