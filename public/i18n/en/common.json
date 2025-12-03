@@ -88,5 +88,7 @@
     "startAnimation": "Start Animation",
     "pauseAnimation": "Pause Animation",
     "resumeAnimation": "Resume Animation",
-    "stopAnimation": "Stop Animation"
+    "stopAnimation": "Stop Animation",
+    "download_animation": "__Download Animation",
+    "animation_speed": "__Animation Speed"
 }
