@@ -114,5 +114,8 @@
     "download_tile_package": "__donwload",
     "failed": "__failed",
     "tile_package_downloaded": "__CHECK BROWSER FOR DOWNLOAD PROGRESS",
-    "clear_all": "__clear all"
+    "clear_all": "__clear all",
+    "export_tile_package_tooltip": "__Export an imagery tile package for the current map extent",
+    "zoom_in_to_enable": "(zoom in to enable)",
+    "concurrent_export_limit_reached": "__Reached the maximum limit of 5 concurrent export jobs"
 }

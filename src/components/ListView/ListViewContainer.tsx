@@ -14,6 +14,7 @@
  */
 
 import React, { useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -66,6 +67,8 @@ const ListViewWrapper: React.FC<Props> = ({ children }) => {
 const ListViewContainer = () => {
     const dispatch = useAppDispatch();
 
+    const { t } = useTranslation();
+
     const { isMobile } = useContext(AppContext);
 
     const waybackItems: IWaybackItem[] = useAppSelector(
@@ -95,15 +98,14 @@ const ListViewContainer = () => {
     const mapExtent = useAppSelector(mapExtentSelector);
 
     const downloadButtonTooltipText = useMemo(() => {
-        const text =
-            'Export an imagery tile package for the current map extent';
+        const text = t('export_tile_package_tooltip');
 
         if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
-            return text + ` (zoom in to enable)`;
+            return text + ' ' + t('zoom_in_to_enable');
         }
 
         if (hasReachedLimitOfConcurrentDownloadJobs) {
-            return 'Reached the maximum limit of 5 concurrent export jobs';
+            return t('concurrent_export_limit_reached');
         }
 
         return text;
