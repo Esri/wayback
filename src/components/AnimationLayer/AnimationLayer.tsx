@@ -173,18 +173,6 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
                 // just clear all elements in media layer
                 source.elements.removeAll();
             } else {
-                // source.elements.addMany(
-                //     imageElementsData.map((d) => d.imageElement)
-                // );
-
-                // // wait for one second before starting playing the animation,
-                // // to give the media layer enough time to add all image elements
-                // await delay(1000);
-
-                // console.log(
-                //     'media layer elements are ready, starting animation...'
-                // );
-
                 try {
                     const mediaLayerElements = imageElementsData.map(
                         (d) => d.imageElement
@@ -220,14 +208,6 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     }, [imageElementsData, isAnimationModeOn, mapView]);
 
     useEffect(() => {
-        // if (isAnimationModeOn) {
-        //     dispatch(animationStatusChanged('loading'));
-        // } else {
-        //     dispatch(animationStatusChanged(null));
-        //     dispatch(rNum2ExcludeReset());
-        //     dispatch(releaseNumberOfActiveAnimationFrameChanged(null));
-        // }
-
         // always reset these states when user exits the animation mode
         if (!isAnimationModeOn) {
             dispatch(animationStatusChanged(null));

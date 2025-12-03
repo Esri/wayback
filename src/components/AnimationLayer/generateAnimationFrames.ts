@@ -289,24 +289,24 @@ const getTileByScreenPoint = ({
     };
 };
 
-const getCenterLocationForFrameRect = ({
-    frameRect,
-    mapView,
-}: {
-    frameRect: FrameRectInfo;
-    mapView: MapView;
-}): CenterLocationForFrameRect => {
-    const { screenX, screenY, height, width } = frameRect;
+// const getCenterLocationForFrameRect = ({
+//     frameRect,
+//     mapView,
+// }: {
+//     frameRect: FrameRectInfo;
+//     mapView: MapView;
+// }): CenterLocationForFrameRect => {
+//     const { screenX, screenY, height, width } = frameRect;
 
-    const point = mapView.toMap({
-        x: screenX + width / 2,
-        y: screenY + height / 2,
-    });
+//     const point = mapView.toMap({
+//         x: screenX + width / 2,
+//         y: screenY + height / 2,
+//     });
 
-    const { latitude, longitude } = point;
+//     const { latitude, longitude } = point;
 
-    return {
-        latitude,
-        longitude,
-    };
-};
+//     return {
+//         latitude,
+//         longitude,
+//     };
+// };
