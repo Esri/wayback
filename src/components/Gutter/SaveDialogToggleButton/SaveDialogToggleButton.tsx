@@ -88,7 +88,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                     aria-label="clear all selected items"
                     onClick={clearAll}
                 >
-                    clear all
+                    {t('clear_all')}
                 </button>
             )}
         </div>

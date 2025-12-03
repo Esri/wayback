@@ -113,5 +113,6 @@
     "in_progress": "__in progress",
     "download_tile_package": "__donwload",
     "failed": "__failed",
-    "tile_package_downloaded": "__CHECK BROWSER FOR DOWNLOAD PROGRESS"
+    "tile_package_downloaded": "__CHECK BROWSER FOR DOWNLOAD PROGRESS",
+    "clear_all": "__clear all"
 }
