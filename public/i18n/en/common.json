@@ -105,5 +105,13 @@
     "wayport_export_instruction_3": "__No more than five exports may be requested concurrently.",
     "wayport_export_instruction_4": "__This dialog can safely be closed while tile packages are being created.",
     "wayback_export_title": "__Wayback Export (<action>beta</action>)",
-    "wayback_export_description": "__Exported basemap tiles are intended for offline use in ArcGIS applications and <offline-app-link>offline applications</offline-app-link> built with an ArcGIS Runtime SDK in accordance with Esri's terms of use: <summary-link>View Summary</summary-link> and <terms-of-use-link>View Terms of Use</terms-of-use-link>."
+    "wayback_export_description": "__Exported basemap tiles are intended for offline use in ArcGIS applications and <offline-app-link>offline applications</offline-app-link> built with an ArcGIS Runtime SDK in accordance with Esri's terms of use: <summary-link>View Summary</summary-link> and <terms-of-use-link>View Terms of Use</terms-of-use-link>.",
+    "level_max_min": "__Level {{maxLevel}} - {{minLevel}}",
+    "estimated_tiles": "__~{{numTiles}} tiles",
+    "tiles_ready_for_download": "__Tiles Ready to Download - {{size}}MB",
+    "create_tile_package": "__create tile package",
+    "in_progress": "__in progress",
+    "download_tile_package": "__donwload",
+    "failed": "__failed",
+    "tile_package_downloaded": "__CHECK BROWSER FOR DOWNLOAD PROGRESS"
 }

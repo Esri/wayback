@@ -54,14 +54,6 @@ type Props = {
     levelsOnChange: (id: string, levels: number[]) => void;
 };
 
-const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
-    'not started': 'create tile package',
-    pending: 'in progress',
-    finished: 'donwload',
-    failed: 'failed',
-    downloaded: 'CHECK BROWSER FOR DOWNLOAD PROGRESS',
-};
-
 export const DownloadJobCard: FC<Props> = ({
     data,
     createTilePackageButtonOnClick,
@@ -114,6 +106,14 @@ export const DownloadJobCard: FC<Props> = ({
         return total;
     }, [tileEstimations, levels]);
 
+    const ButtonLableByStatus: Record<DownloadJobStatus, string> = {
+        'not started': t('create_tile_package'),
+        pending: t('in_progress'),
+        finished: t('download_tile_package'),
+        failed: t('failed'),
+        downloaded: t('tile_package_downloaded'),
+    };
+
     // const getStatusIcon = () => {
     //     return (
     //         <CalciteButton
@@ -141,7 +141,8 @@ export const DownloadJobCard: FC<Props> = ({
     const getButtonLable = () => {
         if (status === 'finished' && outputTilePackageInfo !== undefined) {
             const sizeInMB = (outputTilePackageInfo.size / 1000000).toFixed(1);
-            return `Tiles Ready to Download - ${sizeInMB}MB`;
+            // return `Tiles Ready to Download - ${sizeInMB}MB`;
+            return t('tiles_ready_for_download', { size: sizeInMB });
         }
 
         return ButtonLableByStatus[status] || status;
@@ -266,12 +267,22 @@ export const DownloadJobCard: FC<Props> = ({
                 <div className="text-sm text-white w-[96px] shrink-0">
                     <div className="leading-none mb-[2px]">
                         <span>
-                            Level {levels[0]} - {levels[1]}
+                            {t('level_max_min', {
+                                maxLevel: levels[0],
+                                minLevel: levels[1],
+                            })}
+
+                            {/* Level {levels[0]} - {levels[1]} */}
                         </span>
                     </div>
 
                     <div className="leading-none">
-                        <span>~{formatTotalNumOfTiles(totalTiles)} tiles</span>
+                        {/* <span>~{formatTotalNumOfTiles(totalTiles)} tiles</span> */}
+                        <span>
+                            {t('estimated_tiles', {
+                                numTiles: formatTotalNumOfTiles(totalTiles),
+                            })}
+                        </span>
                     </div>
                 </div>
             </div>
