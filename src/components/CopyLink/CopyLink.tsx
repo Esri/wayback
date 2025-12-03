@@ -1,15 +1,17 @@
 import { MapActionButton } from '@components/MapView/MapActionButton';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const CopyLink = () => {
     const [hasCopied, setHasCopied] = React.useState(false);
+    const { t } = useTranslation();
     return (
         <MapActionButton
             showLoadingIndicator={false}
             disabled={false}
             topMarging={4}
-            tooltip={'Copy link to clipboard'}
+            tooltip={t('copyLinkToClipboard')}
             onClickHandler={() => {
                 navigator.clipboard.writeText(window.location.href);
 
