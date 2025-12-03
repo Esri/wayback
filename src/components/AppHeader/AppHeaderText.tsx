@@ -18,7 +18,7 @@ import React from 'react';
 export const AppHeaderText = () => {
     return (
         <div className="text-white text-center">
-            <span className="text-xl font-light">
+            <span className="text-xl font-light whitespace-nowrap">
                 Esri | World Imagery{' '}
                 <span className="text-white font-medium">Wayback</span>
             </span>

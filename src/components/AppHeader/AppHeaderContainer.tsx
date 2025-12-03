@@ -27,8 +27,6 @@ import { selectMapMode } from '@store/Map/reducer';
 import { isAboutThisAppModalOpenToggled } from '@store/UI/reducer';
 
 export const AppHeaderContainer = () => {
-    // const isGutterHide = useAppSelector(isGutterHideSelector);
-
     const dispatch = useAppDispatch();
 
     const mode = useAppSelector(selectMapMode);
@@ -40,10 +38,6 @@ export const AppHeaderContainer = () => {
     if (IS_MOBILE) {
         return (
             <MobileHeader
-                // isGutterHide={isGutterHide}
-                // leftNavBtnOnClick={() => {
-                //     dispatch(isGutterHideToggled());
-                // }}
                 infoButtonOnClick={() => {
                     dispatch(isAboutThisAppModalOpenToggled());
                 }}
