@@ -27,15 +27,19 @@ import { AppLayout } from '@components/index';
 import { getWaybackItems } from '@esri/wayback-core';
 import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 import { initApp } from '@utils/initApp/initApp';
+import { getAppLanguage } from '@utils/i18n/getAppLanguage';
 
 (async () => {
     const root = createRoot(document.getElementById('appRootDiv'));
 
     try {
+        const appLanguage = getAppLanguage();
+
         // Initialize the application
         // This includes setting up i18next, Esri OAuth, and Adobe Analytics
         await initApp({
             appId: APP_ID,
+            appLanguage,
         });
 
         // fetch wayback items from the Wayback service

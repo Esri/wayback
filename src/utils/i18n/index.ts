@@ -10,6 +10,12 @@ import { format } from 'date-fns';
  * @returns void
  */
 export const initI18next = async (language = 'en') => {
+    // Set the HTML document's language attribute to the current app language
+    // This helps with the ArcGIS API to display the content in the correct language
+    if (language !== 'en') {
+        document.documentElement.lang = language;
+    }
+
     // get the "last-modified" meta tag, which gets added to 'index.html' file during the build process by webpack
     const lastModifiedMetaTag = document.querySelector(
         'meta[name="last-modified"]'

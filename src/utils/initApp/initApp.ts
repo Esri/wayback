@@ -17,6 +17,11 @@ type InitAppParams = {
      * Use undefined or an empty string if the app does not require OAuth.
      */
     appId: string;
+    /**
+     * The application language/locale code (e.g., 'en', 'es', etc.).
+     * If not provided, the default language will be used, which is 'en'.
+     */
+    appLanguage?: string;
 };
 
 /**
@@ -36,7 +41,10 @@ const isHostedOnLivingAtlasServer =
  *                                 If the app does not require OAuth, this can be an empty string or undefined.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const initApp = async ({ appId }: InitAppParams): Promise<void> => {
+export const initApp = async ({
+    appId,
+    appLanguage,
+}: InitAppParams): Promise<void> => {
     console.log('Initializing application...');
 
     // If the app is hosted on Living Atlas server, it must use ArcGIS Online as the portal URL
@@ -83,7 +91,8 @@ export const initApp = async ({ appId }: InitAppParams): Promise<void> => {
         });
     }
 
-    await initI18next();
+    // Initialize i18next for internationalization
+    await initI18next(appLanguage);
 
     await initLogger();
 
