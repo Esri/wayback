@@ -20,7 +20,7 @@ import { DownloadJobPlaceholder } from './DownloadJobPlaceholder';
 import { CalciteButton } from '@esri/calcite-components-react';
 import { Modal } from '@components/Modal/Modal';
 import classNames from 'classnames';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 type Props = {
     /**
@@ -94,9 +94,12 @@ export const DownloadDialog: FC<Props> = ({
     levelsOnChange,
     signInButtonOnClick,
 }: Props) => {
+    const { t } = useTranslation();
     const getJobsList = () => {
         if (!jobs?.length && !isAddingNewDownloadJob) {
-            return <div className="text-center my-8">No download jobs.</div>;
+            return (
+                <div className="text-center my-8">{t('no_download_jobs')}</div>
+            );
         }
 
         return jobs.map((job) => {
@@ -148,7 +151,7 @@ export const DownloadDialog: FC<Props> = ({
                 )}
 
                 <p className="text-sm mt-2 mb-4">
-                    Exported basemap tiles are intended for offline use in
+                    {/* Exported basemap tiles are intended for offline use in
                     ArcGIS applications and{' '}
                     <a
                         href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
@@ -174,26 +177,42 @@ export const DownloadDialog: FC<Props> = ({
                     >
                         View Terms of Use
                     </a>
-                    .
+                    . */}
                     {/* You can choose this window while your tiles are prepared. */}
+
+                    <Trans
+                        i18nKey="wayback_export_description"
+                        components={{
+                            'offline-app-link': (
+                                <a
+                                    href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                            'summary-link': (
+                                <a
+                                    href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                            'terms-of-use-link': (
+                                <a
+                                    href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                        }}
+                    />
                 </p>
 
                 <ul className="list-inside list-disc text-sm">
-                    <li>
-                        Exports are based on map extent, with a minimum zoom
-                        level of 12.
-                    </li>
-                    <li>
-                        Each export request is limited to a maximum of 150,000
-                        tiles.
-                    </li>
-                    <li>
-                        No more than five exports may be requested concurrently.
-                    </li>
-                    <li>
-                        This dialog can safely be closed while tile packages are
-                        being created.
-                    </li>
+                    <li>{t('wayport_export_instruction_1')}</li>
+                    <li>{t('wayport_export_instruction_2')}</li>
+                    <li>{t('wayport_export_instruction_3')}</li>
+                    <li>{t('wayport_export_instruction_4')}</li>
                 </ul>
 
                 <hr className="my-8 opacity-50" />

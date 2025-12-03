@@ -48,6 +48,7 @@ import {
 } from '@store/UI/reducer';
 import { Modal } from '@components/Modal/Modal';
 import { AppContext } from '@contexts/AppContextProvider';
+import { Trans } from 'react-i18next';
 
 export const DownloadDialogContainer = () => {
     const dispatch = useAppDispatch();
@@ -105,16 +106,32 @@ export const DownloadDialogContainer = () => {
 
     const getTitle = () => {
         return (
+            // <span className="text-2xl mb-8">
+            //     Wayback Export (
+            //     <a
+            //         href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+            //         target="_blank"
+            //         rel="noreferrer"
+            //     >
+            //         beta
+            //     </a>
+            //     )
+            // </span>
+
             <span className="text-2xl mb-8">
-                Wayback Export (
-                <a
-                    href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    beta
-                </a>
-                )
+                <Trans
+                    i18nKey="wayback_export_title"
+                    components={{
+                        action: (
+                            <a
+                                href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="underline"
+                            />
+                        ),
+                    }}
+                />
             </span>
         );
     };
