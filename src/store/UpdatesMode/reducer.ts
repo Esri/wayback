@@ -50,8 +50,8 @@ export type UpdatesModeState = {
     status: WorldImageryUpdatesStatusEnum[];
     /**
      * category filter for imagery updates
-     * - `vivid-advanced`: Imagery updates from Maxar's Vivid Advanced basemap product.
-     * - `vivid-standard`: Imagery updates from Maxar's Vivid Standard basemap product.
+     * - `vivid-advanced`: Imagery updates from Vantor's Vivid Advanced basemap product.
+     * - `vivid-standard`: Imagery updates from Vantor's Vivid Standard basemap product.
      * - `community-contributed`: Imagery updates contributed by the GIS User Community.
      */
     category: ImageryUpdatesCategory;

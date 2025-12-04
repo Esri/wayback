@@ -1,7 +1,7 @@
 // import { tier } from '@utils/Tier';
 
 /**
- * Maxar's Vivid Advanced basemap product provides committed image currency in a high-resolution,
+ * Vantor's Vivid Advanced basemap product provides committed image currency in a high-resolution,
  * high-quality image layer over defined metropolitan and high-interest areas across the globe.
  */
 const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
@@ -17,7 +17,7 @@ export const VIVID_ADVANCED_FROM_MAXAR_URL =
 //     : VIVID_ADVANCED_FROM_MAXAR_URL_DEV;
 
 /**
- * Maxar's Vivid Standard basemap product provides a visually consistent and continuous image layer
+ * Vantor's Vivid Standard basemap product provides a visually consistent and continuous image layer
  * over large areas through advanced image mosaicking techniques, including tonal balancing and
  * seamline blending across thousands of image strips.
  */
@@ -137,8 +137,8 @@ export enum WorldImageryUpdatesStatusEnum {
 /**
  * Imagery Updates Categories
  *
- * - `vivid-advanced`: Imagery updates from Maxar's Vivid Advanced basemap product.
- * - `vivid-standard`: Imagery updates from Maxar's Vivid Standard basemap product.
+ * - `vivid-advanced`: Imagery updates from Vantor's Vivid Advanced basemap product.
+ * - `vivid-standard`: Imagery updates from Vantor's Vivid Standard basemap product.
  * - `community-contributed`: Imagery updates contributed by the GIS User Community.
  */
 export type ImageryUpdatesCategory =
