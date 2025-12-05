@@ -12,6 +12,9 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 
+const validateEnv = require('./webpack/validateEnvironmentVariables');
+const loadEnvironmentVariables = require('./webpack/loadEnvironmentVariables');
+
 const {
     title,
     author,
@@ -32,35 +35,12 @@ module.exports = (env, options)=> {
      * If the environment file name is not specified, the default value will be `.env`.
      */
     const envFileName = env?.envFileName || '.env';
+    const envConfig = loadEnvironmentVariables(envFileName);
 
-    // Get the path to the environment file
-    const envPath = path.resolve(__dirname, envFileName);
-    console.log(`Using environment file: ${envPath}`);
-
-    // check if the environment file exists
-    if (!fs.existsSync(envPath)) {
-        console.error(`Environment file ${envPath} does not exist. Please create it based on .env.template\n`);
-        process.exit(1);
-    }
-
-    // Load the environment variables
-    const envConfig = dotenv.config({ path: envPath }).parsed || {};
-    console.log(`Loaded environment variables from ${envPath}\n`);
-
-    // throw an error if the environment variables is an empty object
-    if (Object.keys(envConfig).length === 0) {
-        console.error(`No environment variables found in the environment file ${envPath}. Please check the file content or create it based on .env.template\n`);
-        process.exit(1);
-    }
-
-    if(!envConfig.APP_ID) {
-        console.error(
-            `Failed to start/build the application:\n` +
-            `Please ensure that the environment variable APP_ID is set in your .env file.\n` + 
-            `Please refer to the Prerequisites section in README for more information on how to set up your environment variables.`
-        );
-        process.exit(1);
-    }
+    /**
+     * Validate that all required environment variables are set for the specified application.
+     */
+    validateEnv(envConfig);
 
     return {
         devServer: {
