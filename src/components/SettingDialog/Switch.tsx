@@ -18,11 +18,11 @@ type Props = {
 };
 
 export const Switch: FC<Props> = ({ label, checked, onChange }) => {
-    const props: { [key: string]: any } = {};
+    // const props: { [key: string]: any } = {};
 
-    if (checked) {
-        props['checked'] = true;
-    }
+    // if (checked) {
+    //     props['checked'] = true;
+    // }
 
     return (
         <div>
@@ -30,6 +30,7 @@ export const Switch: FC<Props> = ({ label, checked, onChange }) => {
                 onCalciteSwitchChange={(evt: any) => {
                     onChange(evt.target?.checked);
                 }}
+                checked={checked || undefined}
             />
             <span className="text-sm ml-2">{label}</span>
         </div>

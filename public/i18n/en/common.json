@@ -136,5 +136,9 @@
     "copy_coordinates": "__click to copy the coordinates of this location",
     "closed_metadata_popup": "__Closed metadata popup",
     "preview": "__Preview",
-    "settings": "__Settings"
+    "settings": "__Settings",
+    "save_map_extent": "__Save current map extent as default",
+    "save_custom_portal": "__Use ArcGIS Enterprise URL to save map",
+    "saved": "__Saved",
+    "save": "__Save"
 }

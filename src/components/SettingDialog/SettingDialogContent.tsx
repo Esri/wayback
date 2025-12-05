@@ -13,19 +13,17 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import {
     saveDefaultExtent,
     getCustomPortalUrl,
     setCustomPortalUrl,
-    // setShouldShowUpdatesWithLocalChanges,
-    // getShouldShowUpdatesWithLocalChanges,
 } from '@utils/LocalStorage';
 import { IExtentGeomety } from '@typings/index';
 import { Switch } from './Switch';
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
-// import config from './config';
+import { CalciteButton } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 type SaveBtnLabelValue = 'Save' | 'Saved';
 
@@ -36,68 +34,45 @@ interface IProps {
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
 }
 
-interface IState {
-    portalUrl: string;
-    shouldUseCustomPortalUrl: boolean;
-    shouldSaveAsDefaultExtent: boolean;
-    // shouldShowLocalChangesByDefault: boolean;
-    saveBtnLable: SaveBtnLabelValue;
-}
-
-type StateKeys = keyof IState;
-
 const CustomUrlFromLocalStorage = getCustomPortalUrl();
 
-class SettingDialogContent extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
+    const { t } = useTranslation();
 
-        this.state = {
-            // portalUrl: getPortalUrlInSearchParam(),
-            portalUrl: CustomUrlFromLocalStorage,
-            shouldUseCustomPortalUrl: CustomUrlFromLocalStorage ? true : false,
-            shouldSaveAsDefaultExtent: false,
-            // shouldShowLocalChangesByDefault:
-            //     getShouldShowUpdatesWithLocalChanges(),
-            saveBtnLable: 'Save',
-        };
+    const [portalUrl, setPortalUrl] = useState<string>(
+        CustomUrlFromLocalStorage
+    );
 
-        this.saveSettings = this.saveSettings.bind(this);
-        this.portalUrlInputOnChange = this.portalUrlInputOnChange.bind(this);
-        this.toggleBooleanStateVal = this.toggleBooleanStateVal.bind(this);
-    }
+    const [shouldUseCustomPortalUrl, setShouldUseCustomPortalUrl] =
+        useState<boolean>(CustomUrlFromLocalStorage ? true : false);
+    const [shouldSaveAsDefaultExtent, setShouldSaveAsDefaultExtent] =
+        useState<boolean>(false);
 
-    portalUrlInputOnChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        const portalUrl = evt.currentTarget.value;
+    // const [saveBtnLable, setSaveBtnLable] = useState<SaveBtnLabelValue>('Save');
 
-        this.setState({
-            portalUrl,
-        });
-    }
+    // const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-    toggleBooleanStateVal(stateKey: StateKeys) {
-        if (typeof this.state[stateKey] === 'boolean') {
-            const newVal = !this.state[stateKey];
+    const [settingsSaved, setSettingsSaved] = useState<boolean>(false);
 
-            this.setState((prevState) => ({
-                ...prevState,
-                [stateKey]: newVal,
-            }));
-        }
-    }
+    const portalUrlInputOnChange = (
+        evt: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setPortalUrl(evt.currentTarget.value);
+    };
 
-    saveSettings() {
-        const {
-            portalUrl,
-            shouldUseCustomPortalUrl,
-            shouldSaveAsDefaultExtent,
-            // shouldShowLocalChangesByDefault,
-        } = this.state;
+    // const toggleSaveBtnLabel = (isSaved = false) => {
+    //     const newVal = isSaved ? 'Saved' : 'Save';
+    //     setSaveBtnLable(newVal);
 
-        const { mapExtent } = this.props;
+    //     if (newVal === 'Saved') {
+    //         setTimeout(() => {
+    //             setSaveBtnLable('Save');
+    //         }, 2000);
+    //     }
+    // };
 
+    const saveSettings = () => {
         if (shouldSaveAsDefaultExtent) {
-            // const mapExt = getMapExtent();
             saveDefaultExtent(mapExtent);
         }
 
@@ -107,123 +82,70 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
         setCustomPortalUrl(customPortalUrl);
 
         if (customPortalUrl !== CustomUrlFromLocalStorage) {
-            // savePortalUrlInSearchParam(portalUrl);
             window.location.reload();
         }
 
-        this.toggleSaveBtnLabel(true);
+        setSettingsSaved(true);
 
-        // this.close();
+        setTimeout(() => {
+            setSettingsSaved(false);
+        }, 2000);
+    };
 
-        // onClose();
-    }
+    useEffect(() => {
+        setShouldSaveAsDefaultExtent(false);
+    }, [mapExtent]);
 
-    toggleSaveBtnLabel(isSaved = false) {
-        const newVal = isSaved ? 'Saved' : 'Save';
+    return (
+        <>
+            <div className="mt-2 mb-4">
+                <Switch
+                    label={t('save_map_extent')}
+                    checked={shouldSaveAsDefaultExtent}
+                    onChange={() =>
+                        setShouldSaveAsDefaultExtent(!shouldSaveAsDefaultExtent)
+                    }
+                />
+            </div>
 
-        this.setState(
-            {
-                saveBtnLable: newVal,
-            },
-            () => {
-                if (newVal === 'Saved') {
-                    setTimeout(() => {
-                        this.toggleSaveBtnLabel();
-                    }, 2000);
-                }
-            }
-        );
-    }
+            <div className="mt-2 mb-4">
+                <Switch
+                    label={t('save_custom_portal')}
+                    checked={shouldUseCustomPortalUrl}
+                    onChange={() =>
+                        setShouldUseCustomPortalUrl(!shouldUseCustomPortalUrl)
+                    }
+                />
 
-    // close() {
-    //     calcite.bus.emit('modal:close');
-    // }
-
-    componentDidUpdate(prevProps: IProps) {
-        const { mapExtent } = this.props;
-
-        // turn off shouldSaveAsDefaultExtent every time the map extent changes
-        if (mapExtent !== prevProps.mapExtent) {
-            this.setState({
-                shouldSaveAsDefaultExtent: false,
-            });
-        }
-    }
-
-    // componentDidMount() {
-    //     calcite.modal();
-    // }
-
-    render() {
-        // const { signedInAlready, signedInUser, toggleSignInBtnOnClick } =
-        //     this.props;
-        const {
-            portalUrl,
-            shouldUseCustomPortalUrl,
-            shouldSaveAsDefaultExtent,
-            // shouldShowLocalChangesByDefault,
-            saveBtnLable,
-        } = this.state;
-
-        return (
-            <>
-                {/* <h2 className="text-3xl text-center mb-4">Settings</h2> */}
-
-                <div className="mt-2 mb-4">
-                    <Switch
-                        label="Save current map extent as default"
-                        checked={shouldSaveAsDefaultExtent ? true : false}
-                        onChange={() => {
-                            // console.log('on change')
-                            this.toggleBooleanStateVal(
-                                'shouldSaveAsDefaultExtent'
-                            );
-                        }}
-                    />
-                </div>
-
-                <div className="mt-2 mb-4">
-                    <Switch
-                        label="Use ArcGIS Enterprise URL to save map"
-                        checked={shouldUseCustomPortalUrl ? true : false}
-                        onChange={() => {
-                            // console.log('on change')
-                            this.toggleBooleanStateVal(
-                                'shouldUseCustomPortalUrl'
-                            );
-                        }}
-                    />
-
-                    {shouldUseCustomPortalUrl ? (
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                className="w-full p-1 outline-none"
-                                placeholder="https://<my-enterprise-url>/portal"
-                                onChange={this.portalUrlInputOnChange}
-                                value={portalUrl || undefined}
-                            />
-                        </div>
-                    ) : null}
-                </div>
-
-                <div className="flex justify-end">
-                    <div
-                        className={classnames({
-                            disabled: !portalUrl && !shouldSaveAsDefaultExtent,
-                        })}
-                        style={{
-                            '--calcite-button-text-color': '#fff',
-                        }}
-                    >
-                        <CalciteButton onClick={this.saveSettings}>
-                            {saveBtnLable}
-                        </CalciteButton>
+                {shouldUseCustomPortalUrl && (
+                    <div className="mt-2">
+                        <input
+                            type="text"
+                            className="w-full p-1 outline-none"
+                            placeholder="https://<my-enterprise-url>/portal"
+                            onChange={portalUrlInputOnChange}
+                            value={portalUrl || ''}
+                        />
                     </div>
+                )}
+            </div>
+
+            <div className="flex justify-end">
+                <div
+                    className={classnames({
+                        disabled: !portalUrl && !shouldSaveAsDefaultExtent,
+                    })}
+                    style={{
+                        '--calcite-button-text-color': '#fff',
+                    }}
+                >
+                    <CalciteButton onClick={saveSettings}>
+                        {settingsSaved ? t('saved') : t('save')}
+                    </CalciteButton>
                 </div>
-            </>
-        );
-    }
-}
+            </div>
+        </>
+    );
+};
 
 export default SettingDialogContent;
