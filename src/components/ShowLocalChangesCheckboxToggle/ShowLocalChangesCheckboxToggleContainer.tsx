@@ -21,8 +21,9 @@ import {
     shouldOnlyShowItemsWithLocalChangeSelector,
     shouldOnlyShowItemsWithLocalChangeToggled,
 } from '@store/UI/reducer';
+import { LocalChangesToggle } from '.';
 
-import ShowLocalChangesCheckboxToggle from './index';
+// import ShowLocalChangesCheckboxToggle from './index';
 
 const ShowLocalChangesCheckboxToggleContainer = () => {
     const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ const ShowLocalChangesCheckboxToggleContainer = () => {
     );
 
     return (
-        <ShowLocalChangesCheckboxToggle
+        <LocalChangesToggle
             isActive={shouldOnlyShowItemsWithLocalChange}
             onChange={() => {
                 dispatch(shouldOnlyShowItemsWithLocalChangeToggled());

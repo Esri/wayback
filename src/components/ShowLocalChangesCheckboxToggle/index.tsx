@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { CalciteIcon } from '@esri/calcite-components-react';
+import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -23,30 +23,21 @@ interface IProps {
     onChange: () => void;
 }
 
-const CheckboxToggle: FC<IProps> = ({ isActive, onChange }) => {
+export const LocalChangesToggle: FC<IProps> = ({ isActive, onChange }) => {
     const { t } = useTranslation();
 
     return (
-        <div
-            className="hidden md:flex items-center justify-center my-1"
-            // onClick={onChange}
-            style={
-                {
-                    // '--calcite-checkbox-icon-color': "#fff"  --- IGNORE ---
-                }
-            }
-        >
-            <button
-                className="flex justify-center items-center"
+        <div className="hidden md:flex items-center justify-center my-1">
+            <CalciteButton
+                appearance="transparent"
+                kind="neutral"
+                scale="s"
                 onClick={onChange}
-                aria-label={t('show_only_local_changes')}
+                label={t('show_only_local_changes')}
+                iconStart={isActive ? 'check-square' : 'square'}
             >
-                {isActive ? (
-                    <CalciteIcon icon="check-square" scale="s" />
-                ) : (
-                    <CalciteIcon icon="square" scale="s" />
-                )}
-            </button>
+                {/* {t('show_only_local_changes')} */}
+            </CalciteButton>
 
             <span className="text-sm ml-1">
                 <Trans
@@ -60,4 +51,4 @@ const CheckboxToggle: FC<IProps> = ({ isActive, onChange }) => {
     );
 };
 
-export default React.memo(CheckboxToggle);
+// export default React.memo(CheckboxToggle);
