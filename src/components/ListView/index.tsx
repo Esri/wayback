@@ -16,10 +16,9 @@
 import './style.css';
 import React from 'react';
 
-import { IWaybackItem, IStaticTooltipData } from '@typings/index';
+import { IWaybackItem } from '@typings/index';
 
 import { ListViewCard as Card } from './Card';
-import StaticTooltip from '../StaticTooltip';
 
 interface IProps {
     isMobile: boolean;
@@ -46,37 +45,9 @@ interface IProps {
     onMouseOut?: () => void;
 }
 
-interface IState {
-    tooltipData: IStaticTooltipData;
-}
-
-class ListView extends React.PureComponent<IProps, IState> {
+class ListView extends React.PureComponent<IProps> {
     constructor(props: IProps) {
         super(props);
-
-        this.state = {
-            tooltipData: {
-                content: '',
-                top: 0,
-                left: 0,
-            },
-        };
-
-        this.setTooltipData = this.setTooltipData.bind(this);
-    }
-
-    setTooltipData(data?: IStaticTooltipData) {
-        const tooltipData = data
-            ? data
-            : {
-                  content: '',
-                  top: 0,
-                  left: 0,
-              };
-
-        this.setState({
-            tooltipData,
-        });
     }
 
     getListViewCards() {
@@ -131,7 +102,6 @@ class ListView extends React.PureComponent<IProps, IState> {
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseOut={onMouseOut}
-                    toggleTooltip={this.setTooltipData}
                     downloadButtonOnClick={downloadButtonOnClick}
                 />
             );
@@ -143,25 +113,11 @@ class ListView extends React.PureComponent<IProps, IState> {
     render() {
         const cards = this.getListViewCards();
 
-        // need to use a static tooltip that has the position relative to the window because the list view wrap has the "overflow-y: auto"
-        // css property, which make the default tooltip hide by the container.
-        const { tooltipData } = this.state;
-        const { isMobile } = this.props;
-
-        const staticTooltip = !isMobile ? (
-            <StaticTooltip
-                top={tooltipData.top}
-                left={tooltipData.left}
-                content={tooltipData.content}
-            />
-        ) : null;
-
         return (
             <>
                 <div className="list-view-container" data-testid="card-list">
                     {cards}
                 </div>
-                {staticTooltip}
             </>
         );
     }

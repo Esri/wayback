@@ -16,7 +16,7 @@
 import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
-import { IWaybackItem, IStaticTooltipData } from '@typings/index';
+import { IWaybackItem } from '@typings/index';
 // import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
 import { CalciteIcon } from '@esri/calcite-components-react';
@@ -44,7 +44,6 @@ interface Props {
         shouldShowPreviewItemTitle: boolean
     ) => void;
     onMouseOut?: () => void;
-    toggleTooltip?: (data?: IStaticTooltipData) => void;
 }
 
 // interface IState {}

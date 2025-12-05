@@ -109,12 +109,6 @@ interface IURLParamData {
     activeDialog: AppDialogName;
 }
 
-interface IStaticTooltipData {
-    content: string;
-    top: number;
-    left: number;
-}
-
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -124,5 +118,4 @@ export {
     IScreenPoint,
     IExtentGeomety,
     IURLParamData,
-    IStaticTooltipData,
 };
