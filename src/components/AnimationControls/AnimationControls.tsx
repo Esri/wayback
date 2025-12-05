@@ -201,15 +201,7 @@ const AnimationControls = () => {
 
     return (
         <>
-            <div
-                className="h-full py-0 mt-2"
-                // style={{
-                //     padding: '0 1rem',
-                //     marginTop: '.5rem',
-                // }}
-            >
-                {getContent()}
-            </div>
+            <div className="h-full py-0 mt-2">{getContent()}</div>
         </>
     );
 };

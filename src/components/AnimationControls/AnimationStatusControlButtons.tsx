@@ -94,56 +94,17 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
     copyLinkButtonOnClick,
 }: Props) => {
     const { t } = useTranslation();
-    // const getIcon = () => {
-    //     // if (status === 'loading') {
-    //     //     return <CalciteLoader inline />;
-    //     // }
-
-    //     if(status === 'playing'){
-    //         return PauseBtn;
-    //     }
-
-    //     return PlayBtn;
-    // };
-    // return (
-    //     <div
-    //         className="mr-2 cursor-pointer"
-    //         style={{
-    //             display: 'flex',
-    //         }}
-    //         onClick={onClick}
-    //     >
-    //         {getIcon()}
-    //     </div>
-    // );
 
     return (
         <div className="flex items-center">
             {(status === 'playing' || status === 'pausing') && (
                 <>
-                    {/* <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="link"
-                        label="Copy Link to Clipboard"
-                        scale="s"
-                        onClick={copyLinkButtonOnClick}
-                    /> */}
-
                     <ControlButton
                         icon="link"
                         label={t('copyLinkToClipboard')}
                         onClick={copyLinkButtonOnClick}
                     />
 
-                    {/* <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="download-to"
-                        label="Download Animation"
-                        scale="s"
-                        onClick={downloadButtonOnClick}
-                    /> */}
                     <ControlButton
                         icon="download-to"
                         label={t('downloadAnimation')}
@@ -155,14 +116,6 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is no status, show play button to start loading animation frames
                 !status && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="play"
-                    //     label="Start Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'loading')}
-                    // />
                     <ControlButton
                         icon="play"
                         label={t('startAnimation')}
@@ -174,14 +127,6 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is playing, show pause button to pause the animation
                 status === 'playing' && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="pause"
-                    //     label="Pause Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'pausing')}
-                    // />
                     <ControlButton
                         icon="pause"
                         label={t('pauseAnimation')}
@@ -193,14 +138,6 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is paused, show play button to resume the animation
                 status === 'pausing' && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="play"
-                    //     label="Resume Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'playing')}
-                    // />
                     <ControlButton
                         icon="play"
                         label={t('resumeAnimation')}
@@ -214,14 +151,6 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is a status, show close button to stop the animation
                 status && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="x-circle"
-                    //     label="Stop Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, null)}
-                    // />
                     <ControlButton
                         icon="x-circle"
                         label={t('stopAnimation')}

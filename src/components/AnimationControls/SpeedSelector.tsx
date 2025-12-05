@@ -34,8 +34,6 @@ const SpeedSelector: React.FC<Props> = ({
 }: Props) => {
     const { t } = useTranslation();
 
-    // const sliderRef = React.useRef<any>(null);
-
     const calcSliderValue = () => {
         const idx = ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.indexOf(defaultVal);
 
