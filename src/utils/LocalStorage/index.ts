@@ -16,7 +16,6 @@
 import { ReferenceLayerLanguage } from '@constants/map';
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import { MapCenter } from '@store/Map/reducer';
-// import { IExtentGeomety } from '@typings/index';
 
 enum KEYS {
     // defaultExtent = 'WaybackAppDefaultExtent',
@@ -40,27 +39,6 @@ const getItem = (key: KEYS) => {
 const removeItem = (key: KEYS) => {
     localStorage.removeItem(key);
 };
-
-// const saveDefaultExtent = (extent: IExtentGeomety) => {
-//     if (!extent) {
-//         console.error('default extent is missing');
-//         return;
-//     }
-//     setItem(KEYS.defaultExtent, JSON.stringify(extent));
-// };
-
-// const getDefaultExtent = (): IExtentGeomety => {
-//     const defaultExtent = getItem(KEYS.defaultExtent);
-//     return defaultExtent ? JSON.parse(defaultExtent) : null;
-// };
-
-// const setShouldShowUpdatesWithLocalChanges = (val = false) => {
-//     setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
-// };
-
-// const getShouldShowUpdatesWithLocalChanges = () => {
-//     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
-// };
 
 const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
     if (!center || zoom === undefined) {
@@ -160,18 +138,12 @@ export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
 };
 
 export {
-    // saveDefaultExtent,
-    // getDefaultExtent,
     saveDefaultMapLocation,
     getDefaultMapLocation,
     getCustomPortalUrl,
     setCustomPortalUrl,
-    // setShouldShowUpdatesWithLocalChanges,
-    // getShouldShowUpdatesWithLocalChanges,
     setShouldOpenSaveWebMapDialog,
     getShouldOpenSaveWebMapDialog,
     saveDownloadJobs2LocalStorage,
     getDownloadJobsFromLocalStorage,
-    // saveHashParams,
-    // getHashParamsFromLocalStorage,
 };

@@ -120,7 +120,7 @@ const getPreloadedState4SwipeView = (
 };
 
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
-    const { mapExtent, animationSpeed, isSwipeWidgetOpen } = urlParams;
+    const { mapExtent } = urlParams;
 
     // first try to get the map center and zoom from the hash params
     let initialMapCenter = getMapCenterFromHashParams();
@@ -144,12 +144,6 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     }
 
     let mode: MapMode = getMapModeFromHashParams();
-
-    // if (isSwipeWidgetOpen) {
-    //     mode = 'swipe';
-    // } else if (animationSpeed !== null) {
-    //     mode = 'animation';
-    // }
 
     // we need to set the mode to 'explore' if the device is mobile
     // because the swipe mode and animation mode is not supported on mobile devices
