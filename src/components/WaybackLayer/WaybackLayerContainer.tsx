@@ -24,7 +24,7 @@ import WaybackLayer from './WaybackLayer';
 
 // import IMapView from 'esri/views/MapView';
 import MapView from '@arcgis/core/views/MapView';
-import { selectAnimationStatus } from '@store/AnimationMode/reducer';
+// import { selectAnimationStatus } from '@store/AnimationMode/reducer';
 
 type Props = {
     mapView?: MapView;
@@ -33,7 +33,7 @@ type Props = {
 const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
     const activeWaybackItem = useAppSelector(activeWaybackItemSelector);
 
-    const animationStatus = useAppSelector(selectAnimationStatus);
+    // const animationStatus = useAppSelector(selectAnimationStatus);
 
     const isVisible = useMemo(() => {
         // if(animationStatus !== null){
@@ -41,7 +41,7 @@ const WaybackLayerContainer: React.FC<Props> = ({ mapView }: Props) => {
         // }
 
         return true;
-    }, [animationStatus]);
+    }, []);
 
     useEffect(() => {
         saveReleaseNum4ActiveWaybackItemToHashParams(

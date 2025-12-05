@@ -49,27 +49,6 @@ const WaybackLayer: React.FC<Props> = ({
         mapView.map.add(waybackLayerRef.current, 0);
     };
 
-    // const getWaybackLayer = async()=>{
-
-    //     try {
-    //         type Modules = [typeof IWebTileLayer];
-
-    //         const [WebTileLayer] = await (loadModules([
-    //             'esri/layers/WebTileLayer',
-    //         ]) as Promise<Modules>);
-
-    //         const waybackLayer = new WebTileLayer({
-    //             urlTemplate: activeWaybackItem.itemURL,
-    //         });
-
-    //         return waybackLayer;
-
-    //     } catch (err) {
-    //         console.error(err)
-    //         return null;
-    //     }
-    // }
-
     useEffect(() => {
         if (mapView && activeWaybackItem) {
             updateWaybackLayer();
