@@ -16,27 +16,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import {
-    saveDefaultExtent,
+    saveDefaultMapLocation,
     getCustomPortalUrl,
     setCustomPortalUrl,
 } from '@utils/LocalStorage';
-import { IExtentGeomety } from '@typings/index';
+// import { IExtentGeomety } from '@typings/index';
 import { Switch } from './Switch';
 import { CalciteButton } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
-
-type SaveBtnLabelValue = 'Save' | 'Saved';
+import { MapCenter } from '@store/Map/reducer';
 
 interface IProps {
-    mapExtent?: IExtentGeomety;
-    signedInAlready?: boolean;
-    signedInUser?: __esri.PortalUser;
-    toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
+    mapCenterAndZoom: {
+        center: MapCenter;
+        zoom: number;
+    };
 }
 
 const CustomUrlFromLocalStorage = getCustomPortalUrl();
 
-const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
+const SettingDialogContent: React.FC<IProps> = ({ mapCenterAndZoom }) => {
     const { t } = useTranslation();
 
     const [portalUrl, setPortalUrl] = useState<string>(
@@ -45,35 +44,19 @@ const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
 
     const [shouldUseCustomPortalUrl, setShouldUseCustomPortalUrl] =
         useState<boolean>(CustomUrlFromLocalStorage ? true : false);
-    const [shouldSaveAsDefaultExtent, setShouldSaveAsDefaultExtent] =
+
+    const [shouldSaveAsDefaultMapLocation, setShouldSaveAsDefaultMapLocation] =
         useState<boolean>(false);
-
-    // const [saveBtnLable, setSaveBtnLable] = useState<SaveBtnLabelValue>('Save');
-
-    // const timeoutRef = useRef<NodeJS.Timeout>(null);
 
     const [settingsSaved, setSettingsSaved] = useState<boolean>(false);
 
-    const portalUrlInputOnChange = (
-        evt: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setPortalUrl(evt.currentTarget.value);
-    };
-
-    // const toggleSaveBtnLabel = (isSaved = false) => {
-    //     const newVal = isSaved ? 'Saved' : 'Save';
-    //     setSaveBtnLable(newVal);
-
-    //     if (newVal === 'Saved') {
-    //         setTimeout(() => {
-    //             setSaveBtnLable('Save');
-    //         }, 2000);
-    //     }
-    // };
-
     const saveSettings = () => {
-        if (shouldSaveAsDefaultExtent) {
-            saveDefaultExtent(mapExtent);
+        if (shouldSaveAsDefaultMapLocation) {
+            // saveDefaultExtent(mapExtent);
+            saveDefaultMapLocation(
+                mapCenterAndZoom.center,
+                mapCenterAndZoom.zoom
+            );
         }
 
         const customPortalUrl =
@@ -92,18 +75,20 @@ const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
         }, 2000);
     };
 
-    useEffect(() => {
-        setShouldSaveAsDefaultExtent(false);
-    }, [mapExtent]);
+    // useEffect(() => {
+    //     setShouldSaveAsDefaultExtent(false);
+    // }, [mapExtent]);
 
     return (
         <>
             <div className="mt-2 mb-4">
                 <Switch
                     label={t('save_map_extent')}
-                    checked={shouldSaveAsDefaultExtent}
+                    checked={shouldSaveAsDefaultMapLocation}
                     onChange={() =>
-                        setShouldSaveAsDefaultExtent(!shouldSaveAsDefaultExtent)
+                        setShouldSaveAsDefaultMapLocation(
+                            !shouldSaveAsDefaultMapLocation
+                        )
                     }
                 />
             </div>
@@ -123,7 +108,9 @@ const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
                             type="text"
                             className="w-full p-1 outline-none"
                             placeholder="https://<my-enterprise-url>/portal"
-                            onChange={portalUrlInputOnChange}
+                            onChange={(evt) => {
+                                setPortalUrl(evt?.currentTarget?.value || '');
+                            }}
                             value={portalUrl || ''}
                         />
                     </div>
@@ -133,7 +120,8 @@ const SettingDialogContent: React.FC<IProps> = ({ mapExtent }) => {
             <div className="flex justify-end">
                 <div
                     className={classnames({
-                        disabled: !portalUrl && !shouldSaveAsDefaultExtent,
+                        disabled:
+                            !portalUrl && !setShouldSaveAsDefaultMapLocation,
                     })}
                     style={{
                         '--calcite-button-text-color': '#fff',

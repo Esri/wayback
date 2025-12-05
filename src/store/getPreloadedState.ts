@@ -30,6 +30,7 @@ import {
     getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
     getPreferredReferenceLayerLocale,
+    getDefaultMapLocation,
 } from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
@@ -50,17 +51,10 @@ import { ReferenceLayerLanguage } from '@constants/map';
 import { IS_MOBILE } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
-
-// const isMobile = miscFns.isMobileDevice();
+import { init } from 'i18next';
 
 const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
-    // const { isDownloadDialogOpen } = urlParams;
-
     const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
-
-    // if (isDownloadDialogOpen) {
-    //     activeDialog = 'download-tile-package';
-    // }
 
     const state: UIState = {
         ...initialUIState,
@@ -128,7 +122,13 @@ const getPreloadedState4SwipeView = (
 const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
     const { mapExtent, animationSpeed, isSwipeWidgetOpen } = urlParams;
 
+    // first try to get the map center and zoom from the hash params
     let initialMapCenter = getMapCenterFromHashParams();
+
+    // then try to get the default map location from the local storage
+    if (!initialMapCenter) {
+        initialMapCenter = getDefaultMapLocation();
+    }
 
     // if the map center and mapExtent is not set in the hash params, we will use a random interesting place
     if (!initialMapCenter && !mapExtent) {
@@ -145,11 +145,11 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 
     let mode: MapMode = getMapModeFromHashParams();
 
-    if (isSwipeWidgetOpen) {
-        mode = 'swipe';
-    } else if (animationSpeed !== null) {
-        mode = 'animation';
-    }
+    // if (isSwipeWidgetOpen) {
+    //     mode = 'swipe';
+    // } else if (animationSpeed !== null) {
+    //     mode = 'animation';
+    // }
 
     // we need to set the mode to 'explore' if the device is mobile
     // because the swipe mode and animation mode is not supported on mobile devices

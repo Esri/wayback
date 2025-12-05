@@ -24,15 +24,7 @@ import {
     // shouldOnlyShowItemsWithLocalChangeToggled,
 } from '@store/UI/reducer';
 
-import { mapExtentSelector } from '@store/Map/reducer';
-
-// import { AppContext } from '@contexts/AppContextProvider';
-import {
-    getSignedInUser,
-    isAnonymouns,
-    signIn,
-    signOut,
-} from '@utils/Esri-OAuth';
+import { selectMapCenterAndZoom } from '@store/Map/reducer';
 import SettingDialogContent from './SettingDialogContent';
 import { Modal } from '@components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
@@ -42,24 +34,12 @@ const SettingDialogContainer = () => {
 
     const { t } = useTranslation();
 
-    // const { userSession, oauthUtils } = useContext(AppContext);
-
-    const mapExtent = useAppSelector(mapExtentSelector);
+    const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
 
     const isOpen = useAppSelector(isSettingModalOpenSelector);
 
-    const user = getSignedInUser();
-
     const onCloseHandler = () => {
         dispatch(activeDialogUpdated());
-    };
-
-    const toggleSignInBtnOnClick = (shouldSignIn?: boolean) => {
-        if (shouldSignIn) {
-            signIn();
-        } else {
-            signOut();
-        }
     };
 
     return (
@@ -69,12 +49,7 @@ const SettingDialogContainer = () => {
             width="m"
             onClose={onCloseHandler}
         >
-            <SettingDialogContent
-                mapExtent={mapExtent}
-                signedInUser={user}
-                signedInAlready={isAnonymouns() === false}
-                toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-            />
+            <SettingDialogContent mapCenterAndZoom={mapCenterAndZoom} />
         </Modal>
     );
 };

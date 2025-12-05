@@ -15,10 +15,12 @@
 
 import { ReferenceLayerLanguage } from '@constants/map';
 import { DownloadJob } from '@store/DownloadMode/reducer';
-import { IExtentGeomety } from '@typings/index';
+import { MapCenter } from '@store/Map/reducer';
+// import { IExtentGeomety } from '@typings/index';
 
 enum KEYS {
-    defaultExtent = 'WaybackAppDefaultExtent',
+    // defaultExtent = 'WaybackAppDefaultExtent',
+    defaultLocation = 'WaybackAppDefaultLocation',
     showUpdatesWithLocalChanges = 'WaybackAppShouldShowUpdatesWithLocalChanges',
     shouldOpenSaveWebMapDialog = 'WaybackAppShouldOpenSaveWebMapDialog',
     customPortalUrl = 'WaybackAppCustomPortalUrl',
@@ -39,18 +41,18 @@ const removeItem = (key: KEYS) => {
     localStorage.removeItem(key);
 };
 
-const saveDefaultExtent = (extent: IExtentGeomety) => {
-    if (!extent) {
-        console.error('default extent is missing');
-        return;
-    }
-    setItem(KEYS.defaultExtent, JSON.stringify(extent));
-};
+// const saveDefaultExtent = (extent: IExtentGeomety) => {
+//     if (!extent) {
+//         console.error('default extent is missing');
+//         return;
+//     }
+//     setItem(KEYS.defaultExtent, JSON.stringify(extent));
+// };
 
-const getDefaultExtent = (): IExtentGeomety => {
-    const defaultExtent = getItem(KEYS.defaultExtent);
-    return defaultExtent ? JSON.parse(defaultExtent) : null;
-};
+// const getDefaultExtent = (): IExtentGeomety => {
+//     const defaultExtent = getItem(KEYS.defaultExtent);
+//     return defaultExtent ? JSON.parse(defaultExtent) : null;
+// };
 
 // const setShouldShowUpdatesWithLocalChanges = (val = false) => {
 //     setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
@@ -59,6 +61,51 @@ const getDefaultExtent = (): IExtentGeomety => {
 // const getShouldShowUpdatesWithLocalChanges = () => {
 //     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
 // };
+
+const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
+    if (!center || zoom === undefined) {
+        console.error('default location is missing');
+        return;
+    }
+
+    if (center.lat === undefined || center.lon === undefined) {
+        console.error('default location is missing lat or lon');
+        return;
+    }
+
+    const location = [center.lon, center.lat, zoom].join(',');
+
+    setItem(KEYS.defaultLocation, JSON.stringify(location));
+};
+
+const getDefaultMapLocation = (): {
+    center: MapCenter;
+    zoom: number;
+} | null => {
+    const defaultLocation = getItem(KEYS.defaultLocation);
+
+    if (!defaultLocation) {
+        return null;
+    }
+
+    const locParts = JSON.parse(defaultLocation).split(',');
+
+    if (
+        locParts.length === 3 &&
+        !isNaN(parseFloat(locParts[0])) &&
+        !isNaN(parseFloat(locParts[1])) &&
+        !isNaN(parseInt(locParts[2], 10))
+    ) {
+        return {
+            center: {
+                lon: parseFloat(locParts[0]),
+                lat: parseFloat(locParts[1]),
+            },
+            zoom: parseInt(locParts[2], 10),
+        };
+    }
+    return null;
+};
 
 const setShouldOpenSaveWebMapDialog = () => {
     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
@@ -113,8 +160,10 @@ export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
 };
 
 export {
-    saveDefaultExtent,
-    getDefaultExtent,
+    // saveDefaultExtent,
+    // getDefaultExtent,
+    saveDefaultMapLocation,
+    getDefaultMapLocation,
     getCustomPortalUrl,
     setCustomPortalUrl,
     // setShouldShowUpdatesWithLocalChanges,
