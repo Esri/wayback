@@ -128,10 +128,11 @@
     "about_how_description": "__Available versions of the World Imagery map are presented within a timeline and as layers in a list. Versions that resulted in local changes are highlighted in bold white, and the layer currently selected is highlighted in blue. Point and click on the map for additional imagery details within the selected layer. One or more layers can be added to a queue and pushed to a new ArcGIS Online web map.",
     "fetching_metadata": "__Fetching metadata...",
     "no_metadata_found": "__No metadata found for this location.",
-    "metadata_provider_source_acquisition_date": "__{{provider}} ({{source}}) image captured on <b>{{formattedDate}}</b> as shown in the <b>{{releaseDate}}</b> version of the World Imagery map.",
+    "metadata_provider_source_with_acquisition_date": "__{{provider}} ({{source}}) image captured on <b>{{formattedDate}}</b> as shown in the <b>{{releaseDate}}</b> version of the World Imagery map.",
     "metadata_provider_source": "__{{provider}} ({{source}}) imagery as shown in the <b>{{releaseDate}}</b> version of the World Imagery map.",
     "metadata_resolution": "__<b>Resolution</b>: Pixels in the source image represent a ground distance of <b>{{resolution}}</b> meters.",
     "metadata_accuracy": "__<b>Accuracy</b>: Objects displayed in this image are within <b>{{accuracy}}</b> meters of true location.",
-    "copy_coordinates": "__click to copy the coordinates of this location"
+    "copy_coordinates": "__click to copy the coordinates of this location",
+    "closed_metadata_popup": "__Closed metadata popup"
 
 }
