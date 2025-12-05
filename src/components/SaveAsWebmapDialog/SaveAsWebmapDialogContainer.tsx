@@ -43,9 +43,12 @@ import {
     signInUsingDifferentAccount,
 } from '@utils/Esri-OAuth';
 import { Modal } from '@components/Modal/Modal';
+import { useTranslation } from 'react-i18next';
 
 const SaveAsWebmapDialogContainer = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
 
@@ -77,7 +80,7 @@ const SaveAsWebmapDialogContainer = () => {
 
     return (
         <Modal
-            title="Wayback Map Settings:"
+            title={t('save_as_webmap')}
             isOpen={isOpen}
             onClose={onCloseHandler}
         >

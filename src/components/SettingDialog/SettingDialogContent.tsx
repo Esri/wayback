@@ -34,10 +34,6 @@ interface IProps {
     signedInAlready?: boolean;
     signedInUser?: __esri.PortalUser;
     toggleSignInBtnOnClick: (shouldSignIn: boolean) => void;
-    // shouldShowLocalChangesByDefaultOnClick: (
-    //     shouldShowLocalChangesByDefault: boolean
-    // ) => void;
-    // onClose: () => void;
 }
 
 interface IState {
@@ -105,19 +101,6 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
             saveDefaultExtent(mapExtent);
         }
 
-        // if (
-        //     shouldShowLocalChangesByDefault !==
-        //     getShouldShowUpdatesWithLocalChanges()
-        // ) {
-        //     setShouldShowUpdatesWithLocalChanges(
-        //         shouldShowLocalChangesByDefault
-        //     );
-
-        //     shouldShowLocalChangesByDefaultOnClick(
-        //         shouldShowLocalChangesByDefault
-        //     );
-        // }
-
         const customPortalUrl =
             shouldUseCustomPortalUrl && portalUrl ? portalUrl : null;
 
@@ -172,8 +155,8 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
     // }
 
     render() {
-        const { signedInAlready, signedInUser, toggleSignInBtnOnClick } =
-            this.props;
+        // const { signedInAlready, signedInUser, toggleSignInBtnOnClick } =
+        //     this.props;
         const {
             portalUrl,
             shouldUseCustomPortalUrl,
@@ -182,55 +165,11 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
             saveBtnLable,
         } = this.state;
 
-        // const isShouldShowLocalChangesByDefaultChanged =
-        //     shouldShowLocalChangesByDefault !==
-        //     getShouldShowUpdatesWithLocalChanges();
-
-        // const saveBtnClasses = classnames('btn', {
-        //     'btn-disabled': !portalUrl && !shouldSaveAsDefaultExtent,
-        // });
-
-        // const signOutBtn = (
-        //     <CalciteButton
-        //         appearance="transparent"
-        //         onClick={toggleSignInBtnOnClick.bind(this, false)}
-        //     >
-        //         Sign Out
-        //     </CalciteButton>
-        // );
-
-        // const signInBtn = (
-        //     <CalciteButton
-        //         appearance="outline"
-        //         onClick={toggleSignInBtnOnClick.bind(this, true)}
-        //     >
-        //         Sign In
-        //     </CalciteButton>
-        // );
-
         return (
             <>
                 {/* <h2 className="text-3xl text-center mb-4">Settings</h2> */}
 
                 <div className="mt-2 mb-4">
-                    {/* <label className="toggle-switch">
-                        <input
-                            type="checkbox"
-                            className="toggle-switch-input"
-                            checked={
-                                shouldSaveAsDefaultExtent ? true : false
-                            }
-                            onChange={this.toggleBooleanStateVal.bind(
-                                this,
-                                'shouldSaveAsDefaultExtent'
-                            )}
-                        />
-                        <span className="toggle-switch-track margin-right-1"></span>
-                        <span className="toggle-switch-label font-size--1">
-                            Save current map extent as default
-                        </span>
-                    </label> */}
-
                     <Switch
                         label="Save current map extent as default"
                         checked={shouldSaveAsDefaultExtent ? true : false}
@@ -244,24 +183,6 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                 </div>
 
                 <div className="mt-2 mb-4">
-                    {/* <label className="toggle-switch">
-                        <input
-                            type="checkbox"
-                            className="toggle-switch-input"
-                            checked={
-                                shouldUseCustomPortalUrl ? true : false
-                            }
-                            onChange={this.toggleBooleanStateVal.bind(
-                                this,
-                                'shouldUseCustomPortalUrl'
-                            )}
-                        />
-                        <span className="toggle-switch-track margin-right-1"></span>
-                        <span className="toggle-switch-label font-size--1">
-                            Use ArcGIS Enterprise URL to save map
-                        </span>
-                    </label> */}
-
                     <Switch
                         label="Use ArcGIS Enterprise URL to save map"
                         checked={shouldUseCustomPortalUrl ? true : false}
@@ -274,14 +195,6 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                     />
 
                     {shouldUseCustomPortalUrl ? (
-                        // <label>
-                        //     <input
-                        //         type="text"
-                        //         placeholder="https://<my-enterprise-url>/portal"
-                        //         onChange={this.portalUrlInputOnChange}
-                        //         value={portalUrl}
-                        //     />
-                        // </label>
                         <div className="mt-2">
                             <input
                                 type="text"
@@ -294,24 +207,7 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                     ) : null}
                 </div>
 
-                {/* {signedInUser ? (
-                    <div
-                        className="mb-4 text-sm flex items-center"
-                        data-agol-user-role={signedInUser?.role}
-                    >
-                        <CalciteIcon icon="user" />
-                        <span className="ml-1">
-                            Signed in as{' '}
-                            <strong>{signedInUser?.username}</strong>
-                        </span>
-                    </div>
-                ) : null} */}
-
                 <div className="flex justify-end">
-                    {/* <span className="mr-4">
-                        {signedInAlready ? signOutBtn : signInBtn}
-                    </span> */}
-
                     <div
                         className={classnames({
                             disabled: !portalUrl && !shouldSaveAsDefaultExtent,
@@ -324,12 +220,6 @@ class SettingDialogContent extends React.PureComponent<IProps, IState> {
                             {saveBtnLable}
                         </CalciteButton>
                     </div>
-                    {/* <span
-                        className={saveBtnClasses}
-                        onClick={this.saveSettings}
-                    >
-                        {saveBtnLable}
-                    </span> */}
                 </div>
             </>
         );

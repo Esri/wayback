@@ -64,6 +64,7 @@
     "learn_more_about_release": "Learn more about this release",
     "remove_release_from_webmap": "Remove this release from your ArcGIS Online web map",
     "add_release_to_webmap": "Add this release to an ArcGIS Online web map",
+    "save_as_webmap": "Save as Web Map",
     "webmap_title_label": "Title",
     "webmap_title_placeholder": "Title is required",
     "webmap_tags_label": "Tags",
@@ -134,5 +135,6 @@
     "metadata_accuracy": "__<b>Accuracy</b>: Objects displayed in this image are within <b>{{accuracy}}</b> meters of true location.",
     "copy_coordinates": "__click to copy the coordinates of this location",
     "closed_metadata_popup": "__Closed metadata popup",
-    "preview": "__Preview"
+    "preview": "__Preview",
+    "settings": "__Settings"
 }

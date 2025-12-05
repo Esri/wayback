@@ -35,9 +35,12 @@ import {
 } from '@utils/Esri-OAuth';
 import SettingDialogContent from './SettingDialogContent';
 import { Modal } from '@components/Modal/Modal';
+import { useTranslation } from 'react-i18next';
 
 const SettingDialogContainer = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     // const { userSession, oauthUtils } = useContext(AppContext);
 
@@ -59,25 +62,9 @@ const SettingDialogContainer = () => {
         }
     };
 
-    // const shouldShowLocalChangesByDefaultOnClick = (val: boolean) => {
-    //     dispatch(shouldOnlyShowItemsWithLocalChangeToggled(val));
-    // };
-
-    // return isOpen ? (
-    //     <SetttingDialog
-    //         mapExtent={mapExtent}
-    //         signedInAlready={isAnonymouns() === false}
-    //         toggleSignInBtnOnClick={toggleSignInBtnOnClick}
-    //         // shouldShowLocalChangesByDefaultOnClick={
-    //         //     shouldShowLocalChangesByDefaultOnClick
-    //         // }
-    //         onClose={onCloseHandler}
-    //     />
-    // ) : null;
-
     return (
         <Modal
-            title="Settings"
+            title={t('settings')}
             isOpen={isOpen}
             width="m"
             onClose={onCloseHandler}
