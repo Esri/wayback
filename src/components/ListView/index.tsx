@@ -45,28 +45,26 @@ interface IProps {
     onMouseOut?: () => void;
 }
 
-class ListView extends React.PureComponent<IProps> {
-    constructor(props: IProps) {
-        super(props);
-    }
+const ListView: React.FC<IProps> = ({
+    waybackItems,
+    activeWaybackItem,
+    rNum4SelectedWaybackItems,
+    rNum4WaybackItemsWithLocalChanges,
+    shouldOnlyShowItemsWithLocalChange,
+    shouldDownloadButtonBeDisabled,
+    downloadButtonTooltipText,
+    toggleSelect,
+    onClick,
+    onMouseEnter,
+    onMouseOut,
+    downloadButtonOnClick,
+}) => {
+    const cardData = React.useMemo(() => {
+        if (!waybackItems || waybackItems.length === 0) {
+            return [];
+        }
 
-    getListViewCards() {
-        const {
-            waybackItems,
-            activeWaybackItem,
-            rNum4SelectedWaybackItems,
-            rNum4WaybackItemsWithLocalChanges,
-            shouldOnlyShowItemsWithLocalChange,
-            shouldDownloadButtonBeDisabled,
-            downloadButtonTooltipText,
-            toggleSelect,
-            onClick,
-            onMouseEnter,
-            onMouseOut,
-            downloadButtonOnClick,
-        } = this.props;
-
-        const cardData = shouldOnlyShowItemsWithLocalChange
+        return shouldOnlyShowItemsWithLocalChange
             ? waybackItems.filter((d) => {
                   return (
                       rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) >
@@ -74,53 +72,49 @@ class ListView extends React.PureComponent<IProps> {
                   );
               })
             : waybackItems;
+    }, [
+        shouldOnlyShowItemsWithLocalChange,
+        waybackItems,
+        rNum4WaybackItemsWithLocalChanges,
+    ]);
 
-        const cards = cardData.map((d) => {
-            const isActive =
-                activeWaybackItem.releaseNum === d.releaseNum ? true : false;
-            const isSelected =
-                rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1
-                    ? true
-                    : false;
-            const isHighlighted =
-                rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1
-                    ? true
-                    : false;
+    return (
+        <div className="list-view-container" data-testid="card-list">
+            {cardData.map((d) => {
+                const isActive =
+                    activeWaybackItem.releaseNum === d.releaseNum
+                        ? true
+                        : false;
+                const isSelected =
+                    rNum4SelectedWaybackItems.indexOf(d.releaseNum) > -1
+                        ? true
+                        : false;
+                const isHighlighted =
+                    rNum4WaybackItemsWithLocalChanges.indexOf(d.releaseNum) > -1
+                        ? true
+                        : false;
 
-            return (
-                <Card
-                    key={`list-view-card-${d.releaseNum}`}
-                    data={d}
-                    isActive={isActive}
-                    isSelected={isSelected}
-                    isHighlighted={isHighlighted}
-                    toggleSelect={toggleSelect}
-                    shouldDownloadButtonBeDisabled={
-                        shouldDownloadButtonBeDisabled
-                    }
-                    downloadButtonTooltipText={downloadButtonTooltipText}
-                    onClick={onClick}
-                    onMouseEnter={onMouseEnter}
-                    onMouseOut={onMouseOut}
-                    downloadButtonOnClick={downloadButtonOnClick}
-                />
-            );
-        });
-
-        return cards;
-    }
-
-    render() {
-        const cards = this.getListViewCards();
-
-        return (
-            <>
-                <div className="list-view-container" data-testid="card-list">
-                    {cards}
-                </div>
-            </>
-        );
-    }
-}
+                return (
+                    <Card
+                        key={`list-view-card-${d.releaseNum}`}
+                        data={d}
+                        isActive={isActive}
+                        isSelected={isSelected}
+                        isHighlighted={isHighlighted}
+                        toggleSelect={toggleSelect}
+                        shouldDownloadButtonBeDisabled={
+                            shouldDownloadButtonBeDisabled
+                        }
+                        downloadButtonTooltipText={downloadButtonTooltipText}
+                        onClick={onClick}
+                        onMouseEnter={onMouseEnter}
+                        onMouseOut={onMouseOut}
+                        downloadButtonOnClick={downloadButtonOnClick}
+                    />
+                );
+            })}
+        </div>
+    );
+};
 
 export default ListView;

@@ -167,14 +167,6 @@ export const ListViewCard: FC<Props> = ({
                         </button>
                     </>
                 )}
-
-                {/* <div
-                    className="add-to-webmap-btn cursor-pointer"
-                    // onMouseOver={this.showTooltip}
-                    // onMouseOut={this.hideTooltip}
-                    onClick={toggleSelect.bind(this, data.releaseNum)}
-                    title={tooltipContentAdd2WebmapBtn}
-                ></div> */}
             </div>
         </div>
     );

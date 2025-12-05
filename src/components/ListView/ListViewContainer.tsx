@@ -45,25 +45,6 @@ type Props = {
     children?: React.ReactNode;
 };
 
-const ListViewWrapper: React.FC<Props> = ({ children }) => {
-    return (
-        <div
-            className="mt-2 fancy-scrollbar"
-            style={{
-                position: 'relative',
-                flexGrow: 1,
-                flexShrink: 0,
-                flexBasis: 200,
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                paddingBottom: '2rem',
-            }}
-        >
-            <div className="mx-4">{children}</div>
-        </div>
-    );
-};
-
 const ListViewContainer = () => {
     const dispatch = useAppDispatch();
 
@@ -112,44 +93,57 @@ const ListViewContainer = () => {
     }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
 
     return (
-        <ListViewWrapper>
-            <ListView
-                isMobile={isMobile}
-                waybackItems={waybackItems}
-                activeWaybackItem={activeWaybackItem}
-                shouldDownloadButtonBeDisabled={
-                    hasReachedLimitOfConcurrentDownloadJobs ||
-                    zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
-                }
-                downloadButtonTooltipText={downloadButtonTooltipText}
-                shouldOnlyShowItemsWithLocalChange={
-                    shouldOnlyShowItemsWithLocalChange
-                }
-                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-                rNum4WaybackItemsWithLocalChanges={
-                    rNum4WaybackItemsWithLocalChanges
-                }
-                onClick={(releaseNum: number) => {
-                    dispatch(setActiveWaybackItem(releaseNum));
-                }}
-                onMouseEnter={(releaseNum: number) => {
-                    dispatch(setPreviewWaybackItem(releaseNum));
-                }}
-                onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
-                toggleSelect={(releaseNum: number) => {
-                    dispatch(toggleSelectWaybackItem(releaseNum));
-                }}
-                downloadButtonOnClick={(releaseNum: number) => {
-                    dispatch(
-                        addToDownloadList({
-                            releaseNum,
-                            extent: mapExtent,
-                            zoomLevel: zoom,
-                        })
-                    );
-                }}
-            />
-        </ListViewWrapper>
+        <div
+            className="mt-2 fancy-scrollbar"
+            style={{
+                position: 'relative',
+                flexGrow: 1,
+                flexShrink: 0,
+                flexBasis: 200,
+                overflowX: 'hidden',
+                overflowY: 'auto',
+                paddingBottom: '2rem',
+            }}
+        >
+            <div className="mx-4">
+                <ListView
+                    isMobile={isMobile}
+                    waybackItems={waybackItems}
+                    activeWaybackItem={activeWaybackItem}
+                    shouldDownloadButtonBeDisabled={
+                        hasReachedLimitOfConcurrentDownloadJobs ||
+                        zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
+                    }
+                    downloadButtonTooltipText={downloadButtonTooltipText}
+                    shouldOnlyShowItemsWithLocalChange={
+                        shouldOnlyShowItemsWithLocalChange
+                    }
+                    rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+                    rNum4WaybackItemsWithLocalChanges={
+                        rNum4WaybackItemsWithLocalChanges
+                    }
+                    onClick={(releaseNum: number) => {
+                        dispatch(setActiveWaybackItem(releaseNum));
+                    }}
+                    onMouseEnter={(releaseNum: number) => {
+                        dispatch(setPreviewWaybackItem(releaseNum));
+                    }}
+                    onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
+                    toggleSelect={(releaseNum: number) => {
+                        dispatch(toggleSelectWaybackItem(releaseNum));
+                    }}
+                    downloadButtonOnClick={(releaseNum: number) => {
+                        dispatch(
+                            addToDownloadList({
+                                releaseNum,
+                                extent: mapExtent,
+                                zoomLevel: zoom,
+                            })
+                        );
+                    }}
+                />
+            </div>
+        </div>
     );
 };
 
