@@ -133,6 +133,6 @@
     "metadata_resolution": "__<b>Resolution</b>: Pixels in the source image represent a ground distance of <b>{{resolution}}</b> meters.",
     "metadata_accuracy": "__<b>Accuracy</b>: Objects displayed in this image are within <b>{{accuracy}}</b> meters of true location.",
     "copy_coordinates": "__click to copy the coordinates of this location",
-    "closed_metadata_popup": "__Closed metadata popup"
-
+    "closed_metadata_popup": "__Closed metadata popup",
+    "preview": "__Preview"
 }

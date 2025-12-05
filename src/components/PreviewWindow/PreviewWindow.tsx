@@ -21,6 +21,7 @@ import MapView from '@arcgis/core/views/MapView';
 
 // import styled from 'styled-components';
 import { generateFrames } from './utils';
+import { useTranslation } from 'react-i18next';
 
 export const PREVIEW_WINDOW_WIDTH = 500;
 export const PREVIEW_WINDOW_HEIGHT = 300;
@@ -36,6 +37,8 @@ const PreviewWindow: React.FC<Props> = ({
     alternativeRNum4RreviewWaybackItem,
     mapView,
 }: Props) => {
+    const { t } = useTranslation();
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [imageUrl, setImageUrl] = useState<string>();
@@ -107,7 +110,8 @@ const PreviewWindow: React.FC<Props> = ({
                         fontSize: '.95rem',
                     }}
                 >
-                    <b>Wayback {previewWaybackItem.releaseDateLabel}</b> preview
+                    <b>Wayback {previewWaybackItem.releaseDateLabel}</b>{' '}
+                    {t('preview')}
                 </span>
             </div>
         </div>
