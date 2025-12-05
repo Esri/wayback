@@ -125,5 +125,7 @@
     "about_why_heading": "__WHY",
     "about_why_description": "__As World Imagery is updated with more current imagery, new versions of the map are published. When and where updates occur, the previous imagery is replaced and is no longer visible. For many use cases, the new imagery is more desirable and typically preferred. Other times, however, the previous imagery may support use cases that the new imagery does not. In these cases, a user may need to access a previous version of World Imagery.",
     "about_how_heading": "__HOW",
-    "about_how_description": "__Available versions of the World Imagery map are presented within a timeline and as layers in a list. Versions that resulted in local changes are highlighted in bold white, and the layer currently selected is highlighted in blue. Point and click on the map for additional imagery details within the selected layer. One or more layers can be added to a queue and pushed to a new ArcGIS Online web map."
+    "about_how_description": "__Available versions of the World Imagery map are presented within a timeline and as layers in a list. Versions that resulted in local changes are highlighted in bold white, and the layer currently selected is highlighted in blue. Point and click on the map for additional imagery details within the selected layer. One or more layers can be added to a queue and pushed to a new ArcGIS Online web map.",
+    "fetching_metadata": "__Fetching metadata...",
+    "no_metadata_found": "__No metadata found for this location."
 }

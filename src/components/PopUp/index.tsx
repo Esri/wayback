@@ -15,7 +15,7 @@
 
 // import { loadModules } from 'esri-loader';
 import './style.css';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { dateFns } from 'helper-toolkit-ts';
 
 import {
@@ -24,6 +24,7 @@ import {
     // IWaybackItem,
 } from '@typings/index';
 import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
     /**
@@ -38,58 +39,13 @@ interface IProps {
 const Width = 360;
 const PositionOffset = 22.5;
 
-const PopUp: FC<IProps> = (props: IProps) => {
-    const { metadata, isQueryingMetadata, metadataAnchorScreenPoint, onClose } =
-        props;
-
-    const formatMetadataDate = () => {
-        const { metadata } = props;
-        const { date } = metadata;
-
-        const metadataDate = new Date(date);
-
-        const year = metadataDate.getFullYear();
-        const month = dateFns.getMonthName(metadataDate.getMonth(), true);
-        const day = metadataDate.getDate();
-
-        return `${month} ${day}, ${year}`;
-    };
-
-    const copyQueryLocation = () => {
-        const { queryLocation } = metadata;
-
-        const text = `x: ${queryLocation.longitude.toFixed(
-            5
-        )} y:${queryLocation.latitude.toFixed(5)}`;
-        navigator.clipboard.writeText(text);
-    };
-
-    if (!metadataAnchorScreenPoint) {
-        return null;
-    }
-
-    if (!metadata && !isQueryingMetadata) {
-        return null;
-    }
-
-    const containerStyle = {
-        position: 'absolute',
-        top: metadataAnchorScreenPoint.y - PositionOffset,
-        left: metadataAnchorScreenPoint.x - PositionOffset,
-        width: Width,
-    } as React.CSSProperties;
-
-    if (isQueryingMetadata) {
-        return (
-            <div className="popup-container" style={containerStyle}>
-                <div className="reticle-wrap"></div>
-
-                <div className="content-wrap text-white">
-                    <CalciteLoader text="Fetching Metadata..." scale="s" />
-                </div>
-            </div>
-        );
-    }
+const PopUp: FC<IProps> = ({
+    metadata,
+    isQueryingMetadata,
+    metadataAnchorScreenPoint,
+    onClose,
+}: IProps) => {
+    const { t } = useTranslation();
 
     const {
         provider,
@@ -99,10 +55,43 @@ const PopUp: FC<IProps> = (props: IProps) => {
         releaseDate,
         date,
         queryLocation,
-    } = metadata;
+    } = metadata || {};
 
-    // const releaseDate = 'targetLayer.releaseDateLabel';
-    const formattedDate = formatMetadataDate();
+    const formattedDate = useMemo(() => {
+        if (!date) {
+            return '';
+        }
+
+        const metadataDate = new Date(date);
+
+        const year = metadataDate.getFullYear();
+        const month = dateFns.getMonthName(metadataDate.getMonth(), true);
+        const day = metadataDate.getDate();
+
+        return `${month} ${day}, ${year}`;
+    }, [date]);
+
+    const containerStyle = useMemo(() => {
+        if (!metadataAnchorScreenPoint) {
+            return {};
+        }
+
+        return {
+            position: 'absolute',
+            top: metadataAnchorScreenPoint.y - PositionOffset,
+            left: metadataAnchorScreenPoint.x - PositionOffset,
+            width: Width,
+        } as React.CSSProperties;
+    }, [metadataAnchorScreenPoint]);
+
+    const copyQueryLocation = () => {
+        // const { queryLocation } = metadata;
+
+        const text = `x: ${queryLocation.longitude.toFixed(
+            5
+        )} y:${queryLocation.latitude.toFixed(5)}`;
+        navigator.clipboard.writeText(text);
+    };
 
     const providerAndCaptureDateInfo = date ? (
         <span>
@@ -115,6 +104,26 @@ const PopUp: FC<IProps> = (props: IProps) => {
             version of the World Imagery map.
         </span>
     );
+
+    if (!metadataAnchorScreenPoint) {
+        return null;
+    }
+
+    if (!metadata && !isQueryingMetadata) {
+        return null;
+    }
+
+    if (isQueryingMetadata) {
+        return (
+            <div className="popup-container" style={containerStyle}>
+                <div className="reticle-wrap"></div>
+
+                <div className="content-wrap text-white">
+                    <CalciteLoader text={t('fetching_metadata')} scale="s" />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="popup-container" style={containerStyle}>
