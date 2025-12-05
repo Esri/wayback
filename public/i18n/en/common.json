@@ -76,6 +76,7 @@
     "sign_in_again_prompt": "Please <action>sign in</action> again using a different account.",
     "show_only_local_changes": "Show only versions with local changes",
     "show_only_local_changes_with_highlight": "Only versions with <strong>local changes</strong>",
+    "versions_w_local_changes": "__Versions with <strong>local changes</strong>", 
     "reference_label_overlay": "Reference label overlay",
     "choose_label_language": "Choose label language",
     "select_label_language": "Select {{language}} label overlay",
@@ -140,5 +141,7 @@
     "save_map_extent": "__Save current map extent as default",
     "save_custom_portal": "__Use ArcGIS Enterprise URL to save map",
     "saved": "__Saved",
-    "save": "__Save"
+    "save": "__Save",
+    "left_selection": "__Left Selection",
+    "right_selection": "__Right Selection"
 }

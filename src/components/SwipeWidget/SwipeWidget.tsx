@@ -119,7 +119,7 @@ const SwipeWidget: React.FC<Props> = ({
             mapView.map.remove(existingLayer);
         }
 
-        const newLayer = await getWaybackLayer(layerItem);
+        const newLayer = getWaybackLayer(layerItem);
         layersRef.current[layerIndex] = newLayer;
         mapView.map.add(newLayer, 1);
 

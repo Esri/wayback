@@ -16,11 +16,11 @@
 import './SwipeWidgetLayerSelector.css';
 import React from 'react';
 import { IWaybackItem } from '@typings/index';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 
 import { LayerSelector } from '../';
-import { CalciteIcon } from '@esri/calcite-components-react';
-import { useTranslation } from 'react-i18next';
+import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const SwipeWidgetLayerSelectorWidth = 220;
 
@@ -85,8 +85,12 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
             <div className="flex-grow pt-12">
                 <div>
                     <span className="text-sm">
-                        Versions with{' '}
-                        <span className="text-white">local changes</span>
+                        <Trans
+                            i18nKey={'versions_w_local_changes'}
+                            components={{
+                                highlight: <span className="text-white" />,
+                            }}
+                        />
                     </span>
                 </div>
                 {items}
@@ -100,15 +104,17 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <div className="text-center text-custom-theme-blue-light shrink-0">
+            <div className="text-center text-custom-theme-blue-light shrink-0 mt-2">
                 <h4 className="text-2xl font-light mb-0">
-                    {targetLayerType === 'leading' ? 'Left' : 'Right'} Selection
+                    {targetLayerType === 'leading'
+                        ? t('left_selection')
+                        : t('right_selection')}
                 </h4>
                 <div>
                     <span>{selectedItem.releaseDateLabel}</span>
                     <br />
                     <span className="text-xs">
-                        Click map for imagery details
+                        {t('click_map_for_imagery_details')}
                     </span>
                 </div>
             </div>
@@ -121,20 +127,16 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         }
 
         return (
-            <button
-                className="absolute top-1 right-1 cursor-pointer text-white"
-                // style={{
-                //     position: 'absolute',
-                //     top: '0.25rem',
-                //     right: '0',
-                //     cursor: 'pointer',
-                // }}
-                onClick={onClose}
-                aria-label={t('close_swipe_mode')}
-            >
-                {/* <span className="icon-ui-close text-white"></span> */}
-                <CalciteIcon icon="x" scale="l" />
-            </button>
+            <div className="absolute top-1 right-1 text-white">
+                <CalciteButton
+                    appearance="transparent"
+                    kind="neutral"
+                    onClick={onClose}
+                    label={t('close_swipe_mode')}
+                    iconStart="x"
+                    // scale='l'
+                />
+            </div>
         );
     };
 
@@ -142,19 +144,16 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
         <div
             className=" flex flex-col overflow-y-auto overflow-x-hidden bg-custom-background p-4 fancy-scrollbar"
             style={{
-                // position: 'absolute',
                 height: '100%',
                 width: SwipeWidgetLayerSelectorWidth,
                 top: 0,
                 left: targetLayerType === 'leading' ? 0 : 'unset',
                 right: targetLayerType === 'trailing' ? 0 : 'unset',
                 boxSizing: 'border-box',
-                // display: 'flex',
-                // alignItems: 'center',
             }}
         >
-            {getTitle()}
             {getCloseBtn()}
+            {getTitle()}
             {getList()}
         </div>
     );
