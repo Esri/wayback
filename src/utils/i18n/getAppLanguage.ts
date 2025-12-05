@@ -19,6 +19,11 @@ const LOCALE_SEARCH_PARAM_KEY = 'lang';
 export const SUPPORTED_LOCALES = ['en', 'zh'];
 
 /**
+ * Cache for the application language to avoid redundant computations.
+ */
+let cachedAppLanguage: string | null = null;
+
+/**
  * Retrieves the application language from the URL query parameters or localstorage.
  *
  * This function looks for the "lang" query parameter in the current URL.
@@ -28,6 +33,10 @@ export const SUPPORTED_LOCALES = ['en', 'zh'];
  * @returns {string} The language code from the URL query parameter or 'en' if not found.
  */
 export const getAppLanguage = () => {
+    if (cachedAppLanguage) {
+        return cachedAppLanguage;
+    }
+
     // get the "lang" query parameter from the URL
     const searchParams = new URLSearchParams(window.location.search);
     const localeFromSearchParams =
@@ -44,11 +53,11 @@ export const getAppLanguage = () => {
 
     // if the lang query parameter is found and is supported, return it
     if (lang) {
-        return lang;
+        return (cachedAppLanguage = lang);
     }
 
     // if the lang query parameter is not found or not supported, return 'en' as the default language
-    return 'en';
+    return (cachedAppLanguage = 'en');
 };
 
 /**

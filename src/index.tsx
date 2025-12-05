@@ -46,7 +46,10 @@ import { getAppLanguage } from '@utils/i18n/getAppLanguage';
         const waybackItems = await getWaybackItems();
 
         // Get the preloaded state for the Redux store
-        const preloadedState = await getPreloadedState(waybackItems);
+        const preloadedState = await getPreloadedState({
+            waybackItems,
+            appLanguage,
+        });
 
         root.render(
             <ReduxProvider store={configureAppStore(preloadedState)}>

@@ -25,14 +25,13 @@ import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 export type AppDialogName = 'about' | 'setting' | 'save' | 'export';
 
 export type UIState = {
-    // isSaveAsWebmapDialogOpen: boolean;
+    /**
+     * If true, only items with local changes will be shown in the item list
+     */
     shouldOnlyShowItemsWithLocalChange: boolean;
     shouldShowPreviewItemTitle: boolean;
     // isGutterHide: boolean;
     isSideBarHide: boolean;
-    // isShareModalOpen: boolean;
-    // isAboutThisAppModalOpen: boolean;
-    // isSettingModalOpen: boolean;
     /**
      * Whether the user profile card is open or not
      */
@@ -41,6 +40,11 @@ export type UIState = {
      * The name of the currently active dialog (if any)
      */
     activeDialog: AppDialogName | null;
+    /**
+     * The current application language. This is set during app initialization and
+     * does not change during the app session.
+     */
+    appLanguage: string;
 };
 
 export const initialUIState = {
@@ -54,6 +58,7 @@ export const initialUIState = {
     isSettingModalOpen: false,
     isUserProfileCardOpen: false,
     activeDialog: null,
+    appLanguage: 'en',
 } as UIState;
 
 const slice = createSlice({
@@ -163,6 +168,8 @@ export const isSettingModalOpenSelector = (state: RootState) =>
 
 export const isUserProfileCardOpenSelector = (state: RootState) =>
     state.UI.isUserProfileCardOpen;
+
+export const selectAppLanguage = (state: RootState) => state.UI.appLanguage;
 
 export const activeDialogSelector = (state: RootState) => state.UI.activeDialog;
 

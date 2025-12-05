@@ -53,12 +53,16 @@ import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
 import { init } from 'i18next';
 
-const getPreloadedState4UI = (urlParams: IURLParamData): UIState => {
+const getPreloadedState4UI = (
+    urlParams: IURLParamData,
+    appLanguage: string
+): UIState => {
     const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
 
     const state: UIState = {
         ...initialUIState,
         activeDialog,
+        appLanguage,
     };
 
     return state;
@@ -223,13 +227,17 @@ const getPreloadedState4Downloadmode = (
     return state;
 };
 
-const getPreloadedState = async (
-    waybackItems: IWaybackItem[]
-): Promise<PartialRootState> => {
+const getPreloadedState = async ({
+    waybackItems,
+    appLanguage,
+}: {
+    waybackItems: IWaybackItem[];
+    appLanguage: string;
+}): Promise<PartialRootState> => {
     const urlParams: IURLParamData = decodeURLParams();
 
     const preloadedState = {
-        UI: getPreloadedState4UI(urlParams),
+        UI: getPreloadedState4UI(urlParams, appLanguage),
         WaybackItems: getPreloadedState4WaybackItems(waybackItems, urlParams),
         SwipeView: getPreloadedState4SwipeView(urlParams, waybackItems),
         Map: getPreloadedState4Map(urlParams),

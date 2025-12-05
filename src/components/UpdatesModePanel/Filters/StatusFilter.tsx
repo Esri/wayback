@@ -11,6 +11,7 @@ import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { numberWithCommas } from 'helper-toolkit-ts/dist/number';
 import { CalciteCheckbox } from '@esri/calcite-components-react';
+import { selectAppLanguage } from '@store/UI/reducer';
 
 type StatusCheckboxProps = {
     /**
@@ -44,7 +45,12 @@ type StatusCheckboxProps = {
     onChange?: () => void;
 };
 
-const formatArea = (areaInSqKm: number) => {
+const formatArea = (areaInSqKm: number, appLanguage: string) => {
+    if (appLanguage !== 'en') {
+        // For non-English languages, just return the area with no formatting
+        return `${areaInSqKm.toFixed(0)}`;
+    }
+
     if (areaInSqKm >= 1000000) {
         return `${(areaInSqKm / 1000000).toFixed(1)}M`;
     }
@@ -66,6 +72,8 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
     onChange,
 }) => {
     const { t } = useTranslation();
+
+    const appLanguage = useAppSelector(selectAppLanguage);
 
     const statusLocaleKey = `${status}`.toLowerCase();
 
@@ -103,7 +111,7 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                     <span className="text-sm">
                         {t('status_message', {
                             num_sites: numberWithCommas(count),
-                            area: formatArea(area),
+                            area: formatArea(area, appLanguage),
                         })}
                     </span>
                 </div>
