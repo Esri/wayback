@@ -16,7 +16,7 @@ const LOCALE_SEARCH_PARAM_KEY = 'lang';
 /**
  * Languages/locales supported by the application.
  */
-export const SUPPORTED_LOCALES = ['en', 'es', 'ja'];
+export const SUPPORTED_LOCALES = ['en', 'zh'];
 
 /**
  * Retrieves the application language from the URL query parameters or localstorage.

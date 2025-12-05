@@ -67,9 +67,11 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const statusLocaleKey = `${status}`.toLowerCase();
+
     return (
         <div
-            className="grid items-center text-xs"
+            className="grid items-center text-xs mb-1"
             style={{
                 gridTemplateColumns: '24px 1fr',
             }}
@@ -78,7 +80,7 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                 checked={checked}
                 disabled={disabled}
                 onCalciteCheckboxChange={onChange}
-                label={t(status)}
+                label={t(statusLocaleKey)}
             ></CalciteCheckbox>
             <div
                 className="grid items-center gap-1 font-bold"
@@ -87,9 +89,17 @@ const StatusCheckbox: FC<StatusCheckboxProps> = ({
                     gridTemplateColumns: '62px 1fr',
                 }}
             >
-                <span className="text-sm">{t(status)}</span>
                 <div>
-                    <span className="ml-1 mr-2">|</span>
+                    <span className="text-sm">{t(statusLocaleKey)}</span>
+                </div>
+
+                <div
+                    className="border-l pl-2 ml-2"
+                    style={{
+                        borderColor: color ? color : 'inherit',
+                    }}
+                >
+                    {/* <span className="ml-1 mr-2">|</span> */}
                     <span className="text-sm">
                         {t('status_message', {
                             num_sites: numberWithCommas(count),

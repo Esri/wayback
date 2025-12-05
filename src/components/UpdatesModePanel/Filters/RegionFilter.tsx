@@ -123,7 +123,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
             <>
                 <div className="w-full mb-2">
                     <CalciteInputText
-                        placeholder="Search region"
+                        placeholder={t('search_region')}
                         value={searchTerm}
                         clearable
                         onCalciteInputTextInput={(event: any) => {
