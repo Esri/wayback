@@ -76,45 +76,6 @@ export const getHashParamValueByKey = (
     return hashParams.get(key);
 };
 
-/**
- * Retrieve map extent from URL hash params. The app no longer saves extent to URL hash params,
- * but this function is kept for backward compatibility in case users have ext param in their URLs.
- * @param hashParams
- * @returns
- */
-export const getMapExtentFromURLHashParams = (
-    hashParams: URLSearchParams
-): IExtentGeomety => {
-    const extent = getHashParamValueByKey('ext', hashParams);
-
-    if (!extent) {
-        return null;
-    }
-
-    const ext = extent.split(',').map((d) => +d);
-
-    // const ext = getHashParamValueByKey('ext')
-    //     ? getHashParamValueByKey('ext')
-    //           .split(',')
-    //           .map((d) => +d)
-    //     : null;
-
-    const mapExtent: IExtentGeomety =
-        ext && ext.length === 4
-            ? {
-                  xmin: ext[0],
-                  ymin: ext[1],
-                  xmax: ext[2],
-                  ymax: ext[3],
-                  spatialReference: {
-                      wkid: 4326,
-                  },
-              }
-            : null;
-
-    return mapExtent;
-};
-
 export const saveReleaseNum4SelectedWaybackItemsToHashParams = (
     rNum4SelectedWaybackItems: number[]
 ): void => {
@@ -191,66 +152,6 @@ export const getMapCenterFromHashParams = (hashParams: URLSearchParams) => {
     };
 };
 
-// const decodeURLParams = (): IURLParamData => {
-//     // hashParams = new URLSearchParams(window.location.hash.slice(1));
-
-//     // const localChangesOnly =
-//     //     getHashParamValueByKey('localChangesOnly') === 'true' ? true : false;
-
-//     // const selected = getHashParamValueByKey('selected')
-//     //     ? getHashParamValueByKey('selected')
-//     //           .split(',')
-//     //           .map((d) => +d)
-//     //     : null;
-
-//     // const active = getHashParamValueByKey('active')
-//     //     ? +getHashParamValueByKey('active')
-//     //     : null;
-
-//     // const mapExtent = getMapExtent();
-
-//     // const isSwipeWidgetOpen = getHashParamValueByKey('swipeWidget')
-//     //     ? true
-//     //     : false;
-
-//     // const swipeWidgetLayers = isSwipeWidgetOpen
-//     //     ? getHashParamValueByKey('swipeWidget')
-//     //           .split(',')
-//     //           .map((d) => +d)
-//     //     : [];
-
-//     // const animationSpeed =
-//     //     getHashParamValueByKey('animationSpeed') &&
-//     //     /\d/.test(getHashParamValueByKey('animationSpeed'))
-//     //         ? +getHashParamValueByKey('animationSpeed')
-//     //         : null;
-
-//     // const rNum4FramesToExclude = getHashParamValueByKey('framesToExclude')
-//     //     ? getHashParamValueByKey('framesToExclude')
-//     //           .split(',')
-//     //           .map((rNum) => +rNum)
-//     //     : [];
-
-//     // const isDownloadDialogOpen =
-//     //     getHashParamValueByKey('downloadMode') === 'true' ? true : false;
-
-//     const urlParams: IURLParamData = {
-//         // mapExtent,
-//         // rNum4SelectedWaybackItems: selected,
-//         // shouldOnlyShowItemsWithLocalChange: localChangesOnly,
-//         // rNum4ActiveWaybackItem: active,
-//         // isSwipeWidgetOpen,
-//         // rNum4SwipeWidgetLeadingLayer: swipeWidgetLayers[0] || null,
-//         // rNum4SwipeWidgetTrailingLayer: swipeWidgetLayers[1] || null,
-//         // animationSpeed,
-//         // rNum4FramesToExclude,
-//         // isDownloadDialogOpen,
-//         // activeDialog: getActiveDialogFromHashParams(),
-//     };
-
-//     return urlParams;
-// };
-
 export const saveMapModeToHashParams = (mode: MapMode): void => {
     const key: ParamKey = 'mode';
     const value = mode ? mode : null;
@@ -273,14 +174,6 @@ export const getMapModeFromHashParams = (
 
     return value as MapMode;
 };
-
-// export const saveActiveDialogInHashParams = (
-//     dialogName: AppDialogName
-// ): void => {
-//     const key: ParamKey = 'activeDialog';
-//     const value = dialogName ? dialogName : null;
-//     updateHashParams(key, value);
-// };
 
 /**
  * Get the active dialog name from hash params
@@ -392,4 +285,37 @@ export const saveUpdatesModeDataInURLHashParams = (
     const dataToSave = [status.join(','), category, region].join('|');
 
     updateHashParams('updatesLayer', dataToSave);
+};
+
+/**
+ * Retrieve map extent from URL hash params. The app no longer saves extent to URL hash params,
+ * but this function is kept for backward compatibility in case users have ext param in their URLs.
+ * @param hashParams
+ * @returns
+ */
+export const getMapExtentFromURLHashParams = (
+    hashParams: URLSearchParams
+): IExtentGeomety => {
+    const extent = getHashParamValueByKey('ext', hashParams);
+
+    if (!extent) {
+        return null;
+    }
+
+    const ext = extent.split(',').map((d) => +d);
+
+    const mapExtent: IExtentGeomety =
+        ext && ext.length === 4
+            ? {
+                  xmin: ext[0],
+                  ymin: ext[1],
+                  xmax: ext[2],
+                  ymax: ext[3],
+                  spatialReference: {
+                      wkid: 4326,
+                  },
+              }
+            : null;
+
+    return mapExtent;
 };
