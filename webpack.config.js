@@ -1,6 +1,3 @@
-// require('dotenv').config({ path: './.env' }); 
-const dotenv = require('dotenv');
-const fs = require('fs');
 const path = require('path');
 const package = require('./package.json');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
@@ -14,6 +11,7 @@ const { DefinePlugin } = require('webpack');
 
 const validateEnv = require('./webpack/validateEnvironmentVariables');
 const loadEnvironmentVariables = require('./webpack/loadEnvironmentVariables');
+const getGlobalConstants = require('./webpack/getGlobalContants');
 
 const {
     title,
@@ -41,6 +39,12 @@ module.exports = (env, options)=> {
      * Validate that all required environment variables are set for the specified application.
      */
     validateEnv(envConfig);
+
+    /**
+     * Get global constants to be defined in the webpack build process.
+     * These constants are made available in the application code via webpack's DefinePlugin.
+     */
+    const globalContants = getGlobalConstants(envConfig);
 
     return {
         devServer: {
@@ -103,24 +107,10 @@ module.exports = (env, options)=> {
                         }
                     ]
                 },
-                // { 
-                //     test: /\.(woff|woff2|ttf|eot)$/,  
-                //     loader: "file-loader",
-                //     options: {
-                //         name: '[name].[contenthash].[ext]',
-                //     }
-                // },
                 {
                     test: /\.(woff|woff2|ttf|eot)$/,
                     type: 'asset/resource',
                 },
-                // { 
-                //     test: /\.(png|jpg|gif|svg)$/,  
-                //     loader: "file-loader",
-                //     options: {
-                //         name: '[name].[contenthash].[ext]',
-                //     }
-                // },
                 {
                     test: /\.(png|jpg|gif|svg)$/,
                     type: 'asset/resource',
@@ -130,16 +120,7 @@ module.exports = (env, options)=> {
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
-                // define environment variables to be used in the application
-                APP_ID: JSON.stringify(envConfig.APP_ID),
-                ENV_ARCGIS_PORTAL_ROOT_URL: JSON.stringify(envConfig.ARCGIS_PORTAL_ROOT_URL),
-                ENV_WAYBACK_CONFIG_FILE_URL: JSON.stringify(envConfig.WAYBACK_CONFIG_FILE_URL),
-                ENV_WAYBACK_SUBDOMAINS: JSON.stringify(envConfig.WAYBACK_SUBDOMAINS ? envConfig.WAYBACK_SUBDOMAINS.split(',').map(s => s.trim()) : undefined),
-                ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL: JSON.stringify(envConfig.WAYBACK_EXPORT_GP_SERVICE_ROOT_URL),
-                ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.METROPOLITAN_UPDATES_FEATURE_LAYER_URL),
-                ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.REGIONAL_UPDATES_FEATURE_LAYER_URL),
-                ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.COMMUNITY_UPDATES_FEATURE_LAYER_URL),
-                ENV_WORLD_IMAGERY_BASEMAP_URL: JSON.stringify(envConfig.WORLD_IMAGERY_BASEMAP_URL),
+                ...globalContants
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({
@@ -170,6 +151,7 @@ module.exports = (env, options)=> {
                     'og:url': homepage,
                     'og:image': `${homepage}/public/screenshot.jpg`,
                     "last-modified": new Date().getTime().toString(),
+                    'last-modified-readable': new Date().toLocaleString(),
                 },
                 minify: {
                     html5                          : true,
