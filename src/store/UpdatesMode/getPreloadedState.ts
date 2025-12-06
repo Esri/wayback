@@ -2,23 +2,10 @@ import { getHashParamValueByKey, updateHashParams } from '@utils/urlParams';
 import { UpdatesModeState, initialUpdatesModeState } from './reducer';
 import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
 
-/**
- * Save Updates Mode data in the URL hash params
- * @param data - Updates Mode data to be saved
- * @returns void
- */
-export const saveUpdatesModeDataInURLHashParams = (
-    data: UpdatesModeState
-): void => {
-    const { status, category, region } = data;
-
-    const dataToSave = [status.join(','), category, region].join('|');
-
-    updateHashParams('updatesLayer', dataToSave);
-};
-
-export const getUpdatesModeFromHashParams = (): UpdatesModeState => {
-    const value = getHashParamValueByKey('updatesLayer');
+export const getUpdatesModeFromHashParams = (
+    hashParams: URLSearchParams
+): UpdatesModeState => {
+    const value = getHashParamValueByKey('updatesLayer', hashParams);
 
     if (!value) {
         return initialUpdatesModeState;
@@ -45,6 +32,8 @@ export const getUpdatesModeFromHashParams = (): UpdatesModeState => {
     };
 };
 
-export const getPreloadedState4UpdatesMode = (): UpdatesModeState => {
-    return getUpdatesModeFromHashParams() || initialUpdatesModeState;
+export const getPreloadedState4UpdatesMode = (
+    hashParams: URLSearchParams
+): UpdatesModeState => {
+    return getUpdatesModeFromHashParams(hashParams) || initialUpdatesModeState;
 };

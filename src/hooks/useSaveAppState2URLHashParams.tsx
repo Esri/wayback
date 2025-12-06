@@ -24,10 +24,10 @@ import {
     saveAnimationSpeedToHashParams,
     saveMapModeToHashParams,
     updateHashParams,
+    saveUpdatesModeDataInURLHashParams,
 } from '@utils/urlParams';
 import { selectMapMode } from '@store/Map/reducer';
 import { selectUpdatesModeState } from '@store/UpdatesMode/selectors';
-import { saveUpdatesModeDataInURLHashParams } from '@store/UpdatesMode/getPreloadedState';
 import { activeDialogSelector } from '@store/UI/reducer';
 
 export const useSaveAppState2URLHashParams = () => {

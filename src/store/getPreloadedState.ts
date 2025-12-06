@@ -18,12 +18,19 @@ import { PartialRootState } from './configureStore';
 import { AppDialogName, initialUIState, UIState } from './UI/reducer';
 import { initialWaybackItemsState, WaybackItemsState } from './Wayback/reducer';
 import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
-import { IURLParamData, IWaybackItem } from '../types';
+import { IWaybackItem } from '../types';
 import { initialMapState, MapMode, MapState } from './Map/reducer';
 import {
-    decodeURLParams,
+    getActiveDialogFromHashParams,
+    getAnimationSpeedFromHashParams,
+    // decodeURLParams,
     getMapCenterFromHashParams,
+    getMapExtentFromURLHashParams,
     getMapModeFromHashParams,
+    getReleaseNum4FramesToExcludeFromHashParams,
+    getReleaseNumForActiveWaybackItemFromHashParams,
+    getReleaseNumsForSelectedWaybackItemsFromHashParams,
+    getSwipeWidgetLayersFromHashParams,
 } from '@utils/urlParams';
 
 import {
@@ -39,25 +46,23 @@ import {
     initialAnimationModeState,
 } from './AnimationMode/reducer';
 
-//npm install helper-toolkit-ts
-import { miscFns } from 'helper-toolkit-ts';
 import {
     DownloadModeState,
     initialDownloadModeState,
     DownloadJob,
 } from './DownloadMode/reducer';
-import { isAnonymouns } from '@utils/Esri-OAuth';
-import { ReferenceLayerLanguage } from '@constants/map';
 import { IS_MOBILE } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
-import { init } from 'i18next';
 
 const getPreloadedState4UI = (
-    urlParams: IURLParamData,
+    hashParams: URLSearchParams,
     appLanguage: string
 ): UIState => {
-    const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
+    // const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
+
+    const activeDialog: AppDialogName | null =
+        getActiveDialogFromHashParams(hashParams);
 
     const state: UIState = {
         ...initialUIState,
@@ -70,9 +75,15 @@ const getPreloadedState4UI = (
 
 const getPreloadedState4WaybackItems = (
     waybackItems: IWaybackItem[],
-    urlParams: IURLParamData
+    hashParams: URLSearchParams
 ): WaybackItemsState => {
-    const { rNum4SelectedWaybackItems, rNum4ActiveWaybackItem } = urlParams;
+    // const { rNum4SelectedWaybackItems, rNum4ActiveWaybackItem } = urlParams;
+
+    const releaseNum4ActiveWaybackItem =
+        getReleaseNumForActiveWaybackItemFromHashParams(hashParams);
+
+    const releaseNum4SelectedItems =
+        getReleaseNumsForSelectedWaybackItemsFromHashParams(hashParams);
 
     const byReleaseNumber: {
         [key: number]: IWaybackItem;
@@ -90,44 +101,54 @@ const getPreloadedState4WaybackItems = (
         ...initialWaybackItemsState,
         byReleaseNumber,
         allReleaseNumbers,
-        releaseNum4SelectedItems: rNum4SelectedWaybackItems || [],
+        releaseNum4SelectedItems: releaseNum4SelectedItems || [],
         releaseNum4ActiveWaybackItem:
-            rNum4ActiveWaybackItem || allReleaseNumbers[0],
+            releaseNum4ActiveWaybackItem || allReleaseNumbers[0],
     };
 
     return state;
 };
 
 const getPreloadedState4SwipeView = (
-    urlParams: IURLParamData,
+    hashParams: URLSearchParams,
     waybackItems: IWaybackItem[]
 ): SwipeViewState => {
-    const {
-        isSwipeWidgetOpen,
-        rNum4SwipeWidgetLeadingLayer,
-        rNum4SwipeWidgetTrailingLayer,
-        rNum4ActiveWaybackItem,
-    } = urlParams;
+    // const {
+    //     isSwipeWidgetOpen,
+    //     rNum4SwipeWidgetLeadingLayer,
+    //     rNum4SwipeWidgetTrailingLayer,
+    //     rNum4ActiveWaybackItem,
+    // } = urlParams;
+
+    const { releaseNum4LeadingLayer, releaseNum4TrailingLayer } =
+        getSwipeWidgetLayersFromHashParams(hashParams);
+
+    const rNum4ActiveWaybackItem =
+        getReleaseNumForActiveWaybackItemFromHashParams(hashParams);
 
     const state: SwipeViewState = {
         ...initialSwipeViewState,
         releaseNum4LeadingLayer:
-            rNum4SwipeWidgetLeadingLayer ||
+            releaseNum4LeadingLayer ||
             rNum4ActiveWaybackItem ||
             waybackItems[0].releaseNum,
         releaseNum4TrailingLayer:
-            rNum4SwipeWidgetTrailingLayer ||
+            releaseNum4TrailingLayer ||
             waybackItems[waybackItems.length - 1].releaseNum,
     };
 
     return state;
 };
 
-const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
-    const { mapExtent } = urlParams;
+const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
+    // const { mapExtent } = urlParams;
+
+    // get map extent from the url hash params
+    // the app no longer saves extent to URL hash params, but we keep this for backward compatibility
+    const mapExtent = getMapExtentFromURLHashParams(hashParams);
 
     // first try to get the map center and zoom from the hash params
-    let initialMapCenter = getMapCenterFromHashParams();
+    let initialMapCenter = getMapCenterFromHashParams(hashParams);
 
     // then try to get the default map location from the local storage
     if (!initialMapCenter) {
@@ -147,7 +168,7 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
         };
     }
 
-    let mode: MapMode = getMapModeFromHashParams();
+    let mode: MapMode = getMapModeFromHashParams(hashParams);
 
     // we need to set the mode to 'explore' if the device is mobile
     // because the swipe mode and animation mode is not supported on mobile devices
@@ -168,10 +189,13 @@ const getPreloadedState4Map = (urlParams: IURLParamData): MapState => {
 };
 
 const getPreloadedState4AnimationMode = (
-    urlParams: IURLParamData
+    hashParams: URLSearchParams
 ): AnimationModeState => {
-    let { animationSpeed } = urlParams;
-    const { rNum4FramesToExclude } = urlParams;
+    // let { animationSpeed } = urlParams;
+    let animationSpeed = getAnimationSpeedFromHashParams(hashParams);
+    // const { rNum4FramesToExclude } = urlParams;
+    const rNum4FramesToExclude =
+        getReleaseNum4FramesToExcludeFromHashParams(hashParams);
 
     if (
         animationSpeed === null ||
@@ -200,10 +224,8 @@ const getPreloadedState4AnimationMode = (
 };
 
 const getPreloadedState4Downloadmode = (
-    urlParams: IURLParamData
+    hashParams: URLSearchParams
 ): DownloadModeState => {
-    const { isDownloadDialogOpen } = urlParams;
-
     const jobs: DownloadJob[] = getDownloadJobsFromLocalStorage();
 
     const byId: { [key: string]: DownloadJob } = {};
@@ -217,7 +239,6 @@ const getPreloadedState4Downloadmode = (
 
     const state: DownloadModeState = {
         ...initialDownloadModeState,
-        // isDownloadDialogOpen,
         jobs: {
             byId,
             ids,
@@ -234,16 +255,17 @@ const getPreloadedState = async ({
     waybackItems: IWaybackItem[];
     appLanguage: string;
 }): Promise<PartialRootState> => {
-    const urlParams: IURLParamData = decodeURLParams();
+    // get the url params from the current window location hash
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
 
     const preloadedState = {
-        UI: getPreloadedState4UI(urlParams, appLanguage),
-        WaybackItems: getPreloadedState4WaybackItems(waybackItems, urlParams),
-        SwipeView: getPreloadedState4SwipeView(urlParams, waybackItems),
-        Map: getPreloadedState4Map(urlParams),
-        AnimationMode: getPreloadedState4AnimationMode(urlParams),
-        DownloadMode: getPreloadedState4Downloadmode(urlParams),
-        UpdatesMode: getPreloadedState4UpdatesMode(),
+        UI: getPreloadedState4UI(hashParams, appLanguage),
+        WaybackItems: getPreloadedState4WaybackItems(waybackItems, hashParams),
+        SwipeView: getPreloadedState4SwipeView(hashParams, waybackItems),
+        Map: getPreloadedState4Map(hashParams),
+        AnimationMode: getPreloadedState4AnimationMode(hashParams),
+        DownloadMode: getPreloadedState4Downloadmode(hashParams),
+        UpdatesMode: getPreloadedState4UpdatesMode(hashParams),
     } as PartialRootState;
 
     return preloadedState;

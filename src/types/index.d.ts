@@ -95,20 +95,6 @@ interface IScreenPoint {
     y: number;
 }
 
-interface IURLParamData {
-    mapExtent?: IExtentGeomety;
-    rNum4SelectedWaybackItems?: Array<number>;
-    shouldOnlyShowItemsWithLocalChange?: boolean;
-    rNum4ActiveWaybackItem?: number;
-    isSwipeWidgetOpen?: boolean;
-    rNum4SwipeWidgetLeadingLayer?: number;
-    rNum4SwipeWidgetTrailingLayer?: number;
-    animationSpeed?: number;
-    rNum4FramesToExclude?: number[];
-    isDownloadDialogOpen?: boolean;
-    activeDialog: AppDialogName;
-}
-
 export {
     IWaybackConfig,
     IWaybackItem,
@@ -117,5 +103,4 @@ export {
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IExtentGeomety,
-    IURLParamData,
 };
