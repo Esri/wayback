@@ -15,8 +15,14 @@ const LOCALE_SEARCH_PARAM_KEY = 'lang';
 
 /**
  * Languages/locales supported by the application.
+ * This is derived from the ENV_SUPPORTED_LANGUAGES environment variable.
+ * If the variable is not set, defaults to ['en'].
  */
-export const SUPPORTED_LOCALES = ['en', 'zh'];
+export const SUPPORTED_LOCALES =
+    ENV_SUPPORTED_LANGUAGES && Array.isArray(ENV_SUPPORTED_LANGUAGES)
+        ? ENV_SUPPORTED_LANGUAGES
+        : ['en'];
+// console.log('Supported locales:', SUPPORTED_LOCALES);
 
 /**
  * Cache for the application language to avoid redundant computations.

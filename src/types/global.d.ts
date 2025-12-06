@@ -20,7 +20,7 @@ declare const ENV_WAYBACK_CONFIG_FILE_URL: string;
  * Optional: Comma-separated list of subdomains for the Wayback tile service.
  * Defaults to wayback,wayback-a,wayback-b if not specified.
  */
-declare const ENV_WAYBACK_SUBDOMAINS: string;
+declare const ENV_WAYBACK_SUBDOMAINS: string[];
 
 /**
  * Optional: Wayback Export GP Service Root URL.
@@ -51,3 +51,8 @@ declare const ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL: string;
  * Defaults to https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/ if not specified.
  */
 declare const ENV_WORLD_IMAGERY_BASEMAP_URL: string;
+
+/**
+ * Optional: Comma-separated list of supported languages in the application.
+ */
+declare const ENV_SUPPORTED_LANGUAGES: string[];
