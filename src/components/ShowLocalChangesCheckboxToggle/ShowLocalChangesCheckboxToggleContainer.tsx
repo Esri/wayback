@@ -22,6 +22,7 @@ import {
     shouldOnlyShowItemsWithLocalChangeToggled,
 } from '@store/UI/reducer';
 import { LocalChangesToggle } from '.';
+import { IS_MOBILE } from '@constants/UI';
 
 // import ShowLocalChangesCheckboxToggle from './index';
 
@@ -31,6 +32,10 @@ const ShowLocalChangesCheckboxToggleContainer = () => {
     const shouldOnlyShowItemsWithLocalChange = useAppSelector(
         shouldOnlyShowItemsWithLocalChangeSelector
     );
+
+    if (IS_MOBILE) {
+        return null;
+    }
 
     return (
         <LocalChangesToggle

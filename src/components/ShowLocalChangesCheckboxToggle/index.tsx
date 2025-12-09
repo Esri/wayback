@@ -27,7 +27,7 @@ export const LocalChangesToggle: FC<IProps> = ({ isActive, onChange }) => {
     const { t } = useTranslation();
 
     return (
-        <div className="hidden md:flex items-center justify-center my-1">
+        <div className="items-center justify-center my-1">
             <CalciteButton
                 appearance="transparent"
                 kind="neutral"

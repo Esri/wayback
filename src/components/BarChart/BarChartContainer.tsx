@@ -71,7 +71,7 @@ const BarChartContainer: React.FC = () => {
     }
 
     return (
-        <div className="hidden md:block">
+        <div className="w-full">
             <BarChart
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}
