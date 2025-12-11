@@ -66,6 +66,7 @@ export const ModeToggleButton: FC<Props> = ({
             <button
                 className="flex items-center justify-center"
                 data-testid={testId}
+                data-active={isActive}
                 onClick={onClick}
                 aria-label={label}
                 title={tooltip}

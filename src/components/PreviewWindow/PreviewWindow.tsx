@@ -102,6 +102,8 @@ const PreviewWindow: React.FC<Props> = ({
                 width: `${PREVIEW_WINDOW_WIDTH}px`,
                 height: `${PREVIEW_WINDOW_HEIGHT}px`,
             }}
+            data-testid="preview-window-container"
+            data-release-date={previewWaybackItem?.releaseDateLabel || ''}
         >
             {imageUrl && <img src={imageUrl} />}
             <div className="preview-item-info">

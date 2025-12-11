@@ -12,9 +12,9 @@ export const loadAdobeAnalytics = (hostedOnLivingAtlas = false) => {
     }
 
     if (hostedOnLivingAtlas === false) {
-        console.warn(
-            'Adobe Analytics is only loaded on livingatlas.arcgis.com.'
-        );
+        // console.warn(
+        //     'Adobe Analytics is only loaded on livingatlas.arcgis.com.'
+        // );
         return;
     }
 
