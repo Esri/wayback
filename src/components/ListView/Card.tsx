@@ -92,6 +92,8 @@ export const ListViewCard: FC<Props> = ({
             // that monitors the health of this app
             data-testid={`list-card-${data.releaseNum}`}
             data-release-num={data.releaseNum}
+            data-release-date={data.releaseDateLabel}
+            data-active={isActive}
         >
             <div
                 className={classnames('list-card group', {

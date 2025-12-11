@@ -241,6 +241,7 @@ const BarChart: React.FC<IProps> = ({
         <div
             className={ContainerClassName}
             ref={containerRef}
+            data-testid="releases-bar-chart"
             style={{
                 width: '100%',
                 height: '55px',
