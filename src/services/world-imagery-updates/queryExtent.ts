@@ -1,6 +1,6 @@
 import { getToken } from '@utils/Esri-OAuth';
 import { ImageryUpdatesCategory } from './config';
-import { IExtent } from '@esri/arcgis-rest-request';
+import { IExtent } from '@typings/index';
 import { getImageryUpdatesUrl } from './helpers';
 
 const cachedResults: Map<string, IExtent | null> = new Map();

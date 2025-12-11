@@ -95,6 +95,33 @@ interface IScreenPoint {
     y: number;
 }
 
+export interface ISpatialReference {
+    wkid?: number;
+    latestWkid?: number;
+    vcsWkid?: number;
+    latestVcsWkid?: number;
+    wkt?: string;
+    latestWkt?: string;
+}
+
+export interface IExtent {
+    xmin: number;
+    ymin: number;
+    zmin?: number;
+    xmax: number;
+    ymax: number;
+    zmax?: number;
+    spatialReference?: ISpatialReference;
+}
+
+export interface IFeature {
+    geometry?: any;
+    attributes: {
+        [key: string]: any;
+    };
+    // symbol?: ISymbol;
+}
+
 export {
     IWaybackConfig,
     IWaybackItem,

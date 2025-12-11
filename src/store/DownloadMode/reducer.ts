@@ -22,7 +22,7 @@ import {
 
 // import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 // import { batch } from 'react-redux';
-import { IExtent } from '@esri/arcgis-rest-request';
+import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 

@@ -5,7 +5,8 @@ import {
     WorldImageryUpdatesStatusEnum,
 } from './config';
 import { getImageryUpdatesUrl } from './helpers';
-import { IFeature } from '@esri/arcgis-rest-request';
+import { IFeature } from '@typings/index';
+// import { IFeature } from '@esri/arcgis-rest-request';
 
 const cachedResults: Map<string, string[]> = new Map();
 

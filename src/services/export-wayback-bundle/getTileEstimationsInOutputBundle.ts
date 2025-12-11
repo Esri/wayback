@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IExtent } from '@esri/arcgis-rest-request';
+import { IExtent } from '@typings/index';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 import axios from 'axios';
 import { geometryFns } from 'helper-toolkit-ts';

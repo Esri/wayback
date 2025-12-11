@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
-import { IExtent } from '@esri/arcgis-rest-request';
+// import { IExtent } from '@typings/index';
 // import { tier } from '@utils/Tier';
 import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
 // import axios from 'axios';
 import { getToken } from '@utils/Esri-OAuth';
+import { IExtent } from '@typings/index';
 
 type GPJobStatus =
     | 'esriJobSubmitted'

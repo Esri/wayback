@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IExtent } from '@esri/arcgis-rest-request';
+import { IExtent } from '@typings/index';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 // import { batch } from 'react-redux';
 import {
