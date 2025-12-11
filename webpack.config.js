@@ -11,7 +11,7 @@ const { DefinePlugin } = require('webpack');
 
 const validateEnv = require('./webpack/validateEnvironmentVariables');
 const loadEnvironmentVariables = require('./webpack/loadEnvironmentVariables');
-const getGlobalConstants = require('./webpack/getGlobalContants');
+const getGlobalConstants = require('./webpack/getGlobalConstants');
 
 const {
     title,
@@ -44,7 +44,7 @@ module.exports = (env, options)=> {
      * Get global constants to be defined in the webpack build process.
      * These constants are made available in the application code via webpack's DefinePlugin.
      */
-    const globalContants = getGlobalConstants(envConfig);
+    const globalConstants = getGlobalConstants(envConfig);
 
     return {
         devServer: {
@@ -120,7 +120,7 @@ module.exports = (env, options)=> {
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
-                ...globalContants
+                ...globalConstants
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({

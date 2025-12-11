@@ -2,9 +2,7 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 
-const {
-    ERROR_TERMIAL_OUTPUT_COLOR,
-} = require('./constants');
+const { logErrorAndExit } = require('./helpers');
 
 /**
  * Load environment variables from the specified .env file.
@@ -22,8 +20,7 @@ const loadEnvironmentVariables = (envFileName)=>{
 
     // check if the environment file exists
     if (!fs.existsSync(envPath)) {
-        console.error(ERROR_TERMIAL_OUTPUT_COLOR, `Environment file ${envPath} does not exist. Please create it based on .env.template and place it in the project root directory.\n`);
-        process.exit(1);
+        logErrorAndExit(`Environment file ${envPath} does not exist. Please create it based on .env.template and place it in the project root directory.\n`);
     }
 
     // Load the environment variables
@@ -32,8 +29,7 @@ const loadEnvironmentVariables = (envFileName)=>{
 
     // throw an error if the environment variables is an empty object
     if (Object.keys(envConfig).length === 0) {
-        console.error(ERROR_TERMIAL_OUTPUT_COLOR, `No environment variables found in the environment file ${envPath}. Please check the file content.`);
-        process.exit(1);
+        logErrorAndExit(`No environment variables found in the environment file ${envPath}. Please check the file content.`);
     }
 
     return envConfig;

@@ -1,6 +1,4 @@
-const {
-    ERROR_TERMIAL_OUTPUT_COLOR,
-} = require('./constants');
+const { logErrorAndExit } = require('./helpers');
 
 const {
     ENV_VARIABLES,
@@ -18,16 +16,14 @@ const validateEnv = (
     console.log(`Validating environment variables...\n`);
 
     if(!envConfig){
-        console.error(ERROR_TERMIAL_OUTPUT_COLOR, 'Failed to validate environment variables: No environment configuration provided for validation.');
-        process.exit(1);
+        logErrorAndExit('Failed to validate environment variables: No environment configuration provided for validation.');
     }
 
     // Get environment variables for the specified application
     const environmentVariables = ENV_VARIABLES;
 
     if(!environmentVariables){
-        console.error(ERROR_TERMIAL_OUTPUT_COLOR, `Failed to validate environment variables: No environment variable configuration found.`);
-        process.exit(1);
+        logErrorAndExit('Failed to validate environment variables: No environment variable configuration found.');
     }
 
     // Get required environment variable names
@@ -41,9 +37,8 @@ const validateEnv = (
     }
 
     for(const varName of requiredEnvVars){
-        if(envConfig && !(varName in envConfig)){
-            console.error(ERROR_TERMIAL_OUTPUT_COLOR, `Missing required environment variable: "${varName}". Please define it in your .env file.\nYou can refer to the .env.template file for guidance.`);
-            process.exit(1);
+        if(!(varName in envConfig)){
+            logErrorAndExit(`Missing required environment variable: "${varName}". Please define it in your .env file.\nYou can refer to the .env.template file for guidance.`);
         }
     }
     

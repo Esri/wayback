@@ -22,7 +22,7 @@ const ENV_VARIABLES = [
     {
         name: 'WAYBACK_SUBDOMAINS',
         required: false,
-        default: 'wayback,waback-a,wayback-b'
+        default: 'wayback,wayback-a,wayback-b'
     },
     {
         name: 'WAYBACK_EXPORT_GP_SERVICE_ROOT_URL',
