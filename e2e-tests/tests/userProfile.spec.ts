@@ -23,6 +23,12 @@ test.describe('Wayback - User Profile Dialog', () => {
         // Sign in to ArcGIS Online
         await signInWithArcGISOnline(page);
 
+        // verify the User Profile button shows signed-in state
+        await expect(userProfileButton).toHaveAttribute(
+            'data-signed-user',
+            `${process.env.E2E_TEST_ARCGIS_ONLINE_USERNAME}`
+        );
+
         // Click the User Profile button again to open the dialog
         await userProfileButton.click();
 
@@ -43,6 +49,21 @@ test.describe('Wayback - User Profile Dialog', () => {
 
         // Verify that the User Profile dialog is closed
         await expect(userProfileDialog).toBeHidden();
+
+        // Open the User Profile dialog again
+        await userProfileButton.click();
+        await expect(userProfileDialog).toBeVisible();
+
+        // Locate and click the Sign Out button
+        const signOutButton = page.getByTestId('sign-out-btn');
+        await expect(signOutButton).toBeVisible();
+        await signOutButton.click();
+
+        // Verify that the User Profile dialog is closed after signing out
+        await expect(userProfileDialog).toBeHidden();
+
+        // Verify that the User Profile button shows signed-out state
+        await expect(userProfileButton).not.toHaveAttribute('data-signed-user');
 
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);

@@ -64,21 +64,23 @@ test.describe('Wayback - Explorer Mode', () => {
         await expect(activeBar).toHaveClass(/is-active/);
 
         // Find the second highlighted bar in the bar chart
-        const secondHighlightedBar = highlightedBars.nth(1);
-        const highlightedBarReleaseNum =
-            (await secondHighlightedBar.getAttribute('data-release-num')) || '';
+        const secondBar = highlightedBars.nth(1);
+        const secondReleaseNum =
+            (await secondBar.getAttribute('data-release-num')) || '';
 
         // Hover over the second highlighted bar and verify the preview window
-        await secondHighlightedBar.hover();
-        await verifyPreviewWindowByReleaseNum(page, highlightedBarReleaseNum);
+        await secondBar.hover();
+        await verifyPreviewWindowByReleaseNum(page, secondReleaseNum);
 
         // Click the second highlighted bar and verify the corresponding card is highlighted
-        await secondHighlightedBar.click();
-        const highlightedCard = page.getByTestId(
-            `list-card-${highlightedBarReleaseNum}`
-        );
-        await expect(highlightedCard).toBeVisible();
-        await expect(highlightedCard).toHaveAttribute('data-active', 'true');
+        await secondBar.click();
+        const secondCard = page.getByTestId(`list-card-${secondReleaseNum}`);
+        await expect(secondCard).toBeVisible();
+        await expect(secondCard).toHaveAttribute('data-active', 'true');
+
+        // verify the hash in the URL corresponds to the selected release
+        const url = page.url();
+        expect(url).toContain(`active=${secondReleaseNum}`);
 
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);

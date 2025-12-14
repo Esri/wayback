@@ -5,12 +5,38 @@ import { defineConfig, devices } from '@playwright/test';
  * https://github.com/motdotla/dotenv
  */
 import dotenv from 'dotenv';
+import fs from 'fs';
 // import path from 'path';
-dotenv.config({ path: '.env.development' });
+dotenv.config({ path: '.env.e2e' });
 
+// exit if the env file is missing
+if (!fs.existsSync('.env.e2e')) {
+    console.error('Error: Missing .env.e2e file.');
+    process.exit(1);
+}
+
+// exit if the env file is missing required variables
+const requiredEnvVars = [
+    'E2E_TEST_ARCGIS_ONLINE_USERNAME',
+    'E2E_TEST_ARCGIS_ONLINE_PASSWORD',
+    'WEBPACK_DEV_SERVER_HOSTNAME',
+];
+for (const varName of requiredEnvVars) {
+    if (!process.env[varName]) {
+        console.error(
+            `Error: Missing required environment variable ${varName} in .env.e2e file`
+        );
+        process.exit(1);
+    }
+}
+
+// Set DEV_SERVER_URL based on the WEBPACK_DEV_SERVER_HOSTNAME environment variable or default to localhost.
+// This URL is used in e2e tests to connect to the development server.
+// Ensure it aligns with the dev server configuration in webpack.config.js.
 export const DEV_SERVER_URL = process.env.WEBPACK_DEV_SERVER_HOSTNAME
     ? `https://${process.env.WEBPACK_DEV_SERVER_HOSTNAME}:8080`
     : 'http://localhost:8080'; // Default to localhost if not set
+// console.log(`Using DEV_SERVER_URL: ${DEV_SERVER_URL}`);
 
 /**
  * See https://playwright.dev/docs/test-configuration.

@@ -103,6 +103,7 @@ export const ProfileCard: FC<Props> = ({
             </div>
 
             <CalciteButton
+                data-testid="sign-out-btn"
                 appearance="outline"
                 kind="inverse"
                 iconStart="sign-out"
