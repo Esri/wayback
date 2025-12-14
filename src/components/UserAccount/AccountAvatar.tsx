@@ -87,6 +87,7 @@ export const AccountAvatar: FC<Props> = ({
         <div
             className="relative flex justify-center items-center w-full my-2 cursor-pointer px-1"
             title={label}
+            data-testid="user-profile-btn"
         >
             <button
                 ref={buttonRef}

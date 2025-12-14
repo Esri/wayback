@@ -49,6 +49,7 @@ export const ProfileCard: FC<Props> = ({
         <div
             ref={containerRef}
             className="w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4"
+            data-testid="user-profile-dialog"
         >
             <div
                 className="absolute top-1 right-1 cursor-pointer"
@@ -57,6 +58,7 @@ export const ProfileCard: FC<Props> = ({
                 }}
             >
                 <CalciteButton
+                    data-testid="close-profile-card-btn"
                     ref={closeButtonRef}
                     appearance="transparent"
                     kind="inverse"
@@ -81,6 +83,7 @@ export const ProfileCard: FC<Props> = ({
                             target="_blank"
                             className="underline text-white"
                             rel="noreferrer"
+                            data-testid="user-profile-name-link"
                         >
                             {userFullName || userName}
                         </a>

@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 import dotenv from 'dotenv';
 // import path from 'path';
-dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env.development' });
 
 export const DEV_SERVER_URL = process.env.WEBPACK_DEV_SERVER_HOSTNAME
     ? `https://${process.env.WEBPACK_DEV_SERVER_HOSTNAME}:8080`
@@ -83,7 +83,7 @@ export default defineConfig({
     //   reuseExistingServer: !process.env.CI,
     // },
     webServer: {
-        command: 'npm run start',
+        command: 'npm run start:dev',
         url: DEV_SERVER_URL,
         reuseExistingServer: !process.env.CI,
         ignoreHTTPSErrors: true,
