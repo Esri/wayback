@@ -93,7 +93,7 @@
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
-    "@arcgis/core": "^4.32.10",
+    "@arcgis/core": "4.34",
     "@esri/calcite-components-react": "^3.3.3",
     "@esri/wayback-core": "^1.0.10",
     "@reduxjs/toolkit": "^2.6.1",
