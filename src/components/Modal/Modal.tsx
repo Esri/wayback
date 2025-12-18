@@ -90,6 +90,7 @@ export const Modal: FC<Props> = ({
                         kind="neutral"
                         label={t('close')}
                         onClick={onClose}
+                        data-testid="modal-close-button"
                     />
                 </div>
 

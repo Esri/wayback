@@ -107,3 +107,43 @@ The `user-profile.spec.ts` file contains tests that verify the functionality of 
     - Confirms the "Sign Out" button is visible and functional.
     - Verifies the dialog is closed after signing out.
     - Ensures the "User Profile" button reflects the signed-out state - anonymous user icon.
+
+## Test Save as Webmap Functionalities
+
+### Running the Save as Webmap Tests
+To run only the tests related to the **Save as Webmap** functionalities, use:
+
+```sh
+npx playwright test e2e-tests/tests/save-as-webmap.spec.ts --config e2e-tests/playwright.config.ts --headed --workers=1
+```
+
+### Test Details
+The `save-as-webmap.spec.ts` file contains tests that verify the functionality of the "Save as Webmap" feature in the Wayback App. These tests include:
+
+1. **Save as Webmap Button Initial State**
+    - Ensures the "Save as Webmap" button is visible but initially disabled.
+
+2. **Card Selection and Save as Webmap Button Activation**
+    - Verifies that activating/hovering a card enables the "Save as Webmap" button.
+    - Confirms the selected items count indicator at bottom right side of the "Save as Webmap" button updates correctly when items are added or removed.
+
+3. **Clear All Selected Items**
+    - Ensures the "Clear All" button clears all selected items.
+    - Verifies the "Save as Webmap" button is disabled after clearing all selections.
+
+4. **Save as Webmap Dialog Visibility**
+    - Confirms the "Save as Webmap" dialog appears after clicking the "Save as Webmap" button.
+
+5. **Sign In to Save Webmap**
+    - Verifies the "Sign In to Save Webmap" button is visible and functional.
+    - Confirms the ability to sign in using ArcGIS Online credentials.
+    - Ensures the "Create Wayback Webmap" button becomes enabled after signing in.
+
+6. **Webmap Title Validation**
+    - Ensures the "Create Wayback Webmap" button is disabled when the title input is empty.
+    - Verifies the button becomes enabled after entering a valid title.
+
+7. **Create Wayback Webmap**
+    - Confirms the "Create Wayback Webmap" button creates the webmap successfully.
+    - Verifies the "Open Wayback Map" button is visible after the webmap is created.
+

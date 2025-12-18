@@ -71,13 +71,20 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                     aria-label={'save as web map'}
                     onClick={onClickHandler}
                     title={tooltipContent}
+                    disabled={!isActive}
+                    data-testid="save-as-webmap-button"
                 >
                     <CalciteIcon icon="arcgis-online" scale="l" />
                 </button>
 
                 {isActive && (
                     <IndicatorBubble>
-                        <span>{selectedWaybackItems.length}</span>
+                        <span
+                            data-testid="selected-wayback-items-count"
+                            data-count={selectedWaybackItems?.length || 0}
+                        >
+                            {selectedWaybackItems.length}
+                        </span>
                     </IndicatorBubble>
                 )}
             </div>
@@ -87,6 +94,8 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                     className="mx-auto text-center cursor-pointer text-xs"
                     aria-label="clear all selected items"
                     onClick={clearAll}
+                    title={t('clear_all')}
+                    data-testid="clear-all-selected-items-button"
                 >
                     {t('clear_all')}
                 </button>

@@ -152,6 +152,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                         ? t('creating_wayback_map')
                         : t('create_wayback_map')
                 }
+                data-testid="create-wayback-webmap-button"
             >
                 {isCreatingWebmap
                     ? t('creating_wayback_map')
@@ -177,6 +178,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                         onChange={(e) => setTitle(e.target.value)}
                         required={true}
                         disabled={isCreatingWebmap}
+                        data-testid="webmap-title-input"
                     />
                 </div>
 
@@ -221,6 +223,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                 <CalciteButton
                     width="full"
                     label={t('open_wayback_map')}
+                    data-testid="open-wayback-webmap-button"
                     ref={(el) => {
                         if (el) {
                             // Focus after render
@@ -277,6 +280,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
         <div
             className={classnames('w-96 p-1')}
             style={{ '--calcite-button-text-color': '#fff' }}
+            data-testid="save-as-webmap-dialog-content"
         >
             {props.promptToSignIn && (
                 <p className="mb-4">
@@ -287,6 +291,7 @@ export const SaveAsWebmapDialog: React.FC<IProps> = (props) => {
                                 <button
                                     className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
                                     aria-label={t('sign_in')}
+                                    data-testid="sign-in-to-save-webmap-button"
                                     onClick={() => {
                                         if (props.signInButtonOnClick) {
                                             props.signInButtonOnClick();

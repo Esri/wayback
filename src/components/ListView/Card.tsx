@@ -164,6 +164,7 @@ export const ListViewCard: FC<Props> = ({
                             onClick={toggleSelect.bind(this, data.releaseNum)}
                             title={labelForToggleAddToWebmapBtn}
                             aria-label={labelForToggleAddToWebmapBtn}
+                            data-testid={`toggle-add-to-webmap-button-${data.releaseNum}`}
                         >
                             <CalciteIcon icon="arcgis-online" scale="m" />
                         </button>
