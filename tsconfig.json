@@ -3,7 +3,14 @@
         "allowSyntheticDefaultImports": true,
         "allowJs": false,
         "jsx": "react",
-        "module": "commonjs",
+        // Specify library type definitions to be included in the compilation.
+        // "lib": ["DOM", "DOM.Iterable", "ES2023"],
+        "lib": ["DOM", "DOM.Iterable", "ES2022"],
+        // The module system to use for compilation.
+        // Here, ES modules are targeted (ESNext) to enable top-level await and dynamic imports.
+        "module": "ES2022",
+        // Respects package.json's "exports" conditions.
+        "moduleResolution": "Bundler",
         "noImplicitAny": true,
         "outDir": "./build/",
         "preserveConstEnums": true,
@@ -12,7 +19,7 @@
         "target": "es5",
         "resolveJsonModule": true,
         "typeRoots": [ "./src/types", "./node_modules/@types"],
-        "lib": [ "es2020", "dom" ],
+        // "lib": [ "es2020", "dom" ],
         "paths": {
             "@components/*": ["./src/components/*"],
             "@constants/*": ["./src/constants/*"],
