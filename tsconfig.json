@@ -2,7 +2,10 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "allowJs": false,
-        "jsx": "react",
+        "jsx": "react-jsx",
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "forceConsistentCasingInFileNames": true,
         // Specify library type definitions to be included in the compilation.
         // "lib": ["DOM", "DOM.Iterable", "ES2023"],
         "lib": ["DOM", "DOM.Iterable", "ES2022"],
@@ -11,12 +14,13 @@
         "module": "ES2022",
         // Respects package.json's "exports" conditions.
         "moduleResolution": "Bundler",
+        "esModuleInterop": true,
         "noImplicitAny": true,
         "outDir": "./build/",
         "preserveConstEnums": true,
         "removeComments": true,
         "sourceMap": false,
-        "target": "es5",
+        "target": "es2020",
         "resolveJsonModule": true,
         "typeRoots": [ "./src/types", "./node_modules/@types"],
         // "lib": [ "es2020", "dom" ],
