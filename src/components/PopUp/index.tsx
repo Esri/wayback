@@ -126,6 +126,18 @@ const PopUp: FC<IProps> = ({
                 // this "data-testid" attribute will be used by the script that monitors the health of this app
                 data-testid="popup-content"
             >
+                <div className="close-btn text-white">
+                    <CalciteButton
+                        appearance="transparent"
+                        kind="neutral"
+                        scale="s"
+                        iconStart="x"
+                        label={t('closed_metadata_popup')}
+                        data-testid="popup-close-button"
+                        onClick={onClose}
+                    ></CalciteButton>
+                </div>
+
                 <div className="text-wrap">
                     <p className="mb-2">
                         {
@@ -168,17 +180,6 @@ const PopUp: FC<IProps> = ({
                         x: {queryLocation.longitude.toFixed(4)}
                         {'  '}y: {queryLocation.latitude.toFixed(4)}
                     </p>
-                </div>
-
-                <div className="close-btn text-white">
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        scale="s"
-                        iconStart="x"
-                        label={t('closed_metadata_popup')}
-                        onClick={onClose}
-                    ></CalciteButton>
                 </div>
             </div>
         </div>

@@ -1,5 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
-import { mockedMetadataQueryResponse } from './mockedResponse';
+import {
+    mockedMetadataQueryResponse,
+    mockedMetadataQueryResponse2014R1,
+} from './mockedResponse';
 
 /**
  * Mock the network requests for the Wayback app.
@@ -49,6 +52,22 @@ export const mockNetworkRequests = async (page: Page) => {
         '**/arcgis/rest/services/World_Imagery_Metadata_*/MapServer/*/query*',
         async (route) => {
             console.log('Mocked World Imagery Metadata query intercepted');
+
+            // check if the url contains 2014_r01, if so, return different mocked response
+            const url = route.request().url();
+            if (url.includes('World_Imagery_Metadata_2014_r01')) {
+                console.log(
+                    'Using mockedMetadataQueryResponse2014R1 for 2014_r01'
+                );
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockedMetadataQueryResponse2014R1),
+                });
+            }
+
+            console.log('Using default mockedMetadataQueryResponse');
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',

@@ -162,3 +162,20 @@ npx playwright test e2e-tests/tests/map-popup.spec.ts --config e2e-tests/playwri
 ```
 
 ### Test Details
+The `map-popup.spec.ts` file contains tests that verify the functionality of the Map Popup in the Wayback App. These tests include:
+
+1. **Map Popup Visibility and Content Verification**
+    - Navigates to the Explorer Mode.
+    - Ensures the map view container is visible.
+    - Clicks on the map to trigger a popup.
+    - Verifies the popup appears with correct content including provider, source description, acquisition date, sampling resolution, and source accuracy.
+    - Confirms the "Close" button is visible and functional.
+    - Verifies the popup is hidden after clicking the "Close" button.
+
+2. **Popup in Switch Mode**
+    - Navigates to the Swipe Mode page.
+    - Ensures the map view container is visible.
+    - Clicks on the left side of the swipe map to open a popup.
+    - Verifies the popup displays with expected content for the left side layer.
+    - Clicks on the right side of the swipe map to open a popup.
+    - Verifies the popup displays with different expected content for the right side layer.
