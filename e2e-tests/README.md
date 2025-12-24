@@ -12,6 +12,11 @@ E2E_TEST_ARCGIS_ONLINE_USERNAME = your_username_here
 # Required: ArcGIS Online password for E2E tests
 E2E_TEST_ARCGIS_ONLINE_PASSWORD = your_password_here
 
+# Required: Specifies the target tier for E2E tests
+# It determines which npm script to use to start the development server (e.g., `npm run start:dev` or `npm run start:prod`).
+# Values: dev | prod
+E2E_TEST_TARGET_TIER = dev
+
 # OPtional: Specify the hostname used by the Webpack development server.
 # This value is utilized in end-to-end tests to connect to the development server.
 # Ensure it matches the dev server host configuration in `webpack.config.js`.

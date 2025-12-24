@@ -20,6 +20,7 @@ const requiredEnvVars = [
     'E2E_TEST_ARCGIS_ONLINE_USERNAME',
     'E2E_TEST_ARCGIS_ONLINE_PASSWORD',
     'WEBPACK_DEV_SERVER_HOSTNAME',
+    'E2E_TEST_TARGET_TIER',
 ];
 for (const varName of requiredEnvVars) {
     if (!process.env[varName]) {
@@ -37,6 +38,14 @@ export const DEV_SERVER_URL = process.env.WEBPACK_DEV_SERVER_HOSTNAME
     ? `https://${process.env.WEBPACK_DEV_SERVER_HOSTNAME}:8080`
     : 'http://localhost:8080'; // Default to localhost if not set
 // console.log(`Using DEV_SERVER_URL: ${DEV_SERVER_URL}`);
+
+// Determine the target tier for E2E tests: 'dev' or 'prod'
+const TARGET_TIER = process.env.E2E_TEST_TARGET_TIER || 'dev';
+console.log(`E2E tests will run against the '${TARGET_TIER}' tier.`);
+
+// Determine the web server command based on the target tier
+const DEV_SERVER_START_COMMAND =
+    TARGET_TIER === 'prod' ? 'npm run start:prod' : 'npm run start:dev';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -109,7 +118,7 @@ export default defineConfig({
     //   reuseExistingServer: !process.env.CI,
     // },
     webServer: {
-        command: 'npm run start:dev',
+        command: DEV_SERVER_START_COMMAND,
         url: DEV_SERVER_URL,
         reuseExistingServer: !process.env.CI,
         ignoreHTTPSErrors: true,
