@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import { mockedMetadataQueryResponse } from './mockedResponse';
 
 /**
  * Mock the network requests for the Wayback app.
@@ -42,6 +43,19 @@ export const mockNetworkRequests = async (page: Page) => {
             });
         }
     );
+
+    // Mocked response for World Imagery Metadata query
+    await page.route(
+        '**/arcgis/rest/services/World_Imagery_Metadata_*/MapServer/*/query*',
+        async (route) => {
+            console.log('Mocked World Imagery Metadata query intercepted');
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockedMetadataQueryResponse),
+            });
+        }
+    );
 };
 
 /**
@@ -57,4 +71,7 @@ export const resetMockedNetworkRequest = async (page: Page) => {
     await page.unroute('https://mtags.arcgis.com/tags-min.js');
     await page.unroute('**/sharing/rest/content/users/*/addItem');
     await page.unroute('**/sharing/rest/content/users/*/items/*/update');
+    await page.unroute(
+        '**/arcgis/rest/services/World_Imagery_Metadata_*/MapServer/*/query*'
+    );
 };

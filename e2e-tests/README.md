@@ -152,3 +152,13 @@ The `save-as-webmap.spec.ts` file contains tests that verify the functionality o
     - Confirms the "Create Wayback Webmap" button creates the webmap successfully.
     - Verifies the "Open Wayback Map" button is visible after the webmap is created.
 
+## Test Map Popup
+
+### Running the Map Popup Tests
+To run only the tests related to the **Map Popup**, use:
+
+```sh   
+npx playwright test e2e-tests/tests/map-popup.spec.ts --config e2e-tests/playwright.config.ts --headed --workers=1
+```
+
+### Test Details

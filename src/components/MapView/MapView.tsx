@@ -93,6 +93,7 @@ const MapViewComponent: React.FC<Props> = ({
         setMapView(view);
 
         view.when(() => {
+            console.log('MapView initialized');
             initEventHandlers(view);
         });
     };
@@ -164,6 +165,7 @@ const MapViewComponent: React.FC<Props> = ({
                     width: '100%',
                     height: '100%',
                 }}
+                data-testid="map-view-container"
                 ref={mapDivRef}
             ></div>
 
