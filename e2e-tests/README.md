@@ -179,3 +179,11 @@ The `map-popup.spec.ts` file contains tests that verify the functionality of the
     - Verifies the popup displays with expected content for the left side layer.
     - Clicks on the right side of the swipe map to open a popup.
     - Verifies the popup displays with different expected content for the right side layer.
+
+## Test Updates Mode
+### Running the Updates Mode Tests
+To run only the tests related to the **Updates** mode, use:
+
+```sh
+npx playwright test e2e-tests/tests/updates-mode.spec.ts --config e2e-tests/playwright.config.ts --headed --workers=1
+``` 

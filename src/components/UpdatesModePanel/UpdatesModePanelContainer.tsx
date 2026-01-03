@@ -43,6 +43,7 @@ export const UpdatesPanelContainer = () => {
                 className={classNames({
                     disabled: disabled,
                 })}
+                data-testid="updates-mode-filters-container"
             >
                 <CategoryFilter disabled={disabled} />
                 <StatusFilter disabled={disabled} />

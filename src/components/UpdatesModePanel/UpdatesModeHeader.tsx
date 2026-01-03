@@ -30,7 +30,7 @@ export const UpdatesModeHeader: FC<UpdatesModeHeaderProps> = ({
     return (
         <div className="text-white font-light text-sm mb-2">
             {showSignInPrompt || showSignInWithOrgAccountPrompt ? (
-                <p className="">
+                <p data-testid="updates-mode-sign-in-prompt">
                     {/* {t('sign_in_prompt_updates_mode')} */}
 
                     <Trans
@@ -42,6 +42,7 @@ export const UpdatesModeHeader: FC<UpdatesModeHeaderProps> = ({
                         components={{
                             action: (
                                 <button
+                                    data-testid="updates-mode-sign-in-button"
                                     className={SignInLinkClassName}
                                     onClick={() => {
                                         if (signInButtonOnClick) {
