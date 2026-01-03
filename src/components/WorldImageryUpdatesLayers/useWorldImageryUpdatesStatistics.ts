@@ -36,12 +36,19 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 export const useWorldImageryUpdatesStatistics = (
     worldImageryUpdatesLayerRef: React.RefObject<FeatureLayer>,
     layerURL: string,
-    whereClause: string
+    whereClause: string,
+    isVisible: boolean
 ) => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        // skip if the layer reference is not available
         if (!worldImageryUpdatesLayerRef.current) {
+            return;
+        }
+
+        // Skip querying if the layer is not visible
+        if (!isVisible) {
             return;
         }
 
@@ -112,5 +119,5 @@ export const useWorldImageryUpdatesStatistics = (
             .catch((error) => {
                 console.error('Error querying features:', error);
             });
-    }, [whereClause, layerURL]);
+    }, [whereClause, layerURL, isVisible]);
 };

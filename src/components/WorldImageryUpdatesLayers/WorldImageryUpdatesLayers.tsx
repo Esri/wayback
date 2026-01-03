@@ -149,7 +149,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     useWorldImageryUpdatesStatistics(
         worldImageryUpdatesLayerRef,
         layerURL,
-        whereClause
+        whereClause,
+        isVisible
     );
 
     useZoomToSelectedRegion(
