@@ -33,7 +33,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vannizhang/wayback.git"
+        "url": "git+https://github.com/wayback/wayback.git"
     },
     "keywords": [
         "Wayback",
@@ -44,7 +44,7 @@
     "author": "ArcGIS Living Atlas of the World",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/vannizhang/wayback/issues"
+        "url": "https://github.com/esri/wayback/issues"
     },
     "homepage": "https://livingatlas.arcgis.com/wayback/",
     "devDependencies": {
