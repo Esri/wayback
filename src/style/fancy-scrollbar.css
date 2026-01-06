@@ -3,13 +3,13 @@
 }
 
 .fancy-scrollbar::-webkit-scrollbar-track {
-    background: rgba(100, 100, 100, .5); 
+    background: rgba(100, 100, 100, 0.5);
 }
 
 .fancy-scrollbar::-webkit-scrollbar-thumb {
-    background: #888; 
+    background: #888;
 }
 
 .fancy-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #666; 
+    background: #666;
 }

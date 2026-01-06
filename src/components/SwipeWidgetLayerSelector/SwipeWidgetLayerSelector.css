@@ -1,5 +1,5 @@
-.swipe-widget-layer-selector-item.is-selected:after{
-    content: "";
+.swipe-widget-layer-selector-item.is-selected:after {
+    content: '';
     position: absolute;
     left: 100%;
     top: 50%;
@@ -12,8 +12,8 @@
     margin-top: -12px;
 }
 
-.swipe-widget-layer-selector-item.is-selected.is-arrow-on-left:after{
-    content: "";
+.swipe-widget-layer-selector-item.is-selected.is-arrow-on-left:after {
+    content: '';
     position: absolute;
     left: -24px;
     top: 50%;

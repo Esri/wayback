@@ -1,4 +1,3 @@
-
 // Terminal output color for errors (red)
 const ERROR_TERMINAL_OUTPUT_COLOR = '\x1b[31m%s\x1b[0m';
 
@@ -13,5 +12,5 @@ const logErrorAndExit = (message) => {
 
 module.exports = {
     ERROR_TERMINAL_OUTPUT_COLOR,
-    logErrorAndExit
+    logErrorAndExit,
 };

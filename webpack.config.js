@@ -1,7 +1,7 @@
 const path = require('path');
 const package = require('./package.json');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -13,20 +13,13 @@ const validateEnv = require('./webpack/validateEnvironmentVariables');
 const loadEnvironmentVariables = require('./webpack/loadEnvironmentVariables');
 const getGlobalConstants = require('./webpack/getGlobalConstants');
 
-const {
-    title,
-    author,
-    keywords,
-    description,
-    homepage
-} = package;
+const { title, author, keywords, description, homepage } = package;
 
-module.exports = (env, options)=> {
-
+module.exports = (env, options) => {
     const devMode = options.mode === 'development' ? true : false;
 
     process.env.NODE_ENV = options.mode;
-    
+
     /**
      * Load the environment variables from the specified environment file.
      * The environment file name should be specified using `--env envFileName=.env.development` or `--env envFileName=.env.production`.
@@ -50,7 +43,7 @@ module.exports = (env, options)=> {
         devServer: {
             server: 'https',
             host: envConfig.WEBPACK_DEV_SERVER_HOSTNAME || 'localhost',
-            allowedHosts: "all"
+            allowedHosts: 'all',
         },
         entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
@@ -58,7 +51,7 @@ module.exports = (env, options)=> {
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].[contenthash].js',
             publicPath: '',
-            assetModuleFilename: `[name][contenthash][ext][query]`
+            assetModuleFilename: `[name][contenthash][ext][query]`,
         },
         devtool: devMode ? 'source-map' : false,
         resolve: {
@@ -79,33 +72,33 @@ module.exports = (env, options)=> {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
                 },
                 {
                     test: /\.html$/,
-                    use: [ 
+                    use: [
                         {
-                            loader: "html-loader",
-                            options: { 
-                                minimize: true
-                            }
-                        }
-                    ]
+                            loader: 'html-loader',
+                            options: {
+                                minimize: true,
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.css$/i,
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
-                            loader: "css-loader", 
+                            loader: 'css-loader',
                             options: {
-                                sourceMap: true
-                            }
+                                sourceMap: true,
+                            },
                         },
                         {
-                            loader: 'postcss-loader'
-                        }
-                    ]
+                            loader: 'postcss-loader',
+                        },
+                    ],
                 },
                 {
                     test: /\.(woff|woff2|ttf|eot)$/,
@@ -115,22 +108,22 @@ module.exports = (env, options)=> {
                     test: /\.(png|jpg|gif|svg)$/,
                     type: 'asset/resource',
                 },
-            ]
+            ],
         },
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
-                ...globalConstants
+                ...globalConstants,
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({
                 patterns: [
-                    { 
-                        from: "public/**/*", 
+                    {
+                        from: 'public/**/*',
                         globOptions: {
-                            ignore: ["**/index.html"],
+                            ignore: ['**/index.html'],
                         },
-                    }
+                    },
                 ],
             }),
             new HtmlWebPackPlugin({
@@ -143,36 +136,38 @@ module.exports = (env, options)=> {
                     title,
                     description,
                     author,
-                    keywords: Array.isArray(keywords) 
-                        ? package.keywords.join(',') 
+                    keywords: Array.isArray(keywords)
+                        ? package.keywords.join(',')
                         : undefined,
                     'og:title': title,
                     'og:description': description,
                     'og:url': homepage,
                     'og:image': `${homepage}/public/screenshot.jpg`,
-                    "last-modified": new Date().getTime().toString(),
+                    'last-modified': new Date().getTime().toString(),
                     'last-modified-readable': new Date().toLocaleString(),
                 },
                 minify: {
-                    html5                          : true,
-                    collapseWhitespace             : true,
-                    minifyCSS                      : true,
-                    minifyJS                       : true,
-                    minifyURLs                     : false,
-                    removeComments                 : true,
-                    removeEmptyAttributes          : true,
-                    removeOptionalTags             : true,
-                    removeRedundantAttributes      : true,
-                    removeScriptTypeAttributes     : true,
-                    removeStyleLinkTypeAttributese : true,
-                    useShortDoctype                : true
-                }
+                    html5: true,
+                    collapseWhitespace: true,
+                    minifyCSS: true,
+                    minifyJS: true,
+                    minifyURLs: false,
+                    removeComments: true,
+                    removeEmptyAttributes: true,
+                    removeOptionalTags: true,
+                    removeRedundantAttributes: true,
+                    removeScriptTypeAttributes: true,
+                    removeStyleLinkTypeAttributese: true,
+                    useShortDoctype: true,
+                },
             }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
-                chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: devMode
+                    ? '[name].css'
+                    : '[name].[contenthash].css',
             }),
             // new CleanWebpackPlugin()
         ].filter(Boolean),
@@ -197,12 +192,11 @@ module.exports = (env, options)=> {
                     terserOptions: {
                         compress: {
                             drop_console: true,
-                        }
-                    }
-                }), 
-                new CssMinimizerPlugin()
-            ]
-        }
-    }
-
+                        },
+                    },
+                }),
+                new CssMinimizerPlugin(),
+            ],
+        },
+    };
 };

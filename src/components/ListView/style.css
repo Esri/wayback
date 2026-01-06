@@ -44,8 +44,7 @@
 }
 
 .list-view-container .list-card.is-active a
-/* .list-view-container .list-card.is-active .open-item-btn  */
-{
+/* .list-view-container .list-card.is-active .open-item-btn  */ {
     text-decoration: none;
     color: #fff;
 }
@@ -60,7 +59,7 @@
     left: 100%;
     top: 50%;
     border: solid transparent;
-    content: "";
+    content: '';
     height: 0;
     width: 0;
     pointer-events: none;

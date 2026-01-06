@@ -13,15 +13,15 @@
     --gutter-bgColor: #444444;
     --default-ui-bgColor: #121212;
 
-    --color-inactive-item: rgba(76,76,76, .6);
-    --color-active-item: #2267AE;
+    --color-inactive-item: rgba(76, 76, 76, 0.6);
+    --color-active-item: #2267ae;
     --color-highlight-item: #fff;
     --color-highlight-item-hover: #56a5d8;
-    --color-hover-item: #1A3D60;
+    --color-hover-item: #1a3d60;
 
     --theme-brand: #0079c1;
     --theme-blue-light: #56a5d8;
 
-    --theme-blue-dark:#1A3D60;
+    --theme-blue-dark: #1a3d60;
     --popup-background: rgba(44, 103, 172, 0.9);
 }

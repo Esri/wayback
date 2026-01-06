@@ -1,4 +1,5 @@
 # World Imagery Wayback App
+
 The World Imagery Wayback app provides an interactive experience for exploring historical versions of the World Imagery basemap. Users can browse versions directly on the map, along a timeline, or in a list view. Versions that include local updates are dynamically highlighted based on the user’s location and map scale.
 
 [View it live](https://livingatlas.arcgis.com/wayback/)
@@ -12,12 +13,15 @@ If you want to use the World Imagery Wayback service in your application without
 ## Prerequisites
 
 ### Clone the repository
+
 To run this application locally, you need to clone the repository, it is recommended to fork it first, then clone your forked repository to your local machine.
 
 ### Node.js and NPM
+
 Ensure you have Node.js and NPM installed on your machine. You can download them from the [Node.js website](https://nodejs.org/en/). The current Long Term Support (LTS) release is recommended for this project.
 
 ### Environment Variables
+
 Before running the application, ensure you have a `.env` file in the root directory of the project. You can create this file by copying the provided [`.env.template`](./.env.template) file.
 
 In the `.env` file, you must specify the `APP_ID`, which is required for authenticating with ArcGIS services. Follow the [How to implement user authentication](https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/how-to-implement-user-authentication/) guide to obtain your OAuth App ID.
@@ -61,6 +65,7 @@ npm run build
 ```
 
 ## Resources
+
 - [Wayback - 81 Flavors of World Imagery](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/wayback-81-flavors-of-world-imagery/)
 - [A Fresh Look for Wayback](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/a-fresh-look-for-wayback/)
 - [World Imagery Wayback Export](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/imagery/wayback-export/)
@@ -70,7 +75,7 @@ npm run build
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by submitting an issue.
+Find a bug or want to request a new feature? Please let us know by submitting an issue.
 
 ## Contributing
 
@@ -80,7 +85,7 @@ Esri welcomes contributions from anyone and everyone. Please see our [guidelines
 
 ### The Imagery
 
-The imagery presented in the Wayback app is subject to the terms and conditions set forth in the Esri Master Agreement or Terms of Use.  See [World Imagery](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9) for additional details on the imagery content and applicable Terms of Use.
+The imagery presented in the Wayback app is subject to the terms and conditions set forth in the Esri Master Agreement or Terms of Use. See [World Imagery](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9) for additional details on the imagery content and applicable Terms of Use.
 
 ### The Software
 
@@ -90,7 +95,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

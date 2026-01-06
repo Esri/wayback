@@ -3,6 +3,7 @@
 End-to-end tests for the Wayback App ensure the functionality and reliability of key features.
 
 ## Prerequisites
+
 Update the `.env.e2e` file in project root with these variables.
 
 ```sh
@@ -25,6 +26,7 @@ WEBPACK_DEV_SERVER_HOSTNAME = custom.hostname.here
 ```
 
 ## Running the Tests
+
 To run the end-to-end tests, use the following command:
 
 ```sh
@@ -46,6 +48,7 @@ npx playwright test e2e-tests/tests/{file-name} --config e2e-tests/playwright.co
 ## Test Explore Mode
 
 ### Running the Explore Tests
+
 To run only the tests related to the **Explore** mode, use:
 
 ```sh
@@ -53,6 +56,7 @@ npx playwright test e2e-tests/tests/explore.spec.ts --config e2e-tests/playwrigh
 ```
 
 ### Test Details
+
 The `explore.spec.ts` file contains tests that verify the functionality of the "Explore" mode in the Wayback App. These tests include:
 
 1. **Explorer Mode Button Verification**
@@ -79,6 +83,7 @@ The `explore.spec.ts` file contains tests that verify the functionality of the "
 ## Test User Profile Dialog
 
 ### Running the User Profile Dialog Tests
+
 To run only the tests related to the **User Profile Dialog**, use:
 
 ```sh
@@ -86,6 +91,7 @@ npx playwright test e2e-tests/tests/user-profile.spec.ts --config e2e-tests/play
 ```
 
 ### Test Details
+
 The `user-profile.spec.ts` file contains tests that verify the functionality of the User Profile Dialog in the Wayback App. These tests include:
 
 1. **User Profile Button Visibility and Click**
@@ -116,6 +122,7 @@ The `user-profile.spec.ts` file contains tests that verify the functionality of 
 ## Test Save as Webmap Functionalities
 
 ### Running the Save as Webmap Tests
+
 To run only the tests related to the **Save as Webmap** functionalities, use:
 
 ```sh
@@ -123,6 +130,7 @@ npx playwright test e2e-tests/tests/save-as-webmap.spec.ts --config e2e-tests/pl
 ```
 
 ### Test Details
+
 The `save-as-webmap.spec.ts` file contains tests that verify the functionality of the "Save as Webmap" feature in the Wayback App. These tests include:
 
 1. **Save as Webmap Button Initial State**
@@ -155,13 +163,15 @@ The `save-as-webmap.spec.ts` file contains tests that verify the functionality o
 ## Test Map Popup
 
 ### Running the Map Popup Tests
+
 To run only the tests related to the **Map Popup**, use:
 
-```sh   
+```sh
 npx playwright test e2e-tests/tests/map-popup.spec.ts --config e2e-tests/playwright.config.ts --headed --workers=1
 ```
 
 ### Test Details
+
 The `map-popup.spec.ts` file contains tests that verify the functionality of the Map Popup in the Wayback App. These tests include:
 
 1. **Map Popup Visibility and Content Verification**
@@ -181,9 +191,11 @@ The `map-popup.spec.ts` file contains tests that verify the functionality of the
     - Verifies the popup displays with different expected content for the right side layer.
 
 ## Test Updates Mode
+
 ### Running the Updates Mode Tests
+
 To run only the tests related to the **Updates** mode, use:
 
 ```sh
 npx playwright test e2e-tests/tests/updates-mode.spec.ts --config e2e-tests/playwright.config.ts --headed --workers=1
-``` 
+```

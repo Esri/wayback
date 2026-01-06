@@ -1,5 +1,5 @@
-.layer-selector.is-selected:after{
-    content: "";
+.layer-selector.is-selected:after {
+    content: '';
     position: absolute;
     left: 100%;
     top: 50%;
@@ -12,8 +12,8 @@
     margin-top: -12px;
 }
 
-.layer-selector.is-selected.is-arrow-on-left:after{
-    content: "";
+.layer-selector.is-selected.is-arrow-on-left:after {
+    content: '';
     position: absolute;
     left: -24px;
     top: 50%;
