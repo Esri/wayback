@@ -15,7 +15,7 @@
     "build:dev": "webpack --mode production --env envFileName=.env.development",
     "build:prod": "webpack --mode production --env envFileName=.env.production",
     "lint": "eslint src --ext .tsx,.ts --cache --fix",
-    "format": "prettier --write src/**/*.{ts,tsx,json}",
+    "format": "prettier --write \"**/*.{ts,tsx,json,js,md,css}\"",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -26,6 +26,9 @@
     ],
     "e2e-tests/**/*.{ts,tsx,json}": [
       "prettier --write"
+    ],
+    "public/**/*.{json,html}": [
+        "prettier --write"
     ]
   },
   "repository": {

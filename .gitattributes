@@ -1,0 +1,3 @@
+# Ensures all files use Unix-style line endings (LF) instead of Windows-style (CRLF)
+# across all platforms, maintaining consistency in version control
+* text eol=lf
