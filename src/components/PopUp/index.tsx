@@ -29,6 +29,7 @@ import {
     CalciteLoader,
 } from '@esri/calcite-components-react';
 import { Trans, useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 interface IProps {
     /**
@@ -68,11 +69,13 @@ const PopUp: FC<IProps> = ({
 
         const metadataDate = new Date(date);
 
-        const year = metadataDate.getFullYear();
-        const month = dateFns.getMonthName(metadataDate.getMonth(), true);
-        const day = metadataDate.getDate();
+        // const year = metadataDate.getFullYear();
+        // const month = dateFns.getMonthName(metadataDate.getMonth(), true);
+        // const day = metadataDate.getDate();
 
-        return `${month} ${day}, ${year}`;
+        // return `${month} ${day}, ${year}`;
+
+        return format(metadataDate, 'yyyy-MM-dd');
     }, [date]);
 
     const containerStyle = useMemo(() => {
