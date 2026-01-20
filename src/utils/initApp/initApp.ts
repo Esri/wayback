@@ -7,7 +7,7 @@ import { loadAdobeAnalytics } from './loadAdobeAnalytics';
 import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 import { initLogger } from '@utils/IndexedDBLogger';
 import { initEsriOAuth } from '@utils/Esri-OAuth';
-import { getCustomPortalUrl } from '@utils/LocalStorage';
+// import { getCustomPortalUrl } from '@utils/LocalStorage';
 import { setCustomWaybackConfig } from '@esri/wayback-core';
 
 type InitAppParams = {
@@ -63,7 +63,7 @@ export const initApp = async ({
     if (appId) {
         await initEsriOAuth({
             appId,
-            portalUrl: getCustomPortalUrl() || ARCGIS_PROTAL_ROOT,
+            portalUrl: ARCGIS_PROTAL_ROOT,
         });
     } else {
         // console.warn(

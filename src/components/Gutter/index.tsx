@@ -56,7 +56,7 @@ export const Gutter: FC<IProps> = ({
                     </button>
                 </div>
 
-                <div
+                {/* <div
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'setting',
@@ -71,7 +71,7 @@ export const Gutter: FC<IProps> = ({
                     >
                         <CalciteIcon icon="gear" scale="l" />
                     </button>
-                </div>
+                </div> */}
 
                 {/* <div
                     className="gutter-nav-btn mb-0"

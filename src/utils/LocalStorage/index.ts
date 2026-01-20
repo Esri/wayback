@@ -15,7 +15,7 @@
 
 import { ReferenceLayerLanguage } from '@constants/map';
 import { DownloadJob } from '@store/DownloadMode/reducer';
-import { MapCenter } from '@store/Map/reducer';
+// import { MapCenter } from '@store/Map/reducer';
 
 enum KEYS {
     // defaultExtent = 'WaybackAppDefaultExtent',
@@ -40,74 +40,74 @@ const removeItem = (key: KEYS) => {
     localStorage.removeItem(key);
 };
 
-const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
-    if (!center || zoom === undefined) {
-        console.error('default location is missing');
-        return;
-    }
+// const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
+//     if (!center || zoom === undefined) {
+//         console.error('default location is missing');
+//         return;
+//     }
 
-    if (center.lat === undefined || center.lon === undefined) {
-        console.error('default location is missing lat or lon');
-        return;
-    }
+//     if (center.lat === undefined || center.lon === undefined) {
+//         console.error('default location is missing lat or lon');
+//         return;
+//     }
 
-    const location = [center.lon, center.lat, zoom].join(',');
+//     const location = [center.lon, center.lat, zoom].join(',');
 
-    setItem(KEYS.defaultLocation, JSON.stringify(location));
-};
+//     setItem(KEYS.defaultLocation, JSON.stringify(location));
+// };
 
-const getDefaultMapLocation = (): {
-    center: MapCenter;
-    zoom: number;
-} | null => {
-    const defaultLocation = getItem(KEYS.defaultLocation);
+// const getDefaultMapLocation = (): {
+//     center: MapCenter;
+//     zoom: number;
+// } | null => {
+//     const defaultLocation = getItem(KEYS.defaultLocation);
 
-    if (!defaultLocation) {
-        return null;
-    }
+//     if (!defaultLocation) {
+//         return null;
+//     }
 
-    const locParts = JSON.parse(defaultLocation).split(',');
+//     const locParts = JSON.parse(defaultLocation).split(',');
 
-    if (
-        locParts.length === 3 &&
-        !isNaN(parseFloat(locParts[0])) &&
-        !isNaN(parseFloat(locParts[1])) &&
-        !isNaN(parseInt(locParts[2], 10))
-    ) {
-        return {
-            center: {
-                lon: parseFloat(locParts[0]),
-                lat: parseFloat(locParts[1]),
-            },
-            zoom: parseInt(locParts[2], 10),
-        };
-    }
-    return null;
-};
+//     if (
+//         locParts.length === 3 &&
+//         !isNaN(parseFloat(locParts[0])) &&
+//         !isNaN(parseFloat(locParts[1])) &&
+//         !isNaN(parseInt(locParts[2], 10))
+//     ) {
+//         return {
+//             center: {
+//                 lon: parseFloat(locParts[0]),
+//                 lat: parseFloat(locParts[1]),
+//             },
+//             zoom: parseInt(locParts[2], 10),
+//         };
+//     }
+//     return null;
+// };
 
-const setShouldOpenSaveWebMapDialog = () => {
-    setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
-};
+// const setShouldOpenSaveWebMapDialog = () => {
+//     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
+// };
 
-const getCustomPortalUrl = () => {
-    return getItem(KEYS.customPortalUrl);
-};
+// const getCustomPortalUrl = () => {
+//     return getItem(KEYS.customPortalUrl);
+// };
 
-const setCustomPortalUrl = (portalUrl = '') => {
-    portalUrl
-        ? setItem(KEYS.customPortalUrl, portalUrl)
-        : removeItem(KEYS.customPortalUrl);
-};
+// const setCustomPortalUrl = (portalUrl = '') => {
+//     portalUrl
+//         ? setItem(KEYS.customPortalUrl, portalUrl)
+//         : removeItem(KEYS.customPortalUrl);
+// };
 
-const getShouldOpenSaveWebMapDialog = () => {
-    const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
+// const getShouldOpenSaveWebMapDialog = () => {
+//     const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
 
-    if (val) {
-        removeItem(KEYS.shouldOpenSaveWebMapDialog);
-    }
+//     if (val) {
+//         removeItem(KEYS.shouldOpenSaveWebMapDialog);
+//     }
 
-    return val === 'true' ? true : false;
-};
+//     return val === 'true' ? true : false;
+// };
 
 const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
     if (!jobs || !jobs.length) {
@@ -137,13 +137,26 @@ export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
     return val as ReferenceLayerLanguage;
 };
 
+/**
+ * Cleans up local storage by removing deprecated keys
+ */
+const cleanUpLocalStorage = () => {
+    // removeItem(KEYS.defaultExtent);
+    removeItem(KEYS.defaultLocation);
+    removeItem(KEYS.customPortalUrl);
+    removeItem(KEYS.shouldOpenSaveWebMapDialog);
+    removeItem(KEYS.hashParams);
+    removeItem(KEYS.showUpdatesWithLocalChanges);
+};
+cleanUpLocalStorage();
+
 export {
-    saveDefaultMapLocation,
-    getDefaultMapLocation,
-    getCustomPortalUrl,
-    setCustomPortalUrl,
-    setShouldOpenSaveWebMapDialog,
-    getShouldOpenSaveWebMapDialog,
+    // saveDefaultMapLocation,
+    // getDefaultMapLocation,
+    // getCustomPortalUrl,
+    // setCustomPortalUrl,
+    // setShouldOpenSaveWebMapDialog,
+    // getShouldOpenSaveWebMapDialog,
     saveDownloadJobs2LocalStorage,
     getDownloadJobsFromLocalStorage,
 };

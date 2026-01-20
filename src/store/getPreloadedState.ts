@@ -34,10 +34,10 @@ import {
 } from '@utils/urlParams';
 
 import {
-    getShouldOpenSaveWebMapDialog,
+    // getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
     getPreferredReferenceLayerLocale,
-    getDefaultMapLocation,
+    // getDefaultMapLocation,
 } from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
@@ -150,10 +150,10 @@ const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
     // first try to get the map center and zoom from the hash params
     let initialMapCenter = getMapCenterFromHashParams(hashParams);
 
-    // then try to get the default map location from the local storage
-    if (!initialMapCenter) {
-        initialMapCenter = getDefaultMapLocation();
-    }
+    // // then try to get the default map location from the local storage
+    // if (!initialMapCenter) {
+    //     initialMapCenter = getDefaultMapLocation();
+    // }
 
     // if the map center and mapExtent is not set in the hash params, we will use a random interesting place
     if (!initialMapCenter && !mapExtent) {

@@ -29,7 +29,7 @@ import {
     SearchWidget,
     SwipeWidget,
     SaveAsWebMapDialog,
-    SettingDialog,
+    // SettingDialog,
     SwipeWidgetLayerSelector,
     TilePreviewWindow,
     WaybackLayer,
@@ -97,7 +97,7 @@ const AppLayout: React.FC = () => {
 
             <SaveAsWebMapDialog />
 
-            <SettingDialog />
+            {/* <SettingDialog /> */}
 
             <DownloadDialog />
 
