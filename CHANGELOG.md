@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+- Added End-to-End tests for multiple features using Playwright.
+
+### Changed
+- Moved the strings from the React components to the i18next translation files for better internationalization support.
+- Removed the Settings Dialog and related codes.
+- Update TypeScript to version 5.9.3 and it's configuration.
+- Update @arcgis/core to version 4.34 and adjust CSS import path.
+
 ## 2025-10-28
 
 ### Changed
