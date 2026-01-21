@@ -36,7 +36,7 @@ import {
 import {
     // getShouldOpenSaveWebMapDialog,
     getDownloadJobsFromLocalStorage,
-    getPreferredReferenceLayerLocale,
+    // getPreferredReferenceLayerLocale,
     // getDefaultMapLocation,
 } from '@utils/LocalStorage';
 import {
@@ -182,7 +182,7 @@ const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
         mapExtent,
         center: initialMapCenter?.center,
         zoom: initialMapCenter?.zoom,
-        referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
+        // referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
     };
 
     return state;

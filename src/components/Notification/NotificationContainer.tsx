@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { NotificationSetReferenceLayerLocale } from './NotificationSetReferenceLayerLocale';
+// import { NotificationSetReferenceLayerLocale } from './NotificationSetReferenceLayerLocale';
 import {
     useNotificationMessage2Display,
     NotificationType,
@@ -16,10 +16,10 @@ export const NotificationContainer: FC = () => {
 
     return (
         <div className=" absolute bottom-0 md:bottom-6 z-10 w-full flex justify-center pointer-events-none">
-            {notification2Display ===
+            {/* {notification2Display ===
                 NotificationType.SET_REFERENCE_LAYER_LOCALE && (
                 <NotificationSetReferenceLayerLocale />
-            )}
+            )} */}
         </div>
     );
 };

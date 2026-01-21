@@ -17,22 +17,22 @@ import React, { useCallback, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    isAnimationModeOnSelector,
+    // isAnimationModeOnSelector,
     selectIsAnimationActive,
 } from '@store/AnimationMode/reducer';
 import {
-    isReferenceLayerSwitcherOpenToggled,
+    // isReferenceLayerSwitcherOpenToggled,
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
-    selectIsReferenceLayerSwitcherOpen,
+    // selectIsReferenceLayerSwitcherOpen,
 } from '@store/Map/reducer';
 // import { MobileHide } from '../MobileVisibility';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 import { IS_MOBILE } from '@constants/UI';
-import { LocaleSwitch } from './LocaleSwitch';
-import useOnClickOutside from '@hooks/useOnClickOutside';
-import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
+// import { LocaleSwitch } from './LocaleSwitch';
+// import useOnClickOutside from '@hooks/useOnClickOutside';
+// import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
 
 const ReferenceLayerToggleContainer = () => {
     const dispatch = useAppDispatch();
@@ -49,18 +49,18 @@ const ReferenceLayerToggleContainer = () => {
 
     // const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
 
-    const isLocaleSwitchOpen = useAppSelector(
-        selectIsReferenceLayerSwitcherOpen
-    );
+    // const isLocaleSwitchOpen = useAppSelector(
+    //     selectIsReferenceLayerSwitcherOpen
+    // );
 
     const isAnimationActive = useAppSelector(selectIsAnimationActive);
 
-    useOnClickOutside(containerRef, () => {
-        // setIsLocaleSwitchOpen(false);
-        dispatch(isReferenceLayerSwitcherOpenToggled(false));
-    });
+    // useOnClickOutside(containerRef, () => {
+    //     // setIsLocaleSwitchOpen(false);
+    //     dispatch(isReferenceLayerSwitcherOpenToggled(false));
+    // });
 
-    useSuggestReferenceLayerLocale();
+    // useSuggestReferenceLayerLocale();
 
     if (isAnimationActive || IS_MOBILE) {
         return null;
@@ -69,18 +69,18 @@ const ReferenceLayerToggleContainer = () => {
     return (
         <div
             ref={containerRef}
-            className="absolute top-[15px] right-[15px] h-[32px] w-[240px] bg-custom-background text-custom-foreground"
+            className="absolute top-[15px] right-[15px] h-[32px] min-w-[240px] bg-custom-background text-custom-foreground"
         >
             <ReferenceLayerToggle
                 isActive={isReferenceLayerVisible}
                 onClick={toggleReferenceLayer}
-                localeSwitchButtonOnClick={() => {
-                    // setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
-                    dispatch(isReferenceLayerSwitcherOpenToggled());
-                }}
+                // localeSwitchButtonOnClick={() => {
+                //     // setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                //     dispatch(isReferenceLayerSwitcherOpenToggled());
+                // }}
             />
 
-            {isLocaleSwitchOpen && <LocaleSwitch />}
+            {/* {isLocaleSwitchOpen && <LocaleSwitch />} */}
         </div>
     );
 };

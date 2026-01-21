@@ -122,20 +122,20 @@ const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
     return val ? JSON.parse(val) : [];
 };
 
-export const setPreferredReferenceLayerLocale = (
-    locale: ReferenceLayerLanguage
-) => {
-    if (locale) {
-        setItem(KEYS.referenceLayerLocale, locale);
-    } else {
-        removeItem(KEYS.referenceLayerLocale);
-    }
-};
+// export const setPreferredReferenceLayerLocale = (
+//     locale: ReferenceLayerLanguage
+// ) => {
+//     if (locale) {
+//         setItem(KEYS.referenceLayerLocale, locale);
+//     } else {
+//         removeItem(KEYS.referenceLayerLocale);
+//     }
+// };
 
-export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
-    const val = getItem(KEYS.referenceLayerLocale);
-    return val as ReferenceLayerLanguage;
-};
+// export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
+//     const val = getItem(KEYS.referenceLayerLocale);
+//     return val as ReferenceLayerLanguage;
+// };
 
 /**
  * Cleans up local storage by removing deprecated keys
@@ -147,6 +147,7 @@ const cleanUpLocalStorage = () => {
     removeItem(KEYS.shouldOpenSaveWebMapDialog);
     removeItem(KEYS.hashParams);
     removeItem(KEYS.showUpdatesWithLocalChanges);
+    removeItem(KEYS.referenceLayerLocale);
 };
 cleanUpLocalStorage();
 

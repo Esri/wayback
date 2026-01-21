@@ -19,13 +19,13 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
     isActive: boolean;
     onClick: () => void;
-    localeSwitchButtonOnClick: () => void;
+    // localeSwitchButtonOnClick: () => void;
 }
 
 const ReferenceLayerToggle: React.FC<IProps> = ({
     isActive,
     onClick,
-    localeSwitchButtonOnClick,
+    // localeSwitchButtonOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -56,7 +56,7 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
     );
 
     return (
-        <div className="relative w-full h-full flex items-center justify-between ">
+        <div className="relative w-full h-full flex items-center justify-between">
             <div className="flex items-center ml-2">
                 <button
                     className="mx-2 cursor-pointer"
@@ -65,7 +65,9 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 >
                     {icon}
                 </button>
-                <div className=" text-sm">{t('reference_label_overlay')}</div>
+                <div className=" text-sm mr-2">
+                    {t('reference_label_overlay')}
+                </div>
             </div>
             {/* 
             <button
@@ -77,15 +79,14 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 <CalciteIcon icon="language" scale="s"></CalciteIcon>
             </button> */}
 
-            <CalciteButton
+            {/* <CalciteButton
                 appearance="transparent"
                 kind="neutral"
                 onClick={localeSwitchButtonOnClick}
                 label={t('choose_label_language')}
                 iconStart="language"
             >
-                {/* <CalciteIcon icon="language" scale="s"></CalciteIcon> */}
-            </CalciteButton>
+            </CalciteButton> */}
         </div>
     );
 };

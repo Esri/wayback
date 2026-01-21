@@ -61,10 +61,10 @@ export type MapState = {
      * The locale of the reference layer that is suggested by the app
      */
     suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
-    /**
-     * if true, the reference layer switcher is open
-     */
-    isReferenceLayerSwitcherOpen: boolean;
+    // /**
+    //  * if true, the reference layer switcher is open
+    //  */
+    // isReferenceLayerSwitcherOpen: boolean;
 };
 
 export const initialMapState: MapState = {
@@ -78,7 +78,7 @@ export const initialMapState: MapState = {
     center: null,
     referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
     suggestedReferenceLayerLocale: null,
-    isReferenceLayerSwitcherOpen: false,
+    // isReferenceLayerSwitcherOpen: false,
 };
 
 const slice = createSlice({
@@ -122,32 +122,32 @@ const slice = createSlice({
         zoomUpdated: (state, action: PayloadAction<number>) => {
             state.zoom = action.payload;
         },
-        referenceLayerLocaleUpdated: (
-            state,
-            action: PayloadAction<ReferenceLayerLanguage>
-        ) => {
-            state.referenceLayerLocale = action.payload;
-        },
-        suggestedReferenceLayerLocaleUpdated: (
-            state,
-            action: PayloadAction<ReferenceLayerLanguage | null>
-        ) => {
-            state.suggestedReferenceLayerLocale = action.payload;
-        },
-        isReferenceLayerSwitcherOpenToggled: (
-            state,
-            action: PayloadAction<boolean>
-        ) => {
-            if (action.payload === undefined) {
-                state.isReferenceLayerSwitcherOpen =
-                    !state.isReferenceLayerSwitcherOpen;
-                return;
-            } else {
-                state.isReferenceLayerSwitcherOpen = action.payload;
-            }
+        // referenceLayerLocaleUpdated: (
+        //     state,
+        //     action: PayloadAction<ReferenceLayerLanguage>
+        // ) => {
+        //     state.referenceLayerLocale = action.payload;
+        // },
+        // suggestedReferenceLayerLocaleUpdated: (
+        //     state,
+        //     action: PayloadAction<ReferenceLayerLanguage | null>
+        // ) => {
+        //     state.suggestedReferenceLayerLocale = action.payload;
+        // },
+        // isReferenceLayerSwitcherOpenToggled: (
+        //     state,
+        //     action: PayloadAction<boolean>
+        // ) => {
+        //     if (action.payload === undefined) {
+        //         state.isReferenceLayerSwitcherOpen =
+        //             !state.isReferenceLayerSwitcherOpen;
+        //         return;
+        //     } else {
+        //         state.isReferenceLayerSwitcherOpen = action.payload;
+        //     }
 
-            // state.isReferenceLayerSwitcherOpen = action.payload;
-        },
+        //     // state.isReferenceLayerSwitcherOpen = action.payload;
+        // },
     },
 });
 
@@ -162,9 +162,9 @@ export const {
     isQueryingMetadataToggled,
     mapCenterUpdated,
     zoomUpdated,
-    referenceLayerLocaleUpdated,
-    suggestedReferenceLayerLocaleUpdated,
-    isReferenceLayerSwitcherOpenToggled,
+    // referenceLayerLocaleUpdated,
+    // suggestedReferenceLayerLocaleUpdated,
+    // isReferenceLayerSwitcherOpenToggled,
 } = slice.actions;
 
 export const selectMapMode = (state: RootState) => state.Map.mode;
@@ -185,14 +185,14 @@ export const metadataPopupAnchorSelector = (state: RootState) =>
 
 export const selectMapCenter = (state: RootState) => state.Map.center;
 
-export const selectReferenceLayerLocale = (state: RootState) =>
-    state.Map.referenceLayerLocale;
+// export const selectReferenceLayerLocale = (state: RootState) =>
+//     state.Map.referenceLayerLocale;
 
-export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
-    state.Map.suggestedReferenceLayerLocale;
+// export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
+//     state.Map.suggestedReferenceLayerLocale;
 
-export const selectIsReferenceLayerSwitcherOpen = (state: RootState) =>
-    state.Map.isReferenceLayerSwitcherOpen;
+// export const selectIsReferenceLayerSwitcherOpen = (state: RootState) =>
+//     state.Map.isReferenceLayerSwitcherOpen;
 
 /**
  * Select center and zoom of the map
