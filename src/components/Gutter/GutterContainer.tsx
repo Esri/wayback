@@ -38,6 +38,7 @@ import { SwipeModeToggleBtnContainerButton } from './SwipeModeToggleButton';
 import { AnimationModeToggleButton } from './AnimationModeToggleButton';
 import { DownloadTilePackageDialogToggleButton } from './DownloadTilePackageDialogToggleButton';
 import { SaveWebmapDialogToggleButton } from './SaveDialogToggleButton';
+import { LocaleSwitcherToggleButton } from '@components/LocaleSwitcher';
 
 type Props = {
     children?: React.ReactNode;
@@ -102,6 +103,8 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
             {/* only show user avatar when the height is sufficient */}
             <div className="absolute bottom-0 left-0 w-full hidden [@media(min-height:450px)]:block">
+                <LocaleSwitcherToggleButton />
+
                 <AccountAvatar />
             </div>
         </Gutter>

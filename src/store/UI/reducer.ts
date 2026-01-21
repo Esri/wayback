@@ -45,6 +45,10 @@ export type UIState = {
      * does not change during the app session.
      */
     appLanguage: string;
+    /**
+     * Whether the locale switcher is open or not
+     */
+    isLocaleSwitcherOpen: boolean;
 };
 
 export const initialUIState = {
@@ -59,6 +63,7 @@ export const initialUIState = {
     isUserProfileCardOpen: false,
     activeDialog: null,
     appLanguage: 'en',
+    isLocaleSwitcherOpen: false,
 } as UIState;
 
 const slice = createSlice({
@@ -121,6 +126,9 @@ const slice = createSlice({
         ) => {
             state.activeDialog = action.payload;
         },
+        loacleSwitcherToggled: (state) => {
+            state.isLocaleSwitcherOpen = !state.isLocaleSwitcherOpen;
+        },
     },
 });
 
@@ -138,6 +146,7 @@ export const {
     userProfileCardOpenToggled,
     activeDialogUpdated,
     isDownloadDialogOpenToggled,
+    loacleSwitcherToggled,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
@@ -172,5 +181,8 @@ export const isUserProfileCardOpenSelector = (state: RootState) =>
 export const selectAppLanguage = (state: RootState) => state.UI.appLanguage;
 
 export const activeDialogSelector = (state: RootState) => state.UI.activeDialog;
+
+export const selectIsLocaleSwitcherOpen = (state: RootState) =>
+    state.UI.isLocaleSwitcherOpen;
 
 export default reducer;

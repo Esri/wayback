@@ -47,6 +47,7 @@ import { AppHeader } from '@components/AppHeader';
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
 import { ProfileCard } from '@components/UserAccount';
+import { LocaleSwitcherDialog } from '@components/LocaleSwitcher';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -102,6 +103,8 @@ const AppLayout: React.FC = () => {
             <DownloadDialog />
 
             <ProfileCard />
+
+            <LocaleSwitcherDialog />
 
             <AboutThisApp />
 

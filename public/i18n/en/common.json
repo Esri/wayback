@@ -144,5 +144,7 @@
     "save": "Save",
     "left_selection": "Left Selection",
     "right_selection": "Right Selection",
-    "search_region": "Search region"
+    "search_region": "Search region",
+    "switch_language": "Switch Language",
+    "chhoose_language": "Choose Language"
 }
