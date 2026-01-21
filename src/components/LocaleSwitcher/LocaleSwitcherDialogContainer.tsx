@@ -13,7 +13,7 @@ export const LocaleSwitcherDialogContainer = () => {
 
     const isLoacleSwitcherOpen = useAppSelector(selectIsLocaleSwitcherOpen);
 
-    const selectedLocale = useAppSelector(selectAppLanguage);
+    const appLanguage = useAppSelector(selectAppLanguage);
 
     const LocaleOption = useLocaleOptions();
 
@@ -25,8 +25,8 @@ export const LocaleSwitcherDialogContainer = () => {
         <div className="fixed left-gutter-width bottom-12 z-50 pl-2">
             <LocaleSwitcherDialog
                 data={LocaleOption}
-                selectedLocale={selectedLocale}
-                setSelectedLocale={(locale: string) => {
+                appLanguage={appLanguage}
+                appLanguageOnChange={(locale: string) => {
                     console.log('Locale selected:', locale);
                     // dispatch action to change locale
                     // dispatch(
