@@ -7,6 +7,7 @@ import {
 import React from 'react';
 import { LocaleSwitcherDialog } from './LocaleSwitcherDialog';
 import { useLocaleOptions } from './useLocaleOptions';
+import { setPreferredLocale } from '@utils/i18n/getAppLanguage';
 
 export const LocaleSwitcherDialogContainer = () => {
     const dispatch = useAppDispatch();
@@ -22,16 +23,12 @@ export const LocaleSwitcherDialogContainer = () => {
     }
 
     return (
-        <div className="fixed left-gutter-width bottom-12 z-50 pl-2">
+        <div className="fixed left-gutter-width bottom-2 z-50 pl-2">
             <LocaleSwitcherDialog
                 data={LocaleOption}
                 appLanguage={appLanguage}
                 appLanguageOnChange={(locale: string) => {
-                    console.log('Locale selected:', locale);
-                    // dispatch action to change locale
-                    // dispatch(
-                    //     appLanguageChanged(locale)
-                    // )
+                    setPreferredLocale(locale);
                 }}
                 onClose={() => {
                     dispatch(loacleSwitcherToggled());
