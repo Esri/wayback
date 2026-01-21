@@ -55,18 +55,18 @@ export const LocaleSwitcherDialog: FC<Props> = ({
             className="w-72 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md py-2 px-3"
             data-testid="locale-switcher-dialog"
             style={{
-                '--calcite-color-text-inverse': 'var(--default-text-color)',
+                '--calcite-color-text-inverse': '#fff',
             }}
         >
             <div className="w-full p-1 flex items-center justify-between">
-                <h4>{t('choose_language')}</h4>
+                <h4 className="text-sm">{t('choose_language')}</h4>
 
                 <CalciteButton
                     data-testid="close-locale-switcher-dialog-button"
                     appearance="transparent"
                     kind="inverse"
                     iconStart="x"
-                    scale="s"
+                    // scale="s"
                     onClick={() => {
                         onClose();
                     }}
@@ -95,24 +95,23 @@ export const LocaleSwitcherDialog: FC<Props> = ({
                 })}
             </CalciteSelect>
 
-            <div className="mt-2 flex gap-2">
-                <div className="w-1/2">
-                    <CalciteButton
-                        scale={'s'}
-                        disabled={selectedLocale === appLanguage}
-                        appearance="outline"
-                        width="full"
-                        kind="inverse"
-                        label={t('switch_language')}
-                        onClick={() => {
-                            appLanguageOnChange(selectedLocale);
-                        }}
-                    >
-                        {t('switch_language')}
-                    </CalciteButton>
-                </div>
+            <div className="mt-2 flex justify-end">
+                <CalciteButton
+                    scale={'s'}
+                    disabled={selectedLocale === appLanguage}
+                    appearance="outline"
+                    width="full"
+                    kind="inverse"
+                    label={t('switch_language')}
+                    iconStart="language-translate"
+                    onClick={() => {
+                        appLanguageOnChange(selectedLocale);
+                    }}
+                >
+                    {t('switch_language')}
+                </CalciteButton>
 
-                <div className="w-1/2">
+                {/* <div className="w-1/2">
                     <CalciteButton
                         scale={'s'}
                         appearance="outline"
@@ -122,10 +121,11 @@ export const LocaleSwitcherDialog: FC<Props> = ({
                         onClick={() => {
                             onClose();
                         }}
+                        iconStart='x'
                     >
                         {t('cancel')}
                     </CalciteButton>
-                </div>
+                </div> */}
             </div>
         </div>
     );
