@@ -23,8 +23,8 @@ import MapView from '@arcgis/core/views/MapView';
 import { generateFrames } from './utils';
 import { useTranslation } from 'react-i18next';
 
-export const PREVIEW_WINDOW_WIDTH = 500;
-export const PREVIEW_WINDOW_HEIGHT = 300;
+export const PREVIEW_WINDOW_WIDTH = 800;
+export const PREVIEW_WINDOW_HEIGHT = 800 * 0.75; // 4:3 aspect ratio
 
 type Props = {
     mapView?: MapView;
@@ -53,6 +53,26 @@ const PreviewWindow: React.FC<Props> = ({
 
         return left;
     }, [mapView]);
+
+    const previewWindowSize = useMemo(() => {
+        if (!mapView) {
+            return { width: 0, height: 0 };
+        }
+
+        const mapViewWidth = mapView.width;
+        const mapViewHeight = mapView.height;
+
+        const maxWidth = Math.min(PREVIEW_WINDOW_WIDTH, mapViewWidth as number);
+        const maxHeight = Math.min(
+            PREVIEW_WINDOW_HEIGHT,
+            mapViewHeight as number
+        );
+
+        return {
+            width: maxWidth as number,
+            height: maxHeight as number,
+        };
+    }, [mapView?.width, mapView?.height]);
 
     const fetchPreviewWindowImage = async (releaseNum: number) => {
         const container = containerRef.current;
@@ -97,10 +117,10 @@ const PreviewWindow: React.FC<Props> = ({
             className="preview-window-container"
             ref={containerRef}
             style={{
-                top: `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`,
-                left: `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`,
-                width: `${PREVIEW_WINDOW_WIDTH}px`,
-                height: `${PREVIEW_WINDOW_HEIGHT}px`,
+                top: `calc(50% - ${previewWindowSize.height / 2}px)`,
+                left: `calc(50% - ${previewWindowSize.width / 2}px)`,
+                width: `${previewWindowSize.width}px`,
+                height: `${previewWindowSize.height}px`,
             }}
             data-testid="preview-window-container"
             data-release-num={previewWaybackItem?.releaseNum || ''}
