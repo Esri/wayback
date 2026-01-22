@@ -22,6 +22,8 @@ import MapView from '@arcgis/core/views/MapView';
 // import styled from 'styled-components';
 import { generateFrames } from './utils';
 import { useTranslation } from 'react-i18next';
+import { ca } from 'date-fns/locale';
+import { CalciteLoader } from '@esri/calcite-components-react';
 
 export const PREVIEW_WINDOW_WIDTH = 800;
 export const PREVIEW_WINDOW_HEIGHT = 800 * 0.75; // 4:3 aspect ratio
@@ -42,6 +44,10 @@ const PreviewWindow: React.FC<Props> = ({
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [imageUrl, setImageUrl] = useState<string>();
+
+    // indicate whether the preview window image is being fetched
+    const [isFetchingPreviewWindowImage, setIsFetchingPreviewWindowImage] =
+        useState<boolean>(false);
 
     // left position of map view container DIV relative to the window
     const mapViewContainerLeftPos = useMemo(() => {
@@ -82,21 +88,30 @@ const PreviewWindow: React.FC<Props> = ({
 
         const { offsetHeight, offsetWidth } = container;
 
-        const [image] = await generateFrames({
-            frameRect: {
-                // elemRect.left is the left position of the container DIV relative to map view container,
-                // therefore, we need to add the mapViewContainerLeft to it to get the
-                // left position of the container DIV relative to window
-                screenX: elemRect.left - mapViewContainerLeftPos,
-                screenY: elemRect.top,
-                width: offsetWidth,
-                height: offsetHeight,
-            },
-            mapView,
-            releaseNums: [releaseNum.toString()],
-        });
+        setIsFetchingPreviewWindowImage(true);
 
-        setImageUrl(image);
+        try {
+            const [image] = await generateFrames({
+                frameRect: {
+                    // elemRect.left is the left position of the container DIV relative to map view container,
+                    // therefore, we need to add the mapViewContainerLeft to it to get the
+                    // left position of the container DIV relative to window
+                    screenX: elemRect.left - mapViewContainerLeftPos,
+                    screenY: elemRect.top,
+                    width: offsetWidth,
+                    height: offsetHeight,
+                },
+                mapView,
+                releaseNums: [releaseNum.toString()],
+            });
+
+            setImageUrl(image);
+        } catch (error) {
+            console.error('Error generating preview window image:', error);
+            setImageUrl('');
+        } finally {
+            setIsFetchingPreviewWindowImage(false);
+        }
     };
 
     useEffect(() => {
@@ -127,14 +142,20 @@ const PreviewWindow: React.FC<Props> = ({
         >
             {imageUrl && <img src={imageUrl} />}
             <div className="preview-item-info">
-                <span
-                    style={{
-                        fontSize: '.95rem',
-                    }}
-                >
-                    <b>Wayback {previewWaybackItem.releaseDateLabel}</b>{' '}
-                    {t('preview')}
-                </span>
+                <div className="flex items-center gap-2">
+                    <span
+                        style={{
+                            fontSize: '.95rem',
+                        }}
+                    >
+                        <b>Wayback {previewWaybackItem.releaseDateLabel}</b>{' '}
+                        {t('preview')}
+                    </span>
+
+                    {isFetchingPreviewWindowImage && (
+                        <CalciteLoader inline={true} label="loading" />
+                    )}
+                </div>
             </div>
         </div>
     );
