@@ -72,8 +72,6 @@ const AppLayout: React.FC = () => {
 
                     <ReferenceLayer />
 
-                    <TilePreviewWindow />
-
                     <MetadataPopup />
 
                     <MetadataQueryTask />
@@ -91,6 +89,8 @@ const AppLayout: React.FC = () => {
                     <Notification />
 
                     <WorldImageryUpdatesLayers />
+
+                    <TilePreviewWindow />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
