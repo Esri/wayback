@@ -120,10 +120,10 @@ export const getSuggestedLocale = () => {
 
     // normalize and validate the browser locale
     // if it's not supported, an empty string will be returned
-    const lang = normalizeLocale(browserLocale, SUPPORTED_LOCALES);
+    const suggestedLocale = normalizeLocale(browserLocale, SUPPORTED_LOCALES);
 
     // return the suggested locale or default to 'en'
-    return lang || 'en';
+    return suggestedLocale || 'en';
 };
 
 /**
