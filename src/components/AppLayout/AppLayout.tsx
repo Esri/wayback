@@ -40,14 +40,17 @@ import {
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
-import { Notification } from '@components/Notification';
+// import { Notification } from '@components/Notification';
 
 import { AppHeader } from '@components/AppHeader';
 
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
 import { ProfileCard } from '@components/UserAccount';
-import { LocaleSwitcherDialog } from '@components/LocaleSwitcher';
+import {
+    LocaleSuggestion,
+    LocaleSwitcherDialog,
+} from '@components/LocaleSwitcher';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -86,7 +89,7 @@ const AppLayout: React.FC = () => {
 
                     <ZoomWidget />
 
-                    <Notification />
+                    {/* <Notification /> */}
 
                     <WorldImageryUpdatesLayers />
 
@@ -105,6 +108,8 @@ const AppLayout: React.FC = () => {
             <ProfileCard />
 
             <LocaleSwitcherDialog />
+
+            <LocaleSuggestion />
 
             <AboutThisApp />
 
