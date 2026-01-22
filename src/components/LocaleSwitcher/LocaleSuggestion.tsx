@@ -12,10 +12,6 @@ type LocaleSuggestionProps = {
      */
     suggestedLocale: string;
     /**
-     * The current application language code
-     */
-    appLanguage: string;
-    /**
      * Emits when the user accepts the locale switch suggestion
      * @returns
      */
@@ -66,7 +62,6 @@ const localeSwitcherStringsByLocale: LocaleSwitcherStringsByLocale = {
 
 export const LocaleSuggestion: FC<LocaleSuggestionProps> = ({
     suggestedLocale,
-    appLanguage,
     onAccept,
     onClose,
     onDisableSuggestion,

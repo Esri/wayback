@@ -55,7 +55,6 @@ export const LocaleSuggestionContainer = () => {
         <div className="hidden md:flex absolute bottom-6 left-gutter-sidebar-width right-0 pointer-events-none z-10 justify-center items-center">
             <LocaleSuggestion
                 suggestedLocale={suggestedLocale!}
-                appLanguage={appLanguage}
                 onClose={() => {
                     setShouHide(true);
                 }}
