@@ -140,8 +140,13 @@ const PreviewWindow: React.FC<Props> = ({
             data-testid="preview-window-container"
             data-release-num={previewWaybackItem?.releaseNum || ''}
         >
-            {imageUrl && <img src={imageUrl} />}
-            <div className="preview-item-info">
+            {imageUrl && (
+                <img
+                    src={imageUrl}
+                    className="absolute top-0 left-0 w-full h-full"
+                />
+            )}
+            <div className="absolute top-0 left-0 w-full px-2 py-1 text-white bg-custom-theme-blue bg-opacity-80">
                 <div className="flex items-center gap-2">
                     <span
                         style={{
