@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+- Add Locale Switcher dialog to allow users to change the app's language.
+- Add Locale Suggestion component to prompt users to switch to their browser's language if it matches a supported locale.
 - Added End-to-End tests for multiple features using Playwright.
 
 ### Changed
 - Moved the strings from the React components to the i18next translation files for better internationalization support.
+- Adjusted the size of the wayback preview window to be slightly bigger for better visibility.
 - Removed the Settings Dialog and related codes.
 - Update TypeScript to version 5.9.3 and it's configuration.
 - Update @arcgis/core to version 4.34 and adjust CSS import path.
