@@ -11,6 +11,57 @@ import { IFeature } from '@typings/index';
 const cachedResults: Map<string, string[]> = new Map();
 
 /**
+ * A helper function to query features with retry logic.
+ * It will attempt to fetch the features up to 3 times in case of failure.
+ * @param requestUrl - The URL to query features from.
+ * @returns A promise that resolves to an array of IFeature objects.
+ */
+const queryFeaturesWithRetries = async (
+    requestUrl: string
+): Promise<IFeature[]> => {
+    let attempts = 1;
+    const maxAttempts = 3;
+    const delayBetweenAttempts = 1000; // in milliseconds
+
+    const queryFeatures = async (): Promise<IFeature[]> => {
+        const response = await fetch(requestUrl);
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to fetch data from ${requestUrl}: ${response.statusText}`
+            );
+        }
+
+        const data = await response.json();
+
+        if (!data || data.error) {
+            throw new Error(data.error?.message || 'Unknown error');
+        }
+
+        return data?.features || [];
+    };
+
+    while (attempts <= maxAttempts) {
+        try {
+            const features = await queryFeatures();
+            return features;
+        } catch (error) {
+            if (attempts === maxAttempts) {
+                throw error;
+            }
+
+            attempts++;
+
+            // Wait before retrying
+            await new Promise((resolve) =>
+                setTimeout(resolve, delayBetweenAttempts * attempts)
+            );
+        }
+    }
+    return [];
+};
+
+/**
  * Fetches a list of distinct country names for a given imagery updates category.
  * The results are cached to optimize subsequent requests for the same category.
  *
@@ -52,21 +103,8 @@ export const getListOfCountries = async (
     });
 
     const url = `${serviceUrl}/query?${params.toString()}`;
-    const response = await fetch(url);
 
-    if (!response.ok) {
-        throw new Error(
-            `Failed to fetch data from ${url}: ${response.statusText}`
-        );
-    }
-
-    const data = await response.json();
-
-    if (!data || data.error) {
-        throw new Error(data.error?.message || 'Unknown error');
-    }
-
-    const features: IFeature[] = data?.features || [];
+    const features: IFeature[] = await queryFeaturesWithRetries(url);
 
     const countries: string[] = [];
 
