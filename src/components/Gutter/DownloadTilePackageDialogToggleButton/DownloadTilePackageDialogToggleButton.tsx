@@ -26,11 +26,13 @@ import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
-import {
-    isDownloadDialogOpenToggled,
-    isDownloadTilePackageDialogOpenSelector,
-} from '@store/UI/reducer';
-import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+// import {
+//     isDownloadDialogOpenToggled,
+//     isDownloadTilePackageDialogOpenSelector,
+// } from '@store/UI/reducer';
+// import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+import { selectIsWayportModeOn } from '@store/Map/reducer';
+import { toggleWayportMode } from '@store/DownloadMode/thunks';
 
 export const DownloadTilePackageDialogToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -43,15 +45,17 @@ export const DownloadTilePackageDialogToggleButton = () => {
 
     const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
 
-    const shouldBeDisabled = numOfJobs === 0;
+    // const shouldBeDisabled = numOfJobs === 0;
 
-    const isDownloadDialogOpen = useAppSelector(
-        isDownloadTilePackageDialogOpenSelector
-    );
+    // const isDownloadDialogOpen = useAppSelector(
+    //     isDownloadTilePackageDialogOpenSelector
+    // );
 
-    const animationModeOn = useAppSelector(isAnimationModeOnSelector);
+    const isWayportModeOn = useAppSelector(selectIsWayportModeOn);
 
-    const shouldDisableActionButton = animationModeOn;
+    // const animationModeOn = useAppSelector(isAnimationModeOnSelector);
+
+    // const shouldDisableActionButton = animationModeOn;
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -89,25 +93,27 @@ export const DownloadTilePackageDialogToggleButton = () => {
                 //     disabled: numOfJobs === 0,
                 // }
                 {
-                    'opacity-50 pointer-events-none': shouldBeDisabled,
-                    'bg-black text-white': isDownloadDialogOpen,
-                    disabled: shouldDisableActionButton,
+                    // 'opacity-50 pointer-events-none': shouldDisableActionButton,
+                    'bg-black text-white': isWayportModeOn,
+                    // disabled: shouldDisableActionButton,
                 }
             )}
         >
             <button
                 className="relative flex mx-auto items-center justify-center"
                 title={
-                    shouldBeDisabled
-                        ? t('open_download_panel_button_tooltip_disabled')
-                        : t('open_download_panel_button_tooltip')
+                    // shouldBeDisabled
+                    //     ? t('open_download_panel_button_tooltip_disabled')
+                    //     : t('open_download_panel_button_tooltip')
+                    t('open_download_panel_button_tooltip')
                 }
                 aria-label={t('toggle_download_panel')}
                 onClick={() => {
-                    if (shouldBeDisabled) {
-                        return;
-                    }
-                    dispatch(isDownloadDialogOpenToggled());
+                    // if (shouldDisableActionButton) {
+                    //     return;
+                    // }
+                    // dispatch(isDownloadDialogOpenToggled());
+                    dispatch(toggleWayportMode());
                 }}
             >
                 <CalciteIcon icon="download-to" scale="l" />

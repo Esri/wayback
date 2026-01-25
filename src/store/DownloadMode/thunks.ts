@@ -38,6 +38,8 @@ import {
     selectPendingDownloadJobs,
 } from './selectors';
 import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
+import { MapMode, selectMapMode } from '@store/Map/reducer';
+import { updateMapMode } from '@store/Map/thunks';
 
 type AddToDownloadListParams = {
     /**
@@ -337,4 +339,13 @@ export const getOutputTilePackageInfo =
             console.error(err);
         }
         // console.log(tilePackageInfoResponses)
+    };
+
+export const toggleWayportMode =
+    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const mode = selectMapMode(getState());
+
+        const targetMode: MapMode = mode === 'wayport' ? 'explore' : 'wayport';
+
+        dispatch(updateMapMode(targetMode));
     };

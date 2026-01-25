@@ -25,7 +25,7 @@ import {
     activeDialogSelector,
     // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
-    isSettingModalOpenToggled,
+    // isSettingModalOpenToggled,
     // isGutterHideSelector,
 } from '@store/UI/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
@@ -68,9 +68,9 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         dispatch(isAboutThisAppModalOpenToggled());
     };
 
-    const settingButtonOnClick = () => {
-        dispatch(isSettingModalOpenToggled());
-    };
+    // const settingButtonOnClick = () => {
+    //     dispatch(isSettingModalOpenToggled());
+    // };
 
     const copyButtonOnClick = () => {
         copy2clipboard(window.location.href);
@@ -87,7 +87,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
             shouldDisableActionButton={isAnimationModeOn}
             aboutButtonOnClick={aboutButtonOnClick}
             // copyButtonOnClick={copyButtonOnClick}
-            settingButtonOnClick={settingButtonOnClick}
+            // settingButtonOnClick={settingButtonOnClick}
         >
             <ExploreModeToggleButton />
 

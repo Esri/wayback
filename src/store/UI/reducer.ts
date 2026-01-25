@@ -22,7 +22,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-export type AppDialogName = 'about' | 'setting' | 'save' | 'export';
+export type AppDialogName = 'about' | 'save' | 'export';
 
 export type UIState = {
     /**
@@ -105,11 +105,11 @@ const slice = createSlice({
             state.activeDialog =
                 state.activeDialog === 'about' ? null : 'about';
         },
-        isSettingModalOpenToggled: (state) => {
-            // state.isSettingModalOpen = !state.isSettingModalOpen;
-            state.activeDialog =
-                state.activeDialog === 'setting' ? null : 'setting';
-        },
+        // isSettingModalOpenToggled: (state) => {
+        //     // state.isSettingModalOpen = !state.isSettingModalOpen;
+        //     state.activeDialog =
+        //         state.activeDialog === 'setting' ? null : 'setting';
+        // },
         isDownloadDialogOpenToggled: (state) => {
             state.activeDialog =
                 state.activeDialog === 'export' ? null : 'export';
@@ -142,7 +142,7 @@ export const {
     isSideBarHideToggled,
     // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
-    isSettingModalOpenToggled,
+    // isSettingModalOpenToggled,
     userProfileCardOpenToggled,
     activeDialogUpdated,
     isDownloadDialogOpenToggled,
@@ -172,8 +172,8 @@ export const isSideBarHideSelector = (state: RootState) =>
 export const isAboutThisAppModalOpenSelector = (state: RootState) =>
     state.UI.activeDialog === 'about';
 
-export const isSettingModalOpenSelector = (state: RootState) =>
-    state.UI.activeDialog === 'setting';
+// export const isSettingModalOpenSelector = (state: RootState) =>
+//     state.UI.activeDialog === 'setting';
 
 export const isUserProfileCardOpenSelector = (state: RootState) =>
     state.UI.isUserProfileCardOpen;

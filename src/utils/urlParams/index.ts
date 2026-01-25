@@ -166,7 +166,13 @@ export const getMapModeFromHashParams = (
         return 'explore';
     }
 
-    const validModes: MapMode[] = ['explore', 'updates', 'swipe', 'animation'];
+    const validModes: MapMode[] = [
+        'explore',
+        'updates',
+        'swipe',
+        'animation',
+        'wayport',
+    ];
 
     if (!validModes.includes(value as MapMode)) {
         return 'explore'; // default mode
@@ -192,7 +198,7 @@ export const getActiveDialogFromHashParams = (
         'about',
         'export',
         'save',
-        'setting',
+        // 'setting',
     ];
 
     if (!validDialogs.includes(value as AppDialogName)) {

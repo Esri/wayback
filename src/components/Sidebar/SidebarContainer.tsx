@@ -36,6 +36,7 @@ import {
 } from '../';
 import { selectMapMode } from '@store/Map/reducer';
 import { UpdatesModePanel } from '@components/UpdatesModePanel';
+import { WayportPanel } from '@components/WayportPanel';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -63,6 +64,10 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
         if (mode === 'updates') {
             return <UpdatesModePanel />;
+        }
+
+        if (mode === 'wayport') {
+            return <WayportPanel />;
         }
 
         return (

@@ -23,7 +23,7 @@ interface IProps {
     activeDialog: AppDialogName;
     shouldDisableActionButton: boolean;
     aboutButtonOnClick: () => void;
-    settingButtonOnClick: () => void;
+    // settingButtonOnClick: () => void;
     children?: React.ReactNode;
 }
 
@@ -34,7 +34,7 @@ export const Gutter: FC<IProps> = ({
     shouldDisableActionButton,
     // copyButtonOnClick,
     aboutButtonOnClick,
-    settingButtonOnClick,
+    // settingButtonOnClick,
     children,
 }) => {
     return (

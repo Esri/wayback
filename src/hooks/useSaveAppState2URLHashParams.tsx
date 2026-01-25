@@ -60,7 +60,7 @@ export const useSaveAppState2URLHashParams = () => {
     }, [updatesModeData, mode]);
 
     useEffect(() => {
-        if (activeDialog === 'export' || activeDialog === 'save') {
+        if (activeDialog === 'save') {
             updateHashParams('activeDialog', activeDialog);
         } else {
             updateHashParams('activeDialog', undefined);
