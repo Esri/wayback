@@ -28,7 +28,7 @@ type InitAppParams = {
  * Check if the app is hosted on Living Atlas
  * If so, it should use ArcGIS Online as the portal URL
  */
-const isHostedOnLivingAtlasServer =
+export const isHostedOnLivingAtlasServer =
     window.location.host === 'livingatlas.arcgis.com' ||
     window.location.host === 'livingatlasstg.arcgis.com';
 

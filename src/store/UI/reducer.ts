@@ -49,6 +49,12 @@ export type UIState = {
      * Whether the locale switcher is open or not
      */
     isLocaleSwitcherOpen: boolean;
+    /**
+     * If true, the performance analyze tool is enabled in the app.
+     * This is for internal testing purpose only, and this value should not be
+     * updated by end users.
+     */
+    enablePerformanceAnalyzeTool: boolean;
 };
 
 export const initialUIState = {
@@ -64,6 +70,7 @@ export const initialUIState = {
     activeDialog: null,
     appLanguage: 'en',
     isLocaleSwitcherOpen: false,
+    enablePerformanceAnalyzeTool: false,
 } as UIState;
 
 const slice = createSlice({
@@ -184,5 +191,8 @@ export const activeDialogSelector = (state: RootState) => state.UI.activeDialog;
 
 export const selectIsLocaleSwitcherOpen = (state: RootState) =>
     state.UI.isLocaleSwitcherOpen;
+
+export const selectIsPerformanceAnalyzeToolEnabled = (state: RootState) =>
+    state.UI.enablePerformanceAnalyzeTool;
 
 export default reducer;

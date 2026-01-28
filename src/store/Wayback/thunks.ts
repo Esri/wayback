@@ -17,6 +17,7 @@ import { Point } from '@arcgis/core/geometry';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     isLoadingWaybackItemsToggled,
+    localChangesQueryDurationMsUpdated,
     releaseNum4ItemsWithLocalChangesUpdated,
 } from './reducer';
 import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
@@ -36,6 +37,8 @@ export const queryLocalChanges =
 
             dispatch(isLoadingWaybackItemsToggled(true));
 
+            const now = performance.now();
+
             const waybackItems = await getWaybackItemsWithLocalChanges(
                 {
                     longitude: point.longitude,
@@ -45,6 +48,9 @@ export const queryLocalChanges =
                 abortController
             );
 
+            // calculate elapsed time for getting local changes
+            const localChangesQueryDurationMs = performance.now() - now;
+
             // console.log(waybackItems);
             const rNums = waybackItems.map((d) => d.releaseNum);
 
@@ -52,6 +58,10 @@ export const queryLocalChanges =
             dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
 
             dispatch(isLoadingWaybackItemsToggled(false));
+
+            dispatch(
+                localChangesQueryDurationMsUpdated(localChangesQueryDurationMs)
+            );
         } catch (err) {
             console.log('Error querying local changes:', err);
 

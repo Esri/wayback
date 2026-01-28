@@ -55,10 +55,11 @@ export const ModeToggleButton: FC<Props> = ({
     return (
         <div
             className={classNames(
-                'flex relative w-full cursor-pointer text-center items-center justify-center py-2',
+                'flex relative w-full cursor-pointer text-center items-center justify-center py-2 hover:text-white',
                 {
                     'opacity-75': !isActive,
                     'text-white': isActive,
+
                     'bg-custom-background': isActive,
                 }
             )}

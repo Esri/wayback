@@ -33,7 +33,7 @@ export const ExploreModeToggleButton = () => {
             isActive={isActive}
             tooltip={t('open_explore_mode')}
             label={t('open_explore_mode')}
-            icon="list-button"
+            icon="layers"
             testId="explore-mode-toggle-btn"
             onClick={() => dispatch(updateMapMode('explore'))}
         />

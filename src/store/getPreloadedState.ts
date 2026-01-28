@@ -51,7 +51,10 @@ import {
     initialDownloadModeState,
     DownloadJob,
 } from './DownloadMode/reducer';
-import { IS_MOBILE } from '@constants/UI';
+import {
+    IS_MOBILE,
+    SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL,
+} from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
 
@@ -68,6 +71,7 @@ const getPreloadedState4UI = (
         ...initialUIState,
         activeDialog,
         appLanguage,
+        enablePerformanceAnalyzeTool: SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL,
     };
 
     return state;

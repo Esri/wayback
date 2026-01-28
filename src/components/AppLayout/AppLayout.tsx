@@ -51,6 +51,7 @@ import {
     LocaleSuggestion,
     LocaleSwitcherDialog,
 } from '@components/LocaleSwitcher';
+import { PerformanceAnalyzeTool } from '@components/PerformanceAnalyzeTool';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -103,7 +104,7 @@ const AppLayout: React.FC = () => {
 
             {/* <SettingDialog /> */}
 
-            <DownloadDialog />
+            {/* <DownloadDialog /> */}
 
             <ProfileCard />
 
@@ -114,6 +115,8 @@ const AppLayout: React.FC = () => {
             <AboutThisApp />
 
             <MobileFooter />
+
+            <PerformanceAnalyzeTool />
         </ErrorBoundary>
     );
 };

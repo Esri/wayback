@@ -24,6 +24,15 @@ export const COPIED_LINK_MESSAGE_TIME_TO_STAY_OPEN_IN_MILLISECONDS = 3000;
 export const IS_MOBILE = isMobileDevice();
 
 /**
+ * Whether to enable the performance analyze tool based on URL query parameter and hosting environment
+ */
+export const SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL =
+    window.location.search.includes('enablePerformanceAnalyzeTool=true') &&
+    window.location.hostname !== 'livingatlas.arcgis.com'
+        ? true
+        : false;
+
+/**
  * Color for world imagery updates layer based on the status of the update
  */
 export const WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS = {

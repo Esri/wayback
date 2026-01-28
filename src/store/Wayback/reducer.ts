@@ -20,7 +20,7 @@ import {
     // createAsyncThunk
 } from '@reduxjs/toolkit';
 
-import { batch } from 'react-redux';
+// import { batch } from 'react-redux';
 
 import { IWaybackItem } from '@typings/index';
 
@@ -46,6 +46,10 @@ export type WaybackItemsState = {
      * if ture, it is in process of loading wayback items or items with local changes
      */
     isLoading: boolean;
+    /**
+     * Total duration in milliseconds for querying local changes
+     */
+    localChangesQueryDurationMs?: number;
 };
 
 export const initialWaybackItemsState: WaybackItemsState = {
@@ -57,6 +61,7 @@ export const initialWaybackItemsState: WaybackItemsState = {
     releaseNum4PreviewWaybackItem: null,
     releaseNum4AlternativePreviewWaybackItem: null,
     isLoading: false,
+    localChangesQueryDurationMs: 0,
 };
 
 const slice = createSlice({
@@ -131,6 +136,12 @@ const slice = createSlice({
         ) => {
             state.isLoading = action.payload;
         },
+        localChangesQueryDurationMsUpdated: (
+            state: WaybackItemsState,
+            action: PayloadAction<number>
+        ) => {
+            state.localChangesQueryDurationMs = action.payload;
+        },
     },
 });
 
@@ -145,6 +156,7 @@ export const {
     releaseNum4PreviewWaybackItemUpdated,
     releaseNum4AlternativePreviewWaybackItemUpdated,
     isLoadingWaybackItemsToggled,
+    localChangesQueryDurationMsUpdated,
 } = slice.actions;
 
 let delay4SetPreviewWaybackItem: NodeJS.Timeout;
@@ -155,11 +167,9 @@ export const setActiveWaybackItem =
         dispatch: StoreDispatch
         // getState: StoreGetState
     ) => {
-        batch(() => {
-            dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNumber));
-            dispatch(releaseNum4LeadingLayerUpdated(releaseNumber));
-            dispatch(metadataQueryResultUpdated(null));
-        });
+        dispatch(releaseNum4ActiveWaybackItemUpdated(releaseNumber));
+        dispatch(releaseNum4LeadingLayerUpdated(releaseNumber));
+        dispatch(metadataQueryResultUpdated(null));
     };
 
 export const toggleSelectWaybackItem =
@@ -206,19 +216,15 @@ export const setPreviewWaybackItem =
                     rNums[indexOfInputRNum + 1];
             }
 
-            batch(() => {
-                dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
-                dispatch(
-                    releaseNum4AlternativePreviewWaybackItemUpdated(
-                        releaseNum4AlternativePreviewWaybackItem
-                    )
-                );
-                dispatch(
-                    shouldShowPreviewItemTitleToggled(
-                        shouldShowPreviewItemTitle
-                    )
-                );
-            });
+            dispatch(releaseNum4PreviewWaybackItemUpdated(releaseNumber));
+            dispatch(
+                releaseNum4AlternativePreviewWaybackItemUpdated(
+                    releaseNum4AlternativePreviewWaybackItem
+                )
+            );
+            dispatch(
+                shouldShowPreviewItemTitleToggled(shouldShowPreviewItemTitle)
+            );
         }, 200);
     };
 
@@ -269,5 +275,8 @@ export const selectWaybackItemsByReleaseNum = (state: RootState) =>
 
 export const selectIsLoadingWaybackItems = (state: RootState) =>
     state.WaybackItems.isLoading;
+
+export const selectQueryDurationMsForLocalChanges = (state: RootState) =>
+    state.WaybackItems.localChangesQueryDurationMs;
 
 export default reducer;
