@@ -23,6 +23,7 @@ import {
 } from '@store/UI/reducer';
 import { LocalChangesToggle } from '.';
 import { IS_MOBILE } from '@constants/UI';
+import { selectIsLoadingWaybackItems } from '@store/Wayback/reducer';
 
 // import ShowLocalChangesCheckboxToggle from './index';
 
@@ -33,6 +34,8 @@ const ShowLocalChangesCheckboxToggleContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
+    const loadingWaybackItems = useAppSelector(selectIsLoadingWaybackItems);
+
     if (IS_MOBILE) {
         return null;
     }
@@ -40,6 +43,7 @@ const ShowLocalChangesCheckboxToggleContainer = () => {
     return (
         <LocalChangesToggle
             isActive={shouldOnlyShowItemsWithLocalChange}
+            loading={loadingWaybackItems}
             onChange={() => {
                 dispatch(shouldOnlyShowItemsWithLocalChangeToggled());
             }}

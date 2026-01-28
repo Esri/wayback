@@ -13,21 +13,30 @@
  * limitations under the License.
  */
 
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
+import {
+    CalciteButton,
+    CalciteIcon,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 interface IProps {
     isActive: boolean;
+    loading: boolean;
     // label:string,
     onChange: () => void;
 }
 
-export const LocalChangesToggle: FC<IProps> = ({ isActive, onChange }) => {
+export const LocalChangesToggle: FC<IProps> = ({
+    isActive,
+    loading,
+    onChange,
+}) => {
     const { t } = useTranslation();
 
     return (
-        <div className="items-center justify-center my-1">
+        <div className="flex items-center my-1 pl-2">
             <CalciteButton
                 appearance="transparent"
                 kind="neutral"
@@ -39,14 +48,18 @@ export const LocalChangesToggle: FC<IProps> = ({ isActive, onChange }) => {
                 {/* {t('show_only_local_changes')} */}
             </CalciteButton>
 
-            <span className="text-sm ml-1">
-                <Trans
-                    i18nKey="show_only_local_changes_with_highlight"
-                    components={{
-                        strong: <span className="text-white" />,
-                    }}
-                />
-            </span>
+            <div className="flex items-center gap-x-2">
+                <span className="text-sm ml-1">
+                    <Trans
+                        i18nKey="show_only_local_changes_with_highlight"
+                        components={{
+                            strong: <span className="text-white" />,
+                        }}
+                    />
+                </span>
+
+                {loading && <CalciteLoader inline scale="s" />}
+            </div>
         </div>
     );
 };
