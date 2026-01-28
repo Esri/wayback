@@ -30,13 +30,14 @@ import {
     SidebarToggleBtn,
     BarChart,
     Title4ActiveItem,
-    ShowLocalChangesCheckboxToggle,
+    // ShowLocalChangesCheckboxToggle,
     ListView,
     AnimationControls,
 } from '../';
 import { selectMapMode } from '@store/Map/reducer';
 import { UpdatesModePanel } from '@components/UpdatesModePanel';
 import { WayportPanel } from '@components/WayportPanel';
+import { LocalChangesToggle } from '@components/LocalChangesToggle';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -75,7 +76,7 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
                 <div className="mx-4">
                     <BarChart />
 
-                    <ShowLocalChangesCheckboxToggle />
+                    <LocalChangesToggle />
 
                     <Title4ActiveItem />
                 </div>

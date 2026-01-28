@@ -33,7 +33,7 @@ export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmap
 // export { default as SettingDialog } from './SettingDialog/SettingDialogContainer';
 export { default as SidebarToggleBtn } from './SidebarToggleBtn/SidebarToogleBtnContainer';
 export { default as SwipeWidgetLayerSelector } from './SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';
-export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
+// export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
 export { default as AnimationControls } from './AnimationControls/AnimationControls';
