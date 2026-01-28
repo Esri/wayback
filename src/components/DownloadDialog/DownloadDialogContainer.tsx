@@ -34,7 +34,7 @@ import {
     signIn,
     signInUsingDifferentAccount,
 } from '@utils/Esri-OAuth';
-import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
+// import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
 import {
     checkPendingDownloadJobStatus,
     startDownloadJob,
@@ -79,8 +79,7 @@ export const DownloadDialogContainer = () => {
 
     useEffect(() => {
         // save jobs to localhost so they can be restored
-        saveDownloadJobs2LocalStorage(jobs);
-
+        // saveDownloadJobs2LocalStorage(jobs);
         // // prompt anonymouns user to sign in if the user wants to open the download dialog,
         // // since exporting job requires the user token
         // if (jobs?.length && isAnonymouns() && isOpen) {

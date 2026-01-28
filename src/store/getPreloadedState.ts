@@ -33,12 +33,12 @@ import {
     getSwipeWidgetLayersFromHashParams,
 } from '@utils/urlParams';
 
-import {
-    // getShouldOpenSaveWebMapDialog,
-    getDownloadJobsFromLocalStorage,
-    // getPreferredReferenceLayerLocale,
-    // getDefaultMapLocation,
-} from '@utils/LocalStorage';
+// import {
+//     // getShouldOpenSaveWebMapDialog,
+//     getDownloadJobsFromLocalStorage,
+//     // getPreferredReferenceLayerLocale,
+//     // getDefaultMapLocation,
+// } from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,
@@ -226,7 +226,7 @@ const getPreloadedState4AnimationMode = (
 const getPreloadedState4Downloadmode = (
     hashParams: URLSearchParams
 ): DownloadModeState => {
-    const jobs: DownloadJob[] = getDownloadJobsFromLocalStorage();
+    const jobs: DownloadJob[] = []; //getDownloadJobsFromLocalStorage();
 
     const byId: { [key: string]: DownloadJob } = {};
     const ids: string[] = [];

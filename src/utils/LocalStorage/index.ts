@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { ReferenceLayerLanguage } from '@constants/map';
-import { DownloadJob } from '@store/DownloadMode/reducer';
+// import { ReferenceLayerLanguage } from '@constants/map';
+// import { DownloadJob } from '@store/DownloadMode/reducer';
 // import { MapCenter } from '@store/Map/reducer';
 
 enum KEYS {
@@ -28,17 +28,32 @@ enum KEYS {
     referenceLayerLocale = 'WaybackAppPreferredReferenceLayerLocale',
 }
 
-const setItem = (key: KEYS, value = '') => {
-    localStorage.setItem(key, value);
-};
+// const setItem = (key: KEYS, value = '') => {
+//     localStorage.setItem(key, value);
+// };
 
-const getItem = (key: KEYS) => {
-    return localStorage.getItem(key) || null;
-};
+// const getItem = (key: KEYS) => {
+//     return localStorage.getItem(key) || null;
+// };
 
 const removeItem = (key: KEYS) => {
     localStorage.removeItem(key);
 };
+
+/**
+ * Cleans up local storage by removing deprecated keys
+ */
+const cleanUpLocalStorage = () => {
+    // removeItem(KEYS.defaultExtent);
+    removeItem(KEYS.defaultLocation);
+    removeItem(KEYS.customPortalUrl);
+    removeItem(KEYS.shouldOpenSaveWebMapDialog);
+    removeItem(KEYS.hashParams);
+    removeItem(KEYS.showUpdatesWithLocalChanges);
+    removeItem(KEYS.referenceLayerLocale);
+    removeItem(KEYS.downloadJobs);
+};
+cleanUpLocalStorage();
 
 // const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
 //     if (!center || zoom === undefined) {
@@ -109,18 +124,18 @@ const removeItem = (key: KEYS) => {
 //     return val === 'true' ? true : false;
 // };
 
-const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
-    if (!jobs || !jobs.length) {
-        removeItem(KEYS.downloadJobs);
-    } else {
-        setItem(KEYS.downloadJobs, JSON.stringify(jobs));
-    }
-};
+// const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
+//     if (!jobs || !jobs.length) {
+//         removeItem(KEYS.downloadJobs);
+//     } else {
+//         setItem(KEYS.downloadJobs, JSON.stringify(jobs));
+//     }
+// };
 
-const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
-    const val = getItem(KEYS.downloadJobs);
-    return val ? JSON.parse(val) : [];
-};
+// const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
+//     const val = getItem(KEYS.downloadJobs);
+//     return val ? JSON.parse(val) : [];
+// };
 
 // export const setPreferredReferenceLayerLocale = (
 //     locale: ReferenceLayerLanguage
@@ -137,27 +152,13 @@ const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
 //     return val as ReferenceLayerLanguage;
 // };
 
-/**
- * Cleans up local storage by removing deprecated keys
- */
-const cleanUpLocalStorage = () => {
-    // removeItem(KEYS.defaultExtent);
-    removeItem(KEYS.defaultLocation);
-    removeItem(KEYS.customPortalUrl);
-    removeItem(KEYS.shouldOpenSaveWebMapDialog);
-    removeItem(KEYS.hashParams);
-    removeItem(KEYS.showUpdatesWithLocalChanges);
-    removeItem(KEYS.referenceLayerLocale);
-};
-cleanUpLocalStorage();
-
-export {
-    // saveDefaultMapLocation,
-    // getDefaultMapLocation,
-    // getCustomPortalUrl,
-    // setCustomPortalUrl,
-    // setShouldOpenSaveWebMapDialog,
-    // getShouldOpenSaveWebMapDialog,
-    saveDownloadJobs2LocalStorage,
-    getDownloadJobsFromLocalStorage,
-};
+// export {
+//     // saveDefaultMapLocation,
+//     // getDefaultMapLocation,
+//     // getCustomPortalUrl,
+//     // setCustomPortalUrl,
+//     // setShouldOpenSaveWebMapDialog,
+//     // getShouldOpenSaveWebMapDialog,
+//     saveDownloadJobs2LocalStorage,
+//     getDownloadJobsFromLocalStorage,
+// };

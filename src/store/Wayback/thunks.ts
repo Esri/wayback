@@ -46,7 +46,6 @@ export const queryLocalChanges =
             );
 
             // console.log(waybackItems);
-
             const rNums = waybackItems.map((d) => d.releaseNum);
 
             // console.log(rNums);
