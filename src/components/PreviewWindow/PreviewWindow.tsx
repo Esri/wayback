@@ -136,17 +136,28 @@ const PreviewWindow: React.FC<Props> = ({
                 left: `calc(50% - ${previewWindowSize.width / 2}px)`,
                 width: `${previewWindowSize.width}px`,
                 height: `${previewWindowSize.height}px`,
+                background: imageUrl
+                    ? `url(${imageUrl}) center center / contain no-repeat`
+                    : 'transparent',
             }}
             data-testid="preview-window-container"
             data-release-num={previewWaybackItem?.releaseNum || ''}
         >
-            {imageUrl && (
+            {/* {imageUrl && (
                 <img
                     src={imageUrl}
                     className="absolute top-0 left-0 w-full h-full"
                 />
-            )}
-            <div className="absolute top-0 left-0 w-full px-2 py-1 text-white bg-custom-theme-blue bg-opacity-80">
+            )} */}
+            <div className="absolute bottom-0 left-0 w-full px-2 py-1 text-white flex justify-center">
+                <div className="bg-black bg-opacity-60 px-2 rounded-md">
+                    <span>
+                        <b>{previewWaybackItem.releaseDateLabel}</b>{' '}
+                        {t('preview')}
+                    </span>
+                </div>
+            </div>
+            {/* <div className="absolute top-0 left-0 w-full px-2 py-1 text-white bg-custom-theme-blue bg-opacity-80">
                 <div className="flex items-center gap-2">
                     <span
                         style={{
@@ -161,7 +172,7 @@ const PreviewWindow: React.FC<Props> = ({
                         <CalciteLoader inline={true} label="loading" />
                     )}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

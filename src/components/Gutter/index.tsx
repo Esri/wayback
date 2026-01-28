@@ -41,7 +41,7 @@ export const Gutter: FC<IProps> = ({
         <div className="gutter-container background-theme-blue-diagonal-pattern">
             <div className="pt-1">
                 <div
-                    className={classNames('gutter-nav-btn', {
+                    className={classNames('gutter-nav-btn hover:text-white', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'about',
                     })}

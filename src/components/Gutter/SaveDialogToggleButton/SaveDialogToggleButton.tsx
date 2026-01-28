@@ -56,7 +56,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
     return (
         <div
             className={classNames(
-                'save-as-webmap-btn-container relative w-full text-center py-1',
+                'save-as-webmap-btn-container relative w-full text-center py-1 hover:text-white',
                 {
                     'opacity-50 pointer-events-none': disabled,
                     'bg-black text-white': active,
