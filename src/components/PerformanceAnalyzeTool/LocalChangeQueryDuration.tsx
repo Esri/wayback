@@ -62,7 +62,7 @@ export const LocalChangeQueryDuration = () => {
             </div>
 
             <div className="mt-4">
-                <strong>Mdeian Duration by Zoom Level:</strong>
+                <strong>Median Duration by Zoom Level:</strong>
                 <ul className="list-disc list-inside">
                     {Object.entries(durarionByZoom).map(([zoom, durations]) => {
                         // const averageDuration =
