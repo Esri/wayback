@@ -22,6 +22,7 @@ import {
 } from './reducer';
 import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import { logger } from '@utils/IndexedDBLogger';
+import { SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED } from '@constants/UI';
 
 let abortController: AbortController = null;
 
@@ -45,7 +46,8 @@ export const queryLocalChanges =
                     latitude: point.latitude,
                 },
                 zoom,
-                abortController
+                abortController,
+                SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED
             );
 
             // calculate elapsed time for getting local changes

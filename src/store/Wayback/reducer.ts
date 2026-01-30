@@ -179,9 +179,11 @@ export const toggleSelectWaybackItem =
 
         const isSelected = releaseNum4SelectedItems.indexOf(releaseNumber) > -1;
 
-        isSelected
-            ? dispatch(releaseNum4SelectedItemsRemoved(releaseNumber))
-            : dispatch(releaseNum4SelectedItemsAdded(releaseNumber));
+        if (isSelected) {
+            dispatch(releaseNum4SelectedItemsRemoved(releaseNumber));
+        } else {
+            dispatch(releaseNum4SelectedItemsAdded(releaseNumber));
+        }
     };
 
 export const setPreviewWaybackItem =

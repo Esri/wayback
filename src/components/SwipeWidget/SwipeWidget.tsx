@@ -157,7 +157,11 @@ const SwipeWidget: React.FC<Props> = ({
     // }
 
     useEffect(() => {
-        isOpen && mapView ? init() : hide();
+        if (isOpen && mapView) {
+            init();
+        } else {
+            hide();
+        }
     }, [isOpen, mapView]);
 
     useEffect(() => {

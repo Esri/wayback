@@ -290,7 +290,7 @@ export const cleanUpDownloadJobs =
                 );
             }
 
-            false;
+            return false;
         });
 
         for (const job of jobsToBeRemoved) {

@@ -32,6 +32,9 @@ export const SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL =
         ? true
         : false;
 
+export const SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED =
+    window.location.search.includes('useSizeToDetermineLocalChanges=false');
+
 /**
  * Color for world imagery updates layer based on the status of the update
  */
