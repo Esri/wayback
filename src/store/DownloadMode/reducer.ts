@@ -109,14 +109,14 @@ export type DownloadModeState = {
         ids: string[];
     };
     // isDownloadDialogOpen: boolean;
-    /**
-     * If true, the system is currently in the process of adding a new download job.
-     *
-     * Why is this necessary? When creating a new download job, the `getTileEstimationsInOutputBundle` function will be invoked,
-     * and this function might take 1-2 seconds to resolve. Therefore showing a loading indicator should inform the user
-     * that their request has been received.
-     */
-    isAddingNewDownloadJob: boolean;
+    // /**
+    //  * If true, the system is currently in the process of adding a new download job.
+    //  *
+    //  * Why is this necessary? When creating a new download job, the `getTileEstimationsInOutputBundle` function will be invoked,
+    //  * and this function might take 1-2 seconds to resolve. Therefore showing a loading indicator should inform the user
+    //  * that their request has been received.
+    //  */
+    // // isAddingNewDownloadJob: boolean;
 };
 
 export const initialDownloadModeState = {
@@ -135,9 +135,9 @@ const slice = createSlice({
         // isDownloadDialogOpenToggled: (state) => {
         //     state.isDownloadDialogOpen = !state.isDownloadDialogOpen;
         // },
-        isAddingNewDownloadJobToggled: (state) => {
-            state.isAddingNewDownloadJob = !state.isAddingNewDownloadJob;
-        },
+        // isAddingNewDownloadJobToggled: (state) => {
+        //     state.isAddingNewDownloadJob = !state.isAddingNewDownloadJob;
+        // },
         downloadJobCreated: (state, action: PayloadAction<DownloadJob>) => {
             const { id } = action.payload;
             state.jobs.byId[id] = action.payload;
@@ -163,7 +163,7 @@ const { reducer } = slice;
 
 export const {
     // isDownloadDialogOpenToggled,
-    isAddingNewDownloadJobToggled,
+    // isAddingNewDownloadJobToggled,
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,

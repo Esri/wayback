@@ -196,7 +196,7 @@ export const getActiveDialogFromHashParams = (
 
     const validDialogs: AppDialogName[] = [
         'about',
-        'export',
+        // 'export',
         'save',
         // 'setting',
     ];

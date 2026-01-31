@@ -34,7 +34,7 @@ import {
     TilePreviewWindow,
     WaybackLayer,
     ZoomWidget,
-    DownloadDialog,
+    // DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';

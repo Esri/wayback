@@ -41,4 +41,4 @@ export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
-export { DownloadDialog } from './DownloadDialog';
+// export { DownloadDialog } from './DownloadDialog';

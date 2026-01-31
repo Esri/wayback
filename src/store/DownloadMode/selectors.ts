@@ -19,8 +19,17 @@ import { RootState } from '../configureStore';
 // export const selectIsDownloadDialogOpen = (state: RootState) =>
 //     state.DownloadMode.isDownloadDialogOpen;
 
-export const selectIsAddingNewDownloadJob = (state: RootState) =>
-    state.DownloadMode.isAddingNewDownloadJob;
+// export const selectIsAddingNewDownloadJob = (state: RootState) =>
+//     state.DownloadMode.isAddingNewDownloadJob;
+
+export const selectNewDownloadJob = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+        const allJobs = ids.map((id) => byId[id]);
+        return allJobs.find((job) => job.status === 'not started');
+    }
+);
 
 export const selectDownloadJobs = createSelector(
     (state: RootState) => state.DownloadMode.jobs,

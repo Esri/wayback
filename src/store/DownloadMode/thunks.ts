@@ -22,7 +22,7 @@ import {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
-    isAddingNewDownloadJobToggled,
+    // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
 } from './reducer';
 import { nanoid } from 'nanoid';
@@ -37,9 +37,13 @@ import {
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
-import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
+// import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
 import { MapMode, selectMapMode } from '@store/Map/reducer';
 import { updateMapMode } from '@store/Map/thunks';
+import {
+    setActiveWaybackItem,
+    setPreviewWaybackItem,
+} from '@store/Wayback/reducer';
 
 type AddToDownloadListParams = {
     /**
@@ -69,13 +73,38 @@ const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
  */
 export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
 
+/**
+ * Prepares the application state for a new download job.
+ *
+ * @param releaseNum - The release number to set as the active wayback item
+ * @returns A thunk function that dispatches actions to update the store
+ *
+ * @remarks
+ * This thunk performs the following operations:
+ * - Switches the map mode to 'wayport'
+ * - Sets the active wayback item to the specified release number
+ * - Closes the preview window by clearing the active preview item
+ * - Toggles the "adding new download job" flag to indicate a new job is being created
+ */
+const prepareForNewDownloadJob =
+    (releaseNum: number) => (dispatch: StoreDispatch) => {
+        // switch to wayport mode
+        dispatch(updateMapMode('wayport'));
+
+        // set active wayback item to the selected release number
+        dispatch(setActiveWaybackItem(releaseNum));
+
+        // close preview window as we are no longer in explore mode
+        dispatch(setPreviewWaybackItem(null));
+    };
+
 export const addToDownloadList =
     ({ releaseNum, extent }: AddToDownloadListParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
 
-        dispatch(isAddingNewDownloadJobToggled());
-        dispatch(isDownloadDialogOpenToggled());
+        // prepare application state for new download job
+        dispatch(prepareForNewDownloadJob(releaseNum));
 
         const { WaybackItems } = getState();
 
@@ -87,28 +116,28 @@ export const addToDownloadList =
             releaseNum
         );
 
-        // const totalTiles = tileEstimations.reduce((total, curr)=>{
-        //     return total + curr.count
-        // }, 0)
-
         const minZoomLevel = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB;
         const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
         const downloadJob: DownloadJob = {
             id: nanoid(),
-            waybackItem: byReleaseNumber[releaseNum],
-            minZoomLevel,
-            maxZoomLevel,
-            tileEstimations,
-            // totalTiles,
-            levels: [minZoomLevel, maxZoomLevel],
+            waybackItem: {
+                ...byReleaseNumber[releaseNum],
+            },
             extent,
             status: 'not started',
+            // tileEstimations and related info are set to null initially
+            // as they will be updated when user adjust the export extent
+            tileEstimations: null,
+            minZoomLevel: null,
+            maxZoomLevel: null,
+            levels: null, //[minZoomLevel, maxZoomLevel],
+
             // createdTime: new Date().getTime(),
         };
 
         dispatch(downloadJobCreated(downloadJob));
-        dispatch(isAddingNewDownloadJobToggled());
+        // dispatch(isAddingNewDownloadJobToggled());
     };
 
 export const updateUserSelectedZoomLevels =

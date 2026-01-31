@@ -22,7 +22,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-export type AppDialogName = 'about' | 'save' | 'export';
+export type AppDialogName = 'about' | 'save'; //| 'export';
 
 export type UIState = {
     /**
@@ -117,10 +117,10 @@ const slice = createSlice({
         //     state.activeDialog =
         //         state.activeDialog === 'setting' ? null : 'setting';
         // },
-        isDownloadDialogOpenToggled: (state) => {
-            state.activeDialog =
-                state.activeDialog === 'export' ? null : 'export';
-        },
+        // isDownloadDialogOpenToggled: (state) => {
+        //     state.activeDialog =
+        //         state.activeDialog === 'export' ? null : 'export';
+        // },
         userProfileCardOpenToggled: (state, action: PayloadAction<boolean>) => {
             state.isUserProfileCardOpen =
                 typeof action.payload === 'boolean'
@@ -152,15 +152,15 @@ export const {
     // isSettingModalOpenToggled,
     userProfileCardOpenToggled,
     activeDialogUpdated,
-    isDownloadDialogOpenToggled,
+    // isDownloadDialogOpenToggled,
     loacleSwitcherToggled,
 } = slice.actions;
 
 export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
     state.UI.activeDialog === 'save';
 
-export const isDownloadTilePackageDialogOpenSelector = (state: RootState) =>
-    state.UI.activeDialog === 'export';
+// export const isDownloadTilePackageDialogOpenSelector = (state: RootState) =>
+//     state.UI.activeDialog === 'export';
 
 export const shouldOnlyShowItemsWithLocalChangeSelector = (state: RootState) =>
     state.UI.shouldOnlyShowItemsWithLocalChange;
