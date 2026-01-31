@@ -26,7 +26,7 @@ export const WayportIntroduction: FC<Props> = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <div className="text-white font-light text-sm mb-2">
+        <div className="text-white font-light text-sm">
             {promptToSignIn || promptToSignInWithOrgAccount ? (
                 <p className="">
                     <Trans
@@ -50,36 +50,35 @@ export const WayportIntroduction: FC<Props> = ({
                         }}
                     />
                 </p>
-            ) : (
-                <p className="">
-                    <Trans
-                        i18nKey="wayback_export_description"
-                        components={{
-                            'offline-app-link': (
-                                <a
-                                    href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                />
-                            ),
-                            'summary-link': (
-                                <a
-                                    href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                />
-                            ),
-                            'terms-of-use-link': (
-                                <a
-                                    href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                />
-                            ),
-                        }}
-                    />
-                </p>
-            )}
+            ) : // <p className="">
+            //     <Trans
+            //         i18nKey="wayback_export_description"
+            //         components={{
+            //             'offline-app-link': (
+            //                 <a
+            //                     href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
+            //                     target="_blank"
+            //                     rel="noreferrer"
+            //                 />
+            //             ),
+            //             'summary-link': (
+            //                 <a
+            //                     href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
+            //                     target="_blank"
+            //                     rel="noreferrer"
+            //                 />
+            //             ),
+            //             'terms-of-use-link': (
+            //                 <a
+            //                     href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
+            //                     target="_blank"
+            //                     rel="noreferrer"
+            //                 />
+            //             ),
+            //         }}
+            //     />
+            // </p>
+            null}
 
             {/* <p className="text-sm mt-2 mb-4">
             <Trans

@@ -110,14 +110,14 @@ export const addToDownloadList =
 
         const { byReleaseNumber } = WaybackItems;
 
-        const tileEstimations = await getTileEstimationsInOutputBundle(
-            extent,
-            DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-            releaseNum
-        );
+        // const tileEstimations = await getTileEstimationsInOutputBundle(
+        //     extent,
+        //     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+        //     releaseNum
+        // );
 
-        const minZoomLevel = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB;
-        const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
+        // const minZoomLevel = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB;
+        // const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
         const downloadJob: DownloadJob = {
             id: nanoid(),

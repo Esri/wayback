@@ -111,7 +111,7 @@
     "level_max_min": "Level {{maxLevel}} - {{minLevel}}",
     "estimated_tiles": "~{{numTiles}} tiles",
     "tiles_ready_for_download": "Tiles Ready to Download - {{size}}MB",
-    "create_tile_package": "create tile package",
+    "create_tile_package": "Create Tile Package",
     "in_progress": "in progress",
     "download_tile_package": "donwload",
     "failed": "failed",
@@ -146,5 +146,7 @@
     "right_selection": "Right Selection",
     "search_region": "Search region",
     "switch_language": "Switch Language",
-    "choose_language": "Choose Language"
+    "choose_language": "Choose Language",
+    "new_wayport_job_header": "{{releaseDate}} Tile Export",
+    "no_new_wayport_jobs": "No new tile export jobs available."
 }
