@@ -4,8 +4,10 @@
  * Vantor's Vivid Advanced basemap product provides committed image currency in a high-resolution,
  * high-quality image layer over defined metropolitan and high-interest areas across the globe.
  */
+// const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
+//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
 const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
+    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_PubPrep_View/FeatureServer/0';
 
 // const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
 
@@ -21,8 +23,10 @@ export const VIVID_ADVANCED_FROM_MAXAR_URL =
  * over large areas through advanced image mosaicking techniques, including tonal balancing and
  * seamline blending across thousands of image strips.
  */
+// const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
+//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
 const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
+    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_PubPrep_View/FeatureServer/0';
 
 // const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
 
@@ -37,8 +41,10 @@ export const VIVID_STANDARD_FROM_MAXAR_URL =
  * The GIS User Community, including mapping agencies around the world, enhance the ArcGIS World Imagery map by contributing recent,
  * submeter-resolution aerial imagery through the Community Maps Program.
  */
+// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
+//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
 const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
+    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_PubPrep_view/FeatureServer/0';
 
 // const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
 
