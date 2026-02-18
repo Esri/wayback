@@ -3,11 +3,13 @@
 /**
  * Vantor's Vivid Advanced basemap product provides committed image currency in a high-resolution,
  * high-quality image layer over defined metropolitan and high-interest areas across the globe.
+ *
+ * @see https://esri.maps.arcgis.com/home/item.html?id=28c832d4a4f74738aa5c0073469a532e
  */
-// const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
 const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_PubPrep_View/FeatureServer/0';
+    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
+// const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
+//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_PubPrep_View/FeatureServer/0';
 
 // const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
 
@@ -22,11 +24,13 @@ export const VIVID_ADVANCED_FROM_MAXAR_URL =
  * Vantor's Vivid Standard basemap product provides a visually consistent and continuous image layer
  * over large areas through advanced image mosaicking techniques, including tonal balancing and
  * seamline blending across thousands of image strips.
+ *
+ * @see https://esri.maps.arcgis.com/home/item.html?id=406e94e0348c4c59826182379c1590b4
  */
-// const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
 const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_PubPrep_View/FeatureServer/0';
+    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
+// const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
+//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_PubPrep_View/FeatureServer/0';
 
 // const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
 
@@ -40,11 +44,13 @@ export const VIVID_STANDARD_FROM_MAXAR_URL =
 /**
  * The GIS User Community, including mapping agencies around the world, enhance the ArcGIS World Imagery map by contributing recent,
  * submeter-resolution aerial imagery through the Community Maps Program.
+ *
+ * @see https://esri.maps.arcgis.com/home/item.html?id=b5d57c5ddbae499faa1b1e343dd132d7
  */
-// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-//     'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
 const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-    'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_PubPrep_view/FeatureServer/0';
+    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
+// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
+//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_PubPrep_view/FeatureServer/0';
 
 // const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
 
