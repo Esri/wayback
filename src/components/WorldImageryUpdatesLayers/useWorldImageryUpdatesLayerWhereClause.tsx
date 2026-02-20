@@ -5,10 +5,10 @@ import {
 import { useAppSelector } from '@store/configureStore';
 import { UpdatesModeDateFilter } from '@store/UpdatesMode/reducer';
 import {
-    selectUpdatesModeCustomDateRange,
+    // selectUpdatesModeCustomDateRange,
     selectUpdatesModeDate,
     selectUpdatesModeRegion,
-    selectUpdatesModeStatus,
+    // selectUpdatesModeStatus,
 } from '@store/UpdatesMode/selectors';
 import React, { useMemo } from 'react';
 
@@ -17,8 +17,9 @@ const daysToSubtract: Record<UpdatesModeDateFilter, number> = {
     'last-month': 30,
     'last-3-months': 90,
     'last-6-months': 180,
-    'last-year-and-pending': 365,
-    custom: 0,
+    'last-year': 365,
+    pending: 0, // This value is arbitrary since pending updates will be included regardless of the date filter
+    // custom: 0,
 };
 
 /**
@@ -28,30 +29,39 @@ const daysToSubtract: Record<UpdatesModeDateFilter, number> = {
 export const useWorldImageryUpdatesLayerWhereClause = (
     shouldIgnoreRegionFilter = false
 ) => {
-    const status = useAppSelector(selectUpdatesModeStatus);
+    // const status = useAppSelector(selectUpdatesModeStatus);
 
     const dateFilter = useAppSelector(selectUpdatesModeDate);
 
-    const customDateRange = useAppSelector(selectUpdatesModeCustomDateRange);
+    // const customDateRange = useAppSelector(selectUpdatesModeCustomDateRange);
 
     const region = useAppSelector(selectUpdatesModeRegion);
 
     const whereClause: string = useMemo(() => {
+        console.log(
+            'Generating where clause with dateFilter:',
+            dateFilter,
+            'region:',
+            region,
+            'shouldIgnoreRegionFilter:',
+            shouldIgnoreRegionFilter
+        );
+
         const whereClauses: string[] = [
             `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} IS NOT NULL`,
         ];
 
-        if (status && status.length > 0) {
-            whereClauses.push(
-                `${
-                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-                } in ('${status.join("','")}')`
-            );
-        } else {
-            whereClauses.push(
-                `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} IS NULL`
-            );
-        }
+        // if (status && status.length > 0) {
+        //     whereClauses.push(
+        //         `${
+        //             WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
+        //         } in ('${status.join("','")}')`
+        //     );
+        // } else {
+        //     whereClauses.push(
+        //         `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} IS NULL`
+        //     );
+        // }
 
         if (
             region &&
@@ -64,37 +74,43 @@ export const useWorldImageryUpdatesLayerWhereClause = (
             );
         }
 
-        if (
-            dateFilter &&
-            dateFilter !== 'custom' &&
-            daysToSubtract[dateFilter] !== undefined
-        ) {
+        if (dateFilter) {
             console.log('dateFilter', dateFilter);
 
             const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtract[dateFilter]} AND CURRENT_TIMESTAMP)`;
 
-            if (status.includes(WorldImageryUpdatesStatusEnum.pending)) {
-                whereClauses.push(
-                    `${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`
-                );
-            } else if (
-                status.includes(WorldImageryUpdatesStatusEnum.published)
-            ) {
+            if (dateFilter !== 'pending') {
                 whereClauses.push(dateQuery);
+            } else {
+                whereClauses.push(
+                    `(${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
+                );
             }
+
+            // if (status.includes(WorldImageryUpdatesStatusEnum.pending)) {
+            //     whereClauses.push(
+            //         `${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`
+            //     );
+            // } else if (
+            //     status.includes(WorldImageryUpdatesStatusEnum.published)
+            // ) {
+            //     whereClauses.push(dateQuery);
+            // }
         }
 
-        if (dateFilter === 'custom' && customDateRange) {
-            const [startDate, endDate] = customDateRange;
-            if (startDate && endDate) {
-                whereClauses.push(
-                    `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN '${startDate}' AND '${endDate}')`
-                );
-            }
-        }
+        // if (dateFilter === 'custom' && customDateRange) {
+        //     const [startDate, endDate] = customDateRange;
+        //     if (startDate && endDate) {
+        //         whereClauses.push(
+        //             `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN '${startDate}' AND '${endDate}')`
+        //         );
+        //     }
+        // }
+
+        console.log('whereClauses', whereClauses);
 
         return whereClauses.map((clause) => `(${clause})`).join(' AND ');
-    }, [status, dateFilter, region, customDateRange]);
+    }, [dateFilter, region]);
 
     return whereClause;
 };

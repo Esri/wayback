@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { UpdatesModeHeader } from './UpdatesModeHeader';
-import { StatusFilter } from './Filters/StatusFilter';
+// import { StatusFilter } from './Filters/StatusFilter';
 import { CategoryFilter } from './Filters/CategoryFilter';
 import { DateFilter } from './Filters/DateFilter';
 import { RegionFilter } from './Filters/RegionFilter';
 import { signIn, signInUsingDifferentAccount } from '@utils/Esri-OAuth';
 import classNames from 'classnames';
 import { AppContext } from '@contexts/AppContextProvider';
+import { SummaryInfo } from './Filters/SummaryInfo';
 
 export const UpdatesPanelContainer = () => {
     // useEffect(() => {
@@ -45,8 +46,9 @@ export const UpdatesPanelContainer = () => {
                 })}
                 data-testid="updates-mode-filters-container"
             >
+                <SummaryInfo />
                 <CategoryFilter disabled={disabled} />
-                <StatusFilter disabled={disabled} />
+                {/* <StatusFilter disabled={disabled} /> */}
                 <DateFilter disabled={disabled} />
                 <RegionFilter disabled={disabled} />
             </div>

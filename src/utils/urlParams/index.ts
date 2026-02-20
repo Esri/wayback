@@ -286,9 +286,17 @@ export const getReleaseNumsForSelectedWaybackItemsFromHashParams = (
 export const saveUpdatesModeDataInURLHashParams = (
     data: UpdatesModeState
 ): void => {
-    const { status, category, region } = data;
+    const {
+        // status,
+        category,
+        region,
+    } = data;
 
-    const dataToSave = [status.join(','), category, region].join('|');
+    const dataToSave = [
+        // status.join(','),
+        category,
+        region,
+    ].join('|');
 
     updateHashParams('updatesLayer', dataToSave);
 };

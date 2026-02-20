@@ -73,46 +73,55 @@ export const useWorldImageryUpdatesStatistics = (
                         outStatisticFieldName: outStatisticFieldName4Count,
                     },
                 ],
-                groupByFieldsForStatistics: [
-                    WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
-                ],
+                // groupByFieldsForStatistics: [
+                //     WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE,
+                // ],
                 cacheHint: true,
             })
             .then((result) => {
                 const features = result.features;
 
-                let countOfPending = 0;
-                let countOfPublished = 0;
-                let areaOfPending = 0;
-                let areaOfPublished = 0;
+                // let countOfPending = 0;
+                // let countOfPublished = 0;
+                // let areaOfPending = 0;
+                // let areaOfPublished = 0;
+
+                let count = 0;
+                let area = 0;
 
                 for (const feature of features) {
-                    const pubState =
-                        feature.attributes[
-                            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-                        ];
+                    // const pubState =
+                    //     feature.attributes[
+                    //         WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
+                    //     ];
 
-                    if (pubState === WorldImageryUpdatesStatusEnum.pending) {
-                        countOfPending =
-                            feature.attributes[outStatisticFieldName4Count];
-                        areaOfPending =
-                            feature.attributes[outStatisticFieldName4Area];
-                    } else if (
-                        pubState === WorldImageryUpdatesStatusEnum.published
-                    ) {
-                        countOfPublished =
-                            feature.attributes[outStatisticFieldName4Count];
-                        areaOfPublished =
-                            feature.attributes[outStatisticFieldName4Area];
-                    }
+                    // if (pubState === WorldImageryUpdatesStatusEnum.pending) {
+                    //     countOfPending =
+                    //         feature.attributes[outStatisticFieldName4Count];
+                    //     areaOfPending =
+                    //         feature.attributes[outStatisticFieldName4Area];
+                    // } else if (
+                    //     pubState === WorldImageryUpdatesStatusEnum.published
+                    // ) {
+                    //     countOfPublished =
+                    //         feature.attributes[outStatisticFieldName4Count];
+                    //     areaOfPublished =
+                    //         feature.attributes[outStatisticFieldName4Area];
+                    // }
+
+                    count += feature.attributes[outStatisticFieldName4Count];
+                    area += feature.attributes[outStatisticFieldName4Area];
                 }
 
                 dispatch(
                     worldImageryUpdatesOutStatisticsChanged({
-                        countOfPending,
-                        countOfPublished,
-                        areaOfPending,
-                        areaOfPublished,
+                        // countOfPending,
+                        // countOfPublished,
+                        // areaOfPending,
+                        // areaOfPublished,
+                        count,
+                        area,
+                        loading: false,
                     })
                 );
             })

@@ -1,184 +1,184 @@
-import React, { FC } from 'react';
-import { HeaderText } from './HeaderText';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
-import {
-    selectUpdatesModeStatus,
-    selectWorldImageryUpdatesOutStatistics,
-} from '@store/UpdatesMode/selectors';
-import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
-import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
-import { numberWithCommas } from 'helper-toolkit-ts/dist/number';
-import { CalciteCheckbox } from '@esri/calcite-components-react';
-import { selectAppLanguage } from '@store/UI/reducer';
+// import React, { FC } from 'react';
+// import { HeaderText } from './HeaderText';
+// import { useTranslation } from 'react-i18next';
+// import { useAppDispatch, useAppSelector } from '@store/configureStore';
+// import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
+// import {
+//     selectUpdatesModeStatus,
+//     selectWorldImageryUpdatesOutStatistics,
+// } from '@store/UpdatesMode/selectors';
+// import { updatesModeStatusChanged } from '@store/UpdatesMode/reducer';
+// import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+// import { numberWithCommas } from 'helper-toolkit-ts/dist/number';
+// import { CalciteCheckbox } from '@esri/calcite-components-react';
+// import { selectAppLanguage } from '@store/UI/reducer';
 
-type StatusCheckboxProps = {
-    /**
-     * The checked state of the checkbox
-     */
-    checked: boolean;
-    /**
-     * Status of the data associated with the checkbox.
-     */
-    status: WorldImageryUpdatesStatusEnum;
-    /**
-     * The number of sites associated with the checkbox.
-     */
-    count: number;
-    /**
-     * The area associated with the checkbox.
-     */
-    area: number; // in km2
-    /**
-     * The color associated with the checkbox.
-     */
-    color: string;
-    /**
-     * If true, the checkbox will be disabled and not interactable.
-     */
-    disabled: boolean;
-    /**
-     * Emits when the checkbox state changes.
-     * @returns void
-     */
-    onChange?: () => void;
-};
+// type StatusCheckboxProps = {
+//     /**
+//      * The checked state of the checkbox
+//      */
+//     checked: boolean;
+//     /**
+//      * Status of the data associated with the checkbox.
+//      */
+//     status: WorldImageryUpdatesStatusEnum;
+//     /**
+//      * The number of sites associated with the checkbox.
+//      */
+//     count: number;
+//     /**
+//      * The area associated with the checkbox.
+//      */
+//     area: number; // in km2
+//     /**
+//      * The color associated with the checkbox.
+//      */
+//     color: string;
+//     /**
+//      * If true, the checkbox will be disabled and not interactable.
+//      */
+//     disabled: boolean;
+//     /**
+//      * Emits when the checkbox state changes.
+//      * @returns void
+//      */
+//     onChange?: () => void;
+// };
 
-const formatArea = (areaInSqKm: number, appLanguage: string) => {
-    if (appLanguage !== 'en') {
-        // For non-English languages, just return the area with no formatting
-        return `${areaInSqKm.toFixed(0)}`;
-    }
+// const formatArea = (areaInSqKm: number, appLanguage: string) => {
+//     if (appLanguage !== 'en') {
+//         // For non-English languages, just return the area with no formatting
+//         return `${areaInSqKm.toFixed(0)}`;
+//     }
 
-    if (areaInSqKm >= 1000000) {
-        return `${(areaInSqKm / 1000000).toFixed(1)}M`;
-    }
+//     if (areaInSqKm >= 1000000) {
+//         return `${(areaInSqKm / 1000000).toFixed(1)}M`;
+//     }
 
-    if (areaInSqKm >= 1000) {
-        return `${(areaInSqKm / 1000).toFixed(0)}K`;
-    }
+//     if (areaInSqKm >= 1000) {
+//         return `${(areaInSqKm / 1000).toFixed(0)}K`;
+//     }
 
-    return `${areaInSqKm.toFixed(0)}`;
-};
+//     return `${areaInSqKm.toFixed(0)}`;
+// };
 
-const StatusCheckbox: FC<StatusCheckboxProps> = ({
-    checked,
-    status,
-    count,
-    area,
-    color,
-    disabled,
-    onChange,
-}) => {
-    const { t } = useTranslation();
+// const StatusCheckbox: FC<StatusCheckboxProps> = ({
+//     checked,
+//     status,
+//     count,
+//     area,
+//     color,
+//     disabled,
+//     onChange,
+// }) => {
+//     const { t } = useTranslation();
 
-    const appLanguage = useAppSelector(selectAppLanguage);
+//     const appLanguage = useAppSelector(selectAppLanguage);
 
-    const statusLocaleKey = `${status}`.toLowerCase();
+//     const statusLocaleKey = `${status}`.toLowerCase();
 
-    return (
-        <div
-            className="grid items-center text-xs mb-1"
-            style={{
-                gridTemplateColumns: '24px 1fr',
-            }}
-        >
-            <CalciteCheckbox
-                checked={checked}
-                disabled={disabled}
-                onCalciteCheckboxChange={onChange}
-                label={t(statusLocaleKey)}
-            ></CalciteCheckbox>
-            <div
-                className="grid items-center gap-1 font-bold"
-                style={{
-                    color: color ? color : 'inherit',
-                    gridTemplateColumns: '62px 1fr',
-                }}
-            >
-                <div>
-                    <span className="text-sm">{t(statusLocaleKey)}</span>
-                </div>
+//     return (
+//         <div
+//             className="grid items-center text-xs mb-1"
+//             style={{
+//                 gridTemplateColumns: '24px 1fr',
+//             }}
+//         >
+//             <CalciteCheckbox
+//                 checked={checked}
+//                 disabled={disabled}
+//                 onCalciteCheckboxChange={onChange}
+//                 label={t(statusLocaleKey)}
+//             ></CalciteCheckbox>
+//             <div
+//                 className="grid items-center gap-1 font-bold"
+//                 style={{
+//                     color: color ? color : 'inherit',
+//                     gridTemplateColumns: '62px 1fr',
+//                 }}
+//             >
+//                 <div>
+//                     <span className="text-sm">{t(statusLocaleKey)}</span>
+//                 </div>
 
-                <div
-                    className="border-l pl-2 ml-2"
-                    style={{
-                        borderColor: color ? color : 'inherit',
-                    }}
-                >
-                    {/* <span className="ml-1 mr-2">|</span> */}
-                    <span className="text-sm">
-                        {t('status_message', {
-                            num_sites: numberWithCommas(count),
-                            area: formatArea(area, appLanguage),
-                        })}
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
-};
+//                 <div
+//                     className="border-l pl-2 ml-2"
+//                     style={{
+//                         borderColor: color ? color : 'inherit',
+//                     }}
+//                 >
+//                     {/* <span className="ml-1 mr-2">|</span> */}
+//                     <span className="text-sm">
+//                         {t('status_message', {
+//                             num_sites: numberWithCommas(count),
+//                             area: formatArea(area, appLanguage),
+//                         })}
+//                     </span>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
 
-type StatusFilterProps = {
-    /**
-     * If true, the filter will be disabled and not interactable.
-     */
-    disabled: boolean;
-};
+// type StatusFilterProps = {
+//     /**
+//      * If true, the filter will be disabled and not interactable.
+//      */
+//     disabled: boolean;
+// };
 
-export const StatusFilter: FC<StatusFilterProps> = ({ disabled }) => {
-    const { t } = useTranslation();
-    const dispatch = useAppDispatch();
+// export const StatusFilter: FC<StatusFilterProps> = ({ disabled }) => {
+//     const { t } = useTranslation();
+//     const dispatch = useAppDispatch();
 
-    const status = useAppSelector(selectUpdatesModeStatus);
+//     const status = useAppSelector(selectUpdatesModeStatus);
 
-    const outStatistics = useAppSelector(
-        selectWorldImageryUpdatesOutStatistics
-    );
+//     const outStatistics = useAppSelector(
+//         selectWorldImageryUpdatesOutStatistics
+//     );
 
-    const onChange = (status2Toggle: WorldImageryUpdatesStatusEnum) => {
-        // Toggle the status
-        // If the status is already in the list, remove it
-        // If the status is not in the list, add it
-        const newStatus = status.includes(status2Toggle)
-            ? status.filter((s) => s !== status2Toggle)
-            : [...status, status2Toggle];
+//     const onChange = (status2Toggle: WorldImageryUpdatesStatusEnum) => {
+//         // Toggle the status
+//         // If the status is already in the list, remove it
+//         // If the status is not in the list, add it
+//         const newStatus = status.includes(status2Toggle)
+//             ? status.filter((s) => s !== status2Toggle)
+//             : [...status, status2Toggle];
 
-        dispatch(updatesModeStatusChanged(newStatus));
-    };
+//         dispatch(updatesModeStatusChanged(newStatus));
+//     };
 
-    return (
-        <div className="bg-custom-card-background p-2 mb-2 text-white">
-            <div className="mb-2">
-                <HeaderText
-                    title={t('status')}
-                    tooltip={t('status_filter_tooltip')}
-                />
-            </div>
+//     return (
+//         <div className="bg-custom-card-background p-2 mb-2 text-white">
+//             <div className="mb-2">
+//                 <HeaderText
+//                     title={t('status')}
+//                     tooltip={t('status_filter_tooltip')}
+//                 />
+//             </div>
 
-            <StatusCheckbox
-                checked={status.includes(
-                    WorldImageryUpdatesStatusEnum.published
-                )}
-                status={WorldImageryUpdatesStatusEnum.published}
-                count={outStatistics?.countOfPublished || 0}
-                area={outStatistics?.areaOfPublished || 0}
-                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published.color}
-                disabled={disabled}
-                onChange={() =>
-                    onChange(WorldImageryUpdatesStatusEnum.published)
-                }
-            />
-            <StatusCheckbox
-                checked={status.includes(WorldImageryUpdatesStatusEnum.pending)}
-                status={WorldImageryUpdatesStatusEnum.pending}
-                count={outStatistics?.countOfPending || 0}
-                area={outStatistics?.areaOfPending || 0}
-                color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
-                disabled={disabled}
-                onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
-            />
-        </div>
-    );
-};
+//             <StatusCheckbox
+//                 checked={status.includes(
+//                     WorldImageryUpdatesStatusEnum.published
+//                 )}
+//                 status={WorldImageryUpdatesStatusEnum.published}
+//                 count={outStatistics?.countOfPublished || 0}
+//                 area={outStatistics?.areaOfPublished || 0}
+//                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.published.color}
+//                 disabled={disabled}
+//                 onChange={() =>
+//                     onChange(WorldImageryUpdatesStatusEnum.published)
+//                 }
+//             />
+//             <StatusCheckbox
+//                 checked={status.includes(WorldImageryUpdatesStatusEnum.pending)}
+//                 status={WorldImageryUpdatesStatusEnum.pending}
+//                 count={outStatistics?.countOfPending || 0}
+//                 area={outStatistics?.areaOfPending || 0}
+//                 color={WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS.pending.color}
+//                 disabled={disabled}
+//                 onChange={() => onChange(WorldImageryUpdatesStatusEnum.pending)}
+//             />
+//         </div>
+//     );
+// };

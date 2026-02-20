@@ -11,18 +11,22 @@ export const getUpdatesModeFromHashParams = (
         return initialUpdatesModeState;
     }
 
-    const [status, category, region] = value.split('|');
+    const [
+        // status,
+        category,
+        region,
+    ] = value.split('|');
 
     return {
         ...initialUpdatesModeState,
-        status: status
-            .split(',')
-            .filter((s) =>
-                Object.values(WorldImageryUpdatesStatusEnum).includes(
-                    s as WorldImageryUpdatesStatusEnum
-                )
-            ) // filter out invalid values
-            .map((s) => s as WorldImageryUpdatesStatusEnum),
+        // status: status
+        //     .split(',')
+        //     .filter((s) =>
+        //         Object.values(WorldImageryUpdatesStatusEnum).includes(
+        //             s as WorldImageryUpdatesStatusEnum
+        //         )
+        //     ) // filter out invalid values
+        //     .map((s) => s as WorldImageryUpdatesStatusEnum),
         category:
             (category as UpdatesModeState['category']) ||
             initialUpdatesModeState.category,

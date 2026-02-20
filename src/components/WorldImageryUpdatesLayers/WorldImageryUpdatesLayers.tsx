@@ -11,13 +11,13 @@ import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
     VIVID_ADVANCED_FROM_MAXAR_URL,
     VIVID_STANDARD_FROM_MAXAR_URL,
-    WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
-    WorldImageryUpdatesStatusEnum,
+    // WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
+    // WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useWorldImageryUpdatesLayerWhereClause';
-import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
-import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
+// import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+// import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
 import {
     getPopupTemplate,
     getUniqueValueRenderer4WorldImageryUpdates,

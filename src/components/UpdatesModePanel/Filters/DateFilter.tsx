@@ -4,18 +4,18 @@ import { HeaderText } from './HeaderText';
 import { RadioButtonData, RadioButtonGroup } from './RadioButtonGroup';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    updatesModeCustomDateRangeChanged,
+    // updatesModeCustomDateRangeChanged,
     UpdatesModeDateFilter,
     updatesModeDateFilterChanged,
 } from '@store/UpdatesMode/reducer';
 import {
-    selectUpdatesModeCustomDateRange,
+    // selectUpdatesModeCustomDateRange,
     selectUpdatesModeDate,
 } from '@store/UpdatesMode/selectors';
-import {
-    CalciteInputDatePicker,
-    CalciteLabel,
-} from '@esri/calcite-components-react';
+// import {
+//     CalciteInputDatePicker,
+//     CalciteLabel,
+// } from '@esri/calcite-components-react';
 
 type DateFilterProps = {
     /**
@@ -34,35 +34,35 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
     const [selectedDateOption, setSelectedDateOption] =
         React.useState<UpdatesModeDateFilter | null>(updatesModeDateFilter);
 
-    /**
-     * custom date range selected by the user via the date picker.
-     *
-     * This is an array of strings, where the first element is the start date and the second element is the end date.
-     * The string in ISO format ("yyyy-mm-dd").
-     *
-     * @see https://developers.arcgis.com/calcite-design-system/components/input-date-picker/#api-reference-properties-value
-     */
-    const [customDateRange, setCustomDateRange] = useState<
-        [string, string] | null
-    >(['', '']);
+    // /**
+    //  * custom date range selected by the user via the date picker.
+    //  *
+    //  * This is an array of strings, where the first element is the start date and the second element is the end date.
+    //  * The string in ISO format ("yyyy-mm-dd").
+    //  *
+    //  * @see https://developers.arcgis.com/calcite-design-system/components/input-date-picker/#api-reference-properties-value
+    //  */
+    // const [customDateRange, setCustomDateRange] = useState<
+    //     [string, string] | null
+    // >(['', '']);
 
-    /**
-     * The allowed date range for the date picker.
-     * This is set to one year ago from today to one year from today.
-     */
-    const allowedDateRange: [string, string] = useMemo(() => {
-        const today = new Date();
-        const oneYearAgo = new Date();
-        oneYearAgo.setFullYear(today.getFullYear() - 1);
+    // /**
+    //  * The allowed date range for the date picker.
+    //  * This is set to one year ago from today to one year from today.
+    //  */
+    // const allowedDateRange: [string, string] = useMemo(() => {
+    //     const today = new Date();
+    //     const oneYearAgo = new Date();
+    //     oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-        const oneYearFromNow = new Date();
-        oneYearFromNow.setFullYear(today.getFullYear() + 1);
+    //     const oneYearFromNow = new Date();
+    //     oneYearFromNow.setFullYear(today.getFullYear() + 1);
 
-        return [
-            oneYearAgo.toISOString().split('T')[0],
-            oneYearFromNow.toISOString().split('T')[0],
-        ];
-    }, []);
+    //     return [
+    //         oneYearAgo.toISOString().split('T')[0],
+    //         oneYearFromNow.toISOString().split('T')[0],
+    //     ];
+    // }, []);
 
     const data: RadioButtonData[] = useMemo(() => {
         const options: {
@@ -91,13 +91,13 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
                 checked: false,
             },
             {
-                value: 'last-year-and-pending',
+                value: 'last-year',
                 label: t('within_last_year'),
                 checked: false,
             },
             {
-                value: 'custom',
-                label: t('custom_range'),
+                value: 'pending',
+                label: t('pending'),
                 checked: false,
             },
         ];
@@ -109,23 +109,23 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
     }, [selectedDateOption]);
 
     useEffect(() => {
-        if (selectedDateOption === 'custom') {
-            if (
-                !customDateRange ||
-                customDateRange[0] === '' ||
-                customDateRange[1] === ''
-            ) {
-                console.log('Custom date range is not selected');
-                return;
-            }
+        // if (selectedDateOption === 'custom') {
+        //     if (
+        //         !customDateRange ||
+        //         customDateRange[0] === '' ||
+        //         customDateRange[1] === ''
+        //     ) {
+        //         console.log('Custom date range is not selected');
+        //         return;
+        //     }
 
-            console.log('Custom date range selected:', customDateRange);
-            dispatch(updatesModeCustomDateRangeChanged(customDateRange));
-            // return;
-        }
+        //     console.log('Custom date range selected:', customDateRange);
+        //     dispatch(updatesModeCustomDateRangeChanged(customDateRange));
+        //     // return;
+        // }
 
         dispatch(updatesModeDateFilterChanged(selectedDateOption));
-    }, [selectedDateOption, customDateRange]);
+    }, [selectedDateOption]);
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
@@ -153,7 +153,7 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
                     // );
                 }}
             />
-            {selectedDateOption === 'custom' && (
+            {/* {selectedDateOption === 'custom' && (
                 <CalciteLabel>
                     <CalciteInputDatePicker
                         scale="s"
@@ -172,7 +172,7 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
                         }}
                     />
                 </CalciteLabel>
-            )}
+            )} */}
         </div>
     );
 };
