@@ -150,7 +150,7 @@
     "new_wayport_job_header": "{{releaseDate}} Tile Export",
     "no_new_wayport_jobs": "No new tile export jobs available.",
     "updates_mode_summary_tooltip": "Total number of sites and area coverage based on the selected published date and region filters.",
-    "updates_mode_summary_info_pending": "<strong>{{sites}} sites</strong> covering <strong>{{areas}} km²</strong> with <strong>pending</strong> updates.",
-    "updates_mode_summary_info_published": "<strong>{{sites}} sites</strong> covering <strong>{{areas}} km²</strong> with <strong>published</strong> updates.",
+    "updates_mode_summary_info_pending": "<strong>{{sites}}</strong> pending areas covering <strong>{{areas}} km²</strong>.",
+    "updates_mode_summary_info_published": "<strong>{{sites}}</strong> published areas covering <strong>{{areas}} km²</strong>",
     "summary": "Summary"
 }
