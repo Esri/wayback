@@ -1,10 +1,15 @@
-import { SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED } from '@constants/UI';
 import { useAppSelector } from '@store/configureStore';
 import { selectMapCenterAndZoom } from '@store/Map/reducer';
 import { selectIsPerformanceAnalyzeToolEnabled } from '@store/UI/reducer';
 import { selectQueryDurationMsForLocalChanges } from '@store/Wayback/reducer';
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
+
+/**
+ * Whether to use tile size to determine local changes. This is only for experiment and should be removed after the experiment.
+ */
+export const SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__ONLY_FOR_EXPERIMENT =
+    window.location.search.includes('useSizeToDetermineLocalChanges=false');
 
 /**
  * To enable performance analyze tool UI component to show query duration for local changes:
@@ -55,7 +60,7 @@ export const LocalChangeQueryDuration = () => {
 
             <div>
                 <p>
-                    {SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED
+                    {SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__ONLY_FOR_EXPERIMENT
                         ? 'Tile size is NOT used to determine local changes'
                         : 'Tile size is used to determine local changes'}
                 </p>

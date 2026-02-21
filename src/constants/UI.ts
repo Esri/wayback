@@ -21,6 +21,9 @@ import { isMobileDevice } from 'helper-toolkit-ts/dist/misc';
  */
 export const COPIED_LINK_MESSAGE_TIME_TO_STAY_OPEN_IN_MILLISECONDS = 3000;
 
+/**
+ * Whether the application is running in a mobile device
+ */
 export const IS_MOBILE = isMobileDevice();
 
 /**
@@ -31,9 +34,6 @@ export const SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL =
     window.location.hostname !== 'livingatlas.arcgis.com'
         ? true
         : false;
-
-export const SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED =
-    window.location.search.includes('useSizeToDetermineLocalChanges=false');
 
 /**
  * Color for world imagery updates layer based on the status of the update

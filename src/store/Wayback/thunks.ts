@@ -22,7 +22,6 @@ import {
 } from './reducer';
 import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import { logger } from '@utils/IndexedDBLogger';
-import { SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED } from '@constants/UI';
 
 let abortController: AbortController = null;
 
@@ -38,7 +37,7 @@ export const queryLocalChanges =
 
             dispatch(isLoadingWaybackItemsToggled(true));
 
-            const now = performance.now();
+            // const now = performance.now();
 
             const waybackItems = await getWaybackItemsWithLocalChanges(
                 {
@@ -46,12 +45,11 @@ export const queryLocalChanges =
                     latitude: point.latitude,
                 },
                 zoom,
-                abortController,
-                SHOULD_NOT_USE_SIZE_TO_DETERMINE_LOCAL_CHANGES__TO_BE_REMOVED
+                abortController
             );
 
-            // calculate elapsed time for getting local changes
-            const localChangesQueryDurationMs = performance.now() - now;
+            // // calculate elapsed time for getting local changes
+            // const localChangesQueryDurationMs = performance.now() - now;
 
             // console.log(waybackItems);
             const rNums = waybackItems.map((d) => d.releaseNum);
@@ -61,9 +59,9 @@ export const queryLocalChanges =
 
             dispatch(isLoadingWaybackItemsToggled(false));
 
-            dispatch(
-                localChangesQueryDurationMsUpdated(localChangesQueryDurationMs)
-            );
+            // dispatch(
+            //     localChangesQueryDurationMsUpdated(localChangesQueryDurationMs)
+            // );
         } catch (err) {
             console.log('Error querying local changes:', err);
 
