@@ -22,6 +22,7 @@ import {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
+    idOfSelectedJobUpdated,
     // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
 } from './reducer';
@@ -138,6 +139,9 @@ export const addToDownloadList =
 
         dispatch(downloadJobCreated(downloadJob));
         // dispatch(isAddingNewDownloadJobToggled());
+
+        // set the newly created download job as the selected job so that its extent can be displayed on the map
+        dispatch(idOfSelectedJobUpdated(downloadJob.id));
     };
 
 export const updateUserSelectedZoomLevels =

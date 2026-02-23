@@ -82,3 +82,12 @@ export const selectPendingDownloadJobs = createSelector(
         return idOfPendingJobs.map((id) => byId[id]);
     }
 );
+
+export const selectDownloadJobToDisplayOnMap = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.DownloadMode.idOfSelectedJob,
+    (jobs, idOfSelectedJob) => {
+        if (!idOfSelectedJob) return null;
+        return jobs.byId[idOfSelectedJob];
+    }
+);

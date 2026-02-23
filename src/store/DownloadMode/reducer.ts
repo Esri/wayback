@@ -25,6 +25,7 @@ import {
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+import { id } from 'date-fns/locale';
 
 export type DownloadJobStatus =
     | 'not started'
@@ -108,25 +109,20 @@ export type DownloadModeState = {
         };
         ids: string[];
     };
-    // isDownloadDialogOpen: boolean;
-    // /**
-    //  * If true, the system is currently in the process of adding a new download job.
-    //  *
-    //  * Why is this necessary? When creating a new download job, the `getTileEstimationsInOutputBundle` function will be invoked,
-    //  * and this function might take 1-2 seconds to resolve. Therefore showing a loading indicator should inform the user
-    //  * that their request has been received.
-    //  */
-    // // isAddingNewDownloadJob: boolean;
+    /**
+     * Id of the download job that is currently selected in the UI.
+     * This is used to determine which job's extent to display on the map.
+     */
+    idOfSelectedJob: string | null;
 };
 
-export const initialDownloadModeState = {
+export const initialDownloadModeState: DownloadModeState = {
     jobs: {
         byId: {},
         ids: [],
     },
-    isDownloadDialogOpen: false,
-    isAddingNewDownloadJob: false,
-} as DownloadModeState;
+    idOfSelectedJob: null,
+};
 
 const slice = createSlice({
     name: 'Download',
@@ -156,6 +152,12 @@ const slice = createSlice({
                 state.jobs.byId[id] = job;
             }
         },
+        idOfSelectedJobUpdated: (
+            state,
+            action: PayloadAction<string | null>
+        ) => {
+            state.idOfSelectedJob = action.payload;
+        },
     },
 });
 
@@ -167,6 +169,7 @@ export const {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
+    idOfSelectedJobUpdated,
 } = slice.actions;
 
 export default reducer;

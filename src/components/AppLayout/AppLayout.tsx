@@ -52,6 +52,7 @@ import {
     LocaleSwitcherDialog,
 } from '@components/LocaleSwitcher';
 import { PerformanceAnalyzeTool } from '@components/PerformanceAnalyzeTool';
+import { WayportExtentLayer } from '@components/WayportExtentLayer';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -93,6 +94,8 @@ const AppLayout: React.FC = () => {
                     {/* <Notification /> */}
 
                     <WorldImageryUpdatesLayers />
+
+                    <WayportExtentLayer />
 
                     <TilePreviewWindow />
                 </MapView>
