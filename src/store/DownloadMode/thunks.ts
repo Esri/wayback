@@ -27,7 +27,10 @@ import {
     // isDownloadDialogOpenToggled,
 } from './reducer';
 import { nanoid } from 'nanoid';
-import { getTileEstimationsInOutputBundle } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+import {
+    getTileEstimationsInOutputBundle,
+    TileEstimation,
+} from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import {
     checkJobStatus,
     getJobOutputInfo,
@@ -35,6 +38,7 @@ import {
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
     selectDownloadJobs,
+    selectNewDownloadJob,
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
 } from './selectors';
@@ -73,6 +77,11 @@ const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
  * @see https://github.com/vannizhang/wayback/issues/90
  */
 export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
+
+/**
+ * Max tile package level is set to 23.
+ */
+export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
 
 /**
  * Prepares the application state for a new download job.
@@ -132,7 +141,10 @@ export const addToDownloadList =
             tileEstimations: null,
             minZoomLevel: null,
             maxZoomLevel: null,
-            levels: null, //[minZoomLevel, maxZoomLevel],
+            levels: [
+                DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+                DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
+            ],
 
             // createdTime: new Date().getTime(),
         };
@@ -144,24 +156,41 @@ export const addToDownloadList =
         dispatch(idOfSelectedJobUpdated(downloadJob.id));
     };
 
-export const updateUserSelectedZoomLevels =
-    (id: string, levels: number[]) =>
+/**
+ * This thunk function is used to update the new download job data when user adjust the export extent or zoom levels.
+ * @param updatedJobData
+ * @returns
+ */
+export const updateNewDownloadJob =
+    ({
+        extent,
+        levels,
+        tileEstimations,
+    }: {
+        extent?: IExtent;
+        levels?: number[];
+        tileEstimations?: TileEstimation[];
+    }) =>
     (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const { DownloadMode } = getState();
+        const newJob = selectNewDownloadJob(getState());
 
-        const { jobs } = DownloadMode;
-
-        const { byId } = jobs;
-
-        if (!byId[id]) {
-            console.error('cannot find job data with job id of %s', id);
+        if (!newJob) {
+            // console.error('cannot find existing job data for the new download job');
             return;
         }
 
-        const updatedJobData: DownloadJob = {
-            ...byId[id],
-            levels,
+        if (newJob.status !== 'not started') {
+            // console.error('the status of the new download job is not "not started", cannot update the new download job data');
+            return;
+        }
+
+        const updatedJobData = {
+            ...newJob,
+            extent: extent || newJob.extent,
+            levels: levels || newJob.levels,
+            tileEstimations: tileEstimations || null,
         };
+        // console.log('updatedJobData in updateNewDownloadJob thunk:', updatedJobData);
 
         dispatch(downloadJobsUpdated([updatedJobData]));
     };

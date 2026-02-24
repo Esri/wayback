@@ -1,18 +1,26 @@
 import MapView from '@arcgis/core/views/MapView';
-import { useAppSelector } from '@store/configureStore';
-import { selectDownloadJobToDisplayOnMap } from '@store/DownloadMode/selectors';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
+import {
+    selectDownloadJobToDisplayOnMap,
+    selectNewDownloadJob,
+} from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
 import React, { FC, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
 import { useSketchViewModel } from './useSketchViewModel';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
+import { updateNewDownloadJob } from '@store/DownloadMode/thunks';
 
 type Props = {
     mapView?: MapView;
 };
 
 export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
+    const dispatch = useAppDispatch();
+
     const mode = useAppSelector(selectMapMode);
+
+    const newDownloadJob = useAppSelector(selectNewDownloadJob);
 
     const jobToDisplayOnMap = useAppSelector(selectDownloadJobToDisplayOnMap);
 
@@ -50,24 +58,28 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         extentToEdit,
         mapView,
         onExtentChange: (updatedExtent) => {
-            console.log(
-                'Updated extent from useSketchViewModel:',
-                updatedExtent
+            dispatch(
+                updateNewDownloadJob({
+                    extent: updatedExtent,
+                })
             );
-            // Here you can dispatch an action to update the extent in your store
-            // For example:
-            // dispatch(updateDownloadJobExtent(updatedExtent));
         },
     });
 
-    const { tileEstimationData, isGettingEstimations } = useGetTileEstimations({
-        job: jobToDisplayOnMap,
+    const { tileEstimations, isGettingEstimations } = useGetTileEstimations({
+        releaseNum: newDownloadJob?.waybackItem?.releaseNum || null,
         extent: extentToEdit,
     });
 
     useEffect(() => {
-        console.log('Tile Estimation Data:', tileEstimationData);
-    }, [tileEstimationData]);
+        // console.log('Tile Estimation Data:', tileEstimations);
+
+        dispatch(
+            updateNewDownloadJob({
+                tileEstimations,
+            })
+        );
+    }, [tileEstimations]);
 
     return (
         <WayportExtentLayer
