@@ -49,6 +49,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
             return true;
         }
 
+        console.log('countOfTotalTiles', countOfTotalTiles);
+
         if (
             !countOfTotalTiles ||
             countOfTotalTiles <= 0 ||

@@ -81,7 +81,7 @@ export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
 /**
  * Max tile package level is set to 23.
  */
-export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
+export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 18;
 
 /**
  * Prepares the application state for a new download job.
