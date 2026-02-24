@@ -40,10 +40,10 @@ export const SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL =
  */
 export const WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS = {
     pending: {
-        color: '#ff9900', // RGB: (255, 153, 0)
-        fill: 'rgba(255, 153, 0, .5)',
-        fillColorArray: [255, 153, 0, 255],
-        outline: 'rgba(255, 153, 0, .9)',
+        color: '#FF00FF', // RGB: (0, 255, 179)
+        fill: 'rgba(255, 0, 255, .5)',
+        fillColorArray: [255, 0, 255, 255],
+        outline: 'rgba(255, 0, 255, .9)',
     },
     published: {
         color: '#00ffb3', // RGB: (0, 255, 179)
