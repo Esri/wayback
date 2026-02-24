@@ -102,9 +102,6 @@
     "download_complete_message": "Complete! Check browser downloads for the MP4 file.",
     "failed_to_create_mp4": "Failed to create MP4.",
     "no_download_jobs": "No download jobs.",
-    "wayport_export_instruction_1": "Exports are based on map extent, with a minimum zoom level of 12.",
-    "wayport_export_instruction_2": "Each export request is limited to a maximum of 150,000 tiles.",
-    "wayport_export_instruction_3": "No more than five exports may be requested concurrently.",
     "wayport_export_instruction_4": "This dialog can safely be closed while tile packages are being created.",
     "wayback_export_title": "Wayback Export (<action>beta</action>)",
     "wayback_export_description": "Exported basemap tiles are intended for offline use in ArcGIS applications and <offline-app-link>offline applications</offline-app-link> built with an ArcGIS Runtime SDK in accordance with Esri's terms of use: <summary-link>View Summary</summary-link> and <terms-of-use-link>View Terms of Use</terms-of-use-link>.",
@@ -117,9 +114,7 @@
     "failed": "failed",
     "tile_package_downloaded": "CHECK BROWSER FOR DOWNLOAD PROGRESS",
     "clear_all": "clear all",
-    "export_tile_package_tooltip": "Export an imagery tile package for the current map extent",
     "zoom_in_to_enable": "(zoom in to enable)",
-    "concurrent_export_limit_reached": "Reached the maximum limit of 5 concurrent export jobs",
     "selected_version": "Selected version",
     "click_map_for_imagery_details": "Click map for imagery details",
     "about_what_heading": "WHAT",
@@ -152,5 +147,9 @@
     "updates_mode_summary_tooltip": "Total number of sites and area coverage based on the selected published date and region filters.",
     "updates_mode_summary_info_pending": "<strong>{{sites}}</strong> pending areas covering <strong>{{areas}} km²</strong>.",
     "updates_mode_summary_info_published": "<strong>{{sites}}</strong> published areas covering <strong>{{areas}} km²</strong>",
-    "summary": "Summary"
+    "summary": "Summary",
+    "download_job_instruction_1": "Exports are based on selected extent & scale range",
+    "download_job_instruction_2": "Maximum of 150,000 tiles per export request",
+    "download_job_instruction_3": "Maximum of 5 concurrent export requests",
+    "estimated_number_of_tiles": "Estimated number of tiles: {{total}}"
 }

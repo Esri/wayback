@@ -1,6 +1,7 @@
 import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import { DownloadJob } from '@store/DownloadMode/reducer';
+import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +17,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
     const { tileEstimations, levels } = job || {};
 
     // calculate total tiles based on levels selected
-    const countOfTotalTiles = useMemo(() => {
+    const countOfTotalTiles: number = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {
             return 0;
         }
@@ -44,23 +45,22 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
         return total;
     }, [tileEstimations, levels]);
 
+    /**
+     * The export tool has a hard limit of maximum number of tiles allowed in a wayport export request.
+     * If the user selected extent and zoom levels will result in an estimation of total tiles that exceeds the limit,
+     * we will disable the create button and show a warning message to users to adjust the extent or zoom levels.
+     */
+    const exceedsMaxTileLimit = useMemo(() => {
+        if (!countOfTotalTiles) {
+            return false;
+        }
+
+        return countOfTotalTiles > MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT;
+    }, [countOfTotalTiles]);
+
     const shouldDisableCreateButton = useMemo(() => {
-        if (disabled) {
-            return true;
-        }
-
-        console.log('countOfTotalTiles', countOfTotalTiles);
-
-        if (
-            !countOfTotalTiles ||
-            countOfTotalTiles <= 0 ||
-            countOfTotalTiles > MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [countOfTotalTiles, disabled]);
+        return disabled || exceedsMaxTileLimit;
+    }, [exceedsMaxTileLimit, disabled]);
 
     const getContent = () => {
         if (!job) {
@@ -85,6 +85,36 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
                                 job?.waybackItem?.releaseDateLabel || 'Unknown',
                         })}
                     </span>
+                </div>
+
+                <ul className="text-xs list-disc list-inside mb-4">
+                    <li className="mb-2">{t('download_job_instruction_1')}</li>
+                    <li className="mb-2">{t('download_job_instruction_2')}</li>
+                    <li className="mb-2">{t('download_job_instruction_3')}</li>
+                </ul>
+
+                <div className="flex items-center mb-2">
+                    <div className="mr-2">
+                        {exceedsMaxTileLimit ? (
+                            <CalciteIcon
+                                icon="exclamation-mark-circle"
+                                scale="s"
+                                class="text-red-500"
+                            />
+                        ) : (
+                            <CalciteIcon
+                                icon="check-circle"
+                                scale="s"
+                                class="text-green-500"
+                            />
+                        )}
+                    </div>
+
+                    <p className="text-sm ">
+                        {t('estimated_number_of_tiles', {
+                            total: numberWithCommas(countOfTotalTiles),
+                        })}
+                    </p>
                 </div>
 
                 <div>
