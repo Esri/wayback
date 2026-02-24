@@ -4,6 +4,7 @@ import { selectDownloadJobToDisplayOnMap } from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
 import React, { FC, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
+import { useSketchViewModel } from './useSketchViewModel';
 
 type Props = {
     mapView?: MapView;
@@ -14,18 +15,54 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
 
     const jobToDisplayOnMap = useAppSelector(selectDownloadJobToDisplayOnMap);
 
-    const { extent } = jobToDisplayOnMap || {};
+    const extentToDisplay = jobToDisplayOnMap?.extent || null;
+
+    const extentToEdit = useMemo(() => {
+        const currentExtent = jobToDisplayOnMap?.extent || null;
+
+        if (!currentExtent) {
+            return null;
+        }
+
+        if (jobToDisplayOnMap?.status !== 'not started') {
+            return null;
+        }
+
+        return currentExtent;
+    }, [jobToDisplayOnMap]);
 
     const visible = useMemo(() => {
+        // The layer should only be visible in wayport mode
         if (mode !== 'wayport') return false;
-        if (!extent) return false;
+
+        // if there's no extent to display, we shouldn't show the layer
+        if (!extentToDisplay) return false;
+
+        // no need to show the layer if the extent is being edited, as the sketch view model will handle displaying the geometry
+        if (extentToEdit) {
+            return false;
+        }
         return true;
-    }, [mode, extent]);
+    }, [mode, extentToDisplay, extentToEdit]);
+
+    useSketchViewModel({
+        extentToEdit,
+        mapView,
+        onExtentChange: (updatedExtent) => {
+            console.log(
+                'Updated extent from useSketchViewModel:',
+                updatedExtent
+            );
+            // Here you can dispatch an action to update the extent in your store
+            // For example:
+            // dispatch(updateDownloadJobExtent(updatedExtent));
+        },
+    });
 
     return (
         <WayportExtentLayer
             mapView={mapView}
-            extent={extent}
+            extent={extentToDisplay}
             visible={visible}
         />
     );

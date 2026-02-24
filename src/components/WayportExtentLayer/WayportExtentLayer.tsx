@@ -35,9 +35,12 @@ export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
 
     useEffect(() => {
         if (!graphicLayer.current) return;
+
+        graphicLayer.current.visible = visible;
+
         graphicLayer.current.removeAll();
 
-        if (extent) {
+        if (extent && visible) {
             const geometry = new Extent({
                 xmin: extent.xmin,
                 ymin: extent.ymin,
@@ -66,12 +69,7 @@ export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
                 duration: 1000,
             });
         }
-    }, [extent]);
-
-    useEffect(() => {
-        if (!graphicLayer.current) return;
-        graphicLayer.current.visible = visible;
-    }, [visible]);
+    }, [extent, visible]);
 
     return null;
 };
