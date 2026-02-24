@@ -2,9 +2,10 @@ import MapView from '@arcgis/core/views/MapView';
 import { useAppSelector } from '@store/configureStore';
 import { selectDownloadJobToDisplayOnMap } from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
 import { useSketchViewModel } from './useSketchViewModel';
+import { useGetTileEstimations } from './useGetEstimatedTileCount';
 
 type Props = {
     mapView?: MapView;
@@ -58,6 +59,15 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             // dispatch(updateDownloadJobExtent(updatedExtent));
         },
     });
+
+    const { tileEstimationData, isGettingEstimations } = useGetTileEstimations({
+        job: jobToDisplayOnMap,
+        extent: extentToEdit,
+    });
+
+    useEffect(() => {
+        console.log('Tile Estimation Data:', tileEstimationData);
+    }, [tileEstimationData]);
 
     return (
         <WayportExtentLayer
