@@ -4,6 +4,7 @@ import MapView from '@arcgis/core/views/MapView';
 import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import React, { FC, useEffect, useRef } from 'react';
 import { IExtent } from '@typings/index';
+import { map } from 'd3';
 
 type Props = {
     mapView: MapView;
@@ -14,27 +15,24 @@ type Props = {
 export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
     const graphicLayer = useRef<GraphicLayer>(null);
 
-    useEffect(() => {
-        if (!mapView) return;
-
+    const init = () => {
         const layer = new GraphicLayer({
             id: 'wayport-extent-layer',
             visible,
-
             effect: `drop-shadow(2px, 2px, 4px)`,
         });
 
         mapView.map.add(layer);
 
         graphicLayer.current = layer;
-
-        return () => {
-            mapView.map.remove(layer);
-        };
-    }, [mapView]);
+    };
 
     useEffect(() => {
-        if (!graphicLayer.current) return;
+        if (!mapView) return;
+
+        if (!graphicLayer.current) {
+            init();
+        }
 
         graphicLayer.current.visible = visible;
 
@@ -69,7 +67,7 @@ export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
                 duration: 1000,
             });
         }
-    }, [extent, visible]);
+    }, [extent, visible, mapView]);
 
     return null;
 };
