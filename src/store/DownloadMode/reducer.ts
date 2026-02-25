@@ -25,7 +25,6 @@ import {
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
-import { id } from 'date-fns/locale';
 
 export type DownloadJobStatus =
     | 'not started'
@@ -100,6 +99,12 @@ export type DownloadJob = {
          */
         size: number;
     };
+    /**
+     * id of the user who created this download job.
+     * We need this information to determine which download jobs to display in the UI,
+     * as we only want to show the download jobs created by the current user.
+     */
+    userId: string;
 };
 
 export type DownloadModeState = {
@@ -114,6 +119,10 @@ export type DownloadModeState = {
      * This is used to determine which job's extent to display on the map.
      */
     idOfSelectedJob: string | null;
+    /**
+     * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
+     */
+    errorMessage: string;
 };
 
 export const initialDownloadModeState: DownloadModeState = {
@@ -122,6 +131,7 @@ export const initialDownloadModeState: DownloadModeState = {
         ids: [],
     },
     idOfSelectedJob: null,
+    errorMessage: '',
 };
 
 const slice = createSlice({
@@ -158,6 +168,9 @@ const slice = createSlice({
         ) => {
             state.idOfSelectedJob = action.payload;
         },
+        errorMessageUpdated: (state, action: PayloadAction<string>) => {
+            state.errorMessage = action.payload;
+        },
     },
 });
 
@@ -170,6 +183,7 @@ export const {
     downloadJobRemoved,
     downloadJobsUpdated,
     idOfSelectedJobUpdated,
+    errorMessageUpdated,
 } = slice.actions;
 
 export default reducer;

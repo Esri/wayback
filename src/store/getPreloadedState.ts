@@ -57,6 +57,8 @@ import {
 } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
+import { getPreloadedState4Downloadmode } from './DownloadMode/getPreloadedState';
+import { getSignedInUser } from '@utils/Esri-OAuth';
 
 const getPreloadedState4UI = (
     hashParams: URLSearchParams,
@@ -227,31 +229,6 @@ const getPreloadedState4AnimationMode = (
     return state;
 };
 
-const getPreloadedState4Downloadmode = (
-    hashParams: URLSearchParams
-): DownloadModeState => {
-    const jobs: DownloadJob[] = []; //getDownloadJobsFromLocalStorage();
-
-    const byId: { [key: string]: DownloadJob } = {};
-    const ids: string[] = [];
-
-    for (const job of jobs) {
-        const { id } = job;
-        byId[id] = job;
-        ids.push(id);
-    }
-
-    const state: DownloadModeState = {
-        ...initialDownloadModeState,
-        jobs: {
-            byId,
-            ids,
-        },
-    };
-
-    return state;
-};
-
 const getPreloadedState = async ({
     waybackItems,
     appLanguage,
@@ -262,13 +239,16 @@ const getPreloadedState = async ({
     // get the url params from the current window location hash
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
 
+    // get the preloaded state for DownloadMode, which queries the IndexedDB for download jobs created by the current user and initializes the state with those jobs
+    const preloadedState4DonwloadMode = await getPreloadedState4Downloadmode();
+
     const preloadedState = {
         UI: getPreloadedState4UI(hashParams, appLanguage),
         WaybackItems: getPreloadedState4WaybackItems(waybackItems, hashParams),
         SwipeView: getPreloadedState4SwipeView(hashParams, waybackItems),
         Map: getPreloadedState4Map(hashParams),
         AnimationMode: getPreloadedState4AnimationMode(hashParams),
-        DownloadMode: getPreloadedState4Downloadmode(hashParams),
+        DownloadMode: preloadedState4DonwloadMode,
         UpdatesMode: getPreloadedState4UpdatesMode(hashParams),
     } as PartialRootState;
 

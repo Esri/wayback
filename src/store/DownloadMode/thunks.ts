@@ -22,6 +22,7 @@ import {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
+    errorMessageUpdated,
     idOfSelectedJobUpdated,
     // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
@@ -49,6 +50,8 @@ import {
     setActiveWaybackItem,
     setPreviewWaybackItem,
 } from '@store/Wayback/reducer';
+import { getSignedInUser } from '@utils/Esri-OAuth';
+import { wayportJobsStore } from '@utils/wayportJobsStore';
 
 type AddToDownloadListParams = {
     /**
@@ -129,6 +132,14 @@ export const addToDownloadList =
         // const minZoomLevel = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB;
         // const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
 
+        // get the signed in user id to associate with this download job
+        const signedInUserId = getSignedInUser();
+
+        if (!signedInUserId || !signedInUserId.username) {
+            console.error('user is not signed in, cannot create download job');
+            return;
+        }
+
         const downloadJob: DownloadJob = {
             id: nanoid(),
             waybackItem: {
@@ -145,12 +156,14 @@ export const addToDownloadList =
                 DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
                 DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
             ],
-
+            userId: signedInUserId.username,
             // createdTime: new Date().getTime(),
         };
 
-        dispatch(downloadJobCreated(downloadJob));
+        // dispatch(downloadJobCreated(downloadJob));
         // dispatch(isAddingNewDownloadJobToggled());
+
+        dispatch(createDonwloadJob(downloadJob));
 
         // set the newly created download job as the selected job so that its extent can be displayed on the map
         dispatch(idOfSelectedJobUpdated(downloadJob.id));
@@ -190,9 +203,12 @@ export const updateNewDownloadJob =
             levels: levels || newJob.levels,
             tileEstimations: tileEstimations || null,
         };
-        // console.log('updatedJobData in updateNewDownloadJob thunk:', updatedJobData);
+        console.log(
+            'updatedJobData in updateNewDownloadJob thunk:',
+            updatedJobData
+        );
 
-        dispatch(downloadJobsUpdated([updatedJobData]));
+        dispatch(updateDownloadJobs([updatedJobData]));
     };
 
 export const startDownloadJob =
@@ -224,7 +240,7 @@ export const startDownloadJob =
                 status: 'pending',
             };
 
-            dispatch(downloadJobsUpdated([submittedJob]));
+            dispatch(updateDownloadJobs([submittedJob]));
         } catch (err) {
             console.log(err);
 
@@ -233,7 +249,7 @@ export const startDownloadJob =
                 status: 'failed',
             };
 
-            dispatch(downloadJobsUpdated([failedJob]));
+            dispatch(updateDownloadJobs([failedJob]));
         }
     };
 
@@ -283,7 +299,7 @@ export const checkPendingDownloadJobStatus =
                 }
             );
 
-            dispatch(downloadJobsUpdated(updatedJobsData));
+            dispatch(updateDownloadJobs(updatedJobsData));
 
             dispatch(getOutputTilePackageInfo());
 
@@ -315,7 +331,7 @@ export const downloadOutputTilePackage =
         window.open(outputTilePackageInfo.url, '_blank');
 
         dispatch(
-            downloadJobsUpdated([
+            updateDownloadJobs([
                 {
                     ...byId[id],
                     status: 'downloaded',
@@ -355,9 +371,15 @@ export const cleanUpDownloadJobs =
             return false;
         });
 
-        for (const job of jobsToBeRemoved) {
-            dispatch(downloadJobRemoved(job.id));
+        if (!jobsToBeRemoved.length) {
+            return;
         }
+
+        dispatch(deleteDownloadJobs(jobsToBeRemoved));
+
+        // for (const job of jobsToBeRemoved) {
+        //     dispatch(downloadJobRemoved(job.id));
+        // }
     };
 
 /**
@@ -396,11 +418,104 @@ export const getOutputTilePackageInfo =
                 };
             });
 
-            dispatch(downloadJobsUpdated(updatedJobData));
+            dispatch(updateDownloadJobs(updatedJobData));
         } catch (err) {
             console.error(err);
         }
         // console.log(tilePackageInfoResponses)
+    };
+
+/**
+ * This thunk function is used to create a new download job and persist it to IndexedDB when user add a wayback item to the download list.
+ * It dispatches the action to update the store with the new download job data only after the new download job is successfully persisted to IndexedDB,
+ * so that we can ensure the store is always in sync with IndexedDB.
+ *
+ * @param jobData data of the new download job to be created and added to the store and persisted to IndexedDB
+ * @returns void
+ */
+const createDonwloadJob =
+    (jobData: DownloadJob) => async (dispatch: StoreDispatch) => {
+        try {
+            await wayportJobsStore.addJob(jobData);
+            dispatch(downloadJobCreated(jobData));
+        } catch (err) {
+            console.error('Failed to add download job to IndexedDB:', err);
+            // return;
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to create download job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+/**
+ * This thunk function is used to update the download job data when there is any change for the existing download jobs,
+ * such as when user adjust the export extent/zoom levels for a pending job,
+ * or when the status/tile package info of a pending job is updated after checking with Wayport GP service.
+ *
+ * It also persists the updated download job data to IndexedDB so that the download job data can be retained even after page refresh.
+ * @param updatedJobsData an array of updated download job data to be updated in the store and persisted to IndexedDB
+ * @returns
+ */
+const updateDownloadJobs =
+    (updatedJobsData: DownloadJob[]) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        if (!updatedJobsData || !updatedJobsData.length) {
+            return;
+        }
+
+        try {
+            for (const job of updatedJobsData) {
+                if (!job.id) {
+                    console.error('job id is missing for job data:', job);
+                    continue;
+                }
+
+                // Persist update to IndexedDB
+
+                await wayportJobsStore.updateJob(job);
+            }
+
+            dispatch(downloadJobsUpdated(updatedJobsData));
+        } catch (err) {
+            console.error('Failed to update download jobs in IndexedDB:', err);
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to update download job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+/**
+ * This thunk function is used to delete download jobs from the store and IndexedDB when user delete download jobs from the download list in the UI.
+ * @param jobsToBeDeleted an array of download jobs to be deleted from the store and IndexedDB
+ * @returns void
+ */
+export const deleteDownloadJobs =
+    (jobsToBeDeleted: DownloadJob[]) => async (dispatch: StoreDispatch) => {
+        try {
+            for (const job of jobsToBeDeleted) {
+                if (!job.id) {
+                    console.error('job id is missing for job data:', job);
+                    continue;
+                }
+
+                await wayportJobsStore.deleteJob(job.id);
+                dispatch(downloadJobRemoved(job.id));
+            }
+        } catch (err) {
+            console.error('Failed to delete download job from IndexedDB:', err);
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to delete download job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
     };
 
 export const toggleWayportMode =

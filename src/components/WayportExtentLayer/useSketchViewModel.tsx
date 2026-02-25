@@ -130,7 +130,7 @@ export const useSketchViewModel = ({
      * @param extent - The extent to be edited.
      * @returns void
      */
-    const startEditing = (extentToEdit: Extent) => {
+    const startEditing = async (extentToEdit: Extent) => {
         if (!sketchVMRef.current || !graphicsLayerRef.current) {
             return;
         }
@@ -142,25 +142,31 @@ export const useSketchViewModel = ({
             return;
         }
 
-        const extentGraphic = new Graphic({
-            geometry: extentToEdit,
-            symbol: {
-                type: 'simple-fill',
-                color: [0, 0, 0, 0.2],
-                style: 'solid',
-                outline: {
-                    color: [0, 0, 0, 0.5],
-                    width: 2,
+        try {
+            const extentGraphic = new Graphic({
+                geometry: extentToEdit,
+                symbol: {
+                    type: 'simple-fill',
+                    color: [0, 0, 0, 0.2],
+                    style: 'solid',
+                    outline: {
+                        color: [0, 0, 0, 0.5],
+                        width: 2,
+                    },
                 },
-            },
-        });
+            });
 
-        graphicsLayerRef.current.add(extentGraphic);
+            graphicsLayerRef.current.add(extentGraphic);
 
-        sketchVMRef.current.update(extentGraphic);
-        // sketchVMRef.current.activate("update");
+            await sketchVMRef.current.update(extentGraphic);
+            // sketchVMRef.current.activate("update");
 
-        mapView.goTo(extentToEdit.clone().expand(EXPAND_EXTENT_FACTOR));
+            await mapView.goTo(
+                extentToEdit.clone().expand(EXPAND_EXTENT_FACTOR)
+            );
+        } catch (error) {
+            console.error('Error starting sketch edit:', error);
+        }
     };
 
     useEffect(() => {
@@ -182,6 +188,9 @@ export const useSketchViewModel = ({
     }, []);
 
     useEffect(() => {
+        console.log('extentToEdit changed:', extentToEdit);
+        console.log('isSketchVMReady:', isSketchVMReady);
+
         if (
             !sketchVMRef.current ||
             !graphicsLayerRef.current ||
