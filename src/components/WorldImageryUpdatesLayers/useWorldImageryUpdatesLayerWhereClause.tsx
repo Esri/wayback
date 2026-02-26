@@ -75,15 +75,17 @@ export const useWorldImageryUpdatesLayerWhereClause = (
         }
 
         if (dateFilter) {
-            console.log('dateFilter', dateFilter);
-
-            const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtract[dateFilter]} AND CURRENT_TIMESTAMP)`;
+            // console.log('dateFilter', dateFilter);
 
             if (dateFilter !== 'pending') {
+                const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtract[dateFilter]} AND CURRENT_TIMESTAMP)`;
                 whereClauses.push(dateQuery);
+
+                const statusQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.published}')`;
+                whereClauses.push(statusQuery);
             } else {
                 whereClauses.push(
-                    `(${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
+                    `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
                 );
             }
 
