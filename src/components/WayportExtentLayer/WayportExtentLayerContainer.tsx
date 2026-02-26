@@ -22,25 +22,25 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
 
     const newDownloadJob = useAppSelector(selectNewDownloadJob);
 
-    const jobToDisplayOnMap = useAppSelector(selectDownloadJobToDisplayOnMap);
+    // const jobToDisplayOnMap = useAppSelector(selectDownloadJobToDisplayOnMap);
 
-    // The extent to display on the map should be based on the job that is designated to be displayed on the map.
-    // This should not be the new download job that is being created, because the  extent of the new download job is handled separately by the sketch view model, and should not be displayed on the map when it's being edited.
-    const extentToDisplay = useMemo(() => {
-        if (!jobToDisplayOnMap) {
-            return null;
-        }
+    // // The extent to display on the map should be based on the job that is designated to be displayed on the map.
+    // // This should not be the new download job that is being created, because the  extent of the new download job is handled separately by the sketch view model, and should not be displayed on the map when it's being edited.
+    // const extentToDisplay = useMemo(() => {
+    //     if (!jobToDisplayOnMap) {
+    //         return null;
+    //     }
 
-        if (jobToDisplayOnMap.status === 'not started') {
-            return null;
-        }
+    //     if (jobToDisplayOnMap.status === 'not started') {
+    //         return null;
+    //     }
 
-        return jobToDisplayOnMap.extent;
-    }, [jobToDisplayOnMap]);
+    //     return jobToDisplayOnMap.extent;
+    // }, [jobToDisplayOnMap]);
 
     // The extent should only be editable if the job is in 'not started' status. Once the job has been started, the extent should be locked in and not editable.
     const extentToEdit = useMemo(() => {
-        const currentExtent = jobToDisplayOnMap?.extent || null;
+        const currentExtent = newDownloadJob?.extent || null;
 
         if (mode !== 'wayport') {
             return null;
@@ -50,28 +50,31 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             return null;
         }
 
-        if (jobToDisplayOnMap?.status !== 'not started') {
+        if (newDownloadJob?.status !== 'not started') {
             return null;
         }
 
         return currentExtent;
-    }, [jobToDisplayOnMap, mode]);
+    }, [newDownloadJob, mode]);
 
-    const wayportExtentLayerVisibility = useMemo(() => {
-        // The layer should only be visible in wayport mode
-        if (mode !== 'wayport') return false;
+    const isSketchVMActive = Boolean(extentToEdit) && mode === 'wayport';
 
-        // if there's no extent to display, we shouldn't show the layer
-        if (!extentToDisplay) return false;
+    // const wayportExtentLayerVisibility = useMemo(() => {
+    //     // The layer should only be visible in wayport mode
+    //     if (mode !== 'wayport') return false;
 
-        // no need to show the layer if the extent is being edited, as the sketch view model will handle displaying the geometry
-        if (extentToEdit) {
-            return false;
-        }
-        return true;
-    }, [mode, extentToDisplay, extentToEdit]);
+    //     // if there's no extent to display, we shouldn't show the layer
+    //     if (!extentToDisplay) return false;
+
+    //     // no need to show the layer if the extent is being edited, as the sketch view model will handle displaying the geometry
+    //     if (extentToEdit) {
+    //         return false;
+    //     }
+    //     return true;
+    // }, [mode, extentToDisplay, extentToEdit]);
 
     useSketchViewModel({
+        isActive: isSketchVMActive,
         extentToEdit,
         mapView,
         onExtentChange: (updatedExtent) => {
@@ -99,10 +102,11 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     }, [tileEstimations]);
 
     return (
-        <WayportExtentLayer
-            mapView={mapView}
-            extent={extentToDisplay}
-            visible={wayportExtentLayerVisibility}
-        />
+        // <WayportExtentLayer
+        //     mapView={mapView}
+        //     extent={extentToDisplay}
+        //     visible={wayportExtentLayerVisibility}
+        // />
+        null
     );
 };

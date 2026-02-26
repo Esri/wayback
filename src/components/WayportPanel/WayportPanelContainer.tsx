@@ -3,10 +3,13 @@ import { WayportIntroduction } from './WayportIntroduction';
 import { AppContext } from '@contexts/AppContextProvider';
 import { signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
-import { useAppSelector } from '@store/configureStore';
+import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { selectNewDownloadJob } from '@store/DownloadMode/selectors';
+import { deleteDownloadJobs } from '@store/DownloadMode/thunks';
 
 export const WayportPanelContainer = () => {
+    const dispatch = useAppDispatch();
+
     const { notSignedIn, signedInWithArcGISPublicAccount } =
         useContext(AppContext);
 
@@ -31,7 +34,13 @@ export const WayportPanelContainer = () => {
                 }}
             />
 
-            <NewJobDialog disabled={disabled} job={newDownloadJob} />
+            <NewJobDialog
+                disabled={disabled}
+                job={newDownloadJob}
+                onRemove={(job) => {
+                    dispatch(deleteDownloadJobs([job]));
+                }}
+            />
         </div>
     );
 };

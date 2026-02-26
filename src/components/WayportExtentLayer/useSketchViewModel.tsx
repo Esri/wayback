@@ -11,6 +11,10 @@ import { IExtent } from '@typings/index';
 
 type Props = {
     /**
+     * Indicates whether the SketchViewModel should be active and allow editing on the map.
+     */
+    isActive: boolean;
+    /**
      * The current extent to be displayed and edited.
      */
     extentToEdit: IExtent | null;
@@ -34,6 +38,7 @@ type Props = {
  * @returns void
  */
 export const useSketchViewModel = ({
+    isActive,
     extentToEdit,
     mapView,
     onExtentChange,
@@ -48,12 +53,21 @@ export const useSketchViewModel = ({
     const [isSketchVMReady, setIsSketchVMReady] = React.useState(false);
 
     const init = () => {
-        graphicsLayerRef.current = new GraphicsLayer({
-            listMode: 'hide',
-            title: 'Sketch Graphics Layer',
-        });
+        if (!mapView) {
+            console.error('MapView is required to initialize SketchViewModel');
+            return;
+        }
 
-        mapView.map.add(graphicsLayerRef.current);
+        if (!graphicsLayerRef.current) {
+            graphicsLayerRef.current = new GraphicsLayer({
+                listMode: 'hide',
+                title: 'Sketch Graphics Layer',
+            });
+
+            mapView.map.add(graphicsLayerRef.current);
+        }
+
+        console.log('Initializing SketchViewModel');
 
         sketchVMRef.current = new SketchViewModel({
             view: mapView,
@@ -66,8 +80,6 @@ export const useSketchViewModel = ({
                 toggleToolOnClick: false,
             },
         });
-
-        setIsSketchVMReady(true);
 
         // Listen for "update" events to react to edits
         sketchVMRef.current.on('update', function (event) {
@@ -103,6 +115,8 @@ export const useSketchViewModel = ({
                 sketchVMOnUpdate(g);
             }
         });
+
+        setIsSketchVMReady(true);
     };
 
     const sketchVMOnUpdate = (graphic: Graphic) => {
@@ -170,12 +184,13 @@ export const useSketchViewModel = ({
     };
 
     useEffect(() => {
-        if (!mapView) {
+        // only initialize the SketchViewModel if we have a mapView and if the hook is active (e.g. we're in wayport mode and have an extent to edit)
+        if (!mapView || !isActive) {
             return;
         }
 
         init();
-    }, [mapView]);
+    }, [mapView, isActive]);
 
     useEffect(() => {
         return () => {
@@ -200,7 +215,7 @@ export const useSketchViewModel = ({
         if (!extentToEdit) {
             sketchVMRef.current.cancel();
             graphicsLayerRef.current.removeAll();
-            console.log('No updated extent provided');
+            // console.log('No extent to edit, clearing sketch and graphics layer');
             return;
         }
 
@@ -215,6 +230,8 @@ export const useSketchViewModel = ({
                 ymax: extentToEdit.ymax,
                 spatialReference: extentToEdit.spatialReference,
             });
+
+            console.log('Starting new sketch edit with extent:', extentToEdit);
 
             // console.log('No existing graphic to update');
             startEditing(extent);

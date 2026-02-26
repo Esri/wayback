@@ -140,7 +140,7 @@ export const addToDownloadList =
             return;
         }
 
-        const downloadJob: DownloadJob = {
+        const newDownloadJobToAdd: DownloadJob = {
             id: nanoid(),
             waybackItem: {
                 ...byReleaseNumber[releaseNum],
@@ -163,10 +163,10 @@ export const addToDownloadList =
         // dispatch(downloadJobCreated(downloadJob));
         // dispatch(isAddingNewDownloadJobToggled());
 
-        dispatch(createDonwloadJob(downloadJob));
+        dispatch(createDonwloadJob(newDownloadJobToAdd));
 
         // set the newly created download job as the selected job so that its extent can be displayed on the map
-        dispatch(idOfSelectedJobUpdated(downloadJob.id));
+        dispatch(idOfSelectedJobUpdated(newDownloadJobToAdd.id));
     };
 
 /**
@@ -434,8 +434,17 @@ export const getOutputTilePackageInfo =
  * @returns void
  */
 const createDonwloadJob =
-    (jobData: DownloadJob) => async (dispatch: StoreDispatch) => {
+    (jobData: DownloadJob) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
         try {
+            const existingNewDownloadJob = selectNewDownloadJob(getState());
+
+            // If there is already an existing new download job in the store, we need to remove it before creating a new one, because the application only supports one new download job that is being created at a time.
+            if (existingNewDownloadJob) {
+                // console.error('there is already an existing new download job in the store, cannot create another new download job');
+                await dispatch(deleteDownloadJobs([existingNewDownloadJob]));
+            }
+
             await wayportJobsStore.addJob(jobData);
             dispatch(downloadJobCreated(jobData));
         } catch (err) {

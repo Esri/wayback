@@ -11,9 +11,14 @@ import { dispatch, min } from 'd3';
 type NewJobDialogProps = {
     job: DownloadJob | null;
     disabled: boolean;
+    onRemove: (job: DownloadJob) => void;
 };
 
-export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
+export const NewJobDialog: FC<NewJobDialogProps> = ({
+    job,
+    disabled,
+    onRemove,
+}) => {
     const { t } = useTranslation();
 
     const { tileEstimations, levels } = job || {};
@@ -75,18 +80,32 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
 
         return (
             <div>
-                <div className="flex justify-center items-center mb-4">
-                    <CalciteIcon
-                        icon="information"
-                        scale="s"
-                        class="text-custom-theme-blue-light mr-2"
-                    />
-                    <span className=" text-custom-theme-blue-light font-light">
-                        {t('new_wayport_job_header', {
-                            releaseDate:
-                                job?.waybackItem?.releaseDateLabel || 'Unknown',
-                        })}
-                    </span>
+                <div className="w-full relative mb-4">
+                    <div className="flex justify-center items-center ">
+                        <CalciteIcon
+                            icon="information"
+                            scale="s"
+                            class="text-custom-theme-blue-light mr-2"
+                        />
+                        <span className=" text-custom-theme-blue-light font-light">
+                            {t('new_wayport_job_header', {
+                                releaseDate:
+                                    job?.waybackItem?.releaseDateLabel ||
+                                    'Unknown',
+                            })}
+                        </span>
+                    </div>
+
+                    <div className="absolute top-0 right-0">
+                        <CalciteButton
+                            width="full"
+                            disabled={shouldDisableCreateButton}
+                            appearance="transparent"
+                            scale="s"
+                            iconEnd="x"
+                            onClick={onRemove.bind(null, job)}
+                        ></CalciteButton>
+                    </div>
                 </div>
 
                 <div>
@@ -154,6 +173,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
 
                 <div>
                     <CalciteButton
+                        class="mt-2"
                         width="full"
                         disabled={shouldDisableCreateButton}
                         appearance="solid"
