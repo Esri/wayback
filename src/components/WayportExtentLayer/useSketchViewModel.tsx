@@ -188,9 +188,6 @@ export const useSketchViewModel = ({
     }, []);
 
     useEffect(() => {
-        console.log('extentToEdit changed:', extentToEdit);
-        console.log('isSketchVMReady:', isSketchVMReady);
-
         if (
             !sketchVMRef.current ||
             !graphicsLayerRef.current ||
@@ -203,7 +200,7 @@ export const useSketchViewModel = ({
         if (!extentToEdit) {
             sketchVMRef.current.cancel();
             graphicsLayerRef.current.removeAll();
-            // console.log('No updated extent provided');
+            console.log('No updated extent provided');
             return;
         }
 

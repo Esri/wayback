@@ -42,6 +42,10 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     const extentToEdit = useMemo(() => {
         const currentExtent = jobToDisplayOnMap?.extent || null;
 
+        if (mode !== 'wayport') {
+            return null;
+        }
+
         if (!currentExtent) {
             return null;
         }
@@ -51,7 +55,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         }
 
         return currentExtent;
-    }, [jobToDisplayOnMap]);
+    }, [jobToDisplayOnMap, mode]);
 
     const wayportExtentLayerVisibility = useMemo(() => {
         // The layer should only be visible in wayport mode

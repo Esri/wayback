@@ -5,6 +5,8 @@ import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ScaleRangeSelector } from './ScaleRangeSelector';
+import { dispatch, min } from 'd3';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
@@ -87,11 +89,44 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({ job, disabled }) => {
                     </span>
                 </div>
 
-                <ul className="text-xs list-disc list-inside mb-4">
-                    <li className="mb-2">{t('download_job_instruction_1')}</li>
-                    <li className="mb-2">{t('download_job_instruction_2')}</li>
-                    <li className="mb-2">{t('download_job_instruction_3')}</li>
-                </ul>
+                <div>
+                    <ul className="text-xs list-disc list-inside mb-4">
+                        <li className="mb-2">
+                            {t('download_job_instruction_1')}
+                        </li>
+                        <li className="mb-2">
+                            {t('download_job_instruction_2')}
+                        </li>
+                        <li className="mb-2">
+                            {t('download_job_instruction_3')}
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <ScaleRangeSelector
+                        minValue={1}
+                        maxValue={23}
+                        defaultMinScale={1}
+                        defaultMaxScale={23}
+                        onChange={(minScale, maxScale) => {
+                            console.log(
+                                'Selected scale range: ',
+                                minScale,
+                                maxScale
+                            );
+                            // update the levels in the job state
+                            // updateJobLevels(job?.id, [minScale, maxScale]);
+
+                            // dispatch(
+                            //     updateNewDownloadJob({
+                            //         minZoom: minScale,
+                            //         maxZoom: maxScale,
+                            //     })
+                            // )
+                        }}
+                    />
+                </div>
 
                 <div className="flex items-center mb-2">
                     <div className="mr-2">
