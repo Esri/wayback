@@ -115,11 +115,6 @@ export type DownloadModeState = {
         ids: string[];
     };
     /**
-     * Id of the download job that is currently selected in the UI.
-     * This is used to determine which job's extent to display on the map.
-     */
-    idOfSelectedJob: string | null;
-    /**
      * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
      */
     errorMessage: string;
@@ -130,7 +125,6 @@ export const initialDownloadModeState: DownloadModeState = {
         byId: {},
         ids: [],
     },
-    idOfSelectedJob: null,
     errorMessage: '',
 };
 
@@ -162,12 +156,6 @@ const slice = createSlice({
                 state.jobs.byId[id] = job;
             }
         },
-        idOfSelectedJobUpdated: (
-            state,
-            action: PayloadAction<string | null>
-        ) => {
-            state.idOfSelectedJob = action.payload;
-        },
         errorMessageUpdated: (state, action: PayloadAction<string>) => {
             state.errorMessage = action.payload;
         },
@@ -182,7 +170,6 @@ export const {
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
-    idOfSelectedJobUpdated,
     errorMessageUpdated,
 } = slice.actions;
 

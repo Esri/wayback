@@ -18,7 +18,9 @@ export const getPreloadedState4Downloadmode =
         // If no signed in user is found, we will return the initial state with empty jobs.
         const signedInUser = getSignedInUser();
 
-        if (!signedInUser || !signedInUser?.username) {
+        const userId = signedInUser?.username;
+
+        if (!userId) {
             console.warn(
                 'No signed in user found. DownloadMode will be initialized with empty state.'
             );
@@ -26,27 +28,16 @@ export const getPreloadedState4Downloadmode =
         }
 
         try {
-            const jobs: DownloadJob[] = await wayportJobsStore.getJobsByUserId(
-                signedInUser?.username
-            );
-            console.log(
-                `Found ${jobs.length} download jobs for user ${signedInUser.username} in IndexedDB.`
-            );
+            const jobs: DownloadJob[] =
+                await wayportJobsStore.getJobsByUserId(userId);
 
             const byId: { [key: string]: DownloadJob } = {};
             const ids: string[] = [];
-
-            let idOfSelectedJob: string | null = null;
 
             for (const job of jobs) {
                 const { id } = job;
                 byId[id] = job;
                 ids.push(id);
-
-                // if there's a job that is not started, we will set it as the selected job by default, so that its extent can be displayed on the map.
-                if (job.status === 'not started' && !idOfSelectedJob) {
-                    idOfSelectedJob = id;
-                }
             }
 
             const state: DownloadModeState = {
@@ -55,7 +46,6 @@ export const getPreloadedState4Downloadmode =
                     byId,
                     ids,
                 },
-                idOfSelectedJob,
             };
 
             return state;

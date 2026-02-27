@@ -1,24 +1,30 @@
 import { CalciteSlider } from '@esri/calcite-components-react';
+import {
+    DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
+    DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+} from '@store/DownloadMode/thunks';
 import React, { useState, useRef, useEffect } from 'react';
 
 type ScaleRangeSelectorProps = {
+    /**
+     * min zoom level for the download job, default to 1 if not provided
+     */
     minValue?: number;
+    /**
+     * max zoom level for the download job, default to 23 if not provided
+     */
     maxValue?: number;
-    defaultMinScale?: number;
-    defaultMaxScale?: number;
     onChange: (minScale: number, maxScale: number) => void;
 };
 
 export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
     minValue = 1,
     maxValue = 23,
-    defaultMinScale = 1,
-    defaultMaxScale = 23,
     onChange,
 }) => {
     const [value, setValue] = useState<[number, number]>([
-        defaultMinScale,
-        defaultMaxScale,
+        DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+        DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
     ]);
 
     useEffect(() => {
@@ -30,8 +36,8 @@ export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
 
     return (
         <CalciteSlider
-            min={defaultMinScale}
-            max={defaultMaxScale}
+            min={DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB}
+            max={DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB}
             minValue={value[0]}
             maxValue={value[1]}
             ticks={1}

@@ -1,7 +1,7 @@
 import MapView from '@arcgis/core/views/MapView';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    selectDownloadJobToDisplayOnMap,
+    // selectDownloadJobToDisplayOnMap,
     selectNewDownloadJob,
 } from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';

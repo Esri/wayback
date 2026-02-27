@@ -269,6 +269,10 @@ class WayportJobsStore {
             await this.init();
         }
 
+        if (!userId) {
+            return [];
+        }
+
         return new Promise((resolve, reject) => {
             const transaction = this.db!.transaction(
                 [this.storeName],

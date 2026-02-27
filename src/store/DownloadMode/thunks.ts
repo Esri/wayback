@@ -23,7 +23,7 @@ import {
     downloadJobRemoved,
     downloadJobsUpdated,
     errorMessageUpdated,
-    idOfSelectedJobUpdated,
+    // idOfSelectedJobUpdated,
     // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
 } from './reducer';
@@ -50,8 +50,9 @@ import {
     setActiveWaybackItem,
     setPreviewWaybackItem,
 } from '@store/Wayback/reducer';
-import { getSignedInUser } from '@utils/Esri-OAuth';
+import { getSignedInUser, signIn } from '@utils/Esri-OAuth';
 import { wayportJobsStore } from '@utils/wayportJobsStore';
+import { saveNewDownloadJobToSessionStorage } from './helpers';
 
 type AddToDownloadListParams = {
     /**
@@ -135,10 +136,7 @@ export const addToDownloadList =
         // get the signed in user id to associate with this download job
         const signedInUserId = getSignedInUser();
 
-        if (!signedInUserId || !signedInUserId.username) {
-            console.error('user is not signed in, cannot create download job');
-            return;
-        }
+        const userId = signedInUserId?.username || '';
 
         const newDownloadJobToAdd: DownloadJob = {
             id: nanoid(),
@@ -156,17 +154,30 @@ export const addToDownloadList =
                 DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
                 DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
             ],
-            userId: signedInUserId.username,
+            userId,
             // createdTime: new Date().getTime(),
         };
+
+        if (!userId) {
+            console.info(
+                'Prompting user to sign in before creating download job'
+            );
+
+            // save the new download job data to session storage so that we can restore the job after user signs in
+            saveNewDownloadJobToSessionStorage(newDownloadJobToAdd);
+
+            signIn();
+
+            return;
+        }
 
         // dispatch(downloadJobCreated(downloadJob));
         // dispatch(isAddingNewDownloadJobToggled());
 
         dispatch(createDonwloadJob(newDownloadJobToAdd));
 
-        // set the newly created download job as the selected job so that its extent can be displayed on the map
-        dispatch(idOfSelectedJobUpdated(newDownloadJobToAdd.id));
+        // // set the newly created download job as the selected job so that its extent can be displayed on the map
+        // dispatch(idOfSelectedJobUpdated(newDownloadJobToAdd.id));
     };
 
 /**

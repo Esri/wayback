@@ -136,25 +136,14 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     <ScaleRangeSelector
                         minValue={1}
                         maxValue={23}
-                        defaultMinScale={1}
-                        defaultMaxScale={23}
-                        onChange={(minScale, maxScale) => {
-                            // console.log(
-                            //     'Selected scale range: ',
-                            //     minScale,
-                            //     maxScale
-                            // );
-
-                            levelsOnChange(minScale, maxScale);
-                            // update the levels in the job state
-                            // updateJobLevels(job?.id, [minScale, maxScale]);
-
-                            // dispatch(
-                            //     updateNewDownloadJob({
-                            //         minZoom: minScale,
-                            //         maxZoom: maxScale,
-                            //     })
-                            // )
+                        onChange={(
+                            userSelectedMinZoom,
+                            userSelectedMaxZoom
+                        ) => {
+                            levelsOnChange(
+                                userSelectedMinZoom,
+                                userSelectedMaxZoom
+                            );
                         }}
                     />
                 </div>
