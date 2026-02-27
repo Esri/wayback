@@ -27,13 +27,6 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
-        console.log(
-            'Calculating total tiles with tileEstimations:',
-            tileEstimations,
-            'and levels:',
-            levels
-        );
-
         if (!tileEstimations || !tileEstimations.length) {
             return 0;
         }
