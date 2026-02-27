@@ -199,14 +199,19 @@ export const updateNewDownloadJob =
 
         const updatedJobData = {
             ...newJob,
-            extent: extent || newJob.extent,
-            levels: levels || newJob.levels,
-            tileEstimations: tileEstimations || null,
         };
-        console.log(
-            'updatedJobData in updateNewDownloadJob thunk:',
-            updatedJobData
-        );
+
+        if (tileEstimations !== undefined) {
+            updatedJobData.tileEstimations = tileEstimations;
+        }
+
+        if (levels !== undefined) {
+            updatedJobData.levels = levels;
+        }
+
+        if (extent !== undefined) {
+            updatedJobData.extent = extent;
+        }
 
         dispatch(updateDownloadJobs([updatedJobData]));
     };

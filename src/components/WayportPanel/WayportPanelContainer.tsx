@@ -5,7 +5,10 @@ import { signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import { selectNewDownloadJob } from '@store/DownloadMode/selectors';
-import { deleteDownloadJobs } from '@store/DownloadMode/thunks';
+import {
+    deleteDownloadJobs,
+    updateNewDownloadJob,
+} from '@store/DownloadMode/thunks';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -39,6 +42,16 @@ export const WayportPanelContainer = () => {
                 job={newDownloadJob}
                 onRemove={(job) => {
                     dispatch(deleteDownloadJobs([job]));
+                }}
+                levelsOnChange={(minZoom, maxZoom) => {
+                    // console.log('Updating job levels to: ', minZoom, maxZoom);
+                    // update the levels in the job state
+                    // we can directly dispatch the action here since the state update is simple and doesn't require any async operations
+                    dispatch(
+                        updateNewDownloadJob({
+                            levels: [minZoom, maxZoom],
+                        })
+                    );
                 }}
             />
         </div>

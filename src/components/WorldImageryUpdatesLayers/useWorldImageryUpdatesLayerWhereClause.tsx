@@ -38,15 +38,6 @@ export const useWorldImageryUpdatesLayerWhereClause = (
     const region = useAppSelector(selectUpdatesModeRegion);
 
     const whereClause: string = useMemo(() => {
-        console.log(
-            'Generating where clause with dateFilter:',
-            dateFilter,
-            'region:',
-            region,
-            'shouldIgnoreRegionFilter:',
-            shouldIgnoreRegionFilter
-        );
-
         const whereClauses: string[] = [
             `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} IS NOT NULL`,
         ];

@@ -11,12 +11,14 @@ import { dispatch, min } from 'd3';
 type NewJobDialogProps = {
     job: DownloadJob | null;
     disabled: boolean;
+    levelsOnChange: (minZoom: number, maxZoom: number) => void;
     onRemove: (job: DownloadJob) => void;
 };
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
     job,
     disabled,
+    levelsOnChange,
     onRemove,
 }) => {
     const { t } = useTranslation();
@@ -25,6 +27,13 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
+        console.log(
+            'Calculating total tiles with tileEstimations:',
+            tileEstimations,
+            'and levels:',
+            levels
+        );
+
         if (!tileEstimations || !tileEstimations.length) {
             return 0;
         }
@@ -35,7 +44,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
         let total = 0;
 
-        const [minZoom, maxZoom] = levels;
+        const [minZoom, maxZoom] = levels || [-1, -1];
 
         for (const { count, level } of tileEstimations) {
             if (level < minZoom) {
@@ -50,7 +59,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         }
 
         return total;
-    }, [tileEstimations, levels]);
+    }, [tileEstimations, levels[0], levels[1]]);
 
     /**
      * The export tool has a hard limit of maximum number of tiles allowed in a wayport export request.
@@ -129,11 +138,13 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         defaultMinScale={1}
                         defaultMaxScale={23}
                         onChange={(minScale, maxScale) => {
-                            console.log(
-                                'Selected scale range: ',
-                                minScale,
-                                maxScale
-                            );
+                            // console.log(
+                            //     'Selected scale range: ',
+                            //     minScale,
+                            //     maxScale
+                            // );
+
+                            levelsOnChange(minScale, maxScale);
                             // update the levels in the job state
                             // updateJobLevels(job?.id, [minScale, maxScale]);
 
