@@ -35,7 +35,8 @@ export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
             minValue={value[0]}
             maxValue={value[1]}
             ticks={1}
-            labelTicks={true}
+            // labelTicks={true}
+            labelHandles={true}
             onCalciteSliderChange={(evt) => {
                 const taget = evt.target;
                 const value = taget.value;

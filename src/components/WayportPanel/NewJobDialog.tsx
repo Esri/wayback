@@ -25,19 +25,27 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
     const { tileEstimations, levels } = job || {};
 
+    const [minZoom, maxZoom] = levels || [-1, -1];
+
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {
             return 0;
         }
 
-        if (!levels || levels.length !== 2) {
+        // if levels is not set, it means user has not made a selection on zoom levels for the job,
+        // we will treat it as 0 to avoid confusion and potential issues with the export tool when creating a job with no zoom level selected
+        if (minZoom === -1 || maxZoom === -1) {
             return 0;
         }
 
+        // if (!levels || levels.length !== 2) {
+        //     return 0;
+        // }
+
         let total = 0;
 
-        const [minZoom, maxZoom] = levels || [-1, -1];
+        // const [minZoom, maxZoom] = levels || [-1, -1];
 
         for (const { count, level } of tileEstimations) {
             if (level < minZoom) {
@@ -52,7 +60,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         }
 
         return total;
-    }, [tileEstimations, levels[0], levels[1]]);
+    }, [tileEstimations, minZoom, maxZoom]);
 
     /**
      * The export tool has a hard limit of maximum number of tiles allowed in a wayport export request.
