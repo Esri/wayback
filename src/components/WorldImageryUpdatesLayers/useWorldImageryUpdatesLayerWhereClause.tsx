@@ -51,18 +51,6 @@ export const useWorldImageryUpdatesLayerWhereClause = (
             `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} IS NOT NULL`,
         ];
 
-        // if (status && status.length > 0) {
-        //     whereClauses.push(
-        //         `${
-        //             WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE
-        //         } in ('${status.join("','")}')`
-        //     );
-        // } else {
-        //     whereClauses.push(
-        //         `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} IS NULL`
-        //     );
-        // }
-
         if (
             region &&
             region !== null &&
@@ -75,41 +63,20 @@ export const useWorldImageryUpdatesLayerWhereClause = (
         }
 
         if (dateFilter) {
-            // console.log('dateFilter', dateFilter);
-
+            // Add date filter if it's not 'pending'
             if (dateFilter !== 'pending') {
                 const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtract[dateFilter]} AND CURRENT_TIMESTAMP)`;
                 whereClauses.push(dateQuery);
-
-                const statusQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.published}')`;
-                whereClauses.push(statusQuery);
-            } else {
-                whereClauses.push(
-                    `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
-                );
             }
 
-            // if (status.includes(WorldImageryUpdatesStatusEnum.pending)) {
-            //     whereClauses.push(
-            //         `${dateQuery} OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`
-            //     );
-            // } else if (
-            //     status.includes(WorldImageryUpdatesStatusEnum.published)
-            // ) {
-            //     whereClauses.push(dateQuery);
-            // }
+            // Add status filter based on date filter
+            const statusQuery =
+                dateFilter === 'pending'
+                    ? `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
+                    : `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.published}')`;
+
+            whereClauses.push(statusQuery);
         }
-
-        // if (dateFilter === 'custom' && customDateRange) {
-        //     const [startDate, endDate] = customDateRange;
-        //     if (startDate && endDate) {
-        //         whereClauses.push(
-        //             `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN '${startDate}' AND '${endDate}')`
-        //         );
-        //     }
-        // }
-
-        console.log('whereClauses', whereClauses);
 
         return whereClauses.map((clause) => `(${clause})`).join(' AND ');
     }, [dateFilter, region]);
