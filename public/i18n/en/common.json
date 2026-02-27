@@ -151,5 +151,6 @@
     "download_job_instruction_1": "Exports are based on selected extent & scale range",
     "download_job_instruction_2": "Maximum of 150,000 tiles per export request",
     "download_job_instruction_3": "Maximum of 5 concurrent export requests",
-    "estimated_number_of_tiles": "Estimated number of tiles: {{total}}"
+    "estimated_number_of_tiles": "Estimated number of tiles: {{total}}",
+    "wayport_signed_in_with_public_account_warning": "You are signed in with an ArcGIS Online public account. Please sign in with an ArcGIS organizational account to exort tile package"
 }

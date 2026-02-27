@@ -21,27 +21,22 @@ export const saveNewDownloadJobToSessionStorage = (job: DownloadJob) => {
  * we need to assign the userId to the job after the user signs in and we retrieve the job from session storage, so that when we create the job in the backend, we can associate the job with the correct user.
  * @returns
  */
-export const getNewDownloadJobFromSessionStorage = (
-    userId: string
-): DownloadJob | null => {
+export const getNewDownloadJobFromSessionStorage = (): DownloadJob | null => {
     const jobString = sessionStorage.getItem(
         TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY
     );
+    // console.log('retrieving new download job from session storage: ', jobString);
 
     // clean up the session storage after retrieving the job since we only want to restore the job once after the user signs in,
     // if we keep the job in session storage, it will keep restoring the same job every time the user refreshes the page or comes back to the app
     sessionStorage.removeItem(TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY);
-
-    // if not signed in or userId is not available, we should not retrieve the job from session storage since we won't be able to associate the job with the correct user when creating the job in the backend
-    if (!userId) {
-        return null;
-    }
 
     let job: DownloadJob | null = null;
 
     if (jobString) {
         try {
             job = JSON.parse(jobString);
+            console.log('parsed new download job from session storage: ', job);
         } catch (error) {
             console.error(
                 'Error parsing new download job from session storage: ',
@@ -50,14 +45,5 @@ export const getNewDownloadJobFromSessionStorage = (
         }
     }
 
-    if (!job) {
-        return null;
-    }
-
-    // assign the userId to the job before returning it, since the job is created when the user is not signed in,
-    // we need to assign the userId to the job after the user signs in and we retrieve the job from session storage, so that when we create the job in the backend, we can associate the job with the correct user.
-    return {
-        ...job,
-        userId,
-    };
+    return job;
 };

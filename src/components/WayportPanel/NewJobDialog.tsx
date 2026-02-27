@@ -10,16 +10,40 @@ import { dispatch, min } from 'd3';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
+    /**
+     * If true, the user is either not signed in or signed in with an ArcGIS public account.
+     * In both cases, we will disable the create button in the new job dialog since users will not be able to create download jobs.
+     */
     disabled: boolean;
+    /**
+     * If true, it means the user is signed in with an ArcGIS public account.
+     * We will show a warning message to users as they will need to sign in with an organizational account to create Wayport export jobs.
+     */
+    signedInUsingPublicAccount: boolean;
     levelsOnChange: (minZoom: number, maxZoom: number) => void;
+    /**
+     * Emits when user clicks the remove button in the new job dialog to remove the current new download job that is being created.
+     * This will reset the new job dialog and allow users to start over on creating a new download job.
+     * @param job
+     * @returns
+     */
     onRemove: (job: DownloadJob) => void;
+    /**
+     * Emits when user clicks the create button in the new job dialog to create a new download job based on the current job state
+     * which contains the user input such as selected zoom levels for the new job.
+     * @param job
+     * @returns
+     */
+    onCreate: (job: DownloadJob) => void;
 };
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
     job,
     disabled,
+    signedInUsingPublicAccount,
     levelsOnChange,
     onRemove,
+    onCreate,
 }) => {
     const { t } = useTranslation();
 
@@ -171,6 +195,22 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         })}
                     </p>
                 </div>
+
+                {signedInUsingPublicAccount && (
+                    <div className="flex items-center mb-2 bg-yellow-100 p-2 rounded">
+                        <div className="mr-2">
+                            <CalciteIcon
+                                icon="exclamation-mark-triangle"
+                                scale="s"
+                                class="text-yellow-red"
+                            />
+                        </div>
+
+                        <p className="text-sm ">
+                            {t('wayport_signed_in_with_public_account_warning')}
+                        </p>
+                    </div>
+                )}
 
                 <div>
                     <CalciteButton

@@ -52,7 +52,10 @@ import {
 } from '@store/Wayback/reducer';
 import { getSignedInUser, signIn } from '@utils/Esri-OAuth';
 import { wayportJobsStore } from '@utils/wayportJobsStore';
-import { saveNewDownloadJobToSessionStorage } from './helpers';
+import {
+    getNewDownloadJobFromSessionStorage,
+    saveNewDownloadJobToSessionStorage,
+} from './helpers';
 
 type AddToDownloadListParams = {
     /**

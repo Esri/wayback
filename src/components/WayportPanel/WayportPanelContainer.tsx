@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { use, useContext } from 'react';
 import { WayportIntroduction } from './WayportIntroduction';
 import { AppContext } from '@contexts/AppContextProvider';
 import { signIn } from '@utils/Esri-OAuth';
@@ -40,8 +40,12 @@ export const WayportPanelContainer = () => {
             <NewJobDialog
                 disabled={disabled}
                 job={newDownloadJob}
+                signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
                 onRemove={(job) => {
                     dispatch(deleteDownloadJobs([job]));
+                }}
+                onCreate={(job) => {
+                    // console.log('create new download job with state: ', job);
                 }}
                 levelsOnChange={(minZoom, maxZoom) => {
                     // console.log('Updating job levels to: ', minZoom, maxZoom);
