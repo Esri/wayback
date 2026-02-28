@@ -103,59 +103,6 @@ class WayportJobsStore {
     }
 
     /**
-     * Get the current count of download jobs in the store.
-     * If userId is provided, counts only jobs for that user.
-     *
-     * @param userId - Optional user ID to filter counts by user
-     */
-    private async getCount(userId?: string): Promise<number> {
-        if (!this.db) {
-            await this.init();
-        }
-
-        return new Promise((resolve, reject) => {
-            const transaction = this.db!.transaction(
-                [this.storeName],
-                'readonly'
-            );
-            const objectStore = transaction.objectStore(this.storeName);
-
-            if (userId) {
-                // Count only entries for this user
-                const index = objectStore.index('userId');
-                const request = index.count(userId);
-
-                request.onerror = () => reject(request.error);
-                request.onsuccess = () => resolve(request.result);
-            } else {
-                // Count all entries
-                const request = objectStore.count();
-
-                request.onerror = () => reject(request.error);
-                request.onsuccess = () => resolve(request.result);
-            }
-        });
-    }
-
-    /**
-     * Check if a new entry can be added to the store for a specific user.
-     * Returns false if the maximum number of entries (5) has been reached for that user.
-     *
-     * @param userId - The user ID to check the limit for
-     */
-    async canAddNewEntry(userId: string): Promise<boolean> {
-        const count = await this.getCount(userId);
-        return count < MAX_ENTRIES;
-    }
-
-    /**
-     * Get the maximum number of entries allowed in the store.
-     */
-    getMaxEntries(): number {
-        return MAX_ENTRIES;
-    }
-
-    /**
      * Add a new download job to the store.
      * Throws an error if the maximum number of entries has been reached for this user.
      *
@@ -165,13 +112,6 @@ class WayportJobsStore {
     async addJob(job: DownloadJob): Promise<void> {
         if (!this.db) {
             await this.init();
-        }
-
-        const canAdd = await this.canAddNewEntry(job.userId);
-        if (!canAdd) {
-            throw new Error(
-                `Cannot add new download job. Maximum of ${MAX_ENTRIES} entries reached for this user. Please delete an existing job first.`
-            );
         }
 
         return new Promise((resolve, reject) => {
