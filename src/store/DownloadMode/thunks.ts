@@ -127,15 +127,6 @@ export const addToDownloadList =
 
         const { byReleaseNumber } = WaybackItems;
 
-        // const tileEstimations = await getTileEstimationsInOutputBundle(
-        //     extent,
-        //     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-        //     releaseNum
-        // );
-
-        // const minZoomLevel = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB;
-        // const maxZoomLevel = tileEstimations[tileEstimations.length - 1].level;
-
         // get the signed in user id to associate with this download job
         const signedInUserId = getSignedInUser();
 
@@ -162,10 +153,6 @@ export const addToDownloadList =
         };
 
         if (!userId) {
-            console.info(
-                'Prompting user to sign in before creating download job'
-            );
-
             // save the new download job data to session storage so that we can restore the job after user signs in
             saveNewDownloadJobToSessionStorage(newDownloadJobToAdd);
 
@@ -460,7 +447,6 @@ const createDonwloadJob =
 
             // If there is already an existing new download job in the store, we need to remove it before creating a new one, because the application only supports one new download job that is being created at a time.
             if (existingNewDownloadJob) {
-                // console.error('there is already an existing new download job in the store, cannot create another new download job');
                 await dispatch(deleteDownloadJobs([existingNewDownloadJob]));
             }
 
