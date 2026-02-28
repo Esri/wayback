@@ -23,6 +23,7 @@ import {
     downloadJobRemoved,
     downloadJobsUpdated,
     errorMessageUpdated,
+    idOfJobBeingCreatedUpdated,
     // idOfSelectedJobUpdated,
     // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
@@ -42,6 +43,7 @@ import {
     selectNewDownloadJob,
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
+    selectStaleDownloadJobs,
 } from './selectors';
 // import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
 import { MapMode, selectMapMode } from '@store/Map/reducer';
@@ -105,6 +107,10 @@ export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 18;
  */
 const prepareForNewDownloadJob =
     (releaseNum: number) => (dispatch: StoreDispatch) => {
+        // clear the id of the job being created in the store since we are starting to create a new job,
+        // and the previous job being created (if any) will be cleared later when the new job is created
+        dispatch(idOfJobBeingCreatedUpdated(null));
+
         // switch to wayport mode
         dispatch(updateMapMode('wayport'));
 
@@ -188,15 +194,8 @@ export const updateNewDownloadJob =
     (dispatch: StoreDispatch, getState: StoreGetState) => {
         const newJob = selectNewDownloadJob(getState());
 
-        console.log('updating new download job with data: ', {
-            extent,
-            levels,
-            tileEstimations,
-            newJob,
-        });
-
         if (!newJob) {
-            // console.error('cannot find existing job data for the new download job');
+            console.error('No new download job found to update');
             return;
         }
 
@@ -447,18 +446,19 @@ export const updateNewDownloadJob =
  * @returns void
  */
 const createDonwloadJob =
-    (jobData: DownloadJob) =>
+    (jobToBeCreated: DownloadJob) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        try {
-            const existingNewDownloadJob = selectNewDownloadJob(getState());
+        const staleDownloadJobs = selectStaleDownloadJobs(getState());
 
-            // If there is already an existing new download job in the store, we need to remove it before creating a new one, because the application only supports one new download job that is being created at a time.
-            if (existingNewDownloadJob) {
-                await dispatch(deleteDownloadJobs([existingNewDownloadJob]));
+        try {
+            // Clear up stale download jobs before adding the new download job to
+            // avoid potential conflict between the new download job and the stale download jobs
+            if (staleDownloadJobs && staleDownloadJobs.length > 0) {
+                await dispatch(deleteDownloadJobs(staleDownloadJobs));
             }
 
-            await wayportJobsStore.addJob(jobData);
-            dispatch(downloadJobCreated(jobData));
+            await wayportJobsStore.addJob(jobToBeCreated);
+            dispatch(downloadJobCreated(jobToBeCreated));
         } catch (err) {
             console.error('Failed to add download job to IndexedDB:', err);
             // return;

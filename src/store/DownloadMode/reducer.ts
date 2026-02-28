@@ -25,6 +25,8 @@ import {
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+import { stat } from 'fs';
+import { id } from 'date-fns/locale';
 
 export type DownloadJobStatus =
     | 'not started'
@@ -115,6 +117,10 @@ export type DownloadModeState = {
         ids: string[];
     };
     /**
+     * ID of the download job currently being created.
+     */
+    idOfJobBeingCreated: string | null;
+    /**
      * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
      */
     errorMessage: string;
@@ -125,6 +131,7 @@ export const initialDownloadModeState: DownloadModeState = {
         byId: {},
         ids: [],
     },
+    idOfJobBeingCreated: null,
     errorMessage: '',
 };
 
@@ -132,16 +139,11 @@ const slice = createSlice({
     name: 'Download',
     initialState: initialDownloadModeState,
     reducers: {
-        // isDownloadDialogOpenToggled: (state) => {
-        //     state.isDownloadDialogOpen = !state.isDownloadDialogOpen;
-        // },
-        // isAddingNewDownloadJobToggled: (state) => {
-        //     state.isAddingNewDownloadJob = !state.isAddingNewDownloadJob;
-        // },
         downloadJobCreated: (state, action: PayloadAction<DownloadJob>) => {
             const { id } = action.payload;
             state.jobs.byId[id] = action.payload;
             state.jobs.ids = [id, ...state.jobs.ids];
+            state.idOfJobBeingCreated = id;
         },
         downloadJobRemoved: (state, action: PayloadAction<string>) => {
             const idOfJob2BeRemoved = action.payload;
@@ -149,6 +151,10 @@ const slice = createSlice({
             state.jobs.ids = state.jobs.ids.filter(
                 (id) => id !== idOfJob2BeRemoved
             );
+
+            if (state.idOfJobBeingCreated === idOfJob2BeRemoved) {
+                state.idOfJobBeingCreated = null;
+            }
         },
         downloadJobsUpdated: (state, action: PayloadAction<DownloadJob[]>) => {
             for (const job of action.payload) {
@@ -158,6 +164,12 @@ const slice = createSlice({
         },
         errorMessageUpdated: (state, action: PayloadAction<string>) => {
             state.errorMessage = action.payload;
+        },
+        idOfJobBeingCreatedUpdated: (
+            state,
+            action: PayloadAction<string | null>
+        ) => {
+            state.idOfJobBeingCreated = action.payload;
         },
     },
 });
@@ -171,6 +183,7 @@ export const {
     downloadJobRemoved,
     downloadJobsUpdated,
     errorMessageUpdated,
+    idOfJobBeingCreatedUpdated,
 } = slice.actions;
 
 export default reducer;

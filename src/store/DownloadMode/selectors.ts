@@ -24,10 +24,33 @@ import { RootState } from '../configureStore';
 
 export const selectNewDownloadJob = createSelector(
     (state: RootState) => state.DownloadMode.jobs,
-    (jobs) => {
+    (state: RootState) => state.DownloadMode.idOfJobBeingCreated,
+    (jobs, idOfJobBeingCreated) => {
+        const { byId } = jobs;
+        return idOfJobBeingCreated ? byId[idOfJobBeingCreated] : null;
+    }
+);
+
+/**
+ * Selects stale download jobs that should be cleared from the store.
+ * A job is considered stale if its status is still 'not started' and it is
+ * not the job currently being created by the user.
+ */
+export const selectStaleDownloadJobs = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.DownloadMode.idOfJobBeingCreated,
+    (jobs, idOfJobBeingCreated) => {
         const { byId, ids } = jobs;
-        const allJobs = ids.map((id) => byId[id]);
-        return allJobs.find((job) => job.status === 'not started');
+
+        const staleDownloadJobIds = ids.filter((id) => {
+            return (
+                byId[id].status === 'not started' && id !== idOfJobBeingCreated
+            );
+        });
+
+        const staleDownloadJobs = staleDownloadJobIds.map((id) => byId[id]);
+
+        return staleDownloadJobs;
     }
 );
 

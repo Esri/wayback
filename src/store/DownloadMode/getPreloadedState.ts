@@ -34,10 +34,16 @@ export const getPreloadedState4Downloadmode =
             const byId: { [key: string]: DownloadJob } = {};
             const ids: string[] = [];
 
+            let idOfJobBeingCreated: string | null = null;
+
             for (const job of jobs) {
                 const { id } = job;
                 byId[id] = job;
                 ids.push(id);
+
+                if (job.status === 'not started') {
+                    idOfJobBeingCreated = id;
+                }
             }
 
             const state: DownloadModeState = {
@@ -46,6 +52,7 @@ export const getPreloadedState4Downloadmode =
                     byId,
                     ids,
                 },
+                idOfJobBeingCreated,
             };
 
             return state;
