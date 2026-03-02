@@ -107,10 +107,10 @@
     "wayback_export_description": "Exported basemap tiles are intended for offline use in ArcGIS applications and <offline-app-link>offline applications</offline-app-link> built with an ArcGIS Runtime SDK in accordance with Esri's terms of use: <summary-link>View Summary</summary-link> and <terms-of-use-link>View Terms of Use</terms-of-use-link>.",
     "level_max_min": "Level {{maxLevel}} - {{minLevel}}",
     "estimated_tiles": "~{{numTiles}} tiles",
-    "tiles_ready_for_download": "Tiles Ready to Download - {{size}}MB",
+    "tiles_ready_for_download": "Tiles Ready to Download - {{sizeMB}}MB",
     "create_tile_package": "Create Tile Package",
     "in_progress": "in progress",
-    "download_tile_package": "donwload",
+    "download_tile_package": "Download",
     "failed": "failed",
     "tile_package_downloaded": "CHECK BROWSER FOR DOWNLOAD PROGRESS",
     "clear_all": "clear all",
@@ -164,5 +164,6 @@
     "failed_status": "Failed",
     "downloaded_status": "Downloaded",
     "finished_status": "Finished",
-    "no_wayport_jobs": "No pending/completed tile export jobs available."
+    "no_wayport_jobs": "No pending/completed tile export jobs available.",
+    "unknown_size": "Unknown size"
 }

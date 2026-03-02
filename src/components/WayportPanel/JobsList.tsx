@@ -1,4 +1,8 @@
-import { CalciteButton } from '@esri/calcite-components-react';
+import {
+    CalciteButton,
+    CalciteIcon,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import classNames from 'classnames';
 import React, { FC } from 'react';
@@ -45,7 +49,7 @@ export const JobsList: FC<JobsListProps> = ({
     }
 
     return (
-        <div className="mt-2">
+        <div className="mt-2 overflow-x-hidden">
             {jobs.map((job) => {
                 const { waybackItem, levels, status } = job;
                 const { releaseDateLabel } = waybackItem;
@@ -54,7 +58,7 @@ export const JobsList: FC<JobsListProps> = ({
                     <div
                         key={job.id}
                         className={classNames(
-                            'bg-white bg-opacity-10 p-2 w-full flex items-center justify-between text-sm mb-2 border-l-4',
+                            'bg-white bg-opacity-10 py-2 pr-2 w-full flex items-center justify-between text-sm mb-2 border-l-4',
                             {
                                 'border-white':
                                     idOfJobToShowExtentOnMap === job.id, // highlight the job card if its extent is being shown on the map
@@ -86,11 +90,33 @@ export const JobsList: FC<JobsListProps> = ({
                             <span className="ml-1">{releaseDateLabel}</span>
                         </div>
 
-                        <div>
-                            <span className="italic opacity-80">
-                                {statusLabelText[status]}
-                            </span>
-                        </div>
+                        {status !== 'finished' && (
+                            <div className="flex items-center">
+                                <span className="italic opacity-80">
+                                    {statusLabelText[status]}
+                                </span>
+                            </div>
+                        )}
+
+                        {status === 'finished' && (
+                            <CalciteButton
+                                scale="s"
+                                appearance="solid"
+                                iconStart="download-to"
+                                onClick={() => {
+                                    if (job.outputTilePackageInfo?.url) {
+                                        window.open(
+                                            job.outputTilePackageInfo.url,
+                                            '_blank'
+                                        );
+                                    }
+                                }}
+                                label={t('download_tile_package')}
+                                // disabled={!job.outputTilePackageInfo?.url}
+                            >
+                                {t('download_tile_package')}
+                            </CalciteButton>
+                        )}
                     </div>
                 );
             })}

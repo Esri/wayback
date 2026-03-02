@@ -107,6 +107,10 @@ export type DownloadJob = {
      * as we only want to show the download jobs created by the current user.
      */
     userId: string;
+    /**
+     * error message to display in the UI when this download job fails. This can be used to inform user about what went wrong.
+     */
+    errorMessage?: string;
 };
 
 export type DownloadModeState = {

@@ -293,30 +293,31 @@ export const startDownloadJob =
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
         dispatch(updateJobStatus(id, 'waiting to start'));
 
-        // try {
-        //     const res = await submitJob({
-        //         extent,
-        //         levels,
-        //         layerIdentifier: waybackItem.layerIdentifier,
-        //     });
+        try {
+            const res = await submitJob({
+                extent,
+                levels,
+                layerIdentifier: waybackItem.layerIdentifier,
+            });
 
-        //     const submittedJob: DownloadJob = {
-        //         ...newDownloadJob,
-        //         GPJobId: res.jobId,
-        //         status: 'pending',
-        //     };
+            const submittedJob: DownloadJob = {
+                ...newDownloadJob,
+                GPJobId: res.jobId,
+                status: 'pending',
+            };
 
-        //     dispatch(updateDownloadJobs([submittedJob]));
-        // } catch (err) {
-        //     console.log(err);
+            dispatch(updateDownloadJobs([submittedJob]));
+        } catch (err) {
+            // console.log(err);
 
-        //     const failedJob: DownloadJob = {
-        //         ...newDownloadJob,
-        //         status: 'failed',
-        //     };
+            const failedJob: DownloadJob = {
+                ...newDownloadJob,
+                status: 'failed',
+                errorMessage: err.message || 'Unknown error',
+            };
 
-        //     dispatch(updateDownloadJobs([failedJob]));
-        // }
+            dispatch(updateDownloadJobs([failedJob]));
+        }
     };
 
 export const updateJobStatus =
