@@ -25,11 +25,10 @@ import {
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
-import { stat } from 'fs';
-import { id } from 'date-fns/locale';
 
 export type DownloadJobStatus =
     | 'not started'
+    | 'waiting to start'
     | 'pending'
     | 'finished'
     | 'failed'

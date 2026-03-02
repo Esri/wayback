@@ -103,6 +103,16 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         return disabled || exceedsMaxTileLimit;
     }, [exceedsMaxTileLimit, disabled]);
 
+    const maxAvailableTileLevel = useMemo(() => {
+        if (!tileEstimations || !tileEstimations.length) {
+            return null;
+        }
+
+        const last = tileEstimations[tileEstimations.length - 1];
+
+        return last.level;
+    }, [tileEstimations]);
+
     const getContent = () => {
         if (!job) {
             return (
@@ -133,7 +143,6 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     <div className="absolute top-0 right-0">
                         <CalciteButton
                             width="full"
-                            disabled={shouldDisableCreateButton}
                             appearance="transparent"
                             scale="s"
                             iconEnd="x"
@@ -190,9 +199,21 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     </div>
 
                     <p className="text-sm ">
-                        {t('estimated_number_of_tiles', {
-                            total: numberWithCommas(countOfTotalTiles),
-                        })}
+                        {exceedsMaxTileLimit
+                            ? t(
+                                  'estimated_number_of_tiles_exceeded_max_limit',
+                                  {
+                                      total: numberWithCommas(
+                                          countOfTotalTiles
+                                      ),
+                                      maxLimit: numberWithCommas(
+                                          MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
+                                      ),
+                                  }
+                              )
+                            : t('estimated_number_of_tiles', {
+                                  total: numberWithCommas(countOfTotalTiles),
+                              })}
                     </p>
                 </div>
 
@@ -202,7 +223,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             <CalciteIcon
                                 icon="exclamation-mark-triangle"
                                 scale="s"
-                                class="text-yellow-red"
+                                class="text-red-500"
                             />
                         </div>
 
@@ -211,6 +232,26 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         </p>
                     </div>
                 )}
+
+                {maxAvailableTileLevel !== null &&
+                    maxZoom !== undefined &&
+                    maxZoom > maxAvailableTileLevel && (
+                        <div className="flex items-center mb-2">
+                            <div className="mr-2">
+                                <CalciteIcon
+                                    icon="exclamation-mark-triangle"
+                                    scale="s"
+                                    class="text-yellow-500"
+                                />
+                            </div>
+
+                            <p className="text-sm ">
+                                {t('wayport_max_zoom_level_exceeded_warning', {
+                                    maxZoomLevel: maxAvailableTileLevel,
+                                })}
+                            </p>
+                        </div>
+                    )}
 
                 <div>
                     <CalciteButton

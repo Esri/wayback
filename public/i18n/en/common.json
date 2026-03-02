@@ -152,6 +152,8 @@
     "download_job_instruction_2": "Maximum of 150,000 tiles per export request",
     "download_job_instruction_3": "Maximum of 5 concurrent export requests",
     "estimated_number_of_tiles": "Estimated number of tiles: {{total}}",
+    "estimated_number_of_tiles_exceeded_max_limit": "Estimated number of tiles: {{total}}, which exceeds the maximum limit of {{maxLimit}} tiles. Please adjust your extent or zoom level to reduce the number of tiles.",
     "wayport_signed_in_with_public_account_warning": "You are signed in with an ArcGIS Online public account. Please sign in with an ArcGIS organizational account to exort tile package",
-    "export_tile_package_tooltip": "Export an imagery tile package for current map extent"
+    "export_tile_package_tooltip": "Export an imagery tile package for current map extent",
+    "wayport_max_zoom_level_exceeded_warning": "The maximum zoom level for export is {{maxZoomLevel}}. Zoom levels beyond this will not be included in the export."
 }
