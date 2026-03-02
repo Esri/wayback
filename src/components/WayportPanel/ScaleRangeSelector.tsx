@@ -18,14 +18,11 @@ type ScaleRangeSelectorProps = {
 };
 
 export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
-    minValue = 1,
-    maxValue = 23,
+    minValue = DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+    maxValue = DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
     onChange,
 }) => {
-    const [value, setValue] = useState<[number, number]>([
-        DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-        DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
-    ]);
+    const [value, setValue] = useState<[number, number]>([minValue, maxValue]);
 
     useEffect(() => {
         const [minScale, maxScale] = value;

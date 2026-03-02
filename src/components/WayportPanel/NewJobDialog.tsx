@@ -49,7 +49,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
     const { tileEstimations, levels } = job || {};
 
-    const [minZoom, maxZoom] = levels || [-1, -1];
+    const [minZoom, maxZoom] = levels || [];
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
@@ -59,7 +59,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
         // if levels is not set, it means user has not made a selection on zoom levels for the job,
         // we will treat it as 0 to avoid confusion and potential issues with the export tool when creating a job with no zoom level selected
-        if (minZoom === -1 || maxZoom === -1) {
+        if (minZoom === undefined || maxZoom === undefined) {
             return 0;
         }
 
@@ -158,8 +158,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
                 <div>
                     <ScaleRangeSelector
-                        minValue={1}
-                        maxValue={23}
+                        minValue={minZoom}
+                        maxValue={maxZoom}
                         onChange={(
                             userSelectedMinZoom,
                             userSelectedMaxZoom
