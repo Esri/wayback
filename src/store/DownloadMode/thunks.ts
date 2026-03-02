@@ -90,7 +90,7 @@ export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
 /**
  * Max tile package level is set to 23.
  */
-export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 18;
+export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
 
 /**
  * Prepares the application state for a new download job.
@@ -148,8 +148,8 @@ export const addToDownloadList =
             // tileEstimations and related info are set to null initially
             // as they will be updated when user adjust the export extent
             tileEstimations: null,
-            minZoomLevel: null,
-            maxZoomLevel: null,
+            minZoomLevel: DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+            maxZoomLevel: DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
             levels: [
                 DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
                 DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
@@ -221,6 +221,25 @@ export const updateNewDownloadJob =
         }
 
         dispatch(updateDownloadJobs([updatedJobData]));
+    };
+
+export const restoreNewDownloadJobFromSessionStorage =
+    () => (dispatch: StoreDispatch) => {
+        const signedInUser = getSignedInUser();
+
+        if (!signedInUser) {
+            // console.log('No signed in user, skipping restoring new wayport job from session storage');
+            return;
+        }
+
+        const newWayportJobFromStorage = getNewDownloadJobFromSessionStorage();
+
+        if (!newWayportJobFromStorage) {
+            // console.log('No new wayport job found in session storage to restore');
+            return;
+        }
+
+        dispatch(createDonwloadJob(newWayportJobFromStorage));
     };
 
 // export const startDownloadJob =

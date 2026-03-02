@@ -231,7 +231,7 @@ export const useSketchViewModel = ({
                 spatialReference: extentToEdit.spatialReference,
             });
 
-            console.log('Starting new sketch edit with extent:', extentToEdit);
+            // console.log('Starting new sketch edit with extent:', extentToEdit);
 
             // console.log('No existing graphic to update');
             startEditing(extent);

@@ -5,11 +5,12 @@ import {
     selectNewDownloadJob,
 } from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, use, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
 import { useSketchViewModel } from './useSketchViewModel';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
 import { updateNewDownloadJob } from '@store/DownloadMode/thunks';
+import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
 
 type Props = {
     mapView?: MapView;
@@ -21,6 +22,10 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     const mode = useAppSelector(selectMapMode);
 
     const newDownloadJob = useAppSelector(selectNewDownloadJob);
+
+    // Restore the new download job from session storage after sign-in
+    // This preserves the job being created if the user needed to authenticate
+    useRestoreNewWayportJob();
 
     // const jobToDisplayOnMap = useAppSelector(selectDownloadJobToDisplayOnMap);
 
@@ -55,7 +60,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         }
 
         return currentExtent;
-    }, [newDownloadJob, mode]);
+    }, [newDownloadJob?.extent, newDownloadJob?.status, mode]);
 
     const isSketchVMActive = Boolean(extentToEdit) && mode === 'wayport';
 
@@ -93,6 +98,10 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
 
     useEffect(() => {
         // console.log('Tile Estimation Data:', tileEstimations);
+
+        if (!tileEstimations) {
+            return;
+        }
 
         dispatch(
             updateNewDownloadJob({
