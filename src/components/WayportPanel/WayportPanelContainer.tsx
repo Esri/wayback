@@ -11,9 +11,11 @@ import {
 import {
     deleteDownloadJobs,
     startDownloadJob,
+    updateIdOfWayportJobToShowExtentOnMap,
     updateNewDownloadJob,
 } from '@store/DownloadMode/thunks';
 import { JobsList } from './JobsList';
+import { idOfJobToShowExtentOnMapUpdated } from '@store/DownloadMode/reducer';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -28,6 +30,10 @@ export const WayportPanelContainer = () => {
 
     const jobsHasStarted = useAppSelector(
         selectDownloadJobsThatHaveBeenStarted
+    );
+
+    const idOfJobToShowExtentOnMap = useAppSelector(
+        (state) => state.DownloadMode.idOfJobToShowExtentOnMap
     );
 
     return (
@@ -71,11 +77,14 @@ export const WayportPanelContainer = () => {
 
             <JobsList
                 jobs={jobsHasStarted}
+                idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
+                shouldDisableZoomToButton={!!newDownloadJob} // disable zoom to button when there is a job that has not been started, to avoid confusion about whether user should click the create button for the new job or zoom to the existing job
                 onRemove={(job) => {
                     // dispatch(deleteDownloadJobs([job]));
                 }}
                 onZoomTo={(job) => {
                     // zoom to the job's extent in the map
+                    dispatch(updateIdOfWayportJobToShowExtentOnMap(job.id));
                 }}
             />
         </div>

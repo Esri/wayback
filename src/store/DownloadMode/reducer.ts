@@ -25,6 +25,7 @@ import {
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+import { id } from 'date-fns/locale';
 
 export type DownloadJobStatus =
     | 'not started'
@@ -120,6 +121,16 @@ export type DownloadModeState = {
      */
     idOfJobBeingCreated: string | null;
     /**
+     * ID of the download job that user wants to display the extent of on the map.
+     */
+    idOfJobToShowExtentOnMap: string | null;
+    /**
+     * Timestamp of when idOfJobToShowExtentOnMap was last updated.
+     * Used to trigger map extent updates when the user clicks the same job card multiple times.
+     * Since clicking the same job card doesn't change the ID, this timestamp ensures the map zooms to the job's extent every time the user clicks the job card, even if it's the same job as before.
+     */
+    timestampOfDisplayExtentOnMapRequest: number;
+    /**
      * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
      */
     errorMessage: string;
@@ -131,6 +142,8 @@ export const initialDownloadModeState: DownloadModeState = {
         ids: [],
     },
     idOfJobBeingCreated: null,
+    idOfJobToShowExtentOnMap: null,
+    timestampOfDisplayExtentOnMapRequest: 0,
     errorMessage: '',
 };
 
@@ -170,6 +183,17 @@ const slice = createSlice({
         ) => {
             state.idOfJobBeingCreated = action.payload;
         },
+        idOfJobToShowExtentOnMapUpdated: (
+            state,
+            action: PayloadAction<{
+                idOfJobToShow: string | null;
+                requestedOn: number;
+            }>
+        ) => {
+            state.idOfJobToShowExtentOnMap = action.payload?.idOfJobToShow;
+            state.timestampOfDisplayExtentOnMapRequest =
+                action.payload?.requestedOn;
+        },
     },
 });
 
@@ -183,6 +207,7 @@ export const {
     downloadJobsUpdated,
     errorMessageUpdated,
     idOfJobBeingCreatedUpdated,
+    idOfJobToShowExtentOnMapUpdated,
 } = slice.actions;
 
 export default reducer;

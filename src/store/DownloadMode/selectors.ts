@@ -15,6 +15,7 @@
 
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../configureStore';
+import { stat } from 'fs';
 
 // export const selectIsDownloadDialogOpen = (state: RootState) =>
 //     state.DownloadMode.isDownloadDialogOpen;
@@ -131,11 +132,14 @@ export const selectDownloadJobsThatHaveBeenStarted = createSelector(
     }
 );
 
-// export const selectDownloadJobToDisplayOnMap = createSelector(
-//     (state: RootState) => state.DownloadMode.jobs,
-//     (state: RootState) => state.DownloadMode.idOfSelectedJob,
-//     (jobs, idOfSelectedJob) => {
-//         if (!idOfSelectedJob) return null;
-//         return jobs.byId[idOfSelectedJob];
-//     }
-// );
+export const selectDownloadJobToShowExtentOnMap = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.DownloadMode.idOfJobToShowExtentOnMap,
+    (jobs, idOfJobToShowExtentOnMap) => {
+        if (!idOfJobToShowExtentOnMap) return null;
+        return jobs.byId[idOfJobToShowExtentOnMap];
+    }
+);
+
+export const selectTimestampOfDisplayExtentOnMapRequest = (state: RootState) =>
+    state.DownloadMode.timestampOfDisplayExtentOnMapRequest;

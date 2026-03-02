@@ -24,6 +24,7 @@ import {
     downloadJobsUpdated,
     errorMessageUpdated,
     idOfJobBeingCreatedUpdated,
+    idOfJobToShowExtentOnMapUpdated,
     // idOfSelectedJobUpdated,
     // isAddingNewDownloadJobToggled,
     // isDownloadDialogOpenToggled,
@@ -107,6 +108,9 @@ const prepareForNewDownloadJob =
         // clear the id of the job being created in the store since we are starting to create a new job,
         // and the previous job being created (if any) will be cleared later when the new job is created
         dispatch(idOfJobBeingCreatedUpdated(null));
+
+        // clear the id of the job that is being shown extent on map, so that the extent of that job will be removed from the map before we create a new job and show the new job's extent on the map
+        dispatch(updateIdOfWayportJobToShowExtentOnMap(null));
 
         // switch to wayport mode
         dispatch(updateMapMode('wayport'));
@@ -607,6 +611,19 @@ export const deleteDownloadJobs =
                 )
             );
         }
+    };
+
+export const updateIdOfWayportJobToShowExtentOnMap =
+    (idOfJobToShow: string | null) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const requestedOn = idOfJobToShow ? new Date().getTime() : 0;
+
+        dispatch(
+            idOfJobToShowExtentOnMapUpdated({
+                idOfJobToShow,
+                requestedOn,
+            })
+        );
     };
 
 export const toggleWayportMode =

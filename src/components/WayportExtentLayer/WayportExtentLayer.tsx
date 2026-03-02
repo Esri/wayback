@@ -4,7 +4,8 @@ import MapView from '@arcgis/core/views/MapView';
 import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import React, { FC, useEffect, useRef } from 'react';
 import { IExtent } from '@typings/index';
-import { map } from 'd3';
+import { useAppSelector } from '@store/configureStore';
+import { selectTimestampOfDisplayExtentOnMapRequest } from '@store/DownloadMode/selectors';
 
 type Props = {
     mapView: MapView;
@@ -14,6 +15,10 @@ type Props = {
 
 export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
     const graphicLayer = useRef<GraphicLayer>(null);
+
+    const timestampOfDisplayExtentOnMapRequest = useAppSelector(
+        selectTimestampOfDisplayExtentOnMapRequest
+    );
 
     const init = () => {
         const layer = new GraphicLayer({
@@ -63,11 +68,12 @@ export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
 
             // zoom to the extent with some padding
             // so that the extent boundary can be fully shown on the map
-            mapView.goTo(geometry.expand(1.5), {
+            mapView.goTo({
+                target: geometry,
                 duration: 1000,
             });
         }
-    }, [extent, visible, mapView]);
+    }, [extent, visible, mapView, timestampOfDisplayExtentOnMapRequest]);
 
     return null;
 };
