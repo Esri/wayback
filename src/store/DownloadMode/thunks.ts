@@ -66,10 +66,6 @@ type InitiateDownloadJobParams = {
      */
     releaseNum: number;
     /**
-     * current map zoom level
-     */
-    zoomLevel: number;
-    /**
      * current map extent
      */
     extent: IExtent;
@@ -122,6 +118,13 @@ const prepareForNewDownloadJob =
         dispatch(setPreviewWaybackItem(null));
     };
 
+/**
+ * Initiates a new download job with the specified release number and extent.
+ *
+ * @param params - The parameters for initiating the download job
+ * @param params.releaseNum - The release number of the wayback item to download
+ * @param params.extent - The geographic extent for the download job
+ */
 export const initiateNewDownloadJob =
     ({ releaseNum, extent }: InitiateDownloadJobParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
@@ -230,6 +233,18 @@ export const updateNewDownloadJob =
         dispatch(updateDownloadJobs([updatedJobData]));
     };
 
+/**
+ * Restores a new download job from session storage and dispatches it to the store.
+ *
+ * This thunk checks if a user is signed in and if a download job exists in session storage.
+ * If both conditions are met, it dispatches the stored download job to create a new download job in the store.
+ *
+ * @returns A thunk function that takes a dispatch parameter and returns void
+ *
+ * @remarks
+ * - If no user is signed in, the operation is skipped silently
+ * - If no download job is found in session storage, the operation is skipped silently
+ */
 export const restoreNewDownloadJobFromSessionStorage =
     () => (dispatch: StoreDispatch) => {
         const signedInUser = getSignedInUser();

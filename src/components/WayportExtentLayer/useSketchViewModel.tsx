@@ -8,6 +8,7 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import { EXPAND_EXTENT_FACTOR } from './constants';
 import { IExtent } from '@typings/index';
+import { t } from 'i18next';
 
 type Props = {
     /**
@@ -175,9 +176,9 @@ export const useSketchViewModel = ({
             await sketchVMRef.current.update(extentGraphic);
             // sketchVMRef.current.activate("update");
 
-            // await mapView.goTo(
-            //     extentToEdit.clone().expand(EXPAND_EXTENT_FACTOR)
-            // );
+            await mapView.goTo({
+                target: extentToEdit,
+            });
         } catch (error) {
             console.error('Error starting sketch edit:', error);
         }

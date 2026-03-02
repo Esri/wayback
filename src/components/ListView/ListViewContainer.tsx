@@ -137,7 +137,6 @@ const ListViewContainer = () => {
                             initiateNewDownloadJob({
                                 releaseNum,
                                 extent: mapExtent,
-                                zoomLevel: zoom,
                             })
                         );
                     }}
