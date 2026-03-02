@@ -4,11 +4,16 @@ import { AppContext } from '@contexts/AppContextProvider';
 import { signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
-import { selectNewDownloadJob } from '@store/DownloadMode/selectors';
+import {
+    selectDownloadJobsThatHaveBeenStarted,
+    selectNewDownloadJob,
+} from '@store/DownloadMode/selectors';
 import {
     deleteDownloadJobs,
+    startDownloadJob,
     updateNewDownloadJob,
 } from '@store/DownloadMode/thunks';
+import { JobsList } from './JobsList';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -20,6 +25,10 @@ export const WayportPanelContainer = () => {
     const disabled = notSignedIn || signedInWithArcGISPublicAccount;
 
     const newDownloadJob = useAppSelector(selectNewDownloadJob);
+
+    const jobsHasStarted = useAppSelector(
+        selectDownloadJobsThatHaveBeenStarted
+    );
 
     return (
         <div
@@ -46,6 +55,7 @@ export const WayportPanelContainer = () => {
                 }}
                 onCreate={(job) => {
                     // console.log('create new download job with state: ', job);
+                    dispatch(startDownloadJob());
                 }}
                 levelsOnChange={(minZoom, maxZoom) => {
                     // console.log('Updating job levels to: ', minZoom, maxZoom);
@@ -56,6 +66,16 @@ export const WayportPanelContainer = () => {
                             levels: [minZoom, maxZoom],
                         })
                     );
+                }}
+            />
+
+            <JobsList
+                jobs={jobsHasStarted}
+                onRemove={(job) => {
+                    // dispatch(deleteDownloadJobs([job]));
+                }}
+                onZoomTo={(job) => {
+                    // zoom to the job's extent in the map
                 }}
             />
         </div>

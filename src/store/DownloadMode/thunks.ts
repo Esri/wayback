@@ -264,47 +264,76 @@ export const restoreNewDownloadJobFromSessionStorage =
         dispatch(createDownloadJob(newWayportJobFromStorage));
     };
 
-// export const startDownloadJob =
-//     (id: string) =>
-//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const { DownloadMode } = getState();
+export const startDownloadJob =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // const { DownloadMode } = getState();
 
-//         const { jobs } = DownloadMode;
+        // const { jobs } = DownloadMode;
 
-//         const { byId } = jobs;
+        // const { byId } = jobs;
 
-//         if (!byId[id]) {
-//             console.error('cannot find job data with job id of %s', id);
-//             return;
-//         }
+        // if (!byId[id]) {
+        //     console.error('cannot find job data with job id of %s', id);
+        //     return;
+        // }
 
-//         const { extent, levels, waybackItem } = byId[id];
+        const newDownloadJob = selectNewDownloadJob(getState());
 
-//         try {
-//             const res = await submitJob({
-//                 extent,
-//                 levels,
-//                 layerIdentifier: waybackItem.layerIdentifier,
-//             });
+        if (!newDownloadJob) {
+            console.error('No new download job found to start');
+            return;
+        }
 
-//             const submittedJob: DownloadJob = {
-//                 ...byId[id],
-//                 GPJobId: res.jobId,
-//                 status: 'pending',
-//             };
+        const { extent, levels, waybackItem, id } = newDownloadJob;
 
-//             dispatch(updateDownloadJobs([submittedJob]));
-//         } catch (err) {
-//             console.log(err);
+        // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
+        dispatch(updateJobStatus(id, 'waiting to start'));
 
-//             const failedJob: DownloadJob = {
-//                 ...byId[id],
-//                 status: 'failed',
-//             };
+        // try {
+        //     const res = await submitJob({
+        //         extent,
+        //         levels,
+        //         layerIdentifier: waybackItem.layerIdentifier,
+        //     });
 
-//             dispatch(updateDownloadJobs([failedJob]));
-//         }
-//     };
+        //     const submittedJob: DownloadJob = {
+        //         ...newDownloadJob,
+        //         GPJobId: res.jobId,
+        //         status: 'pending',
+        //     };
+
+        //     dispatch(updateDownloadJobs([submittedJob]));
+        // } catch (err) {
+        //     console.log(err);
+
+        //     const failedJob: DownloadJob = {
+        //         ...newDownloadJob,
+        //         status: 'failed',
+        //     };
+
+        //     dispatch(updateDownloadJobs([failedJob]));
+        // }
+    };
+
+export const updateJobStatus =
+    (id: string, status: DownloadJobStatus) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobs = selectDownloadJobs(getState());
+
+        const jobToBeUpdated = jobs.find((job) => job.id === id);
+
+        if (!jobToBeUpdated) {
+            console.error('cannot find job data with job id of %s', id);
+            return;
+        }
+
+        const updatedJobData = {
+            ...jobToBeUpdated,
+            status,
+        };
+
+        await dispatch(updateDownloadJobs([updatedJobData]));
+    };
 
 // export const checkPendingDownloadJobStatus =
 //     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {

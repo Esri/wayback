@@ -260,7 +260,9 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         disabled={shouldDisableCreateButton}
                         appearance="solid"
                         color="blue"
-                        // onClick={() => { createNewDownloadJobFromTemplate(job) }}
+                        onClick={() => {
+                            onCreate(job);
+                        }}
                     >
                         {t('create_tile_package')}
                     </CalciteButton>

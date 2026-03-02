@@ -85,7 +85,11 @@ export const selectNumOfPendingDownloadJobs = createSelector(
     (jobs) => {
         const { byId, ids } = jobs;
 
-        return ids.filter((id) => byId[id].status === 'pending').length;
+        return ids.filter(
+            (id) =>
+                byId[id].status === 'pending' ||
+                byId[id].status === 'waiting to start'
+        ).length;
     }
 );
 
@@ -111,6 +115,19 @@ export const selectPendingDownloadJobs = createSelector(
         );
 
         return idOfPendingJobs.map((id) => byId[id]);
+    }
+);
+
+export const selectDownloadJobsThatHaveBeenStarted = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const idOfStartedJobs = ids.filter(
+            (id) => byId[id].status !== 'not started'
+        );
+
+        return idOfStartedJobs.map((id) => byId[id]);
     }
 );
 
