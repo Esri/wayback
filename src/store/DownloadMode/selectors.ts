@@ -27,7 +27,15 @@ export const selectNewDownloadJob = createSelector(
     (state: RootState) => state.DownloadMode.idOfJobBeingCreated,
     (jobs, idOfJobBeingCreated) => {
         const { byId } = jobs;
-        return idOfJobBeingCreated ? byId[idOfJobBeingCreated] : null;
+        const newDownloadJob = idOfJobBeingCreated
+            ? byId[idOfJobBeingCreated]
+            : null;
+
+        if (!newDownloadJob || newDownloadJob.status !== 'not started') {
+            return null;
+        }
+
+        return newDownloadJob;
     }
 );
 
