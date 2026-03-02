@@ -56,10 +56,11 @@ import { getSignedInUser, signIn } from '@utils/Esri-OAuth';
 import { wayportJobsStore } from '@utils/wayportJobsStore';
 import {
     getNewDownloadJobFromSessionStorage,
+    normalizeExtent,
     saveNewDownloadJobToSessionStorage,
 } from './helpers';
 
-type AddToDownloadListParams = {
+type InitiateDownloadJobParams = {
     /**
      * user selected wayback release number
      */
@@ -121,10 +122,22 @@ const prepareForNewDownloadJob =
         dispatch(setPreviewWaybackItem(null));
     };
 
-export const addToDownloadList =
-    ({ releaseNum, extent }: AddToDownloadListParams) =>
+export const initiateNewDownloadJob =
+    ({ releaseNum, extent }: InitiateDownloadJobParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
+
+        if (!extent) {
+            console.error('Cannot add to download list without a valid extent');
+            return;
+        }
+
+        if (!releaseNum && releaseNum !== 0) {
+            console.error(
+                'Cannot add to download list without a valid release number'
+            );
+            return;
+        }
 
         // prepare application state for new download job
         dispatch(prepareForNewDownloadJob(releaseNum));
@@ -143,7 +156,7 @@ export const addToDownloadList =
             waybackItem: {
                 ...byReleaseNumber[releaseNum],
             },
-            extent,
+            extent: normalizeExtent(extent),
             status: 'not started',
             // tileEstimations and related info are set to null initially
             // as they will be updated when user adjust the export extent
@@ -167,13 +180,7 @@ export const addToDownloadList =
             return;
         }
 
-        // dispatch(downloadJobCreated(downloadJob));
-        // dispatch(isAddingNewDownloadJobToggled());
-
-        dispatch(createDonwloadJob(newDownloadJobToAdd));
-
-        // // set the newly created download job as the selected job so that its extent can be displayed on the map
-        // dispatch(idOfSelectedJobUpdated(newDownloadJobToAdd.id));
+        dispatch(createDownloadJob(newDownloadJobToAdd));
     };
 
 /**
@@ -239,7 +246,7 @@ export const restoreNewDownloadJobFromSessionStorage =
             return;
         }
 
-        dispatch(createDonwloadJob(newWayportJobFromStorage));
+        dispatch(createDownloadJob(newWayportJobFromStorage));
     };
 
 // export const startDownloadJob =
@@ -464,7 +471,7 @@ export const restoreNewDownloadJobFromSessionStorage =
  * @param jobData data of the new download job to be created and added to the store and persisted to IndexedDB
  * @returns void
  */
-const createDonwloadJob =
+const createDownloadJob =
     (jobToBeCreated: DownloadJob) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const staleDownloadJobs = selectStaleDownloadJobs(getState());

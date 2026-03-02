@@ -175,9 +175,9 @@ export const useSketchViewModel = ({
             await sketchVMRef.current.update(extentGraphic);
             // sketchVMRef.current.activate("update");
 
-            await mapView.goTo(
-                extentToEdit.clone().expand(EXPAND_EXTENT_FACTOR)
-            );
+            // await mapView.goTo(
+            //     extentToEdit.clone().expand(EXPAND_EXTENT_FACTOR)
+            // );
         } catch (error) {
             console.error('Error starting sketch edit:', error);
         }

@@ -35,7 +35,7 @@ import ListView from './index';
 import { AppContext } from '@contexts/AppContextProvider';
 import {
     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-    addToDownloadList,
+    initiateNewDownloadJob,
 } from '@store/DownloadMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
@@ -134,7 +134,7 @@ const ListViewContainer = () => {
                     }}
                     downloadButtonOnClick={(releaseNum: number) => {
                         dispatch(
-                            addToDownloadList({
+                            initiateNewDownloadJob({
                                 releaseNum,
                                 extent: mapExtent,
                                 zoomLevel: zoom,

@@ -1,4 +1,6 @@
+import { IExtent } from '@typings/index';
 import { DownloadJob } from './reducer';
+import { Extent } from '@arcgis/core/geometry';
 
 const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
 
@@ -46,4 +48,34 @@ export const getNewDownloadJobFromSessionStorage = (): DownloadJob | null => {
     }
 
     return job;
+};
+
+/**
+ * Normalizes an extent by scaling it inward by 25%.
+ *
+ * This function takes a map extent and shrinks it to 75% of its original size,
+ * effectively creating a normalized/adjusted extent. This is useful to ensure
+ * the user can see the entire extent in the sketch view model without the extent being too close to the edges of the view.
+ *
+ * @param inputExtent - The extent object to normalize
+ * @param scaleFactor - The factor by which to scale the extent inward (default is 0.75 for 75% of original size)
+ * @returns A new extent scaled inward by 25% (75% of original size) with the same spatial reference
+ */
+export const normalizeExtent = (
+    inputExtent: IExtent,
+    scaleFactor = 0.75
+): IExtent => {
+    // const scaleFactor = 0.75;
+
+    const extentObj = new Extent({
+        xmin: inputExtent.xmin,
+        ymin: inputExtent.ymin,
+        xmax: inputExtent.xmax,
+        ymax: inputExtent.ymax,
+        spatialReference: inputExtent.spatialReference,
+    });
+
+    const normalizedExtent = extentObj.expand(scaleFactor);
+
+    return normalizedExtent.toJSON() as IExtent;
 };
