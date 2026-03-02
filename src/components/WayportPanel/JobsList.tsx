@@ -37,11 +37,15 @@ export const JobsList: FC<JobsListProps> = ({
     };
 
     if (jobs.length === 0) {
-        return null;
+        return (
+            <div className="text-center opacity-50 mt-2">
+                <p className="text-sm">{t('no_wayport_jobs')}</p>
+            </div>
+        );
     }
 
     return (
-        <div className="mt-4">
+        <div className="mt-2">
             {jobs.map((job) => {
                 const { waybackItem, levels, status } = job;
                 const { releaseDateLabel } = waybackItem;

@@ -271,9 +271,13 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         );
     };
 
+    if (!job) {
+        return null;
+    }
+
     return (
         <div
-            className={classNames('bg-white bg-opacity-10 p-2 w-full', {
+            className={classNames('bg-white bg-opacity-10 p-2 w-full mb-2', {
                 disabled: disabled,
             })}
         >

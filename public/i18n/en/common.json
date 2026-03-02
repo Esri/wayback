@@ -163,5 +163,6 @@
     "pending_status": "In Progress...",
     "failed_status": "Failed",
     "downloaded_status": "Downloaded",
-    "finished_status": "Finished"
+    "finished_status": "Finished",
+    "no_wayport_jobs": "No pending/completed tile export jobs available."
 }
