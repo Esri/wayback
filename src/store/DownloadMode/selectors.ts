@@ -63,22 +63,20 @@ export const selectStaleDownloadJobs = createSelector(
     }
 );
 
-export const selectDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
-    (jobs) => {
-        const { byId, ids } = jobs;
-        return ids.map((id) => byId[id]);
-    }
-);
+// export const selectDownloadJobs = createSelector(
+//     (state: RootState) => state.DownloadMode.jobs,
+//     (jobs) => {
+//         const { byId, ids } = jobs;
+//         return ids.map((id) => byId[id]);
+//     }
+// );
+
+export const selectDownloadJobById = (state: RootState, id: string) =>
+    state.DownloadMode.jobs.byId[id];
 
 export const selectNumOfDownloadJobs = createSelector(
     (state: RootState) => state.DownloadMode.jobs,
     (jobs) => jobs.ids.length
-);
-
-export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
-    (jobs) => jobs.ids.length >= 5
 );
 
 export const selectNumOfPendingDownloadJobs = createSelector(
@@ -94,6 +92,11 @@ export const selectNumOfPendingDownloadJobs = createSelector(
     }
 );
 
+export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
+    selectNumOfPendingDownloadJobs,
+    (numOfPendingJobs) => numOfPendingJobs >= 5
+);
+
 export const selectNumOfFinishedDownloadJobs = createSelector(
     (state: RootState) => state.DownloadMode.jobs,
     (jobs) => {
@@ -101,7 +104,7 @@ export const selectNumOfFinishedDownloadJobs = createSelector(
 
         return ids.filter((id) => {
             const { status } = byId[id];
-            return status !== 'not started' && status !== 'pending'; //byId[id].status === 'finished' || byId[id].status === 'downloaded' || byId[id].status === 'downloading' || byId[id].status === 'failed' ||
+            return status === 'finished' || status === 'downloaded';
         }).length;
     }
 );

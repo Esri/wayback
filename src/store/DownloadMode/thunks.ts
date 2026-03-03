@@ -40,7 +40,8 @@ import {
     submitJob,
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
-    selectDownloadJobs,
+    selectDownloadJobById,
+    // selectDownloadJobs,
     selectNewDownloadJob,
     selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
@@ -293,6 +294,9 @@ export const startDownloadJob =
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
         dispatch(updateJobStatus(id, 'waiting to start'));
 
+        // set the id of the job to show extent on map to the new job's id so that the extent of the new job will be shown on the map while the job is being started
+        dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
+
         try {
             const res = await submitJob({
                 extent,
@@ -323,9 +327,11 @@ export const startDownloadJob =
 export const updateJobStatus =
     (id: string, status: DownloadJobStatus) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const jobs = selectDownloadJobs(getState());
+        // const jobs = selectDownloadJobs(getState());
 
-        const jobToBeUpdated = jobs.find((job) => job.id === id);
+        // const jobToBeUpdated = jobs.find((job) => job.id === id);
+
+        const jobToBeUpdated = selectDownloadJobById(getState(), id);
 
         if (!jobToBeUpdated) {
             console.error('cannot find job data with job id of %s', id);
