@@ -4,22 +4,33 @@ import { DownloadJob } from '@store/DownloadMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ScaleRangeSelector } from './ScaleRangeSelector';
 import { dispatch, min } from 'd3';
+import { IWaybackItem } from '@typings/index';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
     /**
-     * If true, the user is either not signed in or signed in with an ArcGIS public account.
-     * In both cases, we will disable the create button in the new job dialog since users will not be able to create download jobs.
+     * If true, the user is not signed in. We will disable the create button in the new job dialog and show a prompt to sign in to users in this case as they need to be signed in to create a Wayport export job.
      */
-    disabled: boolean;
+    notSignedIn: boolean;
     /**
      * If true, it means the user is signed in with an ArcGIS public account.
      * We will show a warning message to users as they will need to sign in with an organizational account to create Wayport export jobs.
      */
     signedInUsingPublicAccount: boolean;
+    /**
+     * The active wayback item that is being displayed on the map. We will show the release date of the active wayback item in the create a new job message,
+     * and use it as the default release date for the new job when user clicks the action in the prompt message to create a new job.
+     */
+    activeWaybackItem: IWaybackItem | null;
+    /**
+     * Emit when user changes the zoom levels selection in the new job dialog, with the selected min and max zoom levels as the parameters.
+     * @param minZoom
+     * @param maxZoom
+     * @returns
+     */
     levelsOnChange: (minZoom: number, maxZoom: number) => void;
     /**
      * Emits when user clicks the remove button in the new job dialog to remove the current new download job that is being created.
@@ -34,22 +45,32 @@ type NewJobDialogProps = {
      * @param job
      * @returns
      */
-    onCreate: (job: DownloadJob) => void;
+    onSubmit: (job: DownloadJob) => void;
+    /**
+     * Emit when user clicks the action in the prompt message to create a new job for the current map extent and selected zoom levels.
+     * @returns
+     */
+    onInitiateNewJob: () => void;
 };
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
     job,
-    disabled,
+    notSignedIn,
     signedInUsingPublicAccount,
+    activeWaybackItem,
     levelsOnChange,
     onRemove,
-    onCreate,
+    onSubmit,
+    onInitiateNewJob,
 }) => {
     const { t } = useTranslation();
 
     const { tileEstimations, levels } = job || {};
 
     const [minZoom, maxZoom] = levels || [];
+
+    // determine if the create button should be disabled or not based on user's sign in status
+    const disabled = notSignedIn || signedInUsingPublicAccount;
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
@@ -116,8 +137,23 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     const getContent = () => {
         if (!job) {
             return (
-                <div className="text-center opacity-50">
-                    <p className="text-sm">{t('no_new_wayport_jobs')}</p>
+                <div className="text-white font-light text-sm">
+                    <Trans
+                        i18nKey="no_new_wayport_job"
+                        values={{
+                            waybackReleaseDate:
+                                activeWaybackItem?.releaseDateLabel ||
+                                'Unknown',
+                        }}
+                        components={{
+                            action: (
+                                <button
+                                    className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
+                                    onClick={onInitiateNewJob}
+                                />
+                            ),
+                        }}
+                    />
                 </div>
             );
         }
@@ -261,7 +297,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         appearance="solid"
                         color="blue"
                         onClick={() => {
-                            onCreate(job);
+                            onSubmit(job);
                         }}
                     >
                         {t('create_tile_package')}
@@ -271,7 +307,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         );
     };
 
-    if (!job) {
+    if (!job && notSignedIn) {
         return null;
     }
 

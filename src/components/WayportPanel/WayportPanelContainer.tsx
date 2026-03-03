@@ -11,11 +11,16 @@ import {
 import {
     deleteDownloadJobs,
     downloadOutputTilePackage,
+    initiateNewDownloadJob,
     startDownloadJob,
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewDownloadJob,
 } from '@store/DownloadMode/thunks';
 import { JobsList } from './JobsList';
+import { activeWaybackItemSelector } from '@store/Wayback/reducer';
+import { IWaybackItem } from '@typings/index';
+import { mapExtentSelector } from '@store/Map/reducer';
+import { release } from 'os';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -23,8 +28,11 @@ export const WayportPanelContainer = () => {
     const { notSignedIn, signedInWithArcGISPublicAccount } =
         useContext(AppContext);
 
-    // determine if the panel should be disabled or not
-    const disabled = notSignedIn || signedInWithArcGISPublicAccount;
+    const activeWaybackItem: IWaybackItem = useAppSelector(
+        activeWaybackItemSelector
+    );
+
+    const mapExtent = useAppSelector(mapExtentSelector);
 
     const newDownloadJob = useAppSelector(selectNewDownloadJob);
 
@@ -35,6 +43,10 @@ export const WayportPanelContainer = () => {
     const idOfJobToShowExtentOnMap = useAppSelector(
         (state) => state.DownloadMode.idOfJobToShowExtentOnMap
     );
+
+    const handleInitiateNewJob = () => {
+        // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
+    };
 
     return (
         <div
@@ -53,13 +65,15 @@ export const WayportPanelContainer = () => {
             />
 
             <NewJobDialog
-                disabled={disabled}
+                // disabled={disabled}
                 job={newDownloadJob}
+                notSignedIn={notSignedIn}
                 signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
+                activeWaybackItem={activeWaybackItem}
                 onRemove={(job) => {
                     dispatch(deleteDownloadJobs([job]));
                 }}
-                onCreate={(job) => {
+                onSubmit={(job) => {
                     // console.log('create new download job with state: ', job);
                     dispatch(startDownloadJob());
                 }}
@@ -70,6 +84,15 @@ export const WayportPanelContainer = () => {
                     dispatch(
                         updateNewDownloadJob({
                             levels: [minZoom, maxZoom],
+                        })
+                    );
+                }}
+                onInitiateNewJob={() => {
+                    // // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
+                    dispatch(
+                        initiateNewDownloadJob({
+                            releaseNum: activeWaybackItem.releaseNum,
+                            extent: mapExtent,
                         })
                     );
                 }}

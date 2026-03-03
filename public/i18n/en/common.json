@@ -143,7 +143,7 @@
     "switch_language": "Switch Language",
     "choose_language": "Choose Language",
     "new_wayport_job_header": "{{releaseDate}} Tile Export",
-    "no_new_wayport_jobs": "No new tile export jobs available.",
+    "no_new_wayport_job": "<action>Create a new job</action> to export tiles for the {{waybackReleaseDate}} version at your current map extent.",
     "updates_mode_summary_tooltip": "Total number of sites and area coverage based on the selected published date and region filters.",
     "updates_mode_summary_info_pending": "<strong>{{sites}}</strong> pending areas covering <strong>{{areas}} km²</strong>.",
     "updates_mode_summary_info_published": "<strong>{{sites}}</strong> published areas covering <strong>{{areas}} km²</strong>",
