@@ -179,5 +179,6 @@ export const selectDownloadJobToShowExtentOnMap = createSelector(
     }
 );
 
-export const selectTimestampOfDisplayExtentOnMapRequest = (state: RootState) =>
-    state.DownloadMode.timestampOfDisplayExtentOnMapRequest;
+export const selectTimestampOfZoomToDownloadJobExtentRequest = (
+    state: RootState
+) => state.DownloadMode.timestampOfZoomToDownloadJobExtentRequest;

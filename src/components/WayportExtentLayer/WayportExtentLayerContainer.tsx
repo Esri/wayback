@@ -4,6 +4,7 @@ import {
     selectDownloadJobToShowExtentOnMap,
     // selectDownloadJobToDisplayOnMap,
     selectNewDownloadJob,
+    selectTimestampOfZoomToDownloadJobExtentRequest,
 } from '@store/DownloadMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
 import React, { FC, use, useEffect, useMemo } from 'react';
@@ -23,6 +24,13 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     const mode = useAppSelector(selectMapMode);
 
     const newDownloadJob = useAppSelector(selectNewDownloadJob);
+
+    /**
+     * Timestamp of when the zoom to download job extent on map request is made.
+     */
+    const timestampOfZoomToDownloadJobExtentRequest = useAppSelector(
+        selectTimestampOfZoomToDownloadJobExtentRequest
+    );
 
     // Restore the new download job from session storage after sign-in
     // This preserves the job being created if the user needed to authenticate
@@ -120,6 +128,9 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             mapView={mapView}
             extent={extentToDisplay}
             visible={wayportExtentLayerVisibility}
+            timestampOfZoomToDownloadJobExtentRequest={
+                timestampOfZoomToDownloadJobExtentRequest
+            }
         />
     );
 };

@@ -5,20 +5,26 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import React, { FC, useEffect, useRef } from 'react';
 import { IExtent } from '@typings/index';
 import { useAppSelector } from '@store/configureStore';
-import { selectTimestampOfDisplayExtentOnMapRequest } from '@store/DownloadMode/selectors';
+import { selectTimestampOfZoomToDownloadJobExtentRequest } from '@store/DownloadMode/selectors';
 
 type Props = {
     mapView: MapView;
     extent: IExtent | null;
     visible: boolean;
+    /**
+     * Timestamp of when the zoom to download job extent on map request is made.
+     * This is used as a dependency in useEffect to trigger zooming to the extent on the map whenever the user clicks to show the job extent on the map, even if it's the same job as before.
+     */
+    timestampOfZoomToDownloadJobExtentRequest: number;
 };
 
-export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
+export const WayportExtentLayer: FC<Props> = ({
+    mapView,
+    extent,
+    visible,
+    timestampOfZoomToDownloadJobExtentRequest,
+}) => {
     const graphicLayer = useRef<GraphicLayer>(null);
-
-    const timestampOfDisplayExtentOnMapRequest = useAppSelector(
-        selectTimestampOfDisplayExtentOnMapRequest
-    );
 
     const init = () => {
         const layer = new GraphicLayer({
@@ -73,7 +79,7 @@ export const WayportExtentLayer: FC<Props> = ({ mapView, extent, visible }) => {
                 duration: 1000,
             });
         }
-    }, [extent, visible, mapView, timestampOfDisplayExtentOnMapRequest]);
+    }, [extent, visible, mapView, timestampOfZoomToDownloadJobExtentRequest]);
 
     return null;
 };

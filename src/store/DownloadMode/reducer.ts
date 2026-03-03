@@ -129,11 +129,11 @@ export type DownloadModeState = {
      */
     idOfJobToShowExtentOnMap: string | null;
     /**
-     * Timestamp of when idOfJobToShowExtentOnMap was last updated.
+     * Timestamp of when the zoom to download job extent on map request is made.
      * Used to trigger map extent updates when the user clicks the same job card multiple times.
      * Since clicking the same job card doesn't change the ID, this timestamp ensures the map zooms to the job's extent every time the user clicks the job card, even if it's the same job as before.
      */
-    timestampOfDisplayExtentOnMapRequest: number;
+    timestampOfZoomToDownloadJobExtentRequest: number;
     /**
      * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
      */
@@ -147,7 +147,7 @@ export const initialDownloadModeState: DownloadModeState = {
     },
     idOfJobBeingCreated: null,
     idOfJobToShowExtentOnMap: null,
-    timestampOfDisplayExtentOnMapRequest: 0,
+    timestampOfZoomToDownloadJobExtentRequest: 0,
     errorMessage: '',
 };
 
@@ -195,7 +195,7 @@ const slice = createSlice({
             }>
         ) => {
             state.idOfJobToShowExtentOnMap = action.payload?.idOfJobToShow;
-            state.timestampOfDisplayExtentOnMapRequest =
+            state.timestampOfZoomToDownloadJobExtentRequest =
                 action.payload?.requestedOn;
         },
     },
