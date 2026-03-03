@@ -2,7 +2,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import Extent from '@arcgis/core/geometry/Extent';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
@@ -24,6 +24,10 @@ type Props = {
      */
     mapView: MapView;
     /**
+     * Timestamp of when the zoom to download job extent on map request is made.
+     */
+    timestampOfZoomToDownloadJobExtentRequest: number;
+    /**
      * Emits when the extent has been changed.
      * @param payload.extent - The updated extent resulting from the user's edits on the map.
      * @returns
@@ -42,6 +46,7 @@ export const useSketchViewModel = ({
     isActive,
     extentToEdit,
     mapView,
+    timestampOfZoomToDownloadJobExtentRequest,
     onExtentChange,
 }: Props): void => {
     const sketchVMRef = React.useRef<SketchViewModel | null>(null);
@@ -239,6 +244,45 @@ export const useSketchViewModel = ({
             return;
         }
     }, [extentToEdit, isSketchVMReady]); // re-run when the extent to edit changes or when the sketchVM is ready
+
+    useEffect(() => {
+        if (
+            !sketchVMRef.current ||
+            !graphicsLayerRef.current ||
+            !isSketchVMReady
+        ) {
+            return;
+        }
+
+        if (sketchVMRef.current?.state !== 'active') {
+            // console.log('SketchViewModel is not active, skipping zoom to extent on map request');
+            return;
+        }
+
+        if (timestampOfZoomToDownloadJobExtentRequest === 0) {
+            return;
+        }
+
+        // console.log('Received zoom to extent request with timestamp:', timestampOfZoomToDownloadJobExtentRequest);
+
+        const graphic = graphicsLayerRef.current.graphics?.getItemAt(0);
+
+        if (!graphic) {
+            console.warn('No graphic found on the graphics layer to zoom to');
+            return;
+        }
+
+        const geometry = graphic?.geometry as Polygon;
+
+        if (!geometry) {
+            console.warn('Graphic has no geometry to zoom to');
+            return;
+        }
+
+        mapView.goTo({
+            target: geometry,
+        });
+    }, [timestampOfZoomToDownloadJobExtentRequest, isSketchVMReady]);
 
     return null;
 };

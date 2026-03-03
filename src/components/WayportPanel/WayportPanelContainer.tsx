@@ -21,6 +21,7 @@ import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
 import { release } from 'os';
+import { timestampOfZoomToDownloadJobExtentRequestUpdated } from '@store/DownloadMode/reducer';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -94,6 +95,14 @@ export const WayportPanelContainer = () => {
                             releaseNum: activeWaybackItem.releaseNum,
                             extent: mapExtent,
                         })
+                    );
+                }}
+                onZoomToExtentRequested={() => {
+                    // console.log('User requests to zoom to the job extent on the map, this will trigger the map to zoom to the job extent');
+                    dispatch(
+                        timestampOfZoomToDownloadJobExtentRequestUpdated(
+                            Date.now()
+                        )
                     );
                 }}
             />

@@ -51,6 +51,11 @@ type NewJobDialogProps = {
      * @returns
      */
     onInitiateNewJob: () => void;
+    /**
+     * Emit when user clicks the button to zoom to the job extent on the map in the new job dialog.
+     * @returns
+     */
+    onZoomToExtentRequested: () => void;
 };
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
@@ -62,6 +67,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     onRemove,
     onSubmit,
     onInitiateNewJob,
+    onZoomToExtentRequested,
 }) => {
     const { t } = useTranslation();
 
@@ -161,29 +167,41 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         return (
             <div>
                 <div className="w-full relative mb-4">
-                    <div className="flex justify-center items-center ">
-                        <CalciteIcon
-                            icon="information"
-                            scale="s"
-                            class="text-custom-theme-blue-light mr-2"
-                        />
-                        <span className=" text-custom-theme-blue-light font-light">
-                            {t('new_wayport_job_header', {
-                                releaseDate:
-                                    job?.waybackItem?.releaseDateLabel ||
-                                    'Unknown',
-                            })}
-                        </span>
-                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <CalciteIcon
+                                icon="information"
+                                scale="s"
+                                class="text-custom-theme-blue-light mr-2"
+                            />
 
-                    <div className="absolute top-0 right-0">
-                        <CalciteButton
-                            width="full"
-                            appearance="transparent"
-                            scale="s"
-                            iconEnd="x"
-                            onClick={onRemove.bind(null, job)}
-                        ></CalciteButton>
+                            <span className=" text-custom-theme-blue-light font-light">
+                                {t('new_wayport_job_header', {
+                                    releaseDate:
+                                        job?.waybackItem?.releaseDateLabel ||
+                                        'Unknown',
+                                })}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center">
+                            <CalciteButton
+                                class="ml-1"
+                                scale="s"
+                                iconEnd="search"
+                                appearance="transparent"
+                                kind="neutral"
+                                onClick={onZoomToExtentRequested}
+                            />
+
+                            <CalciteButton
+                                width="full"
+                                appearance="transparent"
+                                scale="s"
+                                iconEnd="x"
+                                onClick={onRemove.bind(null, job)}
+                            ></CalciteButton>
+                        </div>
                     </div>
                 </div>
 

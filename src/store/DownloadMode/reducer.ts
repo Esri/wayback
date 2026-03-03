@@ -26,6 +26,7 @@ import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
 import { id } from 'date-fns/locale';
+import { time } from 'console';
 
 export type DownloadJobStatus =
     | 'not started'
@@ -198,6 +199,12 @@ const slice = createSlice({
             state.timestampOfZoomToDownloadJobExtentRequest =
                 action.payload?.requestedOn;
         },
+        timestampOfZoomToDownloadJobExtentRequestUpdated: (
+            state,
+            action: PayloadAction<number>
+        ) => {
+            state.timestampOfZoomToDownloadJobExtentRequest = action.payload;
+        },
     },
 });
 
@@ -212,6 +219,7 @@ export const {
     errorMessageUpdated,
     idOfJobBeingCreatedUpdated,
     idOfJobToShowExtentOnMapUpdated,
+    timestampOfZoomToDownloadJobExtentRequestUpdated,
 } = slice.actions;
 
 export default reducer;

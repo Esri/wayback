@@ -95,6 +95,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         isActive: isSketchVMActive,
         extentToEdit,
         mapView,
+        timestampOfZoomToDownloadJobExtentRequest,
         onExtentChange: (updatedExtent) => {
             dispatch(
                 updateNewDownloadJob({
