@@ -171,7 +171,17 @@ export const checkJobStatus = async (
         `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}?f=json&token=${getToken()}`
     );
 
+    if (!res.ok) {
+        throw new Error(
+            `Failed to check job status. Server responded with status ${res.status}: ${res.statusText}`
+        );
+    }
+
     const data = await res.json();
+
+    if (data.error) {
+        throw data.error;
+    }
 
     return data as CheckJobStatusResponse;
 };
@@ -183,7 +193,19 @@ export const getJobOutputInfo = async (
         `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
     );
 
-    const data = (await outputRes.json()) as GetJobOutputResponse;
+    if (!outputRes.ok) {
+        throw new Error(
+            `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
+        );
+    }
+
+    const outputData = await outputRes.json();
+
+    if (outputData.error) {
+        throw outputData.error;
+    }
+
+    const data = outputData as GetJobOutputResponse;
 
     const url = data?.value?.url;
 
