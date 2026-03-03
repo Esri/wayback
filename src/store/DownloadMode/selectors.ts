@@ -84,17 +84,34 @@ export const selectNumOfPendingDownloadJobs = createSelector(
     (jobs) => {
         const { byId, ids } = jobs;
 
-        return ids.filter(
-            (id) =>
-                byId[id].status === 'pending' ||
-                byId[id].status === 'waiting to start'
-        ).length;
+        return ids.filter((id) => byId[id].status === 'pending').length;
     }
 );
 
 export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
     selectNumOfPendingDownloadJobs,
     (numOfPendingJobs) => numOfPendingJobs >= 5
+);
+
+export const selectFinishedDownloadJobsWithoutPackageInfo = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const finishedDownloadJobIds = ids.filter((id) => {
+            const { status } = byId[id] || {};
+            return (
+                status === 'finished' &&
+                byId[id].outputTilePackageInfo === undefined
+            );
+        });
+
+        const finishedDownloadJobs = finishedDownloadJobIds.map(
+            (id) => byId[id]
+        );
+
+        return finishedDownloadJobs;
+    }
 );
 
 export const selectNumOfFinishedDownloadJobs = createSelector(
@@ -132,6 +149,24 @@ export const selectDownloadJobsThatHaveBeenStarted = createSelector(
         );
 
         return idOfStartedJobs.map((id) => byId[id]);
+    }
+);
+
+export const selectDownloadJobsThatHaveFinished = createSelector(
+    (state: RootState) => state.DownloadMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const idOfFinishedJobs = ids.filter((id) => {
+            const { status } = byId[id];
+            return (
+                status === 'finished' ||
+                status === 'downloaded' ||
+                status === 'failed'
+            );
+        });
+
+        return idOfFinishedJobs.map((id) => byId[id]);
     }
 );
 

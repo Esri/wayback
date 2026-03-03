@@ -51,13 +51,15 @@ import {
     LocaleSuggestion,
     LocaleSwitcherDialog,
 } from '@components/LocaleSwitcher';
-import { PerformanceAnalyzeTool } from '@components/PerformanceAnalyzeTool';
 import { WayportExtentLayer } from '@components/WayportExtentLayer';
+import { useCheckStatusOfDownloadJobs } from '@hooks/useCheckStatusOfDownloadJobs';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
 
     useRevalidateToken();
+
+    useCheckStatusOfDownloadJobs();
 
     return (
         <ErrorBoundary>
@@ -118,8 +120,6 @@ const AppLayout: React.FC = () => {
             <AboutThisApp />
 
             <MobileFooter />
-
-            <PerformanceAnalyzeTool />
         </ErrorBoundary>
     );
 };

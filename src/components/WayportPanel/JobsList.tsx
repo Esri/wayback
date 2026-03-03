@@ -20,6 +20,7 @@ type JobsListProps = {
     shouldDisableZoomToButton: boolean;
     onRemove: (job: DownloadJob) => void;
     onZoomTo: (job: DownloadJob) => void;
+    downlaodTilePackageButtonOnClick: (jobId: string) => void;
 };
 
 export const JobsList: FC<JobsListProps> = ({
@@ -28,6 +29,7 @@ export const JobsList: FC<JobsListProps> = ({
     idOfJobToShowExtentOnMap,
     onRemove,
     onZoomTo,
+    downlaodTilePackageButtonOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -103,14 +105,10 @@ export const JobsList: FC<JobsListProps> = ({
                                 scale="s"
                                 appearance="solid"
                                 iconStart="download-to"
-                                onClick={() => {
-                                    if (job.outputTilePackageInfo?.url) {
-                                        window.open(
-                                            job.outputTilePackageInfo.url,
-                                            '_blank'
-                                        );
-                                    }
-                                }}
+                                onClick={downlaodTilePackageButtonOnClick.bind(
+                                    null,
+                                    job.id
+                                )}
                                 label={t('download_tile_package')}
                                 // disabled={!job.outputTilePackageInfo?.url}
                             >

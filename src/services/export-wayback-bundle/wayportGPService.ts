@@ -167,58 +167,68 @@ export const submitJob = async ({
 export const checkJobStatus = async (
     jobId: string
 ): Promise<CheckJobStatusResponse> => {
-    const res = await fetch(
-        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}?f=json&token=${getToken()}`
-    );
-
-    if (!res.ok) {
-        throw new Error(
-            `Failed to check job status. Server responded with status ${res.status}: ${res.statusText}`
+    try {
+        const res = await fetch(
+            `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}?f=json&token=${getToken()}`
         );
+
+        if (!res.ok) {
+            throw new Error(
+                `Failed to check job status. Server responded with status ${res.status}: ${res.statusText}`
+            );
+        }
+
+        const data = await res.json();
+
+        if (data.error) {
+            throw data.error;
+        }
+
+        return data as CheckJobStatusResponse;
+    } catch (error) {
+        console.error('Error checking job status:', error);
+        return null;
     }
-
-    const data = await res.json();
-
-    if (data.error) {
-        throw data.error;
-    }
-
-    return data as CheckJobStatusResponse;
 };
 
 export const getJobOutputInfo = async (
     jobId: string
 ): Promise<WayportTilePackageInfo> => {
-    const outputRes = await fetch(
-        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
-    );
-
-    if (!outputRes.ok) {
-        throw new Error(
-            `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
+    try {
+        const outputRes = await fetch(
+            `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
         );
-    }
 
-    const outputData = await outputRes.json();
+        if (!outputRes.ok) {
+            throw new Error(
+                `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
+            );
+        }
 
-    if (outputData.error) {
-        throw outputData.error;
-    }
+        const outputData = await outputRes.json();
 
-    const data = outputData as GetJobOutputResponse;
+        if (outputData.error) {
+            throw outputData.error;
+        }
 
-    const url = data?.value?.url;
+        const data = outputData as GetJobOutputResponse;
 
-    if (!url) {
+        const url = data?.value?.url;
+
+        if (!url) {
+            return null;
+        }
+
+        const tilePackageHeaders = await fetch(url, {
+            method: 'HEAD',
+        });
+
+        return {
+            url,
+            size: +tilePackageHeaders.headers.get('Content-Length'),
+        };
+    } catch (error) {
+        console.error('Error getting job output info:', error);
         return null;
     }
-
-    const tilePackageHeaders = await fetch(url, {
-        method: 'HEAD',
-    });
-
-    return {
-        url,
-        size: +tilePackageHeaders.headers.get('Content-Length'),
-    };
 };

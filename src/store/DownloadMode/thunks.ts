@@ -41,9 +41,10 @@ import {
 } from '@services/export-wayback-bundle/wayportGPService';
 import {
     selectDownloadJobById,
+    selectDownloadJobsThatHaveFinished,
+    selectFinishedDownloadJobsWithoutPackageInfo,
     // selectDownloadJobs,
     selectNewDownloadJob,
-    selectNumOfPendingDownloadJobs,
     selectPendingDownloadJobs,
     selectStaleDownloadJobs,
 } from './selectors';
@@ -266,7 +267,15 @@ export const restoreNewDownloadJobFromSessionStorage =
             return;
         }
 
-        dispatch(createDownloadJob(newWayportJobFromStorage));
+        // Update the userId for the job retrieved from session storage.
+        // The job was created before sign-in, so we assign the signed-in user's ID
+        // to ensure proper association with the user when creating the job in the backend.
+        const downloadJobToBeCreated: DownloadJob = {
+            ...newWayportJobFromStorage,
+            userId: signedInUser.username,
+        };
+
+        dispatch(createDownloadJob(downloadJobToBeCreated));
     };
 
 export const startDownloadJob =
@@ -289,7 +298,7 @@ export const startDownloadJob =
             return;
         }
 
-        const { extent, levels, waybackItem, id } = newDownloadJob;
+        const { extent, levels, waybackItem, id, userId } = newDownloadJob;
 
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
         dispatch(updateJobStatus(id, 'waiting to start'));
@@ -298,6 +307,12 @@ export const startDownloadJob =
         dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
 
         try {
+            if (!userId) {
+                throw new Error(
+                    'Missing user ID for the download job. Please make sure you are signed in before starting the download job.'
+                );
+            }
+
             const res = await submitJob({
                 extent,
                 levels,
@@ -346,177 +361,222 @@ export const updateJobStatus =
         await dispatch(updateDownloadJobs([updatedJobData]));
     };
 
-// export const checkPendingDownloadJobStatus =
-//     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         clearTimeout(checkDownloadJobStatusTimeout);
+/**
+ * This thunk function is used to check the status of pending download jobs, and update the job status in the store based on the response from Wayport GP service.
+ * @returns
+ */
+export const checkPendingDownloadJobStatus =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // clearTimeout(checkDownloadJobStatusTimeout);
 
-//         const pendingJobs = selectPendingDownloadJobs(getState());
+        const pendingJobs = selectPendingDownloadJobs(getState());
 
-//         if (!pendingJobs.length) {
-//             return;
-//         }
+        if (!pendingJobs.length) {
+            return;
+        }
 
-//         checkDownloadJobStatusTimeout = setTimeout(async () => {
-//             const checkJobStatusRequests = pendingJobs.map((downloadJob) => {
-//                 return checkJobStatus(downloadJob.GPJobId);
-//             });
+        const checkJobStatusRequests = pendingJobs.map((downloadJob) => {
+            return checkJobStatus(downloadJob.GPJobId);
+        });
 
-//             const checkJobStatusResponses = await Promise.all(
-//                 checkJobStatusRequests
-//             );
+        // wait for all check job status requests to be settled,
+        const checkJobStatusResponses = await Promise.all(
+            checkJobStatusRequests
+        );
 
-//             const updatedJobsData: DownloadJob[] = checkJobStatusResponses.map(
-//                 (res, index) => {
-//                     const existingJobData = pendingJobs[index];
+        const finishedJobs: DownloadJob[] = [];
 
-//                     let status: DownloadJobStatus = 'pending';
-//                     let finishTime: number = null;
+        for (let i = 0; i < checkJobStatusResponses.length; i++) {
+            // const fulfilledResponse = fulfilledResponses[i];
 
-//                     if (
-//                         res.jobStatus === 'esriJobSucceeded' ||
-//                         res.jobStatus === 'esriJobFailed'
-//                     ) {
-//                         status =
-//                             res.jobStatus === 'esriJobSucceeded'
-//                                 ? 'finished'
-//                                 : 'failed';
+            const res = checkJobStatusResponses[i];
 
-//                         finishTime = new Date().getTime();
-//                     }
+            // if the response is invalid or doesn't contain jobStatus, skip updating the job status for that job
+            if (!res || !res?.jobStatus) {
+                continue;
+            }
 
-//                     return {
-//                         ...existingJobData,
-//                         status,
-//                         finishTime,
-//                     };
-//                 }
-//             );
+            if (
+                res.jobStatus === 'esriJobSucceeded' ||
+                res.jobStatus === 'esriJobFailed'
+            ) {
+                const existingJobData = pendingJobs[i];
 
-//             dispatch(updateDownloadJobs(updatedJobsData));
+                const status: DownloadJobStatus =
+                    res.jobStatus === 'esriJobSucceeded'
+                        ? 'finished'
+                        : 'failed';
 
-//             dispatch(getOutputTilePackageInfo());
+                const finishTime: number = new Date().getTime();
 
-//             // call this thunk function again in case there are still pending jobs left
-//             dispatch(checkPendingDownloadJobStatus());
-//         }, CHECK_JOB_STATUS_DELAY_IN_SECONDS * 1000);
-//     };
+                finishedJobs.push({
+                    ...existingJobData,
+                    status,
+                    finishTime,
+                });
+            }
+        }
 
-// export const downloadOutputTilePackage =
-//     (id: string) =>
-//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const { DownloadMode } = getState();
+        if (finishedJobs.length) {
+            dispatch(updateDownloadJobs(finishedJobs));
+        }
 
-//         const { jobs } = DownloadMode;
+        // const updatedJobsData: DownloadJob[] = checkJobStatusResponses.map(
+        //     (res, index) => {
+        //         const existingJobData = pendingJobs[index];
 
-//         const { byId } = jobs;
+        //         let status: DownloadJobStatus = 'pending';
+        //         let finishTime: number = null;
 
-//         if (!byId[id]) {
-//             console.error('cannot find job data with job id of %s', id);
-//             return;
-//         }
+        //         if (
+        //             res.jobStatus === 'esriJobSucceeded' ||
+        //             res.jobStatus === 'esriJobFailed'
+        //         ) {
+        //             status =
+        //                 res.jobStatus === 'esriJobSucceeded'
+        //                     ? 'finished'
+        //                     : 'failed';
 
-//         const { outputTilePackageInfo } = byId[id];
+        //             finishTime = new Date().getTime();
+        //         }
 
-//         if (!outputTilePackageInfo) {
-//             return;
-//         }
+        //         return {
+        //             ...existingJobData,
+        //             status,
+        //             finishTime,
+        //         };
+        //     }
+        // );
 
-//         window.open(outputTilePackageInfo.url, '_blank');
+        // dispatch(updateDownloadJobs(updatedJobsData));
 
-//         dispatch(
-//             updateDownloadJobs([
-//                 {
-//                     ...byId[id],
-//                     status: 'downloaded',
-//                 },
-//             ])
-//         );
-//     };
+        // dispatch(getOutputTilePackageInfo());
+    };
 
-// /**
-//  * remove download jobs that has been downloaded or are expired
-//  * @returns
-//  */
-// export const cleanUpDownloadJobs =
-//     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const jobs = selectDownloadJobs(getState());
+export const downloadOutputTilePackage =
+    (jobId: string) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobToBeDownloaded = selectDownloadJobById(getState(), jobId);
 
-//         // unix timestamp of curren time
-//         const now = new Date().getTime();
+        if (!jobToBeDownloaded) {
+            console.error('cannot find job data with job id of %s', jobId);
+            return;
+        }
 
-//         // find jobs that were finished more than 1 hour ago
-//         const jobsToBeRemoved = jobs.filter((job) => {
-//             // downloaded job should be removed
-//             if (job.status === 'downloaded') {
-//                 return true;
-//             }
+        const { outputTilePackageInfo } = jobToBeDownloaded || {};
 
-//             // any finished job that is 1 hour old should be removed
-//             if (job.finishTime) {
-//                 const secondsSinceJobWasFinished =
-//                     (now - job.finishTime) / 1000;
-//                 return (
-//                     secondsSinceJobWasFinished >
-//                     DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
-//                 );
-//             }
+        if (!outputTilePackageInfo) {
+            console.error(
+                'No output tile package info found for job with id of %s',
+                jobId
+            );
+            return;
+        }
 
-//             return false;
-//         });
+        window.open(outputTilePackageInfo.url, '_blank');
 
-//         if (!jobsToBeRemoved.length) {
-//             return;
-//         }
+        // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
+        dispatch(
+            updateDownloadJobs([
+                {
+                    ...jobToBeDownloaded,
+                    status: 'downloaded',
+                },
+            ])
+        );
+    };
 
-//         dispatch(deleteDownloadJobs(jobsToBeRemoved));
+/**
+ * remove download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
+ * @returns
+ */
+export const clearDownloadJobs =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobs = selectDownloadJobsThatHaveFinished(getState());
 
-//         // for (const job of jobsToBeRemoved) {
-//         //     dispatch(downloadJobRemoved(job.id));
-//         // }
-//     };
+        if (!jobs.length) {
+            console.log(
+                'No finished download job found, skipping cleaning up download jobs'
+            );
+            return;
+        }
 
-// /**
-//  * get output tile package info for finished jobs
-//  * @returns
-//  */
-// export const getOutputTilePackageInfo =
-//     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const jobs = selectDownloadJobs(getState());
+        // unix timestamp of curren time
+        const now = new Date().getTime();
 
-//         const finishedJobs = jobs.filter((job) => {
-//             return (
-//                 job.status === 'finished' &&
-//                 job.outputTilePackageInfo === undefined
-//             );
-//         });
+        // find jobs that were finished more than 1 hour ago
+        const jobsToBeRemoved = jobs.filter((job) => {
+            // donwloaded jobs and failed jobs will be removed immediately without waiting for 1 hour, as they are no longer useful for users after they are downloaded or failed
+            if (job.status === 'downloaded' || job.status === 'failed') {
+                return true;
+            }
 
-//         if (!finishedJobs.length) {
-//             return;
-//         }
+            // any finished job that is 1 hour old should be removed
+            if (job.finishTime) {
+                const secondsSinceJobWasFinished =
+                    (now - job.finishTime) / 1000;
+                return (
+                    secondsSinceJobWasFinished >
+                    DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
+                );
+            }
 
-//         const tilePackageInfoRequests = finishedJobs.map((job) => {
-//             return getJobOutputInfo(job.GPJobId);
-//         });
+            return false;
+        });
 
-//         try {
-//             const tilePackageInfoResponses = await Promise.all(
-//                 tilePackageInfoRequests
-//             );
-//             console.log(tilePackageInfoResponses);
+        if (!jobsToBeRemoved.length) {
+            return;
+        }
 
-//             const updatedJobData = finishedJobs.map((jobData, index) => {
-//                 return {
-//                     ...jobData,
-//                     outputTilePackageInfo: tilePackageInfoResponses[index],
-//                 };
-//             });
+        dispatch(deleteDownloadJobs(jobsToBeRemoved));
+    };
 
-//             dispatch(updateDownloadJobs(updatedJobData));
-//         } catch (err) {
-//             console.error(err);
-//         }
-//         // console.log(tilePackageInfoResponses)
-//     };
+/**
+ * get output tile package info for finished jobs
+ * @returns
+ */
+export const assignTilePackageInfoToDownloadJobs =
+    (finishedDownloadJobsWithoutPackageInfo: DownloadJob[]) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // const finishedDownloadJobsWithoutPackageInfo = selectFinishedDownloadJobsWithoutPackageInfo(getState());
+
+        if (!finishedDownloadJobsWithoutPackageInfo.length) {
+            return;
+        }
+
+        const tilePackageInfoRequests =
+            finishedDownloadJobsWithoutPackageInfo.map((job) => {
+                return getJobOutputInfo(job.GPJobId);
+            });
+
+        const tilePackageInfoResponses = await Promise.all(
+            tilePackageInfoRequests
+        );
+        // console.log(tilePackageInfoResponses);
+
+        const jobsWithOutputTilePackageInfo: DownloadJob[] = [];
+
+        for (let i = 0; i < tilePackageInfoResponses.length; i++) {
+            const tilePackageInfo = tilePackageInfoResponses[i];
+
+            // if tile package info is not available for the job, skip updating the job with tile package info
+            if (!tilePackageInfo) {
+                continue;
+            }
+
+            const existingJobData = finishedDownloadJobsWithoutPackageInfo[i];
+
+            jobsWithOutputTilePackageInfo.push({
+                ...existingJobData,
+                outputTilePackageInfo: tilePackageInfo,
+            });
+        }
+
+        if (jobsWithOutputTilePackageInfo.length) {
+            dispatch(updateDownloadJobs(jobsWithOutputTilePackageInfo));
+        }
+        // console.log(tilePackageInfoResponses)
+    };
 
 /**
  * This thunk function is used to create a new download job and persist it to IndexedDB when user add a wayback item to the download list.

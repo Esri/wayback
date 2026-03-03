@@ -10,6 +10,7 @@ import {
 } from '@store/DownloadMode/selectors';
 import {
     deleteDownloadJobs,
+    downloadOutputTilePackage,
     startDownloadJob,
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewDownloadJob,
@@ -84,6 +85,10 @@ export const WayportPanelContainer = () => {
                 onZoomTo={(job) => {
                     // zoom to the job's extent in the map
                     dispatch(updateIdOfWayportJobToShowExtentOnMap(job.id));
+                }}
+                downlaodTilePackageButtonOnClick={(jobId) => {
+                    // console.log('Download tile package for job with id: ', jobId);
+                    dispatch(downloadOutputTilePackage(jobId));
                 }}
             />
         </div>
