@@ -36,6 +36,24 @@ export type DownloadJobStatus =
     | 'failed'
     | 'downloaded';
 
+/**
+ * Progress info of a download job, including total number of bundles, number of completed bundles, and percentage of progress.
+ */
+export type DownloadJobProgressInfo = {
+    /**
+     * The total number of bundles that need to be generated for the download job.
+     */
+    totalBundles: number;
+    /**
+     * The number of bundles that have been completed so far for the download job. This is used to calculate the progress percentage of the download job.
+     */
+    completedBundles: number;
+    /**
+     * The percentage of progress for the download job, calculated as (completedBundles / totalBundles) * 100. This gives a clear indication of how much of the download job has been completed.
+     */
+    progressPercentage: number;
+};
+
 export type DownloadJob = {
     /**
      * unique identifier of this download job
@@ -112,6 +130,11 @@ export type DownloadJob = {
      * error message to display in the UI when this download job fails. This can be used to inform user about what went wrong.
      */
     errorMessage?: string;
+    /**
+     * progress info of this download job, including total number of bundles, number of completed bundles, and percentage of progress.
+     * This is used to show the progress of the download job in the UI while the job is still running and has not finished yet.
+     */
+    progressInfo?: DownloadJobProgressInfo;
 };
 
 export type DownloadModeState = {

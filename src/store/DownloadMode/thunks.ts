@@ -62,6 +62,7 @@ import {
     normalizeExtent,
     saveNewDownloadJobToSessionStorage,
 } from './helpers';
+import { parseDownloadJobProgress } from '@services/export-wayback-bundle/wayportHelpers';
 
 type InitiateDownloadJobParams = {
     /**
@@ -386,6 +387,8 @@ export const checkPendingDownloadJobStatus =
 
         const finishedJobs: DownloadJob[] = [];
 
+        const ongoingJobsWithProgressInfo: DownloadJob[] = [];
+
         for (let i = 0; i < checkJobStatusResponses.length; i++) {
             // const fulfilledResponse = fulfilledResponses[i];
 
@@ -415,10 +418,27 @@ export const checkPendingDownloadJobStatus =
                     finishTime,
                 });
             }
+
+            if (res.jobStatus === 'esriJobExecuting') {
+                const progressInfo = parseDownloadJobProgress(res);
+
+                if (progressInfo && progressInfo?.totalBundles > 0) {
+                    const existingJobData = pendingJobs[i];
+
+                    ongoingJobsWithProgressInfo.push({
+                        ...existingJobData,
+                        progressInfo,
+                    });
+                }
+            }
         }
 
         if (finishedJobs.length) {
             dispatch(updateDownloadJobs(finishedJobs));
+        }
+
+        if (ongoingJobsWithProgressInfo.length) {
+            dispatch(updateDownloadJobs(ongoingJobsWithProgressInfo));
         }
 
         // const updatedJobsData: DownloadJob[] = checkJobStatusResponses.map(

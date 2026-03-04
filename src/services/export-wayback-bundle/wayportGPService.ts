@@ -47,7 +47,7 @@ type SubmitJobResponse = {
     jobStatus: GPJobStatus;
 };
 
-type CheckJobStatusResponse = {
+export type CheckJobStatusResponse = {
     jobId: string;
     jobStatus: GPJobStatus;
     results?: {

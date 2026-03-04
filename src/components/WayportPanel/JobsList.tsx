@@ -53,8 +53,12 @@ export const JobsList: FC<JobsListProps> = ({
     return (
         <div className="mt-2 overflow-x-hidden">
             {jobs.map((job) => {
-                const { waybackItem, levels, status } = job;
+                const { waybackItem, levels, status, progressInfo } = job;
                 const { releaseDateLabel } = waybackItem;
+                const progressPercentage =
+                    status === 'pending' && progressInfo
+                        ? `${progressInfo?.progressPercentage || 0}`
+                        : '';
 
                 return (
                     <div
@@ -95,7 +99,10 @@ export const JobsList: FC<JobsListProps> = ({
                         {status !== 'finished' && (
                             <div className="flex items-center">
                                 <span className="italic opacity-80">
-                                    {statusLabelText[status]}
+                                    {statusLabelText[status] +
+                                        (progressPercentage
+                                            ? ` (${progressPercentage}%)`
+                                            : '')}
                                 </span>
                             </div>
                         )}

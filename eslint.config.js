@@ -77,6 +77,13 @@ export default [
 
     // Ignore patterns
     {
-        ignores: ['node_modules/**', 'dist/**', 'build/**', 'webpack/**'],
+        ignores: [
+            'node_modules/**',
+            'dist/**',
+            'build/**',
+            'webpack/**',
+            '**/*.test.ts',
+            '**/*.test.tsx',
+        ],
     },
 ];
