@@ -10,7 +10,7 @@ import {
 } from '@store/DownloadMode/thunks';
 import React, { use, useEffect } from 'react';
 
-const CHECK_JOB_STATUS_INTERVAL = 30000; // 30 seconds
+const CHECK_JOB_STATUS_INTERVAL = 5 * 1000; // 5 seconds
 
 /**
  * This custom hook is used to check the status of pending download jobs at a regular interval, and update the job status in the store based on the response from Wayport GP service.
