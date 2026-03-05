@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
 import EsriMap from '@arcgis/core/Map';
@@ -171,6 +171,10 @@ const MapViewComponent: React.FC<Props> = ({
 
             {mapView
                 ? React.Children.map(children, (child) => {
+                      if (!child) {
+                          return null;
+                      }
+
                       return React.cloneElement(
                           child as React.ReactElement<any>,
                           {

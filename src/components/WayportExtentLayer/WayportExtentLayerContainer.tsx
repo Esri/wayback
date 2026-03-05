@@ -42,7 +42,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     );
 
     // The extent should only be editable if the job is in 'not started' status. Once the job has been started, the extent should be locked in and not editable.
-    const extentToEdit = useMemo(() => {
+    const extentOfNewDownloadJob = useMemo(() => {
         const currentExtent = newDownloadJob?.extent || null;
 
         if (mode !== 'wayport') {
@@ -60,13 +60,17 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         return currentExtent;
     }, [newDownloadJob?.extent, newDownloadJob?.status, mode]);
 
-    const isSketchVMActive = Boolean(extentToEdit) && mode === 'wayport';
+    // const isSketchVMActive = Boolean(extentToEdit) && mode === 'wayport';
 
     // The extent to display on the map should be based on the job that is designated to be displayed on the map.
     // This should not be the new download job that is being created, because the  extent of the new download job is handled separately by the sketch view model,
     // and should not be displayed on the map when it's being edited.
     const extentToDisplay = useMemo(() => {
-        if (!jobToDisplayOnMap || isSketchVMActive || mode !== 'wayport') {
+        if (
+            !jobToDisplayOnMap ||
+            extentOfNewDownloadJob ||
+            mode !== 'wayport'
+        ) {
             return null;
         }
 
@@ -75,7 +79,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         }
 
         return jobToDisplayOnMap?.extent || null;
-    }, [jobToDisplayOnMap, isSketchVMActive, mode]);
+    }, [jobToDisplayOnMap, extentOfNewDownloadJob, mode]);
 
     const wayportExtentLayerVisibility = useMemo(() => {
         // The layer should only be visible in wayport mode
@@ -85,12 +89,12 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         if (!extentToDisplay) return false;
 
         // no need to show the layer if the extent is being edited, as the sketch view model will handle displaying the geometry
-        if (extentToEdit) {
+        if (extentOfNewDownloadJob) {
             return false;
         }
 
         return true;
-    }, [mode, extentToDisplay, extentToEdit]);
+    }, [mode, extentToDisplay, extentOfNewDownloadJob]);
 
     // useSketchViewModel({
     //     isActive: isSketchVMActive,
@@ -108,7 +112,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
 
     const { tileEstimations, isGettingEstimations } = useGetTileEstimations({
         releaseNum: newDownloadJob?.waybackItem?.releaseNum || null,
-        extent: extentToEdit,
+        extent: extentOfNewDownloadJob,
     });
 
     useEffect(() => {
@@ -125,8 +129,23 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         );
     }, [tileEstimations]);
 
-    if (mode === 'wayport' && newDownloadJob && extentToEdit) {
-        return <WayportExtentViewer />;
+    // if the mode is wayport and there's a new download job with an extent,
+    // show the extent viewer which allows the user to edit the extent.
+    // Otherwise, show the wayport extent layer which just displays the extent without editing capabilities.
+    if (mode === 'wayport' && newDownloadJob && extentOfNewDownloadJob) {
+        return (
+            <WayportExtentViewer
+                mapView={mapView}
+                initialExtent={extentOfNewDownloadJob}
+                onExtentChange={(updatedExtent) => {
+                    dispatch(
+                        updateNewDownloadJob({
+                            extent: updatedExtent,
+                        })
+                    );
+                }}
+            />
+        );
     }
 
     return (

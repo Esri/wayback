@@ -1,4 +1,12 @@
-import React, { useState, useRef } from 'react';
+import { Extent, Point } from '@arcgis/core/geometry';
+import MapView from '@arcgis/core/views/MapView';
+import { useAppSelector } from '@store/configureStore';
+import { selectMapCenterAndZoom } from '@store/Map/reducer';
+import { IExtent } from '@typings/index';
+import { delay } from '@utils/snippets/delay';
+import classNames from 'classnames';
+import { set } from 'date-fns';
+import React, { useState, useRef, FC, useEffect, use } from 'react';
 
 const MIN_SIZE = 256;
 
@@ -9,11 +17,25 @@ type Dimensions = {
 
 type Corner = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
-export const WayportExtentViewer = () => {
+type Props = {
+    mapView: MapView;
+    initialExtent: IExtent;
+    onExtentChange: (extent: IExtent) => void;
+};
+
+export const WayportExtentViewer: FC<Props> = ({
+    mapView,
+    initialExtent,
+    onExtentChange,
+}) => {
+    const [isReady, setIsReady] = useState(false);
+
     const [dimensions, setDimensions] = useState<Dimensions>({
-        width: 600,
-        height: 400,
+        width: 0,
+        height: 0,
     });
+
+    const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
 
     const dragInfoRef = useRef<{
         corner: Corner;
@@ -24,6 +46,35 @@ export const WayportExtentViewer = () => {
     } | null>(null);
 
     const containerRef = useRef<HTMLDivElement>(null);
+
+    let debounceTimer = useRef<NodeJS.Timeout>(null);
+
+    const initDimensions = () => {
+        // get the point of the initial extent corners and convert to screen coordinates to calculate the initial width and height of the box in pixels
+        const bottomLeftPoint = new Point({
+            latitude: initialExtent.ymin,
+            longitude: initialExtent.xmin,
+        });
+        const topRightPoint = new Point({
+            latitude: initialExtent.ymax,
+            longitude: initialExtent.xmax,
+        });
+
+        const bottomLeftScreen = mapView.toScreen(bottomLeftPoint);
+        const topRightScreen = mapView.toScreen(topRightPoint);
+
+        // console.log('MapView ready - Initial extent screen points - bottomLeftScreen:', bottomLeftScreen, 'topRightScreen:', topRightScreen);
+
+        if (!bottomLeftScreen || !topRightScreen) return;
+
+        const initialWidth = Math.abs(topRightScreen.x - bottomLeftScreen.x);
+        const initialHeight = Math.abs(topRightScreen.y - bottomLeftScreen.y);
+
+        setDimensions({
+            width: initialWidth,
+            height: initialHeight,
+        });
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
         if (!dragInfoRef.current || !containerRef.current) return;
@@ -82,37 +133,122 @@ export const WayportExtentViewer = () => {
         document.addEventListener('mouseup', handleMouseUp);
     };
 
+    const debouncedOnExtentChange = (extent: IExtent) => {
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+        debounceTimer.current = setTimeout(() => {
+            onExtentChange(extent);
+            // console.log('Calculated new extent from box dimensions:', extent);
+        }, 500); // Adjust the debounce delay as needed
+    };
+
+    useEffect(() => {
+        // Convert dimensions to extent and call onExtentChange
+        if (!containerRef.current || !mapView) return;
+
+        // console.log('Initial extent points - bottomLeftPt:', bottomLeftPt, 'topRightPt:', topRightPt);
+
+        mapView.when(async () => {
+            // console.log('MapView is ready, zooming to initial extent:', initialExtent);
+
+            await mapView.goTo({
+                target: new Extent({
+                    xmin: initialExtent.xmin,
+                    ymin: initialExtent.ymin,
+                    xmax: initialExtent.xmax,
+                    ymax: initialExtent.ymax,
+                    spatialReference: {
+                        wkid: 4326,
+                    },
+                }),
+            });
+
+            setIsReady(true);
+        });
+    }, [mapView]);
+
+    useEffect(() => {
+        if (!isReady) return;
+
+        initDimensions();
+    }, [isReady]);
+
+    useEffect(() => {
+        if (!containerRef.current || !mapView) return;
+
+        const { width, height } = dimensions;
+
+        // no need to calculate if dimensions are not set yet
+        if (!width || !height) return;
+
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const centerX = containerRect.width / 2;
+        const centerY = containerRect.height / 2;
+
+        const topLeftScreen = {
+            x: centerX - width / 2,
+            y: centerY - height / 2,
+        };
+        const bottomRightScreen = {
+            x: centerX + width / 2,
+            y: centerY + height / 2,
+        };
+
+        const topLeftMapPoint = mapView.toMap(topLeftScreen);
+        const bottomRightMapPoint = mapView.toMap(bottomRightScreen);
+
+        if (!topLeftMapPoint || !bottomRightMapPoint) return;
+
+        const newExtent: IExtent = {
+            xmin: topLeftMapPoint.longitude,
+            ymin: bottomRightMapPoint.latitude,
+            xmax: bottomRightMapPoint.longitude,
+            ymax: topLeftMapPoint.latitude,
+        };
+        // onExtentChange(newExtent);
+
+        debouncedOnExtentChange(newExtent);
+    }, [
+        dimensions,
+        mapCenterAndZoom?.zoom,
+        mapCenterAndZoom?.center?.lat,
+        mapCenterAndZoom?.center?.lon,
+    ]);
+
     return (
         <div
             ref={containerRef}
             className="absolute top-0 left-0 w-full h-full z-0 flex items-center justify-center pointer-events-none"
         >
-            <div
-                className="relative "
-                style={{
-                    width: `${dimensions.width}px`,
-                    height: `${dimensions.height}px`,
-                    boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)',
-                }}
-            >
-                {/* Corner handles */}
-                <button
-                    className="absolute -top-2 -left-2 w-4 h-4 bg-white pointer-events-auto cursor-nw-resize"
-                    onMouseDown={(e) => handleMouseDown('top-left', e)}
-                />
-                <button
-                    className="absolute -top-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-ne-resize"
-                    onMouseDown={(e) => handleMouseDown('top-right', e)}
-                />
-                <button
-                    className="absolute -bottom-2 -left-2 w-4 h-4 bg-white  pointer-events-auto cursor-sw-resize"
-                    onMouseDown={(e) => handleMouseDown('bottom-left', e)}
-                />
-                <button
-                    className="absolute -bottom-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-se-resize"
-                    onMouseDown={(e) => handleMouseDown('bottom-right', e)}
-                />
-            </div>
+            {isReady && (
+                <div
+                    className={classNames('relative')}
+                    style={{
+                        width: `${dimensions.width}px`,
+                        height: `${dimensions.height}px`,
+                        boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)',
+                    }}
+                >
+                    {/* Corner handles */}
+                    <button
+                        className="absolute -top-2 -left-2 w-4 h-4 bg-white pointer-events-auto cursor-nw-resize"
+                        onMouseDown={(e) => handleMouseDown('top-left', e)}
+                    />
+                    <button
+                        className="absolute -top-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-ne-resize"
+                        onMouseDown={(e) => handleMouseDown('top-right', e)}
+                    />
+                    <button
+                        className="absolute -bottom-2 -left-2 w-4 h-4 bg-white  pointer-events-auto cursor-sw-resize"
+                        onMouseDown={(e) => handleMouseDown('bottom-left', e)}
+                    />
+                    <button
+                        className="absolute -bottom-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-se-resize"
+                        onMouseDown={(e) => handleMouseDown('bottom-right', e)}
+                    />
+                </div>
+            )}
         </div>
     );
 };
