@@ -84,7 +84,7 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
             return;
         }
 
-        if (appMode === 'updates') {
+        if (appMode === 'updates' || appMode === 'wayport') {
             return;
         }
 
