@@ -7,6 +7,7 @@ import { delay } from '@utils/snippets/delay';
 import classNames from 'classnames';
 import { set } from 'date-fns';
 import React, { useState, useRef, FC, useEffect, use } from 'react';
+import { useCalculateSizeOfExtent } from './useCalculateSizeOfExtent';
 
 const MIN_SIZE = 256;
 
@@ -23,13 +24,13 @@ type Corner = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 type Props = {
     mapView: MapView;
-    initialExtent: IExtent;
+    extent: IExtent;
     onExtentChange: (extent: IExtent) => void;
 };
 
-export const WayportExtentViewer: FC<Props> = ({
+export const WayportExtentEditor: FC<Props> = ({
     mapView,
-    initialExtent,
+    extent,
     onExtentChange,
 }) => {
     const [isReady, setIsReady] = useState(false);
@@ -38,6 +39,8 @@ export const WayportExtentViewer: FC<Props> = ({
         width: 0,
         height: 0,
     });
+
+    const extentSize = useCalculateSizeOfExtent(extent);
 
     const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
 
@@ -56,12 +59,12 @@ export const WayportExtentViewer: FC<Props> = ({
     const initDimensions = () => {
         // get the point of the initial extent corners and convert to screen coordinates to calculate the initial width and height of the box in pixels
         const bottomLeftPoint = new Point({
-            latitude: initialExtent.ymin,
-            longitude: initialExtent.xmin,
+            latitude: extent.ymin,
+            longitude: extent.xmin,
         });
         const topRightPoint = new Point({
-            latitude: initialExtent.ymax,
-            longitude: initialExtent.xmax,
+            latitude: extent.ymax,
+            longitude: extent.xmax,
         });
 
         const bottomLeftScreen = mapView.toScreen(bottomLeftPoint);
@@ -158,10 +161,10 @@ export const WayportExtentViewer: FC<Props> = ({
 
             await mapView.goTo({
                 target: new Extent({
-                    xmin: initialExtent.xmin,
-                    ymin: initialExtent.ymin,
-                    xmax: initialExtent.xmax,
-                    ymax: initialExtent.ymax,
+                    xmin: extent.xmin,
+                    ymin: extent.ymin,
+                    xmax: extent.xmax,
+                    ymax: extent.ymax,
                     spatialReference: {
                         wkid: 4326,
                     },
@@ -263,6 +266,14 @@ export const WayportExtentViewer: FC<Props> = ({
                         )}
                         onMouseDown={(e) => handleMouseDown('bottom-right', e)}
                     />
+
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
+                        {extentSize.widthInKMFormatted + ' km'}
+                    </div>
+
+                    <div className="absolute top-1/2 left-10 transform -translate-y-1/2 -translate-x-full -rotate-90 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
+                        {extentSize.heightInKmFormatted + ' km'}
+                    </div>
                 </div>
             )}
         </div>

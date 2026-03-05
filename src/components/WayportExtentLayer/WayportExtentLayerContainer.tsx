@@ -13,7 +13,7 @@ import { WayportExtentLayer } from './WayportExtentLayer';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
 import { updateNewDownloadJob } from '@store/DownloadMode/thunks';
 import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
-import { WayportExtentViewer } from './WayportExtentViewer';
+import { WayportExtentEditor } from './WayportExtentViewer';
 
 type Props = {
     mapView?: MapView;
@@ -134,9 +134,9 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     // Otherwise, show the wayport extent layer which just displays the extent without editing capabilities.
     if (mode === 'wayport' && newDownloadJob && extentOfNewDownloadJob) {
         return (
-            <WayportExtentViewer
+            <WayportExtentEditor
                 mapView={mapView}
-                initialExtent={extentOfNewDownloadJob}
+                extent={extentOfNewDownloadJob}
                 onExtentChange={(updatedExtent) => {
                     dispatch(
                         updateNewDownloadJob({
