@@ -67,6 +67,7 @@ export const WayportExtentEditor: FC<Props> = ({
             longitude: extent.xmax,
         });
 
+        // get the screen coordinates of the bottom left and top right points of the initial extent
         const bottomLeftScreen = mapView.toScreen(bottomLeftPoint);
         const topRightScreen = mapView.toScreen(topRightPoint);
 
@@ -74,6 +75,7 @@ export const WayportExtentEditor: FC<Props> = ({
 
         if (!bottomLeftScreen || !topRightScreen) return;
 
+        // Calculate the initial width and height of the box in pixels based on the screen coordinates of the initial extent corners
         const initialWidth = Math.abs(topRightScreen.x - bottomLeftScreen.x);
         const initialHeight = Math.abs(topRightScreen.y - bottomLeftScreen.y);
 
@@ -88,11 +90,14 @@ export const WayportExtentEditor: FC<Props> = ({
 
         const { corner, startX, startY, startWidth, startHeight } =
             dragInfoRef.current;
+
+        // Calculate how much the mouse has moved since the user started dragging
         const deltaX = e.clientX - startX;
         const deltaY = e.clientY - startY;
 
         // Get parent dimensions
         const parentRect = containerRef.current.getBoundingClientRect();
+        // Calculate the maximum allowed width and height based on the parent dimensions and a maximum percentage (e.g., 80%) of the parent size to prevent the box from becoming too large
         const maxWidth = parentRect.width * 0.8;
         const maxHeight = parentRect.height * 0.8;
 
@@ -121,6 +126,7 @@ export const WayportExtentEditor: FC<Props> = ({
     };
 
     const handleMouseUp = () => {
+        // Clear the drag info and remove event listeners when the user releases the mouse button
         dragInfoRef.current = null;
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
@@ -128,6 +134,8 @@ export const WayportExtentEditor: FC<Props> = ({
 
     const handleMouseDown = (corner: Corner, evt: React.MouseEvent) => {
         evt.preventDefault();
+
+        // Store the initial position and dimensions when the user starts dragging
         dragInfoRef.current = {
             corner,
             startX: evt.clientX,
@@ -136,6 +144,7 @@ export const WayportExtentEditor: FC<Props> = ({
             startHeight: dimensions.height,
         };
 
+        // Add event listeners to track mouse movement and when the user releases the mouse button
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
     };
@@ -150,6 +159,7 @@ export const WayportExtentEditor: FC<Props> = ({
         }, RESIZE_DEBOUNCE_DELAY); // Adjust the debounce delay as needed
     };
 
+    // When the mapView is ready, zoom to the initial extent and then set isReady to true to show the box and allow resizing
     useEffect(() => {
         // Convert dimensions to extent and call onExtentChange
         if (!containerRef.current || !mapView) return;
@@ -181,6 +191,7 @@ export const WayportExtentEditor: FC<Props> = ({
         initDimensions();
     }, [isReady]);
 
+    // Recalculate extent of the download job when dimensions or map center/zoom changes
     useEffect(() => {
         if (!containerRef.current || !mapView) return;
 
@@ -189,10 +200,12 @@ export const WayportExtentEditor: FC<Props> = ({
         // no need to calculate if dimensions are not set yet
         if (!width || !height) return;
 
+        // Get the center of the container in screen coordinates
         const containerRect = containerRef.current.getBoundingClientRect();
         const centerX = containerRect.width / 2;
         const centerY = containerRect.height / 2;
 
+        // Calculate the screen coordinates of the top-left and bottom-right corners of the box
         const topLeftScreen = {
             x: centerX - width / 2,
             y: centerY - height / 2,
@@ -202,19 +215,21 @@ export const WayportExtentEditor: FC<Props> = ({
             y: centerY + height / 2,
         };
 
+        // Convert the screen coordinates back to map points
         const topLeftMapPoint = mapView.toMap(topLeftScreen);
         const bottomRightMapPoint = mapView.toMap(bottomRightScreen);
 
         if (!topLeftMapPoint || !bottomRightMapPoint) return;
 
+        // Create a new extent from the two map points
         const newExtent: IExtent = {
             xmin: topLeftMapPoint.longitude,
             ymin: bottomRightMapPoint.latitude,
             xmax: bottomRightMapPoint.longitude,
             ymax: topLeftMapPoint.latitude,
         };
-        // onExtentChange(newExtent);
 
+        // call the debounced onExtentChange function with the new extent to update the extent of the download job
         debouncedOnExtentChange(newExtent);
     }, [
         dimensions,
