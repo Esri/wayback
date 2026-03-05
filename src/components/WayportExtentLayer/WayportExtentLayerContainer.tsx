@@ -9,10 +9,11 @@ import {
 import { selectMapMode } from '@store/Map/reducer';
 import React, { FC, use, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
-import { useSketchViewModel } from './useSketchViewModel';
+// import { useSketchViewModel } from './useSketchViewModel';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
 import { updateNewDownloadJob } from '@store/DownloadMode/thunks';
 import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
+import { WayportExtentViewer } from './WayportExtentViewer';
 
 type Props = {
     mapView?: MapView;
@@ -91,19 +92,19 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         return true;
     }, [mode, extentToDisplay, extentToEdit]);
 
-    useSketchViewModel({
-        isActive: isSketchVMActive,
-        extentToEdit,
-        mapView,
-        timestampOfZoomToDownloadJobExtentRequest,
-        onExtentChange: (updatedExtent) => {
-            dispatch(
-                updateNewDownloadJob({
-                    extent: updatedExtent,
-                })
-            );
-        },
-    });
+    // useSketchViewModel({
+    //     isActive: isSketchVMActive,
+    //     extentToEdit,
+    //     mapView,
+    //     timestampOfZoomToDownloadJobExtentRequest,
+    //     onExtentChange: (updatedExtent) => {
+    //         dispatch(
+    //             updateNewDownloadJob({
+    //                 extent: updatedExtent,
+    //             })
+    //         );
+    //     },
+    // });
 
     const { tileEstimations, isGettingEstimations } = useGetTileEstimations({
         releaseNum: newDownloadJob?.waybackItem?.releaseNum || null,
@@ -123,6 +124,10 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             })
         );
     }, [tileEstimations]);
+
+    if (mode === 'wayport' && newDownloadJob && extentToEdit) {
+        return <WayportExtentViewer />;
+    }
 
     return (
         <WayportExtentLayer

@@ -185,14 +185,14 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         </div>
 
                         <div className="flex items-center">
-                            <CalciteButton
+                            {/* <CalciteButton
                                 class="ml-1"
                                 scale="s"
                                 iconEnd="search"
                                 appearance="transparent"
                                 kind="neutral"
                                 onClick={onZoomToExtentRequested}
-                            />
+                            /> */}
 
                             <CalciteButton
                                 width="full"
