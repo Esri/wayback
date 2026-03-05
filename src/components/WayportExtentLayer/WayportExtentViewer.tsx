@@ -10,6 +10,10 @@ import React, { useState, useRef, FC, useEffect, use } from 'react';
 
 const MIN_SIZE = 256;
 
+const RESIZE_DEBOUNCE_DELAY = 500; // milliseconds
+
+const RESIZE_BUTTON_CLASSNAMES = `absolute w-4 h-4 border border-white bg-custom-theme-blue pointer-events-auto rounded-full`;
+
 type Dimensions = {
     width: number;
     height: number;
@@ -140,7 +144,7 @@ export const WayportExtentViewer: FC<Props> = ({
         debounceTimer.current = setTimeout(() => {
             onExtentChange(extent);
             // console.log('Calculated new extent from box dimensions:', extent);
-        }, 500); // Adjust the debounce delay as needed
+        }, RESIZE_DEBOUNCE_DELAY); // Adjust the debounce delay as needed
     };
 
     useEffect(() => {
@@ -232,19 +236,31 @@ export const WayportExtentViewer: FC<Props> = ({
                 >
                     {/* Corner handles */}
                     <button
-                        className="absolute -top-2 -left-2 w-4 h-4 bg-white pointer-events-auto cursor-nw-resize"
+                        className={classNames(
+                            RESIZE_BUTTON_CLASSNAMES,
+                            '-top-2 -left-2 cursor-nw-resize'
+                        )}
                         onMouseDown={(e) => handleMouseDown('top-left', e)}
                     />
                     <button
-                        className="absolute -top-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-ne-resize"
+                        className={classNames(
+                            RESIZE_BUTTON_CLASSNAMES,
+                            '-top-2 -right-2 cursor-ne-resize'
+                        )}
                         onMouseDown={(e) => handleMouseDown('top-right', e)}
                     />
                     <button
-                        className="absolute -bottom-2 -left-2 w-4 h-4 bg-white  pointer-events-auto cursor-sw-resize"
+                        className={classNames(
+                            RESIZE_BUTTON_CLASSNAMES,
+                            '-bottom-2 -left-2 cursor-sw-resize'
+                        )}
                         onMouseDown={(e) => handleMouseDown('bottom-left', e)}
                     />
                     <button
-                        className="absolute -bottom-2 -right-2 w-4 h-4 bg-white pointer-events-auto cursor-se-resize"
+                        className={classNames(
+                            RESIZE_BUTTON_CLASSNAMES,
+                            '-bottom-2 -right-2 cursor-se-resize'
+                        )}
                         onMouseDown={(e) => handleMouseDown('bottom-right', e)}
                     />
                 </div>
