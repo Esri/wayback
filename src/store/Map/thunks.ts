@@ -20,3 +20,11 @@ export const updateMapMode = (mode: MapMode) => (dispatch: StoreDispatch) => {
     // close any active dialog when switching map mode
     dispatch(activeDialogUpdated());
 };
+
+export const toggleSaveWebmapMode =
+    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const currentMode = getState().Map.mode;
+        const newMode =
+            currentMode === 'save-webmap' ? 'explore' : 'save-webmap';
+        dispatch(updateMapMode(newMode));
+    };

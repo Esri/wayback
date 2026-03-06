@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import './style.css';
+// import './style.css';
 import React from 'react';
 import classNames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
@@ -27,8 +27,8 @@ interface IProps {
      * Whether the SaveAsWebmap dialog is open or not
      */
     active: boolean;
-    onClick?: (val: boolean) => void;
-    clearAll?: () => void;
+    onClick?: () => void;
+    // clearAll?: () => void;
 }
 
 // interface IState {}
@@ -37,7 +37,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
     disabled,
     active,
     onClick,
-    clearAll,
+    // clearAll,
 }) => {
     const { t } = useTranslation();
 
@@ -47,11 +47,11 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
         ? t('open_save_webmap_button_tooltip')
         : t('open_save_webmap_button_tooltip_disabled');
 
-    const onClickHandler = () => {
-        if (isActive && onClick) {
-            onClick(true);
-        }
-    };
+    // const onClickHandler = () => {
+    //     if (isActive && onClick) {
+    //         onClick(true);
+    //     }
+    // };
 
     return (
         <div
@@ -65,13 +65,13 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
         >
             <div className="relative">
                 <button
-                    className={classNames('relative', {
+                    className={classNames('relative mt-1', {
                         'cursor-pointer': isActive,
                     })}
                     aria-label={'save as web map'}
-                    onClick={onClickHandler}
+                    onClick={onClick}
                     title={tooltipContent}
-                    disabled={!isActive}
+                    disabled={disabled}
                     data-testid="save-as-webmap-button"
                 >
                     <CalciteIcon icon="arcgis-online" scale="l" />
@@ -89,7 +89,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                 )}
             </div>
 
-            {isActive && (
+            {/* {isActive && (
                 <button
                     className="mx-auto text-center cursor-pointer text-xs"
                     aria-label="clear all selected items"
@@ -99,7 +99,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                 >
                     {t('clear_all')}
                 </button>
-            )}
+            )} */}
         </div>
     );
 };

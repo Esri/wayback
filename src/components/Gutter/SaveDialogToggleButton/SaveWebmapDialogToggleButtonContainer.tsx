@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     releaseNum4SelectedItemsSelector,
-    releaseNum4SelectedItemsCleaned,
+    // releaseNum4SelectedItemsCleaned,
 } from '@store/Wayback/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
@@ -32,14 +32,16 @@ import {
 // } from '@utils/LocalStorage';
 
 import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
-import {
-    isSaveAsWebmapDialogOpenSelector,
-    isSaveAsWebmapDialogOpenToggled,
-} from '@store/UI/reducer';
+// import {
+//     isSaveAsWebmapDialogOpenSelector,
+//     isSaveAsWebmapDialogOpenToggled,
+// } from '@store/UI/reducer';
 import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
 import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
-import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
-import { activeDialogUpdated } from '@store/UI/reducer';
+// import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+// import { activeDialogUpdated } from '@store/UI/reducer';
+import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';
+import { toggleSaveWebmapMode } from '@store/Map/thunks';
 
 export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
@@ -58,31 +60,30 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     );
 
     const isDisabled = useMemo(() => {
-        return (
-            // isSwipeWidgetOpen ||
-            isAnimationModeOn || rNum4SelectedWaybackItems?.length === 0
-        );
-    }, [isAnimationModeOn, rNum4SelectedWaybackItems]);
+        return isAnimationModeOn;
+    }, [isAnimationModeOn]);
 
-    const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
-        isSaveAsWebmapDialogOpenSelector
-    );
+    const isSaveWebmapModeOn = useAppSelector(selectIsSaveWebmapModeOn);
 
-    const clearAllBtnOnClick = () => {
-        dispatch(releaseNum4SelectedItemsCleaned());
+    // const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
+    //     isSaveAsWebmapDialogOpenSelector
+    // );
 
-        // close the SaveAsWebmapDialog if it's open since there is no selected items
-        if (isSaveAsWebmapDialogOpen) {
-            dispatch(activeDialogUpdated());
-        }
-    };
+    // const clearAllBtnOnClick = () => {
+    //     dispatch(releaseNum4SelectedItemsCleaned());
+
+    //     // close the SaveAsWebmapDialog if it's open since there is no selected items
+    //     if (isSaveAsWebmapDialogOpen) {
+    //         dispatch(activeDialogUpdated());
+    //     }
+    // };
 
     const onClickHandler = () => {
         if (isDisabled) {
             return;
         }
 
-        dispatch(isSaveAsWebmapDialogOpenToggled());
+        dispatch(toggleSaveWebmapMode());
 
         // if (isAnonymouns()) {
         //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
@@ -107,10 +108,11 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     return (
         <SaveAsWebmapBtn
             selectedWaybackItems={rNum4SelectedWaybackItems}
-            active={isSaveAsWebmapDialogOpen}
+            // active={isSaveAsWebmapDialogOpen}
+            active={isSaveWebmapModeOn}
             disabled={isDisabled}
             onClick={onClickHandler}
-            clearAll={clearAllBtnOnClick}
+            // clearAll={clearAllBtnOnClick}
         />
     );
 };

@@ -29,7 +29,7 @@ export { default as Sidebar } from './Sidebar/SidebarContainer';
 export { default as SearchWidget } from './SearchWidget/SearchWidget';
 // export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
 export { default as SwipeWidget } from './SwipeWidget/SwipeWidgetContainer';
-export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
+// export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
 // export { default as SettingDialog } from './SettingDialog/SettingDialogContainer';
 export { default as SidebarToggleBtn } from './SidebarToggleBtn/SidebarToogleBtnContainer';
 export { default as SwipeWidgetLayerSelector } from './SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';

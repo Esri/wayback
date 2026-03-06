@@ -33,7 +33,13 @@ export type MapCenter = {
     lat: number;
 };
 
-export type MapMode = 'explore' | 'swipe' | 'animation' | 'updates' | 'wayport';
+export type MapMode =
+    | 'explore'
+    | 'swipe'
+    | 'animation'
+    | 'updates'
+    | 'wayport'
+    | 'save-webmap';
 
 export type MapState = {
     mode: MapMode;
@@ -212,5 +218,8 @@ export const selectMapCenterAndZoom = createSelector(
 
 export const selectIsWayportModeOn = (state: RootState) =>
     state.Map.mode === 'wayport';
+
+export const selectIsSaveWebmapModeOn = (state: RootState) =>
+    state.Map.mode === 'save-webmap';
 
 export default reducer;

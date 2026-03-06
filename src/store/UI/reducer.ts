@@ -22,7 +22,7 @@ import {
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 
-export type AppDialogName = 'about' | 'save'; //| 'export';
+export type AppDialogName = 'about'; //| 'save'; //| 'export';
 
 export type UIState = {
     /**
@@ -77,10 +77,10 @@ const slice = createSlice({
     name: 'UI',
     initialState: initialUIState,
     reducers: {
-        isSaveAsWebmapDialogOpenToggled: (state) => {
-            // state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
-            state.activeDialog = state.activeDialog === 'save' ? null : 'save';
-        },
+        // isSaveAsWebmapDialogOpenToggled: (state) => {
+        //     // state.isSaveAsWebmapDialogOpen = !state.isSaveAsWebmapDialogOpen;
+        //     state.activeDialog = state.activeDialog === 'save' ? null : 'save';
+        // },
         shouldOnlyShowItemsWithLocalChangeToggled: (
             state,
             action: PayloadAction<boolean>
@@ -142,7 +142,7 @@ const slice = createSlice({
 const { reducer } = slice;
 
 export const {
-    isSaveAsWebmapDialogOpenToggled,
+    // isSaveAsWebmapDialogOpenToggled,
     shouldOnlyShowItemsWithLocalChangeToggled,
     shouldShowPreviewItemTitleToggled,
     // isGutterHideToggled,
@@ -156,8 +156,8 @@ export const {
     loacleSwitcherToggled,
 } = slice.actions;
 
-export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
-    state.UI.activeDialog === 'save';
+// export const isSaveAsWebmapDialogOpenSelector = (state: RootState) =>
+//     state.UI.activeDialog === 'save';
 
 // export const isDownloadTilePackageDialogOpenSelector = (state: RootState) =>
 //     state.UI.activeDialog === 'export';

@@ -1,123 +1,123 @@
-/* Copyright 2024 Esri
- *
- * Licensed under the Apache License Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// /* Copyright 2024 Esri
+//  *
+//  * Licensed under the Apache License Version 2.0 (the "License");
+//  * you may not use this file except in compliance with the License.
+//  * You may obtain a copy of the License at
+//  *
+//  *     http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  * Unless required by applicable law or agreed to in writing, software
+//  * distributed under the License is distributed on an "AS IS" BASIS,
+//  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  * See the License for the specific language governing permissions and
+//  * limitations under the License.
+//  */
 
-import React, { useContext, useEffect } from 'react';
+// import React, { useContext, useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector } from '@store/configureStore';
+// import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-import {
-    activeDialogUpdated,
-    isSaveAsWebmapDialogOpenSelector,
-    // isSaveAsWebmapDialogOpenToggled,
-} from '@store/UI/reducer';
+// import {
+//     activeDialogUpdated,
+//     isSaveAsWebmapDialogOpenSelector,
+//     // isSaveAsWebmapDialogOpenToggled,
+// } from '@store/UI/reducer';
 
-import { mapExtentSelector } from '@store/Map/reducer';
+// import { mapExtentSelector } from '@store/Map/reducer';
 
-import {
-    allWaybackItemsSelector,
-    releaseNum4SelectedItemsSelector,
-} from '@store/Wayback/reducer';
+// import {
+//     allWaybackItemsSelector,
+//     releaseNum4SelectedItemsSelector,
+// } from '@store/Wayback/reducer';
 
-// import { AppContext } from '@contexts/AppContextProvider';
+// // import { AppContext } from '@contexts/AppContextProvider';
 
-import { SaveAsWebmapDialog } from './SaveAsWebmapDialog';
-import { IExtentGeomety, IWaybackItem } from '@typings/index';
-import {
-    getPortalBaseUrl,
-    getSignedInUser,
-    getToken,
-    // getUserRole,
-    isAnonymouns,
-    signInUsingDifferentAccount,
-} from '@utils/Esri-OAuth';
-import { Modal } from '@components/Modal/Modal';
-import { useTranslation } from 'react-i18next';
+// import { SaveAsWebmapDialog } from './SaveAsWebmapDialog';
+// import { IExtentGeomety, IWaybackItem } from '@typings/index';
+// import {
+//     getPortalBaseUrl,
+//     getSignedInUser,
+//     getToken,
+//     // getUserRole,
+//     isAnonymouns,
+//     signInUsingDifferentAccount,
+// } from '@utils/Esri-OAuth';
+// import { Modal } from '@components/Modal/Modal';
+// import { useTranslation } from 'react-i18next';
 
-const SaveAsWebmapDialogContainer = () => {
-    const dispatch = useAppDispatch();
+// const SaveAsWebmapDialogContainer = () => {
+//     const dispatch = useAppDispatch();
 
-    const { t } = useTranslation();
+//     const { t } = useTranslation();
 
-    // const { userSession, oauthUtils } = useContext(AppContext);
+//     // const { userSession, oauthUtils } = useContext(AppContext);
 
-    const mapExtent: IExtentGeomety = useAppSelector(mapExtentSelector);
+//     const mapExtent: IExtentGeomety = useAppSelector(mapExtentSelector);
 
-    const waybackItems: IWaybackItem[] = useAppSelector(
-        allWaybackItemsSelector
-    );
+//     const waybackItems: IWaybackItem[] = useAppSelector(
+//         allWaybackItemsSelector
+//     );
 
-    const rNum4SelectedWaybackItems: number[] = useAppSelector(
-        releaseNum4SelectedItemsSelector
-    );
+//     const rNum4SelectedWaybackItems: number[] = useAppSelector(
+//         releaseNum4SelectedItemsSelector
+//     );
 
-    const isOpen: boolean = useAppSelector(isSaveAsWebmapDialogOpenSelector);
+//     const isOpen: boolean = useAppSelector(isSaveAsWebmapDialogOpenSelector);
 
-    const portalUser = getSignedInUser();
+//     const portalUser = getSignedInUser();
 
-    const notSignedIn = React.useMemo(() => isAnonymouns(), []);
+//     const notSignedIn = React.useMemo(() => isAnonymouns(), []);
 
-    const isDisabled = React.useMemo(() => notSignedIn, [notSignedIn]);
+//     const isDisabled = React.useMemo(() => notSignedIn, [notSignedIn]);
 
-    const onCloseHandler = () => {
-        dispatch(activeDialogUpdated());
-    };
+//     const onCloseHandler = () => {
+//         dispatch(activeDialogUpdated());
+//     };
 
-    // useEffect(() => {
-    //     console.log(isOpen);
-    // }, [isOpen]);
+//     // useEffect(() => {
+//     //     console.log(isOpen);
+//     // }, [isOpen]);
 
-    return (
-        <Modal
-            title={t('save_as_webmap')}
-            isOpen={isOpen}
-            onClose={onCloseHandler}
-        >
-            <SaveAsWebmapDialog
-                waybackItems={waybackItems}
-                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-                hasSignedInAlready={isAnonymouns() === false}
-                portalBaseURL={getPortalBaseUrl()}
-                token={getToken()}
-                disabled={isDisabled}
-                promptToSignIn={notSignedIn}
-                // userRole={getUserRole()}
-                portalUser={portalUser}
-                mapExtent={mapExtent}
-                // onClose={onCloseHandler}
-                signInButtonOnClick={() => {
-                    signInUsingDifferentAccount();
-                }}
-            />
-        </Modal>
-    );
+//     return (
+//         <Modal
+//             title={t('save_as_webmap')}
+//             isOpen={isOpen}
+//             onClose={onCloseHandler}
+//         >
+//             <SaveAsWebmapDialog
+//                 waybackItems={waybackItems}
+//                 rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+//                 hasSignedInAlready={isAnonymouns() === false}
+//                 portalBaseURL={getPortalBaseUrl()}
+//                 token={getToken()}
+//                 disabled={isDisabled}
+//                 promptToSignIn={notSignedIn}
+//                 // userRole={getUserRole()}
+//                 portalUser={portalUser}
+//                 mapExtent={mapExtent}
+//                 // onClose={onCloseHandler}
+//                 signInButtonOnClick={() => {
+//                     signInUsingDifferentAccount();
+//                 }}
+//             />
+//         </Modal>
+//     );
 
-    // return isOpen ? (
-    //     <SaveAsWebMapDialog
-    //         waybackItems={waybackItems}
-    //         rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-    //         hasSignedInAlready={isAnonymouns() === false}
-    //         portalBaseURL={getPortalBaseUrl()}
-    //         token={getToken()}
-    //         userRole={getUserRole()}
-    //         mapExtent={mapExtent}
-    //         // onClose={onCloseHandler}
-    //         signInButtonOnClick={() => {
-    //             signInUsingDifferentAccount();
-    //         }}
-    //     />
-    // ) : null;
-};
+//     // return isOpen ? (
+//     //     <SaveAsWebMapDialog
+//     //         waybackItems={waybackItems}
+//     //         rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+//     //         hasSignedInAlready={isAnonymouns() === false}
+//     //         portalBaseURL={getPortalBaseUrl()}
+//     //         token={getToken()}
+//     //         userRole={getUserRole()}
+//     //         mapExtent={mapExtent}
+//     //         // onClose={onCloseHandler}
+//     //         signInButtonOnClick={() => {
+//     //             signInUsingDifferentAccount();
+//     //         }}
+//     //     />
+//     // ) : null;
+// };
 
-export default SaveAsWebmapDialogContainer;
+// export default SaveAsWebmapDialogContainer;

@@ -59,11 +59,11 @@ export const useSaveAppState2URLHashParams = () => {
         }
     }, [updatesModeData, mode]);
 
-    useEffect(() => {
-        if (activeDialog === 'save') {
-            updateHashParams('activeDialog', activeDialog);
-        } else {
-            updateHashParams('activeDialog', undefined);
-        }
-    }, [activeDialog]);
+    // useEffect(() => {
+    //     if (activeDialog === 'save') {
+    //         updateHashParams('activeDialog', activeDialog);
+    //     } else {
+    //         updateHashParams('activeDialog', undefined);
+    //     }
+    // }, [activeDialog]);
 };

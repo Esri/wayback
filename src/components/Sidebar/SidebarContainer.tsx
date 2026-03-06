@@ -38,6 +38,7 @@ import { selectMapMode } from '@store/Map/reducer';
 import { UpdatesModePanel } from '@components/UpdatesModePanel';
 import { WayportPanel } from '@components/WayportPanel';
 import { LocalChangesToggle } from '@components/LocalChangesToggle';
+import { SaveWebmapPanel } from '@components/SaveAsWebmapDialog/SaveWebmapPanel';
 
 // import { MobileHide } from '../MobileVisibility';
 
@@ -69,6 +70,10 @@ const SidebarContainer: React.FC<Props> = ({ children }) => {
 
         if (mode === 'wayport') {
             return <WayportPanel />;
+        }
+
+        if (mode === 'save-webmap') {
+            return <SaveWebmapPanel />;
         }
 
         return (

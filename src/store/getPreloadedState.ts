@@ -21,7 +21,7 @@ import { initialSwipeViewState, SwipeViewState } from './Swipe/reducer';
 import { IWaybackItem } from '../types';
 import { initialMapState, MapMode, MapState } from './Map/reducer';
 import {
-    getActiveDialogFromHashParams,
+    // getActiveDialogFromHashParams,
     getAnimationSpeedFromHashParams,
     // decodeURLParams,
     getMapCenterFromHashParams,
@@ -66,12 +66,12 @@ const getPreloadedState4UI = (
 ): UIState => {
     // const activeDialog: AppDialogName | null = urlParams.activeDialog || null;
 
-    const activeDialog: AppDialogName | null =
-        getActiveDialogFromHashParams(hashParams);
+    // const activeDialog: AppDialogName | null =
+    //     getActiveDialogFromHashParams(hashParams);
 
     const state: UIState = {
         ...initialUIState,
-        activeDialog,
+        // activeDialog
         appLanguage,
         enablePerformanceAnalyzeTool: SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL,
     };

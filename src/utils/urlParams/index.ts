@@ -172,6 +172,7 @@ export const getMapModeFromHashParams = (
         'swipe',
         'animation',
         'wayport',
+        'save-webmap',
     ];
 
     if (!validModes.includes(value as MapMode)) {
@@ -181,31 +182,31 @@ export const getMapModeFromHashParams = (
     return value as MapMode;
 };
 
-/**
- * Get the active dialog name from hash params
- * @returns the active dialog name from hash params, or null if the value is not valid
- */
-export const getActiveDialogFromHashParams = (
-    hashParams: URLSearchParams
-): AppDialogName => {
-    const value = getHashParamValueByKey('activeDialog', hashParams);
+// /**
+//  * Get the active dialog name from hash params
+//  * @returns the active dialog name from hash params, or null if the value is not valid
+//  */
+// export const getActiveDialogFromHashParams = (
+//     hashParams: URLSearchParams
+// ): AppDialogName => {
+//     const value = getHashParamValueByKey('activeDialog', hashParams);
 
-    if (!value) {
-        return null;
-    }
+//     if (!value) {
+//         return null;
+//     }
 
-    const validDialogs: AppDialogName[] = [
-        'about',
-        // 'export',
-        'save',
-        // 'setting',
-    ];
+//     const validDialogs: AppDialogName[] = [
+//         'about',
+//         // 'export',
+//         // 'save',
+//         // 'setting',
+//     ];
 
-    if (!validDialogs.includes(value as AppDialogName)) {
-        return null;
-    }
-    return value as AppDialogName;
-};
+//     if (!validDialogs.includes(value as AppDialogName)) {
+//         return null;
+//     }
+//     return value as AppDialogName;
+// };
 
 export const getAnimationSpeedFromHashParams = (
     hashParams: URLSearchParams

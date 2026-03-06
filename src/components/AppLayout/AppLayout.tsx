@@ -28,7 +28,7 @@ import {
     Sidebar,
     SearchWidget,
     SwipeWidget,
-    SaveAsWebMapDialog,
+    // SaveAsWebMapDialog,
     // SettingDialog,
     SwipeWidgetLayerSelector,
     TilePreviewWindow,
@@ -105,7 +105,7 @@ const AppLayout: React.FC = () => {
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
             </MapViewWrapper>
 
-            <SaveAsWebMapDialog />
+            {/* <SaveAsWebMapDialog /> */}
 
             {/* <SettingDialog /> */}
 
