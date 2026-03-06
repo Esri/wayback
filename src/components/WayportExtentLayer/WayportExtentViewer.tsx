@@ -245,7 +245,7 @@ export const WayportExtentEditor: FC<Props> = ({
         >
             {isReady && (
                 <div
-                    className={classNames('relative')}
+                    className={classNames('relative border border-white')}
                     style={{
                         width: `${dimensions.width}px`,
                         height: `${dimensions.height}px`,
