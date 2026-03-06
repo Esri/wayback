@@ -165,5 +165,6 @@
     "downloaded_status": "Downloaded",
     "finished_status": "Finished",
     "no_wayport_jobs": "No pending/completed tile export jobs available.",
-    "unknown_size": "Unknown size"
+    "unknown_size": "Unknown size",
+    "prompt_to_save_active_wayback_item_as_webmap": "You do not have any versions selected to save in a web map. You can <action>choose</action> the {{waybackReleaseDate}} version and save it to as web map in ArcGIS Online"
 }

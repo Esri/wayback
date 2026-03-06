@@ -38,7 +38,7 @@ import { selectMapMode } from '@store/Map/reducer';
 import { UpdatesModePanel } from '@components/UpdatesModePanel';
 import { WayportPanel } from '@components/WayportPanel';
 import { LocalChangesToggle } from '@components/LocalChangesToggle';
-import { SaveWebmapPanel } from '@components/SaveAsWebmapDialog/SaveWebmapPanel';
+import { SaveWebmapPanel } from '@components/SaveAsWebmapDialog';
 
 // import { MobileHide } from '../MobileVisibility';
 
