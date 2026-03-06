@@ -45,6 +45,7 @@ const SearchWidget: React.FC<Props> = ({ mapView }: Props) => {
                 position: 'absolute',
                 top: 50,
                 left: 15,
+                zIndex: 10,
             }}
         ></div>
     );

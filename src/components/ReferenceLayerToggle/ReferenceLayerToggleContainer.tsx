@@ -69,7 +69,7 @@ const ReferenceLayerToggleContainer = () => {
     return (
         <div
             ref={containerRef}
-            className="absolute top-[15px] right-[15px] h-[32px] min-w-[240px] bg-custom-background text-custom-foreground"
+            className="absolute top-[15px] right-[15px] h-[32px] min-w-[240px] bg-custom-background text-custom-foreground z-10"
         >
             <ReferenceLayerToggle
                 isActive={isReferenceLayerVisible}
