@@ -1,5 +1,6 @@
 import { IExtent } from '@typings/index';
 import { haversineDistance } from '@utils/snippets/haversineDistance';
+import { zoom } from 'd3';
 import React from 'react';
 
 type ExtentSize = {
@@ -19,6 +20,10 @@ type ExtentSize = {
      * Height of the extent in kilometers, formatted as a string with appropriate units (e.g., "10 km", "500 m")
      */
     heightInKmFormatted: string;
+    /**
+     * Whether the size of the extent should be visible or not. This can be used to hide the size information when the zoom level is too low or when the extent is not defined.
+     */
+    visible: boolean;
 };
 
 /**
@@ -51,12 +56,16 @@ const formatNumber = (num: number) => {
  * @param extent
  * @returns
  */
-export const useCalculateSizeOfExtent = (extent: IExtent) => {
+export const useCalculateSizeOfExtent = (
+    extent: IExtent,
+    zoomLevel: number
+) => {
     const [sizeOfExtent, setSizeOfExtent] = React.useState<ExtentSize>({
         widthInKM: 0,
         heightInKm: 0,
         widthInKMFormatted: '0',
         heightInKmFormatted: '0',
+        visible: false,
     });
 
     const calculateSizeOfExtent = (extent: IExtent): ExtentSize => {
@@ -73,6 +82,7 @@ export const useCalculateSizeOfExtent = (extent: IExtent) => {
                 heightInKm: 0,
                 widthInKMFormatted: '0',
                 heightInKmFormatted: '0',
+                visible: false,
             };
         }
         const widthInKM = haversineDistance(
@@ -89,23 +99,25 @@ export const useCalculateSizeOfExtent = (extent: IExtent) => {
             heightInKm,
             widthInKMFormatted: formatNumber(widthInKM),
             heightInKmFormatted: formatNumber(heightInKm),
+            visible: true,
         };
     };
 
     React.useEffect(() => {
-        if (!extent) {
+        if (!extent || !zoomLevel || zoomLevel < 3) {
             setSizeOfExtent({
                 widthInKM: 0,
                 heightInKm: 0,
                 widthInKMFormatted: '0',
                 heightInKmFormatted: '0',
+                visible: false,
             });
             return;
         }
 
         const size = calculateSizeOfExtent(extent);
         setSizeOfExtent(size);
-    }, [extent]);
+    }, [extent, zoomLevel]);
 
     return sizeOfExtent;
 };

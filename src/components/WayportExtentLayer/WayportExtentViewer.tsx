@@ -40,9 +40,9 @@ export const WayportExtentEditor: FC<Props> = ({
         height: 0,
     });
 
-    const extentSize = useCalculateSizeOfExtent(extent);
-
     const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
+
+    const extentSize = useCalculateSizeOfExtent(extent, mapCenterAndZoom?.zoom);
 
     const dragInfoRef = useRef<{
         corner: Corner;
@@ -282,13 +282,17 @@ export const WayportExtentEditor: FC<Props> = ({
                         onMouseDown={(e) => handleMouseDown('bottom-right', e)}
                     />
 
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
-                        {extentSize.widthInKMFormatted + ' km'}
-                    </div>
+                    {extentSize.visible && (
+                        <>
+                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
+                                {extentSize.widthInKMFormatted + ' km'}
+                            </div>
 
-                    <div className="absolute top-1/2 left-10 transform -translate-y-1/2 -translate-x-full -rotate-90 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
-                        {extentSize.heightInKmFormatted + ' km'}
-                    </div>
+                            <div className="absolute top-1/2 left-10 transform -translate-y-1/2 -translate-x-full -rotate-90 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
+                                {extentSize.heightInKmFormatted + ' km'}
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
         </div>
