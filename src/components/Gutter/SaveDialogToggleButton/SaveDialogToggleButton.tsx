@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
     selectedWaybackItems: Array<number>;
-    disabled: boolean;
+    // disabled: boolean;
     /**
      * Whether the SaveAsWebmap dialog is open or not
      */
@@ -34,7 +34,7 @@ interface IProps {
 // interface IState {}
 export const SaveAsWebmapBtn: React.FC<IProps> = ({
     selectedWaybackItems,
-    disabled,
+    // disabled,
     active,
     onClick,
     // clearAll,
@@ -58,7 +58,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
             className={classNames(
                 'save-as-webmap-btn-container relative w-full text-center py-1 hover:text-white',
                 {
-                    'opacity-50 pointer-events-none': disabled,
+                    // 'opacity-50 pointer-events-none': disabled,
                     'bg-black text-white': active,
                 }
             )}
@@ -71,7 +71,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                     aria-label={'save as web map'}
                     onClick={onClick}
                     title={tooltipContent}
-                    disabled={disabled}
+                    // disabled={disabled}
                     data-testid="save-as-webmap-button"
                 >
                     <CalciteIcon icon="arcgis-online" scale="l" />

@@ -55,13 +55,13 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     // const isSwipeWidgetOpen: boolean = useAppSelector(
     //     isSwipeWidgetOpenSelector
     // );
-    const isAnimationModeOn: boolean = useAppSelector(
-        isAnimationModeOnSelector
-    );
+    // const isAnimationModeOn: boolean = useAppSelector(
+    //     isAnimationModeOnSelector
+    // );
 
-    const isDisabled = useMemo(() => {
-        return isAnimationModeOn;
-    }, [isAnimationModeOn]);
+    // const isDisabled = useMemo(() => {
+    //     return isAnimationModeOn;
+    // }, [isAnimationModeOn]);
 
     const isSaveWebmapModeOn = useAppSelector(selectIsSaveWebmapModeOn);
 
@@ -79,9 +79,9 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     // };
 
     const onClickHandler = () => {
-        if (isDisabled) {
-            return;
-        }
+        // if (isDisabled) {
+        //     return;
+        // }
 
         dispatch(toggleSaveWebmapMode());
 
@@ -110,7 +110,7 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
             selectedWaybackItems={rNum4SelectedWaybackItems}
             // active={isSaveAsWebmapDialogOpen}
             active={isSaveWebmapModeOn}
-            disabled={isDisabled}
+            // disabled={isDisabled}
             onClick={onClickHandler}
             // clearAll={clearAllBtnOnClick}
         />

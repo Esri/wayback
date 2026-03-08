@@ -12,6 +12,7 @@ import {
     allWaybackItemsSelector,
     releaseNum4SelectedItemsCleaned,
     releaseNum4SelectedItemsSelector,
+    setActiveWaybackItem,
     toggleSelectWaybackItem,
 } from '@store/Wayback/reducer';
 
@@ -92,6 +93,12 @@ export const SaveWebmapPanelContainer = () => {
                 }}
                 clearAllSelectedItemsOnClick={() => {
                     dispatch(releaseNum4SelectedItemsCleaned());
+                }}
+                removeWaybackItemOnClick={(releaseNum) => {
+                    dispatch(toggleSelectWaybackItem(releaseNum));
+                }}
+                setActiveWaybackItemOnClick={(releaseNum) => {
+                    dispatch(setActiveWaybackItem(releaseNum));
                 }}
             />
         );
