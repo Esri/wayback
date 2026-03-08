@@ -3,6 +3,7 @@ import { WaybackItem } from '@esri/wayback-core';
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { WebmapLayersList } from './WebmapLayersList';
+import { WebmapInputForm } from './WebmapInputForm';
 
 type Props = {
     activeWaybackItem: WaybackItem;
@@ -58,9 +59,22 @@ export const SaveWebmapDialog: FC<Props> = ({
                     clearAllSelectedItemsOnClick={clearAllSelectedItemsOnClick}
                     removeWaybackItemOnClick={removeWaybackItemOnClick}
                 />
+
+                <WebmapInputForm
+                    isCreatingWebmap={false}
+                    disabled={true}
+                    saveButtonOnClick={({ title, tags, description }) => {
+                        console.log('Save button clicked with values:', {
+                            title,
+                            tags,
+                            description,
+                        });
+                        // Implement the logic to save the webmap using the provided values
+                    }}
+                />
             </div>
         );
     };
 
-    return <div className=" py-1 px-1 w-full mb-2">{getContent()}</div>;
+    return <div className="py-1 px-1 w-full mb-2">{getContent()}</div>;
 };
