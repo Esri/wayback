@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { WebmapLayersList } from './WebmapLayersList';
 import { WebmapInputForm } from './WebmapInputForm';
+import { OpenSavedWebmap } from './OpenSavedWebmap';
 
 type Props = {
     /**
@@ -70,6 +71,10 @@ export const SaveWebmapDialog: FC<Props> = ({
                     />
                 </div>
             );
+        }
+
+        if (webmapItemId) {
+            return <OpenSavedWebmap itemId={webmapItemId} />;
         }
 
         return (
