@@ -6,20 +6,27 @@ import { WebmapLayersList } from './WebmapLayersList';
 import { WebmapInputForm } from './WebmapInputForm';
 
 type Props = {
+    /**
+     * Whether the user has permissions to create a webmap or not. This is determined by checking the user's portal privileges.
+     */
+    canCreateWebmap: boolean;
     activeWaybackItem: WaybackItem;
     waybackItemsToSave: WaybackItem[];
     chooseActiveItemOnClick: (releaseNum: number) => void;
     clearAllSelectedItemsOnClick: () => void;
     removeWaybackItemOnClick: (releaseNum: number) => void;
     setActiveWaybackItemOnClick: (releaseNum: number) => void;
+    signInUsingDifferentAccountOnClick: () => void;
 };
 export const SaveWebmapDialog: FC<Props> = ({
+    canCreateWebmap,
     activeWaybackItem,
     waybackItemsToSave,
     chooseActiveItemOnClick,
     clearAllSelectedItemsOnClick,
     removeWaybackItemOnClick,
     setActiveWaybackItemOnClick,
+    signInUsingDifferentAccountOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -61,8 +68,8 @@ export const SaveWebmapDialog: FC<Props> = ({
                 />
 
                 <WebmapInputForm
+                    canCreateWebmap={canCreateWebmap}
                     isCreatingWebmap={false}
-                    disabled={true}
                     saveButtonOnClick={({ title, tags, description }) => {
                         console.log('Save button clicked with values:', {
                             title,
@@ -71,6 +78,9 @@ export const SaveWebmapDialog: FC<Props> = ({
                         });
                         // Implement the logic to save the webmap using the provided values
                     }}
+                    signInUsingDifferentAccountOnClick={
+                        signInUsingDifferentAccountOnClick
+                    }
                 />
             </div>
         );

@@ -29,7 +29,6 @@ import {
     signIn,
     signInUsingDifferentAccount,
 } from '@utils/Esri-OAuth';
-import { Modal } from '@components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import { PromptToSignIn } from './PromptToSignIn';
 import { SaveWebmapDialog } from './SaveWebmapDialog';
@@ -68,9 +67,29 @@ export const SaveWebmapPanelContainer = () => {
         );
     }, [waybackItems, rNum4SelectedWaybackItems]);
 
-    // const portalUser = getSignedInUser();
+    const portalUser = getSignedInUser();
 
     const notSignedIn = React.useMemo(() => isAnonymouns(), []);
+
+    // Determine if the user has privileges to create a web map
+    // Org admins and publishers can create content by default
+    // Other roles need to have 'createItem' privilege
+    // Public accounts (orgId is null) can also create web map (https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor34)
+    const canCreateWebmap = useMemo(() => {
+        if (notSignedIn) {
+            return false;
+        }
+
+        const { role, privileges, orgId } = portalUser || {};
+
+        return (
+            role === 'org_admin' ||
+            role === 'org_publisher' ||
+            (privileges && privileges.some((p) => p.endsWith('createItem'))) ||
+            orgId === null ||
+            orgId === undefined
+        ); // for public account, orgId is null
+    }, [notSignedIn, portalUser]);
 
     const getContent = () => {
         if (notSignedIn) {
@@ -86,6 +105,7 @@ export const SaveWebmapPanelContainer = () => {
 
         return (
             <SaveWebmapDialog
+                canCreateWebmap={canCreateWebmap}
                 activeWaybackItem={activeWaybackItem}
                 waybackItemsToSave={waybackItemsToSave}
                 chooseActiveItemOnClick={(releaseNum) => {
@@ -99,6 +119,9 @@ export const SaveWebmapPanelContainer = () => {
                 }}
                 setActiveWaybackItemOnClick={(releaseNum) => {
                     dispatch(setActiveWaybackItem(releaseNum));
+                }}
+                signInUsingDifferentAccountOnClick={() => {
+                    signInUsingDifferentAccount();
                 }}
             />
         );

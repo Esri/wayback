@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import config from './config';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import {
     CalciteButton,
@@ -10,7 +10,7 @@ import {
 
 type Props = {
     isCreatingWebmap: boolean;
-    disabled?: boolean;
+    canCreateWebmap: boolean;
     saveButtonOnClick: ({
         title,
         tags,
@@ -20,12 +20,14 @@ type Props = {
         tags?: string;
         description?: string;
     }) => void;
+    signInUsingDifferentAccountOnClick: () => void;
 };
 
 export const WebmapInputForm: FC<Props> = ({
     isCreatingWebmap,
-    disabled = false,
+    canCreateWebmap,
     saveButtonOnClick,
+    signInUsingDifferentAccountOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -33,7 +35,11 @@ export const WebmapInputForm: FC<Props> = ({
     const [tags, setTags] = useState(config.tags);
     const [description, setDescription] = useState(config.description);
 
-    const shouldDisableInputFields = isCreatingWebmap || disabled;
+    const shouldDisableInputFields =
+        isCreatingWebmap || canCreateWebmap === false;
+
+    const shouldDisableSaveButton =
+        !title || isCreatingWebmap || canCreateWebmap === false;
 
     return (
         <div className="mt-4">
@@ -96,7 +102,7 @@ export const WebmapInputForm: FC<Props> = ({
                 onClick={() => saveButtonOnClick({ title, tags, description })}
                 loading={isCreatingWebmap}
                 width={'full'}
-                disabled={!title || isCreatingWebmap || disabled}
+                disabled={shouldDisableSaveButton}
                 label={
                     isCreatingWebmap
                         ? t('creating_wayback_map')
@@ -108,6 +114,28 @@ export const WebmapInputForm: FC<Props> = ({
                     ? t('creating_wayback_map')
                     : t('create_wayback_map')}
             </CalciteButton>
+
+            {!canCreateWebmap && (
+                <div className="mt-2 text-sm">
+                    <p className="mb-2">{t('no_privilege_message')}</p>
+                    <p>
+                        <Trans
+                            i18nKey="sign_in_again_prompt"
+                            components={{
+                                action: (
+                                    <button
+                                        className="text-custom-theme-blue-light  cursor-pointer font-bold underline"
+                                        onClick={
+                                            signInUsingDifferentAccountOnClick
+                                        }
+                                        aria-label={t('sign_in')}
+                                    />
+                                ),
+                            }}
+                        />
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
