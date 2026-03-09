@@ -19,16 +19,17 @@ import { IWaybackItem, IExtentGeomety } from '@typings/index';
 // import EsriRquest from 'esri/request';
 
 // import esriRequest from '@arcgis/core/request';
-import esriConfig from '@arcgis/core/config';
+// import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
-import { th } from 'date-fns/locale';
+import config from './config';
 
 interface ICreateWebmapParams {
     title: string;
     tags: string;
-    description: string;
+    // description: string;
+    snippet: string;
     mapExtent: IExtentGeomety;
     waybackItemsToSave?: Array<IWaybackItem>;
     referenceLayer: ReferenceLayerData;
@@ -163,23 +164,38 @@ const getRequestText = (
     return JSON.stringify(requestText);
 };
 
-const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
-    const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
-    let snippetStr = 'Wayback imagery from ';
+/**
+ * Get the snippet string for the webmap item based on the wayback items included in the webmap.
+ * @param waybackItems
+ * @returns
+ */
+export const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
+    // const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
+    // let snippetStr = 'Wayback imagery from ';
 
-    if (releaseDates.length === 1) {
-        return snippetStr + releaseDates[0];
-    }
+    // if (releaseDates.length === 1) {
+    //     return snippetStr + releaseDates[0];
+    // }
 
-    snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
-    snippetStr += ' and ' + releaseDates[releaseDates.length - 1]; // add last one to str with and in front, so we will have "a, b, c and d"
-    return snippetStr;
+    // snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
+    // snippetStr += ' and ' + releaseDates[releaseDates.length - 1]; // add last one to str with and in front, so we will have "a, b, c and d"
+    // return snippetStr;
+
+    const releaseDates =
+        waybackItems && waybackItems?.length > 0
+            ? waybackItems
+                  .sort((a, b) => a.releaseDatetime - b.releaseDatetime)
+                  .map((d) => d.releaseDateLabel)
+                  .join(', ')
+            : 'unknown';
+
+    return `World Imagery, version ${releaseDates}. Created using the World Imagery Wayback application, a global digital archive of Esri's World Imagery map.`;
 };
 
 const createWebmap = async ({
     title = '',
     tags = '',
-    description = '',
+    snippet = '',
     mapExtent = null,
     waybackItemsToSave = [],
     referenceLayer,
@@ -206,7 +222,7 @@ const createWebmap = async ({
 
     const requestBody = new URLSearchParams({
         title,
-        description,
+        description: config.description || '',
         tags,
         extent: mapExtent
             ? [
@@ -216,7 +232,7 @@ const createWebmap = async ({
                   mapExtent.ymax,
               ].join(',')
             : null,
-        snippet: getSnippetStr(waybackItemsToSave),
+        snippet: snippet || getSnippetStr(waybackItemsToSave),
         text: getRequestText(waybackItemsToSave, referenceLayer),
         type: 'Web Map',
         overwrite: 'true',

@@ -61,7 +61,7 @@ type Props = {
     saveButtonOnClick: (params: {
         title: string;
         tags: string;
-        description: string;
+        snippet: string;
     }) => void;
 };
 export const SaveWebmapDialog: FC<Props> = ({
@@ -135,13 +135,14 @@ export const SaveWebmapDialog: FC<Props> = ({
                     canCreateWebmap={canCreateWebmap}
                     isCreatingWebmap={isCreatingWebmap}
                     errorMessage={errorMessage}
-                    saveButtonOnClick={({ title, tags, description }) => {
+                    waybackItemsToSave={waybackItemsToSave}
+                    saveButtonOnClick={({ title, tags, snippet }) => {
                         // console.log('Save button clicked with values:', {
                         //     title,
                         //     tags,
                         //     description,
                         // });
-                        saveButtonOnClick({ title, tags, description });
+                        saveButtonOnClick({ title, tags, snippet });
                     }}
                     signInUsingDifferentAccountOnClick={
                         signInUsingDifferentAccountOnClick

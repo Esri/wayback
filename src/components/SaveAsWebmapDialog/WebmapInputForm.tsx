@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, use, useEffect, useState } from 'react';
 import config from './config';
 import { Trans, useTranslation } from 'react-i18next';
 import classNames from 'classnames';
@@ -8,19 +8,22 @@ import {
     CalciteInputText,
     CalciteTextArea,
 } from '@esri/calcite-components-react';
+import { WaybackItem } from '@esri/wayback-core';
+import { getSnippetStr } from './createWebmap';
 
 type Props = {
     isCreatingWebmap: boolean;
     canCreateWebmap: boolean;
     errorMessage: string;
+    waybackItemsToSave: WaybackItem[];
     saveButtonOnClick: ({
         title,
         tags,
-        description,
+        snippet,
     }: {
         title: string;
         tags?: string;
-        description?: string;
+        snippet: string;
     }) => void;
     signInUsingDifferentAccountOnClick: () => void;
 };
@@ -29,6 +32,7 @@ export const WebmapInputForm: FC<Props> = ({
     isCreatingWebmap,
     canCreateWebmap,
     errorMessage,
+    waybackItemsToSave,
     saveButtonOnClick,
     signInUsingDifferentAccountOnClick,
 }) => {
@@ -36,13 +40,19 @@ export const WebmapInputForm: FC<Props> = ({
 
     const [title, setTitle] = useState(config.title);
     const [tags, setTags] = useState(config.tags);
-    const [description, setDescription] = useState(config.description);
+    // const [description, setDescription] = useState(config.description);
+    const [snippet, setSnippet] = useState('');
 
     const shouldDisableInputFields =
         isCreatingWebmap || canCreateWebmap === false;
 
     const shouldDisableSaveButton =
-        !title || isCreatingWebmap || canCreateWebmap === false;
+        !title || !snippet || isCreatingWebmap || canCreateWebmap === false;
+
+    useEffect(() => {
+        const snippet = getSnippetStr(waybackItemsToSave);
+        setSnippet(snippet);
+    }, [waybackItemsToSave]);
 
     return (
         <div className="mt-4">
@@ -70,6 +80,27 @@ export const WebmapInputForm: FC<Props> = ({
             </div>
 
             <div className="w-full mb-2">
+                <h5>{t('webmap_snippet_label')}</h5>
+                <CalciteInputText
+                    placeholder={t('webmap_snippet_placeholder')}
+                    spellCheck="false"
+                    // className={classNames('w-full outline-none p-1', {
+                    //     outline: !title,
+                    //     'outline-red-400': !title,
+                    // })}
+                    status={snippet ? 'valid' : 'invalid'}
+                    // spellCheck="false"
+                    value={snippet}
+                    // onChange={(e) => setDescription(e.target.value)}
+                    onCalciteInputTextInput={(e) => {
+                        const val = e.target.value;
+                        setSnippet(val);
+                    }}
+                    disabled={shouldDisableInputFields}
+                ></CalciteInputText>
+            </div>
+
+            <div className="w-full mb-2">
                 <h5>{t('webmap_tags_label')}</h5>
                 <CalciteInputText
                     // type="text"
@@ -86,23 +117,8 @@ export const WebmapInputForm: FC<Props> = ({
                 />
             </div>
 
-            <div className="w-full mb-2">
-                <h5>{t('webmap_description_label')}</h5>
-                <CalciteTextArea
-                    className="w-full outline-none p-1"
-                    spellCheck="false"
-                    value={description}
-                    // onChange={(e) => setDescription(e.target.value)}
-                    onCalciteTextAreaInput={(e) => {
-                        const val = e.target.value;
-                        setDescription(val);
-                    }}
-                    disabled={shouldDisableInputFields}
-                ></CalciteTextArea>
-            </div>
-
             <CalciteButton
-                onClick={() => saveButtonOnClick({ title, tags, description })}
+                onClick={() => saveButtonOnClick({ title, tags, snippet })}
                 loading={isCreatingWebmap}
                 width={'full'}
                 disabled={shouldDisableSaveButton}

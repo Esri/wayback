@@ -111,7 +111,7 @@ export const SaveWebmapPanelContainer = () => {
     const saveWebmap = async (params: {
         title: string;
         tags: string;
-        description: string;
+        snippet: string;
     }) => {
         setIsCreatingWebmap(true);
         setErrorMessage('');
@@ -121,7 +121,7 @@ export const SaveWebmapPanelContainer = () => {
             const res = await createWebmap({
                 title: params.title,
                 tags: params?.tags || '',
-                description: params?.description || '',
+                snippet: params?.snippet || '',
                 mapExtent,
                 waybackItemsToSave,
                 referenceLayer: selectedReferenceLayer,
