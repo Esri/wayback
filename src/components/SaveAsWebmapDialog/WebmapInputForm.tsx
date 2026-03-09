@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import {
     CalciteButton,
+    CalciteIcon,
     CalciteInputText,
     CalciteTextArea,
 } from '@esri/calcite-components-react';
@@ -11,6 +12,7 @@ import {
 type Props = {
     isCreatingWebmap: boolean;
     canCreateWebmap: boolean;
+    errorMessage: string;
     saveButtonOnClick: ({
         title,
         tags,
@@ -26,6 +28,7 @@ type Props = {
 export const WebmapInputForm: FC<Props> = ({
     isCreatingWebmap,
     canCreateWebmap,
+    errorMessage,
     saveButtonOnClick,
     signInUsingDifferentAccountOnClick,
 }) => {
@@ -133,6 +136,16 @@ export const WebmapInputForm: FC<Props> = ({
                                 ),
                             }}
                         />
+                    </p>
+                </div>
+            )}
+
+            {errorMessage && (
+                <div className="text-red-500 font-light text-sm bg-red-600 bg-opacity-10 p-2 w-full mt-4">
+                    <p>
+                        {t('save_webmap_failed_message', {
+                            errorMessage,
+                        })}
                     </p>
                 </div>
             )}

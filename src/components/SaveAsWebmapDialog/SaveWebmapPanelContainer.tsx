@@ -46,6 +46,22 @@ export const SaveWebmapPanelContainer = () => {
         allWaybackItemsSelector
     );
 
+    /**
+     * If it is in process of saving a webmap
+     */
+    const [isCreatingWebmap, setIsCreatingWebmap] =
+        React.useState<boolean>(false);
+
+    /**
+     * Error message to display if saving webmap failed
+     */
+    const [errorMessage, setErrorMessage] = React.useState<string>('');
+
+    /**
+     * ID of the created webmap item, used to display link to the created webmap after saving successfully
+     */
+    const [webmapItemId, setWebmapItemId] = React.useState<string>('');
+
     const rNum4SelectedWaybackItems: number[] = useAppSelector(
         releaseNum4SelectedItemsSelector
     );
@@ -108,6 +124,9 @@ export const SaveWebmapPanelContainer = () => {
                 canCreateWebmap={canCreateWebmap}
                 activeWaybackItem={activeWaybackItem}
                 waybackItemsToSave={waybackItemsToSave}
+                isCreatingWebmap={isCreatingWebmap}
+                errorMessage={errorMessage}
+                webmapItemId={webmapItemId}
                 chooseActiveItemOnClick={(releaseNum) => {
                     dispatch(toggleSelectWaybackItem(releaseNum));
                 }}

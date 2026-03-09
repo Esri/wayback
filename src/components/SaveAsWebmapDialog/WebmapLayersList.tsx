@@ -7,6 +7,10 @@ import { useTranslation } from 'react-i18next';
 type Props = {
     activeWaybackItem: WaybackItem;
     waybackItemsToSave: WaybackItem[];
+    /**
+     * If ture, the remove button for each wayback item and "clear all" button will be disabled, this happens when it is in the process of saving a webmap or when the webmap is saved.
+     */
+    disableRemoveAction: boolean;
     setActiveWaybackItemOnClick: (releaseNum: number) => void;
     clearAllSelectedItemsOnClick: () => void;
     removeWaybackItemOnClick: (releaseNum: number) => void;
@@ -15,6 +19,7 @@ type Props = {
 export const WebmapLayersList: FC<Props> = ({
     activeWaybackItem,
     waybackItemsToSave,
+    disableRemoveAction,
     setActiveWaybackItemOnClick,
     clearAllSelectedItemsOnClick,
     removeWaybackItemOnClick,
@@ -31,14 +36,17 @@ export const WebmapLayersList: FC<Props> = ({
                 <span className="text-white font-light text-sm">
                     {t('selected_layers')}
                 </span>
-                <CalciteButton
-                    onClick={clearAllSelectedItemsOnClick}
-                    appearance="transparent"
-                    kind="neutral"
-                    scale="s"
-                >
-                    {t('clear_all')}
-                </CalciteButton>
+
+                {!disableRemoveAction && (
+                    <CalciteButton
+                        onClick={clearAllSelectedItemsOnClick}
+                        appearance="transparent"
+                        kind="neutral"
+                        scale="s"
+                    >
+                        {t('clear_all')}
+                    </CalciteButton>
+                )}
             </div>
 
             {waybackItemsToSave.map((item) => (
@@ -66,16 +74,19 @@ export const WebmapLayersList: FC<Props> = ({
                             {item.releaseDateLabel || 'Unknown'}
                         </span>
                     </button>
-                    <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        scale="s"
-                        iconStart="x"
-                        onClick={removeWaybackItemOnClick.bind(
-                            null,
-                            item.releaseNum
-                        )}
-                    />
+
+                    {!disableRemoveAction && (
+                        <CalciteButton
+                            appearance="transparent"
+                            kind="neutral"
+                            scale="s"
+                            iconStart="x"
+                            onClick={removeWaybackItemOnClick.bind(
+                                null,
+                                item.releaseNum
+                            )}
+                        />
+                    )}
                 </div>
             ))}
         </div>

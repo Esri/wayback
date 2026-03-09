@@ -12,6 +12,18 @@ type Props = {
     canCreateWebmap: boolean;
     activeWaybackItem: WaybackItem;
     waybackItemsToSave: WaybackItem[];
+    /**
+     * If true, it is in the process of saving a webmap, and the input form will be disabled and show loading state
+     */
+    isCreatingWebmap: boolean;
+    /**
+     * Error message to display if saving webmap failed. If it is an empty string, no error message will be displayed.
+     */
+    errorMessage: string;
+    /**
+     * ID of the created webmap item, used to display link to the created webmap after saving successfully
+     */
+    webmapItemId: string;
     chooseActiveItemOnClick: (releaseNum: number) => void;
     clearAllSelectedItemsOnClick: () => void;
     removeWaybackItemOnClick: (releaseNum: number) => void;
@@ -22,6 +34,9 @@ export const SaveWebmapDialog: FC<Props> = ({
     canCreateWebmap,
     activeWaybackItem,
     waybackItemsToSave,
+    isCreatingWebmap,
+    errorMessage,
+    webmapItemId,
     chooseActiveItemOnClick,
     clearAllSelectedItemsOnClick,
     removeWaybackItemOnClick,
@@ -62,6 +77,9 @@ export const SaveWebmapDialog: FC<Props> = ({
                 <WebmapLayersList
                     activeWaybackItem={activeWaybackItem}
                     waybackItemsToSave={waybackItemsToSave}
+                    disableRemoveAction={
+                        isCreatingWebmap || webmapItemId !== ''
+                    }
                     setActiveWaybackItemOnClick={setActiveWaybackItemOnClick}
                     clearAllSelectedItemsOnClick={clearAllSelectedItemsOnClick}
                     removeWaybackItemOnClick={removeWaybackItemOnClick}
@@ -69,7 +87,8 @@ export const SaveWebmapDialog: FC<Props> = ({
 
                 <WebmapInputForm
                     canCreateWebmap={canCreateWebmap}
-                    isCreatingWebmap={false}
+                    isCreatingWebmap={isCreatingWebmap}
+                    errorMessage={errorMessage}
                     saveButtonOnClick={({ title, tags, description }) => {
                         console.log('Save button clicked with values:', {
                             title,
