@@ -81,6 +81,17 @@ export const SaveWebmapDialog: FC<Props> = ({
     const { t } = useTranslation();
 
     const getContent = () => {
+        // If webmap is saved successfully, show the link to the created webmap item
+        if (webmapItemId) {
+            return (
+                <OpenSavedWebmap
+                    itemId={webmapItemId}
+                    onWebmapOpened={clearAllSelectedItemsOnClick}
+                />
+            );
+        }
+
+        // If there is no wayback item selected to save, show the prompt to select active wayback item message
         if (!waybackItemsToSave || waybackItemsToSave.length === 0) {
             return (
                 <div className="text-white font-light text-sm bg-white bg-opacity-10 p-2 w-full mb-2">
@@ -105,10 +116,6 @@ export const SaveWebmapDialog: FC<Props> = ({
                     />
                 </div>
             );
-        }
-
-        if (webmapItemId) {
-            return <OpenSavedWebmap itemId={webmapItemId} />;
         }
 
         return (

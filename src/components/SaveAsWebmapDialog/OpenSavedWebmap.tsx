@@ -1,13 +1,19 @@
 import { CalciteButton } from '@esri/calcite-components-react';
+import { useAppDispatch } from '@store/configureStore';
 import { getPortalBaseUrl } from '@utils/Esri-OAuth';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
     itemId: string;
+    /**
+     * Emits after user clicks the button to open the created webmap in new tab. This will trigger the action to clear selected wayback items.
+     * @returns
+     */
+    onWebmapOpened: () => void;
 };
 
-export const OpenSavedWebmap: FC<Props> = ({ itemId }) => {
+export const OpenSavedWebmap: FC<Props> = ({ itemId, onWebmapOpened }) => {
     const { t } = useTranslation();
 
     const itemUrl = useMemo(() => {
@@ -19,6 +25,16 @@ export const OpenSavedWebmap: FC<Props> = ({ itemId }) => {
 
         return `${portalBaseUrl}/home/item.html?id=${itemId}`;
     }, [itemId]);
+
+    const openWebmapInNewTab = () => {
+        if (!itemUrl) {
+            return;
+        }
+
+        window.open(itemUrl, '_blank');
+
+        onWebmapOpened();
+    };
 
     if (!itemUrl) {
         return null;
@@ -34,9 +50,8 @@ export const OpenSavedWebmap: FC<Props> = ({ itemId }) => {
                     width="full"
                     label={t('open_wayback_map')}
                     data-testid="open-wayback-webmap-button"
-                    href={itemUrl}
-                    target="_blank"
                     iconEnd="launch"
+                    onClick={openWebmapInNewTab}
                 >
                     {t('open_wayback_map')}
                 </CalciteButton>
