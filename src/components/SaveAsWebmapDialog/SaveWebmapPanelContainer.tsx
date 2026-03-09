@@ -16,9 +16,6 @@ import {
     toggleSelectWaybackItem,
 } from '@store/Wayback/reducer';
 
-// import { AppContext } from '@contexts/AppContextProvider';
-
-import { SaveAsWebmapDialog } from './SaveAsWebmapDialog';
 import { IExtentGeomety, IWaybackItem } from '@typings/index';
 import {
     getPortalBaseUrl,
