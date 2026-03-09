@@ -25,11 +25,44 @@ type Props = {
      * ID of the created webmap item, used to display link to the created webmap after saving successfully
      */
     webmapItemId: string;
+    /**
+     * Emits when user choose the active wayback item to save as webmap. The release number of the chosen wayback item is passed as parameter.
+     * @param releaseNum
+     * @returns
+     */
     chooseActiveItemOnClick: (releaseNum: number) => void;
+    /**
+     * Emits when user clicks the button to clear all selected wayback items. This will unselect all wayback items and reset the dialog to initial state.
+     * @returns
+     */
     clearAllSelectedItemsOnClick: () => void;
+    /**
+     * Emits when user clicks the button to remove a wayback item from the list of items to save. The release number of the wayback item to remove is passed as parameter.
+     * @param releaseNum
+     * @returns
+     */
     removeWaybackItemOnClick: (releaseNum: number) => void;
+    /**
+     * Emits when user clicks the button to set a wayback item as the active item. The release number of the wayback item is passed as parameter.
+     * @param releaseNum
+     * @returns
+     */
     setActiveWaybackItemOnClick: (releaseNum: number) => void;
+    /**
+     * Emits when user clicks the button to sign in using a different account. This will trigger the sign in process and refresh the dialog after successful sign in.
+     * @returns
+     */
     signInUsingDifferentAccountOnClick: () => void;
+    /**
+     * Emits when user clicks the button to save the webmap. The title, tags and description input by user in the form are passed as parameters.
+     * @param params
+     * @returns
+     */
+    saveButtonOnClick: (params: {
+        title: string;
+        tags: string;
+        description: string;
+    }) => void;
 };
 export const SaveWebmapDialog: FC<Props> = ({
     canCreateWebmap,
@@ -43,6 +76,7 @@ export const SaveWebmapDialog: FC<Props> = ({
     removeWaybackItemOnClick,
     setActiveWaybackItemOnClick,
     signInUsingDifferentAccountOnClick,
+    saveButtonOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -95,12 +129,12 @@ export const SaveWebmapDialog: FC<Props> = ({
                     isCreatingWebmap={isCreatingWebmap}
                     errorMessage={errorMessage}
                     saveButtonOnClick={({ title, tags, description }) => {
-                        console.log('Save button clicked with values:', {
-                            title,
-                            tags,
-                            description,
-                        });
-                        // Implement the logic to save the webmap using the provided values
+                        // console.log('Save button clicked with values:', {
+                        //     title,
+                        //     tags,
+                        //     description,
+                        // });
+                        saveButtonOnClick({ title, tags, description });
                     }}
                     signInUsingDifferentAccountOnClick={
                         signInUsingDifferentAccountOnClick

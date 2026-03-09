@@ -23,6 +23,7 @@ import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
+import { th } from 'date-fns/locale';
 
 interface ICreateWebmapParams {
     title: string;
@@ -184,16 +185,24 @@ const createWebmap = async ({
     referenceLayer,
 }: ICreateWebmapParams): Promise<ICreateWebmapResponse> => {
     if (!waybackItemsToSave.length) {
-        return null;
+        throw new Error('No wayback items to save in webmap');
     }
 
-    const credential = getCredential();
+    // const credential = getCredential();
 
-    if (credential.server !== 'https://www.arcgis.com') {
-        esriConfig.request.trustedServers.push(credential.server);
-    }
+    // if (credential.server !== 'https://www.arcgis.com') {
+    //     esriConfig.request.trustedServers.push(credential.server);
+    // }
 
     const requestUrl = getRequestUrl();
+
+    const token = getToken();
+
+    if (!requestUrl || !token) {
+        throw new Error(
+            'User is not authenticated. Cannot create webmap without authentication.'
+        );
+    }
 
     const requestBody = new URLSearchParams({
         title,
@@ -215,20 +224,25 @@ const createWebmap = async ({
         token: getToken(),
     });
 
-    try {
-        const createWebmapResponse = await fetch(requestUrl, {
-            method: 'post',
-            body: requestBody,
-        });
-        console.log(createWebmapResponse);
+    const createWebmapResponse = await fetch(requestUrl, {
+        method: 'post',
+        body: requestBody,
+    });
+    // console.log(createWebmapResponse);
 
-        const results = await createWebmapResponse.json();
-
-        return results && !results.error ? results : null;
-    } catch (err) {
-        console.error(err);
-        return null;
+    if (!createWebmapResponse.ok) {
+        throw new Error(
+            `Failed to create webmap: ${createWebmapResponse.statusText}`
+        );
     }
+
+    const res = await createWebmapResponse.json();
+
+    if (res.error) {
+        throw new Error(`Error creating webmap: ${res?.error?.message}`);
+    }
+
+    return res as ICreateWebmapResponse;
 };
 
 export default createWebmap;

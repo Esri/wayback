@@ -32,6 +32,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { PromptToSignIn } from './PromptToSignIn';
 import { SaveWebmapDialog } from './SaveWebmapDialog';
+import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
+import createWebmap from './createWebmap';
 
 export const SaveWebmapPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -107,6 +109,43 @@ export const SaveWebmapPanelContainer = () => {
         ); // for public account, orgId is null
     }, [notSignedIn, portalUser]);
 
+    const selectedReferenceLayer = useSelecteReferenceLayer();
+
+    const saveWebmap = async (params: {
+        title: string;
+        tags: string;
+        description: string;
+    }) => {
+        setIsCreatingWebmap(true);
+        setErrorMessage('');
+        setWebmapItemId('');
+
+        try {
+            const res = await createWebmap({
+                title: params.title,
+                tags: params?.tags || '',
+                description: params?.description || '',
+                mapExtent,
+                waybackItemsToSave,
+                referenceLayer: selectedReferenceLayer,
+            });
+
+            if (!res || !res.id) {
+                throw new Error('Webmap created but no item ID returned.');
+            }
+
+            setWebmapItemId(res.id);
+        } catch (error) {
+            setErrorMessage(
+                error instanceof Error
+                    ? error.message
+                    : 'An unknown error occurred while saving the webmap.'
+            );
+        } finally {
+            setIsCreatingWebmap(false);
+        }
+    };
+
     const getContent = () => {
         if (notSignedIn) {
             return (
@@ -142,6 +181,7 @@ export const SaveWebmapPanelContainer = () => {
                 signInUsingDifferentAccountOnClick={() => {
                     signInUsingDifferentAccount();
                 }}
+                saveButtonOnClick={saveWebmap}
             />
         );
     };
