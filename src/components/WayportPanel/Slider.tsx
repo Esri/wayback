@@ -50,6 +50,8 @@ interface HandleProps {
     value: number;
     isDragging: boolean;
     onMouseDown: (e: React.MouseEvent) => void;
+    type: 'min' | 'max';
+    isAdjacent: boolean;
 }
 
 const Handle: React.FC<HandleProps> = ({
@@ -57,7 +59,13 @@ const Handle: React.FC<HandleProps> = ({
     value,
     isDragging,
     onMouseDown,
+    type,
+    isAdjacent,
 }) => {
+    // Adjust label position when handles are adjacent to prevent overlap
+    const labelTransform =
+        isAdjacent && type === 'min' ? 'translateX(-75%)' : 'translateX(-50%)';
+
     return (
         <>
             <div
@@ -82,7 +90,7 @@ const Handle: React.FC<HandleProps> = ({
                 style={{
                     position: 'absolute',
                     left: `${position}%`,
-                    transform: 'translateX(-50%)',
+                    transform: labelTransform,
                     top: '-8px',
                     fontSize: '12px',
                     pointerEvents: 'none',
@@ -145,6 +153,9 @@ export const Slider: React.FC<SliderProps> = ({
     // Calculate the position percentages for both handles based on their current values
     const startPosition = getPositionFromValue(startValue);
     const endPosition = getPositionFromValue(endValue);
+
+    // Check if handles are adjacent (next to each other)
+    const isAdjacent = endValue - startValue === 1;
 
     /**
      * Initiates the dragging interaction when a handle is pressed.
@@ -242,6 +253,8 @@ export const Slider: React.FC<SliderProps> = ({
                     value={startValue}
                     isDragging={dragging === 'min'}
                     onMouseDown={handleMouseDown('min')}
+                    type="min"
+                    isAdjacent={isAdjacent}
                 />
 
                 {/* End Handle */}
@@ -250,6 +263,8 @@ export const Slider: React.FC<SliderProps> = ({
                     value={endValue}
                     isDragging={dragging === 'max'}
                     onMouseDown={handleMouseDown('max')}
+                    type="max"
+                    isAdjacent={isAdjacent}
                 />
 
                 {/* Tick Marks */}
