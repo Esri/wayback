@@ -8,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ScaleRangeSelector } from './ScaleRangeSelector';
 import { dispatch, min } from 'd3';
 import { IWaybackItem } from '@typings/index';
+import { Slider } from './Slider';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
@@ -234,6 +235,19 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         }}
                     />
                 </div>
+
+                <Slider
+                    // minValue={minZoom}
+                    // maxValue={maxZoom}
+                    defaultStart={minZoom}
+                    defaultEnd={maxZoom}
+                    onChange={(userSelectedMinZoom, userSelectedMaxZoom) => {
+                        levelsOnChange(
+                            userSelectedMinZoom,
+                            userSelectedMaxZoom
+                        );
+                    }}
+                />
 
                 <div className="flex items-center mb-2">
                     <div className="mr-2">
