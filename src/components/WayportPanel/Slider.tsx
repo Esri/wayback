@@ -1,13 +1,49 @@
 import classNames from 'classnames';
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, {
+    useState,
+    useRef,
+    useCallback,
+    useMemo,
+    useEffect,
+} from 'react';
 
-interface SliderProps {
+/**
+ * type for the dragging state of the slider handles, can be 'min', 'max', or null when no handle is being dragged
+ */
+export type SliderHandleType = 'min' | 'max' | null;
+
+type SliderProps = {
+    /**
+     * Minimum value of the slider, default to 1 if not provided
+     */
     min?: number;
+    /**
+     * Maximum value of the slider, default to 23 if not provided
+     */
     max?: number;
+    /**
+     * Default start value for the slider handle, default to min if not provided
+     */
     defaultStart?: number;
+    /**
+     * Default end value for the slider handle, default to max if not provided
+     */
     defaultEnd?: number;
-    onChange?: (start: number, end: number) => void;
-}
+    /**
+     * emits the current start and end values when user finishes dragging either of the handles
+     * @param start
+     * @param end
+     * @returns
+     */
+    onChange: (start: number, end: number) => void;
+    /**
+     * Emits which handle is being dragged whenever user drags either of the handles, emits null when user stops dragging.
+     * This is useful if the parent component wants to show some helper UI based on which handle is being dragged.
+     * @param handleOnDragging
+     * @returns
+     */
+    draggedHandleOnChange: (handleOnDragging: SliderHandleType) => void;
+};
 
 interface HandleProps {
     position: number;
@@ -65,10 +101,11 @@ export const Slider: React.FC<SliderProps> = ({
     defaultStart = 1,
     defaultEnd = 23,
     onChange,
+    draggedHandleOnChange,
 }) => {
     const [startValue, setStartValue] = useState(defaultStart);
     const [endValue, setEndValue] = useState(defaultEnd);
-    const [dragging, setDragging] = useState<'start' | 'end' | null>(null);
+    const [dragging, setDragging] = useState<SliderHandleType>(null);
     const trackRef = useRef<HTMLDivElement>(null);
 
     /**
@@ -114,10 +151,18 @@ export const Slider: React.FC<SliderProps> = ({
      * Prevents default to avoid text selection during drag.
      */
     const handleMouseDown =
-        (handle: 'start' | 'end') => (e: React.MouseEvent) => {
+        (handle: SliderHandleType) => (e: React.MouseEvent) => {
             e.preventDefault();
             setDragging(handle);
         };
+
+    /**
+     * Ends the dragging interaction when mouse button is released.
+     */
+    const handleMouseUp = useCallback(() => {
+        // console.log('Mouse up, end dragging');
+        setDragging(null);
+    }, []);
 
     /**
      * Handles the mouse movement during drag operation.
@@ -129,7 +174,7 @@ export const Slider: React.FC<SliderProps> = ({
 
             const newValue = getValueFromPosition(e.clientX);
 
-            if (dragging === 'start') {
+            if (dragging === 'min') {
                 // Prevent overlap: start must be at least 1 less than end
                 const clampedValue = Math.min(newValue, endValue - 1);
                 setStartValue(clampedValue);
@@ -141,21 +186,23 @@ export const Slider: React.FC<SliderProps> = ({
                 onChange?.(startValue, clampedValue);
             }
         },
-        [dragging, startValue, endValue, onChange, min, max]
+        [dragging, startValue, endValue]
     );
 
-    /**
-     * Ends the dragging interaction when mouse button is released.
-     */
-    const handleMouseUp = useCallback(() => {
-        setDragging(null);
-    }, []);
+    // Generate tick marks
+    const ticks = useMemo(() => {
+        const tickArray = [];
+        for (let i = min; i <= max; i++) {
+            tickArray.push(i);
+        }
+        return tickArray;
+    }, [min, max]);
 
     /**
      * Sets up and tears down document-level event listeners for drag operations.
      * Only active when a handle is being dragged.
      */
-    React.useEffect(() => {
+    useEffect(() => {
         if (dragging) {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
@@ -167,14 +214,9 @@ export const Slider: React.FC<SliderProps> = ({
         }
     }, [dragging, handleMouseMove, handleMouseUp]);
 
-    // Generate tick marks
-    const ticks = useMemo(() => {
-        const tickArray = [];
-        for (let i = min; i <= max; i++) {
-            tickArray.push(i);
-        }
-        return tickArray;
-    }, [min, max]);
+    useEffect(() => {
+        draggedHandleOnChange(dragging);
+    }, [dragging]);
 
     return (
         <div className="w-full px-2">
@@ -198,16 +240,16 @@ export const Slider: React.FC<SliderProps> = ({
                 <Handle
                     position={startPosition}
                     value={startValue}
-                    isDragging={dragging === 'start'}
-                    onMouseDown={handleMouseDown('start')}
+                    isDragging={dragging === 'min'}
+                    onMouseDown={handleMouseDown('min')}
                 />
 
                 {/* End Handle */}
                 <Handle
                     position={endPosition}
                     value={endValue}
-                    isDragging={dragging === 'end'}
-                    onMouseDown={handleMouseDown('end')}
+                    isDragging={dragging === 'max'}
+                    onMouseDown={handleMouseDown('max')}
                 />
 
                 {/* Tick Marks */}

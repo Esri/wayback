@@ -3,12 +3,12 @@ import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { ScaleRangeSelector } from './ScaleRangeSelector';
 import { dispatch, min } from 'd3';
 import { IWaybackItem } from '@typings/index';
-import { Slider } from './Slider';
+import { Slider, SliderHandleType } from './Slider';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
@@ -75,6 +75,9 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     const { tileEstimations, levels } = job || {};
 
     const [minZoom, maxZoom] = levels || [];
+
+    const [handleOnDragging, setHandleOnDragging] =
+        useState<SliderHandleType>(null);
 
     // determine if the create button should be disabled or not based on user's sign in status
     const disabled = notSignedIn || signedInUsingPublicAccount;
@@ -246,6 +249,10 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             userSelectedMinZoom,
                             userSelectedMaxZoom
                         );
+                    }}
+                    draggedHandleOnChange={(handle) => {
+                        // console.log('Handle on dragging changed to: ', handle);
+                        setHandleOnDragging(handle);
                     }}
                 />
 
