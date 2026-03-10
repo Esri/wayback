@@ -363,6 +363,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
             <TilePreviewCard
                 handleOnDragging={handleOnDragging}
                 levels={levels}
+                maxAvailableTileLevel={maxAvailableTileLevel}
+                releaseNumOfActiveWaybackItem={activeWaybackItem?.releaseNum}
             />
             {getContent()}
         </div>

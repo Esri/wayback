@@ -169,5 +169,6 @@
     "unknown_size": "Unknown size",
     "prompt_to_save_active_wayback_item_as_webmap": "You do not have any versions selected to save in a web map. You can <action>choose</action> the {{waybackReleaseDate}} version and save it to as web map in ArcGIS Online",
     "selected_layers": "Selected Layers",
-    "save_webmap_failed_message": "Failed to create web map: {{errorMessage}}"
+    "save_webmap_failed_message": "Failed to create web map: {{errorMessage}}",
+    "tile_not_available_message": "Tile not available at zoom level {{zoomLevel}}"
 }
