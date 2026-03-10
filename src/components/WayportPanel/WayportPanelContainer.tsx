@@ -45,10 +45,6 @@ export const WayportPanelContainer = () => {
         (state) => state.DownloadMode.idOfJobToShowExtentOnMap
     );
 
-    const handleInitiateNewJob = () => {
-        // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
-    };
-
     return (
         <div
             className="p-2 pb-4 flex flex-col gap-1 overflow-y-auto fancy-scrollbar"

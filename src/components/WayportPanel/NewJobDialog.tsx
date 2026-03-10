@@ -220,7 +220,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     </ul>
                 </div>
 
-                <div>
+                {/* <div>
                     <ScaleRangeSelector
                         minValue={minZoom}
                         maxValue={maxZoom}
@@ -234,7 +234,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             );
                         }}
                     />
-                </div>
+                </div> */}
 
                 <Slider
                     // minValue={minZoom}
