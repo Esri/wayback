@@ -93,14 +93,14 @@ export const WayportPanelContainer = () => {
                         })
                     );
                 }}
-                onZoomToExtentRequested={() => {
-                    // console.log('User requests to zoom to the job extent on the map, this will trigger the map to zoom to the job extent');
-                    dispatch(
-                        timestampOfZoomToDownloadJobExtentRequestUpdated(
-                            Date.now()
-                        )
-                    );
-                }}
+                // onZoomToExtentRequested={() => {
+                //     // console.log('User requests to zoom to the job extent on the map, this will trigger the map to zoom to the job extent');
+                //     dispatch(
+                //         timestampOfZoomToDownloadJobExtentRequestUpdated(
+                //             Date.now()
+                //         )
+                //     );
+                // }}
             />
 
             <JobsList

@@ -9,6 +9,7 @@ import { ScaleRangeSelector } from './ScaleRangeSelector';
 import { dispatch, min } from 'd3';
 import { IWaybackItem } from '@typings/index';
 import { Slider, SliderHandleType } from './Slider';
+import { TilePreviewCard } from './TilePreviewCard';
 
 type NewJobDialogProps = {
     job: DownloadJob | null;
@@ -52,11 +53,11 @@ type NewJobDialogProps = {
      * @returns
      */
     onInitiateNewJob: () => void;
-    /**
-     * Emit when user clicks the button to zoom to the job extent on the map in the new job dialog.
-     * @returns
-     */
-    onZoomToExtentRequested: () => void;
+    // /**
+    //  * Emit when user clicks the button to zoom to the job extent on the map in the new job dialog.
+    //  * @returns
+    //  */
+    // onZoomToExtentRequested: () => void;
 };
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
@@ -68,7 +69,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     onRemove,
     onSubmit,
     onInitiateNewJob,
-    onZoomToExtentRequested,
+    // onZoomToExtentRequested,
 }) => {
     const { t } = useTranslation();
 
@@ -352,10 +353,17 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
     return (
         <div
-            className={classNames('bg-white bg-opacity-10 p-2 w-full mb-2', {
-                disabled: disabled,
-            })}
+            className={classNames(
+                'relative bg-white bg-opacity-10 p-2 w-full mb-2',
+                {
+                    disabled: disabled,
+                }
+            )}
         >
+            <TilePreviewCard
+                handleOnDragging={handleOnDragging}
+                levels={levels}
+            />
             {getContent()}
         </div>
     );
