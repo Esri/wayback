@@ -31,16 +31,65 @@ export const TilePreviewCard: FC<PreviewCardProps> = ({
         [level: number]: string;
     }>({});
 
-    const [previewImageURL, setPreviewImageURL] = React.useState<string>('');
+    const [levelToPreview, setLevelToPreview] = React.useState<number | null>(
+        null
+    );
+
+    const previewImageURL = useMemo(() => {
+        if (!levelToPreview) {
+            return null;
+        }
+
+        return imageUrlsByLevel[levelToPreview];
+    }, [levelToPreview, imageUrlsByLevel]);
+
+    // const levelSubtitle = useMemo(() => {
+    //     if (levelToPreview === -1) {
+    //         return '';
+    //     }
+
+    //     const subtitles = [
+    //         'world',
+    //         'world',
+    //         'world',
+    //         'continent',
+    //         'countries - big',
+    //         'countries - small',
+    //         'states/provinces',
+    //         'state/province',
+    //         'counties',
+    //         'county',
+    //         'cities - big',
+    //         'metropolitan areas',
+    //         'cities',
+    //         'city',
+    //         'town',
+    //         'neighborhood',
+    //         'streets',
+    //         'street',
+    //         'buildings',
+    //         'building',
+    //         'small building',
+    //         'rooms',
+    //         'rooms',
+    //         'rooms',
+    //     ]
+
+    //     if (levelToPreview < 0 || levelToPreview > subtitles.length) {
+    //         return '';
+    //     }
+
+    //     return subtitles[levelToPreview];
+    // }, [levelToPreview]);
 
     useEffect(() => {
         if (!handleOnDragging || !levels || levels.length === 0) {
-            setPreviewImageURL('');
+            setLevelToPreview(-1);
             return;
         }
 
         const level = handleOnDragging === 'min' ? levels[0] : levels[1];
-        setPreviewImageURL(imageUrlsByLevel[level] || '');
+        setLevelToPreview(level);
     }, [handleOnDragging, levels, imageUrlsByLevel]);
 
     const loadPreviewImages = ({
@@ -60,6 +109,7 @@ export const TilePreviewCard: FC<PreviewCardProps> = ({
 
         const baseURL = getWaybackServiceBaseURL();
 
+        // for each zoom level from 1 to maxAvailableTileLevel, construct the corresponding preview image URL and store it in imageURLs array and urlsByLevel object
         for (let level = 1; level <= maxAvailableTileLevel; level++) {
             const tileRow = geometryFns.lat2tile(latitude, level);
             const tileCol = geometryFns.long2tile(longitude, level);
