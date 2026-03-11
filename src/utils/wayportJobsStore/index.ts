@@ -175,6 +175,58 @@ class WayportJobsStore {
     }
 
     /**
+     * Clear outdated jobs for a specific user.
+     * Deletes jobs with status 'not started' that either have no createdAt timestamp
+     * or were created beyond the specified cutoff time.
+     *
+     * @param userId - The ID of the user whose jobs to check
+     * @param cutoffHours - Number of hours after which 'not started' jobs should be deleted
+     */
+    async clearOutdatedJobs(
+        userId: string,
+        cutoffHours: number
+    ): Promise<void> {
+        if (!this.db) {
+            await this.init();
+        }
+
+        if (!userId) {
+            return;
+        }
+
+        // Get all jobs for this user
+        const userJobs = await this.getJobsByUserId(userId);
+
+        // Filter for jobs with status 'not started'
+        const notStartedJobs = userJobs.filter(
+            (job) => job.status === 'not started'
+        );
+
+        // Get current timestamp
+        const now = Date.now();
+        const cutoffMs = cutoffHours * 60 * 60 * 1000; // Convert hours to milliseconds
+
+        // Find jobs to delete (no createdAt or created beyond cutoff time)
+        const jobsToDelete = notStartedJobs.filter((job) => {
+            // Delete if no createdAt timestamp
+            if (!job.createdAt) {
+                return true;
+            }
+
+            // Delete if created beyond cutoff time
+            const age = now - job.createdAt;
+            return age >= cutoffMs;
+        });
+
+        // Delete each outdated job
+        const deletePromises = jobsToDelete.map((job) =>
+            this.deleteJob(job.id)
+        );
+
+        await Promise.all(deletePromises);
+    }
+
+    /**
      * Get a single download job by its ID.
      *
      * @param jobId - The ID of the job to retrieve

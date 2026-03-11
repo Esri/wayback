@@ -7,6 +7,13 @@ import {
 import { getSignedInUser } from '@utils/Esri-OAuth';
 
 /**
+ * Cutoff time in hours for considering download jobs as outdated.
+ * Jobs in 'not started' status are retained for this duration before being deleted,
+ * allowing users to return and start their jobs without premature removal.
+ */
+const CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS = 24;
+
+/**
  * This function gets the preloaded state for DownloadMode by querying the IndexedDB for download jobs created by the current signed in user.
  * If no signed in user is found, or if there's an error during the IndexedDB query, it returns the initial state with an empty list of jobs.
  *
@@ -28,6 +35,12 @@ export const getPreloadedState4Downloadmode =
         }
 
         try {
+            // Clear out outdated jobs for this user before getting the jobs from IndexedDB. This ensures that we don't show outdated jobs in the UI.
+            await wayportJobsStore.clearOutdatedJobs(
+                userId,
+                CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS
+            );
+
             const jobs: DownloadJob[] =
                 await wayportJobsStore.getJobsByUserId(userId);
 
