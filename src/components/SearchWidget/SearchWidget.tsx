@@ -76,7 +76,7 @@ const SearchWidget: React.FC<Props> = ({
                 position: 'absolute',
                 top: 15,
                 left: 15,
-                zIndex: 10,
+                zIndex: 20,
             }}
         ></div>
     );
