@@ -135,6 +135,10 @@ export type DownloadJob = {
      * This is used to show the progress of the download job in the UI while the job is still running and has not finished yet.
      */
     progressInfo?: DownloadJobProgressInfo;
+    /**
+     * timestamp of when this download job is created.
+     */
+    createdAt: number;
 };
 
 export type DownloadModeState = {

@@ -178,7 +178,7 @@ export const initiateNewDownloadJob =
                 DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
             ],
             userId,
-            // createdTime: new Date().getTime(),
+            createdAt: new Date().getTime(),
         };
 
         if (!userId) {
