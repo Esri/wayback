@@ -92,36 +92,40 @@ export const getListOfCountries = async (
         );
     }
 
+    const COUNTRY_CODE_FIELD_NAME =
+        WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_CODE;
+
     const params = new URLSearchParams({
         f: 'json',
         token: token,
         returnGeometry: 'false',
         // where: `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 365 AND CURRENT_TIMESTAMP) OR ${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`, // Fetch all records
         where: whereClause, // Use the provided where clause
-        outFields: WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME,
-        returnDistinctValues: 'true', // Ensure we get distinct country names,
+        outFields: COUNTRY_CODE_FIELD_NAME, // Only need the Tag field which contains the country code
+        returnDistinctValues: 'true', // Ensure we get distinct country codes,
     });
 
     const url = `${serviceUrl}/query?${params.toString()}`;
 
     const features: IFeature[] = await queryFeaturesWithRetries(url);
 
-    const countries: string[] = [];
+    const countryCodes: string[] = [];
 
     for (const feature of features) {
-        const countryName = feature.attributes[
-            WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME
+        const countryCode = feature.attributes[
+            COUNTRY_CODE_FIELD_NAME
         ] as string;
 
-        if (countryName) {
-            countries.push(countryName);
+        if (countryCode && countryCode.trim() !== '') {
+            countryCodes.push(countryCode);
         }
     }
+    // console.log(`Fetched country codes for category "${category}":`, countryCodes);
 
     // Remove duplicates and sort the country names
-    const distinctCountries = Array.from(new Set(countries)).sort(); // Remove duplicates and sort
+    const distinctCountryCodes = Array.from(new Set(countryCodes)).sort(); // Remove duplicates and sort
 
-    cachedResults.set(key, distinctCountries);
+    cachedResults.set(key, distinctCountryCodes);
 
-    return distinctCountries;
+    return distinctCountryCodes;
 };

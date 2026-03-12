@@ -123,7 +123,7 @@ export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
 export const WORLD_IMAGERY_UPDATES_LAYER_FIELDS = {
     OBJECTID: 'OBJECTID',
     AREA_NAME: 'AreaName',
-    COUNTRY_NAME: 'CountryName',
+    // COUNTRY_NAME: 'CountryName',
     AREA_SQKM: 'AreaSQKM',
     /**
      * Ground Sample Distance (GSD) is the distance between pixel centers measured on the ground
@@ -131,6 +131,10 @@ export const WORLD_IMAGERY_UPDATES_LAYER_FIELDS = {
     GSD: 'GSD',
     PUB_STATE: 'PubState',
     PUB_DATE: 'PubDate',
+    /**
+     * Tag field contains the ISO Country Code for the update area, e.g. 'US' for United States, 'FR' for France, etc.
+     */
+    COUNTRY_CODE: 'Tag',
 };
 
 /**

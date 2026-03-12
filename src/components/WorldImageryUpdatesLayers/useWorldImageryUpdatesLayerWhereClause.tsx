@@ -49,7 +49,7 @@ export const useWorldImageryUpdatesLayerWhereClause = (
             shouldIgnoreRegionFilter === false
         ) {
             whereClauses.push(
-                `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_NAME} = '${region}'`
+                `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.COUNTRY_CODE} = '${region}'`
             );
         }
 
