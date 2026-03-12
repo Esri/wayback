@@ -26,7 +26,7 @@ type ParamKey =
     | 'swipeWidget' // leading and trailing layer release numbers for swipe widget
     | 'animationSpeed' // animation speed in milliseconds
     | 'framesToExclude' // release numbers of frames to exclude in animation mode
-    | 'updatesLayer' // Updates Mode data in the format of status|category|region
+    | 'updatesMode' // Updates Mode data in the format of category|dateFilter|region
     | 'activeDialog' // the active dialog name
     | 'ext'; // map extent, which is no longer used but kept for backward compatibility
 
@@ -291,15 +291,19 @@ export const saveUpdatesModeDataInURLHashParams = (
         // status,
         category,
         region,
+        dateFilter,
     } = data;
+
+    // console.log('saveUpdatesModeDataInURLHashParams', category, region, dateFilter);
 
     const dataToSave = [
         // status.join(','),
         category,
+        dateFilter,
         region,
     ].join('|');
 
-    updateHashParams('updatesLayer', dataToSave);
+    updateHashParams('updatesMode', dataToSave);
 };
 
 /**

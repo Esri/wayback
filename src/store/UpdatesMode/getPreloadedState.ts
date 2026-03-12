@@ -1,11 +1,16 @@
 import { getHashParamValueByKey, updateHashParams } from '@utils/urlParams';
 import { UpdatesModeState, initialUpdatesModeState } from './reducer';
 import { WorldImageryUpdatesStatusEnum } from '@services/world-imagery-updates/config';
+import {
+    isValidUpdatesModeCategory,
+    isValidUpdatesModeDateFilter,
+} from './helpers';
+import { is } from 'date-fns/locale';
 
 export const getUpdatesModeFromHashParams = (
     hashParams: URLSearchParams
 ): UpdatesModeState => {
-    const value = getHashParamValueByKey('updatesLayer', hashParams);
+    const value = getHashParamValueByKey('updatesMode', hashParams);
 
     if (!value) {
         return initialUpdatesModeState;
@@ -14,6 +19,7 @@ export const getUpdatesModeFromHashParams = (
     const [
         // status,
         category,
+        dateFilter,
         region,
     ] = value.split('|');
 
@@ -28,11 +34,16 @@ export const getUpdatesModeFromHashParams = (
         //     ) // filter out invalid values
         //     .map((s) => s as WorldImageryUpdatesStatusEnum),
         category:
-            (category as UpdatesModeState['category']) ||
-            initialUpdatesModeState.category,
+            category && isValidUpdatesModeCategory(category)
+                ? (category as UpdatesModeState['category'])
+                : initialUpdatesModeState.category,
         region:
             (region as UpdatesModeState['region']) ||
             initialUpdatesModeState.region,
+        dateFilter:
+            dateFilter && isValidUpdatesModeDateFilter(dateFilter)
+                ? (dateFilter as UpdatesModeState['dateFilter'])
+                : initialUpdatesModeState.dateFilter,
     };
 };
 

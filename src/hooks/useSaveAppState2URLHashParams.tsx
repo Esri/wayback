@@ -39,7 +39,7 @@ export const useSaveAppState2URLHashParams = () => {
 
     const updatesModeData = useAppSelector(selectUpdatesModeState);
 
-    const activeDialog = useAppSelector(activeDialogSelector);
+    // const activeDialog = useAppSelector(activeDialogSelector);
 
     useEffect(() => {
         saveAnimationSpeedToHashParams(
@@ -53,7 +53,7 @@ export const useSaveAppState2URLHashParams = () => {
 
     useEffect(() => {
         if (mode !== 'updates') {
-            updateHashParams('updatesLayer', undefined);
+            updateHashParams('updatesMode', undefined);
         } else {
             saveUpdatesModeDataInURLHashParams(updatesModeData);
         }
