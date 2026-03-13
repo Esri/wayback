@@ -59,6 +59,12 @@ const interestingPlaces: InterestingPlace[] = [
         latitude: 36.064,
         zoom: 15,
     },
+    {
+        name: 'Dishui Lake, Shanghai',
+        longitude: 121.9368,
+        latitude: 30.8999,
+        zoom: 15,
+    },
 ];
 
 export const getRandomInterestingPlace = (): InterestingPlace => {
