@@ -77,9 +77,13 @@ export const SaveWebmapPanelContainer = () => {
             return [];
         }
 
-        return waybackItems.filter((item) =>
-            rNum4SelectedWaybackItems.includes(item.releaseNum)
-        );
+        const items = waybackItems
+            .filter((item) =>
+                rNum4SelectedWaybackItems.includes(item.releaseNum)
+            )
+            .sort((a, b) => b.releaseDatetime - a.releaseDatetime);
+
+        return items;
     }, [waybackItems, rNum4SelectedWaybackItems]);
 
     const portalUser = getSignedInUser();

@@ -183,7 +183,7 @@ export const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
 
     const releaseDates =
         waybackItems && waybackItems?.length > 0
-            ? waybackItems
+            ? [...waybackItems]
                   .sort((a, b) => a.releaseDatetime - b.releaseDatetime)
                   .map((d) => d.releaseDateLabel)
                   .join(', ')
