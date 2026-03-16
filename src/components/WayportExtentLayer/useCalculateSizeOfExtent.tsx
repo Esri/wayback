@@ -1,3 +1,5 @@
+import { useAppSelector } from '@store/configureStore';
+import { selectIsMapUpdating } from '@store/Map/reducer';
 import { IExtent } from '@typings/index';
 import { haversineDistance } from '@utils/snippets/haversineDistance';
 import { zoom } from 'd3';
@@ -60,6 +62,8 @@ export const useCalculateSizeOfExtent = (
     extent: IExtent,
     zoomLevel: number
 ) => {
+    const isMapUpdating = useAppSelector(selectIsMapUpdating);
+
     const [sizeOfExtent, setSizeOfExtent] = React.useState<ExtentSize>({
         widthInKM: 0,
         heightInKm: 0,

@@ -27,6 +27,7 @@ import {
 
 import { RootState } from '../configureStore';
 import { ReferenceLayerLanguage } from '@constants/map';
+import { isMap } from 'util/types';
 
 export type MapCenter = {
     lon: number;
@@ -54,19 +55,24 @@ export type MapState = {
     /**
      * Represents the level of detail (LOD) at the center of the view.
      */
-    zoom?: number;
+    zoom: number;
     /**
      * Represents the view's center point
      */
-    center?: MapCenter;
+    center: MapCenter;
     /**
-     * The locale of the reference layer that is set by the user
+     * Indicates whether the map view is currently updating (e.g., during zooming or panning).
+     * This can be used to prevent certain actions from being triggered while the map is still updating, which can help improve performance and user experience.
      */
-    referenceLayerLocale: ReferenceLayerLanguage;
-    /**
-     * The locale of the reference layer that is suggested by the app
-     */
-    suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
+    isUpdaing: boolean; // indicates whether the map view is currently updating (e.g., during zooming or panning)
+    // /**
+    //  * The locale of the reference layer that is set by the user
+    //  */
+    // referenceLayerLocale: ReferenceLayerLanguage;
+    // /**
+    //  * The locale of the reference layer that is suggested by the app
+    //  */
+    // suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
     // /**
     //  * if true, the reference layer switcher is open
     //  */
@@ -82,8 +88,9 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
-    referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
-    suggestedReferenceLayerLocale: null,
+    isUpdaing: false,
+    // referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
+    // suggestedReferenceLayerLocale: null,
     // isReferenceLayerSwitcherOpen: false,
 };
 
@@ -128,6 +135,9 @@ const slice = createSlice({
         zoomUpdated: (state, action: PayloadAction<number>) => {
             state.zoom = action.payload;
         },
+        isMapUpdatingToggled: (state, action: PayloadAction<boolean>) => {
+            state.isUpdaing = action.payload;
+        },
         // referenceLayerLocaleUpdated: (
         //     state,
         //     action: PayloadAction<ReferenceLayerLanguage>
@@ -168,6 +178,7 @@ export const {
     isQueryingMetadataToggled,
     mapCenterUpdated,
     zoomUpdated,
+    isMapUpdatingToggled,
     // referenceLayerLocaleUpdated,
     // suggestedReferenceLayerLocaleUpdated,
     // isReferenceLayerSwitcherOpenToggled,
@@ -190,6 +201,8 @@ export const metadataPopupAnchorSelector = (state: RootState) =>
     state.Map.metadataPopupAnchor;
 
 export const selectMapCenter = (state: RootState) => state.Map.center;
+
+export const selectIsMapUpdating = (state: RootState) => state.Map.isUpdaing;
 
 // export const selectReferenceLayerLocale = (state: RootState) =>
 //     state.Map.referenceLayerLocale;

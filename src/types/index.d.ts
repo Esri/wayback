@@ -74,7 +74,7 @@ interface IMapPointInfo {
     longitude: number;
     latitude: number;
     zoom: number;
-    geometry: IPointGeomety;
+    // geometry: IPointGeomety;
 }
 
 interface IWaybackMetadataQueryResult {

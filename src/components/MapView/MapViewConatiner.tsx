@@ -18,6 +18,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    isMapUpdatingToggled,
     mapCenterUpdated,
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
@@ -27,12 +28,12 @@ import {
     zoomUpdated,
 } from '@store/Map/reducer';
 
-import {
-    isLoadingWaybackItemsToggled,
-    // activeWaybackItemSelector,
-    releaseNum4ItemsWithLocalChangesUpdated,
-    // previewWaybackItemSelector
-} from '@store/Wayback/reducer';
+// import {
+//     isLoadingWaybackItemsToggled,
+//     // activeWaybackItemSelector,
+//     releaseNum4ItemsWithLocalChangesUpdated,
+//     // previewWaybackItemSelector
+// } from '@store/Wayback/reducer';
 
 import MapView from './MapView';
 
@@ -75,6 +76,9 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         return mapExtent;
     }, []);
 
+    /**
+     * Location Info that is used to query wayback local changes when map view is stationary.
+     */
     const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
     const appMode = useAppSelector(selectMapMode);
@@ -115,9 +119,9 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     //     }
     // };
 
-    const onExtentChange = (extent: IExtentGeomety) => {
-        dispatch(mapExtentUpdated(extent));
-    };
+    // const onExtentChange = (extent: IExtentGeomety) => {
+    //     dispatch(mapExtentUpdated(extent));
+    // };
 
     useEffect(() => {
         if (!center || !zoom) {
@@ -141,19 +145,34 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                 initialExtent={defaultMapExtent}
                 center={center}
                 zoom={zoom}
-                onUpdateEnd={(mapCenterPoint: IMapPointInfo) => {
+                onStationary={({ mapCenterPointInfo, mapExtent }) => {
                     // queryVersionsWithLocalChanges(mapCenterPoint);
-                    setQueryLocation(mapCenterPoint);
+                    setQueryLocation(mapCenterPointInfo);
 
                     dispatch(
                         mapCenterUpdated({
-                            lon: mapCenterPoint.longitude,
-                            lat: mapCenterPoint.latitude,
+                            lon: mapCenterPointInfo.longitude,
+                            lat: mapCenterPointInfo.latitude,
                         })
                     );
-                    dispatch(zoomUpdated(mapCenterPoint.zoom));
+
+                    dispatch(zoomUpdated(mapCenterPointInfo.zoom));
+
+                    dispatch(mapExtentUpdated(mapExtent));
+
+                    // set is map updating to false when map is stationary, after map center, zoom and extent are updated.
+                    dispatch(isMapUpdatingToggled(false));
                 }}
-                onExtentChange={onExtentChange}
+                // onExtentChange={onExtentChange}
+                onUpdating={(isUpdating: boolean) => {
+                    // no need to do anything when isUpdating is false,
+                    // as it will be handled in onStationary event where we will update the map center, zoom and extent, and also query local changes based on the new map center and zoom.
+                    if (!isUpdating) {
+                        return;
+                    }
+
+                    dispatch(isMapUpdatingToggled(true));
+                }}
             >
                 {children}
 
