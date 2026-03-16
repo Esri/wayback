@@ -19,13 +19,14 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     isMapUpdatingToggled,
-    mapCenterUpdated,
+    // mapCenterUpdated,
     // isReferenceLayerVisibleSelector,
     mapExtentSelector,
     mapExtentUpdated,
     selectMapCenterAndZoom,
     selectMapMode,
-    zoomUpdated,
+    // zoomUpdated,
+    mapCenterAndZoomUpdated,
 } from '@store/Map/reducer';
 
 // import {
@@ -48,7 +49,7 @@ import {
     // selectAnimationStatus,
 } from '@store/AnimationMode/reducer';
 import { queryLocalChanges } from '@store/Wayback/thunks';
-import { Point } from '@arcgis/core/geometry';
+// import { Point } from '@arcgis/core/geometry';
 import { MapActionButtonGroup } from './MapActionButtonGroup';
 
 type Props = {
@@ -60,11 +61,9 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
-    // const isAnimationModeOn = useAppSelector(isAnimationModeOnSelector);
-
     const animationStatus = useAppSelector(selectAnimationStatus);
 
-    const { center, zoom } = useAppSelector(selectMapCenterAndZoom);
+    const { center, zoom } = useAppSelector(selectMapCenterAndZoom) || {};
 
     // still need to use default map extent as some old urls may still have it
     const defaultMapExtent = useMemo((): IExtentGeomety => {
@@ -76,52 +75,33 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
         return mapExtent;
     }, []);
 
-    /**
-     * Location Info that is used to query wayback local changes when map view is stationary.
-     */
-    const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
+    // const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
     const appMode = useAppSelector(selectMapMode);
 
     useEffect(() => {
-        if (!queryLocation) {
+        if (!center || !zoom) {
             return;
         }
 
-        if (appMode === 'updates' || appMode === 'wayport') {
+        if (
+            appMode === 'updates' ||
+            appMode === 'wayport' ||
+            appMode === 'save-webmap'
+        ) {
             return;
         }
 
-        const { longitude, latitude, zoom } = queryLocation;
+        const { lat, lon } = center;
 
-        const point = new Point({
-            longitude,
-            latitude,
-        });
-
-        dispatch(queryLocalChanges(point, zoom));
-    }, [queryLocation, appMode]);
-
-    // const queryVersionsWithLocalChanges = async (
-    //     mapCenterPoint: IMapPointInfo
-    // ) => {
-    //     try {
-    //         const { longitude, latitude, zoom } = mapCenterPoint;
-
-    //         const point = new Point({
-    //             longitude,
-    //             latitude,
-    //         });
-
-    //         dispatch(queryLocalChanges(point, zoom));
-    //     } catch (err) {
-    //         console.error('failed to query local changes', err);
-    //     }
-    // };
-
-    // const onExtentChange = (extent: IExtentGeomety) => {
-    //     dispatch(mapExtentUpdated(extent));
-    // };
+        dispatch(
+            queryLocalChanges({
+                longitude: lon,
+                latitude: lat,
+                zoom,
+            })
+        );
+    }, [center, zoom, appMode]);
 
     useEffect(() => {
         if (!center || !zoom) {
@@ -147,16 +127,26 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                 zoom={zoom}
                 onStationary={({ mapCenterPointInfo, mapExtent }) => {
                     // queryVersionsWithLocalChanges(mapCenterPoint);
-                    setQueryLocation(mapCenterPointInfo);
+                    // setQueryLocation(mapCenterPointInfo);
+
+                    // dispatch(
+                    //     mapCenterUpdated({
+                    //         lon: mapCenterPointInfo.longitude,
+                    //         lat: mapCenterPointInfo.latitude,
+                    //     })
+                    // );
+
+                    // dispatch(zoomUpdated(mapCenterPointInfo.zoom));
 
                     dispatch(
-                        mapCenterUpdated({
-                            lon: mapCenterPointInfo.longitude,
-                            lat: mapCenterPointInfo.latitude,
+                        mapCenterAndZoomUpdated({
+                            center: {
+                                lon: mapCenterPointInfo.longitude,
+                                lat: mapCenterPointInfo.latitude,
+                            },
+                            zoom: mapCenterPointInfo.zoom,
                         })
                     );
-
-                    dispatch(zoomUpdated(mapCenterPointInfo.zoom));
 
                     dispatch(mapExtentUpdated(mapExtent));
 

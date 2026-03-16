@@ -26,7 +26,15 @@ import { logger } from '@utils/IndexedDBLogger';
 let abortController: AbortController = null;
 
 export const queryLocalChanges =
-    (point: Point, zoom: number) =>
+    ({
+        longitude,
+        latitude,
+        zoom,
+    }: {
+        longitude: number;
+        latitude: number;
+        zoom: number;
+    }) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         try {
             if (abortController) {
@@ -41,8 +49,8 @@ export const queryLocalChanges =
 
             const waybackItems = await getWaybackItemsWithLocalChanges(
                 {
-                    longitude: point.longitude,
-                    latitude: point.latitude,
+                    longitude,
+                    latitude,
                 },
                 zoom,
                 abortController
@@ -72,8 +80,8 @@ export const queryLocalChanges =
 
             logger.log('error_querying_local_changes', {
                 point: {
-                    longitude: point.longitude,
-                    latitude: point.latitude,
+                    longitude: longitude,
+                    latitude: latitude,
                 },
                 zoom,
                 error: (err as Error).message,

@@ -65,18 +65,6 @@ export type MapState = {
      * This can be used to prevent certain actions from being triggered while the map is still updating, which can help improve performance and user experience.
      */
     isUpdaing: boolean; // indicates whether the map view is currently updating (e.g., during zooming or panning)
-    // /**
-    //  * The locale of the reference layer that is set by the user
-    //  */
-    // referenceLayerLocale: ReferenceLayerLanguage;
-    // /**
-    //  * The locale of the reference layer that is suggested by the app
-    //  */
-    // suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
-    // /**
-    //  * if true, the reference layer switcher is open
-    //  */
-    // isReferenceLayerSwitcherOpen: boolean;
 };
 
 export const initialMapState: MapState = {
@@ -89,9 +77,6 @@ export const initialMapState: MapState = {
     zoom: null,
     center: null,
     isUpdaing: false,
-    // referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
-    // suggestedReferenceLayerLocale: null,
-    // isReferenceLayerSwitcherOpen: false,
 };
 
 const slice = createSlice({
@@ -129,11 +114,18 @@ const slice = createSlice({
         ) => {
             state.isQueryingMetadata = action.payload;
         },
-        mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
-            state.center = action.payload;
-        },
-        zoomUpdated: (state, action: PayloadAction<number>) => {
-            state.zoom = action.payload;
+        // mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
+        //     state.center = action.payload;
+        // },
+        // zoomUpdated: (state, action: PayloadAction<number>) => {
+        //     state.zoom = action.payload;
+        // },
+        mapCenterAndZoomUpdated: (
+            state,
+            action: PayloadAction<{ center: MapCenter; zoom: number }>
+        ) => {
+            state.center = action.payload.center;
+            state.zoom = action.payload.zoom;
         },
         isMapUpdatingToggled: (state, action: PayloadAction<boolean>) => {
             state.isUpdaing = action.payload;
@@ -176,8 +168,8 @@ export const {
     metadataPopupAnchorUpdated,
     isReferenceLayerVisibleToggled,
     isQueryingMetadataToggled,
-    mapCenterUpdated,
-    zoomUpdated,
+    mapCenterAndZoomUpdated,
+    // zoomUpdated,
     isMapUpdatingToggled,
     // referenceLayerLocaleUpdated,
     // suggestedReferenceLayerLocaleUpdated,
