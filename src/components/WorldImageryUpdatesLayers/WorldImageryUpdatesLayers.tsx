@@ -26,6 +26,7 @@ import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatistics';
 import { useZoomToSelectedRegion } from './useZoomToSelectedRegion';
 import { AppContext } from '@contexts/AppContextProvider';
+import { useZoomToWorldExtent } from './useZoomToWorldExtent';
 
 type Props = {
     mapView?: MapView;
@@ -160,6 +161,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         whereClause,
         mapView
     );
+
+    useZoomToWorldExtent(mapView);
 
     // useEffect(() => {
     //     if (!worldImageryUpdatesLayerRef.current) {
