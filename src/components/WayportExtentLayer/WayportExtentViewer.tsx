@@ -6,7 +6,7 @@ import { IExtent } from '@typings/index';
 import { delay } from '@utils/snippets/delay';
 import classNames from 'classnames';
 import { set } from 'date-fns';
-import React, { useState, useRef, FC, useEffect, use } from 'react';
+import React, { useState, useRef, FC, useEffect, use, useMemo } from 'react';
 import { useCalculateSizeOfExtent } from './useCalculateSizeOfExtent';
 
 const MIN_SIZE = 256;
@@ -159,6 +159,16 @@ export const WayportExtentEditor: FC<Props> = ({
         }, RESIZE_DEBOUNCE_DELAY); // Adjust the debounce delay as needed
     };
 
+    const showExtentSize = useMemo(() => {
+        return (
+            extentSize &&
+            extentSize?.visible === true &&
+            extentSize.widthInKMFormatted &&
+            extentSize.heightInKmFormatted &&
+            !dragInfoRef.current
+        );
+    }, [extentSize, dragInfoRef.current]);
+
     // When the mapView is ready, zoom to the initial extent and then set isReady to true to show the box and allow resizing
     useEffect(() => {
         // Convert dimensions to extent and call onExtentChange
@@ -282,7 +292,7 @@ export const WayportExtentEditor: FC<Props> = ({
                         onMouseDown={(e) => handleMouseDown('bottom-right', e)}
                     />
 
-                    {extentSize.visible && (
+                    {showExtentSize && (
                         <>
                             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-custom-theme-blue text-white px-2 py-1 rounded text-xs w-[80px] text-center">
                                 {extentSize.widthInKMFormatted + ' km'}
