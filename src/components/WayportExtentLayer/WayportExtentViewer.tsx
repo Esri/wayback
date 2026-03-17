@@ -1,7 +1,10 @@
 import { Extent, Point } from '@arcgis/core/geometry';
 import MapView from '@arcgis/core/views/MapView';
 import { useAppSelector } from '@store/configureStore';
-import { selectMapCenterAndZoom } from '@store/Map/reducer';
+import {
+    selectIsMapUpdating,
+    selectMapCenterAndZoom,
+} from '@store/Map/reducer';
 import { IExtent } from '@typings/index';
 import { delay } from '@utils/snippets/delay';
 import classNames from 'classnames';
@@ -43,6 +46,8 @@ export const WayportExtentEditor: FC<Props> = ({
     const [isDragging, setIsDragging] = useState(false);
 
     const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
+
+    const isMapUpdating = useAppSelector(selectIsMapUpdating);
 
     const [extentSize, setExtentSize] = useState(() =>
         calculateSizeOfExtent(extent)
@@ -174,9 +179,10 @@ export const WayportExtentEditor: FC<Props> = ({
             extentSize.heightInKm &&
             isDragging === false &&
             mapCenterAndZoom?.zoom !== undefined &&
-            mapCenterAndZoom.zoom > 3
+            mapCenterAndZoom.zoom > 3 &&
+            isMapUpdating === false
         );
-    }, [extentSize, isDragging, mapCenterAndZoom?.zoom]);
+    }, [extentSize, isDragging, mapCenterAndZoom?.zoom, isMapUpdating]);
 
     // When the mapView is ready, zoom to the initial extent and then set isReady to true to show the box and allow resizing
     useEffect(() => {
