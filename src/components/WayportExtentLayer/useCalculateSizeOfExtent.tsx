@@ -22,10 +22,6 @@ type ExtentSize = {
      * Height of the extent in kilometers, formatted as a string with appropriate units (e.g., "10 km", "500 m")
      */
     heightInKmFormatted: string;
-    /**
-     * Whether the size of the extent should be visible or not. This can be used to hide the size information when the zoom level is too low or when the extent is not defined.
-     */
-    visible: boolean;
 };
 
 /**
@@ -52,76 +48,122 @@ const formatNumber = (num: number) => {
 };
 
 /**
- * This hook calculates the width and height of a given extent in kilometers using the Haversine distance formula.
- * If the extent is null or undefined, it returns 0 for both width and height. The hook updates the size of the extent whenever the extent changes.
+ * Calculates the width and height of a given map extent in kilometers
+ * using the Haversine distance formula.
  *
- * @param extent
- * @returns
+ * - Width is measured along the top edge (at `ymax`) from `xmin` to `xmax`.
+ * - Height is measured along the left edge (at `xmin`) from `ymin` to `ymax`.
+ *
+ * If any coordinate is undefined, returns zero dimensions with `visible: false`.
+ *
+ * @param extent - The map extent with `xmin`, `ymin`, `xmax`, and `ymax` coordinates.
+ * @returns An `ExtentSize` object containing the width and height in kilometers,
+ * their formatted string representations, and a `visible` flag.
  */
-export const useCalculateSizeOfExtent = (
-    extent: IExtent,
-    zoomLevel: number
-) => {
-    const isMapUpdating = useAppSelector(selectIsMapUpdating);
+export const calculateSizeOfExtent = (extent: IExtent): ExtentSize => {
+    const { xmin, ymin, xmax, ymax } = extent || {};
 
-    const [sizeOfExtent, setSizeOfExtent] = React.useState<ExtentSize>({
-        widthInKM: 0,
-        heightInKm: 0,
-        widthInKMFormatted: '0',
-        heightInKmFormatted: '0',
-        visible: false,
-    });
-
-    const calculateSizeOfExtent = (extent: IExtent): ExtentSize => {
-        const { xmin, ymin, xmax, ymax } = extent || {};
-
-        if (
-            xmin === undefined ||
-            ymin === undefined ||
-            xmax === undefined ||
-            ymax === undefined
-        ) {
-            return {
-                widthInKM: 0,
-                heightInKm: 0,
-                widthInKMFormatted: '0',
-                heightInKmFormatted: '0',
-                visible: false,
-            };
-        }
-        const widthInKM = haversineDistance(
-            { lat: ymax, lon: xmin },
-            { lat: ymax, lon: xmax }
-        );
-
-        const heightInKm = haversineDistance(
-            { lat: ymin, lon: xmin },
-            { lat: ymax, lon: xmin }
-        );
+    if (
+        xmin === undefined ||
+        ymin === undefined ||
+        xmax === undefined ||
+        ymax === undefined
+    ) {
         return {
-            widthInKM,
-            heightInKm,
-            widthInKMFormatted: formatNumber(widthInKM),
-            heightInKmFormatted: formatNumber(heightInKm),
-            visible: true,
+            widthInKM: 0,
+            heightInKm: 0,
+            widthInKMFormatted: '0',
+            heightInKmFormatted: '0',
         };
+    }
+    const widthInKM = haversineDistance(
+        { lat: ymax, lon: xmin },
+        { lat: ymax, lon: xmax }
+    );
+
+    const heightInKm = haversineDistance(
+        { lat: ymin, lon: xmin },
+        { lat: ymax, lon: xmin }
+    );
+    return {
+        widthInKM,
+        heightInKm,
+        widthInKMFormatted: formatNumber(widthInKM),
+        heightInKmFormatted: formatNumber(heightInKm),
     };
-
-    React.useEffect(() => {
-        if (!extent || !zoomLevel || zoomLevel < 3) {
-            setSizeOfExtent({
-                widthInKM: 0,
-                heightInKm: 0,
-                widthInKMFormatted: '0',
-                heightInKmFormatted: '0',
-                visible: false,
-            });
-            return;
-        }
-
-        const size = calculateSizeOfExtent(extent);
-        setSizeOfExtent(size);
-    }, [extent, zoomLevel]);
-
-    return sizeOfExtent;
 };
+
+// /**
+//  * This hook calculates the width and height of a given extent in kilometers using the Haversine distance formula.
+//  * If the extent is null or undefined, it returns 0 for both width and height. The hook updates the size of the extent whenever the extent changes.
+//  *
+//  * @param extent
+//  * @returns
+//  */
+// export const useCalculateSizeOfExtent = (
+//     extent: IExtent,
+//     zoomLevel: number
+// ) => {
+//     // const isMapUpdating = useAppSelector(selectIsMapUpdating);
+
+//     const [sizeOfExtent, setSizeOfExtent] = React.useState<ExtentSize>({
+//         widthInKM: 0,
+//         heightInKm: 0,
+//         widthInKMFormatted: '0',
+//         heightInKmFormatted: '0',
+//         visible: false,
+//     });
+
+//     // const calculateSizeOfExtent = (extent: IExtent): ExtentSize => {
+//     //     const { xmin, ymin, xmax, ymax } = extent || {};
+
+//     //     if (
+//     //         xmin === undefined ||
+//     //         ymin === undefined ||
+//     //         xmax === undefined ||
+//     //         ymax === undefined
+//     //     ) {
+//     //         return {
+//     //             widthInKM: 0,
+//     //             heightInKm: 0,
+//     //             widthInKMFormatted: '0',
+//     //             heightInKmFormatted: '0',
+//     //             visible: false,
+//     //         };
+//     //     }
+//     //     const widthInKM = haversineDistance(
+//     //         { lat: ymax, lon: xmin },
+//     //         { lat: ymax, lon: xmax }
+//     //     );
+
+//     //     const heightInKm = haversineDistance(
+//     //         { lat: ymin, lon: xmin },
+//     //         { lat: ymax, lon: xmin }
+//     //     );
+//     //     return {
+//     //         widthInKM,
+//     //         heightInKm,
+//     //         widthInKMFormatted: formatNumber(widthInKM),
+//     //         heightInKmFormatted: formatNumber(heightInKm),
+//     //         visible: true,
+//     //     };
+//     // };
+
+//     React.useEffect(() => {
+//         if (!extent || !zoomLevel || zoomLevel < 3) {
+//             setSizeOfExtent({
+//                 widthInKM: 0,
+//                 heightInKm: 0,
+//                 widthInKMFormatted: '0',
+//                 heightInKmFormatted: '0',
+//                 visible: false,
+//             });
+//             return;
+//         }
+
+//         const size = calculateSizeOfExtent(extent);
+//         setSizeOfExtent(size);
+//     }, [extent, zoomLevel]);
+
+//     return sizeOfExtent;
+// };
