@@ -40,6 +40,8 @@ export const WayportExtentEditor: FC<Props> = ({
         height: 0,
     });
 
+    const [isDragging, setIsDragging] = useState(false);
+
     const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
 
     const extentSize = useCalculateSizeOfExtent(extent, mapCenterAndZoom?.zoom);
@@ -130,6 +132,8 @@ export const WayportExtentEditor: FC<Props> = ({
         dragInfoRef.current = null;
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+
+        setIsDragging(false);
     };
 
     const handleMouseDown = (corner: Corner, evt: React.MouseEvent) => {
@@ -147,6 +151,8 @@ export const WayportExtentEditor: FC<Props> = ({
         // Add event listeners to track mouse movement and when the user releases the mouse button
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
+
+        setIsDragging(true);
     };
 
     const debouncedOnExtentChange = (extent: IExtent) => {
@@ -162,12 +168,12 @@ export const WayportExtentEditor: FC<Props> = ({
     const showExtentSize = useMemo(() => {
         return (
             extentSize &&
-            extentSize?.visible === true &&
+            extentSize.visible === true &&
             extentSize.widthInKMFormatted &&
             extentSize.heightInKmFormatted &&
-            !dragInfoRef.current
+            isDragging === false
         );
-    }, [extentSize, dragInfoRef.current]);
+    }, [extentSize, isDragging]);
 
     // When the mapView is ready, zoom to the initial extent and then set isReady to true to show the box and allow resizing
     useEffect(() => {
