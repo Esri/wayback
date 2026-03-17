@@ -11,7 +11,7 @@ import { getSignedInUser } from '@utils/Esri-OAuth';
  * Jobs in 'not started' status are retained for this duration before being deleted,
  * allowing users to return and start their jobs without premature removal.
  */
-const CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS = 24;
+const CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS = 2;
 
 /**
  * This function gets the preloaded state for DownloadMode by querying the IndexedDB for download jobs created by the current signed in user.
