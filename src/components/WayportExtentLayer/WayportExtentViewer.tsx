@@ -221,7 +221,7 @@ export const WayportExtentEditor: FC<Props> = ({
         if (!containerRef.current || !mapView || !isReady) return;
 
         // no need to recalculate if the user is currently dragging the box, as we will calculate the new extent on mouse up after the user finishes resizing
-        if (isDragging) {
+        if (isDragging || isMapUpdating) {
             // console.log('User is currently dragging the box, skipping extent recalculation until dragging is finished.');
             return;
         }
@@ -274,6 +274,7 @@ export const WayportExtentEditor: FC<Props> = ({
         mapCenterAndZoom?.center?.lon,
         isDragging,
         isReady,
+        isMapUpdating,
     ]);
 
     return (
