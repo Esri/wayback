@@ -6,15 +6,11 @@ import {
     selectMapCenterAndZoom,
 } from '@store/Map/reducer';
 import { IExtent } from '@typings/index';
-import { delay } from '@utils/snippets/delay';
 import classNames from 'classnames';
-import { set } from 'date-fns';
-import React, { useState, useRef, FC, useEffect, use, useMemo } from 'react';
+import React, { useState, useRef, FC, useEffect, useMemo } from 'react';
 import { calculateSizeOfExtent } from './useCalculateSizeOfExtent';
 
 const MIN_SIZE = 256;
-
-const RESIZE_DEBOUNCE_DELAY = 50; // milliseconds
 
 const RESIZE_BUTTON_CLASSNAMES = `absolute w-4 h-4 border border-white bg-custom-theme-blue pointer-events-auto rounded-full`;
 
@@ -36,6 +32,8 @@ export const WayportExtentEditor: FC<Props> = ({
     extent,
     onExtentChange,
 }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const [isReady, setIsReady] = useState(false);
 
     const [dimensions, setDimensions] = useState<Dimensions>({
@@ -53,6 +51,40 @@ export const WayportExtentEditor: FC<Props> = ({
         calculateSizeOfExtent(extent)
     );
 
+    /**
+     * Track whether the box dimensions exceed the map view size.
+     * If so, constrain them to 80% of the map size to keep resize handles accessible.
+     * This rechecks on every render to handle window resizing or map view changes.
+     */
+    const isDimensionBiggerThanMap = useMemo(() => {
+        if (!mapView) return false;
+
+        if (!dimensions.width || !dimensions.height) return false;
+
+        const mapWidth = mapView.width;
+        const mapHeight = mapView.height;
+
+        return dimensions.width >= mapWidth || dimensions.height >= mapHeight;
+    }, [dimensions, mapView.width, mapView.height]);
+
+    /**
+     * Track if the extent size should be shown on the map.
+     * The size is shown when the extent has a valid size,
+     * the user is not currently dragging the box, the map is zoomed in enough to show the details of the extent size,
+     * and the map is not currently updating which could cause jitter in the displayed size as the box dimensions are being recalculated.
+     */
+    const showExtentSize = useMemo(() => {
+        return (
+            extentSize &&
+            extentSize.widthInKM &&
+            extentSize.heightInKm &&
+            isDragging === false &&
+            mapCenterAndZoom?.zoom !== undefined &&
+            mapCenterAndZoom.zoom > 3 &&
+            isMapUpdating === false
+        );
+    }, [extentSize, isDragging, mapCenterAndZoom?.zoom, isMapUpdating]);
+
     const dragInfoRef = useRef<{
         corner: Corner;
         startX: number;
@@ -61,10 +93,13 @@ export const WayportExtentEditor: FC<Props> = ({
         startHeight: number;
     } | null>(null);
 
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    let debounceTimer = useRef<NodeJS.Timeout>(null);
-
+    /**
+     * This function initializes the dimensions of the box based on the initial extent.
+     * It converts the corners of the initial extent to screen coordinates to calculate
+     * the initial width and height of the box in pixels.
+     *
+     * @returns
+     */
     const initDimensions = () => {
         // get the point of the initial extent corners and convert to screen coordinates to calculate the initial width and height of the box in pixels
         const bottomLeftPoint = new Point({
@@ -162,28 +197,6 @@ export const WayportExtentEditor: FC<Props> = ({
         setIsDragging(true);
     };
 
-    const debouncedOnExtentChange = (extent: IExtent) => {
-        if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-        }
-        debounceTimer.current = setTimeout(() => {
-            onExtentChange(extent);
-            // console.log('Calculated new extent from box dimensions:', extent);
-        }, RESIZE_DEBOUNCE_DELAY); // Adjust the debounce delay as needed
-    };
-
-    const showExtentSize = useMemo(() => {
-        return (
-            extentSize &&
-            extentSize.widthInKM &&
-            extentSize.heightInKm &&
-            isDragging === false &&
-            mapCenterAndZoom?.zoom !== undefined &&
-            mapCenterAndZoom.zoom > 3 &&
-            isMapUpdating === false
-        );
-    }, [extentSize, isDragging, mapCenterAndZoom?.zoom, isMapUpdating]);
-
     // When the mapView is ready, zoom to the initial extent and then set isReady to true to show the box and allow resizing
     useEffect(() => {
         // Convert dimensions to extent and call onExtentChange
@@ -265,8 +278,7 @@ export const WayportExtentEditor: FC<Props> = ({
         setExtentSize(extentSize);
         // console.log('Calculated size of new extent:', extentSize);
 
-        // call the debounced onExtentChange function with the new extent to update the extent of the download job
-        debouncedOnExtentChange(newExtent);
+        onExtentChange(newExtent);
     }, [
         dimensions,
         mapCenterAndZoom?.zoom,
@@ -276,6 +288,20 @@ export const WayportExtentEditor: FC<Props> = ({
         isReady,
         isMapUpdating,
     ]);
+
+    useEffect(() => {
+        // If the box dimensions exceed the map view size, constrain them to 80% of the map size to keep resize handles accessible
+        if (isDimensionBiggerThanMap) {
+            // calculate the new dimensions to be 80% of the map size
+            const newWidth = Math.min(dimensions.width, mapView.width * 0.8);
+            const newHeight = Math.min(dimensions.height, mapView.height * 0.8);
+
+            setDimensions((prev) => ({
+                width: Math.max(MIN_SIZE, newWidth),
+                height: Math.max(MIN_SIZE, newHeight),
+            }));
+        }
+    }, [isDimensionBiggerThanMap]);
 
     return (
         <div
