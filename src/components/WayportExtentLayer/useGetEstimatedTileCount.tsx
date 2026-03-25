@@ -1,7 +1,7 @@
 import {
     getTileEstimationsInOutputBundle,
     TileEstimation,
-} from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+} from '@services/wayport/getTileEstimationsInOutputBundle';
 import { DownloadJob } from '@store/DownloadMode/reducer';
 import { DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB } from '@store/DownloadMode/thunks';
 import { IExtent } from '@typings/index';

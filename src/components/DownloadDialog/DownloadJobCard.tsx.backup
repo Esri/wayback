@@ -17,7 +17,7 @@
 // import classnames from 'classnames';
 // import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 // import { numberFns } from 'helper-toolkit-ts';
-// import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+// import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/wayport/getTileEstimationsInOutputBundle';
 // import {
 //     CalciteButton,
 //     CalciteIcon,

@@ -24,9 +24,7 @@ import {
 // import { batch } from 'react-redux';
 import { IExtent } from '@typings/index';
 import { IWaybackItem } from '@typings/index';
-import { TileEstimation } from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
-import { id } from 'date-fns/locale';
-import { time } from 'console';
+import { TileEstimation } from '@services/wayport/getTileEstimationsInOutputBundle';
 
 export type DownloadJobStatus =
     | 'not started'

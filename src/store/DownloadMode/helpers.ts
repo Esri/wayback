@@ -1,7 +1,7 @@
 import { IExtent } from '@typings/index';
 import { DownloadJob, DownloadJobProgressInfo } from './reducer';
 import { Extent } from '@arcgis/core/geometry';
-import { CheckJobStatusResponse } from '@services/export-wayback-bundle/wayportGPService';
+import { CheckJobStatusResponse } from '@services/wayport/wayportGPService';
 
 const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
 

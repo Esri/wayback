@@ -33,12 +33,12 @@ import { nanoid } from 'nanoid';
 import {
     getTileEstimationsInOutputBundle,
     TileEstimation,
-} from '@services/export-wayback-bundle/getTileEstimationsInOutputBundle';
+} from '@services/wayport/getTileEstimationsInOutputBundle';
 import {
     checkJobStatus,
     getJobOutputInfo,
     submitJob,
-} from '@services/export-wayback-bundle/wayportGPService';
+} from '@services/wayport/wayportGPService';
 import {
     selectDownloadJobById,
     selectDownloadJobsThatHaveFinished,
@@ -62,7 +62,7 @@ import {
     normalizeExtent,
     saveNewDownloadJobToSessionStorage,
 } from './helpers';
-import { parseDownloadJobProgress } from '@services/export-wayback-bundle/wayportHelpers';
+import { parseDownloadJobProgress } from '@services/wayport/wayportHelpers';
 
 type InitiateDownloadJobParams = {
     /**
