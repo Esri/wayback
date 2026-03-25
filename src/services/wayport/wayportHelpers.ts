@@ -93,3 +93,43 @@ export const parseDownloadJobProgress = (
         progressPercentage: Math.round(progressPercentage),
     };
 };
+
+/**
+ * Extracts the alternative file name from the job status response messages.
+ *
+ * Searches messages in reverse order for one matching the pattern "Output:{file_name}.tpkx".
+ *
+ * @param res - The check job status response containing messages
+ * @returns The extracted file name (e.g. "j8b480d1e78244982a59dc22dfac36d44.tpkx"), or null if not found
+ *
+ */
+export const extractAlternativeFileNameFromMessages = (
+    res: CheckJobStatusResponse
+): string | null => {
+    if (!res) {
+        return null;
+    }
+
+    const messages = res?.messages || [];
+
+    for (let i = messages.length - 1; i >= 0; i--) {
+        const text = messages[i].description || '';
+
+        if (!text) {
+            continue;
+        }
+
+        // Match pattern: "Output:{file_name}.tpkx"
+        // - "Output:"  — literal prefix (case-insensitive)
+        // - "(.+\.tpkx)" — capture group: one or more characters ending with ".tpkx"
+        // - "$" — anchored to end of string
+        // e.g. "Output:j8b480d1e78244982a59dc22dfac36d44.tpkx" → captures "j8b480d1e78244982a59dc22dfac36d44.tpkx"
+        const match = text.match(/Output:(.+\.tpkx)$/i);
+
+        if (match) {
+            return match[1].trim();
+        }
+    }
+
+    return null;
+};

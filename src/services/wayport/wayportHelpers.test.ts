@@ -1,4 +1,9 @@
-import { extractBundleCount, extractCompletedBundles } from './wayportHelpers';
+import {
+    extractBundleCount,
+    extractCompletedBundles,
+    extractAlternativeFileNameFromMessages,
+} from './wayportHelpers';
+import { CheckJobStatusResponse } from './wayportGPService';
 
 describe('test extractBundleCount function', () => {
     it('should return correct bundle count when valid message is provided', () => {
@@ -64,5 +69,69 @@ describe('test extractCompletedBundles function', () => {
     it('should return null when message is null', () => {
         const message = null as unknown as string;
         expect(extractCompletedBundles(message)).toBeNull();
+    });
+});
+
+describe('test extractAlternativeFileNameFromMessage function', () => {
+    const createResponse = (
+        descriptions: string[]
+    ): CheckJobStatusResponse => ({
+        jobId: 'test-job-id',
+        jobStatus: 'esriJobSucceeded' as any,
+        messages: descriptions.map((desc) => ({ description: desc })),
+    });
+
+    it('should extract file name from message matching Output:{name}.tpkx pattern', () => {
+        const res = createResponse([
+            'Some other message',
+            'Output:j8b480d1e78244982a59dc22dfac36d44.tpkx',
+        ]);
+        expect(extractAlternativeFileNameFromMessages(res)).toBe(
+            'j8b480d1e78244982a59dc22dfac36d44.tpkx'
+        );
+    });
+
+    it('should return the last matching message when multiple matches exist', () => {
+        const res = createResponse([
+            'Output:first.tpkx',
+            'Some other message',
+            'Output:second.tpkx',
+        ]);
+        expect(extractAlternativeFileNameFromMessages(res)).toBe('second.tpkx');
+    });
+
+    it('should return null when no message matches the pattern', () => {
+        const res = createResponse([
+            'Some random message',
+            'Expecting 33 bundles, 75238 tiles',
+        ]);
+        expect(extractAlternativeFileNameFromMessages(res)).toBeNull();
+    });
+
+    it('should return null when messages array is empty', () => {
+        const res = createResponse([]);
+        expect(extractAlternativeFileNameFromMessages(res)).toBeNull();
+    });
+
+    it('should return null when response is null', () => {
+        expect(extractAlternativeFileNameFromMessages(null as any)).toBeNull();
+    });
+
+    it('should return null when response has no messages property', () => {
+        const res = {
+            jobId: 'test',
+            jobStatus: 'esriJobSucceeded',
+        } as CheckJobStatusResponse;
+        expect(extractAlternativeFileNameFromMessages(res)).toBeNull();
+    });
+
+    it('should return null when file does not end with .tpkx', () => {
+        const res = createResponse(['Output:somefile.zip']);
+        expect(extractAlternativeFileNameFromMessages(res)).toBeNull();
+    });
+
+    it('should skip empty description strings', () => {
+        const res = createResponse(['', 'Output:abc123.tpkx']);
+        expect(extractAlternativeFileNameFromMessages(res)).toBe('abc123.tpkx');
     });
 });
