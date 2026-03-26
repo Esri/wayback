@@ -27,12 +27,17 @@ import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/wayport/getTileEstimationsInOutputBundle';
 
 export type DownloadJobStatus =
-    | 'not started'
-    | 'waiting to start'
-    | 'pending'
-    | 'finished'
-    | 'failed'
-    | 'downloaded';
+    | 'not started' // initial status before submission to Wayport GP service
+    | 'waiting to start' // submitted to Wayport GP service, waiting for the GP job to begin
+    | 'pending' // GP job is running
+    | 'finished' // GP job completed successfully; tile package is ready for download
+    | 'failed' // GP job failed; error message is saved and displayed in the UI
+    | 'downloaded' // user has successfully downloaded the tile package
+    | 'adding tile package item' // adding the output tile package as an item in ArcGIS Online
+    | 'publishing tiled layer' // publishing a hosted tile layer from the tile package item
+    | 'updating tiles' // sending an update tiles request to the hosted tile service
+    | 'finished publishing tile layer' // tiled layer published and update tiles request sent; new tiles may still be generating
+    | 'failed publishing tile layer'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
 
 /**
  * Progress info of a download job, including total number of bundles, number of completed bundles, and percentage of progress.
@@ -137,6 +142,23 @@ export type DownloadJob = {
      * timestamp of when this download job is created.
      */
     createdAt: number;
+    /**
+     * Info about the hosted tile layer published from this job's tile package.
+     */
+    hostedTileLayer?: {
+        /**
+         * Item ID of the hosted tile layer in ArcGIS Portal.
+         */
+        serviceItemId: string;
+        /**
+         * URL of the hosted tile service endpoint.
+         */
+        serviceUrl: string;
+        /**
+         * Error message if publishing failed.
+         */
+        error?: string;
+    };
 };
 
 export type DownloadModeState = {
