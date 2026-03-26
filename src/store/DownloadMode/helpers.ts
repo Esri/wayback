@@ -2,6 +2,7 @@ import { IExtent } from '@typings/index';
 import { DownloadJob, DownloadJobProgressInfo } from './reducer';
 import { Extent } from '@arcgis/core/geometry';
 import { CheckJobStatusResponse } from '@services/wayport/wayportGPService';
+import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
 
 const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
 
@@ -79,4 +80,69 @@ export const normalizeExtent = (
     const normalizedExtent = extentObj.expand(scaleFactor);
 
     return normalizedExtent.toJSON() as IExtent;
+};
+
+/**
+ * Replaces the default "wayport.tpkx" filename at the end of a Wayport output URL
+ * with an alternative tile package name to avoid naming conflicts in ArcGIS Online.
+ *
+ * @param outputUrl - The original output tile package URL ending with "wayport.tpkx".
+ * @param alternativeTilePackageName - The replacement filename to use.
+ * @returns The URL with the alternative filename, or the original URL if either param is falsy.
+ */
+export const getAlternativeWayportOutputUrl = (
+    outputUrl: string,
+    alternativeTilePackageName: string
+) => {
+    if (!outputUrl || !alternativeTilePackageName) {
+        return outputUrl;
+    }
+
+    // replace wayport.tpkx at end of the url with the alternative tile package name
+    return outputUrl.replace(/wayport\.tpkx$/, alternativeTilePackageName);
+};
+
+/**
+ * Extracts the levels and other data needed to update a hosted tile layer from a download job.
+ * Expands the job's `levels` tuple (min, max) into a full array of consecutive level numbers.
+ * Falls back to levels 1–22 if the job has no levels defined.
+ *
+ * @param job - The download job to extract tile update data from.
+ * @returns An object containing the full list of levels to update.
+ */
+export const getDataToUpdateTilesOfWayportTileLayer = (
+    job: DownloadJob
+): {
+    fullLevelList: number[];
+    extentInWebMercator: IExtent;
+} => {
+    let outputLevels: number[] = [];
+
+    if (!job.levels || job.levels.length === 0) {
+        // if the job does not have specific levels defined, we will assume it includes all levels from 1 to 22
+        outputLevels = Array.from({ length: 22 }, (_, i) => i + 1);
+    }
+
+    const [minLevel, maxLevel] = job.levels || [];
+
+    for (let i = minLevel; i <= maxLevel; i++) {
+        outputLevels.push(i);
+    }
+
+    const extent = job.extent || null;
+
+    const extentInWgs84 = new Extent({
+        xmin: extent?.xmin,
+        ymin: extent?.ymin,
+        xmax: extent?.xmax,
+        ymax: extent?.ymax,
+        spatialReference: extent?.spatialReference,
+    });
+
+    const extentInWebMercator = geographicToWebMercator(extentInWgs84);
+
+    return {
+        fullLevelList: outputLevels,
+        extentInWebMercator: extentInWebMercator.toJSON() as IExtent,
+    };
 };

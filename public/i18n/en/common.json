@@ -415,5 +415,10 @@
     "COUNTRY_NAME_YE": "Yemen",
     "COUNTRY_NAME_ZM": "Zambia",
     "COUNTRY_NAME_ZW": "Zimbabwe",
-    "unknown_country": "Unknown Country"
+    "unknown_country": "Unknown Country",
+    "adding_tile_package_item_status": "Adding Tile Package Item",
+    "publishing_tile_layer_status": "Publishing Tiled Layer",
+    "updating_tiles_status": "Updating Tiles",
+    "finished_publishing_tile_layer_status": "Tile Layer Published",
+    "failed_publishing_tile_layer_status": "Failed Publishing Tile Layer"
 }

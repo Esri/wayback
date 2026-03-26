@@ -55,9 +55,11 @@ import {
     setActiveWaybackItem,
     setPreviewWaybackItem,
 } from '@store/Wayback/reducer';
-import { getSignedInUser, signIn } from '@utils/Esri-OAuth';
+import { getSignedInUser, getToken, signIn } from '@utils/Esri-OAuth';
 import { wayportJobsStore } from '@utils/wayportJobsStore';
 import {
+    getAlternativeWayportOutputUrl,
+    getDataToUpdateTilesOfWayportTileLayer,
     getNewDownloadJobFromSessionStorage,
     normalizeExtent,
     saveNewDownloadJobToSessionStorage,
@@ -66,6 +68,10 @@ import {
     extractAlternativeFileNameFromMessages,
     parseDownloadJobProgress,
 } from '@services/wayport/wayportHelpers';
+import { createTilePackageItemAndWaitForCompletion } from '@services/hosted-tile-layer/addTilePackageItem';
+import { ARCGIS_PROTAL_ROOT } from '@constants/index';
+import { publishTiledLayer } from '@services/hosted-tile-layer/publishTiledLayer';
+import { updateTilesAndWaitForCompletion } from '@services/hosted-tile-layer/updateTiles';
 
 type InitiateDownloadJobParams = {
     /**
@@ -517,6 +523,156 @@ export const downloadOutputTilePackage =
                 },
             ])
         );
+    };
+
+export const publishWayportTilePackageAsTileLayer =
+    (jobId: string) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // console.log('Publishing tile layer for job with id: ', jobId);
+
+        const jobToBePublished = selectDownloadJobById(getState(), jobId);
+
+        if (!jobToBePublished) {
+            console.error('cannot find job data with job id of %s', jobId);
+            return;
+        }
+
+        const { outputTilePackageInfo, alternativeOutputName } =
+            jobToBePublished || {};
+
+        if (!outputTilePackageInfo) {
+            console.error(
+                'No output tile package info found for job with id of %s',
+                jobId
+            );
+            return;
+        }
+
+        console.log(
+            'Publishing tile layer for job with id: ',
+            jobId,
+            ' with output tile package info: ',
+            outputTilePackageInfo
+        );
+
+        // get the token to publish tile layer
+        const token = getToken();
+        if (!token) {
+            console.error(
+                'No token found, cannot publish tile layer for job with id of %s',
+                jobId
+            );
+            return;
+        }
+
+        // get the signed in user to publish tile layer
+        const signedInUser = getSignedInUser();
+        if (!signedInUser) {
+            console.error(
+                'No signed in user found, cannot publish tile layer for job with id of %s',
+                jobId
+            );
+            return;
+        }
+
+        try {
+            // mark as the status as "adding tile package item" and call createTilePackageItemAndWaitForCompletion to create an item for the output tile package in the user's content, and wait for the item creation to be completed before calling publish API, to avoid potential issue of publishing a tile package item that is not fully created yet which may cause the publish operation to fail
+            await dispatch(
+                updateDownloadJobs([
+                    {
+                        ...jobToBePublished,
+                        publishWayportTileLayerStatus:
+                            'adding tile package item',
+                    },
+                ])
+            );
+
+            const tilePackageItemId =
+                await createTilePackageItemAndWaitForCompletion({
+                    dataUrl: getAlternativeWayportOutputUrl(
+                        outputTilePackageInfo.url,
+                        alternativeOutputName
+                    ),
+                    title: `Wayport Tile Package - ${jobId}`,
+                    username: signedInUser.username,
+                    portalRoot: ARCGIS_PROTAL_ROOT,
+                    token,
+                });
+
+            // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
+            await dispatch(
+                updateDownloadJobs([
+                    {
+                        ...jobToBePublished,
+                        publishWayportTileLayerStatus: 'publishing tile layer',
+                    },
+                ])
+            );
+
+            const serviceResult = await publishTiledLayer({
+                itemId: tilePackageItemId,
+                token,
+                username: signedInUser.username,
+                portalRoot: ARCGIS_PROTAL_ROOT,
+                wayportJobId: jobId,
+            });
+
+            // mark the job as published successfully with the service item id and service url
+            await dispatch(
+                updateDownloadJobs([
+                    {
+                        ...jobToBePublished,
+                        publishWayportTileLayerStatus: 'updating tiles',
+                    },
+                ])
+            );
+
+            const { fullLevelList, extentInWebMercator } =
+                getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
+
+            await updateTilesAndWaitForCompletion({
+                serviceUrl: serviceResult.serviceurl,
+                token,
+                levels: fullLevelList,
+                extent: extentInWebMercator,
+            });
+
+            await dispatch(
+                updateDownloadJobs([
+                    {
+                        ...jobToBePublished,
+                        publishWayportTileLayerStatus: 'finished',
+                        wayportTileLayerInfo: {
+                            tilePackageItemId,
+                            serviceItemId: serviceResult.serviceItemId,
+                            serviceUrl: serviceResult.serviceurl,
+                            error: null,
+                        },
+                    },
+                ])
+            );
+        } catch (err) {
+            console.error(
+                'Failed to publish tile layer for job with id of %s. Error: ',
+                jobId,
+                err
+            );
+
+            dispatch(
+                updateDownloadJobs([
+                    {
+                        ...jobToBePublished,
+                        publishWayportTileLayerStatus: 'failed',
+                        wayportTileLayerInfo: {
+                            tilePackageItemId: null,
+                            serviceItemId: null,
+                            serviceUrl: null,
+                            error: err.message || 'Unknown error',
+                        },
+                    },
+                ])
+            );
+        }
     };
 
 /**

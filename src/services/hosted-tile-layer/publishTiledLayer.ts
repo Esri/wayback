@@ -23,33 +23,45 @@ type PublishTiledLayerParams = {
     wayportJobId?: string;
 };
 
+type ServiceResult = {
+    /**
+     * type of the published service (e.g. "MapServer")
+     */
+    type: string;
+    /**
+     * ID of the published service item in ArcGIS Portal
+     */
+    serviceItemId: string;
+    /**
+     * URL of the published service endpoint
+     */
+    serviceurl: string;
+    /**
+     * size of the published service
+     */
+    size: number;
+    /**
+     *  id of the publishing job
+     */
+    jobId: string;
+};
+
 type PublishTiledLayerResponse = {
-    services: {
-        /**
-         * type of the published service (e.g. "MapServer")
-         */
-        type: string;
-        /**
-         * ID of the published service item in ArcGIS Portal
-         */
-        serviceItemId: string;
-        /**
-         * URL of the published service endpoint
-         */
-        serviceurl: boolean;
-        /**
-         * size of the published service
-         */
-        size: number;
-        /**
-         *  id of the publishing job
-         */
-        jobId: string;
-    }[];
+    services: ServiceResult[];
     /**
      * error information if the publish operation failed
      */
     error?: any;
+};
+
+const getUniqueServiceName = (jobId: string) => {
+    const uniqueSuffix = jobId || nanoid(6); // use jobId if available, otherwise generate a random string
+
+    // generate a unique service name using the job ID and a random string to ensure uniqueness
+    const serviceName = `wayport_tile_layer_${uniqueSuffix}}`;
+
+    // only numbers, letters, and underscores are allowed in service names, so replace any invalid characters with underscores
+    return serviceName.replace(/[^a-zA-Z0-9_]/g, '_').toLocaleLowerCase();
 };
 
 /**
@@ -72,7 +84,7 @@ export const publishTiledLayer = async ({
     username,
     portalRoot = 'https://www.arcgis.com',
     wayportJobId,
-}: PublishTiledLayerParams): Promise<string> => {
+}: PublishTiledLayerParams): Promise<ServiceResult> => {
     if (!itemId) {
         throw new Error('itemId is required to publish a tiled layer');
     }
@@ -92,8 +104,8 @@ export const publishTiledLayer = async ({
         itemId,
         fileType: 'tilePackage',
         publishParameters: JSON.stringify({
-            name: `wayport_tile_layer_${wayportJobId || new Date().getTime()}}`,
-            // maxRecordCount: 2000,
+            name: getUniqueServiceName(wayportJobId),
+            maxRecordCount: 1000,
         }),
         buildInitialCache: 'true',
         f: 'json',
@@ -136,5 +148,5 @@ export const publishTiledLayer = async ({
         throw new Error('Failed to get service item ID from response');
     }
 
-    return serviceItemId;
+    return serviceResult;
 };

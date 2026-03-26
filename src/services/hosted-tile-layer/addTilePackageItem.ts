@@ -129,6 +129,10 @@ type CheckItemProcessingStatusParams = {
      */
     itemId: string;
     /**
+     * The username of the ArcGIS account that owns the item being checked.
+     */
+    userId: string;
+    /**
      * Authentication token for the ArcGIS Portal API.
      */
     token: string;
@@ -166,6 +170,7 @@ type CheckItemProcessingStatusResponse = {
  */
 const checkItemProcessingStatus = async ({
     itemId,
+    userId,
     token,
     portalRoot = 'https://www.arcgis.com',
 }: CheckItemProcessingStatusParams): Promise<CheckItemProcessingStatusResponse> => {
@@ -176,7 +181,7 @@ const checkItemProcessingStatus = async ({
         throw new Error('token is required to check item processing status');
     }
 
-    const requestUrl = `${portalRoot}/sharing/rest/content/items/${itemId}/status?f=json&token=${token}`;
+    const requestUrl = `${portalRoot}/sharing/rest/content/users/${userId}/items/${itemId}/status?token=${token}&f=json`;
 
     const res = await fetch(requestUrl);
 
@@ -230,6 +235,7 @@ export const createTilePackageItemAndWaitForCompletion = async (
             itemId,
             token,
             portalRoot,
+            userId: params.username,
         });
 
         if (processingStatusResponse.status === 'completed') {

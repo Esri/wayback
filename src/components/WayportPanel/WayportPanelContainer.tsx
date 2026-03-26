@@ -12,6 +12,7 @@ import {
     deleteDownloadJobs,
     downloadOutputTilePackage,
     initiateNewDownloadJob,
+    publishWayportTilePackageAsTileLayer,
     startDownloadJob,
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewDownloadJob,
@@ -117,6 +118,10 @@ export const WayportPanelContainer = () => {
                 downlaodTilePackageButtonOnClick={(jobId) => {
                     // console.log('Download tile package for job with id: ', jobId);
                     dispatch(downloadOutputTilePackage(jobId));
+                }}
+                publishTileLayerButtonOnClick={(jobId) => {
+                    // console.log('Publish hosted tile layer for job with id: ', jobId);
+                    dispatch(publishWayportTilePackageAsTileLayer(jobId));
                 }}
             />
         </div>

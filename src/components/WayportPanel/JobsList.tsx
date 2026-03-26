@@ -5,7 +5,7 @@ import {
 } from '@esri/calcite-components-react';
 import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
 import classNames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type JobsListProps = {
@@ -21,6 +21,7 @@ type JobsListProps = {
     onRemove: (job: DownloadJob) => void;
     onZoomTo: (job: DownloadJob) => void;
     downlaodTilePackageButtonOnClick: (jobId: string) => void;
+    publishTileLayerButtonOnClick: (jobId: string) => void;
 };
 
 export const JobsList: FC<JobsListProps> = ({
@@ -30,10 +31,11 @@ export const JobsList: FC<JobsListProps> = ({
     onRemove,
     onZoomTo,
     downlaodTilePackageButtonOnClick,
+    publishTileLayerButtonOnClick,
 }) => {
     const { t } = useTranslation();
 
-    const statusLabelText: Record<DownloadJobStatus, string> = {
+    const wayportJobStatusLabel: Record<DownloadJobStatus, string> = {
         'not started': t('not_started_status'),
         'waiting to start': t('waiting_to_start_status'),
         pending: t('pending_status'),
@@ -53,12 +55,27 @@ export const JobsList: FC<JobsListProps> = ({
     return (
         <div className="mt-2 overflow-x-hidden">
             {jobs.map((job) => {
-                const { waybackItem, levels, status, progressInfo } = job;
+                const {
+                    waybackItem,
+                    status,
+                    progressInfo,
+                    publishWayportTileLayerStatus,
+                } = job;
                 const { releaseDateLabel } = waybackItem;
                 const progressPercentage =
                     status === 'pending' && progressInfo
                         ? `${progressInfo?.progressPercentage || 0}`
                         : '';
+
+                // remove button should be disabled when the job is in progress (pending or waiting to start) or when the tile layer is being published or updated,
+                // to prevent users from removing a job that is in the middle of being processed
+                const shouldRemoveButtonBeDisabled =
+                    status === 'pending' ||
+                    status === 'waiting to start' ||
+                    publishWayportTileLayerStatus ===
+                        'adding tile package item' ||
+                    publishWayportTileLayerStatus === 'publishing tile layer' ||
+                    publishWayportTileLayerStatus === 'updating tiles';
 
                 return (
                     <div
@@ -81,6 +98,7 @@ export const JobsList: FC<JobsListProps> = ({
                                 color="neutral"
                                 onClick={onRemove.bind(null, job)}
                                 label={t('remove_wayport_job')}
+                                disabled={shouldRemoveButtonBeDisabled}
                             ></CalciteButton>
 
                             <CalciteButton
@@ -96,31 +114,65 @@ export const JobsList: FC<JobsListProps> = ({
                             <span className="ml-1">{releaseDateLabel}</span>
                         </div>
 
-                        {status !== 'finished' && (
-                            <div className="flex items-center">
-                                <span className="italic opacity-80">
-                                    {statusLabelText[status] +
-                                        (progressPercentage
-                                            ? ` (${progressPercentage}%)`
-                                            : '')}
-                                </span>
-                            </div>
+                        {!publishWayportTileLayerStatus && (
+                            <>
+                                {status !== 'finished' && (
+                                    <div className="flex items-center">
+                                        <span className="italic opacity-80">
+                                            {wayportJobStatusLabel[status] +
+                                                (progressPercentage
+                                                    ? ` (${progressPercentage}%)`
+                                                    : '')}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {status === 'finished' && (
+                                    <div>
+                                        <CalciteButton
+                                            scale="s"
+                                            appearance="solid"
+                                            iconStart="download-to"
+                                            width="full"
+                                            onClick={downlaodTilePackageButtonOnClick.bind(
+                                                null,
+                                                job.id
+                                            )}
+                                            label={t('download_tile_package')}
+                                            // disabled={!job.outputTilePackageInfo?.url}
+                                        >
+                                            {t('download_tile_package')}
+                                        </CalciteButton>
+
+                                        <CalciteButton
+                                            class="mt-2"
+                                            scale="s"
+                                            appearance="outline"
+                                            iconStart="tile-layer"
+                                            width="full"
+                                            onClick={publishTileLayerButtonOnClick.bind(
+                                                null,
+                                                job.id
+                                            )}
+                                        >
+                                            Publish Tile Layer
+                                        </CalciteButton>
+                                    </div>
+                                )}
+                            </>
                         )}
 
-                        {status === 'finished' && (
-                            <CalciteButton
-                                scale="s"
-                                appearance="solid"
-                                iconStart="download-to"
-                                onClick={downlaodTilePackageButtonOnClick.bind(
-                                    null,
-                                    job.id
+                        {publishWayportTileLayerStatus && (
+                            <>
+                                {publishWayportTileLayerStatus !==
+                                    'finished' && (
+                                    <div className="flex items-center">
+                                        <span className="italic opacity-80">
+                                            {publishWayportTileLayerStatus}
+                                        </span>
+                                    </div>
                                 )}
-                                label={t('download_tile_package')}
-                                // disabled={!job.outputTilePackageInfo?.url}
-                            >
-                                {t('download_tile_package')}
-                            </CalciteButton>
+                            </>
                         )}
                     </div>
                 );
