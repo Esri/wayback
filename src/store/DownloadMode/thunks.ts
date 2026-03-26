@@ -62,7 +62,10 @@ import {
     normalizeExtent,
     saveNewDownloadJobToSessionStorage,
 } from './helpers';
-import { parseDownloadJobProgress } from '@services/wayport/wayportHelpers';
+import {
+    extractAlternativeFileNameFromMessages,
+    parseDownloadJobProgress,
+} from '@services/wayport/wayportHelpers';
 
 type InitiateDownloadJobParams = {
     /**
@@ -412,11 +415,21 @@ export const checkPendingDownloadJobStatus =
 
                 const finishTime: number = new Date().getTime();
 
-                finishedJobs.push({
+                // Extract alternative output file name from GP job messages if available.
+                // ArcGIS Online rejects publishing tile packages with duplicate names,
+                // so we use this name instead of the default "wayport.tpkx" to avoid conflicts.
+                const alternativeOutputName =
+                    extractAlternativeFileNameFromMessages(res);
+
+                // update the status, finish time, and alternative output name (if any) for the finished job
+                const updatedJobData: DownloadJob = {
                     ...existingJobData,
                     status,
                     finishTime,
-                });
+                    alternativeOutputName,
+                };
+
+                finishedJobs.push(updatedJobData);
             }
 
             if (res.jobStatus === 'esriJobExecuting') {

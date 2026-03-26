@@ -124,6 +124,11 @@ export type DownloadJob = {
         size: number;
     };
     /**
+     * Alternative output file name extracted from GP job messages, used in place of the default "wayport.tpkx"
+     * to avoid naming conflicts when adding the tile package item and sending update tiles requests.
+     */
+    alternativeOutputName?: string;
+    /**
      * id of the user who created this download job.
      * We need this information to determine which download jobs to display in the UI,
      * as we only want to show the download jobs created by the current user.
