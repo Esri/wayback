@@ -6,6 +6,7 @@ import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
     selectDownloadJobsThatHaveBeenStarted,
+    selectIdOfJobToShowExtentOnMap,
     selectNewDownloadJob,
 } from '@store/WayportMode/selectors';
 import {
@@ -47,7 +48,7 @@ export const WayportPanelContainer = () => {
     );
 
     const idOfJobToShowExtentOnMap = useAppSelector(
-        (state) => state.DownloadMode.idOfJobToShowExtentOnMap
+        selectIdOfJobToShowExtentOnMap
     );
 
     /**

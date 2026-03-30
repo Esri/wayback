@@ -224,7 +224,7 @@ export const initialDownloadModeState: DownloadModeState = {
 };
 
 const slice = createSlice({
-    name: 'Download',
+    name: 'WayportMode',
     initialState: initialDownloadModeState,
     reducers: {
         downloadJobCreated: (state, action: PayloadAction<DownloadJob>) => {

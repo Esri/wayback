@@ -19,7 +19,7 @@ import Map from './Map/reducer';
 import SwipeView from './Swipe/reducer';
 import WaybackItems from './Wayback/reducer';
 import AnimationMode from './AnimationMode/reducer';
-import DownloadMode from './WayportMode/reducer';
+import WayportMode from './WayportMode/reducer';
 import UpdatesMode from './UpdatesMode/reducer';
 
 export default combineReducers({
@@ -28,6 +28,6 @@ export default combineReducers({
     SwipeView,
     WaybackItems,
     AnimationMode,
-    DownloadMode,
+    WayportMode,
     UpdatesMode,
 });

@@ -15,17 +15,16 @@
 
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../configureStore';
-import { stat } from 'fs';
 
 // export const selectIsDownloadDialogOpen = (state: RootState) =>
-//     state.DownloadMode.isDownloadDialogOpen;
+//     state.WayportMode.isDownloadDialogOpen;
 
 // export const selectIsAddingNewDownloadJob = (state: RootState) =>
-//     state.DownloadMode.isAddingNewDownloadJob;
+//     state.WayportMode.isAddingNewDownloadJob;
 
 export const selectNewDownloadJob = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
-    (state: RootState) => state.DownloadMode.idOfJobBeingCreated,
+    (state: RootState) => state.WayportMode.jobs,
+    (state: RootState) => state.WayportMode.idOfJobBeingCreated,
     (jobs, idOfJobBeingCreated) => {
         const { byId } = jobs;
         const newDownloadJob = idOfJobBeingCreated
@@ -46,8 +45,8 @@ export const selectNewDownloadJob = createSelector(
  * not the job currently being created by the user.
  */
 export const selectStaleDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
-    (state: RootState) => state.DownloadMode.idOfJobBeingCreated,
+    (state: RootState) => state.WayportMode.jobs,
+    (state: RootState) => state.WayportMode.idOfJobBeingCreated,
     (jobs, idOfJobBeingCreated) => {
         const { byId, ids } = jobs;
 
@@ -64,7 +63,7 @@ export const selectStaleDownloadJobs = createSelector(
 );
 
 // export const selectDownloadJobs = createSelector(
-//     (state: RootState) => state.DownloadMode.jobs,
+//     (state: RootState) => state.WayportMode.jobs,
 //     (jobs) => {
 //         const { byId, ids } = jobs;
 //         return ids.map((id) => byId[id]);
@@ -72,15 +71,15 @@ export const selectStaleDownloadJobs = createSelector(
 // );
 
 export const selectDownloadJobById = (state: RootState, id: string) =>
-    state.DownloadMode.jobs.byId[id];
+    state.WayportMode.jobs.byId[id];
 
 export const selectNumOfDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => jobs.ids.length
 );
 
 export const selectNumOfPendingDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -94,7 +93,7 @@ export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
 );
 
 export const selectFinishedDownloadJobsWithoutPackageInfo = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -115,7 +114,7 @@ export const selectFinishedDownloadJobsWithoutPackageInfo = createSelector(
 );
 
 export const selectNumOfFinishedDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -127,7 +126,7 @@ export const selectNumOfFinishedDownloadJobs = createSelector(
 );
 
 export const selectPendingDownloadJobs = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -140,7 +139,7 @@ export const selectPendingDownloadJobs = createSelector(
 );
 
 export const selectDownloadJobsThatHaveBeenStarted = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -153,7 +152,7 @@ export const selectDownloadJobsThatHaveBeenStarted = createSelector(
 );
 
 export const selectDownloadJobsThatHaveFinished = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
+    (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
@@ -171,8 +170,8 @@ export const selectDownloadJobsThatHaveFinished = createSelector(
 );
 
 export const selectDownloadJobToShowExtentOnMap = createSelector(
-    (state: RootState) => state.DownloadMode.jobs,
-    (state: RootState) => state.DownloadMode.idOfJobToShowExtentOnMap,
+    (state: RootState) => state.WayportMode.jobs,
+    (state: RootState) => state.WayportMode.idOfJobToShowExtentOnMap,
     (jobs, idOfJobToShowExtentOnMap) => {
         if (!idOfJobToShowExtentOnMap) return null;
         return jobs.byId[idOfJobToShowExtentOnMap];
@@ -181,4 +180,7 @@ export const selectDownloadJobToShowExtentOnMap = createSelector(
 
 export const selectTimestampOfZoomToDownloadJobExtentRequest = (
     state: RootState
-) => state.DownloadMode.timestampOfZoomToDownloadJobExtentRequest;
+) => state.WayportMode.timestampOfZoomToDownloadJobExtentRequest;
+
+export const selectIdOfJobToShowExtentOnMap = (state: RootState) =>
+    state.WayportMode.idOfJobToShowExtentOnMap;
