@@ -10,19 +10,23 @@ import {
 } from '@store/DownloadMode/selectors';
 import {
     deleteDownloadJobs,
-    downloadOutputTilePackage,
+    // downloadOutputTilePackage,
     initiateNewDownloadJob,
     publishWayportTilePackageAsTileLayer,
     startDownloadJob,
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewDownloadJob,
+    updateWayportJobStatus,
 } from '@store/DownloadMode/thunks';
 import { JobsList } from './JobsList';
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
 import { release } from 'os';
-import { timestampOfZoomToDownloadJobExtentRequestUpdated } from '@store/DownloadMode/reducer';
+import {
+    DownloadJob,
+    timestampOfZoomToDownloadJobExtentRequestUpdated,
+} from '@store/DownloadMode/reducer';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -45,6 +49,28 @@ export const WayportPanelContainer = () => {
     const idOfJobToShowExtentOnMap = useAppSelector(
         (state) => state.DownloadMode.idOfJobToShowExtentOnMap
     );
+
+    /**
+     * Download the output tile package for the given job.
+     * This will open the tile package url in a new tab to trigger the download,
+     * and also update the job status to "downloaded" to provide feedback
+     * in the UI that the download is in progress.
+     * @param job The download job for which to download the tile package.
+     * @returns void
+     */
+    const downloadTilePackage = (job: DownloadJob) => {
+        // dispatch(downloadOutputTilePackage(jobId));
+
+        if (!job || !job.outputTilePackageInfo?.url) {
+            console.warn('No output tile package url found for job: ', job);
+            return;
+        }
+
+        window.open(job.outputTilePackageInfo?.url, '_blank');
+
+        // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
+        dispatch(updateWayportJobStatus(job.id, 'downloaded'));
+    };
 
     return (
         <div
@@ -115,10 +141,7 @@ export const WayportPanelContainer = () => {
                     // zoom to the job's extent in the map
                     dispatch(updateIdOfWayportJobToShowExtentOnMap(job.id));
                 }}
-                downlaodTilePackageButtonOnClick={(jobId) => {
-                    // console.log('Download tile package for job with id: ', jobId);
-                    dispatch(downloadOutputTilePackage(jobId));
-                }}
+                downlaodTilePackageButtonOnClick={downloadTilePackage}
                 publishTileLayerButtonOnClick={(jobId) => {
                     // console.log('Publish hosted tile layer for job with id: ', jobId);
                     dispatch(publishWayportTilePackageAsTileLayer(jobId));

@@ -84,9 +84,9 @@ type InitiateDownloadJobParams = {
     extent: IExtent;
 };
 
-let checkDownloadJobStatusTimeout: NodeJS.Timeout;
+// let checkDownloadJobStatusTimeout: NodeJS.Timeout;
 
-const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
+// const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
 const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
 
@@ -311,7 +311,7 @@ export const startDownloadJob =
         const { extent, levels, waybackItem, id, userId } = newDownloadJob;
 
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
-        dispatch(updateJobStatus(id, 'waiting to start'));
+        dispatch(updateWayportJobStatus(id, 'waiting to start'));
 
         // set the id of the job to show extent on map to the new job's id so that the extent of the new job will be shown on the map while the job is being started
         dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
@@ -349,7 +349,13 @@ export const startDownloadJob =
         }
     };
 
-export const updateJobStatus =
+/**
+ * Updates the status of a download job with the specified ID.
+ * @param id The ID of the download job to update
+ * @param status The new status to set for the download job
+ * @returns A thunk function that takes a dispatch parameter and returns void
+ */
+export const updateWayportJobStatus =
     (id: string, status: DownloadJobStatus) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // const jobs = selectDownloadJobs(getState());
@@ -492,38 +498,39 @@ export const checkPendingDownloadJobStatus =
         // dispatch(getOutputTilePackageInfo());
     };
 
-export const downloadOutputTilePackage =
-    (jobId: string) =>
-    async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const jobToBeDownloaded = selectDownloadJobById(getState(), jobId);
+// export const downloadOutputTilePackage =
+//     (jobId: string) =>
+//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const jobToBeDownloaded = selectDownloadJobById(getState(), jobId);
 
-        if (!jobToBeDownloaded) {
-            console.error('cannot find job data with job id of %s', jobId);
-            return;
-        }
+//         if (!jobToBeDownloaded) {
+//             console.error('cannot find job data with job id of %s', jobId);
+//             return;
+//         }
 
-        const { outputTilePackageInfo } = jobToBeDownloaded || {};
+//         const { outputTilePackageInfo } = jobToBeDownloaded || {};
 
-        if (!outputTilePackageInfo) {
-            console.error(
-                'No output tile package info found for job with id of %s',
-                jobId
-            );
-            return;
-        }
+//         if (!outputTilePackageInfo) {
+//             console.error(
+//                 'No output tile package info found for job with id of %s',
+//                 jobId
+//             );
+//             return;
+//         }
 
-        window.open(outputTilePackageInfo.url, '_blank');
+//         window.open(outputTilePackageInfo.url, '_blank');
 
-        // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
-        dispatch(
-            updateDownloadJobs([
-                {
-                    ...jobToBeDownloaded,
-                    status: 'downloaded',
-                },
-            ])
-        );
-    };
+//         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
+//         dispatch(
+//             // updateDownloadJobs([
+//             //     {
+//             //         ...jobToBeDownloaded,
+//             //         status: 'downloaded',
+//             //     },
+//             // ])
+//             updateWayportJobStatus(jobId, 'downloaded')
+//         );
+//     };
 
 export const publishWayportTilePackageAsTileLayer =
     (jobId: string) =>
