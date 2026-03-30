@@ -30,7 +30,7 @@ import { TileEstimation } from '@services/wayport/getTileEstimationsInOutputBund
  * Status of the wayport download job, which is created when user submits a geoprocessing job to Wayport GP service to generate a wayback tile package.
  * The status is used to track the progress of the wayport job and show the appropriate information in the UI.
  */
-export type DownloadJobStatus =
+export type WayportJobStatus =
     | 'not started' // initial status before submission to Wayport GP service
     | 'waiting to start' // submitted to Wayport GP service, waiting for the GP job to begin
     | 'pending' // GP job is running
@@ -52,7 +52,7 @@ export type PublishWayportTileLayerStatus =
 /**
  * Progress info of a download job, including total number of bundles, number of completed bundles, and percentage of progress.
  */
-export type DownloadJobProgressInfo = {
+export type WayportJobProgressInfo = {
     /**
      * The total number of bundles that need to be generated for the download job.
      */
@@ -67,7 +67,7 @@ export type DownloadJobProgressInfo = {
     progressPercentage: number;
 };
 
-export type DownloadJob = {
+export type WayportJob = {
     /**
      * unique identifier of this download job
      */
@@ -107,7 +107,7 @@ export type DownloadJob = {
     /**
      * status of this download job
      */
-    status: DownloadJobStatus;
+    status: WayportJobStatus;
     /**
      * unix timestamp of when this geoprocessing job was started
      */
@@ -152,7 +152,7 @@ export type DownloadJob = {
      * progress info of this download job, including total number of bundles, number of completed bundles, and percentage of progress.
      * This is used to show the progress of the download job in the UI while the job is still running and has not finished yet.
      */
-    progressInfo?: DownloadJobProgressInfo;
+    progressInfo?: WayportJobProgressInfo;
     /**
      * timestamp of when this download job is created.
      */
@@ -185,10 +185,10 @@ export type DownloadJob = {
     publishWayportTileLayerStatus?: PublishWayportTileLayerStatus;
 };
 
-export type DownloadModeState = {
+export type WayportModeState = {
     jobs: {
         byId: {
-            [key: string]: DownloadJob;
+            [key: string]: WayportJob;
         };
         ids: string[];
     };
@@ -212,7 +212,7 @@ export type DownloadModeState = {
     errorMessage: string;
 };
 
-export const initialDownloadModeState: DownloadModeState = {
+export const initialWayportModeState: WayportModeState = {
     jobs: {
         byId: {},
         ids: [],
@@ -225,9 +225,9 @@ export const initialDownloadModeState: DownloadModeState = {
 
 const slice = createSlice({
     name: 'WayportMode',
-    initialState: initialDownloadModeState,
+    initialState: initialWayportModeState,
     reducers: {
-        downloadJobCreated: (state, action: PayloadAction<DownloadJob>) => {
+        downloadJobCreated: (state, action: PayloadAction<WayportJob>) => {
             const { id } = action.payload;
             state.jobs.byId[id] = action.payload;
             state.jobs.ids = [id, ...state.jobs.ids];
@@ -244,7 +244,7 @@ const slice = createSlice({
                 state.idOfJobBeingCreated = null;
             }
         },
-        downloadJobsUpdated: (state, action: PayloadAction<DownloadJob[]>) => {
+        downloadJobsUpdated: (state, action: PayloadAction<WayportJob[]>) => {
             for (const job of action.payload) {
                 const { id } = job;
                 state.jobs.byId[id] = job;

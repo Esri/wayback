@@ -1,4 +1,4 @@
-import { DownloadJobProgressInfo } from '@store/WayportMode/reducer';
+import { WayportJobProgressInfo } from '@store/WayportMode/reducer';
 import { CheckJobStatusResponse } from './wayportGPService';
 
 /**
@@ -38,7 +38,7 @@ export const extractCompletedBundles = (text: string): number | null => {
 
 export const parseDownloadJobProgress = (
     res: CheckJobStatusResponse
-): DownloadJobProgressInfo => {
+): WayportJobProgressInfo => {
     if (!res || !res?.messages || res?.messages?.length === 0) {
         return null;
     }

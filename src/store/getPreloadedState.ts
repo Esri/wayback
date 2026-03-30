@@ -52,7 +52,7 @@ import {
 } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
-import { getPreloadedState4Downloadmode } from './WayportMode/getPreloadedState';
+import { getPreloadedState4Wayportmode } from './WayportMode/getPreloadedState';
 import { getSignedInUser } from '@utils/Esri-OAuth';
 
 const getPreloadedState4UI = (
@@ -235,7 +235,7 @@ const getPreloadedState = async ({
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
 
     // get the preloaded state for DownloadMode, which queries the IndexedDB for download jobs created by the current user and initializes the state with those jobs
-    const preloadedState4DonwloadMode = await getPreloadedState4Downloadmode();
+    const preloadedState4DonwloadMode = await getPreloadedState4Wayportmode();
 
     const preloadedState = {
         UI: getPreloadedState4UI(hashParams, appLanguage),
@@ -243,7 +243,7 @@ const getPreloadedState = async ({
         SwipeView: getPreloadedState4SwipeView(hashParams, waybackItems),
         Map: getPreloadedState4Map(hashParams),
         AnimationMode: getPreloadedState4AnimationMode(hashParams),
-        DownloadMode: preloadedState4DonwloadMode,
+        WayportMode: preloadedState4DonwloadMode,
         UpdatesMode: getPreloadedState4UpdatesMode(hashParams),
     } as PartialRootState;
 

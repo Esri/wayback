@@ -1,8 +1,8 @@
 import { wayportJobsStore } from '@utils/wayportJobsStore';
 import {
-    DownloadJob,
-    DownloadModeState,
-    initialDownloadModeState,
+    WayportJob,
+    WayportModeState,
+    initialWayportModeState,
 } from './reducer';
 import { getSignedInUser } from '@utils/Esri-OAuth';
 
@@ -19,8 +19,8 @@ const CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS = 2;
  *
  * @returns A promise that resolves to the preloaded state for DownloadMode
  */
-export const getPreloadedState4Downloadmode =
-    async (): Promise<DownloadModeState> => {
+export const getPreloadedState4Wayportmode =
+    async (): Promise<WayportModeState> => {
         // get the signed in user information, which will be used to query the IndexedDB for download jobs created by this user.
         // If no signed in user is found, we will return the initial state with empty jobs.
         const signedInUser = getSignedInUser();
@@ -31,7 +31,7 @@ export const getPreloadedState4Downloadmode =
             console.warn(
                 'No signed in user found. DownloadMode will be initialized with empty state.'
             );
-            return initialDownloadModeState;
+            return initialWayportModeState;
         }
 
         try {
@@ -41,10 +41,10 @@ export const getPreloadedState4Downloadmode =
                 CUTOFF_IN_HOURS_FOR_OUTDATED_JOBS
             );
 
-            const jobs: DownloadJob[] =
+            const jobs: WayportJob[] =
                 await wayportJobsStore.getJobsByUserId(userId);
 
-            const byId: { [key: string]: DownloadJob } = {};
+            const byId: { [key: string]: WayportJob } = {};
             const ids: string[] = [];
 
             let idOfJobBeingCreated: string | null = null;
@@ -59,8 +59,8 @@ export const getPreloadedState4Downloadmode =
                 }
             }
 
-            const state: DownloadModeState = {
-                ...initialDownloadModeState,
+            const state: WayportModeState = {
+                ...initialWayportModeState,
                 jobs: {
                     byId,
                     ids,
@@ -74,6 +74,6 @@ export const getPreloadedState4Downloadmode =
                 'Failed to get preloaded state for DownloadMode:',
                 err
             );
-            return initialDownloadModeState;
+            return initialWayportModeState;
         }
     };

@@ -1,5 +1,5 @@
 import { IExtent } from '@typings/index';
-import { DownloadJob, DownloadJobProgressInfo } from './reducer';
+import { WayportJob } from './reducer';
 import { Extent } from '@arcgis/core/geometry';
 import { CheckJobStatusResponse } from '@services/wayport/wayportGPService';
 import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
@@ -12,7 +12,7 @@ const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
  * we can restore the job they were creating instead of losing all the information they have inputed and making them start from scratch on creating a new job after signing in.
  * @param job
  */
-export const saveNewDownloadJobToSessionStorage = (job: DownloadJob) => {
+export const saveNewDownloadJobToSessionStorage = (job: WayportJob) => {
     sessionStorage.setItem(
         TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY,
         JSON.stringify(job)
@@ -25,7 +25,7 @@ export const saveNewDownloadJobToSessionStorage = (job: DownloadJob) => {
  * we need to assign the userId to the job after the user signs in and we retrieve the job from session storage, so that when we create the job in the backend, we can associate the job with the correct user.
  * @returns
  */
-export const getNewDownloadJobFromSessionStorage = (): DownloadJob | null => {
+export const getNewDownloadJobFromSessionStorage = (): WayportJob | null => {
     const jobString = sessionStorage.getItem(
         TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY
     );
@@ -35,7 +35,7 @@ export const getNewDownloadJobFromSessionStorage = (): DownloadJob | null => {
     // if we keep the job in session storage, it will keep restoring the same job every time the user refreshes the page or comes back to the app
     sessionStorage.removeItem(TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY);
 
-    let job: DownloadJob | null = null;
+    let job: WayportJob | null = null;
 
     if (jobString) {
         try {
@@ -111,7 +111,7 @@ export const getAlternativeWayportOutputUrl = (
  * @returns An object containing the full list of levels to update.
  */
 export const getDataToUpdateTilesOfWayportTileLayer = (
-    job: DownloadJob
+    job: WayportJob
 ): {
     fullLevelList: number[];
     extentInWebMercator: IExtent;

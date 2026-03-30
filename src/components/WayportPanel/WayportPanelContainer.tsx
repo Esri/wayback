@@ -25,7 +25,7 @@ import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
 import { release } from 'os';
 import {
-    DownloadJob,
+    WayportJob,
     timestampOfZoomToDownloadJobExtentRequestUpdated,
 } from '@store/WayportMode/reducer';
 
@@ -59,7 +59,7 @@ export const WayportPanelContainer = () => {
      * @param job The download job for which to download the tile package.
      * @returns void
      */
-    const downloadTilePackage = (job: DownloadJob) => {
+    const downloadTilePackage = (job: WayportJob) => {
         // dispatch(downloadOutputTilePackage(jobId));
 
         if (!job || !job.outputTilePackageInfo?.url) {

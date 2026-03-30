@@ -1,6 +1,6 @@
 import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/wayport/getTileEstimationsInOutputBundle';
-import { DownloadJob } from '@store/WayportMode/reducer';
+import { WayportJob } from '@store/WayportMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo, useState } from 'react';
@@ -12,7 +12,7 @@ import { Slider, SliderHandleType } from './Slider';
 import { TilePreviewCard } from './TilePreviewCard';
 
 type NewJobDialogProps = {
-    job: DownloadJob | null;
+    job: WayportJob | null;
     /**
      * If true, the user is not signed in. We will disable the create button in the new job dialog and show a prompt to sign in to users in this case as they need to be signed in to create a Wayport export job.
      */
@@ -40,14 +40,14 @@ type NewJobDialogProps = {
      * @param job
      * @returns
      */
-    onRemove: (job: DownloadJob) => void;
+    onRemove: (job: WayportJob) => void;
     /**
      * Emits when user clicks the create button in the new job dialog to create a new download job based on the current job state
      * which contains the user input such as selected zoom levels for the new job.
      * @param job
      * @returns
      */
-    onSubmit: (job: DownloadJob) => void;
+    onSubmit: (job: WayportJob) => void;
     /**
      * Emit when user clicks the action in the prompt message to create a new job for the current map extent and selected zoom levels.
      * @returns

@@ -17,8 +17,8 @@ import { IExtent } from '@typings/index';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 // import { batch } from 'react-redux';
 import {
-    DownloadJob,
-    DownloadJobStatus,
+    WayportJob,
+    WayportJobStatus,
     downloadJobCreated,
     downloadJobRemoved,
     downloadJobsUpdated,
@@ -170,7 +170,7 @@ export const initiateNewWayportJob =
 
         const userId = signedInUserId?.username || '';
 
-        const newDownloadJobToAdd: DownloadJob = {
+        const newDownloadJobToAdd: WayportJob = {
             id: nanoid(),
             waybackItem: {
                 ...byReleaseNumber[releaseNum],
@@ -280,7 +280,7 @@ export const restoreNewWayportJobFromSessionStorage =
         // Update the userId for the job retrieved from session storage.
         // The job was created before sign-in, so we assign the signed-in user's ID
         // to ensure proper association with the user when creating the job in the backend.
-        const downloadJobToBeCreated: DownloadJob = {
+        const downloadJobToBeCreated: WayportJob = {
             ...newWayportJobFromStorage,
             userId: signedInUser.username,
         };
@@ -329,7 +329,7 @@ export const startWayportJob =
                 layerIdentifier: waybackItem.layerIdentifier,
             });
 
-            const submittedJob: DownloadJob = {
+            const submittedJob: WayportJob = {
                 ...newDownloadJob,
                 GPJobId: res.jobId,
                 status: 'pending',
@@ -339,7 +339,7 @@ export const startWayportJob =
         } catch (err) {
             // console.log(err);
 
-            const failedJob: DownloadJob = {
+            const failedJob: WayportJob = {
                 ...newDownloadJob,
                 status: 'failed',
                 errorMessage: err.message || 'Unknown error',
@@ -356,7 +356,7 @@ export const startWayportJob =
  * @returns A thunk function that takes a dispatch parameter and returns void
  */
 export const updateWayportJobStatus =
-    (id: string, status: DownloadJobStatus) =>
+    (id: string, status: WayportJobStatus) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // const jobs = selectDownloadJobs(getState());
 
@@ -400,9 +400,9 @@ export const checkPendingWayportJobStatus =
             checkJobStatusRequests
         );
 
-        const finishedJobs: DownloadJob[] = [];
+        const finishedJobs: WayportJob[] = [];
 
-        const ongoingJobsWithProgressInfo: DownloadJob[] = [];
+        const ongoingJobsWithProgressInfo: WayportJob[] = [];
 
         for (let i = 0; i < checkJobStatusResponses.length; i++) {
             // const fulfilledResponse = fulfilledResponses[i];
@@ -420,7 +420,7 @@ export const checkPendingWayportJobStatus =
             ) {
                 const existingJobData = pendingJobs[i];
 
-                const status: DownloadJobStatus =
+                const status: WayportJobStatus =
                     res.jobStatus === 'esriJobSucceeded'
                         ? 'finished'
                         : 'failed';
@@ -434,7 +434,7 @@ export const checkPendingWayportJobStatus =
                     extractAlternativeFileNameFromMessages(res);
 
                 // update the status, finish time, and alternative output name (if any) for the finished job
-                const updatedJobData: DownloadJob = {
+                const updatedJobData: WayportJob = {
                     ...existingJobData,
                     status,
                     finishTime,
@@ -732,7 +732,7 @@ export const clearWayportJobs =
  * @returns
  */
 export const assignTilePackageInfoToDownloadJobs =
-    (finishedDownloadJobsWithoutPackageInfo: DownloadJob[]) =>
+    (finishedDownloadJobsWithoutPackageInfo: WayportJob[]) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // const finishedDownloadJobsWithoutPackageInfo = selectFinishedDownloadJobsWithoutPackageInfo(getState());
 
@@ -750,7 +750,7 @@ export const assignTilePackageInfoToDownloadJobs =
         );
         // console.log(tilePackageInfoResponses);
 
-        const jobsWithOutputTilePackageInfo: DownloadJob[] = [];
+        const jobsWithOutputTilePackageInfo: WayportJob[] = [];
 
         for (let i = 0; i < tilePackageInfoResponses.length; i++) {
             const tilePackageInfo = tilePackageInfoResponses[i];
@@ -783,7 +783,7 @@ export const assignTilePackageInfoToDownloadJobs =
  * @returns void
  */
 const createWayportJobHelper =
-    (jobToBeCreated: DownloadJob) =>
+    (jobToBeCreated: WayportJob) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const staleDownloadJobs = selectStaleDownloadJobs(getState());
 
@@ -818,7 +818,7 @@ const createWayportJobHelper =
  * @returns
  */
 const updateWayportJobsHelper =
-    (updatedJobsData: DownloadJob[]) =>
+    (updatedJobsData: WayportJob[]) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         if (!updatedJobsData || !updatedJobsData.length) {
             return;
@@ -854,7 +854,7 @@ const updateWayportJobsHelper =
  * @returns void
  */
 export const deleteWayportJobs =
-    (jobsToBeDeleted: DownloadJob[]) => async (dispatch: StoreDispatch) => {
+    (jobsToBeDeleted: WayportJob[]) => async (dispatch: StoreDispatch) => {
         try {
             for (const job of jobsToBeDeleted) {
                 if (!job.id) {

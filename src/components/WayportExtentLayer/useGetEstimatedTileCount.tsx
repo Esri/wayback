@@ -2,7 +2,6 @@ import {
     getTileEstimationsInOutputBundle,
     TileEstimation,
 } from '@services/wayport/getTileEstimationsInOutputBundle';
-import { DownloadJob } from '@store/WayportMode/reducer';
 import { DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB } from '@store/WayportMode/thunks';
 import { IExtent } from '@typings/index';
 import React, { useMemo } from 'react';

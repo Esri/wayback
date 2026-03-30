@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { DownloadJob } from '@store/WayportMode/reducer';
+import { WayportJob } from '@store/WayportMode/reducer';
 
 /**
  * Maximum number of download job entries allowed in IndexedDB
@@ -109,7 +109,7 @@ class WayportJobsStore {
      * @param job - The download job to add
      * @throws {Error} If the maximum number of entries (5) has been reached for this user
      */
-    async addJob(job: DownloadJob): Promise<void> {
+    async addJob(job: WayportJob): Promise<void> {
         if (!this.db) {
             await this.init();
         }
@@ -133,7 +133,7 @@ class WayportJobsStore {
      *
      * @param job - The download job to update
      */
-    async updateJob(job: DownloadJob): Promise<void> {
+    async updateJob(job: WayportJob): Promise<void> {
         if (!this.db) {
             await this.init();
         }
@@ -232,7 +232,7 @@ class WayportJobsStore {
      * @param jobId - The ID of the job to retrieve
      * @returns The download job, or undefined if not found
      */
-    async getJob(jobId: string): Promise<DownloadJob | undefined> {
+    async getJob(jobId: string): Promise<WayportJob | undefined> {
         if (!this.db) {
             await this.init();
         }
@@ -256,7 +256,7 @@ class WayportJobsStore {
      * @param userId - The ID of the user whose jobs to retrieve
      * @returns An array of download jobs belonging to the specified user
      */
-    async getJobsByUserId(userId: string): Promise<DownloadJob[]> {
+    async getJobsByUserId(userId: string): Promise<WayportJob[]> {
         if (!this.db) {
             await this.init();
         }

@@ -3,13 +3,13 @@ import {
     CalciteIcon,
     CalciteLoader,
 } from '@esri/calcite-components-react';
-import { DownloadJob, DownloadJobStatus } from '@store/WayportMode/reducer';
+import { WayportJob, WayportJobStatus } from '@store/WayportMode/reducer';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type JobsListProps = {
-    jobs: DownloadJob[];
+    jobs: WayportJob[];
     /**
      * The id of the job that is currently being shown on the map by having its extent displayed on the map.
      */
@@ -18,9 +18,9 @@ type JobsListProps = {
      * If true, the zoom to button will be disabled and not clickable.
      */
     shouldDisableZoomToButton: boolean;
-    onRemove: (job: DownloadJob) => void;
-    onZoomTo: (job: DownloadJob) => void;
-    downlaodTilePackageButtonOnClick: (job: DownloadJob) => void;
+    onRemove: (job: WayportJob) => void;
+    onZoomTo: (job: WayportJob) => void;
+    downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
     publishTileLayerButtonOnClick: (jobId: string) => void;
 };
 
@@ -35,7 +35,7 @@ export const JobsList: FC<JobsListProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const wayportJobStatusLabel: Record<DownloadJobStatus, string> = {
+    const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
         'not started': t('not_started_status'),
         'waiting to start': t('waiting_to_start_status'),
         pending: t('pending_status'),
