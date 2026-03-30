@@ -27,7 +27,7 @@ import { IWaybackItem } from '@typings/index';
 import { TileEstimation } from '@services/wayport/getTileEstimationsInOutputBundle';
 
 /**
- * Status of the wayport download job, which is created when user submits a geoprocessing job to Wayport GP service to generate a wayback tile package.
+ * Status of the wayport wayport job, which is created when user submits a geoprocessing job to Wayport GP service to generate a wayback tile package.
  * The status is used to track the progress of the wayport job and show the appropriate information in the UI.
  */
 export type WayportJobStatus =
@@ -50,49 +50,52 @@ export type PublishWayportTileLayerStatus =
     | 'failed'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
 
 /**
- * Progress info of a download job, including total number of bundles, number of completed bundles, and percentage of progress.
+ * Progress info of a wayport job, including total number of bundles, number of completed bundles, and percentage of progress.
  */
 export type WayportJobProgressInfo = {
     /**
-     * The total number of bundles that need to be generated for the download job.
+     * The total number of bundles that need to be generated for the wayport job.
      */
     totalBundles: number;
     /**
-     * The number of bundles that have been completed so far for the download job. This is used to calculate the progress percentage of the download job.
+     * The number of bundles that have been completed so far for the wayport job. This is used to calculate the progress percentage of the wayport job.
      */
     completedBundles: number;
     /**
-     * The percentage of progress for the download job, calculated as (completedBundles / totalBundles) * 100. This gives a clear indication of how much of the download job has been completed.
+     * The percentage of progress for the wayport job, calculated as (completedBundles / totalBundles) * 100. This gives a clear indication of how much of the wayport job has been completed.
      */
     progressPercentage: number;
 };
 
+/**
+ * A wayport job stands for Wayback Export job, which represents a user's request to export a wayback item as a tile package through the Wayport GP service.
+ */
 export type WayportJob = {
     /**
-     * unique identifier of this download job
+     * unique identifier of this wayport job
      */
     id: string;
     // /**
-    //  * wayback release number for this download job
+    //  * wayback release number for this wayport job
     //  */
     // releaseNum: number;
     /**
-     * wayback item associated with this download job
+     * wayback item associated with this wayport job
      */
     waybackItem: IWaybackItem;
     /**
-     * map extent of this download job
+     * map extent of this wayport job
      */
     extent: IExtent;
     /**
-     * This download job has a minimum zoom level. We use the zoom level of the map when user creates this job as the minimum zoom level .
+     * This wayport job has a minimum zoom level. We use the zoom level of the map when user creates this job as the minimum zoom level .
      * Users are not allowed to select a zoom level lower than the minZoomLevel.
      * For example, if the user's current zoom level is 12, they can only choose zoom levels 12 and above (12-16), but not 10-16.
      */
     minZoomLevel: number;
     /**
-     * This download job has a predefined maximum zoom level. The maximum zoom level will be determined based on the `minZoomLevel`.
-     * There is an upper limit on the total number of tiles (e.g., 150,000) that can be included in each download job.
+     * This wayport job has a predefined maximum zoom level. The maximum zoom level will be determined based on the `minZoomLevel`.
+     * There is an upper limit on the total number of tiles (e.g., 150,000) that can be included in each wayport job.
      * The `maxZoomLevel` helps us ensure that the user does not submit a job that would exceed that limit.
      */
     maxZoomLevel: number;
@@ -105,7 +108,7 @@ export type WayportJob = {
      */
     tileEstimations: TileEstimation[];
     /**
-     * status of this download job
+     * status of this wayport job
      */
     status: WayportJobStatus;
     /**
@@ -139,22 +142,22 @@ export type WayportJob = {
      */
     alternativeOutputName?: string;
     /**
-     * id of the user who created this download job.
-     * We need this information to determine which download jobs to display in the UI,
-     * as we only want to show the download jobs created by the current user.
+     * id of the user who created this wayport job.
+     * We need this information to determine which wayport jobs to display in the UI,
+     * as we only want to show the wayport jobs created by the current user.
      */
     userId: string;
     /**
-     * error message to display in the UI when this download job fails. This can be used to inform user about what went wrong.
+     * error message to display in the UI when this wayport job fails. This can be used to inform user about what went wrong.
      */
     errorMessage?: string;
     /**
-     * progress info of this download job, including total number of bundles, number of completed bundles, and percentage of progress.
-     * This is used to show the progress of the download job in the UI while the job is still running and has not finished yet.
+     * progress info of this wayport job, including total number of bundles, number of completed bundles, and percentage of progress.
+     * This is used to show the progress of the wayport job in the UI while the job is still running and has not finished yet.
      */
     progressInfo?: WayportJobProgressInfo;
     /**
-     * timestamp of when this download job is created.
+     * timestamp of when this wayport job is created.
      */
     createdAt: number;
     /**
@@ -193,21 +196,21 @@ export type WayportModeState = {
         ids: string[];
     };
     /**
-     * ID of the download job currently being created.
+     * ID of the wayport job currently being created.
      */
     idOfJobBeingCreated: string | null;
     /**
-     * ID of the download job that user wants to display the extent of on the map.
+     * ID of the wayport job that user wants to display the extent of on the map.
      */
     idOfJobToShowExtentOnMap: string | null;
     /**
-     * Timestamp of when the zoom to download job extent on map request is made.
+     * Timestamp of when the zoom to wayport job extent on map request is made.
      * Used to trigger map extent updates when the user clicks the same job card multiple times.
      * Since clicking the same job card doesn't change the ID, this timestamp ensures the map zooms to the job's extent every time the user clicks the job card, even if it's the same job as before.
      */
     timestampOfZoomToDownloadJobExtentRequest: number;
     /**
-     * Error message to display in the UI when creating or updating a download job fails. This can be used to inform user about what went wrong and how to fix it.
+     * Error message to display in the UI when creating or updating a wayport job fails. This can be used to inform user about what went wrong and how to fix it.
      */
     errorMessage: string;
 };
