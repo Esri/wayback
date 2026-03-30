@@ -92,12 +92,10 @@ export const JobCard: FC<JobCardProps> = ({
     ]);
 
     const getActionButtons = () => {
-        let buttons: React.ReactNode = null;
-
         // if the tile layer is published, show the button to open the published tile layer in ArcGIS Online
         if (publishWayportTileLayerStatus === 'finished') {
-            buttons = (
-                <div className="mt-2">
+            return (
+                <div className="mt-2 ml-2">
                     <CalciteButton
                         scale="s"
                         appearance="solid"
@@ -115,8 +113,8 @@ export const JobCard: FC<JobCardProps> = ({
 
         // if the job is finished but the tile layer is not published yet, show the buttons to download the tile package or publish the tile layer
         if (status === 'finished' && !publishWayportTileLayerStatus) {
-            buttons = (
-                <>
+            return (
+                <div className="mt-2 ml-2">
                     <CalciteButton
                         scale="s"
                         appearance="solid"
@@ -145,12 +143,8 @@ export const JobCard: FC<JobCardProps> = ({
                     >
                         {t('download_tile_package')}
                     </CalciteButton>
-                </>
+                </div>
             );
-        }
-
-        if (buttons) {
-            return <div className="mt-2 ml-2">{buttons}</div>;
         }
 
         return null;
