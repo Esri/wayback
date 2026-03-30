@@ -5,8 +5,8 @@ import {
 } from '@store/DownloadMode/selectors';
 import {
     assignTilePackageInfoToDownloadJobs,
-    checkPendingDownloadJobStatus,
-    clearDownloadJobs,
+    checkPendingWayportJobStatus,
+    clearWayportJobs,
 } from '@store/DownloadMode/thunks';
 import React, { use, useEffect } from 'react';
 
@@ -39,7 +39,7 @@ export const useCheckStatusOfDownloadJobs = () => {
         // check the status of pending download jobs every 30 seconds
         const checkDownloadJobStatusInterval = setInterval(() => {
             // dispatch the thunk action to check the status of pending download jobs
-            dispatch(checkPendingDownloadJobStatus());
+            dispatch(checkPendingWayportJobStatus());
         }, CHECK_JOB_STATUS_INTERVAL);
 
         // cleanup: clear the interval when countOfPendingDownloadJobs changes or component unmounts
@@ -64,6 +64,6 @@ export const useCheckStatusOfDownloadJobs = () => {
 
     useEffect(() => {
         // clear download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean.
-        dispatch(clearDownloadJobs());
+        dispatch(clearWayportJobs());
     }, []);
 };

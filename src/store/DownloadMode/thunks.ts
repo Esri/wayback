@@ -141,7 +141,7 @@ const prepareForNewDownloadJob =
  * @param params.releaseNum - The release number of the wayback item to download
  * @param params.extent - The geographic extent for the download job
  */
-export const initiateNewDownloadJob =
+export const initiateNewWayportJob =
     ({ releaseNum, extent }: InitiateDownloadJobParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
@@ -199,7 +199,7 @@ export const initiateNewDownloadJob =
             return;
         }
 
-        dispatch(createDownloadJob(newDownloadJobToAdd));
+        dispatch(createWayportJobHelper(newDownloadJobToAdd));
     };
 
 /**
@@ -207,7 +207,7 @@ export const initiateNewDownloadJob =
  * @param updatedJobData
  * @returns
  */
-export const updateNewDownloadJob =
+export const updateNewWayportJob =
     ({
         extent,
         levels,
@@ -246,7 +246,7 @@ export const updateNewDownloadJob =
             updatedJobData.extent = extent;
         }
 
-        dispatch(updateDownloadJobs([updatedJobData]));
+        dispatch(updateWayportJobsHelper([updatedJobData]));
     };
 
 /**
@@ -261,7 +261,7 @@ export const updateNewDownloadJob =
  * - If no user is signed in, the operation is skipped silently
  * - If no download job is found in session storage, the operation is skipped silently
  */
-export const restoreNewDownloadJobFromSessionStorage =
+export const restoreNewWayportJobFromSessionStorage =
     () => (dispatch: StoreDispatch) => {
         const signedInUser = getSignedInUser();
 
@@ -285,10 +285,10 @@ export const restoreNewDownloadJobFromSessionStorage =
             userId: signedInUser.username,
         };
 
-        dispatch(createDownloadJob(downloadJobToBeCreated));
+        dispatch(createWayportJobHelper(downloadJobToBeCreated));
     };
 
-export const startDownloadJob =
+export const startWayportJob =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // const { DownloadMode } = getState();
 
@@ -335,7 +335,7 @@ export const startDownloadJob =
                 status: 'pending',
             };
 
-            dispatch(updateDownloadJobs([submittedJob]));
+            dispatch(updateWayportJobsHelper([submittedJob]));
         } catch (err) {
             // console.log(err);
 
@@ -345,7 +345,7 @@ export const startDownloadJob =
                 errorMessage: err.message || 'Unknown error',
             };
 
-            dispatch(updateDownloadJobs([failedJob]));
+            dispatch(updateWayportJobsHelper([failedJob]));
         }
     };
 
@@ -374,14 +374,14 @@ export const updateWayportJobStatus =
             status,
         };
 
-        await dispatch(updateDownloadJobs([updatedJobData]));
+        await dispatch(updateWayportJobsHelper([updatedJobData]));
     };
 
 /**
  * This thunk function is used to check the status of pending download jobs, and update the job status in the store based on the response from Wayport GP service.
  * @returns
  */
-export const checkPendingDownloadJobStatus =
+export const checkPendingWayportJobStatus =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // clearTimeout(checkDownloadJobStatusTimeout);
 
@@ -459,11 +459,11 @@ export const checkPendingDownloadJobStatus =
         }
 
         if (finishedJobs.length) {
-            dispatch(updateDownloadJobs(finishedJobs));
+            dispatch(updateWayportJobsHelper(finishedJobs));
         }
 
         if (ongoingJobsWithProgressInfo.length) {
-            dispatch(updateDownloadJobs(ongoingJobsWithProgressInfo));
+            dispatch(updateWayportJobsHelper(ongoingJobsWithProgressInfo));
         }
 
         // const updatedJobsData: DownloadJob[] = checkJobStatusResponses.map(
@@ -493,7 +493,7 @@ export const checkPendingDownloadJobStatus =
         //     }
         // );
 
-        // dispatch(updateDownloadJobs(updatedJobsData));
+        // dispatch(updateWayportJobsHelper(updatedJobsData));
 
         // dispatch(getOutputTilePackageInfo());
     };
@@ -522,7 +522,7 @@ export const checkPendingDownloadJobStatus =
 
 //         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
 //         dispatch(
-//             // updateDownloadJobs([
+//             // updateWayportJobsHelper([
 //             //     {
 //             //         ...jobToBeDownloaded,
 //             //         status: 'downloaded',
@@ -585,7 +585,7 @@ export const publishWayportTilePackageAsTileLayer =
         try {
             // mark as the status as "adding tile package item" and call createTilePackageItemAndWaitForCompletion to create an item for the output tile package in the user's content, and wait for the item creation to be completed before calling publish API, to avoid potential issue of publishing a tile package item that is not fully created yet which may cause the publish operation to fail
             await dispatch(
-                updateDownloadJobs([
+                updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus:
@@ -608,7 +608,7 @@ export const publishWayportTilePackageAsTileLayer =
 
             // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
             await dispatch(
-                updateDownloadJobs([
+                updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus: 'publishing tile layer',
@@ -626,7 +626,7 @@ export const publishWayportTilePackageAsTileLayer =
 
             // mark the job as published successfully with the service item id and service url
             await dispatch(
-                updateDownloadJobs([
+                updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus: 'updating tiles',
@@ -645,7 +645,7 @@ export const publishWayportTilePackageAsTileLayer =
             });
 
             await dispatch(
-                updateDownloadJobs([
+                updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus: 'finished',
@@ -666,7 +666,7 @@ export const publishWayportTilePackageAsTileLayer =
             );
 
             dispatch(
-                updateDownloadJobs([
+                updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus: 'failed',
@@ -686,7 +686,7 @@ export const publishWayportTilePackageAsTileLayer =
  * remove download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
  * @returns
  */
-export const clearDownloadJobs =
+export const clearWayportJobs =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobs = selectDownloadJobsThatHaveFinished(getState());
 
@@ -724,7 +724,7 @@ export const clearDownloadJobs =
             return;
         }
 
-        dispatch(deleteDownloadJobs(jobsToBeRemoved));
+        dispatch(deleteWayportJobs(jobsToBeRemoved));
     };
 
 /**
@@ -769,7 +769,7 @@ export const assignTilePackageInfoToDownloadJobs =
         }
 
         if (jobsWithOutputTilePackageInfo.length) {
-            dispatch(updateDownloadJobs(jobsWithOutputTilePackageInfo));
+            dispatch(updateWayportJobsHelper(jobsWithOutputTilePackageInfo));
         }
         // console.log(tilePackageInfoResponses)
     };
@@ -782,7 +782,7 @@ export const assignTilePackageInfoToDownloadJobs =
  * @param jobData data of the new download job to be created and added to the store and persisted to IndexedDB
  * @returns void
  */
-const createDownloadJob =
+const createWayportJobHelper =
     (jobToBeCreated: DownloadJob) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const staleDownloadJobs = selectStaleDownloadJobs(getState());
@@ -791,7 +791,7 @@ const createDownloadJob =
             // Clear up stale download jobs before adding the new download job to
             // avoid potential conflict between the new download job and the stale download jobs
             if (staleDownloadJobs && staleDownloadJobs.length > 0) {
-                await dispatch(deleteDownloadJobs(staleDownloadJobs));
+                await dispatch(deleteWayportJobs(staleDownloadJobs));
             }
 
             await wayportJobsStore.addJob(jobToBeCreated);
@@ -817,7 +817,7 @@ const createDownloadJob =
  * @param updatedJobsData an array of updated download job data to be updated in the store and persisted to IndexedDB
  * @returns
  */
-const updateDownloadJobs =
+const updateWayportJobsHelper =
     (updatedJobsData: DownloadJob[]) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         if (!updatedJobsData || !updatedJobsData.length) {
@@ -853,7 +853,7 @@ const updateDownloadJobs =
  * @param jobsToBeDeleted an array of download jobs to be deleted from the store and IndexedDB
  * @returns void
  */
-export const deleteDownloadJobs =
+export const deleteWayportJobs =
     (jobsToBeDeleted: DownloadJob[]) => async (dispatch: StoreDispatch) => {
         try {
             for (const job of jobsToBeDeleted) {

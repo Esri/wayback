@@ -11,7 +11,7 @@ import React, { FC, use, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
 // import { useSketchViewModel } from './useSketchViewModel';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
-import { updateNewDownloadJob } from '@store/DownloadMode/thunks';
+import { updateNewWayportJob } from '@store/DownloadMode/thunks';
 import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
 import { WayportExtentEditor } from './WayportExtentViewer';
 
@@ -123,7 +123,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
         }
 
         dispatch(
-            updateNewDownloadJob({
+            updateNewWayportJob({
                 tileEstimations,
             })
         );
@@ -139,7 +139,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
                 extent={extentOfNewDownloadJob}
                 onExtentChange={(updatedExtent) => {
                     dispatch(
-                        updateNewDownloadJob({
+                        updateNewWayportJob({
                             extent: updatedExtent,
                         })
                     );

@@ -9,13 +9,13 @@ import {
     selectNewDownloadJob,
 } from '@store/DownloadMode/selectors';
 import {
-    deleteDownloadJobs,
+    deleteWayportJobs,
     // downloadOutputTilePackage,
-    initiateNewDownloadJob,
+    initiateNewWayportJob,
     publishWayportTilePackageAsTileLayer,
-    startDownloadJob,
+    startWayportJob,
     updateIdOfWayportJobToShowExtentOnMap,
-    updateNewDownloadJob,
+    updateNewWayportJob,
     updateWayportJobStatus,
 } from '@store/DownloadMode/thunks';
 import { JobsList } from './JobsList';
@@ -95,18 +95,18 @@ export const WayportPanelContainer = () => {
                 signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
                 activeWaybackItem={activeWaybackItem}
                 onRemove={(job) => {
-                    dispatch(deleteDownloadJobs([job]));
+                    dispatch(deleteWayportJobs([job]));
                 }}
                 onSubmit={(job) => {
                     // console.log('create new download job with state: ', job);
-                    dispatch(startDownloadJob());
+                    dispatch(startWayportJob());
                 }}
                 levelsOnChange={(minZoom, maxZoom) => {
                     // console.log('Updating job levels to: ', minZoom, maxZoom);
                     // update the levels in the job state
                     // we can directly dispatch the action here since the state update is simple and doesn't require any async operations
                     dispatch(
-                        updateNewDownloadJob({
+                        updateNewWayportJob({
                             levels: [minZoom, maxZoom],
                         })
                     );
@@ -114,7 +114,7 @@ export const WayportPanelContainer = () => {
                 onInitiateNewJob={() => {
                     // // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
                     dispatch(
-                        initiateNewDownloadJob({
+                        initiateNewWayportJob({
                             releaseNum: activeWaybackItem.releaseNum,
                             extent: mapExtent,
                         })
@@ -135,7 +135,7 @@ export const WayportPanelContainer = () => {
                 idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                 shouldDisableZoomToButton={!!newDownloadJob} // disable zoom to button when there is a job that has not been started, to avoid confusion about whether user should click the create button for the new job or zoom to the existing job
                 onRemove={(job) => {
-                    dispatch(deleteDownloadJobs([job]));
+                    dispatch(deleteWayportJobs([job]));
                 }}
                 onZoomTo={(job) => {
                     // zoom to the job's extent in the map
