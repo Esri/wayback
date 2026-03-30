@@ -3,7 +3,11 @@ import {
     CalciteIcon,
     CalciteLoader,
 } from '@esri/calcite-components-react';
-import { WayportJob, WayportJobStatus } from '@store/WayportMode/reducer';
+import {
+    PublishWayportTileLayerStatus,
+    WayportJob,
+    WayportJobStatus,
+} from '@store/WayportMode/reducer';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +27,7 @@ type JobsListProps = {
     onZoomTo: (job: WayportJob) => void;
     downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
     publishTileLayerButtonOnClick: (jobId: string) => void;
+    openPublishedTileLayerOnClick: (job: WayportJob) => void;
 };
 
 export const JobsList: FC<JobsListProps> = ({
@@ -33,6 +38,7 @@ export const JobsList: FC<JobsListProps> = ({
     onZoomTo,
     downlaodTilePackageButtonOnClick,
     publishTileLayerButtonOnClick,
+    openPublishedTileLayerOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -43,6 +49,18 @@ export const JobsList: FC<JobsListProps> = ({
         finished: t('finished_status'),
         failed: t('failed_status'),
         downloaded: t('downloaded_status'),
+    };
+
+    const wayportTileLayerPublishStatusLabel: Record<
+        PublishWayportTileLayerStatus,
+        string
+    > = {
+        'not started': t('not_started_status'),
+        'adding tile package item': t('adding_tile_package_item_status'),
+        'publishing tile layer': t('publishing_tile_layer_status'),
+        'updating tiles': t('updating_tiles_status'),
+        finished: t('finished_publishing_tile_layer_status'),
+        failed: t('failed_publishing_tile_layer_status'),
     };
 
     if (jobs.length === 0) {
@@ -61,6 +79,9 @@ export const JobsList: FC<JobsListProps> = ({
                         key={job.id}
                         job={job}
                         wayportJobStatusLabel={wayportJobStatusLabel}
+                        wayportTileLayerPublishStatusLabel={
+                            wayportTileLayerPublishStatusLabel
+                        }
                         idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                         shouldDisableZoomToButton={shouldDisableZoomToButton}
                         onRemove={onRemove}
@@ -70,6 +91,9 @@ export const JobsList: FC<JobsListProps> = ({
                         }
                         publishTileLayerButtonOnClick={
                             publishTileLayerButtonOnClick
+                        }
+                        openPublishedTileLayerOnClick={
+                            openPublishedTileLayerOnClick
                         }
                     />
                 );

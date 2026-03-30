@@ -1,7 +1,7 @@
 import React, { use, useContext } from 'react';
 import { WayportIntroduction } from './WayportIntroduction';
 import { AppContext } from '@contexts/AppContextProvider';
-import { signIn } from '@utils/Esri-OAuth';
+import { getPortalBaseUrl, signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
@@ -70,6 +70,24 @@ export const WayportPanelContainer = () => {
 
         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
         dispatch(updateWayportJobStatus(job.id, 'downloaded'));
+    };
+
+    const openPublishedTileLayer = (job: WayportJob) => {
+        const portalRoot = getPortalBaseUrl();
+
+        if (!job?.wayportTileLayerInfo?.serviceItemId) {
+            console.warn(
+                'No published tile layer item id found for job: ',
+                job
+            );
+            return;
+        }
+
+        const itemId = job?.wayportTileLayerInfo?.serviceItemId;
+
+        const url = `${portalRoot}/home/item.html?id=${itemId}`;
+
+        window.open(url, '_blank');
     };
 
     return (
@@ -146,6 +164,7 @@ export const WayportPanelContainer = () => {
                     // console.log('Publish hosted tile layer for job with id: ', jobId);
                     dispatch(publishWayportTilePackageAsTileLayer(jobId));
                 }}
+                openPublishedTileLayerOnClick={openPublishedTileLayer}
             />
         </div>
     );

@@ -416,9 +416,11 @@
     "COUNTRY_NAME_ZM": "Zambia",
     "COUNTRY_NAME_ZW": "Zimbabwe",
     "unknown_country": "Unknown Country",
-    "adding_tile_package_item_status": "Adding Tile Package Item",
+    "adding_tile_package_item_status": "Adding Tile Package",
     "publishing_tile_layer_status": "Publishing Tiled Layer",
     "updating_tiles_status": "Updating Tiles",
     "finished_publishing_tile_layer_status": "Tile Layer Published",
-    "failed_publishing_tile_layer_status": "Failed Publishing Tile Layer"
+    "failed_publishing_tile_layer_status": "Failed Publishing Tile Layer",
+    "open_wayport_tile_layer": "Open Tile Layer",
+    "publish_wayport_tile_layer": "Publish as Tile Layer"
 }
