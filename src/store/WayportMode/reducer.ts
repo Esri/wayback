@@ -132,15 +132,15 @@ export type WayportJob = {
          */
         url: string;
         /**
+         * alternative url to download the tile package with an alternative file name (instead of the default "wayport.tpkx") extracted from GP job messages,
+         * used to avoid naming conflicts when adding the tile package item and sending update tiles requests.
+         */
+        alternativeUrl: string;
+        /**
          * size of the output tile package
          */
         size: number;
     };
-    /**
-     * Alternative output file name extracted from GP job messages, used in place of the default "wayport.tpkx"
-     * to avoid naming conflicts when adding the tile package item and sending update tiles requests.
-     */
-    alternativeOutputName?: string;
     /**
      * id of the user who created this wayport job.
      * We need this information to determine which wayport jobs to display in the UI,

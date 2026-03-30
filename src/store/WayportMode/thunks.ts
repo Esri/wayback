@@ -61,6 +61,7 @@ import {
     getAlternativeWayportOutputUrl,
     getDataToUpdateTilesOfWayportTileLayer,
     getNewWayportJobFromSessionStorage,
+    getWayportJobOutputInfoHelper,
     normalizeExtent,
     saveNewWayportJobToSessionStorage,
 } from './helpers';
@@ -427,18 +428,20 @@ export const checkPendingWayportJobStatus =
 
                 const finishTime: number = new Date().getTime();
 
-                // Extract alternative output file name from GP job messages if available.
-                // ArcGIS Online rejects publishing tile packages with duplicate names,
-                // so we use this name instead of the default "wayport.tpkx" to avoid conflicts.
-                const alternativeOutputName =
-                    extractAlternativeFileNameFromMessages(res);
+                const jobOutputInfo =
+                    status === 'finished'
+                        ? await getWayportJobOutputInfoHelper(
+                              existingJobData.GPJobId,
+                              res
+                          )
+                        : null;
 
                 // update the status, finish time, and alternative output name (if any) for the finished job
                 const updatedJobData: WayportJob = {
                     ...existingJobData,
                     status,
                     finishTime,
-                    alternativeOutputName,
+                    outputTilePackageInfo: jobOutputInfo,
                 };
 
                 finishedJobs.push(updatedJobData);
@@ -544,8 +547,7 @@ export const publishWayportTilePackageAsTileLayer =
             return;
         }
 
-        const { outputTilePackageInfo, alternativeOutputName } =
-            jobToBePublished || {};
+        const { outputTilePackageInfo } = jobToBePublished || {};
 
         if (!outputTilePackageInfo) {
             console.error(
@@ -596,10 +598,9 @@ export const publishWayportTilePackageAsTileLayer =
 
             const tilePackageItemId =
                 await createTilePackageItemAndWaitForCompletion({
-                    dataUrl: getAlternativeWayportOutputUrl(
+                    dataUrl:
+                        outputTilePackageInfo.alternativeUrl ||
                         outputTilePackageInfo.url,
-                        alternativeOutputName
-                    ),
                     title: `Wayport Tile Package - ${jobId}`,
                     username: signedInUser.username,
                     portalRoot: ARCGIS_PROTAL_ROOT,
@@ -727,52 +728,52 @@ export const clearWayportJobs =
         dispatch(deleteWayportJobs(jobsToBeRemoved));
     };
 
-/**
- * get output tile package info for finished jobs
- * @returns
- */
-export const assignTilePackageInfoToDownloadJobs =
-    (finishedDownloadJobsWithoutPackageInfo: WayportJob[]) =>
-    async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        // const finishedDownloadJobsWithoutPackageInfo = selectFinishedWayportobsWithoutPackageInfo(getState());
+// /**
+//  * get output tile package info for finished jobs
+//  * @returns
+//  */
+// export const assignTilePackageInfoToDownloadJobs =
+//     (finishedDownloadJobsWithoutPackageInfo: WayportJob[]) =>
+//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         // const finishedDownloadJobsWithoutPackageInfo = selectFinishedWayportobsWithoutPackageInfo(getState());
 
-        if (!finishedDownloadJobsWithoutPackageInfo.length) {
-            return;
-        }
+//         if (!finishedDownloadJobsWithoutPackageInfo.length) {
+//             return;
+//         }
 
-        const tilePackageInfoRequests =
-            finishedDownloadJobsWithoutPackageInfo.map((job) => {
-                return getJobOutputInfo(job.GPJobId);
-            });
+//         const tilePackageInfoRequests =
+//             finishedDownloadJobsWithoutPackageInfo.map((job) => {
+//                 return getJobOutputInfo(job.GPJobId);
+//             });
 
-        const tilePackageInfoResponses = await Promise.all(
-            tilePackageInfoRequests
-        );
-        // console.log(tilePackageInfoResponses);
+//         const tilePackageInfoResponses = await Promise.all(
+//             tilePackageInfoRequests
+//         );
+//         // console.log(tilePackageInfoResponses);
 
-        const jobsWithOutputTilePackageInfo: WayportJob[] = [];
+//         const jobsWithOutputTilePackageInfo: WayportJob[] = [];
 
-        for (let i = 0; i < tilePackageInfoResponses.length; i++) {
-            const tilePackageInfo = tilePackageInfoResponses[i];
+//         for (let i = 0; i < tilePackageInfoResponses.length; i++) {
+//             const tilePackageInfo = tilePackageInfoResponses[i];
 
-            // if tile package info is not available for the job, skip updating the job with tile package info
-            if (!tilePackageInfo) {
-                continue;
-            }
+//             // if tile package info is not available for the job, skip updating the job with tile package info
+//             if (!tilePackageInfo) {
+//                 continue;
+//             }
 
-            const existingJobData = finishedDownloadJobsWithoutPackageInfo[i];
+//             const existingJobData = finishedDownloadJobsWithoutPackageInfo[i];
 
-            jobsWithOutputTilePackageInfo.push({
-                ...existingJobData,
-                outputTilePackageInfo: tilePackageInfo,
-            });
-        }
+//             jobsWithOutputTilePackageInfo.push({
+//                 ...existingJobData,
+//                 outputTilePackageInfo: tilePackageInfo,
+//             });
+//         }
 
-        if (jobsWithOutputTilePackageInfo.length) {
-            dispatch(updateWayportJobsHelper(jobsWithOutputTilePackageInfo));
-        }
-        // console.log(tilePackageInfoResponses)
-    };
+//         if (jobsWithOutputTilePackageInfo.length) {
+//             dispatch(updateWayportJobsHelper(jobsWithOutputTilePackageInfo));
+//         }
+//         // console.log(tilePackageInfoResponses)
+//     };
 
 /**
  * This thunk function is used to create a new wayport job and persist it to IndexedDB when user add a wayback item to the download list.

@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    selectFinishedWayportobsWithoutPackageInfo,
+    // selectFinishedWayportobsWithoutPackageInfo,
     selectNumOfPendingWayportJobs,
 } from '@store/WayportMode/selectors';
 import {
-    assignTilePackageInfoToDownloadJobs,
+    // assignTilePackageInfoToDownloadJobs,
     checkPendingWayportJobStatus,
     clearWayportJobs,
 } from '@store/WayportMode/thunks';
@@ -20,11 +20,6 @@ export const useCheckStatusOfDownloadJobs = () => {
     // get the count of pending download jobs from the store
     const countOfPendingDownloadJobs = useAppSelector(
         selectNumOfPendingWayportJobs
-    );
-
-    // get the list of finished download jobs that don't have tile package info assigned yet
-    const finishedDownloadJobsWithoutPackageInfo = useAppSelector(
-        selectFinishedWayportobsWithoutPackageInfo
     );
 
     const dispatch = useAppDispatch();
@@ -48,19 +43,19 @@ export const useCheckStatusOfDownloadJobs = () => {
         };
     }, [countOfPendingDownloadJobs]);
 
-    useEffect(() => {
-        // Skip if there is no finished download job that needs to have tile package info assigned
-        if (finishedDownloadJobsWithoutPackageInfo.length === 0) {
-            // console.log('No finished download job without package info, skip assigning tile package info to download jobs');
-            return;
-        }
+    // useEffect(() => {
+    //     // Skip if there is no finished download job that needs to have tile package info assigned
+    //     if (finishedDownloadJobsWithoutPackageInfo.length === 0) {
+    //         // console.log('No finished download job without package info, skip assigning tile package info to download jobs');
+    //         return;
+    //     }
 
-        dispatch(
-            assignTilePackageInfoToDownloadJobs(
-                finishedDownloadJobsWithoutPackageInfo
-            )
-        );
-    }, [finishedDownloadJobsWithoutPackageInfo]);
+    //     dispatch(
+    //         assignTilePackageInfoToDownloadJobs(
+    //             finishedDownloadJobsWithoutPackageInfo
+    //         )
+    //     );
+    // }, [finishedDownloadJobsWithoutPackageInfo]);
 
     useEffect(() => {
         // clear download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean.

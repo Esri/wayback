@@ -57,12 +57,16 @@ export const WayportPanelContainer = () => {
     const downloadTilePackage = (job: WayportJob) => {
         // dispatch(downloadOutputTilePackage(jobId));
 
-        if (!job || !job.outputTilePackageInfo?.url) {
+        if (
+            !job ||
+            !job?.outputTilePackageInfo ||
+            !job?.outputTilePackageInfo?.url
+        ) {
             console.warn('No output tile package url found for job: ', job);
             return;
         }
 
-        window.open(job.outputTilePackageInfo?.url, '_blank');
+        window.open(job.outputTilePackageInfo.url, '_blank');
 
         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
         dispatch(updateWayportJobStatus(job.id, 'downloaded'));

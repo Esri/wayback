@@ -194,41 +194,42 @@ export const checkJobStatus = async (
 export const getJobOutputInfo = async (
     jobId: string
 ): Promise<WayportTilePackageInfo> => {
-    try {
-        const outputRes = await fetch(
-            `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
+    const outputRes = await fetch(
+        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
+    );
+
+    if (!outputRes.ok) {
+        throw new Error(
+            `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
         );
+    }
 
-        if (!outputRes.ok) {
-            throw new Error(
-                `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
-            );
-        }
+    const outputData = await outputRes.json();
 
-        const outputData = await outputRes.json();
+    if (outputData.error) {
+        throw outputData.error;
+    }
 
-        if (outputData.error) {
-            throw outputData.error;
-        }
+    const data = outputData as GetJobOutputResponse;
 
-        const data = outputData as GetJobOutputResponse;
+    const url = data?.value?.url;
 
-        const url = data?.value?.url;
-
-        if (!url) {
-            return null;
-        }
-
-        const tilePackageHeaders = await fetch(url, {
-            method: 'HEAD',
-        });
-
-        return {
-            url,
-            size: +tilePackageHeaders.headers.get('Content-Length'),
-        };
-    } catch (error) {
-        console.error('Error getting job output info:', error);
+    if (!url) {
         return null;
     }
+
+    const tilePackageHeaders = await fetch(url, {
+        method: 'HEAD',
+    });
+
+    if (!tilePackageHeaders.ok) {
+        throw new Error(
+            `Failed to get tile package headers. Server responded with status ${tilePackageHeaders.status}: ${tilePackageHeaders.statusText}`
+        );
+    }
+
+    return {
+        url,
+        size: +tilePackageHeaders.headers.get('Content-Length'),
+    };
 };

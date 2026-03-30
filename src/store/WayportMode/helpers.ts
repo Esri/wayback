@@ -1,8 +1,14 @@
 import { IExtent } from '@typings/index';
 import { WayportJob } from './reducer';
 import { Extent } from '@arcgis/core/geometry';
-import { CheckJobStatusResponse } from '@services/wayport/wayportGPService';
+import {
+    CheckJobStatusResponse,
+    getJobOutputInfo,
+} from '@services/wayport/wayportGPService';
 import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
+import { ca } from 'date-fns/locale';
+import { extractAlternativeFileNameFromMessages } from '@services/wayport/wayportHelpers';
+import { t } from 'i18next';
 
 const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
 
@@ -83,26 +89,6 @@ export const normalizeExtent = (
 };
 
 /**
- * Replaces the default "wayport.tpkx" filename at the end of a Wayport output URL
- * with an alternative tile package name to avoid naming conflicts in ArcGIS Online.
- *
- * @param outputUrl - The original output tile package URL ending with "wayport.tpkx".
- * @param alternativeTilePackageName - The replacement filename to use.
- * @returns The URL with the alternative filename, or the original URL if either param is falsy.
- */
-export const getAlternativeWayportOutputUrl = (
-    outputUrl: string,
-    alternativeTilePackageName: string
-) => {
-    if (!outputUrl || !alternativeTilePackageName) {
-        return outputUrl;
-    }
-
-    // replace wayport.tpkx at end of the url with the alternative tile package name
-    return outputUrl.replace(/wayport\.tpkx$/, alternativeTilePackageName);
-};
-
-/**
  * Extracts the levels and other data needed to update a hosted tile layer from a download job.
  * Expands the job's `levels` tuple (min, max) into a full array of consecutive level numbers.
  * Falls back to levels 1–22 if the job has no levels defined.
@@ -145,4 +131,96 @@ export const getDataToUpdateTilesOfWayportTileLayer = (
         fullLevelList: outputLevels,
         extentInWebMercator: extentInWebMercator.toJSON() as IExtent,
     };
+};
+
+/**
+ * Replaces the default "wayport.tpkx" filename at the end of a Wayport output URL
+ * with an alternative tile package name to avoid naming conflicts in ArcGIS Online.
+ *
+ * @param outputUrl - The original output tile package URL ending with "wayport.tpkx".
+ * @param alternativeTilePackageName - The replacement filename to use.
+ * @returns The URL with the alternative filename, or the original URL if either param is falsy.
+ */
+export const getAlternativeWayportOutputUrl = (
+    outputUrl: string,
+    alternativeTilePackageName: string
+) => {
+    if (!outputUrl || !alternativeTilePackageName) {
+        return outputUrl;
+    }
+
+    // replace wayport.tpkx at end of the url with the alternative tile package name
+    return outputUrl.replace(/wayport\.tpkx$/, alternativeTilePackageName);
+};
+
+type GetWayportJobOutputInfoHelperResponse = {
+    url: string;
+    size: number;
+    alternativeUrl: string;
+};
+
+/**
+ * Retrieves the output info (URL, size, and alternative URL) for a completed Wayport GP job.
+ *
+ * If the GP job response lacks output results, returns empty/default values.
+ * Also extracts an alternative tile package filename from the job messages to avoid
+ * duplicate-name conflicts when publishing to ArcGIS Online.
+ *
+ * @param jobId - The unique identifier of the GP job.
+ * @param response - The check-job-status response containing results and messages.
+ * @returns An object with the output URL, file size, and an alternative URL with a unique filename.
+ */
+export const getWayportJobOutputInfoHelper = async (
+    jobId: string,
+    response: CheckJobStatusResponse
+): Promise<GetWayportJobOutputInfoHelperResponse> => {
+    if (
+        !response.results ||
+        !response.results.output ||
+        !response.results.output.paramUrl
+    ) {
+        console.error(
+            'No output URL found in GP job results for jobId:',
+            jobId
+        );
+        return {
+            url: '',
+            size: 0,
+            alternativeUrl: '',
+        };
+    }
+
+    // Extract alternative output file name from GP job messages if available.
+    // ArcGIS Online rejects publishing tile packages with duplicate names,
+    // so we use this name instead of the default "wayport.tpkx" to avoid conflicts.
+    const alternativeOutputName =
+        extractAlternativeFileNameFromMessages(response);
+
+    try {
+        const outputInfo = await getJobOutputInfo(jobId);
+
+        if (!outputInfo.url) {
+            throw new Error(
+                'No output URL found in job output info for jobId: ' + jobId
+            );
+        }
+
+        const alternativeUrl = getAlternativeWayportOutputUrl(
+            outputInfo.url,
+            alternativeOutputName
+        );
+
+        return {
+            url: outputInfo.url || '',
+            size: outputInfo.size || 0,
+            alternativeUrl: alternativeUrl || '',
+        };
+    } catch (error) {
+        console.error('Error getting job output info:', error);
+        return {
+            url: '',
+            size: 0,
+            alternativeUrl: '',
+        };
+    }
 };
