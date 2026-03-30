@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
     selectDownloadJobsThatHaveBeenStarted,
     selectNewDownloadJob,
-} from '@store/DownloadMode/selectors';
+} from '@store/WayportMode/selectors';
 import {
     deleteWayportJobs,
     // downloadOutputTilePackage,
@@ -17,7 +17,7 @@ import {
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewWayportJob,
     updateWayportJobStatus,
-} from '@store/DownloadMode/thunks';
+} from '@store/WayportMode/thunks';
 import { JobsList } from './JobsList';
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { IWaybackItem } from '@typings/index';
@@ -26,7 +26,7 @@ import { release } from 'os';
 import {
     DownloadJob,
     timestampOfZoomToDownloadJobExtentRequestUpdated,
-} from '@store/DownloadMode/reducer';
+} from '@store/WayportMode/reducer';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();

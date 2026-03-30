@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
-// import { isDownloadDialogOpenToggled } from '@store/DownloadMode/reducer';
+// import { isDownloadDialogOpenToggled } from '@store/WayportMode/reducer';
 import {
     selectNumOfDownloadJobs,
     selectNumOfFinishedDownloadJobs,
     selectNumOfPendingDownloadJobs,
-} from '@store/DownloadMode/selectors';
+} from '@store/WayportMode/selectors';
 import React from 'react';
 import { useAppSelector } from '@store/configureStore';
 import { useAppDispatch } from '@store/configureStore';
@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 // } from '@store/UI/reducer';
 // import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { selectIsWayportModeOn } from '@store/Map/reducer';
-import { toggleWayportMode } from '@store/DownloadMode/thunks';
+import { toggleWayportMode } from '@store/WayportMode/thunks';
 
 export const DownloadTilePackageDialogToggleButton = () => {
     const dispatch = useAppDispatch();

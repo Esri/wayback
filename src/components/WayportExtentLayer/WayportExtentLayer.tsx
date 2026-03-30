@@ -5,7 +5,7 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import React, { FC, useEffect, useRef } from 'react';
 import { IExtent } from '@typings/index';
 import { useAppSelector } from '@store/configureStore';
-import { selectTimestampOfZoomToDownloadJobExtentRequest } from '@store/DownloadMode/selectors';
+import { selectTimestampOfZoomToDownloadJobExtentRequest } from '@store/WayportMode/selectors';
 
 type Props = {
     mapView: MapView;

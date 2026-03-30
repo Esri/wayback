@@ -3,7 +3,7 @@ import {
     CalciteIcon,
     CalciteLoader,
 } from '@esri/calcite-components-react';
-import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
+import { DownloadJob, DownloadJobStatus } from '@store/WayportMode/reducer';
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

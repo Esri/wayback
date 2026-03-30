@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { DownloadJob } from '@store/DownloadMode/reducer';
+import { DownloadJob } from '@store/WayportMode/reducer';
 
 /**
  * Maximum number of download job entries allowed in IndexedDB

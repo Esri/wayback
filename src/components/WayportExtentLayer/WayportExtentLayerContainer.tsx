@@ -5,13 +5,13 @@ import {
     // selectDownloadJobToDisplayOnMap,
     selectNewDownloadJob,
     selectTimestampOfZoomToDownloadJobExtentRequest,
-} from '@store/DownloadMode/selectors';
+} from '@store/WayportMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
 import React, { FC, use, useEffect, useMemo } from 'react';
 import { WayportExtentLayer } from './WayportExtentLayer';
 // import { useSketchViewModel } from './useSketchViewModel';
 import { useGetTileEstimations } from './useGetEstimatedTileCount';
-import { updateNewWayportJob } from '@store/DownloadMode/thunks';
+import { updateNewWayportJob } from '@store/WayportMode/thunks';
 import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
 import { WayportExtentEditor } from './WayportExtentViewer';
 

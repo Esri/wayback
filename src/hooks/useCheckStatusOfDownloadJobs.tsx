@@ -2,12 +2,12 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
     selectFinishedDownloadJobsWithoutPackageInfo,
     selectNumOfPendingDownloadJobs,
-} from '@store/DownloadMode/selectors';
+} from '@store/WayportMode/selectors';
 import {
     assignTilePackageInfoToDownloadJobs,
     checkPendingWayportJobStatus,
     clearWayportJobs,
-} from '@store/DownloadMode/thunks';
+} from '@store/WayportMode/thunks';
 import React, { use, useEffect } from 'react';
 
 const CHECK_JOB_STATUS_INTERVAL = 5 * 1000; // 5 seconds

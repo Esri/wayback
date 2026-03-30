@@ -1,4 +1,4 @@
-import { DownloadJobProgressInfo } from '@store/DownloadMode/reducer';
+import { DownloadJobProgressInfo } from '@store/WayportMode/reducer';
 import { CheckJobStatusResponse } from './wayportGPService';
 
 /**

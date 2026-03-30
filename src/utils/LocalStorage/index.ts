@@ -14,7 +14,7 @@
  */
 
 // import { ReferenceLayerLanguage } from '@constants/map';
-// import { DownloadJob } from '@store/DownloadMode/reducer';
+// import { DownloadJob } from '@store/WayportMode/reducer';
 // import { MapCenter } from '@store/Map/reducer';
 
 enum KEYS {

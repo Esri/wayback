@@ -1,6 +1,6 @@
 import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/wayport/getTileEstimationsInOutputBundle';
-import { DownloadJob } from '@store/DownloadMode/reducer';
+import { DownloadJob } from '@store/WayportMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo, useState } from 'react';

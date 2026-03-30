@@ -36,10 +36,10 @@ import { AppContext } from '@contexts/AppContextProvider';
 import {
     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
     initiateNewWayportJob,
-} from '@store/DownloadMode/thunks';
+} from '@store/WayportMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
-import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/DownloadMode/selectors';
+import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/WayportMode/selectors';
 
 type Props = {
     children?: React.ReactNode;

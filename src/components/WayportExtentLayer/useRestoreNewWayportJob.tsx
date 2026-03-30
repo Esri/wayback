@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@store/configureStore';
-import { restoreNewWayportJobFromSessionStorage } from '@store/DownloadMode/thunks';
+import { restoreNewWayportJobFromSessionStorage } from '@store/WayportMode/thunks';
 import { getSignedInUser } from '@utils/Esri-OAuth';
 import React, { useEffect } from 'react';
 

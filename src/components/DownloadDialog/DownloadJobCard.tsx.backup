@@ -15,7 +15,7 @@
 
 // import React, { FC, useEffect, useMemo } from 'react';
 // import classnames from 'classnames';
-// import { DownloadJob, DownloadJobStatus } from '@store/DownloadMode/reducer';
+// import { DownloadJob, DownloadJobStatus } from '@store/WayportMode/reducer';
 // import { numberFns } from 'helper-toolkit-ts';
 // import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/wayport/getTileEstimationsInOutputBundle';
 // import {

@@ -18,14 +18,14 @@
 // import {
 //     downloadJobRemoved,
 //     // isDownloadDialogOpenToggled,
-// } from '@store/DownloadMode/reducer';
+// } from '@store/WayportMode/reducer';
 
 // import {
 //     selectDownloadJobs,
 //     selectIsAddingNewDownloadJob,
 //     // selectIsDownloadDialogOpen,
 //     selectNumOfPendingDownloadJobs,
-// } from '@store/DownloadMode/selectors';
+// } from '@store/WayportMode/selectors';
 
 // import { DownloadDialog } from './DownloadDialog';
 // import { useAppDispatch } from '@store/configureStore';
@@ -41,7 +41,7 @@
 //     updateUserSelectedZoomLevels,
 //     downloadOutputTilePackage,
 //     cleanUpDownloadJobs,
-// } from '@store/DownloadMode/thunks';
+// } from '@store/WayportMode/thunks';
 // import {
 //     activeDialogUpdated,
 //     isDownloadTilePackageDialogOpenSelector,

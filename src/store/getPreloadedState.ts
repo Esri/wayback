@@ -47,17 +47,12 @@ import {
 } from './AnimationMode/reducer';
 
 import {
-    DownloadModeState,
-    initialDownloadModeState,
-    DownloadJob,
-} from './DownloadMode/reducer';
-import {
     IS_MOBILE,
     SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL,
 } from '@constants/UI';
 import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
-import { getPreloadedState4Downloadmode } from './DownloadMode/getPreloadedState';
+import { getPreloadedState4Downloadmode } from './WayportMode/getPreloadedState';
 import { getSignedInUser } from '@utils/Esri-OAuth';
 
 const getPreloadedState4UI = (

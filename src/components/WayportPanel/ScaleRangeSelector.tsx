@@ -2,7 +2,7 @@ import { CalciteSlider } from '@esri/calcite-components-react';
 import {
     DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-} from '@store/DownloadMode/thunks';
+} from '@store/WayportMode/thunks';
 import React, { useState, useRef, useEffect } from 'react';
 
 type ScaleRangeSelectorProps = {
