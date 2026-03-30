@@ -24,7 +24,7 @@
 //     selectDownloadJobs,
 //     selectIsAddingNewDownloadJob,
 //     // selectIsDownloadDialogOpen,
-//     selectNumOfPendingDownloadJobs,
+//     selectNumOfPendingWayportJobs,
 // } from '@store/WayportMode/selectors';
 
 // import { DownloadDialog } from './DownloadDialog';
@@ -57,7 +57,7 @@
 
 //     const jobs = useAppSelector(selectDownloadJobs);
 
-//     const numPendingJobs = useAppSelector(selectNumOfPendingDownloadJobs);
+//     const numPendingJobs = useAppSelector(selectNumOfPendingWayportJobs);
 
 //     const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
 

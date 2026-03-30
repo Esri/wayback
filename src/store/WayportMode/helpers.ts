@@ -12,7 +12,7 @@ const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
  * we can restore the job they were creating instead of losing all the information they have inputed and making them start from scratch on creating a new job after signing in.
  * @param job
  */
-export const saveNewDownloadJobToSessionStorage = (job: WayportJob) => {
+export const saveNewWayportJobToSessionStorage = (job: WayportJob) => {
     sessionStorage.setItem(
         TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY,
         JSON.stringify(job)
@@ -25,7 +25,7 @@ export const saveNewDownloadJobToSessionStorage = (job: WayportJob) => {
  * we need to assign the userId to the job after the user signs in and we retrieve the job from session storage, so that when we create the job in the backend, we can associate the job with the correct user.
  * @returns
  */
-export const getNewDownloadJobFromSessionStorage = (): WayportJob | null => {
+export const getNewWayportJobFromSessionStorage = (): WayportJob | null => {
     const jobString = sessionStorage.getItem(
         TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY
     );

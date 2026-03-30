@@ -16,8 +16,8 @@
 // import { isDownloadDialogOpenToggled } from '@store/WayportMode/reducer';
 import {
     selectNumOfDownloadJobs,
-    selectNumOfFinishedDownloadJobs,
-    selectNumOfPendingDownloadJobs,
+    selectNumOfFinishedWayportJobs,
+    selectNumOfPendingWayportJobs,
 } from '@store/WayportMode/selectors';
 import React from 'react';
 import { useAppSelector } from '@store/configureStore';
@@ -41,9 +41,9 @@ export const DownloadTilePackageDialogToggleButton = () => {
 
     const numOfJobs = useAppSelector(selectNumOfDownloadJobs);
 
-    // const numOfPendingJobs = useAppSelector(selectNumOfPendingDownloadJobs);
+    // const numOfPendingJobs = useAppSelector(selectNumOfPendingWayportJobs);
 
-    const numOfFinishedJobs = useAppSelector(selectNumOfFinishedDownloadJobs);
+    const numOfFinishedJobs = useAppSelector(selectNumOfFinishedWayportJobs);
 
     // const shouldBeDisabled = numOfJobs === 0;
 

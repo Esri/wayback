@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    selectFinishedDownloadJobsWithoutPackageInfo,
-    selectNumOfPendingDownloadJobs,
+    selectFinishedWayportobsWithoutPackageInfo,
+    selectNumOfPendingWayportJobs,
 } from '@store/WayportMode/selectors';
 import {
     assignTilePackageInfoToDownloadJobs,
@@ -19,12 +19,12 @@ const CHECK_JOB_STATUS_INTERVAL = 5 * 1000; // 5 seconds
 export const useCheckStatusOfDownloadJobs = () => {
     // get the count of pending download jobs from the store
     const countOfPendingDownloadJobs = useAppSelector(
-        selectNumOfPendingDownloadJobs
+        selectNumOfPendingWayportJobs
     );
 
     // get the list of finished download jobs that don't have tile package info assigned yet
     const finishedDownloadJobsWithoutPackageInfo = useAppSelector(
-        selectFinishedDownloadJobsWithoutPackageInfo
+        selectFinishedWayportobsWithoutPackageInfo
     );
 
     const dispatch = useAppDispatch();

@@ -39,7 +39,7 @@ import {
 } from '@store/WayportMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
-import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/WayportMode/selectors';
+import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
 
 type Props = {
     children?: React.ReactNode;
@@ -71,7 +71,7 @@ const ListViewContainer = () => {
     );
 
     const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
-        selectHasReachedLimitOfConcurrentDownloadJobs
+        selectHasReachedLimitOfConcurrentWayportJobs
     );
 
     const { zoom } = useAppSelector(selectMapCenterAndZoom);

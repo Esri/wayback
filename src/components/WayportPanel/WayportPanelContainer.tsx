@@ -5,9 +5,9 @@ import { signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    selectDownloadJobsThatHaveBeenStarted,
+    selectWayportJobsThatHaveBeenStarted,
     selectIdOfJobToShowExtentOnMap,
-    selectNewDownloadJob,
+    selectNewWayportJob,
 } from '@store/WayportMode/selectors';
 import {
     deleteWayportJobs,
@@ -24,10 +24,7 @@ import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
 import { release } from 'os';
-import {
-    WayportJob,
-    timestampOfZoomToDownloadJobExtentRequestUpdated,
-} from '@store/WayportMode/reducer';
+import { WayportJob } from '@store/WayportMode/reducer';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -41,11 +38,9 @@ export const WayportPanelContainer = () => {
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
-    const newDownloadJob = useAppSelector(selectNewDownloadJob);
+    const newDownloadJob = useAppSelector(selectNewWayportJob);
 
-    const jobsHasStarted = useAppSelector(
-        selectDownloadJobsThatHaveBeenStarted
-    );
+    const jobsHasStarted = useAppSelector(selectWayportJobsThatHaveBeenStarted);
 
     const idOfJobToShowExtentOnMap = useAppSelector(
         selectIdOfJobToShowExtentOnMap

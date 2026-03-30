@@ -227,13 +227,13 @@ const slice = createSlice({
     name: 'WayportMode',
     initialState: initialWayportModeState,
     reducers: {
-        downloadJobCreated: (state, action: PayloadAction<WayportJob>) => {
+        wayportJobCreated: (state, action: PayloadAction<WayportJob>) => {
             const { id } = action.payload;
             state.jobs.byId[id] = action.payload;
             state.jobs.ids = [id, ...state.jobs.ids];
             state.idOfJobBeingCreated = id;
         },
-        downloadJobRemoved: (state, action: PayloadAction<string>) => {
+        wayportJobRemoved: (state, action: PayloadAction<string>) => {
             const idOfJob2BeRemoved = action.payload;
             delete state.jobs.byId[idOfJob2BeRemoved];
             state.jobs.ids = state.jobs.ids.filter(
@@ -244,7 +244,7 @@ const slice = createSlice({
                 state.idOfJobBeingCreated = null;
             }
         },
-        downloadJobsUpdated: (state, action: PayloadAction<WayportJob[]>) => {
+        wayportJobsUpdated: (state, action: PayloadAction<WayportJob[]>) => {
             for (const job of action.payload) {
                 const { id } = job;
                 state.jobs.byId[id] = job;
@@ -270,12 +270,12 @@ const slice = createSlice({
             state.timestampOfZoomToDownloadJobExtentRequest =
                 action.payload?.requestedOn;
         },
-        timestampOfZoomToDownloadJobExtentRequestUpdated: (
-            state,
-            action: PayloadAction<number>
-        ) => {
-            state.timestampOfZoomToDownloadJobExtentRequest = action.payload;
-        },
+        // timestampOfZoomToDownloadJobExtentRequestUpdated: (
+        //     state,
+        //     action: PayloadAction<number>
+        // ) => {
+        //     state.timestampOfZoomToDownloadJobExtentRequest = action.payload;
+        // },
     },
 });
 
@@ -284,13 +284,13 @@ const { reducer } = slice;
 export const {
     // isDownloadDialogOpenToggled,
     // isAddingNewDownloadJobToggled,
-    downloadJobCreated,
-    downloadJobRemoved,
-    downloadJobsUpdated,
+    wayportJobCreated,
+    wayportJobRemoved,
+    wayportJobsUpdated,
     errorMessageUpdated,
     idOfJobBeingCreatedUpdated,
     idOfJobToShowExtentOnMapUpdated,
-    timestampOfZoomToDownloadJobExtentRequestUpdated,
+    // timestampOfZoomToDownloadJobExtentRequestUpdated,
 } = slice.actions;
 
 export default reducer;

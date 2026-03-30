@@ -19,9 +19,9 @@ import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     WayportJob,
     WayportJobStatus,
-    downloadJobCreated,
-    downloadJobRemoved,
-    downloadJobsUpdated,
+    wayportJobCreated,
+    wayportJobRemoved,
+    wayportJobsUpdated,
     errorMessageUpdated,
     idOfJobBeingCreatedUpdated,
     idOfJobToShowExtentOnMapUpdated,
@@ -40,13 +40,13 @@ import {
     submitJob,
 } from '@services/wayport/wayportGPService';
 import {
-    selectDownloadJobById,
-    selectDownloadJobsThatHaveFinished,
-    selectFinishedDownloadJobsWithoutPackageInfo,
+    selectWayportJobById,
+    selectWayportJobsThatHaveFinished,
+    selectFinishedWayportobsWithoutPackageInfo,
     // selectDownloadJobs,
-    selectNewDownloadJob,
-    selectPendingDownloadJobs,
-    selectStaleDownloadJobs,
+    selectNewWayportJob,
+    selectPendingWayportJobs,
+    selectStaleWayportJobs,
 } from './selectors';
 // import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
 import { MapMode, selectMapMode } from '@store/Map/reducer';
@@ -60,9 +60,9 @@ import { wayportJobsStore } from '@utils/wayportJobsStore';
 import {
     getAlternativeWayportOutputUrl,
     getDataToUpdateTilesOfWayportTileLayer,
-    getNewDownloadJobFromSessionStorage,
+    getNewWayportJobFromSessionStorage,
     normalizeExtent,
-    saveNewDownloadJobToSessionStorage,
+    saveNewWayportJobToSessionStorage,
 } from './helpers';
 import {
     extractAlternativeFileNameFromMessages,
@@ -103,7 +103,7 @@ export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
 export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
 
 /**
- * Prepares the application state for a new download job.
+ * Prepares the application state for a new wayport job.
  *
  * @param releaseNum - The release number to set as the active wayback item
  * @returns A thunk function that dispatches actions to update the store
@@ -113,7 +113,7 @@ export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
  * - Switches the map mode to 'wayport'
  * - Sets the active wayback item to the specified release number
  * - Closes the preview window by clearing the active preview item
- * - Toggles the "adding new download job" flag to indicate a new job is being created
+ * - Toggles the "adding new wayport job" flag to indicate a new job is being created
  */
 const prepareForNewDownloadJob =
     (releaseNum: number) => (dispatch: StoreDispatch) => {
@@ -135,11 +135,11 @@ const prepareForNewDownloadJob =
     };
 
 /**
- * Initiates a new download job with the specified release number and extent.
+ * Initiates a new wayport job with the specified release number and extent.
  *
- * @param params - The parameters for initiating the download job
+ * @param params - The parameters for initiating the wayport job
  * @param params.releaseNum - The release number of the wayback item to download
- * @param params.extent - The geographic extent for the download job
+ * @param params.extent - The geographic extent for the wayport job
  */
 export const initiateNewWayportJob =
     ({ releaseNum, extent }: InitiateDownloadJobParams) =>
@@ -158,14 +158,14 @@ export const initiateNewWayportJob =
             return;
         }
 
-        // prepare application state for new download job
+        // prepare application state for new wayport job
         dispatch(prepareForNewDownloadJob(releaseNum));
 
         const { WaybackItems } = getState();
 
         const { byReleaseNumber } = WaybackItems;
 
-        // get the signed in user id to associate with this download job
+        // get the signed in user id to associate with this wayport job
         const signedInUserId = getSignedInUser();
 
         const userId = signedInUserId?.username || '';
@@ -191,8 +191,8 @@ export const initiateNewWayportJob =
         };
 
         if (!userId) {
-            // save the new download job data to session storage so that we can restore the job after user signs in
-            saveNewDownloadJobToSessionStorage(newDownloadJobToAdd);
+            // save the new wayport job data to session storage so that we can restore the job after user signs in
+            saveNewWayportJobToSessionStorage(newDownloadJobToAdd);
 
             signIn();
 
@@ -203,7 +203,7 @@ export const initiateNewWayportJob =
     };
 
 /**
- * This thunk function is used to update the new download job data when user adjust the export extent or zoom levels.
+ * This thunk function is used to update the new wayport job data when user adjust the export extent or zoom levels.
  * @param updatedJobData
  * @returns
  */
@@ -218,15 +218,15 @@ export const updateNewWayportJob =
         tileEstimations?: TileEstimation[];
     }) =>
     (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const newJob = selectNewDownloadJob(getState());
+        const newJob = selectNewWayportJob(getState());
 
         if (!newJob) {
-            console.error('No new download job found to update');
+            console.error('No new wayport job found to update');
             return;
         }
 
         if (newJob.status !== 'not started') {
-            // console.error('the status of the new download job is not "not started", cannot update the new download job data');
+            // console.error('the status of the new wayport job is not "not started", cannot update the new wayport job data');
             return;
         }
 
@@ -250,16 +250,16 @@ export const updateNewWayportJob =
     };
 
 /**
- * Restores a new download job from session storage and dispatches it to the store.
+ * Restores a new wayport job from session storage and dispatches it to the store.
  *
- * This thunk checks if a user is signed in and if a download job exists in session storage.
- * If both conditions are met, it dispatches the stored download job to create a new download job in the store.
+ * This thunk checks if a user is signed in and if a wayport job exists in session storage.
+ * If both conditions are met, it dispatches the stored wayport job to create a new wayport job in the store.
  *
  * @returns A thunk function that takes a dispatch parameter and returns void
  *
  * @remarks
  * - If no user is signed in, the operation is skipped silently
- * - If no download job is found in session storage, the operation is skipped silently
+ * - If no wayport job is found in session storage, the operation is skipped silently
  */
 export const restoreNewWayportJobFromSessionStorage =
     () => (dispatch: StoreDispatch) => {
@@ -270,7 +270,7 @@ export const restoreNewWayportJobFromSessionStorage =
             return;
         }
 
-        const newWayportJobFromStorage = getNewDownloadJobFromSessionStorage();
+        const newWayportJobFromStorage = getNewWayportJobFromSessionStorage();
 
         if (!newWayportJobFromStorage) {
             // console.log('No new wayport job found in session storage to restore');
@@ -301,10 +301,10 @@ export const startWayportJob =
         //     return;
         // }
 
-        const newDownloadJob = selectNewDownloadJob(getState());
+        const newDownloadJob = selectNewWayportJob(getState());
 
         if (!newDownloadJob) {
-            console.error('No new download job found to start');
+            console.error('No new wayport job found to start');
             return;
         }
 
@@ -319,7 +319,7 @@ export const startWayportJob =
         try {
             if (!userId) {
                 throw new Error(
-                    'Missing user ID for the download job. Please make sure you are signed in before starting the download job.'
+                    'Missing user ID for the wayport job. Please make sure you are signed in before starting the wayport job.'
                 );
             }
 
@@ -350,9 +350,9 @@ export const startWayportJob =
     };
 
 /**
- * Updates the status of a download job with the specified ID.
- * @param id The ID of the download job to update
- * @param status The new status to set for the download job
+ * Updates the status of a wayport job with the specified ID.
+ * @param id The ID of the wayport job to update
+ * @param status The new status to set for the wayport job
  * @returns A thunk function that takes a dispatch parameter and returns void
  */
 export const updateWayportJobStatus =
@@ -362,7 +362,7 @@ export const updateWayportJobStatus =
 
         // const jobToBeUpdated = jobs.find((job) => job.id === id);
 
-        const jobToBeUpdated = selectDownloadJobById(getState(), id);
+        const jobToBeUpdated = selectWayportJobById(getState(), id);
 
         if (!jobToBeUpdated) {
             console.error('cannot find job data with job id of %s', id);
@@ -378,14 +378,14 @@ export const updateWayportJobStatus =
     };
 
 /**
- * This thunk function is used to check the status of pending download jobs, and update the job status in the store based on the response from Wayport GP service.
+ * This thunk function is used to check the status of pending wayport jobs, and update the job status in the store based on the response from Wayport GP service.
  * @returns
  */
 export const checkPendingWayportJobStatus =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // clearTimeout(checkDownloadJobStatusTimeout);
 
-        const pendingJobs = selectPendingDownloadJobs(getState());
+        const pendingJobs = selectPendingWayportJobs(getState());
 
         if (!pendingJobs.length) {
             return;
@@ -501,7 +501,7 @@ export const checkPendingWayportJobStatus =
 // export const downloadOutputTilePackage =
 //     (jobId: string) =>
 //     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const jobToBeDownloaded = selectDownloadJobById(getState(), jobId);
+//         const jobToBeDownloaded = selectWayportJobById(getState(), jobId);
 
 //         if (!jobToBeDownloaded) {
 //             console.error('cannot find job data with job id of %s', jobId);
@@ -537,7 +537,7 @@ export const publishWayportTilePackageAsTileLayer =
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log('Publishing tile layer for job with id: ', jobId);
 
-        const jobToBePublished = selectDownloadJobById(getState(), jobId);
+        const jobToBePublished = selectWayportJobById(getState(), jobId);
 
         if (!jobToBePublished) {
             console.error('cannot find job data with job id of %s', jobId);
@@ -683,16 +683,16 @@ export const publishWayportTilePackageAsTileLayer =
     };
 
 /**
- * remove download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
+ * remove wayport jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
  * @returns
  */
 export const clearWayportJobs =
     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const jobs = selectDownloadJobsThatHaveFinished(getState());
+        const jobs = selectWayportJobsThatHaveFinished(getState());
 
         if (!jobs.length) {
             console.log(
-                'No finished download job found, skipping cleaning up download jobs'
+                'No finished wayport job found, skipping cleaning up wayport jobs'
             );
             return;
         }
@@ -734,7 +734,7 @@ export const clearWayportJobs =
 export const assignTilePackageInfoToDownloadJobs =
     (finishedDownloadJobsWithoutPackageInfo: WayportJob[]) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        // const finishedDownloadJobsWithoutPackageInfo = selectFinishedDownloadJobsWithoutPackageInfo(getState());
+        // const finishedDownloadJobsWithoutPackageInfo = selectFinishedWayportobsWithoutPackageInfo(getState());
 
         if (!finishedDownloadJobsWithoutPackageInfo.length) {
             return;
@@ -775,46 +775,46 @@ export const assignTilePackageInfoToDownloadJobs =
     };
 
 /**
- * This thunk function is used to create a new download job and persist it to IndexedDB when user add a wayback item to the download list.
- * It dispatches the action to update the store with the new download job data only after the new download job is successfully persisted to IndexedDB,
+ * This thunk function is used to create a new wayport job and persist it to IndexedDB when user add a wayback item to the download list.
+ * It dispatches the action to update the store with the new wayport job data only after the new wayport job is successfully persisted to IndexedDB,
  * so that we can ensure the store is always in sync with IndexedDB.
  *
- * @param jobData data of the new download job to be created and added to the store and persisted to IndexedDB
+ * @param jobData data of the new wayport job to be created and added to the store and persisted to IndexedDB
  * @returns void
  */
 const createWayportJobHelper =
     (jobToBeCreated: WayportJob) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const staleDownloadJobs = selectStaleDownloadJobs(getState());
+        const staleDownloadJobs = selectStaleWayportJobs(getState());
 
         try {
-            // Clear up stale download jobs before adding the new download job to
-            // avoid potential conflict between the new download job and the stale download jobs
+            // Clear up stale wayport jobs before adding the new wayport job to
+            // avoid potential conflict between the new wayport job and the stale wayport jobs
             if (staleDownloadJobs && staleDownloadJobs.length > 0) {
                 await dispatch(deleteWayportJobs(staleDownloadJobs));
             }
 
             await wayportJobsStore.addJob(jobToBeCreated);
-            dispatch(downloadJobCreated(jobToBeCreated));
+            dispatch(wayportJobCreated(jobToBeCreated));
         } catch (err) {
-            console.error('Failed to add download job to IndexedDB:', err);
+            console.error('Failed to add wayport job to IndexedDB:', err);
             // return;
 
             dispatch(
                 errorMessageUpdated(
-                    `Failed to create download job. Error: ${err.message || 'Unknown error'}`
+                    `Failed to create wayport job. Error: ${err.message || 'Unknown error'}`
                 )
             );
         }
     };
 
 /**
- * This thunk function is used to update the download job data when there is any change for the existing download jobs,
+ * This thunk function is used to update the wayport job data when there is any change for the existing wayport jobs,
  * such as when user adjust the export extent/zoom levels for a pending job,
  * or when the status/tile package info of a pending job is updated after checking with Wayport GP service.
  *
- * It also persists the updated download job data to IndexedDB so that the download job data can be retained even after page refresh.
- * @param updatedJobsData an array of updated download job data to be updated in the store and persisted to IndexedDB
+ * It also persists the updated wayport job data to IndexedDB so that the wayport job data can be retained even after page refresh.
+ * @param updatedJobsData an array of updated wayport job data to be updated in the store and persisted to IndexedDB
  * @returns
  */
 const updateWayportJobsHelper =
@@ -836,21 +836,21 @@ const updateWayportJobsHelper =
                 await wayportJobsStore.updateJob(job);
             }
 
-            dispatch(downloadJobsUpdated(updatedJobsData));
+            dispatch(wayportJobsUpdated(updatedJobsData));
         } catch (err) {
-            console.error('Failed to update download jobs in IndexedDB:', err);
+            console.error('Failed to update wayport jobs in IndexedDB:', err);
 
             dispatch(
                 errorMessageUpdated(
-                    `Failed to update download job. Error: ${err.message || 'Unknown error'}`
+                    `Failed to update wayport job. Error: ${err.message || 'Unknown error'}`
                 )
             );
         }
     };
 
 /**
- * This thunk function is used to delete download jobs from the store and IndexedDB when user delete download jobs from the download list in the UI.
- * @param jobsToBeDeleted an array of download jobs to be deleted from the store and IndexedDB
+ * This thunk function is used to delete wayport jobs from the store and IndexedDB when user delete wayport jobs from the download list in the UI.
+ * @param jobsToBeDeleted an array of wayport jobs to be deleted from the store and IndexedDB
  * @returns void
  */
 export const deleteWayportJobs =
@@ -863,14 +863,14 @@ export const deleteWayportJobs =
                 }
 
                 await wayportJobsStore.deleteJob(job.id);
-                dispatch(downloadJobRemoved(job.id));
+                dispatch(wayportJobRemoved(job.id));
             }
         } catch (err) {
-            console.error('Failed to delete download job from IndexedDB:', err);
+            console.error('Failed to delete wayport job from IndexedDB:', err);
 
             dispatch(
                 errorMessageUpdated(
-                    `Failed to delete download job. Error: ${err.message || 'Unknown error'}`
+                    `Failed to delete wayport job. Error: ${err.message || 'Unknown error'}`
                 )
             );
         }

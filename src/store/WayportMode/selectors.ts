@@ -22,7 +22,7 @@ import { RootState } from '../configureStore';
 // export const selectIsAddingNewDownloadJob = (state: RootState) =>
 //     state.WayportMode.isAddingNewDownloadJob;
 
-export const selectNewDownloadJob = createSelector(
+export const selectNewWayportJob = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (state: RootState) => state.WayportMode.idOfJobBeingCreated,
     (jobs, idOfJobBeingCreated) => {
@@ -44,7 +44,7 @@ export const selectNewDownloadJob = createSelector(
  * A job is considered stale if its status is still 'not started' and it is
  * not the job currently being created by the user.
  */
-export const selectStaleDownloadJobs = createSelector(
+export const selectStaleWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (state: RootState) => state.WayportMode.idOfJobBeingCreated,
     (jobs, idOfJobBeingCreated) => {
@@ -70,7 +70,7 @@ export const selectStaleDownloadJobs = createSelector(
 //     }
 // );
 
-export const selectDownloadJobById = (state: RootState, id: string) =>
+export const selectWayportJobById = (state: RootState, id: string) =>
     state.WayportMode.jobs.byId[id];
 
 export const selectNumOfDownloadJobs = createSelector(
@@ -78,7 +78,7 @@ export const selectNumOfDownloadJobs = createSelector(
     (jobs) => jobs.ids.length
 );
 
-export const selectNumOfPendingDownloadJobs = createSelector(
+export const selectNumOfPendingWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -87,12 +87,12 @@ export const selectNumOfPendingDownloadJobs = createSelector(
     }
 );
 
-export const selectHasReachedLimitOfConcurrentDownloadJobs = createSelector(
-    selectNumOfPendingDownloadJobs,
+export const selectHasReachedLimitOfConcurrentWayportJobs = createSelector(
+    selectNumOfPendingWayportJobs,
     (numOfPendingJobs) => numOfPendingJobs >= 5
 );
 
-export const selectFinishedDownloadJobsWithoutPackageInfo = createSelector(
+export const selectFinishedWayportobsWithoutPackageInfo = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -113,7 +113,7 @@ export const selectFinishedDownloadJobsWithoutPackageInfo = createSelector(
     }
 );
 
-export const selectNumOfFinishedDownloadJobs = createSelector(
+export const selectNumOfFinishedWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -125,7 +125,7 @@ export const selectNumOfFinishedDownloadJobs = createSelector(
     }
 );
 
-export const selectPendingDownloadJobs = createSelector(
+export const selectPendingWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -138,7 +138,7 @@ export const selectPendingDownloadJobs = createSelector(
     }
 );
 
-export const selectDownloadJobsThatHaveBeenStarted = createSelector(
+export const selectWayportJobsThatHaveBeenStarted = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -151,7 +151,7 @@ export const selectDownloadJobsThatHaveBeenStarted = createSelector(
     }
 );
 
-export const selectDownloadJobsThatHaveFinished = createSelector(
+export const selectWayportJobsThatHaveFinished = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
@@ -169,7 +169,7 @@ export const selectDownloadJobsThatHaveFinished = createSelector(
     }
 );
 
-export const selectDownloadJobToShowExtentOnMap = createSelector(
+export const selectWayportJobToShowExtentOnMap = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (state: RootState) => state.WayportMode.idOfJobToShowExtentOnMap,
     (jobs, idOfJobToShowExtentOnMap) => {

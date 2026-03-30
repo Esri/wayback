@@ -1,9 +1,9 @@
 import MapView from '@arcgis/core/views/MapView';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
-    selectDownloadJobToShowExtentOnMap,
+    selectWayportJobToShowExtentOnMap,
     // selectDownloadJobToDisplayOnMap,
-    selectNewDownloadJob,
+    selectNewWayportJob,
     selectTimestampOfZoomToDownloadJobExtentRequest,
 } from '@store/WayportMode/selectors';
 import { selectMapMode } from '@store/Map/reducer';
@@ -24,7 +24,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
 
     const mode = useAppSelector(selectMapMode);
 
-    const newDownloadJob = useAppSelector(selectNewDownloadJob);
+    const newDownloadJob = useAppSelector(selectNewWayportJob);
 
     /**
      * Timestamp of when the zoom to download job extent on map request is made.
@@ -37,9 +37,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     // This preserves the job being created if the user needed to authenticate
     useRestoreNewWayportJob();
 
-    const jobToDisplayOnMap = useAppSelector(
-        selectDownloadJobToShowExtentOnMap
-    );
+    const jobToDisplayOnMap = useAppSelector(selectWayportJobToShowExtentOnMap);
 
     // The extent should only be editable if the job is in 'not started' status. Once the job has been started, the extent should be locked in and not editable.
     const extentOfNewDownloadJob = useMemo(() => {
