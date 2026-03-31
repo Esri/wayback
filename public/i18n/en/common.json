@@ -419,7 +419,7 @@
     "adding_tile_package_item_status": "Adding Tile Package",
     "publishing_tile_layer_status": "Publishing Tile Layer",
     "updating_tiles_status": "Publishing Tiles",
-    "finished_publishing_tile_layer_status": "Tile Layer Published",
+    "finished_publishing_tile_layer_status": "Tile Layer is Ready",
     "failed_publishing_tile_layer_status": "Failed Publishing Tile Layer",
     "open_wayport_tile_layer": "Open Tile Layer",
     "publish_wayport_tile_layer": "Publish as Tile Layer"

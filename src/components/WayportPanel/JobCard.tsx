@@ -111,11 +111,8 @@ export const JobCard: FC<JobCardProps> = ({
             );
         }
 
-        // if the job is finished/or downloaded but the tile layer is not published yet, show the buttons to download the tile package or publish the tile layer
-        if (
-            (status === 'finished' || status === 'downloaded') &&
-            !publishWayportTileLayerStatus
-        ) {
+        // if the job is finished but the tile package is not published or downloaded yet, show the buttons to download the tile package or publish the tile layer
+        if (status === 'finished' && !publishWayportTileLayerStatus) {
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton
@@ -142,12 +139,8 @@ export const JobCard: FC<JobCardProps> = ({
                             job
                         )}
                         label={t('download_tile_package')}
-                        // disabled={!job.outputTilePackageInfo?.url}
-                        disabled={status === 'downloaded'}
                     >
-                        {status === 'downloaded'
-                            ? t('downloaded_tile_package')
-                            : t('download_tile_package')}
+                        {t('download_tile_package')}
                     </CalciteButton>
                 </div>
             );
