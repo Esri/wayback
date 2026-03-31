@@ -88,7 +88,7 @@ export const DownloadTilePackageDialogToggleButton = () => {
     return (
         <div
             className={classnames(
-                'relative w-full text-center py-2 mb-1 px-1 cursor-pointer z-10',
+                'relative w-full text-center py-2 my-1 px-1 cursor-pointer z-10',
                 // {
                 //     disabled: numOfJobs === 0,
                 // }
@@ -116,7 +116,7 @@ export const DownloadTilePackageDialogToggleButton = () => {
                     dispatch(toggleWayportMode());
                 }}
             >
-                <CalciteIcon icon="download-to" scale="l" />
+                <CalciteIcon icon="export" scale="l" />
             </button>
             {getIndicator()}
         </div>

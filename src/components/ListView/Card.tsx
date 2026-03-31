@@ -152,7 +152,7 @@ export const ListViewCard: FC<Props> = ({
                             title={downloadButtonTooltipText}
                             aria-label={downloadButtonTooltipText}
                         >
-                            <CalciteIcon icon="download-to" scale="m" />
+                            <CalciteIcon icon="export" scale="m" />
                         </button>
 
                         <button

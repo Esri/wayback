@@ -134,7 +134,7 @@ export const JobCard: FC<JobCardProps> = ({
                     <CalciteButton
                         class="mt-2"
                         scale="s"
-                        appearance="outline"
+                        appearance="solid"
                         iconStart="download-to"
                         width="full"
                         onClick={downlaodTilePackageButtonOnClick.bind(

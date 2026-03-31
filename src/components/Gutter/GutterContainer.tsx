@@ -95,11 +95,11 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
             <AnimationModeToggleButton />
 
-            <UpdatesModeToggleButton />
-
             <DownloadTilePackageDialogToggleButton />
 
             <SaveWebmapDialogToggleButton />
+
+            <UpdatesModeToggleButton />
 
             {/* only show user avatar when the height is sufficient */}
             <div className="absolute bottom-0 left-0 w-full hidden [@media(min-height:450px)]:block">
