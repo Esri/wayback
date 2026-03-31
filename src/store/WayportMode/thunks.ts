@@ -71,7 +71,10 @@ import {
 } from '@services/wayport/wayportHelpers';
 import { createTilePackageItemAndWaitForCompletion } from '@services/hosted-tile-layer/addTilePackageItem';
 import { ARCGIS_PROTAL_ROOT } from '@constants/index';
-import { publishTiledLayer } from '@services/hosted-tile-layer/publishTiledLayer';
+import {
+    publishTiledLayer,
+    updatePublishedTileLayer,
+} from '@services/hosted-tile-layer/publishTiledLayer';
 import { updateTilesAndWaitForCompletion } from '@services/hosted-tile-layer/updateTiles';
 
 type InitiateDownloadJobParams = {
@@ -623,6 +626,15 @@ export const publishWayportTilePackageAsTileLayer =
                 username: signedInUser.username,
                 portalRoot: ARCGIS_PROTAL_ROOT,
                 wayportJobId: jobId,
+            });
+
+            // after the service is published successfully, call update API to update the item information of the published service item
+            // to make it easier for users to identify the service item in their content
+            await updatePublishedTileLayer({
+                serviceItemId: serviceResult.serviceItemId,
+                token,
+                portalRoot: ARCGIS_PROTAL_ROOT,
+                wayprotJob: jobToBePublished,
             });
 
             // mark the job as published successfully with the service item id and service url

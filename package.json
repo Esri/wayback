@@ -99,6 +99,7 @@
     },
     "dependencies": {
         "@arcgis/core": "4.34",
+        "@esri/arcgis-rest-portal": "^4.10.1",
         "@esri/calcite-components-react": "^3.3.3",
         "@esri/wayback-core": "^1.0.10",
         "@reduxjs/toolkit": "^2.6.1",

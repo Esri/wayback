@@ -1,3 +1,7 @@
+import { getItem } from '@services/portal-item/getItem';
+import { updateItem } from '@services/portal-item/updateItem';
+import { WayportJob } from '@store/WayportMode/reducer';
+import { logger } from '@utils/IndexedDBLogger';
 import { nanoid } from 'nanoid';
 
 type PublishTiledLayerParams = {
@@ -149,4 +153,90 @@ export const publishTiledLayer = async ({
     }
 
     return serviceResult;
+};
+
+type UpdatePublishedTileLayerParams = {
+    /**
+     * The ID of the already published service item to update.
+     */
+    serviceItemId: string;
+    /**
+     * Wayport job information that will be used to update the name of the published layer item for easier identification
+     */
+    wayprotJob: WayportJob;
+    /**
+     * Authentication token for the ArcGIS Portal API.
+     */
+    token: string;
+    /**
+     * The root URL of the ArcGIS Portal. This is optional and defaults to "https://www.arcgis.com" if not provided.
+     */
+    portalRoot?: string;
+};
+
+/**
+ * Updates the metadata of an already-published hosted tile layer item in ArcGIS Portal.
+ *
+ * Fetches the current item data for the given `serviceItemId`, then updates its `title`,
+ * `snippet`, `tags`, and `extent` based on the provided Wayport job information.
+ *
+ * @param params - The parameters for updating the published tile layer.
+ * @param params.serviceItemId - The ID of the published service item to update.
+ * @param params.token - Authentication token for the ArcGIS Portal API.
+ * @param params.portalRoot - The root URL of the ArcGIS Portal. Defaults to `"https://www.arcgis.com"`.
+ * @param params.wayprotJob - Wayport job data used to derive the new title, snippet, zoom levels, and extent.
+ * @returns A promise that resolves when the update is complete. Errors are caught and logged internally.
+ */
+export const updatePublishedTileLayer = async ({
+    serviceItemId,
+    token,
+    portalRoot = 'https://www.arcgis.com',
+    wayprotJob,
+}: UpdatePublishedTileLayerParams): Promise<void> => {
+    try {
+        if (!serviceItemId) {
+            throw new Error(
+                'itemId is required to update a published tile layer'
+            );
+        }
+
+        if (!token) {
+            throw new Error(
+                'token is required to update a published tile layer'
+            );
+        }
+
+        // get the item data of the published service item to be updated, in order to get the current item data that is required for the update operation (e.g. owner, ownerFolder and etc)
+        const item = await getItem({
+            itemId: serviceItemId,
+            token,
+            portalRoot,
+        });
+
+        const { waybackItem, levels, extent } = wayprotJob || {};
+        const { releaseDateLabel } = waybackItem || {};
+
+        const newTitle = `Wayport Tile Layer - ${releaseDateLabel}`;
+
+        const newSnippet = [
+            `This tile layer was published by World Imagery Wayback App on ${new Date().toLocaleDateString()}.`,
+            `It is based on a tile package that was generated from the ${releaseDateLabel} release of the World Imagery basemap.`,
+            `This tile layer includes cached tile between zoom levels ${levels?.[0]} and ${levels?.[1]}.`,
+        ].join(' ');
+
+        await updateItem({
+            item,
+            itemDataToBeUpdated: {
+                title: newTitle,
+                snippet: newSnippet,
+                tags: 'Wayport, Wayback, World Imagery',
+                extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
+            },
+            token,
+            portalRoot,
+        });
+    } catch (error) {
+        logger.log('error_updating_published_wayport_tile_layer', error);
+        console.error('Error updating published tile layer item:', error);
+    }
 };
