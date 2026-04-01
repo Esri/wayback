@@ -147,11 +147,29 @@ export const selectNumOfFinishedWayportJobs = createSelector(
     }
 );
 
-export const selectNumOfUnfinishedWayportJobs = createSelector(
-    selectNumOfDownloadJobs,
-    selectNumOfFinishedWayportJobs,
-    (numOfDownloadJobs, numOfFinishedWayportJobs) =>
-        numOfDownloadJobs - numOfFinishedWayportJobs
+export const selectNumOfOngoingJobs = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        return ids.filter((id) => {
+            const { status } = byId[id];
+            return (
+                status === 'wayport job waiting to start' ||
+                status === 'wayport job pending' ||
+                status === 'wayport job finished' ||
+                status === 'publishing job waiting to start' ||
+                status === 'publishing job adding tile package' ||
+                status === 'publishing job adding tile layer' ||
+                status === 'publishing job updating tiles'
+            );
+        }).length;
+    }
+);
+
+export const selectIsThereAnyOngoingJobs = createSelector(
+    selectNumOfOngoingJobs,
+    (numOfOngoingJobs) => numOfOngoingJobs > 0
 );
 
 export const selectPendingWayportJobs = createSelector(

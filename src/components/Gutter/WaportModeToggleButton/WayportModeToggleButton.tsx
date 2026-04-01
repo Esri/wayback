@@ -17,8 +17,7 @@
 import {
     selectNumOfDownloadJobs,
     selectNumOfFinishedWayportJobs,
-    selectNumOfPendingWayportJobs,
-    selectNumOfUnfinishedWayportJobs,
+    selectNumOfOngoingJobs,
     selectNumOfWayportJobsNotStarted,
 } from '@store/WayportMode/selectors';
 import React from 'react';
@@ -53,16 +52,14 @@ export const WaportModeToggleButton = () => {
 
     const numOfFinishedJobs = useAppSelector(selectNumOfFinishedWayportJobs);
 
-    const numOfUnfinishedJobs = useAppSelector(
-        selectNumOfUnfinishedWayportJobs
-    );
+    const numOfOngoingJobs = useAppSelector(selectNumOfOngoingJobs);
 
     /**
      * Show check icon when there are jobs and all of them are finished. If there are jobs but not all of them are finished, show the number of jobs. If there are no jobs, show nothing.
      */
     const showCheckIcon =
         numOfJobs > 0 &&
-        numOfUnfinishedJobs === 0 &&
+        numOfOngoingJobs === 0 &&
         numOfFinishedJobs === numOfJobs;
 
     const isWayportModeOn = useAppSelector(selectIsWayportModeOn);
@@ -74,7 +71,7 @@ export const WaportModeToggleButton = () => {
 
         let indicatorContent = null;
 
-        const showCounter = numOfJobsNotStarted > 0 || numOfUnfinishedJobs > 0;
+        const showCounter = numOfJobsNotStarted > 0 || numOfOngoingJobs > 0;
 
         if (showCheckIcon) {
             indicatorContent = (
@@ -93,7 +90,7 @@ export const WaportModeToggleButton = () => {
             );
         } else if (showCounter) {
             indicatorContent = (
-                <span>{numOfJobsNotStarted || numOfUnfinishedJobs}</span>
+                <span>{numOfJobsNotStarted || numOfOngoingJobs}</span>
             );
         }
 

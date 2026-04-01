@@ -422,5 +422,6 @@
     "finished_publishing_tile_layer_status": "Tile Layer is Ready",
     "failed_publishing_tile_layer_status": "Failed Publishing Tile Layer",
     "open_wayport_tile_layer": "Open Tile Layer",
-    "publish_wayport_tile_layer": "Publish as Tile Layer"
+    "publish_wayport_tile_layer": "Publish as Tile Layer",
+    "wayport_ongoing_job_warning": "You already have an ongoing export job. Please wait for it to finish before starting a new one."
 }

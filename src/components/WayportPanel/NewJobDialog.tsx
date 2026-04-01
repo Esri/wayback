@@ -10,6 +10,8 @@ import { dispatch, min } from 'd3';
 import { IWaybackItem } from '@typings/index';
 import { Slider, SliderHandleType } from './Slider';
 import { TilePreviewCard } from './TilePreviewCard';
+import { useAppSelector } from '@store/configureStore';
+import { selectIsThereAnyOngoingJobs } from '@store/WayportMode/selectors';
 
 type NewJobDialogProps = {
     job: WayportJob | null;
@@ -80,8 +82,10 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     const [handleOnDragging, setHandleOnDragging] =
         useState<SliderHandleType>(null);
 
+    const hasOngoingJob = useAppSelector(selectIsThereAnyOngoingJobs);
+
     // determine if the create button should be disabled or not based on user's sign in status
-    const disabled = notSignedIn || signedInUsingPublicAccount;
+    const disabledNewJobDialog = notSignedIn || signedInUsingPublicAccount;
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
@@ -132,8 +136,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     }, [countOfTotalTiles]);
 
     const shouldDisableCreateButton = useMemo(() => {
-        return disabled || exceedsMaxTileLimit;
-    }, [exceedsMaxTileLimit, disabled]);
+        return disabledNewJobDialog || exceedsMaxTileLimit || hasOngoingJob;
+    }, [exceedsMaxTileLimit, disabledNewJobDialog, hasOngoingJob]);
 
     const maxAvailableTileLevel = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {
@@ -329,6 +333,22 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         </div>
                     )}
 
+                {hasOngoingJob && (
+                    <div className="flex items-center mb-2">
+                        <div className="mr-2">
+                            <CalciteIcon
+                                icon="exclamation-mark-triangle"
+                                scale="s"
+                                class="text-yellow-500"
+                            />
+                        </div>
+
+                        <p className="text-sm ">
+                            {t('wayport_ongoing_job_warning')}
+                        </p>
+                    </div>
+                )}
+
                 <div>
                     <CalciteButton
                         class="mt-2"
@@ -356,7 +376,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
             className={classNames(
                 'relative bg-white bg-opacity-10 p-2 w-full mb-2',
                 {
-                    disabled: disabled,
+                    disabled: disabledNewJobDialog,
                 }
             )}
         >

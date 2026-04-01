@@ -37,7 +37,7 @@ export type WayportJobStatus =
     | 'wayport job finished' // GP job completed successfully; tile package is ready for download
     | 'wayport job failed' // GP job failed; error message is saved and displayed in the UI
     | 'wayport job downloaded' // user has successfully downloaded the tile package
-    | 'publishing job not started' // initial status before starting to publish tile layer and update tiles
+    | 'publishing job waiting to start' // initial status before starting to publish tile layer and update tiles
     | 'publishing job adding tile package' // adding the output tile package as an item in ArcGIS Online
     | 'publishing job adding tile layer' // publishing a hosted tile layer from the tile package item
     | 'publishing job updating tiles' // sending an update tiles request to the hosted tile service
