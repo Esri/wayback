@@ -550,7 +550,7 @@ export const publishWayportTilePackageAsTileLayer =
             return;
         }
 
-        const { outputTilePackageInfo } = jobToBePublished || {};
+        const { outputTilePackageInfo, waybackItem } = jobToBePublished || {};
 
         if (!outputTilePackageInfo) {
             console.error(
@@ -604,7 +604,7 @@ export const publishWayportTilePackageAsTileLayer =
                     dataUrl:
                         outputTilePackageInfo.alternativeUrl ||
                         outputTilePackageInfo.url,
-                    title: `Wayport Tile Package - ${jobId}`,
+                    title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
                     username: signedInUser.username,
                     portalRoot: ARCGIS_PROTAL_ROOT,
                     token,

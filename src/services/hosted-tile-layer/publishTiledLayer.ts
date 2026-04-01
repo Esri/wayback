@@ -216,11 +216,11 @@ export const updatePublishedTileLayer = async ({
         const { waybackItem, levels, extent } = wayprotJob || {};
         const { releaseDateLabel } = waybackItem || {};
 
-        const newTitle = `Wayport Tile Layer - ${releaseDateLabel}`;
+        const newTitle = `Wayback Tile Layer - ${releaseDateLabel}`;
 
         const newSnippet = [
             `This tile layer was published by World Imagery Wayback App on ${new Date().toLocaleDateString()}.`,
-            `It is based on a tile package that was generated from the ${releaseDateLabel} release of the World Imagery basemap.`,
+            `It is based on a tile package that was generated from the ${releaseDateLabel} version of the World Imagery basemap.`,
             `This tile layer includes cached tile between zoom levels ${levels?.[0]} and ${levels?.[1]}.`,
         ].join(' ');
 
@@ -229,7 +229,7 @@ export const updatePublishedTileLayer = async ({
             itemDataToBeUpdated: {
                 title: newTitle,
                 snippet: newSnippet,
-                tags: 'Wayport, Wayback, World Imagery',
+                tags: 'Wayback, World Imagery, Tile Layer, GeoAI, Esri, Living Atlas',
                 extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
             },
             token,
