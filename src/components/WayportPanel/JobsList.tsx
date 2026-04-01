@@ -43,24 +43,26 @@ export const JobsList: FC<JobsListProps> = ({
     const { t } = useTranslation();
 
     const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
-        'not started': t('not_started_status'),
-        'waiting to start': t('waiting_to_start_status'),
-        pending: t('pending_status'),
-        finished: t('finished_status'),
-        failed: t('failed_status'),
-        downloaded: t('downloaded_status'),
+        'wayport job not started': t('not_started_status'),
+        'wayport job waiting to start': t('waiting_to_start_status'),
+        'wayport job pending': t('pending_status'),
+        'wayport job finished': t('finished_status'),
+        'wayport job failed': t('failed_status'),
+        'wayport job downloaded': t('downloaded_status'),
     };
 
     const wayportTileLayerPublishStatusLabel: Record<
         PublishWayportTileLayerStatus,
         string
     > = {
-        'not started': t('not_started_status'),
-        'adding tile package item': t('adding_tile_package_item_status'),
-        'publishing tile layer': t('publishing_tile_layer_status'),
-        'updating tiles': t('updating_tiles_status'),
-        finished: t('finished_publishing_tile_layer_status'),
-        failed: t('failed_publishing_tile_layer_status'),
+        'publishing job not started': t('not_started_status'),
+        'publishing job adding tile package': t(
+            'adding_tile_package_item_status'
+        ),
+        'publishing job adding tile layer': t('publishing_tile_layer_status'),
+        'publishing job updating tiles': t('updating_tiles_status'),
+        'publishing job finished': t('finished_publishing_tile_layer_status'),
+        'publishing job failed': t('failed_publishing_tile_layer_status'),
     };
 
     if (jobs.length === 0) {

@@ -54,7 +54,7 @@ export const getPreloadedState4Wayportmode =
                 byId[id] = job;
                 ids.push(id);
 
-                if (job.status === 'not started') {
+                if (job.status === 'wayport job not started') {
                     idOfJobBeingCreated = id;
                 }
             }

@@ -199,7 +199,7 @@ class WayportJobsStore {
 
         // Filter for jobs with status 'not started'
         const notStartedJobs = userJobs.filter(
-            (job) => job.status === 'not started'
+            (job) => job.status === 'wayport job not started'
         );
 
         // Get current timestamp

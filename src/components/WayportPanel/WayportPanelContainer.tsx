@@ -69,7 +69,7 @@ export const WayportPanelContainer = () => {
         window.open(job.outputTilePackageInfo.url, '_blank');
 
         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
-        dispatch(updateWayportJobStatus(job.id, 'downloaded'));
+        dispatch(updateWayportJobStatus(job.id, 'wayport job downloaded'));
     };
 
     const openPublishedTileLayer = (job: WayportJob) => {

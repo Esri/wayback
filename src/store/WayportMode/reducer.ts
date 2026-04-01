@@ -31,23 +31,23 @@ import { TileEstimation } from '@services/wayport/getTileEstimationsInOutputBund
  * The status is used to track the progress of the wayport job and show the appropriate information in the UI.
  */
 export type WayportJobStatus =
-    | 'not started' // initial status before submission to Wayport GP service
-    | 'waiting to start' // submitted to Wayport GP service, waiting for the GP job to begin
-    | 'pending' // GP job is running
-    | 'finished' // GP job completed successfully; tile package is ready for download
-    | 'failed' // GP job failed; error message is saved and displayed in the UI
-    | 'downloaded'; // user has successfully downloaded the tile package
+    | 'wayport job not started' // initial status before submission to Wayport GP service
+    | 'wayport job waiting to start' // submitted to Wayport GP service, waiting for the GP job to begin
+    | 'wayport job pending' // GP job is running
+    | 'wayport job finished' // GP job completed successfully; tile package is ready for download
+    | 'wayport job failed' // GP job failed; error message is saved and displayed in the UI
+    | 'wayport job downloaded'; // user has successfully downloaded the tile package
 
 /**
  * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles, which happens after the wayport GP job is finished and the tile package is ready.
  */
 export type PublishWayportTileLayerStatus =
-    | 'not started' // initial status before starting to publish tile layer and update tiles
-    | 'adding tile package item' // adding the output tile package as an item in ArcGIS Online
-    | 'publishing tile layer' // publishing a hosted tile layer from the tile package item
-    | 'updating tiles' // sending an update tiles request to the hosted tile service
-    | 'finished' // tiled layer published and update tiles request sent; new tiles may still be generating
-    | 'failed'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
+    | 'publishing job not started' // initial status before starting to publish tile layer and update tiles
+    | 'publishing job adding tile package' // adding the output tile package as an item in ArcGIS Online
+    | 'publishing job adding tile layer' // publishing a hosted tile layer from the tile package item
+    | 'publishing job updating tiles' // sending an update tiles request to the hosted tile service
+    | 'publishing job finished' // tiled layer published and update tiles request sent; new tiles may still be generating
+    | 'publishing job failed'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
 
 /**
  * Progress info of a wayport job, including total number of bundles, number of completed bundles, and percentage of progress.

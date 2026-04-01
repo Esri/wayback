@@ -31,7 +31,10 @@ export const selectNewWayportJob = createSelector(
             ? byId[idOfJobBeingCreated]
             : null;
 
-        if (!newDownloadJob || newDownloadJob.status !== 'not started') {
+        if (
+            !newDownloadJob ||
+            newDownloadJob.status !== 'wayport job not started'
+        ) {
             return null;
         }
 
@@ -52,7 +55,8 @@ export const selectStaleWayportJobs = createSelector(
 
         const staleDownloadJobIds = ids.filter((id) => {
             return (
-                byId[id].status === 'not started' && id !== idOfJobBeingCreated
+                byId[id].status === 'wayport job not started' &&
+                id !== idOfJobBeingCreated
             );
         });
 
@@ -83,7 +87,8 @@ export const selectNumOfPendingWayportJobs = createSelector(
     (jobs) => {
         const { byId, ids } = jobs;
 
-        return ids.filter((id) => byId[id].status === 'pending').length;
+        return ids.filter((id) => byId[id].status === 'wayport job pending')
+            .length;
     }
 );
 
@@ -92,26 +97,26 @@ export const selectHasReachedLimitOfConcurrentWayportJobs = createSelector(
     (numOfPendingJobs) => numOfPendingJobs >= 5
 );
 
-export const selectFinishedWayportobsWithoutPackageInfo = createSelector(
-    (state: RootState) => state.WayportMode.jobs,
-    (jobs) => {
-        const { byId, ids } = jobs;
+// export const selectFinishedWayportobsWithoutPackageInfo = createSelector(
+//     (state: RootState) => state.WayportMode.jobs,
+//     (jobs) => {
+//         const { byId, ids } = jobs;
 
-        const finishedDownloadJobIds = ids.filter((id) => {
-            const { status } = byId[id] || {};
-            return (
-                status === 'finished' &&
-                byId[id].outputTilePackageInfo === undefined
-            );
-        });
+//         const finishedDownloadJobIds = ids.filter((id) => {
+//             const { status } = byId[id] || {};
+//             return (
+//                 status === 'wayport job finished' &&
+//                 byId[id].outputTilePackageInfo === undefined
+//             );
+//         });
 
-        const finishedDownloadJobs = finishedDownloadJobIds.map(
-            (id) => byId[id]
-        );
+//         const finishedDownloadJobs = finishedDownloadJobIds.map(
+//             (id) => byId[id]
+//         );
 
-        return finishedDownloadJobs;
-    }
-);
+//         return finishedDownloadJobs;
+//     }
+// );
 
 export const selectNumOfFinishedWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
@@ -120,7 +125,10 @@ export const selectNumOfFinishedWayportJobs = createSelector(
 
         return ids.filter((id) => {
             const { status } = byId[id];
-            return status === 'finished' || status === 'downloaded';
+            return (
+                status === 'wayport job finished' ||
+                status === 'wayport job downloaded'
+            );
         }).length;
     }
 );
@@ -131,7 +139,7 @@ export const selectPendingWayportJobs = createSelector(
         const { byId, ids } = jobs;
 
         const idOfPendingJobs = ids.filter(
-            (id) => byId[id].status === 'pending'
+            (id) => byId[id].status === 'wayport job pending'
         );
 
         return idOfPendingJobs.map((id) => byId[id]);
@@ -144,7 +152,7 @@ export const selectWayportJobsThatHaveBeenStarted = createSelector(
         const { byId, ids } = jobs;
 
         const idOfStartedJobs = ids.filter(
-            (id) => byId[id].status !== 'not started'
+            (id) => byId[id].status !== 'wayport job not started'
         );
 
         return idOfStartedJobs.map((id) => byId[id]);
@@ -159,9 +167,9 @@ export const selectWayportJobsThatHaveFinished = createSelector(
         const idOfFinishedJobs = ids.filter((id) => {
             const { status } = byId[id];
             return (
-                status === 'finished' ||
-                status === 'downloaded' ||
-                status === 'failed'
+                status === 'wayport job finished' ||
+                status === 'wayport job downloaded' ||
+                status === 'wayport job failed'
             );
         });
 

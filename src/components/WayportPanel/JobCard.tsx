@@ -75,7 +75,7 @@ export const JobCard: FC<JobCardProps> = ({
 
         // get the progress percentage from the job's progressInfo if the job is in pending status, to show alongside the status label
         const progressPercentage =
-            status === 'pending' && progressInfo?.progressPercentage
+            status === 'wayport job pending' && progressInfo?.progressPercentage
                 ? `${progressInfo?.progressPercentage}`
                 : '';
 
@@ -93,7 +93,7 @@ export const JobCard: FC<JobCardProps> = ({
 
     const getActionButtons = () => {
         // if the tile layer is published, show the button to open the published tile layer in ArcGIS Online
-        if (publishWayportTileLayerStatus === 'finished') {
+        if (publishWayportTileLayerStatus === 'publishing job finished') {
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton
@@ -112,7 +112,10 @@ export const JobCard: FC<JobCardProps> = ({
         }
 
         // if the job is finished but the tile package is not published or downloaded yet, show the buttons to download the tile package or publish the tile layer
-        if (status === 'finished' && !publishWayportTileLayerStatus) {
+        if (
+            status === 'wayport job finished' &&
+            !publishWayportTileLayerStatus
+        ) {
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton

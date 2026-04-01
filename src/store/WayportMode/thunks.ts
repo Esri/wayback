@@ -42,7 +42,7 @@ import {
 import {
     selectWayportJobById,
     selectWayportJobsThatHaveFinished,
-    selectFinishedWayportobsWithoutPackageInfo,
+    // selectFinishedWayportobsWithoutPackageInfo,
     // selectDownloadJobs,
     selectNewWayportJob,
     selectPendingWayportJobs,
@@ -180,7 +180,7 @@ export const initiateNewWayportJob =
                 ...byReleaseNumber[releaseNum],
             },
             extent: normalizeExtent(extent),
-            status: 'not started',
+            status: 'wayport job not started',
             // tileEstimations and related info are set to null initially
             // as they will be updated when user adjust the export extent
             tileEstimations: null,
@@ -229,7 +229,7 @@ export const updateNewWayportJob =
             return;
         }
 
-        if (newJob.status !== 'not started') {
+        if (newJob.status !== 'wayport job not started') {
             // console.error('the status of the new wayport job is not "not started", cannot update the new wayport job data');
             return;
         }
@@ -315,7 +315,7 @@ export const startWayportJob =
         const { extent, levels, waybackItem, id, userId } = newDownloadJob;
 
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
-        dispatch(updateWayportJobStatus(id, 'waiting to start'));
+        dispatch(updateWayportJobStatus(id, 'wayport job waiting to start'));
 
         // set the id of the job to show extent on map to the new job's id so that the extent of the new job will be shown on the map while the job is being started
         dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
@@ -336,7 +336,7 @@ export const startWayportJob =
             const submittedJob: WayportJob = {
                 ...newDownloadJob,
                 GPJobId: res.jobId,
-                status: 'pending',
+                status: 'wayport job pending',
             };
 
             dispatch(updateWayportJobsHelper([submittedJob]));
@@ -345,7 +345,7 @@ export const startWayportJob =
 
             const failedJob: WayportJob = {
                 ...newDownloadJob,
-                status: 'failed',
+                status: 'wayport job failed',
                 errorMessage: err.message || 'Unknown error',
             };
 
@@ -426,13 +426,13 @@ export const checkPendingWayportJobStatus =
 
                 const status: WayportJobStatus =
                     res.jobStatus === 'esriJobSucceeded'
-                        ? 'finished'
-                        : 'failed';
+                        ? 'wayport job finished'
+                        : 'wayport job failed';
 
                 const finishTime: number = new Date().getTime();
 
                 const jobOutputInfo =
-                    status === 'finished'
+                    status === 'wayport job finished'
                         ? await getWayportJobOutputInfoHelper(
                               existingJobData.GPJobId,
                               res
@@ -594,7 +594,7 @@ export const publishWayportTilePackageAsTileLayer =
                     {
                         ...jobToBePublished,
                         publishWayportTileLayerStatus:
-                            'adding tile package item',
+                            'publishing job adding tile package',
                     },
                 ])
             );
@@ -615,7 +615,8 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus: 'publishing tile layer',
+                        publishWayportTileLayerStatus:
+                            'publishing job adding tile layer',
                     },
                 ])
             );
@@ -642,7 +643,8 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus: 'updating tiles',
+                        publishWayportTileLayerStatus:
+                            'publishing job updating tiles',
                     },
                 ])
             );
@@ -661,7 +663,8 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus: 'finished',
+                        publishWayportTileLayerStatus:
+                            'publishing job finished',
                         wayportTileLayerInfo: {
                             tilePackageItemId,
                             serviceItemId: serviceResult.serviceItemId,
@@ -682,7 +685,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus: 'failed',
+                        publishWayportTileLayerStatus: 'publishing job failed',
                         wayportTileLayerInfo: {
                             tilePackageItemId: null,
                             serviceItemId: null,
@@ -716,7 +719,10 @@ export const clearWayportJobs =
         // find jobs that were finished more than 1 hour ago
         const jobsToBeRemoved = jobs.filter((job) => {
             // donwloaded jobs and failed jobs will be removed immediately without waiting for 1 hour, as they are no longer useful for users after they are downloaded or failed
-            if (job.status === 'downloaded' || job.status === 'failed') {
+            if (
+                job.status === 'wayport job downloaded' ||
+                job.status === 'wayport job failed'
+            ) {
                 return true;
             }
 

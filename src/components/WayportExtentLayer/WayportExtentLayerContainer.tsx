@@ -51,7 +51,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             return null;
         }
 
-        if (newDownloadJob?.status !== 'not started') {
+        if (newDownloadJob?.status !== 'wayport job not started') {
             return null;
         }
 
@@ -72,7 +72,7 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             return null;
         }
 
-        if (jobToDisplayOnMap.status === 'not started') {
+        if (jobToDisplayOnMap.status === 'wayport job not started') {
             return null;
         }
 
