@@ -34,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import { selectIsWayportModeOn } from '@store/Map/reducer';
 import { toggleWayportMode } from '@store/WayportMode/thunks';
 
-export const DownloadTilePackageDialogToggleButton = () => {
+export const WaportModeToggleButton = () => {
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();

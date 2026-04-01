@@ -127,7 +127,8 @@ export const selectNumOfFinishedWayportJobs = createSelector(
             const { status } = byId[id];
             return (
                 status === 'wayport job finished' ||
-                status === 'wayport job downloaded'
+                status === 'wayport job downloaded' ||
+                status === 'publishing job finished'
             );
         }).length;
     }

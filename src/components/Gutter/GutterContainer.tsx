@@ -36,7 +36,7 @@ import { UpdatesModeToggleButton } from '@components/Gutter/UpdatesModeToggleBut
 import { AccountAvatar } from '@components/UserAccount';
 import { SwipeModeToggleBtnContainerButton } from './SwipeModeToggleButton';
 import { AnimationModeToggleButton } from './AnimationModeToggleButton';
-import { DownloadTilePackageDialogToggleButton } from './DownloadTilePackageDialogToggleButton';
+import { WaportModeToggleButton } from './WaportModeToggleButton';
 import { SaveWebmapDialogToggleButton } from './SaveDialogToggleButton';
 import { LocaleSwitcherToggleButton } from '@components/LocaleSwitcher';
 
@@ -95,7 +95,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
             <AnimationModeToggleButton />
 
-            <DownloadTilePackageDialogToggleButton />
+            <WaportModeToggleButton />
 
             <SaveWebmapDialogToggleButton />
 
