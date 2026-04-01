@@ -114,6 +114,10 @@ class WayportJobsStore {
             await this.init();
         }
 
+        if (!job.userId || !job.id) {
+            return;
+        }
+
         return new Promise((resolve, reject) => {
             const transaction = this.db!.transaction(
                 [this.storeName],
@@ -136,6 +140,10 @@ class WayportJobsStore {
     async updateJob(job: WayportJob): Promise<void> {
         if (!this.db) {
             await this.init();
+        }
+
+        if (!job.userId || !job.id) {
+            return;
         }
 
         return new Promise((resolve, reject) => {

@@ -197,10 +197,6 @@ export const initiateNewWayportJob =
         if (!userId) {
             // save the new wayport job data to session storage so that we can restore the job after user signs in
             saveNewWayportJobToSessionStorage(newDownloadJobToAdd);
-
-            signIn();
-
-            return;
         }
 
         dispatch(createWayportJobHelper(newDownloadJobToAdd));
@@ -809,7 +805,10 @@ const createWayportJobHelper =
                 await dispatch(deleteWayportJobs(staleDownloadJobs));
             }
 
-            await wayportJobsStore.addJob(jobToBeCreated);
+            if (jobToBeCreated.id && jobToBeCreated.userId) {
+                await wayportJobsStore.addJob(jobToBeCreated);
+            }
+
             dispatch(wayportJobCreated(jobToBeCreated));
         } catch (err) {
             console.error('Failed to add wayport job to IndexedDB:', err);
@@ -841,12 +840,13 @@ const updateWayportJobsHelper =
 
         try {
             for (const job of updatedJobsData) {
-                if (!job.id) {
-                    console.error('job id is missing for job data:', job);
+                if (!job.id || !job.userId) {
+                    console.warn(
+                        'job id or userId is missing for job data, cannot update the job in IndexedDB:',
+                        job
+                    );
                     continue;
                 }
-
-                // Persist update to IndexedDB
 
                 await wayportJobsStore.updateJob(job);
             }
