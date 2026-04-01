@@ -36,18 +36,24 @@ export type WayportJobStatus =
     | 'wayport job pending' // GP job is running
     | 'wayport job finished' // GP job completed successfully; tile package is ready for download
     | 'wayport job failed' // GP job failed; error message is saved and displayed in the UI
-    | 'wayport job downloaded'; // user has successfully downloaded the tile package
-
-/**
- * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles, which happens after the wayport GP job is finished and the tile package is ready.
- */
-export type PublishWayportTileLayerStatus =
+    | 'wayport job downloaded' // user has successfully downloaded the tile package
     | 'publishing job not started' // initial status before starting to publish tile layer and update tiles
     | 'publishing job adding tile package' // adding the output tile package as an item in ArcGIS Online
     | 'publishing job adding tile layer' // publishing a hosted tile layer from the tile package item
     | 'publishing job updating tiles' // sending an update tiles request to the hosted tile service
     | 'publishing job finished' // tiled layer published and update tiles request sent; new tiles may still be generating
     | 'publishing job failed'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
+
+// /**
+//  * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles, which happens after the wayport GP job is finished and the tile package is ready.
+//  */
+// export type PublishWayportTileLayerStatus =
+//     | 'publishing job not started' // initial status before starting to publish tile layer and update tiles
+//     | 'publishing job adding tile package' // adding the output tile package as an item in ArcGIS Online
+//     | 'publishing job adding tile layer' // publishing a hosted tile layer from the tile package item
+//     | 'publishing job updating tiles' // sending an update tiles request to the hosted tile service
+//     | 'publishing job finished' // tiled layer published and update tiles request sent; new tiles may still be generating
+//     | 'publishing job failed'; // failed at some step of adding item, publishing, or updating tiles; error message is saved and displayed in the UI
 
 /**
  * Progress info of a wayport job, including total number of bundles, number of completed bundles, and percentage of progress.
@@ -181,11 +187,11 @@ export type WayportJob = {
          */
         error?: string;
     };
-    /**
-     * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles,
-     * which happens after the wayport GP job is finished and the tile package is ready.
-     */
-    publishWayportTileLayerStatus?: PublishWayportTileLayerStatus;
+    // /**
+    //  * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles,
+    //  * which happens after the wayport GP job is finished and the tile package is ready.
+    //  */
+    // publishWayportTileLayerStatus?: PublishWayportTileLayerStatus;
 };
 
 export type WayportModeState = {

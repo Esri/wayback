@@ -1,10 +1,10 @@
+// import {
+//     CalciteButton,
+//     CalciteIcon,
+//     CalciteLoader,
+// } from '@esri/calcite-components-react';
 import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
-import {
-    PublishWayportTileLayerStatus,
+    // PublishWayportTileLayerStatus,
     WayportJob,
     WayportJobStatus,
 } from '@store/WayportMode/reducer';
@@ -49,12 +49,6 @@ export const JobsList: FC<JobsListProps> = ({
         'wayport job finished': t('finished_status'),
         'wayport job failed': t('failed_status'),
         'wayport job downloaded': t('downloaded_status'),
-    };
-
-    const wayportTileLayerPublishStatusLabel: Record<
-        PublishWayportTileLayerStatus,
-        string
-    > = {
         'publishing job not started': t('not_started_status'),
         'publishing job adding tile package': t(
             'adding_tile_package_item_status'
@@ -64,6 +58,20 @@ export const JobsList: FC<JobsListProps> = ({
         'publishing job finished': t('finished_publishing_tile_layer_status'),
         'publishing job failed': t('failed_publishing_tile_layer_status'),
     };
+
+    // const wayportTileLayerPublishStatusLabel: Record<
+    //     PublishWayportTileLayerStatus,
+    //     string
+    // > = {
+    //     'publishing job not started': t('not_started_status'),
+    //     'publishing job adding tile package': t(
+    //         'adding_tile_package_item_status'
+    //     ),
+    //     'publishing job adding tile layer': t('publishing_tile_layer_status'),
+    //     'publishing job updating tiles': t('updating_tiles_status'),
+    //     'publishing job finished': t('finished_publishing_tile_layer_status'),
+    //     'publishing job failed': t('failed_publishing_tile_layer_status'),
+    // };
 
     if (jobs.length === 0) {
         return (
@@ -81,9 +89,9 @@ export const JobsList: FC<JobsListProps> = ({
                         key={job.id}
                         job={job}
                         wayportJobStatusLabel={wayportJobStatusLabel}
-                        wayportTileLayerPublishStatusLabel={
-                            wayportTileLayerPublishStatusLabel
-                        }
+                        // wayportTileLayerPublishStatusLabel={
+                        //     wayportTileLayerPublishStatusLabel
+                        // }
                         idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                         shouldDisableZoomToButton={shouldDisableZoomToButton}
                         onRemove={onRemove}

@@ -63,17 +63,20 @@ const IMAGES_BY_ZOOM_LEVEL: string[] = [
  * @returns `true` if the remove button should be disabled, `false` otherwise.
  */
 export const checkShouldDisableRemoveButton = (job: WayportJob): boolean => {
-    const { status, publishWayportTileLayerStatus } = job;
+    const { status } = job || {};
+
+    if (!status) {
+        return false;
+    }
 
     // remove button should be disabled when the job is in progress (pending or waiting to start) or when the tile layer is being published or updated,
     // to prevent users from removing a job that is in the middle of being processed
     const shouldBeDisabled =
         status === 'wayport job pending' ||
         status === 'wayport job waiting to start' ||
-        publishWayportTileLayerStatus ===
-            'publishing job adding tile package' ||
-        publishWayportTileLayerStatus === 'publishing job adding tile layer' ||
-        publishWayportTileLayerStatus === 'publishing job updating tiles';
+        status === 'publishing job adding tile package' ||
+        status === 'publishing job adding tile layer' ||
+        status === 'publishing job updating tiles';
 
     return shouldBeDisabled;
 };

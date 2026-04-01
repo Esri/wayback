@@ -1,6 +1,6 @@
 import { CalciteButton } from '@esri/calcite-components-react';
 import {
-    PublishWayportTileLayerStatus,
+    // PublishWayportTileLayerStatus,
     WayportJob,
     WayportJobStatus,
 } from '@store/WayportMode/reducer';
@@ -18,14 +18,14 @@ type JobCardProps = {
      * used to display the current status of the job in the UI.
      * */
     wayportJobStatusLabel: Record<WayportJobStatus, string>;
-    /**
-     * A mapping of PublishWayportTileLayerStatus values to their corresponding user-friendly labels,
-     * used to display the current status of the tile layer publish/update workflow in the UI.
-     */
-    wayportTileLayerPublishStatusLabel: Record<
-        PublishWayportTileLayerStatus,
-        string
-    >;
+    // /**
+    //  * A mapping of PublishWayportTileLayerStatus values to their corresponding user-friendly labels,
+    //  * used to display the current status of the tile layer publish/update workflow in the UI.
+    //  */
+    // wayportTileLayerPublishStatusLabel: Record<
+    //     PublishWayportTileLayerStatus,
+    //     string
+    // >;
     onRemove: (job: WayportJob) => void;
     onZoomTo: (job: WayportJob) => void;
     downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
@@ -38,7 +38,7 @@ export const JobCard: FC<JobCardProps> = ({
     idOfJobToShowExtentOnMap,
     shouldDisableZoomToButton,
     wayportJobStatusLabel,
-    wayportTileLayerPublishStatusLabel,
+    // wayportTileLayerPublishStatusLabel,
     onRemove,
     onZoomTo,
     downlaodTilePackageButtonOnClick,
@@ -47,8 +47,7 @@ export const JobCard: FC<JobCardProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const { waybackItem, status, progressInfo, publishWayportTileLayerStatus } =
-        job || {};
+    const { waybackItem, status, progressInfo } = job || {};
 
     const { releaseDateLabel } = waybackItem;
 
@@ -59,13 +58,13 @@ export const JobCard: FC<JobCardProps> = ({
      * its current status and publish status.
      */
     const statusLabel = useMemo(() => {
-        if (publishWayportTileLayerStatus) {
-            return (
-                wayportTileLayerPublishStatusLabel[
-                    publishWayportTileLayerStatus
-                ] || publishWayportTileLayerStatus
-            );
-        }
+        // if (publishWayportTileLayerStatus) {
+        //     return (
+        //         wayportTileLayerPublishStatusLabel[
+        //             publishWayportTileLayerStatus
+        //         ] || publishWayportTileLayerStatus
+        //     );
+        // }
 
         const statusLabel = wayportJobStatusLabel[status] || status;
 
@@ -86,14 +85,14 @@ export const JobCard: FC<JobCardProps> = ({
         return statusLabel;
     }, [
         status,
-        publishWayportTileLayerStatus,
+        // publishWayportTileLayerStatus,
         wayportJobStatusLabel,
         progressInfo?.progressPercentage,
     ]);
 
     const getActionButtons = () => {
         // if the tile layer is published, show the button to open the published tile layer in ArcGIS Online
-        if (publishWayportTileLayerStatus === 'publishing job finished') {
+        if (status === 'publishing job finished') {
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton
@@ -112,10 +111,7 @@ export const JobCard: FC<JobCardProps> = ({
         }
 
         // if the job is finished but the tile package is not published or downloaded yet, show the buttons to download the tile package or publish the tile layer
-        if (
-            status === 'wayport job finished' &&
-            !publishWayportTileLayerStatus
-        ) {
+        if (status === 'wayport job finished') {
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton

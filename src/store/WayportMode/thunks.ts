@@ -593,8 +593,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus:
-                            'publishing job adding tile package',
+                        status: 'publishing job adding tile package',
                     },
                 ])
             );
@@ -615,8 +614,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus:
-                            'publishing job adding tile layer',
+                        status: 'publishing job adding tile layer',
                     },
                 ])
             );
@@ -643,8 +641,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus:
-                            'publishing job updating tiles',
+                        status: 'publishing job updating tiles',
                     },
                 ])
             );
@@ -663,8 +660,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus:
-                            'publishing job finished',
+                        status: 'publishing job finished',
                         wayportTileLayerInfo: {
                             tilePackageItemId,
                             serviceItemId: serviceResult.serviceItemId,
@@ -685,7 +681,7 @@ export const publishWayportTilePackageAsTileLayer =
                 updateWayportJobsHelper([
                     {
                         ...jobToBePublished,
-                        publishWayportTileLayerStatus: 'publishing job failed',
+                        status: 'publishing job failed',
                         wayportTileLayerInfo: {
                             tilePackageItemId: null,
                             serviceItemId: null,
