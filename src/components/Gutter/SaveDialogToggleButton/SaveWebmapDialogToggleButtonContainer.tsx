@@ -37,7 +37,7 @@ import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
 //     isSaveAsWebmapDialogOpenToggled,
 // } from '@store/UI/reducer';
 import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
-import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+// import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 // import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 // import { activeDialogUpdated } from '@store/UI/reducer';
 import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';

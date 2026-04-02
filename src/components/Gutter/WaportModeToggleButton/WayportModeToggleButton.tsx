@@ -104,7 +104,7 @@ export const WaportModeToggleButton = () => {
     return (
         <div
             className={classnames(
-                'relative w-full text-center py-2 my-1 px-1 cursor-pointer z-10',
+                'relative w-full text-center py-2 px-1 cursor-pointer z-10',
                 // {
                 //     disabled: numOfJobs === 0,
                 // }
@@ -123,7 +123,7 @@ export const WaportModeToggleButton = () => {
                     //     : t('open_download_panel_button_tooltip')
                     t('open_download_panel_button_tooltip')
                 }
-                aria-label={t('toggle_download_panel')}
+                aria-label={t('open_download_panel_button_tooltip')}
                 onClick={() => {
                     // if (shouldDisableActionButton) {
                     //     return;
