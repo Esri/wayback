@@ -187,7 +187,11 @@ export const checkJobStatus = async (
         return data as CheckJobStatusResponse;
     } catch (error) {
         console.error('Error checking job status:', error);
-        return null;
+
+        return {
+            jobId,
+            jobStatus: 'esriJobFailed',
+        };
     }
 };
 
