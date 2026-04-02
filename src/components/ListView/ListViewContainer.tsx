@@ -31,15 +31,15 @@ import {
 
 import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
 
-import ListView from './index';
+import ListView from './ListView';
 import { AppContext } from '@contexts/AppContextProvider';
 import {
-    DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+    // DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
     initiateNewWayportJob,
 } from '@store/WayportMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
-import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
+// import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
 
 type Props = {
     children?: React.ReactNode;
@@ -70,27 +70,27 @@ const ListViewContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
-    const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
-        selectHasReachedLimitOfConcurrentWayportJobs
-    );
+    // const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
+    //     selectHasReachedLimitOfConcurrentWayportJobs
+    // );
 
-    const { zoom } = useAppSelector(selectMapCenterAndZoom);
+    // const { zoom } = useAppSelector(selectMapCenterAndZoom);
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
-    const downloadButtonTooltipText = useMemo(() => {
-        const text = t('export_tile_package_tooltip');
+    // const downloadButtonTooltipText = useMemo(() => {
+    //     const text = t('export_tile_package_tooltip');
 
-        if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
-            return text + ' ' + t('zoom_in_to_enable');
-        }
+    //     if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
+    //         return text + ' ' + t('zoom_in_to_enable');
+    //     }
 
-        if (hasReachedLimitOfConcurrentDownloadJobs) {
-            return t('concurrent_export_limit_reached');
-        }
+    //     if (hasReachedLimitOfConcurrentDownloadJobs) {
+    //         return t('concurrent_export_limit_reached');
+    //     }
 
-        return text;
-    }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
+    //     return text;
+    // }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
 
     return (
         <div
@@ -110,11 +110,11 @@ const ListViewContainer = () => {
                     isMobile={isMobile}
                     waybackItems={waybackItems}
                     activeWaybackItem={activeWaybackItem}
-                    shouldDownloadButtonBeDisabled={
-                        hasReachedLimitOfConcurrentDownloadJobs ||
-                        zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
-                    }
-                    downloadButtonTooltipText={downloadButtonTooltipText}
+                    // shouldDownloadButtonBeDisabled={
+                    //     hasReachedLimitOfConcurrentDownloadJobs ||
+                    //     zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
+                    // }
+                    // downloadButtonTooltipText={downloadButtonTooltipText}
                     shouldOnlyShowItemsWithLocalChange={
                         shouldOnlyShowItemsWithLocalChange
                     }

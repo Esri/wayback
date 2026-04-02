@@ -23,19 +23,11 @@ import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 
-interface Props {
+type Props = {
     data: IWaybackItem;
     isActive: boolean;
     isSelected: boolean;
     isHighlighted: boolean;
-    /**
-     * if true, download button should be disabled
-     */
-    shouldDownloadButtonBeDisabled?: boolean;
-    /**
-     * tooltip text for download button
-     */
-    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -44,7 +36,7 @@ interface Props {
         shouldShowPreviewItemTitle: boolean
     ) => void;
     onMouseOut?: () => void;
-}
+};
 
 // interface IState {}
 
@@ -55,14 +47,14 @@ export const ListViewCard: FC<Props> = ({
     isActive,
     isSelected,
     isHighlighted,
-    shouldDownloadButtonBeDisabled,
-    downloadButtonTooltipText,
+    // shouldDownloadButtonBeDisabled,
+    // downloadButtonTooltipText,
     onClick,
     onMouseEnter,
     onMouseOut,
     toggleSelect,
     downloadButtonOnClick,
-}: Props) => {
+}) => {
     const { isMobile } = useContext(AppContext);
 
     const { t } = useTranslation();
@@ -139,18 +131,18 @@ export const ListViewCard: FC<Props> = ({
                             className={classnames(ButtonWrapperClassnames, {
                                 flex: showControlButtons,
                                 'hidden group-hover:flex': !showControlButtons,
-                                'cursor-default opacity-50':
-                                    shouldDownloadButtonBeDisabled,
+                                // 'cursor-default opacity-50':
+                                //     shouldDownloadButtonBeDisabled,
                             })}
                             onClick={() => {
-                                if (shouldDownloadButtonBeDisabled) {
-                                    return;
-                                }
+                                // if (shouldDownloadButtonBeDisabled) {
+                                //     return;
+                                // }
 
                                 downloadButtonOnClick(data.releaseNum);
                             }}
-                            title={downloadButtonTooltipText}
-                            aria-label={downloadButtonTooltipText}
+                            title={t('export_tile_package_tooltip')}
+                            aria-label={t('export_tile_package_tooltip')}
                         >
                             <CalciteIcon icon="export" scale="m" />
                         </button>

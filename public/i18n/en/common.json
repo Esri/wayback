@@ -155,7 +155,7 @@
     "estimated_number_of_tiles": "Estimated number of tiles: {{total}}",
     "estimated_number_of_tiles_exceeded_max_limit": "{{total}} tiles exceeds limit",
     "wayport_signed_in_with_public_account_warning": "You are signed in with an ArcGIS Online public account. Please sign in with an ArcGIS organizational account to exort tile package",
-    "export_tile_package_tooltip": "Export an imagery tile package for current map extent",
+    "export_tile_package_tooltip": "Export a tile package for this version",
     "wayport_max_zoom_level_exceeded_warning": "No tiles exist beyond level {{maxZoomLevel}} in this area",
     "remove_wayport_job": "Remove this job from the list",
     "zoom_to_wayport_job": "Zoom to this job's extent in the map",

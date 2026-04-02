@@ -27,17 +27,6 @@ interface IProps {
     shouldOnlyShowItemsWithLocalChange: boolean;
     rNum4SelectedWaybackItems: Array<number>;
     rNum4WaybackItemsWithLocalChanges: Array<number>;
-    /**
-     * if ture, the The donwload button will be disabled.
-     * The download button should only be enabled if
-     * - number of download jobs has not reached to the limit
-     * - map zoom level is 12+
-     */
-    shouldDownloadButtonBeDisabled: boolean;
-    /**
-     * tooltip text for download button
-     */
-    downloadButtonTooltipText: string;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -51,8 +40,6 @@ const ListView: React.FC<IProps> = ({
     rNum4SelectedWaybackItems,
     rNum4WaybackItemsWithLocalChanges,
     shouldOnlyShowItemsWithLocalChange,
-    shouldDownloadButtonBeDisabled,
-    downloadButtonTooltipText,
     toggleSelect,
     onClick,
     onMouseEnter,
@@ -102,10 +89,6 @@ const ListView: React.FC<IProps> = ({
                         isSelected={isSelected}
                         isHighlighted={isHighlighted}
                         toggleSelect={toggleSelect}
-                        shouldDownloadButtonBeDisabled={
-                            shouldDownloadButtonBeDisabled
-                        }
-                        downloadButtonTooltipText={downloadButtonTooltipText}
                         onClick={onClick}
                         onMouseEnter={onMouseEnter}
                         onMouseOut={onMouseOut}

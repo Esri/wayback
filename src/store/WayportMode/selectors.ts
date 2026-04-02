@@ -106,10 +106,10 @@ export const selectNumOfPendingWayportJobs = createSelector(
     }
 );
 
-export const selectHasReachedLimitOfConcurrentWayportJobs = createSelector(
-    selectNumOfPendingWayportJobs,
-    (numOfPendingJobs) => numOfPendingJobs >= 5
-);
+// export const selectHasReachedLimitOfConcurrentWayportJobs = createSelector(
+//     selectNumOfPendingWayportJobs,
+//     (numOfPendingJobs) => numOfPendingJobs >= 5
+// );
 
 // export const selectFinishedWayportobsWithoutPackageInfo = createSelector(
 //     (state: RootState) => state.WayportMode.jobs,
