@@ -45,7 +45,7 @@ export const TilePreviewCard: FC<PreviewCardProps> = ({
     }
 
     return (
-        <div className="absolute top-0 left-0 w-full h-[130px] bg-[#2a2a2a] z-10 flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-full bottom-0 bg-[#2a2a2a] z-10 flex items-center justify-center">
             <img
                 src={previewImageURL}
                 alt="Tile Preview"

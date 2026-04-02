@@ -175,74 +175,67 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
         return (
             <div>
-                <div className="w-full relative mb-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <CalciteIcon
-                                icon="information"
-                                scale="s"
-                                class="text-custom-theme-blue-light mr-2"
-                            />
+                <div className="relative w-full">
+                    <TilePreviewCard
+                        handleOnDragging={handleOnDragging}
+                        levels={levels}
+                        // maxAvailableTileLevel={maxAvailableTileLevel}
+                        // releaseNumOfActiveWaybackItem={activeWaybackItem?.releaseNum}
+                    />
 
-                            <span className=" text-custom-theme-blue-light font-light">
-                                {t('new_wayport_job_header', {
-                                    releaseDate:
-                                        job?.waybackItem?.releaseDateLabel ||
-                                        'Unknown',
-                                })}
-                            </span>
-                        </div>
+                    <div className="w-full relative mb-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <CalciteIcon
+                                    icon="information"
+                                    scale="s"
+                                    class="text-custom-theme-blue-light mr-2"
+                                />
 
-                        <div className="flex items-center">
-                            {/* <CalciteButton
-                                class="ml-1"
-                                scale="s"
-                                iconEnd="search"
-                                appearance="transparent"
-                                kind="neutral"
-                                onClick={onZoomToExtentRequested}
-                            /> */}
+                                <span className=" text-custom-theme-blue-light font-light">
+                                    {t('new_wayport_job_header', {
+                                        releaseDate:
+                                            job?.waybackItem
+                                                ?.releaseDateLabel || 'Unknown',
+                                    })}
+                                </span>
+                            </div>
 
-                            <CalciteButton
-                                width="full"
-                                appearance="transparent"
-                                scale="s"
-                                iconEnd="x"
-                                onClick={onRemove.bind(null, job)}
-                            ></CalciteButton>
+                            <div className="flex items-center">
+                                {/* <CalciteButton
+                                    class="ml-1"
+                                    scale="s"
+                                    iconEnd="search"
+                                    appearance="transparent"
+                                    kind="neutral"
+                                    onClick={onZoomToExtentRequested}
+                                /> */}
+
+                                <CalciteButton
+                                    width="full"
+                                    appearance="transparent"
+                                    scale="s"
+                                    iconEnd="x"
+                                    onClick={onRemove.bind(null, job)}
+                                ></CalciteButton>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div>
-                    <ul className="text-xs list-disc list-inside mb-4">
-                        <li className="mb-2">
-                            {t('download_job_instruction_1')}
-                        </li>
-                        <li className="mb-2">
-                            {t('download_job_instruction_2')}
-                        </li>
-                        <li className="mb-2">
-                            {t('download_job_instruction_3')}
-                        </li>
-                    </ul>
+                    <div className="w-full">
+                        <ul className="text-sm list-disc ml-5 pb-1 mb-2 opacity-50">
+                            <li className="mb-2">
+                                {t('download_job_instruction_1')}
+                            </li>
+                            <li className="mb-2">
+                                {t('download_job_instruction_2')}
+                            </li>
+                            {/* <li className="mb-2">
+                                {t('download_job_instruction_3')}
+                            </li> */}
+                        </ul>
+                    </div>
                 </div>
-
-                {/* <div>
-                    <ScaleRangeSelector
-                        minValue={minZoom}
-                        maxValue={maxZoom}
-                        onChange={(
-                            userSelectedMinZoom,
-                            userSelectedMaxZoom
-                        ) => {
-                            levelsOnChange(
-                                userSelectedMinZoom,
-                                userSelectedMaxZoom
-                            );
-                        }}
-                    />
-                </div> */}
 
                 <Slider
                     // minValue={minZoom}
@@ -380,12 +373,6 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                 }
             )}
         >
-            <TilePreviewCard
-                handleOnDragging={handleOnDragging}
-                levels={levels}
-                // maxAvailableTileLevel={maxAvailableTileLevel}
-                // releaseNumOfActiveWaybackItem={activeWaybackItem?.releaseNum}
-            />
             {getContent()}
         </div>
     );

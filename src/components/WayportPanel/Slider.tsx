@@ -231,7 +231,7 @@ export const Slider: React.FC<SliderProps> = ({
 
     return (
         <div className="w-full px-2">
-            <div className="relative h-[36px] flex items-center">
+            <div className="relative h-[36px] flex items-center z-20">
                 {/* Track */}
                 <div
                     ref={trackRef}
