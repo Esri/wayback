@@ -37,6 +37,7 @@ export type WayportJobStatus =
     | 'wayport job finished' // GP job completed successfully; tile package is ready for download
     | 'wayport job failed' // GP job failed; error message is saved and displayed in the UI
     | 'wayport job downloaded' // user has successfully downloaded the tile package
+    | 'wayport job expired' // the output tile package has expired and is no longer available for download; this can happen when the tile package has been generated for a while but user hasn't downloaded it yet, or when user tries to download the tile package after a certain period of time since the tile package is generated (e.g., 7 days), depending on how long the Wayport GP service keeps the generated tile packages available for download
     | 'publishing job adding tile package' // adding the output tile package as an item in ArcGIS Online
     | 'publishing job adding tile layer' // publishing a hosted tile layer from the tile package item
     | 'publishing job updating tiles' // sending an update tiles request to the hosted tile service

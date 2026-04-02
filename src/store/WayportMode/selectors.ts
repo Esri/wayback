@@ -159,6 +159,7 @@ export const selectIdsOfOngoingWayportJobs = createSelector(
                 status !== 'wayport job not started' &&
                 status !== 'wayport job failed' &&
                 status !== 'wayport job downloaded' &&
+                status !== 'wayport job expired' &&
                 status !== 'publishing job finished' &&
                 status !== 'publishing job failed'
             );

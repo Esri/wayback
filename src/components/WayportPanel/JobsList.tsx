@@ -56,6 +56,7 @@ export const JobsList: FC<JobsListProps> = ({
         'wayport job finished': t('wayport_job_finished_status'),
         'wayport job failed': t('wayport_job_failed_status'),
         'wayport job downloaded': t('wayport_job_downloaded_status'),
+        'wayport job expired': t('wayport_job_expired_status'),
         'publishing job adding tile package': t(
             'adding_tile_package_item_status'
         ),

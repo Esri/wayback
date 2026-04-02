@@ -58,7 +58,7 @@ export const WayportPanelContainer = () => {
      * @param job The download job for which to download the tile package.
      * @returns void
      */
-    const downloadTilePackage = (job: WayportJob) => {
+    const downloadTilePackage = async (job: WayportJob) => {
         // dispatch(downloadOutputTilePackage(jobId));
 
         if (
@@ -70,16 +70,39 @@ export const WayportPanelContainer = () => {
             return;
         }
 
-        window.open(job.outputTilePackageInfo.url, '_blank');
+        try {
+            // make a HEAD request to the tile package url to check if the tile package is still available
+            // before triggering the download, since the tile package can expire one hour after it is generated.
+            const res = await fetch(job.outputTilePackageInfo.url, {
+                method: 'HEAD',
+            });
 
-        // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
-        // dispatch(updateWayportJobStatus(job.id, 'wayport job downloaded'));
-        dispatch(
-            updateWayportJob({
-                jobId: job.id,
-                partialJobData: { status: 'wayport job downloaded' },
-            })
-        );
+            if (!res.ok) {
+                throw new Error(
+                    `Failed to access tile package url. Server responded with status ${res.status}: ${res.statusText}`
+                );
+            }
+
+            window.open(job.outputTilePackageInfo.url, '_blank');
+
+            // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
+            // dispatch(updateWayportJobStatus(job.id, 'wayport job downloaded'));
+            dispatch(
+                updateWayportJob({
+                    jobId: job.id,
+                    partialJobData: { status: 'wayport job downloaded' },
+                })
+            );
+        } catch (error) {
+            // console.error('Error downloading tile package: ', error);
+
+            dispatch(
+                updateWayportJob({
+                    jobId: job.id,
+                    partialJobData: { status: 'wayport job expired' },
+                })
+            );
+        }
     };
 
     const openPublishedTileLayer = (job: WayportJob) => {
