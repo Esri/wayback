@@ -246,7 +246,13 @@ export const updateNewWayportJob =
             updatedJobData.extent = extent;
         }
 
-        dispatch(updateWayportJobsHelper([updatedJobData]));
+        // dispatch(updateWayportJobsHelper([updatedJobData]));
+        dispatch(
+            updateWayportJob({
+                jobId: newJob.id,
+                partialJobData: updatedJobData,
+            })
+        );
     };
 
 /**
@@ -311,7 +317,15 @@ export const startWayportJob =
         const { extent, levels, waybackItem, id, userId } = newDownloadJob;
 
         // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
-        dispatch(updateWayportJobStatus(id, 'wayport job waiting to start'));
+        // dispatch(updateWayportJobStatus(id, 'wayport job waiting to start'));
+        await dispatch(
+            updateWayportJob({
+                jobId: id,
+                partialJobData: {
+                    status: 'wayport job waiting to start',
+                },
+            })
+        );
 
         // set the id of the job to show extent on map to the new job's id so that the extent of the new job will be shown on the map while the job is being started
         dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
@@ -329,52 +343,42 @@ export const startWayportJob =
                 layerIdentifier: waybackItem.layerIdentifier,
             });
 
-            const submittedJob: WayportJob = {
-                ...newDownloadJob,
-                GPJobId: res.jobId,
-                status: 'wayport job pending',
-            };
+            // const submittedJob: WayportJob = {
+            //     ...newDownloadJob,
+            //     GPJobId: res.jobId,
+            //     status: 'wayport job pending',
+            // };
 
-            dispatch(updateWayportJobsHelper([submittedJob]));
+            // dispatch(updateWayportJobsHelper([submittedJob]));
+            dispatch(
+                updateWayportJob({
+                    jobId: id,
+                    partialJobData: {
+                        GPJobId: res.jobId,
+                        status: 'wayport job pending',
+                    },
+                })
+            );
         } catch (err) {
             // console.log(err);
 
-            const failedJob: WayportJob = {
-                ...newDownloadJob,
-                status: 'wayport job failed',
-                errorMessage: err.message || 'Unknown error',
-            };
+            // const failedJob: WayportJob = {
+            //     ...newDownloadJob,
+            //     status: 'wayport job failed',
+            //     errorMessage: err.message || 'Unknown error',
+            // };
 
-            dispatch(updateWayportJobsHelper([failedJob]));
+            // dispatch(updateWayportJobsHelper([failedJob]));
+            dispatch(
+                updateWayportJob({
+                    jobId: id,
+                    partialJobData: {
+                        status: 'wayport job failed',
+                        errorMessage: err.message || 'Unknown error',
+                    },
+                })
+            );
         }
-    };
-
-/**
- * Updates the status of a wayport job with the specified ID.
- * @param id The ID of the wayport job to update
- * @param status The new status to set for the wayport job
- * @returns A thunk function that takes a dispatch parameter and returns void
- */
-export const updateWayportJobStatus =
-    (id: string, status: WayportJobStatus) =>
-    async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        // const jobs = selectDownloadJobs(getState());
-
-        // const jobToBeUpdated = jobs.find((job) => job.id === id);
-
-        const jobToBeUpdated = selectWayportJobById(getState(), id);
-
-        if (!jobToBeUpdated) {
-            console.error('cannot find job data with job id of %s', id);
-            return;
-        }
-
-        const updatedJobData = {
-            ...jobToBeUpdated,
-            status,
-        };
-
-        await dispatch(updateWayportJobsHelper([updatedJobData]));
     };
 
 /**
@@ -400,9 +404,9 @@ export const checkPendingWayportJobStatus =
             checkJobStatusRequests
         );
 
-        const finishedJobs: WayportJob[] = [];
+        // const finishedJobs: WayportJob[] = [];
 
-        const ongoingJobsWithProgressInfo: WayportJob[] = [];
+        // const ongoingJobsWithProgressInfo: WayportJob[] = [];
 
         for (let i = 0; i < checkJobStatusResponses.length; i++) {
             // const fulfilledResponse = fulfilledResponses[i];
@@ -435,15 +439,25 @@ export const checkPendingWayportJobStatus =
                           )
                         : null;
 
-                // update the status, finish time, and alternative output name (if any) for the finished job
-                const updatedJobData: WayportJob = {
-                    ...existingJobData,
-                    status,
-                    finishTime,
-                    outputTilePackageInfo: jobOutputInfo,
-                };
+                // // update the status, finish time, and alternative output name (if any) for the finished job
+                // const updatedJobData: WayportJob = {
+                //     ...existingJobData,
+                //     status,
+                //     finishTime,
+                //     outputTilePackageInfo: jobOutputInfo,
+                // };
 
-                finishedJobs.push(updatedJobData);
+                // finishedJobs.push(updatedJobData);
+                await dispatch(
+                    updateWayportJob({
+                        jobId: existingJobData.id,
+                        partialJobData: {
+                            status,
+                            finishTime,
+                            outputTilePackageInfo: jobOutputInfo,
+                        },
+                    })
+                );
             }
 
             if (res.jobStatus === 'esriJobExecuting') {
@@ -452,242 +466,30 @@ export const checkPendingWayportJobStatus =
                 if (progressInfo && progressInfo?.totalBundles > 0) {
                     const existingJobData = pendingJobs[i];
 
-                    ongoingJobsWithProgressInfo.push({
-                        ...existingJobData,
-                        progressInfo,
-                    });
+                    // ongoingJobsWithProgressInfo.push({
+                    //     ...existingJobData,
+                    //     progressInfo,
+                    // });
+
+                    await dispatch(
+                        updateWayportJob({
+                            jobId: existingJobData.id,
+                            partialJobData: {
+                                progressInfo,
+                            },
+                        })
+                    );
                 }
             }
         }
 
-        if (finishedJobs.length) {
-            dispatch(updateWayportJobsHelper(finishedJobs));
-        }
+        // if (finishedJobs.length) {
+        //     dispatch(updateWayportJobsHelper(finishedJobs));
+        // }
 
-        if (ongoingJobsWithProgressInfo.length) {
-            dispatch(updateWayportJobsHelper(ongoingJobsWithProgressInfo));
-        }
-
-        // const updatedJobsData: DownloadJob[] = checkJobStatusResponses.map(
-        //     (res, index) => {
-        //         const existingJobData = pendingJobs[index];
-
-        //         let status: DownloadJobStatus = 'pending';
-        //         let finishTime: number = null;
-
-        //         if (
-        //             res.jobStatus === 'esriJobSucceeded' ||
-        //             res.jobStatus === 'esriJobFailed'
-        //         ) {
-        //             status =
-        //                 res.jobStatus === 'esriJobSucceeded'
-        //                     ? 'finished'
-        //                     : 'failed';
-
-        //             finishTime = new Date().getTime();
-        //         }
-
-        //         return {
-        //             ...existingJobData,
-        //             status,
-        //             finishTime,
-        //         };
-        //     }
-        // );
-
-        // dispatch(updateWayportJobsHelper(updatedJobsData));
-
-        // dispatch(getOutputTilePackageInfo());
-    };
-
-// export const downloadOutputTilePackage =
-//     (jobId: string) =>
-//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-//         const jobToBeDownloaded = selectWayportJobById(getState(), jobId);
-
-//         if (!jobToBeDownloaded) {
-//             console.error('cannot find job data with job id of %s', jobId);
-//             return;
-//         }
-
-//         const { outputTilePackageInfo } = jobToBeDownloaded || {};
-
-//         if (!outputTilePackageInfo) {
-//             console.error(
-//                 'No output tile package info found for job with id of %s',
-//                 jobId
-//             );
-//             return;
-//         }
-
-//         window.open(outputTilePackageInfo.url, '_blank');
-
-//         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
-//         dispatch(
-//             // updateWayportJobsHelper([
-//             //     {
-//             //         ...jobToBeDownloaded,
-//             //         status: 'downloaded',
-//             //     },
-//             // ])
-//             updateWayportJobStatus(jobId, 'downloaded')
-//         );
-//     };
-
-export const publishWayportTilePackageAsTileLayer =
-    (jobId: string) =>
-    async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        // console.log('Publishing tile layer for job with id: ', jobId);
-
-        const jobToBePublished = selectWayportJobById(getState(), jobId);
-
-        if (!jobToBePublished) {
-            console.error('cannot find job data with job id of %s', jobId);
-            return;
-        }
-
-        const { outputTilePackageInfo, waybackItem } = jobToBePublished || {};
-
-        if (!outputTilePackageInfo) {
-            console.error(
-                'No output tile package info found for job with id of %s',
-                jobId
-            );
-            return;
-        }
-
-        console.log(
-            'Publishing tile layer for job with id: ',
-            jobId,
-            ' with output tile package info: ',
-            outputTilePackageInfo
-        );
-
-        // get the token to publish tile layer
-        const token = getToken();
-        if (!token) {
-            console.error(
-                'No token found, cannot publish tile layer for job with id of %s',
-                jobId
-            );
-            return;
-        }
-
-        // get the signed in user to publish tile layer
-        const signedInUser = getSignedInUser();
-        if (!signedInUser) {
-            console.error(
-                'No signed in user found, cannot publish tile layer for job with id of %s',
-                jobId
-            );
-            return;
-        }
-
-        try {
-            // mark as the status as "adding tile package item" and call createTilePackageItemAndWaitForCompletion to create an item for the output tile package in the user's content, and wait for the item creation to be completed before calling publish API, to avoid potential issue of publishing a tile package item that is not fully created yet which may cause the publish operation to fail
-            await dispatch(
-                updateWayportJobsHelper([
-                    {
-                        ...jobToBePublished,
-                        status: 'publishing job adding tile package',
-                    },
-                ])
-            );
-
-            const tilePackageItemId =
-                await createTilePackageItemAndWaitForCompletion({
-                    dataUrl:
-                        outputTilePackageInfo.alternativeUrl ||
-                        outputTilePackageInfo.url,
-                    title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
-                    username: signedInUser.username,
-                    portalRoot: ARCGIS_PROTAL_ROOT,
-                    token,
-                });
-
-            // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
-            await dispatch(
-                updateWayportJobsHelper([
-                    {
-                        ...jobToBePublished,
-                        status: 'publishing job adding tile layer',
-                    },
-                ])
-            );
-
-            const serviceResult = await publishTiledLayer({
-                itemId: tilePackageItemId,
-                token,
-                username: signedInUser.username,
-                portalRoot: ARCGIS_PROTAL_ROOT,
-                wayportJobId: jobId,
-            });
-
-            // after the service is published successfully, call update API to update the item information of the published service item
-            // to make it easier for users to identify the service item in their content
-            await updatePublishedTileLayer({
-                serviceItemId: serviceResult.serviceItemId,
-                token,
-                portalRoot: ARCGIS_PROTAL_ROOT,
-                wayprotJob: jobToBePublished,
-            });
-
-            // mark the job as published successfully with the service item id and service url
-            await dispatch(
-                updateWayportJobsHelper([
-                    {
-                        ...jobToBePublished,
-                        status: 'publishing job updating tiles',
-                    },
-                ])
-            );
-
-            const { fullLevelList, extentInWebMercator } =
-                getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
-
-            await updateTilesAndWaitForCompletion({
-                serviceUrl: serviceResult.serviceurl,
-                token,
-                levels: fullLevelList,
-                extent: extentInWebMercator,
-            });
-
-            await dispatch(
-                updateWayportJobsHelper([
-                    {
-                        ...jobToBePublished,
-                        status: 'publishing job finished',
-                        wayportTileLayerInfo: {
-                            tilePackageItemId,
-                            serviceItemId: serviceResult.serviceItemId,
-                            serviceUrl: serviceResult.serviceurl,
-                            error: null,
-                        },
-                    },
-                ])
-            );
-        } catch (err) {
-            console.error(
-                'Failed to publish tile layer for job with id of %s. Error: ',
-                jobId,
-                err
-            );
-
-            dispatch(
-                updateWayportJobsHelper([
-                    {
-                        ...jobToBePublished,
-                        status: 'publishing job failed',
-                        wayportTileLayerInfo: {
-                            tilePackageItemId: null,
-                            serviceItemId: null,
-                            serviceUrl: null,
-                            error: err.message || 'Unknown error',
-                        },
-                    },
-                ])
-            );
-        }
+        // if (ongoingJobsWithProgressInfo.length) {
+        //     dispatch(updateWayportJobsHelper(ongoingJobsWithProgressInfo));
+        // }
     };
 
 /**
@@ -822,38 +624,39 @@ const createWayportJobHelper =
         }
     };
 
-/**
- * This thunk function is used to update the wayport job data when there is any change for the existing wayport jobs,
- * such as when user adjust the export extent/zoom levels for a pending job,
- * or when the status/tile package info of a pending job is updated after checking with Wayport GP service.
- *
- * It also persists the updated wayport job data to IndexedDB so that the wayport job data can be retained even after page refresh.
- * @param updatedJobsData an array of updated wayport job data to be updated in the store and persisted to IndexedDB
- * @returns
- */
-const updateWayportJobsHelper =
-    (updatedJobsData: WayportJob[]) =>
+type UpdateWayportJobParams = {
+    jobId: string;
+    partialJobData: Partial<WayportJob>;
+};
+
+export const updateWayportJob =
+    ({ jobId, partialJobData }: UpdateWayportJobParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        if (!updatedJobsData || !updatedJobsData.length) {
+        const existingJobData = selectWayportJobById(getState(), jobId);
+
+        if (!existingJobData) {
+            console.error('cannot find job data with job id of %s', jobId);
             return;
         }
 
-        try {
-            for (const job of updatedJobsData) {
-                if (!job.id || !job.userId) {
-                    console.warn(
-                        'job id or userId is missing for job data, cannot update the job in IndexedDB:',
-                        job
-                    );
-                    continue;
-                }
+        const updatedJobData: WayportJob = {
+            ...existingJobData,
+            ...partialJobData,
+        };
 
-                await wayportJobsStore.updateJob(job);
+        try {
+            if (!updatedJobData.id || !updatedJobData.userId) {
+                console.warn(
+                    'job id or userId is missing for job data, cannot update the job in IndexedDB:',
+                    updatedJobData
+                );
+            } else {
+                await wayportJobsStore.updateJob(updatedJobData);
             }
 
-            dispatch(wayportJobsUpdated(updatedJobsData));
+            dispatch(wayportJobsUpdated([updatedJobData]));
         } catch (err) {
-            console.error('Failed to update wayport jobs in IndexedDB:', err);
+            console.error('Failed to update wayport job in IndexedDB:', err);
 
             dispatch(
                 errorMessageUpdated(
@@ -862,6 +665,51 @@ const updateWayportJobsHelper =
             );
         }
     };
+
+// /**
+//  * This thunk function is used to update the wayport job data when there is any change for the existing wayport jobs,
+//  * such as when user adjust the export extent/zoom levels for a pending job,
+//  * or when the status/tile package info of a pending job is updated after checking with Wayport GP service.
+//  *
+//  * It also persists the updated wayport job data to IndexedDB so that the wayport job data can be retained even after page refresh.
+//  * @param updatedJobsData an array of updated wayport job data to be updated in the store and persisted to IndexedDB
+//  * @returns
+//  */
+// const updateWayportJobsHelper =
+//     (updatedJobsData: WayportJob[]) =>
+//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         if (!updatedJobsData || !updatedJobsData.length) {
+//             return;
+//         }
+
+//         for (const job of updatedJobsData) {
+//             await dispatch(updateWayportJob(job));
+//         }
+
+//         // try {
+//         //     for (const job of updatedJobsData) {
+//         //         if (!job.id || !job.userId) {
+//         //             console.warn(
+//         //                 'job id or userId is missing for job data, cannot update the job in IndexedDB:',
+//         //                 job
+//         //             );
+//         //             continue;
+//         //         }
+
+//         //         await wayportJobsStore.updateJob(job);
+//         //     }
+
+//         //     dispatch(wayportJobsUpdated(updatedJobsData));
+//         // } catch (err) {
+//         //     console.error('Failed to update wayport jobs in IndexedDB:', err);
+
+//         //     dispatch(
+//         //         errorMessageUpdated(
+//         //             `Failed to update wayport job. Error: ${err.message || 'Unknown error'}`
+//         //         )
+//         //     );
+//         // }
+//     };
 
 /**
  * This thunk function is used to delete wayport jobs from the store and IndexedDB when user delete wayport jobs from the download list in the UI.

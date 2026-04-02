@@ -16,9 +16,9 @@
         // Improves build performance in large projects
         "skipLibCheck": true,
 
-        // Base directory for resolving non-relative imports
-        // Required for path alias configuration via "paths"
-        "baseUrl": "./",
+        // // Base directory for resolving non-relative imports
+        // // Required for path alias configuration via "paths"
+        // "baseUrl": "./",
 
         // Enforce consistent casing in import paths
         // Prevents runtime issues on case-sensitive file systems (Linux, CI)
@@ -68,6 +68,8 @@
         // Allow importing JSON files as modules
         // Example: import config from './config.json'
         "resolveJsonModule": true,
+
+        "strict": false,
 
         // Explicit directories to search for global type definitions
         // NOTE: When specified, TypeScript ONLY searches these directories

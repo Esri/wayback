@@ -1,0 +1,342 @@
+/* Copyright 2024 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { StoreDispatch, StoreGetState } from '../configureStore';
+import { selectWayportJobById } from './selectors';
+// import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
+import { getSignedInUser, getToken, signIn } from '@utils/Esri-OAuth';
+import { getDataToUpdateTilesOfWayportTileLayer } from './helpers';
+import { createTilePackageItemAndWaitForCompletion } from '@services/hosted-tile-layer/addTilePackageItem';
+import { ARCGIS_PROTAL_ROOT } from '@constants/index';
+import {
+    publishTiledLayer,
+    updatePublishedTileLayer,
+} from '@services/hosted-tile-layer/publishTiledLayer';
+import { updateTilesAndWaitForCompletion } from '@services/hosted-tile-layer/updateTiles';
+import { updateWayportJob } from './thunks';
+
+type AddTilePackageItemParams = {
+    jobId: string;
+    token: string;
+    username: string;
+    portalRoot: string;
+};
+
+/**
+ * Redux thunk that creates a tile package item in ArcGIS and updates the
+ * associated Wayport job with the resulting item ID.
+ *
+ * Steps:
+ * 1. Looks up the job by `jobId` from the store.
+ * 2. Sets the job status to `'publishing job adding tile package'`.
+ * 3. Calls `createTilePackageItemAndWaitForCompletion` using the output tile
+ *    package URL (prefers `alternativeUrl` if available).
+ * 4. Stores the returned item ID on the job as `wayportTilePackageItemId`.
+ *
+ * @param params - Parameters required to add the tile package item.
+ * @param params.jobId - ID of the Wayport job to publish.
+ * @param params.token - ArcGIS authentication token.
+ * @param params.username - Username of the signed-in ArcGIS account.
+ * @param params.portalRoot - Root URL of the ArcGIS portal.
+ * @throws {Error} If no `outputTilePackageInfo` is found on the job.
+ */
+export const addTilePackageItem =
+    ({ jobId, token, username, portalRoot }: AddTilePackageItemParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobToBePublished = selectWayportJobById(getState(), jobId);
+
+        const { outputTilePackageInfo, waybackItem } = jobToBePublished || {};
+
+        if (!outputTilePackageInfo) {
+            throw new Error(
+                'No output tile package info found for job ' +
+                    jobToBePublished.id
+            );
+        }
+
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    status: 'publishing job adding tile package',
+                },
+            })
+        );
+
+        const tilePackageItemId =
+            await createTilePackageItemAndWaitForCompletion({
+                dataUrl:
+                    outputTilePackageInfo.alternativeUrl ||
+                    outputTilePackageInfo.url,
+                title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
+                username: username,
+                portalRoot,
+                token,
+            });
+
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    wayportTilePackageItemId: tilePackageItemId,
+                },
+            })
+        );
+    };
+
+type PublishTileLayerParams = {
+    jobId: string;
+    token: string;
+    username: string;
+    portalRoot: string;
+};
+
+/**
+ * Redux thunk that publishes a hosted tile layer from a previously created
+ * tile package item and updates the associated Wayport job with the resulting
+ * service information.
+ *
+ * Steps:
+ * 1. Looks up the job by `jobId` from the store and validates that a
+ *    `wayportTilePackageItemId` exists and the job is in the expected status.
+ * 2. Sets the job status to `'publishing job adding tile layer'`.
+ * 3. Calls `publishTiledLayer` to publish the tile package as a hosted tile layer.
+ * 4. Stores the returned `serviceItemId` and `serviceurl` on the job.
+ * 5. Calls `updatePublishedTileLayer` to update the service item's metadata.
+ *
+ * @param params - Parameters required to publish the tile layer.
+ * @param params.jobId - ID of the Wayport job to publish.
+ * @param params.token - ArcGIS authentication token.
+ * @param params.username - Username of the signed-in ArcGIS account.
+ * @param params.portalRoot - Root URL of the ArcGIS portal.
+ * @throws {Error} If the job is not found, has no tile package item ID, is not
+ *   in the expected status, or if the publish response is invalid.
+ */
+export const publishTileLayer =
+    ({ jobId, token, username, portalRoot }: PublishTileLayerParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobToBePublished = selectWayportJobById(getState(), jobId);
+
+        if (!jobToBePublished) {
+            throw new Error('cannot find job data with job id of ' + jobId);
+        }
+
+        const tilePackageItemId = jobToBePublished.wayportTilePackageItemId;
+
+        if (!tilePackageItemId) {
+            throw new Error(
+                'No tile package item id found for job with id of ' + jobId
+            );
+        }
+
+        if (jobToBePublished.status !== 'publishing job adding tile package') {
+            throw new Error(
+                `Job with id of ${jobId} is in status of ${jobToBePublished.status}, cannot publish tile layer until the tile package item is added and ready`
+            );
+        }
+
+        // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    status: 'publishing job adding tile layer',
+                },
+            })
+        );
+
+        const serviceResult = await publishTiledLayer({
+            itemId: tilePackageItemId,
+            token,
+            username,
+            portalRoot,
+            wayportJobId: jobId,
+        });
+
+        if (
+            !serviceResult ||
+            !serviceResult.serviceItemId ||
+            !serviceResult.serviceurl
+        ) {
+            throw new Error(
+                'Invalid publish service result for job with id of ' + jobId
+            );
+        }
+
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    wayportTileLayerServiceItemId: serviceResult.serviceItemId,
+                    wayportTileLayerServiceUrl: serviceResult.serviceurl,
+                },
+            })
+        );
+
+        // after the service is published successfully, call update API to update the item information of the published service item
+        // to make it easier for users to identify the service item in their content
+        await updatePublishedTileLayer({
+            serviceItemId: serviceResult.serviceItemId,
+            token,
+            portalRoot: ARCGIS_PROTAL_ROOT,
+            wayprotJob: jobToBePublished,
+        });
+    };
+
+type UpdateTilesOfWayportTileLayerParams = {
+    jobId: string;
+    token: string;
+};
+
+/**
+ * Redux thunk that triggers a tile update operation on a previously published
+ * Wayport hosted tile layer and waits for it to complete.
+ *
+ * Steps:
+ * 1. Looks up the job by `jobId` from the store and retrieves the tile layer service URL.
+ * 2. Sets the job status to `'publishing job updating tiles'`.
+ * 3. Derives the tile levels and extent via `getDataToUpdateTilesOfWayportTileLayer`.
+ * 4. Calls `updateTilesAndWaitForCompletion` to rebuild the tiles for the given extent and levels.
+ * 5. Sets the job status to `'publishing job finished'` upon success.
+ *
+ * @param params - Parameters required to update the tiles.
+ * @param params.jobId - ID of the Wayport job whose tile layer should be updated.
+ * @param params.token - ArcGIS authentication token.
+ * @throws {Error} If the job is not found.
+ */
+export const updateTilesOfWayportTileLayer =
+    ({ jobId, token }: UpdateTilesOfWayportTileLayerParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const jobToBePublished = selectWayportJobById(getState(), jobId);
+
+        if (!jobToBePublished) {
+            throw new Error('cannot find job data with job id of ' + jobId);
+        }
+
+        const { wayportTileLayerServiceUrl } = jobToBePublished;
+
+        // mark the job as published successfully with the service item id and service url
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    status: 'publishing job updating tiles',
+                },
+            })
+        );
+
+        const { fullLevelList, extentInWebMercator } =
+            getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
+
+        await updateTilesAndWaitForCompletion({
+            serviceUrl: wayportTileLayerServiceUrl,
+            token,
+            levels: fullLevelList,
+            extent: extentInWebMercator,
+        });
+
+        await dispatch(
+            updateWayportJob({
+                jobId: jobToBePublished.id,
+                partialJobData: {
+                    status: 'publishing job finished',
+                },
+            })
+        );
+    };
+
+export const publishWayportTilePackageAsTileLayer =
+    (jobId: string) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // console.log('Publishing tile layer for job with id: ', jobId);
+
+        const jobToBePublished = selectWayportJobById(getState(), jobId);
+
+        if (!jobToBePublished) {
+            console.error('cannot find job data with job id of %s', jobId);
+            return;
+        }
+
+        // get the token to publish tile layer
+        const token = getToken();
+        if (!token) {
+            console.error(
+                'No token found, cannot publish tile layer for job with id of %s',
+                jobId
+            );
+            return;
+        }
+
+        // get the signed in user to publish tile layer
+        const signedInUser = getSignedInUser();
+        if (!signedInUser) {
+            console.error(
+                'No signed in user found, cannot publish tile layer for job with id of %s',
+                jobId
+            );
+            return;
+        }
+
+        try {
+            // step 1: add tile package item and wait for the item to be created successfully
+            await dispatch(
+                addTilePackageItem({
+                    jobId,
+                    token,
+                    username: signedInUser.username,
+                    portalRoot: ARCGIS_PROTAL_ROOT,
+                })
+            );
+
+            // step 2: publish tile layer from the created tile package item, and update the job with the published service information
+            await dispatch(
+                publishTileLayer({
+                    jobId,
+                    token,
+                    username: signedInUser.username,
+                    portalRoot: ARCGIS_PROTAL_ROOT,
+                })
+            );
+
+            // step 3: call update tiles API to update the tiles of the published tile layer, and wait for the update operation to be completed before marking the job as completely finished
+            await dispatch(
+                updateTilesOfWayportTileLayer({
+                    jobId,
+                    token,
+                })
+            );
+        } catch (err) {
+            console.error(
+                'Failed to publish tile layer for job with id of %s. Error: ',
+                jobId,
+                err
+            );
+
+            dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                        wayportTileLayerServiceItemId: undefined,
+                        wayportTileLayerServiceUrl: undefined,
+                        errorCaughtWhilePublishWayportTileLayer:
+                            err instanceof Error
+                                ? err.message
+                                : 'Unknown error',
+                    },
+                })
+            );
+        }
+    };

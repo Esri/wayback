@@ -13,18 +13,19 @@ import {
     deleteWayportJobs,
     // downloadOutputTilePackage,
     initiateNewWayportJob,
-    publishWayportTilePackageAsTileLayer,
+    // publishWayportTilePackageAsTileLayer,
     startWayportJob,
     updateIdOfWayportJobToShowExtentOnMap,
     updateNewWayportJob,
-    updateWayportJobStatus,
+    updateWayportJob,
+    // updateWayportJobStatus,
 } from '@store/WayportMode/thunks';
 import { JobsList } from './JobsList';
 import { activeWaybackItemSelector } from '@store/Wayback/reducer';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
-import { release } from 'os';
 import { WayportJob } from '@store/WayportMode/reducer';
+import { publishWayportTilePackageAsTileLayer } from '@store/WayportMode/publishTileLayerThunks';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -69,13 +70,19 @@ export const WayportPanelContainer = () => {
         window.open(job.outputTilePackageInfo.url, '_blank');
 
         // set the job status to "downloaded" immediately to provide feedback in the UI that the job is being downloaded,
-        dispatch(updateWayportJobStatus(job.id, 'wayport job downloaded'));
+        // dispatch(updateWayportJobStatus(job.id, 'wayport job downloaded'));
+        dispatch(
+            updateWayportJob({
+                jobId: job.id,
+                partialJobData: { status: 'wayport job downloaded' },
+            })
+        );
     };
 
     const openPublishedTileLayer = (job: WayportJob) => {
         const portalRoot = getPortalBaseUrl();
 
-        if (!job?.wayportTileLayerInfo?.serviceItemId) {
+        if (!job?.wayportTileLayerServiceItemId) {
             console.warn(
                 'No published tile layer item id found for job: ',
                 job
@@ -83,7 +90,7 @@ export const WayportPanelContainer = () => {
             return;
         }
 
-        const itemId = job?.wayportTileLayerInfo?.serviceItemId;
+        const itemId = job?.wayportTileLayerServiceItemId;
 
         const url = `${portalRoot}/home/item.html?id=${itemId}`;
 

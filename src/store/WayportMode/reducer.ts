@@ -118,6 +118,16 @@ export type WayportJob = {
      */
     status: WayportJobStatus;
     /**
+     * id of the user who created this wayport job.
+     * We need this information to determine which wayport jobs to display in the UI,
+     * as we only want to show the wayport jobs created by the current user.
+     */
+    userId: string;
+    /**
+     * timestamp of when this wayport job is created.
+     */
+    createdAt: number;
+    /**
      * unix timestamp of when this geoprocessing job was started
      */
     startTime?: number;
@@ -148,12 +158,6 @@ export type WayportJob = {
         size: number;
     };
     /**
-     * id of the user who created this wayport job.
-     * We need this information to determine which wayport jobs to display in the UI,
-     * as we only want to show the wayport jobs created by the current user.
-     */
-    userId: string;
-    /**
      * error message to display in the UI when this wayport job fails. This can be used to inform user about what went wrong.
      */
     errorMessage?: string;
@@ -163,35 +167,21 @@ export type WayportJob = {
      */
     progressInfo?: WayportJobProgressInfo;
     /**
-     * timestamp of when this wayport job is created.
+     * Item ID of the tile package created for this job's output tile package. This is used to track the item in ArcGIS Portal and update the UI accordingly.
      */
-    createdAt: number;
+    wayportTilePackageItemId?: string;
     /**
-     * Info about the hosted tile layer published from this job's tile package.
+     * URL of the tile layer published from this job's tile package.
      */
-    wayportTileLayerInfo?: {
-        /**
-         * Item ID of the tile package added to ArcGIS Portal for this job's output tile package.
-         */
-        tilePackageItemId: string;
-        /**
-         * Item ID of the hosted tile layer in ArcGIS Portal.
-         */
-        serviceItemId: string;
-        /**
-         * URL of the hosted tile service endpoint.
-         */
-        serviceUrl: string;
-        /**
-         * Error message if publishing failed.
-         */
-        error?: string;
-    };
-    // /**
-    //  * Status of the process of publishing a hosted tile layer from the wayback tile package and updating tiles,
-    //  * which happens after the wayport GP job is finished and the tile package is ready.
-    //  */
-    // publishWayportTileLayerStatus?: PublishWayportTileLayerStatus;
+    wayportTileLayerServiceUrl?: string;
+    /**
+     * Item ID of the hosted tile layer published from this job's tile package. This is used to track the item in ArcGIS Portal and update the UI accordingly.
+     */
+    wayportTileLayerServiceItemId?: string;
+    /**
+     * Error caught while publishing tile layer from this job's tile package. This is used to display error message in the UI if publishing failed.
+     */
+    errorCaughtWhilePublishWayportTileLayer?: string;
 };
 
 export type WayportModeState = {
