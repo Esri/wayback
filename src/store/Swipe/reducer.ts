@@ -78,22 +78,22 @@ export const {
     swipePositionUpdated,
 } = slice.actions;
 
-export const toggleSwipeWidget =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const mode = selectMapMode(getState());
+// export const toggleSwipeWidget =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const mode = selectMapMode(getState());
 
-        const newMode: MapMode = mode === 'swipe' ? 'explore' : 'swipe';
+//         const newMode: MapMode = mode === 'swipe' ? 'explore' : 'swipe';
 
-        dispatch(updateMapMode(newMode));
+//         dispatch(updateMapMode(newMode));
 
-        // const { AnimationMode } = getState();
+//         // const { AnimationMode } = getState();
 
-        // if (AnimationMode.isAnimationModeOn) {
-        //     dispatch(toggleAnimationMode());
-        // }
+//         // if (AnimationMode.isAnimationModeOn) {
+//         //     dispatch(toggleAnimationMode());
+//         // }
 
-        // dispatch(isSwipeWidgetOpenToggled());
-    };
+//         // dispatch(isSwipeWidgetOpenToggled());
+//     };
 
 export const isSwipeWidgetOpenSelector = (state: RootState) =>
     state.Map.mode === 'swipe';

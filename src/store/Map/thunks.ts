@@ -21,10 +21,10 @@ export const updateMapMode = (mode: MapMode) => (dispatch: StoreDispatch) => {
     dispatch(activeDialogUpdated());
 };
 
-export const toggleSaveWebmapMode =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const currentMode = getState().Map.mode;
-        const newMode =
-            currentMode === 'save-webmap' ? 'explore' : 'save-webmap';
-        dispatch(updateMapMode(newMode));
-    };
+// export const toggleSaveWebmapMode =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const currentMode = getState().Map.mode;
+//         const newMode =
+//             currentMode === 'save-webmap' ? 'explore' : 'save-webmap';
+//         dispatch(updateMapMode(newMode));
+//     };

@@ -41,7 +41,7 @@ import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParam
 // import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 // import { activeDialogUpdated } from '@store/UI/reducer';
 import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';
-import { toggleSaveWebmapMode } from '@store/Map/thunks';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
@@ -78,26 +78,26 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     //     }
     // };
 
-    const onClickHandler = () => {
-        // if (isDisabled) {
-        //     return;
-        // }
+    // const onClickHandler = () => {
+    //     // if (isDisabled) {
+    //     //     return;
+    //     // }
 
-        dispatch(toggleSaveWebmapMode());
+    //     dispatch(toggleSaveWebmapMode());
 
-        // if (isAnonymouns()) {
-        //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
-        //     setShouldOpenSaveWebMapDialog();
+    //     // if (isAnonymouns()) {
+    //     //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
+    //     //     setShouldOpenSaveWebMapDialog();
 
-        //     // // save hash params in local storage so the current app state can be restored after sigining in
-        //     // saveHashParams();
+    //     //     // // save hash params in local storage so the current app state can be restored after sigining in
+    //     //     // saveHashParams();
 
-        //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
-        //     signIn();
-        // } else {
-        //     dispatch(isSaveAsWebmapDialogOpenToggled());
-        // }
-    };
+    //     //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
+    //     //     signIn();
+    //     // } else {
+    //     //     dispatch(isSaveAsWebmapDialogOpenToggled());
+    //     // }
+    // };
 
     useEffect(() => {
         saveReleaseNum4SelectedWaybackItemsToHashParams(
@@ -111,7 +111,9 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
             // active={isSaveAsWebmapDialogOpen}
             active={isSaveWebmapModeOn}
             // disabled={isDisabled}
-            onClick={onClickHandler}
+            onClick={() => {
+                dispatch(updateMapMode('save-webmap'));
+            }}
             // clearAll={clearAllBtnOnClick}
         />
     );

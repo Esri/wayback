@@ -14,15 +14,15 @@ export const changeSelectedRegionForUpdatesMode =
         dispatch(updatesModeRegionChanged(region));
     };
 
-/**
- * Toggles between 'updates' mode and 'explore' mode.
- * @returns A thunk that toggles between 'updates' mode and 'explore' mode.
- */
-export const toggleUpdatesMode =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const mode = selectMapMode(getState());
+// /**
+//  * Toggles between 'updates' mode and 'explore' mode.
+//  * @returns A thunk that toggles between 'updates' mode and 'explore' mode.
+//  */
+// export const toggleUpdatesMode =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const mode = selectMapMode(getState());
 
-        const newMode: MapMode = mode === 'updates' ? 'explore' : 'updates';
+//         const newMode: MapMode = mode === 'updates' ? 'explore' : 'updates';
 
-        dispatch(updateMapMode(newMode));
-    };
+//         dispatch(updateMapMode(newMode));
+//     };

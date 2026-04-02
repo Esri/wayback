@@ -30,7 +30,7 @@ import {
     selectAnimationStatus,
     selectReleaseNumberOfActiveAnimationFrame,
     showDownloadAnimationPanelToggled,
-    toggleAnimationMode,
+    // toggleAnimationMode,
     // waybackItems4AnimationSelector,
 } from '@store/AnimationMode/reducer';
 import classNames from 'classnames';

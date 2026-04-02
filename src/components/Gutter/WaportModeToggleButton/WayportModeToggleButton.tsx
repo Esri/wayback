@@ -33,7 +33,8 @@ import { useTranslation } from 'react-i18next';
 // } from '@store/UI/reducer';
 // import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 import { selectIsWayportModeOn } from '@store/Map/reducer';
-import { toggleWayportMode } from '@store/WayportMode/thunks';
+// import { toggleWayportMode } from '@store/WayportMode/thunks';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const WaportModeToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -129,7 +130,7 @@ export const WaportModeToggleButton = () => {
                     //     return;
                     // }
                     // dispatch(isDownloadDialogOpenToggled());
-                    dispatch(toggleWayportMode());
+                    dispatch(updateMapMode('wayport'));
                 }}
             >
                 <CalciteIcon icon="export" scale="l" />

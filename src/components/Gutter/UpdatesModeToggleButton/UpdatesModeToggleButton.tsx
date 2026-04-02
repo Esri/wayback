@@ -7,7 +7,7 @@ import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { useTranslation } from 'react-i18next';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { updateMapMode } from '@store/Map/thunks';
-import { toggleUpdatesMode } from '@store/UpdatesMode/thunks';
+// import { toggleUpdatesMode } from '@store/UpdatesMode/thunks';
 
 export const UpdatesModeToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ export const UpdatesModeToggleButton = () => {
             label={t('open_updates_mode')}
             icon="date-time"
             testId="updates-mode-toggle-btn"
-            onClick={() => dispatch(toggleUpdatesMode())}
+            onClick={() => dispatch(updateMapMode('updates'))}
         />
     );
 };

@@ -904,11 +904,11 @@ export const updateIdOfWayportJobToShowExtentOnMap =
         );
     };
 
-export const toggleWayportMode =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const mode = selectMapMode(getState());
+// export const toggleWayportMode =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const mode = selectMapMode(getState());
 
-        const targetMode: MapMode = mode === 'wayport' ? 'explore' : 'wayport';
+//         const targetMode: MapMode = mode === 'wayport' ? 'explore' : 'wayport';
 
-        dispatch(updateMapMode(targetMode));
-    };
+//         dispatch(updateMapMode(targetMode));
+//     };

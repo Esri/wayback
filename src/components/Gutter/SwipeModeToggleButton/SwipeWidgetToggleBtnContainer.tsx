@@ -17,10 +17,10 @@ import React, { useMemo } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-import {
-    isSwipeWidgetOpenSelector,
-    toggleSwipeWidget,
-} from '@store/Swipe/reducer';
+// import {
+//     isSwipeWidgetOpenSelector,
+//     toggleSwipeWidget,
+// } from '@store/Swipe/reducer';
 
 import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 
@@ -30,6 +30,7 @@ import { metadataQueryResultUpdated, selectMapMode } from '@store/Map/reducer';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { useTranslation } from 'react-i18next';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const SwipeModeToggleBtnContainer = () => {
     const dispatch = useAppDispatch();
@@ -46,7 +47,9 @@ export const SwipeModeToggleBtnContainer = () => {
 
     const onClickHandler = () => {
         dispatch(metadataQueryResultUpdated(null));
-        dispatch(toggleSwipeWidget());
+        // dispatch(toggleSwipeWidget());
+
+        dispatch(updateMapMode('swipe'));
     };
 
     const active = useMemo(

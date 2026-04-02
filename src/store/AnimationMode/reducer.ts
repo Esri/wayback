@@ -150,14 +150,14 @@ export const {
     animationLinkIsCopiedChanged,
 } = slice.actions;
 
-export const toggleAnimationMode =
-    () => (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const mode = selectMapMode(getState());
+// export const toggleAnimationMode =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const mode = selectMapMode(getState());
 
-        const newMode: MapMode = mode === 'animation' ? 'explore' : 'animation';
+//         const newMode: MapMode = mode === 'animation' ? 'explore' : 'animation';
 
-        dispatch(updateMapMode(newMode));
-    };
+//         dispatch(updateMapMode(newMode));
+//     };
 
 export const selectAnimationStatus = (state: RootState) =>
     state.AnimationMode.animationStatus;
