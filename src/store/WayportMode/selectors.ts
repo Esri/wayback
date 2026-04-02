@@ -15,6 +15,7 @@
 
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../configureStore';
+import { se } from 'date-fns/locale';
 
 // export const selectIsDownloadDialogOpen = (state: RootState) =>
 //     state.WayportMode.isDownloadDialogOpen;
@@ -147,12 +148,12 @@ export const selectNumOfFinishedWayportJobs = createSelector(
     }
 );
 
-export const selectNumOfOngoingJobs = createSelector(
+export const selectIdsOfOngoingWayportJobs = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
         const { byId, ids } = jobs;
 
-        return ids.filter((id) => {
+        const ongoingJobIds = ids.filter((id) => {
             const { status } = byId[id];
             return (
                 status !== 'wayport job not started' &&
@@ -161,8 +162,15 @@ export const selectNumOfOngoingJobs = createSelector(
                 status !== 'publishing job finished' &&
                 status !== 'publishing job failed'
             );
-        }).length;
+        });
+
+        return ongoingJobIds;
     }
+);
+
+export const selectNumOfOngoingJobs = createSelector(
+    selectIdsOfOngoingWayportJobs,
+    (idsOfOngoingJobs) => idsOfOngoingJobs.length
 );
 
 export const selectIsThereAnyOngoingJobs = createSelector(

@@ -16,6 +16,10 @@ import { JobCard } from './JobCard';
 type JobsListProps = {
     jobs: WayportJob[];
     /**
+     * Ids of the jobs that are currently ongoing, which means they cannot be removed.
+     */
+    idsOfOngoingJobs: string[];
+    /**
      * The id of the job that is currently being shown on the map by having its extent displayed on the map.
      */
     idOfJobToShowExtentOnMap: string | null;
@@ -32,6 +36,7 @@ type JobsListProps = {
 
 export const JobsList: FC<JobsListProps> = ({
     jobs,
+    idsOfOngoingJobs,
     shouldDisableZoomToButton,
     idOfJobToShowExtentOnMap,
     onRemove,
@@ -43,12 +48,14 @@ export const JobsList: FC<JobsListProps> = ({
     const { t } = useTranslation();
 
     const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
-        'wayport job not started': t('not_started_status'),
-        'wayport job waiting to start': t('waiting_to_start_status'),
-        'wayport job pending': t('pending_status'),
-        'wayport job finished': t('finished_status'),
-        'wayport job failed': t('failed_status'),
-        'wayport job downloaded': t('downloaded_status'),
+        'wayport job not started': t('wayport_job_not_started_status'),
+        'wayport job waiting to start': t(
+            'wayport_job_waiting_to_start_status'
+        ),
+        'wayport job pending': t('wayport_job_pending_status'),
+        'wayport job finished': t('wayport_job_finished_status'),
+        'wayport job failed': t('wayport_job_failed_status'),
+        'wayport job downloaded': t('wayport_job_downloaded_status'),
         'publishing job adding tile package': t(
             'adding_tile_package_item_status'
         ),
@@ -83,10 +90,13 @@ export const JobsList: FC<JobsListProps> = ({
     return (
         <div className="mt-2 overflow-x-hidden">
             {jobs.map((job) => {
+                const isOngoingJob = idsOfOngoingJobs.includes(job.id);
+
                 return (
                     <JobCard
                         key={job.id}
                         job={job}
+                        isOngoingJob={isOngoingJob}
                         wayportJobStatusLabel={wayportJobStatusLabel}
                         // wayportTileLayerPublishStatusLabel={
                         //     wayportTileLayerPublishStatusLabel

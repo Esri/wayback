@@ -8,6 +8,7 @@ import {
     selectWayportJobsThatHaveBeenStarted,
     selectIdOfJobToShowExtentOnMap,
     selectNewWayportJob,
+    selectIdsOfOngoingWayportJobs,
 } from '@store/WayportMode/selectors';
 import {
     deleteWayportJobs,
@@ -46,6 +47,8 @@ export const WayportPanelContainer = () => {
     const idOfJobToShowExtentOnMap = useAppSelector(
         selectIdOfJobToShowExtentOnMap
     );
+
+    const idsOfOngoingJobs = useAppSelector(selectIdsOfOngoingWayportJobs);
 
     /**
      * Download the output tile package for the given job.
@@ -157,6 +160,7 @@ export const WayportPanelContainer = () => {
 
             <JobsList
                 jobs={jobsHasStarted}
+                idsOfOngoingJobs={idsOfOngoingJobs}
                 idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                 shouldDisableZoomToButton={!!newDownloadJob} // disable zoom to button when there is a job that has not been started, to avoid confusion about whether user should click the create button for the new job or zoom to the existing job
                 onRemove={(job) => {

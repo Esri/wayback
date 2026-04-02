@@ -1,4 +1,4 @@
-import { CalciteButton } from '@esri/calcite-components-react';
+import { CalciteButton, CalciteLoader } from '@esri/calcite-components-react';
 import {
     // PublishWayportTileLayerStatus,
     WayportJob,
@@ -11,6 +11,10 @@ import { checkShouldDisableRemoveButton } from './jobCardHelpers';
 
 type JobCardProps = {
     job: WayportJob;
+    /**
+     * If true, it means the job is currently ongoing, which means the remove button for this job should be disabled to prevent user from removing a job that is still ongoing.
+     */
+    isOngoingJob: boolean;
     idOfJobToShowExtentOnMap: string | null;
     shouldDisableZoomToButton: boolean;
     /**
@@ -35,6 +39,7 @@ type JobCardProps = {
 
 export const JobCard: FC<JobCardProps> = ({
     job,
+    isOngoingJob,
     idOfJobToShowExtentOnMap,
     shouldDisableZoomToButton,
     wayportJobStatusLabel,
@@ -51,7 +56,7 @@ export const JobCard: FC<JobCardProps> = ({
 
     const { releaseDateLabel } = waybackItem;
 
-    const shouldRemoveButtonBeDisabled = checkShouldDisableRemoveButton(job);
+    // const shouldRemoveButtonBeDisabled = checkShouldDisableRemoveButton(job);
 
     /**
      * Determines the appropriate status label to display for the job based on
@@ -160,16 +165,22 @@ export const JobCard: FC<JobCardProps> = ({
             )}
         >
             <div className="flex items-center justify-between">
-                <div className="flex items-center shrink-0">
-                    <CalciteButton
-                        scale="s"
-                        iconStart="x"
-                        appearance="transparent"
-                        color="neutral"
-                        onClick={onRemove.bind(null, job)}
-                        label={t('remove_wayport_job')}
-                        disabled={shouldRemoveButtonBeDisabled}
-                    ></CalciteButton>
+                <div className="flex items-center shrink-0 pl-1">
+                    <div className="w-6 h-6 relative flex items-center justify-center">
+                        {isOngoingJob ? (
+                            <CalciteLoader inline scale="s" />
+                        ) : (
+                            <CalciteButton
+                                scale="s"
+                                iconStart="x"
+                                appearance="transparent"
+                                color="neutral"
+                                onClick={onRemove.bind(null, job)}
+                                label={t('remove_wayport_job')}
+                                disabled={isOngoingJob}
+                            ></CalciteButton>
+                        )}
+                    </div>
 
                     <CalciteButton
                         scale="s"
