@@ -54,38 +54,36 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
     return (
         <div
             className={classNames(
-                'save-as-webmap-btn-container relative w-full text-center py-2 hover:text-white',
+                'relative w-full text-center py-2 px-1 cursor-pointer z-10',
                 {
                     // 'opacity-50 pointer-events-none': disabled,
                     'bg-black text-white': active,
                 }
             )}
         >
-            <div className="relative">
-                <button
-                    className={classNames(
-                        'relative flex items-center justify-center w-full h-full'
-                    )}
-                    aria-label={tooltipContent}
-                    onClick={onClick}
-                    title={tooltipContent}
-                    // disabled={disabled}
-                    data-testid="save-as-webmap-button"
-                >
-                    <CalciteIcon icon="arcgis-online" scale="l" />
-                </button>
-
-                {hasSelectedItems && (
-                    <IndicatorBubble>
-                        <span
-                            data-testid="selected-wayback-items-count"
-                            data-count={selectedWaybackItems?.length || 0}
-                        >
-                            {selectedWaybackItems.length}
-                        </span>
-                    </IndicatorBubble>
+            <button
+                className={classNames(
+                    'relative flex mx-auto items-center justify-center'
                 )}
-            </div>
+                aria-label={tooltipContent}
+                onClick={onClick}
+                title={tooltipContent}
+                // disabled={disabled}
+                data-testid="save-as-webmap-button"
+            >
+                <CalciteIcon icon="arcgis-online" scale="l" />
+            </button>
+
+            {hasSelectedItems && (
+                <IndicatorBubble>
+                    <span
+                        data-testid="selected-wayback-items-count"
+                        data-count={selectedWaybackItems?.length || 0}
+                    >
+                        {selectedWaybackItems.length}
+                    </span>
+                </IndicatorBubble>
+            )}
         </div>
     );
 };
