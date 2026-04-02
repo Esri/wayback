@@ -16,6 +16,10 @@ import { JobCard } from './JobCard';
 type JobsListProps = {
     jobs: WayportJob[];
     /**
+     * If true, it means the user is not signed in with an ArcGIS Online account.
+     */
+    notSignedIn: boolean;
+    /**
      * Ids of the jobs that are currently ongoing, which means they cannot be removed.
      */
     idsOfOngoingJobs: string[];
@@ -36,6 +40,7 @@ type JobsListProps = {
 
 export const JobsList: FC<JobsListProps> = ({
     jobs,
+    notSignedIn,
     idsOfOngoingJobs,
     shouldDisableZoomToButton,
     idOfJobToShowExtentOnMap,
@@ -80,7 +85,7 @@ export const JobsList: FC<JobsListProps> = ({
     //     'publishing job failed': t('failed_publishing_tile_layer_status'),
     // };
 
-    if (jobs.length === 0) {
+    if (jobs.length === 0 && notSignedIn === false) {
         return (
             <div className="text-center opacity-50 mt-2">
                 <p className="text-sm">{t('no_wayport_jobs')}</p>

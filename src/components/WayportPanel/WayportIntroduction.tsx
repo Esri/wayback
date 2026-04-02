@@ -11,23 +11,34 @@ type Props = {
      * to access download features
      */
     promptToSignInWithOrgAccount: boolean;
-
+    /**
+     * If true, it means the user has not selected any wayback item to export, and should be prompted to select a wayback item to export
+     */
+    promptToSelectVersionToExport: boolean;
     /**
      * Sign in button click handler
      * @returns void
      */
     signInButtonOnClick: () => void;
+    /**
+     * Emits when the user clicks the button to open explore mode to select wayback items to export
+     * @returns
+     */
+    openExploreModeButtonOnClick: () => void;
 };
 
 export const WayportIntroduction: FC<Props> = ({
     promptToSignIn,
     promptToSignInWithOrgAccount,
+    promptToSelectVersionToExport,
     signInButtonOnClick,
+    openExploreModeButtonOnClick,
 }) => {
     const { t } = useTranslation();
-    return (
-        <div className="text-white font-light text-sm">
-            {promptToSignIn || promptToSignInWithOrgAccount ? (
+
+    if (promptToSignIn || promptToSignInWithOrgAccount) {
+        return (
+            <div className="text-white font-light text-sm mb-2">
                 <p className="">
                     <Trans
                         i18nKey={
@@ -50,71 +61,29 @@ export const WayportIntroduction: FC<Props> = ({
                         }}
                     />
                 </p>
-            ) : // <p className="">
-            //     <Trans
-            //         i18nKey="wayback_export_description"
-            //         components={{
-            //             'offline-app-link': (
-            //                 <a
-            //                     href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
-            //                     target="_blank"
-            //                     rel="noreferrer"
-            //                 />
-            //             ),
-            //             'summary-link': (
-            //                 <a
-            //                     href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
-            //                     target="_blank"
-            //                     rel="noreferrer"
-            //                 />
-            //             ),
-            //             'terms-of-use-link': (
-            //                 <a
-            //                     href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
-            //                     target="_blank"
-            //                     rel="noreferrer"
-            //                 />
-            //             ),
-            //         }}
-            //     />
-            // </p>
-            null}
+            </div>
+        );
+    }
 
-            {/* <p className="text-sm mt-2 mb-4">
-            <Trans
-                i18nKey="wayback_export_description"
-                components={{
-                    'offline-app-link': (
-                        <a
-                            href="https://developers.arcgis.com/documentation/mapping-apis-and-services/offline/"
-                            target="_blank"
-                            rel="noreferrer"
-                        />
-                    ),
-                    'summary-link': (
-                        <a
-                            href="https://downloads2.esri.com/arcgisonline/docs/tou_summary.pdf"
-                            target="_blank"
-                            rel="noreferrer"
-                        />
-                    ),
-                    'terms-of-use-link': (
-                        <a
-                            href="https://www.esri.com/en-us/legal/terms/full-master-agreement"
-                            target="_blank"
-                            rel="noreferrer"
-                        />
-                    ),
-                }}
-            />
-        </p>
+    if (promptToSelectVersionToExport) {
+        return (
+            <div className="text-white font-light text-sm mb-2">
+                <p className="">
+                    <Trans
+                        i18nKey={'prompt_to_select_wayback_item_to_export'}
+                        components={{
+                            action: (
+                                <button
+                                    className="font-semibold underline cursor-pointer text-custom-theme-blue-light "
+                                    onClick={openExploreModeButtonOnClick}
+                                />
+                            ),
+                        }}
+                    />
+                </p>
+            </div>
+        );
+    }
 
-        <ul className="list-inside list-disc text-xs opacity-80">
-            <li>{t('wayport_export_instruction_1')}</li>
-            <li>{t('wayport_export_instruction_2')}</li>
-            <li>{t('wayport_export_instruction_3')}</li>
-            <li>{t('wayport_export_instruction_4')}</li>
-        </ul> */}
-        </div>
-    );
+    return null;
 };

@@ -150,28 +150,28 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     }, [tileEstimations]);
 
     const getContent = () => {
-        if (!job) {
-            return (
-                <div className="text-white font-light text-sm">
-                    <Trans
-                        i18nKey="no_new_wayport_job"
-                        values={{
-                            waybackReleaseDate:
-                                activeWaybackItem?.releaseDateLabel ||
-                                'Unknown',
-                        }}
-                        components={{
-                            action: (
-                                <button
-                                    className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
-                                    onClick={onInitiateNewJob}
-                                />
-                            ),
-                        }}
-                    />
-                </div>
-            );
-        }
+        // if (!job) {
+        //     return (
+        //         <div className="text-white font-light text-sm">
+        //             <Trans
+        //                 i18nKey="no_new_wayport_job"
+        //                 values={{
+        //                     waybackReleaseDate:
+        //                         activeWaybackItem?.releaseDateLabel ||
+        //                         'Unknown',
+        //                 }}
+        //                 components={{
+        //                     action: (
+        //                         <button
+        //                             className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
+        //                             onClick={onInitiateNewJob}
+        //                         />
+        //                     ),
+        //                 }}
+        //             />
+        //         </div>
+        //     );
+        // }
 
         return (
             <div>
@@ -360,7 +360,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         );
     };
 
-    if (!job && notSignedIn) {
+    if (!job || notSignedIn) {
         return null;
     }
 

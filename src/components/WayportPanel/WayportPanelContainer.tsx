@@ -27,6 +27,7 @@ import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector } from '@store/Map/reducer';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { publishWayportTilePackageAsTileLayer } from '@store/WayportMode/publishTileLayerThunks';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -134,8 +135,12 @@ export const WayportPanelContainer = () => {
             <WayportIntroduction
                 promptToSignIn={notSignedIn}
                 promptToSignInWithOrgAccount={signedInWithArcGISPublicAccount}
+                promptToSelectVersionToExport={!newDownloadJob}
                 signInButtonOnClick={() => {
                     signIn();
+                }}
+                openExploreModeButtonOnClick={() => {
+                    dispatch(updateMapMode('explore'));
                 }}
             />
 
@@ -183,6 +188,7 @@ export const WayportPanelContainer = () => {
 
             <JobsList
                 jobs={jobsHasStarted}
+                notSignedIn={notSignedIn}
                 idsOfOngoingJobs={idsOfOngoingJobs}
                 idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                 shouldDisableZoomToButton={!!newDownloadJob} // disable zoom to button when there is a job that has not been started, to avoid confusion about whether user should click the create button for the new job or zoom to the existing job
