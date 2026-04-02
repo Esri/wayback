@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { WebmapLayersList } from './WebmapLayersList';
 import { WebmapInputForm } from './WebmapInputForm';
 import { OpenSavedWebmap } from './OpenSavedWebmap';
+import classNames from 'classnames';
 
 type Props = {
     /**
@@ -25,6 +26,10 @@ type Props = {
      * ID of the created webmap item, used to display link to the created webmap after saving successfully
      */
     webmapItemId: string;
+    /**
+     * If true, the user is not signed in, and the panel will be disabled with a prompt to sign in to save the webmap. Otherwise, it will show the content of the panel.
+     */
+    notSignedIn: boolean;
     /**
      * Emits when user choose the active wayback item to save as webmap. The release number of the chosen wayback item is passed as parameter.
      * @param releaseNum
@@ -71,6 +76,7 @@ export const SaveWebmapDialog: FC<Props> = ({
     isCreatingWebmap,
     errorMessage,
     webmapItemId,
+    notSignedIn,
     chooseActiveItemOnClick,
     clearAllSelectedItemsOnClick,
     removeWaybackItemOnClick,
@@ -78,7 +84,7 @@ export const SaveWebmapDialog: FC<Props> = ({
     signInUsingDifferentAccountOnClick,
     saveButtonOnClick,
 }) => {
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
 
     const getContent = () => {
         // If webmap is saved successfully, show the link to the created webmap item
@@ -133,6 +139,7 @@ export const SaveWebmapDialog: FC<Props> = ({
 
                 <WebmapInputForm
                     canCreateWebmap={canCreateWebmap}
+                    notSignedIn={notSignedIn}
                     isCreatingWebmap={isCreatingWebmap}
                     errorMessage={errorMessage}
                     waybackItemsToSave={waybackItemsToSave}
@@ -152,5 +159,13 @@ export const SaveWebmapDialog: FC<Props> = ({
         );
     };
 
-    return <div className="py-1 px-1 w-full mb-2">{getContent()}</div>;
+    return (
+        <div
+            className={classNames('py-1 px-1 w-full mb-2', {
+                disabled: notSignedIn,
+            })}
+        >
+            {getContent()}
+        </div>
+    );
 };

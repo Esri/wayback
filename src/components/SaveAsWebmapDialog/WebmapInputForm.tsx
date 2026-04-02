@@ -14,6 +14,7 @@ import { getSnippetStr } from './createWebmap';
 type Props = {
     isCreatingWebmap: boolean;
     canCreateWebmap: boolean;
+    notSignedIn: boolean;
     errorMessage: string;
     waybackItemsToSave: WaybackItem[];
     saveButtonOnClick: ({
@@ -31,6 +32,7 @@ type Props = {
 export const WebmapInputForm: FC<Props> = ({
     isCreatingWebmap,
     canCreateWebmap,
+    notSignedIn,
     errorMessage,
     waybackItemsToSave,
     saveButtonOnClick,
@@ -44,10 +46,14 @@ export const WebmapInputForm: FC<Props> = ({
     const [snippet, setSnippet] = useState('');
 
     const shouldDisableInputFields =
-        isCreatingWebmap || canCreateWebmap === false;
+        isCreatingWebmap || canCreateWebmap === false || notSignedIn;
 
     const shouldDisableSaveButton =
-        !title || !snippet || isCreatingWebmap || canCreateWebmap === false;
+        !title ||
+        !snippet ||
+        isCreatingWebmap ||
+        canCreateWebmap === false ||
+        notSignedIn;
 
     useEffect(() => {
         const snippet = getSnippetStr(waybackItemsToSave);
@@ -134,7 +140,7 @@ export const WebmapInputForm: FC<Props> = ({
                     : t('create_wayback_map')}
             </CalciteButton>
 
-            {!canCreateWebmap && (
+            {notSignedIn === false && !canCreateWebmap && (
                 <div className="mt-2 text-sm">
                     <p className="mb-2">{t('no_privilege_message')}</p>
                     <p>

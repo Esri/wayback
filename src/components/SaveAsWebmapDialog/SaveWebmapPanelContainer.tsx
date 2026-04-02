@@ -147,20 +147,23 @@ export const SaveWebmapPanelContainer = () => {
         }
     };
 
-    const getContent = () => {
-        if (notSignedIn) {
-            return (
+    return (
+        <div
+            className="p-2 pb-4 flex flex-col gap-1 overflow-y-auto fancy-scrollbar text-sm"
+            style={{
+                maxHeight: 'calc(100vh - 60px)',
+                '--calcite-button-text-color': '#fff',
+            }}
+        >
+            {notSignedIn && (
                 <PromptToSignIn
-                    promptToSignIn={notSignedIn}
                     signInButtonOnClick={() => {
                         signIn();
                     }}
                 />
-            );
-        }
-
-        return (
+            )}
             <SaveWebmapDialog
+                notSignedIn={notSignedIn}
                 canCreateWebmap={canCreateWebmap}
                 activeWaybackItem={activeWaybackItem}
                 waybackItemsToSave={waybackItemsToSave}
@@ -184,18 +187,6 @@ export const SaveWebmapPanelContainer = () => {
                 }}
                 saveButtonOnClick={saveWebmap}
             />
-        );
-    };
-
-    return (
-        <div
-            className="p-2 pb-4 flex flex-col gap-1 overflow-y-auto fancy-scrollbar text-sm"
-            style={{
-                maxHeight: 'calc(100vh - 60px)',
-                '--calcite-button-text-color': '#fff',
-            }}
-        >
-            {getContent()}
         </div>
     );
 };
