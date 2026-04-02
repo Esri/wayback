@@ -13,7 +13,7 @@ import {
 import {
     deleteWayportJobs,
     // downloadOutputTilePackage,
-    initiateNewWayportJob,
+    // initiateNewWayportJob,
     // publishWayportTilePackageAsTileLayer,
     startWayportJob,
     updateIdOfWayportJobToShowExtentOnMap,
@@ -22,9 +22,9 @@ import {
     // updateWayportJobStatus,
 } from '@store/WayportMode/thunks';
 import { JobsList } from './JobsList';
-import { activeWaybackItemSelector } from '@store/Wayback/reducer';
-import { IWaybackItem } from '@typings/index';
-import { mapExtentSelector } from '@store/Map/reducer';
+// import { activeWaybackItemSelector } from '@store/Wayback/reducer';
+// import { IWaybackItem } from '@typings/index';
+// import { mapExtentSelector } from '@store/Map/reducer';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { publishWayportTilePackageAsTileLayer } from '@store/WayportMode/publishTileLayerThunks';
 import { updateMapMode } from '@store/Map/thunks';
@@ -35,11 +35,11 @@ export const WayportPanelContainer = () => {
     const { notSignedIn, signedInWithArcGISPublicAccount } =
         useContext(AppContext);
 
-    const activeWaybackItem: IWaybackItem = useAppSelector(
-        activeWaybackItemSelector
-    );
+    // const activeWaybackItem: IWaybackItem = useAppSelector(
+    //     activeWaybackItemSelector
+    // );
 
-    const mapExtent = useAppSelector(mapExtentSelector);
+    // const mapExtent = useAppSelector(mapExtentSelector);
 
     const newDownloadJob = useAppSelector(selectNewWayportJob);
 
@@ -149,7 +149,7 @@ export const WayportPanelContainer = () => {
                 job={newDownloadJob}
                 notSignedIn={notSignedIn}
                 signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
-                activeWaybackItem={activeWaybackItem}
+                // activeWaybackItem={activeWaybackItem}
                 onRemove={(job) => {
                     dispatch(deleteWayportJobs([job]));
                 }}
@@ -167,15 +167,15 @@ export const WayportPanelContainer = () => {
                         })
                     );
                 }}
-                onInitiateNewJob={() => {
-                    // // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
-                    dispatch(
-                        initiateNewWayportJob({
-                            releaseNum: activeWaybackItem.releaseNum,
-                            extent: mapExtent,
-                        })
-                    );
-                }}
+                // onInitiateNewJob={() => {
+                //     // // console.log('User initiates to create a new job for the current map extent and selected zoom levels');
+                //     dispatch(
+                //         initiateNewWayportJob({
+                //             releaseNum: activeWaybackItem.releaseNum,
+                //             extent: mapExtent,
+                //         })
+                //     );
+                // }}
                 // onZoomToExtentRequested={() => {
                 //     // console.log('User requests to zoom to the job extent on the map, this will trigger the map to zoom to the job extent');
                 //     dispatch(

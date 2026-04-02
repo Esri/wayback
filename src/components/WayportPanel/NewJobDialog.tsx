@@ -4,9 +4,7 @@ import { WayportJob } from '@store/WayportMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import classNames from 'classnames';
 import React, { FC, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { ScaleRangeSelector } from './ScaleRangeSelector';
-import { dispatch, min } from 'd3';
+import { useTranslation } from 'react-i18next';
 import { IWaybackItem } from '@typings/index';
 import { Slider, SliderHandleType } from './Slider';
 import { TilePreviewCard } from './TilePreviewCard';
@@ -24,11 +22,11 @@ type NewJobDialogProps = {
      * We will show a warning message to users as they will need to sign in with an organizational account to create Wayport export jobs.
      */
     signedInUsingPublicAccount: boolean;
-    /**
-     * The active wayback item that is being displayed on the map. We will show the release date of the active wayback item in the create a new job message,
-     * and use it as the default release date for the new job when user clicks the action in the prompt message to create a new job.
-     */
-    activeWaybackItem: IWaybackItem | null;
+    // /**
+    //  * The active wayback item that is being displayed on the map. We will show the release date of the active wayback item in the create a new job message,
+    //  * and use it as the default release date for the new job when user clicks the action in the prompt message to create a new job.
+    //  */
+    // activeWaybackItem: IWaybackItem | null;
     /**
      * Emit when user changes the zoom levels selection in the new job dialog, with the selected min and max zoom levels as the parameters.
      * @param minZoom
@@ -50,11 +48,11 @@ type NewJobDialogProps = {
      * @returns
      */
     onSubmit: (job: WayportJob) => void;
-    /**
-     * Emit when user clicks the action in the prompt message to create a new job for the current map extent and selected zoom levels.
-     * @returns
-     */
-    onInitiateNewJob: () => void;
+    // /**
+    //  * Emit when user clicks the action in the prompt message to create a new job for the current map extent and selected zoom levels.
+    //  * @returns
+    //  */
+    // onInitiateNewJob: () => void;
     // /**
     //  * Emit when user clicks the button to zoom to the job extent on the map in the new job dialog.
     //  * @returns
@@ -66,11 +64,11 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     job,
     notSignedIn,
     signedInUsingPublicAccount,
-    activeWaybackItem,
+    // activeWaybackItem,
     levelsOnChange,
     onRemove,
     onSubmit,
-    onInitiateNewJob,
+    // onInitiateNewJob,
     // onZoomToExtentRequested,
 }) => {
     const { t } = useTranslation();
@@ -360,7 +358,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         );
     };
 
-    if (!job || notSignedIn) {
+    if (!job) {
         return null;
     }
 
