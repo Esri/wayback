@@ -155,13 +155,11 @@ export const selectNumOfOngoingJobs = createSelector(
         return ids.filter((id) => {
             const { status } = byId[id];
             return (
-                status === 'wayport job waiting to start' ||
-                status === 'wayport job pending' ||
-                status === 'wayport job finished' ||
-                status === 'publishing job waiting to start' ||
-                status === 'publishing job adding tile package' ||
-                status === 'publishing job adding tile layer' ||
-                status === 'publishing job updating tiles'
+                status !== 'wayport job not started' &&
+                status !== 'wayport job failed' &&
+                status !== 'wayport job downloaded' &&
+                status !== 'publishing job finished' &&
+                status !== 'publishing job failed'
             );
         }).length;
     }

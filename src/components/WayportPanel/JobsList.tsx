@@ -49,7 +49,6 @@ export const JobsList: FC<JobsListProps> = ({
         'wayport job finished': t('finished_status'),
         'wayport job failed': t('failed_status'),
         'wayport job downloaded': t('downloaded_status'),
-        'publishing job waiting to start': t('waiting_to_start_status'),
         'publishing job adding tile package': t(
             'adding_tile_package_item_status'
         ),
