@@ -163,6 +163,7 @@ export const SaveWebmapPanelContainer = () => {
                     }}
                 />
             )}
+
             <SaveWebmapDialog
                 notSignedIn={notSignedIn}
                 canCreateWebmap={canCreateWebmap}

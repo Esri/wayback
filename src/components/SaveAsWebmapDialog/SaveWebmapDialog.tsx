@@ -99,8 +99,55 @@ export const SaveWebmapDialog: FC<Props> = ({
             );
         }
 
-        // If there is no wayback item selected to save, show the prompt to select active wayback item message
-        if (!waybackItemsToSave || waybackItemsToSave.length === 0) {
+        // If there is at least one wayback item selected to save, show the input form to create webmap with the selected wayback items
+        // If user is not signed in, just disable the input form to provider user an hint that they need to sign in to enable the form
+        if (waybackItemsToSave && waybackItemsToSave.length > 0) {
+            // If there is at least one wayback item selected to save, show the input form to create webmap with the selected wayback items
+            return (
+                <div
+                    className={classNames({
+                        disabled: notSignedIn,
+                    })}
+                >
+                    <WebmapLayersList
+                        activeWaybackItem={activeWaybackItem}
+                        waybackItemsToSave={waybackItemsToSave}
+                        disableRemoveAction={
+                            isCreatingWebmap || webmapItemId !== ''
+                        }
+                        setActiveWaybackItemOnClick={
+                            setActiveWaybackItemOnClick
+                        }
+                        clearAllSelectedItemsOnClick={
+                            clearAllSelectedItemsOnClick
+                        }
+                        removeWaybackItemOnClick={removeWaybackItemOnClick}
+                    />
+
+                    <WebmapInputForm
+                        canCreateWebmap={canCreateWebmap}
+                        notSignedIn={notSignedIn}
+                        isCreatingWebmap={isCreatingWebmap}
+                        errorMessage={errorMessage}
+                        waybackItemsToSave={waybackItemsToSave}
+                        saveButtonOnClick={({ title, tags, snippet }) => {
+                            // console.log('Save button clicked with values:', {
+                            //     title,
+                            //     tags,
+                            //     description,
+                            // });
+                            saveButtonOnClick({ title, tags, snippet });
+                        }}
+                        signInUsingDifferentAccountOnClick={
+                            signInUsingDifferentAccountOnClick
+                        }
+                    />
+                </div>
+            );
+        }
+
+        // If signed in but no wayback item is selected to save, show the prompt to select wayback items to save as webmap
+        if (notSignedIn === false) {
             return (
                 <div className="text-white font-light text-sm w-full mb-2">
                     <Trans
@@ -127,43 +174,7 @@ export const SaveWebmapDialog: FC<Props> = ({
             );
         }
 
-        return (
-            <div
-                className={classNames({
-                    disabled: notSignedIn,
-                })}
-            >
-                <WebmapLayersList
-                    activeWaybackItem={activeWaybackItem}
-                    waybackItemsToSave={waybackItemsToSave}
-                    disableRemoveAction={
-                        isCreatingWebmap || webmapItemId !== ''
-                    }
-                    setActiveWaybackItemOnClick={setActiveWaybackItemOnClick}
-                    clearAllSelectedItemsOnClick={clearAllSelectedItemsOnClick}
-                    removeWaybackItemOnClick={removeWaybackItemOnClick}
-                />
-
-                <WebmapInputForm
-                    canCreateWebmap={canCreateWebmap}
-                    notSignedIn={notSignedIn}
-                    isCreatingWebmap={isCreatingWebmap}
-                    errorMessage={errorMessage}
-                    waybackItemsToSave={waybackItemsToSave}
-                    saveButtonOnClick={({ title, tags, snippet }) => {
-                        // console.log('Save button clicked with values:', {
-                        //     title,
-                        //     tags,
-                        //     description,
-                        // });
-                        saveButtonOnClick({ title, tags, snippet });
-                    }}
-                    signInUsingDifferentAccountOnClick={
-                        signInUsingDifferentAccountOnClick
-                    }
-                />
-            </div>
-        );
+        return null;
     };
 
     return (
