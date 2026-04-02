@@ -223,7 +223,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     </div>
 
                     <div className="w-full">
-                        <ul className="text-sm list-disc ml-5 pb-1 mb-2 opacity-50">
+                        <ul className="text-sm list-disc ml-5 pb-1 mb-2">
                             <li className="mb-2">
                                 {t('download_job_instruction_1')}
                             </li>

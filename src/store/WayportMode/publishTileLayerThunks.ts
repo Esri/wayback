@@ -59,41 +59,78 @@ export const addTilePackageItem =
 
         const { outputTilePackageInfo, waybackItem } = jobToBePublished || {};
 
-        if (!outputTilePackageInfo) {
-            throw new Error(
-                'No output tile package info found for job ' +
-                    jobToBePublished.id
-            );
-        }
+        try {
+            if (!outputTilePackageInfo) {
+                throw new Error(
+                    'No output tile package info found for job ' +
+                        jobToBePublished.id
+                );
+            }
 
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    status: 'publishing job adding tile package',
-                },
-            })
-        );
+            const tilePackageUrl =
+                outputTilePackageInfo.alternativeUrl ||
+                outputTilePackageInfo.url;
 
-        const tilePackageItemId =
-            await createTilePackageItemAndWaitForCompletion({
-                dataUrl:
-                    outputTilePackageInfo.alternativeUrl ||
-                    outputTilePackageInfo.url,
-                title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
-                username: username,
-                portalRoot,
-                token,
+            // before adding the tile package item, make a request to the tile package url to make sure the tile package is still available,
+            // since the tile package can expire one hour after it is generated. If the tile package is no longer available.
+            const res = await fetch(tilePackageUrl, {
+                method: 'HEAD',
             });
 
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    wayportTilePackageItemId: tilePackageItemId,
-                },
-            })
-        );
+            if (!res.ok) {
+                throw new Error(
+                    `Failed to access tile package url. Server responded with status ${res.status}: ${res.statusText}`
+                );
+            }
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job adding tile package',
+                    },
+                })
+            );
+
+            const tilePackageItemId =
+                await createTilePackageItemAndWaitForCompletion({
+                    dataUrl:
+                        outputTilePackageInfo.alternativeUrl ||
+                        outputTilePackageInfo.url,
+                    title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
+                    username: username,
+                    portalRoot,
+                    token,
+                });
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        wayportTilePackageItemId: tilePackageItemId,
+                    },
+                })
+            );
+        } catch (err) {
+            console.error(
+                'Failed to add tile package item for job with id of %s. Error: ',
+                jobId,
+                err
+            );
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                        errorCaughtWhilePublishWayportTileLayer:
+                            err instanceof Error
+                                ? err.message
+                                : 'Unknown error',
+                    },
+                })
+            );
+        }
     };
 
 type PublishTileLayerParams = {
@@ -129,70 +166,94 @@ export const publishTileLayer =
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobToBePublished = selectWayportJobById(getState(), jobId);
 
-        if (!jobToBePublished) {
-            throw new Error('cannot find job data with job id of ' + jobId);
-        }
+        try {
+            if (!jobToBePublished) {
+                throw new Error('cannot find job data with job id of ' + jobId);
+            }
 
-        const tilePackageItemId = jobToBePublished.wayportTilePackageItemId;
+            const tilePackageItemId = jobToBePublished.wayportTilePackageItemId;
 
-        if (!tilePackageItemId) {
-            throw new Error(
-                'No tile package item id found for job with id of ' + jobId
+            if (!tilePackageItemId) {
+                throw new Error(
+                    'No tile package item id found for job with id of ' + jobId
+                );
+            }
+
+            if (
+                jobToBePublished.status !== 'publishing job adding tile package'
+            ) {
+                throw new Error(
+                    `Job with id of ${jobId} is in status of ${jobToBePublished.status}, cannot publish tile layer until the tile package item is added and ready`
+                );
+            }
+
+            // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job adding tile layer',
+                    },
+                })
+            );
+
+            const serviceResult = await publishTiledLayer({
+                itemId: tilePackageItemId,
+                token,
+                username,
+                portalRoot,
+                wayportJobId: jobId,
+            });
+
+            if (
+                !serviceResult ||
+                !serviceResult.serviceItemId ||
+                !serviceResult.serviceurl
+            ) {
+                throw new Error(
+                    'Invalid publish service result for job with id of ' + jobId
+                );
+            }
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        wayportTileLayerServiceItemId:
+                            serviceResult.serviceItemId,
+                        wayportTileLayerServiceUrl: serviceResult.serviceurl,
+                    },
+                })
+            );
+
+            // after the service is published successfully, call update API to update the item information of the published service item
+            // to make it easier for users to identify the service item in their content
+            await updatePublishedTileLayer({
+                serviceItemId: serviceResult.serviceItemId,
+                token,
+                portalRoot: ARCGIS_PROTAL_ROOT,
+                wayprotJob: jobToBePublished,
+            });
+        } catch (err) {
+            console.error(
+                'Failed to publish tile layer for job with id of %s. Error: ',
+                jobId,
+                err
+            );
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                        errorCaughtWhilePublishWayportTileLayer:
+                            err instanceof Error
+                                ? err.message
+                                : 'Unknown error',
+                    },
+                })
             );
         }
-
-        if (jobToBePublished.status !== 'publishing job adding tile package') {
-            throw new Error(
-                `Job with id of ${jobId} is in status of ${jobToBePublished.status}, cannot publish tile layer until the tile package item is added and ready`
-            );
-        }
-
-        // after the tile package item is created successfully, update the job status to "publishing tile layer" and call publish API to publish the tile package as a hosted tile layer, and update the job status and related info based on the response from publish API
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    status: 'publishing job adding tile layer',
-                },
-            })
-        );
-
-        const serviceResult = await publishTiledLayer({
-            itemId: tilePackageItemId,
-            token,
-            username,
-            portalRoot,
-            wayportJobId: jobId,
-        });
-
-        if (
-            !serviceResult ||
-            !serviceResult.serviceItemId ||
-            !serviceResult.serviceurl
-        ) {
-            throw new Error(
-                'Invalid publish service result for job with id of ' + jobId
-            );
-        }
-
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    wayportTileLayerServiceItemId: serviceResult.serviceItemId,
-                    wayportTileLayerServiceUrl: serviceResult.serviceurl,
-                },
-            })
-        );
-
-        // after the service is published successfully, call update API to update the item information of the published service item
-        // to make it easier for users to identify the service item in their content
-        await updatePublishedTileLayer({
-            serviceItemId: serviceResult.serviceItemId,
-            token,
-            portalRoot: ARCGIS_PROTAL_ROOT,
-            wayprotJob: jobToBePublished,
-        });
     };
 
 type UpdateTilesOfWayportTileLayerParams = {
@@ -221,40 +282,61 @@ export const updateTilesOfWayportTileLayer =
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobToBePublished = selectWayportJobById(getState(), jobId);
 
-        if (!jobToBePublished) {
-            throw new Error('cannot find job data with job id of ' + jobId);
+        try {
+            if (!jobToBePublished) {
+                throw new Error('cannot find job data with job id of ' + jobId);
+            }
+
+            const { wayportTileLayerServiceUrl } = jobToBePublished;
+
+            // mark the job as published successfully with the service item id and service url
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job updating tiles',
+                    },
+                })
+            );
+
+            const { fullLevelList, extentInWebMercator } =
+                getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
+
+            await updateTilesAndWaitForCompletion({
+                serviceUrl: wayportTileLayerServiceUrl,
+                token,
+                levels: fullLevelList,
+                extent: extentInWebMercator,
+            });
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job finished',
+                    },
+                })
+            );
+        } catch (err) {
+            console.error(
+                'Failed to update tiles of tile layer for job with id of %s. Error: ',
+                jobId,
+                err
+            );
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                        errorCaughtWhilePublishWayportTileLayer:
+                            err instanceof Error
+                                ? err.message
+                                : 'Unknown error',
+                    },
+                })
+            );
         }
-
-        const { wayportTileLayerServiceUrl } = jobToBePublished;
-
-        // mark the job as published successfully with the service item id and service url
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    status: 'publishing job updating tiles',
-                },
-            })
-        );
-
-        const { fullLevelList, extentInWebMercator } =
-            getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
-
-        await updateTilesAndWaitForCompletion({
-            serviceUrl: wayportTileLayerServiceUrl,
-            token,
-            levels: fullLevelList,
-            extent: extentInWebMercator,
-        });
-
-        await dispatch(
-            updateWayportJob({
-                jobId: jobToBePublished.id,
-                partialJobData: {
-                    status: 'publishing job finished',
-                },
-            })
-        );
     };
 
 export const publishWayportTilePackageAsTileLayer =
