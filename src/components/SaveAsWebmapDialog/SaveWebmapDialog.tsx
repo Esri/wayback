@@ -30,12 +30,13 @@ type Props = {
      * If true, the user is not signed in, and the panel will be disabled with a prompt to sign in to save the webmap. Otherwise, it will show the content of the panel.
      */
     notSignedIn: boolean;
-    /**
-     * Emits when user choose the active wayback item to save as webmap. The release number of the chosen wayback item is passed as parameter.
-     * @param releaseNum
-     * @returns
-     */
-    chooseActiveItemOnClick: (releaseNum: number) => void;
+    // /**
+    //  * Emits when user choose the active wayback item to save as webmap. The release number of the chosen wayback item is passed as parameter.
+    //  * @param releaseNum
+    //  * @returns
+    //  */
+    // chooseActiveItemOnClick: (releaseNum: number) => void;
+    openExploreModeOnClick: () => void;
     /**
      * Emits when user clicks the button to clear all selected wayback items. This will unselect all wayback items and reset the dialog to initial state.
      * @returns
@@ -77,7 +78,8 @@ export const SaveWebmapDialog: FC<Props> = ({
     errorMessage,
     webmapItemId,
     notSignedIn,
-    chooseActiveItemOnClick,
+    openExploreModeOnClick,
+    // chooseActiveItemOnClick,
     clearAllSelectedItemsOnClick,
     removeWaybackItemOnClick,
     setActiveWaybackItemOnClick,
@@ -100,22 +102,23 @@ export const SaveWebmapDialog: FC<Props> = ({
         // If there is no wayback item selected to save, show the prompt to select active wayback item message
         if (!waybackItemsToSave || waybackItemsToSave.length === 0) {
             return (
-                <div className="text-white font-light text-sm bg-white bg-opacity-10 p-2 w-full mb-2">
+                <div className="text-white font-light text-sm w-full mb-2">
                     <Trans
-                        i18nKey="prompt_to_save_active_wayback_item_as_webmap"
-                        values={{
-                            waybackReleaseDate:
-                                activeWaybackItem?.releaseDateLabel ||
-                                'Unknown',
-                        }}
+                        i18nKey="prompt_to_select_wayback_item_to_save_as_webmap"
+                        // values={{
+                        //     waybackReleaseDate:
+                        //         activeWaybackItem?.releaseDateLabel ||
+                        //         'Unknown',
+                        // }}
                         components={{
                             action: (
                                 <button
                                     className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
-                                    onClick={chooseActiveItemOnClick.bind(
-                                        null,
-                                        activeWaybackItem.releaseNum
-                                    )}
+                                    // onClick={chooseActiveItemOnClick.bind(
+                                    //     null,
+                                    //     activeWaybackItem.releaseNum
+                                    // )}
+                                    onClick={openExploreModeOnClick}
                                 />
                             ),
                         }}
@@ -125,7 +128,11 @@ export const SaveWebmapDialog: FC<Props> = ({
         }
 
         return (
-            <div>
+            <div
+                className={classNames({
+                    disabled: notSignedIn,
+                })}
+            >
                 <WebmapLayersList
                     activeWaybackItem={activeWaybackItem}
                     waybackItemsToSave={waybackItemsToSave}
@@ -160,11 +167,7 @@ export const SaveWebmapDialog: FC<Props> = ({
     };
 
     return (
-        <div
-            className={classNames('py-1 px-1 w-full mb-2', {
-                disabled: notSignedIn,
-            })}
-        >
+        <div className={classNames('py-1 px-1 w-full mb-2')}>
             {getContent()}
         </div>
     );

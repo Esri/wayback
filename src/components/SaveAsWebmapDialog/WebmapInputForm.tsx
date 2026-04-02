@@ -23,7 +23,7 @@ type Props = {
         snippet,
     }: {
         title: string;
-        tags?: string;
+        tags: string;
         snippet: string;
     }) => void;
     signInUsingDifferentAccountOnClick: () => void;

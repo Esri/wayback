@@ -31,6 +31,7 @@ import { PromptToSignIn } from './PromptToSignIn';
 import { SaveWebmapDialog } from './SaveWebmapDialog';
 import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
 import createWebmap from './createWebmap';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const SaveWebmapPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -170,8 +171,11 @@ export const SaveWebmapPanelContainer = () => {
                 isCreatingWebmap={isCreatingWebmap}
                 errorMessage={errorMessage}
                 webmapItemId={webmapItemId}
-                chooseActiveItemOnClick={(releaseNum) => {
-                    dispatch(toggleSelectWaybackItem(releaseNum));
+                // chooseActiveItemOnClick={(releaseNum) => {
+                //     dispatch(toggleSelectWaybackItem(releaseNum));
+                // }}
+                openExploreModeOnClick={() => {
+                    dispatch(updateMapMode('explore'));
                 }}
                 clearAllSelectedItemsOnClick={() => {
                     dispatch(releaseNum4SelectedItemsCleaned());
