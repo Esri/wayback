@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2025 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,15 @@
  * limitations under the License.
  */
 
-declare module '*.jpg';
-declare module '*.png';
-declare module '*.svg';
-declare module '*.jpeg';
-declare module '*.css';
+export const imageDataToBlob = (imageData: ImageData): Promise<Blob> => {
+    const canvas = document.createElement('canvas');
+    canvas.width = imageData.width;
+    canvas.height = imageData.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.putImageData(imageData, 0, 0); // synchronous
+
+    return new Promise((resolve, reject) => {
+        canvas.toBlob(resolve); // implied image/png format
+    });
+};

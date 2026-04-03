@@ -1,0 +1,18 @@
+.screenshot-effect {
+    background-color: rgba(
+        255,
+        255,
+        255,
+        1
+    ); /* Initial background with 100% opacity */
+    animation: backgroundTransition 1s forwards; /* Animation with 2-second duration, only play once*/
+}
+
+@keyframes backgroundTransition {
+    0% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+}

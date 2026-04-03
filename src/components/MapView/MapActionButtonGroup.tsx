@@ -5,6 +5,7 @@ import { ZoomToExtent } from '@components/ZoomToExtent/ZoomToExtent';
 import { useTranslation } from 'react-i18next';
 import { CopyLink } from '@components/CopyLink/CopyLink';
 import { APP_FULL_EXTENT_CENTER, APP_FULL_EXTENT_ZOOM } from '@constants/map';
+import { ScreenshotWidget } from '@components/ScreenshotWidget/ScreenshotWidget';
 
 type Props = {
     mapView?: MapView;
@@ -32,6 +33,8 @@ export const MapActionButtonGroup: FC<Props> = ({ mapView }) => {
                     });
                 }}
             />
+
+            <ScreenshotWidget mapView={mapView} />
 
             <CopyLink />
         </div>
