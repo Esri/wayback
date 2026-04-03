@@ -280,10 +280,14 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                                       maxLimit: numberWithCommas(
                                           MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
                                       ),
+                                      minZoomLevel: minZoom,
+                                      maxZoomLevel: maxZoom,
                                   }
                               )
                             : t('estimated_number_of_tiles', {
                                   total: numberWithCommas(countOfTotalTiles),
+                                  minZoomLevel: minZoom,
+                                  maxZoomLevel: maxZoom,
                               })}
                     </p>
                 </div>
