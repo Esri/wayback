@@ -53,6 +53,7 @@ import {
 } from '@components/LocaleSwitcher';
 import { WayportExtentLayer } from '@components/WayportExtentLayer';
 import { useCheckStatusOfDownloadJobs } from '@hooks/useCheckStatusOfDownloadJobs';
+import { useBeforeUnloadEvent } from '@hooks/useBeforeUnloadEvent';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -60,6 +61,9 @@ const AppLayout: React.FC = () => {
     useRevalidateToken();
 
     useCheckStatusOfDownloadJobs();
+
+    // confirm with user before leaving the app if there are ongoing export jobs to prevent accidental loss of progress
+    useBeforeUnloadEvent();
 
     return (
         <ErrorBoundary>
