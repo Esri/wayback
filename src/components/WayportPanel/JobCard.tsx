@@ -7,7 +7,6 @@ import {
 import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { checkShouldDisableRemoveButton } from './jobCardHelpers';
 
 type JobCardProps = {
     job: WayportJob;

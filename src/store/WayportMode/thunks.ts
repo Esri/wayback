@@ -48,8 +48,6 @@ import {
     selectPendingWayportJobs,
     selectStaleWayportJobs,
 } from './selectors';
-// import { isDownloadDialogOpenToggled } from '@store/UI/reducer';
-import { MapMode, selectMapMode } from '@store/Map/reducer';
 import { updateMapMode } from '@store/Map/thunks';
 import {
     setActiveWaybackItem,
@@ -58,24 +56,12 @@ import {
 import { getSignedInUser, getToken, signIn } from '@utils/Esri-OAuth';
 import { wayportJobsStore } from '@utils/wayportJobsStore';
 import {
-    getAlternativeWayportOutputUrl,
-    getDataToUpdateTilesOfWayportTileLayer,
     getNewWayportJobFromSessionStorage,
     getWayportJobOutputInfoHelper,
     normalizeExtent,
     saveNewWayportJobToSessionStorage,
 } from './helpers';
-import {
-    extractAlternativeFileNameFromMessages,
-    parseDownloadJobProgress,
-} from '@services/wayport/wayportHelpers';
-import { createTilePackageItemAndWaitForCompletion } from '@services/hosted-tile-layer/addTilePackageItem';
-import { ARCGIS_PROTAL_ROOT } from '@constants/index';
-import {
-    publishTiledLayer,
-    updatePublishedTileLayer,
-} from '@services/hosted-tile-layer/publishTiledLayer';
-import { updateTilesAndWaitForCompletion } from '@services/hosted-tile-layer/updateTiles';
+import { parseDownloadJobProgress } from '@services/wayport/wayportHelpers';
 
 type InitiateDownloadJobParams = {
     /**

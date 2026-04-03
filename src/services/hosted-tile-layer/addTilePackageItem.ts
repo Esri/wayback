@@ -60,7 +60,7 @@ type AddItemResponse = {
  *
  * @see https://developers.arcgis.com/rest/users-groups-and-items/add-item/#description
  */
-const addTilePackageItem = async ({
+export const addTilePackageItem = async ({
     title,
     dataUrl,
     snippet,
@@ -168,7 +168,7 @@ type CheckItemProcessingStatusResponse = {
  * @throws {Error} If the HTTP request fails or the server returns an error.
  * @see https://developers.arcgis.com/rest/users-groups-and-items/status/
  */
-const checkItemProcessingStatus = async ({
+export const checkItemProcessingStatus = async ({
     itemId,
     userId,
     token,
@@ -206,52 +206,52 @@ const checkItemProcessingStatus = async ({
     return data as CheckItemProcessingStatusResponse;
 };
 
-/**
- * Creates a tile package item in ArcGIS Portal and polls until server-side processing is complete.
- * Combines {@link addTilePackageItem} and {@link checkItemProcessingStatus} into a single workflow:
- * first adds the item, then polls the processing status every 10 seconds until it reaches
- * `'completed'` or `'failed'`. If processing fails or doesn't complete within 15 minutes, an error is thrown.
- *
- * @param {AddTilePackageItemParams} params - The parameters for adding the tile package item.
- * @returns {Promise<string>} The item ID of the successfully processed tile package.
- * @throws {Error} If the item fails to be added or if server-side processing fails.
- */
-export const createTilePackageItemAndWaitForCompletion = async (
-    params: AddTilePackageItemParams
-): Promise<string> => {
-    const { token, portalRoot } = params;
+// /**
+//  * Creates a tile package item in ArcGIS Portal and polls until server-side processing is complete.
+//  * Combines {@link addTilePackageItem} and {@link checkItemProcessingStatus} into a single workflow:
+//  * first adds the item, then polls the processing status every 10 seconds until it reaches
+//  * `'completed'` or `'failed'`. If processing fails or doesn't complete within 15 minutes, an error is thrown.
+//  *
+//  * @param {AddTilePackageItemParams} params - The parameters for adding the tile package item.
+//  * @returns {Promise<string>} The item ID of the successfully processed tile package.
+//  * @throws {Error} If the item fails to be added or if server-side processing fails.
+//  */
+// export const createTilePackageItemAndWaitForCompletion = async (
+//     params: AddTilePackageItemParams
+// ): Promise<string> => {
+//     const { token, portalRoot } = params;
 
-    // Step 1: Add tile package item
-    const addItemResponse = await addTilePackageItem(params);
-    const itemId = addItemResponse.id;
+//     // Step 1: Add tile package item
+//     const addItemResponse = await addTilePackageItem(params);
+//     const itemId = addItemResponse.id;
 
-    // Step 2: Poll item processing status until it's completed
-    const maxWaitTime = 15 * 60 * 1000; // 15 minutes
-    const startTime = Date.now();
-    let processingStatusResponse: CheckItemProcessingStatusResponse;
+//     // Step 2: Poll item processing status until it's completed
+//     const maxWaitTime = 15 * 60 * 1000; // 15 minutes
+//     const startTime = Date.now();
+//     let processingStatusResponse: CheckItemProcessingStatusResponse;
 
-    while (true) {
-        processingStatusResponse = await checkItemProcessingStatus({
-            itemId,
-            token,
-            portalRoot,
-            userId: params.username,
-        });
+//     while (true) {
+//         processingStatusResponse = await checkItemProcessingStatus({
+//             itemId,
+//             token,
+//             portalRoot,
+//             userId: params.username,
+//         });
 
-        if (processingStatusResponse.status === 'completed') {
-            break;
-        } else if (processingStatusResponse.status === 'failed') {
-            throw new Error(`Item processing failed for item ID: ${itemId}`);
-        }
+//         if (processingStatusResponse.status === 'completed') {
+//             break;
+//         } else if (processingStatusResponse.status === 'failed') {
+//             throw new Error(`Item processing failed for item ID: ${itemId}`);
+//         }
 
-        if (Date.now() - startTime >= maxWaitTime) {
-            throw new Error(
-                `Item processing timed out after 15 minutes for item ID: ${itemId}`
-            );
-        }
+//         if (Date.now() - startTime >= maxWaitTime) {
+//             throw new Error(
+//                 `Item processing timed out after 15 minutes for item ID: ${itemId}`
+//             );
+//         }
 
-        await delay(10000); // Wait for 10 seconds before polling again
-    }
+//         await delay(10000); // Wait for 10 seconds before polling again
+//     }
 
-    return itemId;
-};
+//     return itemId;
+// };

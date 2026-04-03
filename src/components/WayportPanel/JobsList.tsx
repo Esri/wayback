@@ -62,28 +62,19 @@ export const JobsList: FC<JobsListProps> = ({
         'wayport job failed': t('wayport_job_failed_status'),
         'wayport job downloaded': t('wayport_job_downloaded_status'),
         'wayport job expired': t('wayport_job_expired_status'),
+        'publishing job waiting to start': t('adding_tile_package_item_status'),
         'publishing job adding tile package': t(
             'adding_tile_package_item_status'
         ),
-        'publishing job adding tile layer': t('publishing_tile_layer_status'),
+        'publishing job added tile package': t(
+            'adding_tile_package_item_status'
+        ),
+        'publishing job added tile layer': t('publishing_tile_layer_status'),
         'publishing job updating tiles': t('updating_tiles_status'),
+        'publishing job updated tiles': t('updating_tiles_status'),
         'publishing job finished': t('finished_publishing_tile_layer_status'),
         'publishing job failed': t('failed_publishing_tile_layer_status'),
     };
-
-    // const wayportTileLayerPublishStatusLabel: Record<
-    //     PublishWayportTileLayerStatus,
-    //     string
-    // > = {
-    //     'publishing job not started': t('not_started_status'),
-    //     'publishing job adding tile package': t(
-    //         'adding_tile_package_item_status'
-    //     ),
-    //     'publishing job adding tile layer': t('publishing_tile_layer_status'),
-    //     'publishing job updating tiles': t('updating_tiles_status'),
-    //     'publishing job finished': t('finished_publishing_tile_layer_status'),
-    //     'publishing job failed': t('failed_publishing_tile_layer_status'),
-    // };
 
     if (jobs.length === 0 && notSignedIn === false) {
         return (
