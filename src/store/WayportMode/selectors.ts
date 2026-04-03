@@ -238,3 +238,87 @@ export const selectTimestampOfZoomToDownloadJobExtentRequest = (
 
 export const selectIdOfJobToShowExtentOnMap = (state: RootState) =>
     state.WayportMode.idOfJobToShowExtentOnMap;
+
+export const selectWayportJobWaiting4TilePackageToBeAdded = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const tilePackageItemWaitingToBeAddedJobIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'publishing job adding tile package';
+        });
+
+        if (tilePackageItemWaitingToBeAddedJobIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'publishing job adding tile package' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = tilePackageItemWaitingToBeAddedJobIds[0];
+
+        return byId[jobId];
+    }
+);
+
+export const selectWayportJobReadyToBePublished = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const tilePackageItemReadyToBePublishedJobIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'publishing job added tile package';
+        });
+
+        if (tilePackageItemReadyToBePublishedJobIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'publishing job added tile package' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = tilePackageItemReadyToBePublishedJobIds[0];
+
+        return byId[jobId];
+    }
+);
+
+export const selectWayportJobReadyToHaveTilesUpdated = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const tileLayerReadyToHaveTilesUpdatedJobIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'publishing job added tile layer';
+        });
+
+        if (tileLayerReadyToHaveTilesUpdatedJobIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'publishing job added tile layer' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = tileLayerReadyToHaveTilesUpdatedJobIds[0];
+
+        return byId[jobId];
+    }
+);
+
+export const selectWayportJobUpdatingTiles = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const jobWaitingToHaveTilesUpdatedIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'publishing job updating tiles';
+        });
+
+        if (jobWaitingToHaveTilesUpdatedIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'publishing job waiting to update tiles' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = jobWaitingToHaveTilesUpdatedIds[0];
+
+        return byId[jobId];
+    }
+);

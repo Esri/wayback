@@ -519,104 +519,61 @@ export const publishWayportTilePackageAsTileLayer =
                 })
             );
 
-            // step 1.1 need to wait for the tile package item to be ready before publishing the tile layer,
-            // otherwise the publish operation will likely fail due to the item still being processed and not ready yet.
-            const maxWaitTimeInMs = 10 * 60 * 1000; // 10 minute
-            const checkIntervalInMs = 30 * 1000; // 30 seconds
-            const startTime = Date.now();
-            let isTilePackageReady = false;
+            // // step 2: publish tile layer from the created tile package item, and update the job with the published service information
+            // await dispatch(
+            //     publishTileLayerThunk({
+            //         jobId,
+            //         token,
+            //         portalRoot: ARCGIS_PROTAL_ROOT,
+            //     })
+            // );
 
-            while (true) {
-                const elapsedTime = Date.now() - startTime;
+            // // step 3: call update tiles API to update the tiles of the published tile layer, and wait for the update operation to be completed before marking the job as completely finished
+            // await dispatch(
+            //     updateTilesOfWayportTileLayerThunk({
+            //         jobId,
+            //         token,
+            //     })
+            // );
 
-                if (elapsedTime > maxWaitTimeInMs) {
-                    break;
-                }
+            // // step 4: wait for update tiles operation to be completed, then mark the job as completely finished
+            // const maxWaitTimeInMsForUpdateTiles = 30 * 60 * 1000; // 30 minutes
+            // const checkIntervalInMsForUpdateTiles = 30 * 1000; // 30 seconds
+            // const startTimeForUpdateTiles = Date.now();
 
-                await new Promise((resolve) =>
-                    setTimeout(resolve, checkIntervalInMs)
-                );
+            // while (true) {
+            //     const elapsedTime = Date.now() - startTimeForUpdateTiles;
 
-                await dispatch(
-                    waitTilePackageIsReadyToPublishThunk({
-                        jobId,
-                        token,
-                        portalRoot: ARCGIS_PROTAL_ROOT,
-                    })
-                );
+            //     if (elapsedTime > maxWaitTimeInMsForUpdateTiles) {
+            //         break;
+            //     }
 
-                const updatedJobData = selectWayportJobById(getState(), jobId);
+            //     await new Promise((resolve) =>
+            //         setTimeout(resolve, checkIntervalInMsForUpdateTiles)
+            //     );
 
-                if (
-                    updatedJobData.status ===
-                    'publishing job added tile package'
-                ) {
-                    isTilePackageReady = true;
-                    break;
-                }
-            }
+            //     await dispatch(
+            //         checkUpdateTilesStatusThunk({
+            //             jobId,
+            //             token,
+            //         })
+            //     );
 
-            if (!isTilePackageReady) {
-                throw new Error(
-                    'Tile package item is not ready for publishing after waiting for 1 minute'
-                );
-            }
+            //     const updatedJobData = selectWayportJobById(getState(), jobId);
 
-            // step 2: publish tile layer from the created tile package item, and update the job with the published service information
-            await dispatch(
-                publishTileLayerThunk({
-                    jobId,
-                    token,
-                    portalRoot: ARCGIS_PROTAL_ROOT,
-                })
-            );
+            //     if (updatedJobData.status !== 'publishing job updating tiles') {
+            //         break;
+            //     }
 
-            // step 3: call update tiles API to update the tiles of the published tile layer, and wait for the update operation to be completed before marking the job as completely finished
-            await dispatch(
-                updateTilesOfWayportTileLayerThunk({
-                    jobId,
-                    token,
-                })
-            );
-
-            // step 4: wait for update tiles operation to be completed, then mark the job as completely finished
-            const maxWaitTimeInMsForUpdateTiles = 30 * 60 * 1000; // 30 minutes
-            const checkIntervalInMsForUpdateTiles = 30 * 1000; // 30 seconds
-            const startTimeForUpdateTiles = Date.now();
-
-            while (true) {
-                const elapsedTime = Date.now() - startTimeForUpdateTiles;
-
-                if (elapsedTime > maxWaitTimeInMsForUpdateTiles) {
-                    break;
-                }
-
-                await new Promise((resolve) =>
-                    setTimeout(resolve, checkIntervalInMsForUpdateTiles)
-                );
-
-                await dispatch(
-                    checkUpdateTilesStatusThunk({
-                        jobId,
-                        token,
-                    })
-                );
-
-                const updatedJobData = selectWayportJobById(getState(), jobId);
-
-                if (updatedJobData.status !== 'publishing job updating tiles') {
-                    break;
-                }
-
-                if (
-                    Date.now() - startTimeForUpdateTiles >
-                    maxWaitTimeInMsForUpdateTiles
-                ) {
-                    throw new Error(
-                        'Update tiles operation is not completed after waiting for 30 minutes'
-                    );
-                }
-            }
+            //     if (
+            //         Date.now() - startTimeForUpdateTiles >
+            //         maxWaitTimeInMsForUpdateTiles
+            //     ) {
+            //         throw new Error(
+            //             'Update tiles operation is not completed after waiting for 30 minutes'
+            //         );
+            //     }
+            // }
         } catch (err) {
             console.error(
                 'Failed to publish tile layer for job with id of %s. Error: ',
