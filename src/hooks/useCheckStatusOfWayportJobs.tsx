@@ -16,7 +16,7 @@ const CHECK_JOB_STATUS_INTERVAL = 5 * 1000; // 5 seconds
  * This custom hook is used to check the status of pending download jobs at a regular interval, and update the job status in the store based on the response from Wayport GP service.
  * The interval will only be active when there is at least one pending download job, and will be cleared when there is no pending download job or when the component using this hook unmounts.
  */
-export const useCheckStatusOfDownloadJobs = () => {
+export const useManageStatusOfWayportJobs = () => {
     // get the count of pending download jobs from the store
     const countOfPendingDownloadJobs = useAppSelector(
         selectNumOfPendingWayportJobs

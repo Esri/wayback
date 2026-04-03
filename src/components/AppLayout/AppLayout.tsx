@@ -52,7 +52,7 @@ import {
     LocaleSwitcherDialog,
 } from '@components/LocaleSwitcher';
 import { WayportExtentLayer } from '@components/WayportExtentLayer';
-import { useCheckStatusOfDownloadJobs } from '@hooks/useCheckStatusOfDownloadJobs';
+import { useManageStatusOfWayportJobs } from '@hooks/useCheckStatusOfWayportJobs';
 import { useBeforeUnloadEvent } from '@hooks/useBeforeUnloadEvent';
 
 const AppLayout: React.FC = () => {
@@ -60,7 +60,8 @@ const AppLayout: React.FC = () => {
 
     useRevalidateToken();
 
-    useCheckStatusOfDownloadJobs();
+    // This custom hook is used to check and manage the status of pending Wayport export jobs at a regular interval, and update the job status in the store.
+    useManageStatusOfWayportJobs();
 
     // confirm with user before leaving the app if there are ongoing export jobs to prevent accidental loss of progress
     useBeforeUnloadEvent();
