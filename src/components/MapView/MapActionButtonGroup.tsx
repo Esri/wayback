@@ -4,6 +4,7 @@ import MapView from '@arcgis/core/views/MapView';
 import { ZoomToExtent } from '@components/ZoomToExtent/ZoomToExtent';
 import { useTranslation } from 'react-i18next';
 import { CopyLink } from '@components/CopyLink/CopyLink';
+import { APP_FULL_EXTENT_CENTER, APP_FULL_EXTENT_ZOOM } from '@constants/map';
 
 type Props = {
     mapView?: MapView;
@@ -26,8 +27,8 @@ export const MapActionButtonGroup: FC<Props> = ({ mapView }) => {
                 tooltip={t('zoom_to_full_extent')}
                 onClick={() => {
                     mapView.goTo({
-                        center: [-4.8908, 25.35031],
-                        zoom: 3,
+                        center: APP_FULL_EXTENT_CENTER,
+                        zoom: APP_FULL_EXTENT_ZOOM,
                     });
                 }}
             />

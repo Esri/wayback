@@ -359,3 +359,10 @@ export const HYBRID_REFERENCE_LAYERS: ReferenceLayerData[] = [
     //     url: `https://www.arcgis.com/sharing/rest/content/items/f9616aa008b84402ab30c207298b4f11/resources/styles/root.json`,
     // },
 ];
+
+/**
+ * The center and zoom level for the full extent of the app, which is the default view when user clicks on zoom to full extent button.
+ */
+export const APP_FULL_EXTENT_CENTER = [-4.8908, 25.35031] as [number, number];
+
+export const APP_FULL_EXTENT_ZOOM = 3;

@@ -1,4 +1,5 @@
 import MapView from '@arcgis/core/views/MapView';
+import { APP_FULL_EXTENT_CENTER, APP_FULL_EXTENT_ZOOM } from '@constants/map';
 import { usePrevious } from '@hooks/usePrevious';
 import { useAppSelector } from '@store/configureStore';
 import { selectMapMode } from '@store/Map/reducer';
@@ -20,7 +21,8 @@ export const useZoomToWorldExtent = (mapView: MapView) => {
         await mapView.when();
 
         mapView.goTo({
-            zoom: 3,
+            center: APP_FULL_EXTENT_CENTER,
+            zoom: APP_FULL_EXTENT_ZOOM,
         });
 
         // Set the flag to indicate that we've zoomed to the world extent
