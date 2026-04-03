@@ -178,6 +178,7 @@
     "publish_wayport_tile_layer": "Publish as Tile Layer",
     "wayport_ongoing_job_warning": "You already have an ongoing export job. Please wait for it to finish before starting a new one.",
     "prompt_to_select_wayback_item_to_export": "No version is currently selected. <action>Open Explore Mode</action> to select a version to export tiles.",
+    "save_map_view_as_image": "Save Snapshot of Current Map View",
     "COUNTRY_NAME_AF": "Afghanistan",
     "COUNTRY_NAME_AL": "Albania",
     "COUNTRY_NAME_DZ": "Algeria",
