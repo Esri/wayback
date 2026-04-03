@@ -27,7 +27,6 @@ import {
 
 import { RootState } from '../configureStore';
 import { ReferenceLayerLanguage } from '@constants/map';
-import { isMap } from 'util/types';
 
 export type MapCenter = {
     lon: number;
@@ -65,6 +64,14 @@ export type MapState = {
      * This can be used to prevent certain actions from being triggered while the map is still updating, which can help improve performance and user experience.
      */
     isUpdaing: boolean; // indicates whether the map view is currently updating (e.g., during zooming or panning)
+    /**
+     * Map scale at the current view
+     */
+    scale: number;
+    /**
+     * Map resolution at the current view, in map units per pixel. For example, if the spatial reference of the map is Web Mercator, the resolution is in meters per pixel.
+     */
+    resolution: number;
 };
 
 export const initialMapState: MapState = {
@@ -76,6 +83,8 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
+    scale: null,
+    resolution: null,
     isUpdaing: false,
 };
 
@@ -130,32 +139,13 @@ const slice = createSlice({
         isMapUpdatingToggled: (state, action: PayloadAction<boolean>) => {
             state.isUpdaing = action.payload;
         },
-        // referenceLayerLocaleUpdated: (
-        //     state,
-        //     action: PayloadAction<ReferenceLayerLanguage>
-        // ) => {
-        //     state.referenceLayerLocale = action.payload;
-        // },
-        // suggestedReferenceLayerLocaleUpdated: (
-        //     state,
-        //     action: PayloadAction<ReferenceLayerLanguage | null>
-        // ) => {
-        //     state.suggestedReferenceLayerLocale = action.payload;
-        // },
-        // isReferenceLayerSwitcherOpenToggled: (
-        //     state,
-        //     action: PayloadAction<boolean>
-        // ) => {
-        //     if (action.payload === undefined) {
-        //         state.isReferenceLayerSwitcherOpen =
-        //             !state.isReferenceLayerSwitcherOpen;
-        //         return;
-        //     } else {
-        //         state.isReferenceLayerSwitcherOpen = action.payload;
-        //     }
-
-        //     // state.isReferenceLayerSwitcherOpen = action.payload;
-        // },
+        mapScaleAndResolutionUpdated: (
+            state,
+            action: PayloadAction<{ scale: number; resolution: number }>
+        ) => {
+            state.scale = action.payload.scale;
+            state.resolution = action.payload.resolution;
+        },
     },
 });
 
@@ -171,6 +161,7 @@ export const {
     mapCenterAndZoomUpdated,
     // zoomUpdated,
     isMapUpdatingToggled,
+    mapScaleAndResolutionUpdated,
     // referenceLayerLocaleUpdated,
     // suggestedReferenceLayerLocaleUpdated,
     // isReferenceLayerSwitcherOpenToggled,
@@ -226,5 +217,9 @@ export const selectIsWayportModeOn = (state: RootState) =>
 
 export const selectIsSaveWebmapModeOn = (state: RootState) =>
     state.Map.mode === 'save-webmap';
+
+export const selectMapScale = (state: RootState) => state.Map.scale;
+
+export const selectMapResolution = (state: RootState) => state.Map.resolution;
 
 export default reducer;

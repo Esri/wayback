@@ -47,6 +47,8 @@ interface Props {
     onStationary: (payload: {
         mapCenterPointInfo: IMapPointInfo;
         mapExtent: IExtentGeomety;
+        mapScale: number;
+        mapResolution: number;
     }) => void;
     onUpdating: (isUpdating: boolean) => void;
     // onExtentChange: (extent: IExtentGeomety) => void;
@@ -137,6 +139,8 @@ const MapViewComponent: React.FC<Props> = ({
                 onStationary({
                     mapCenterPointInfo: mapViewCenterPointInfo,
                     mapExtent: extent.toJSON(),
+                    mapScale: view.scale,
+                    mapResolution: view.resolution,
                 });
             }
         );

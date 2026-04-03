@@ -27,6 +27,7 @@ import {
     selectMapMode,
     // zoomUpdated,
     mapCenterAndZoomUpdated,
+    mapScaleAndResolutionUpdated,
 } from '@store/Map/reducer';
 
 // import {
@@ -125,7 +126,12 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                 initialExtent={defaultMapExtent}
                 center={center}
                 zoom={zoom}
-                onStationary={({ mapCenterPointInfo, mapExtent }) => {
+                onStationary={({
+                    mapCenterPointInfo,
+                    mapExtent,
+                    mapResolution,
+                    mapScale,
+                }) => {
                     // queryVersionsWithLocalChanges(mapCenterPoint);
                     // setQueryLocation(mapCenterPointInfo);
 
@@ -149,6 +155,13 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                     );
 
                     dispatch(mapExtentUpdated(mapExtent));
+
+                    dispatch(
+                        mapScaleAndResolutionUpdated({
+                            scale: mapScale,
+                            resolution: mapResolution,
+                        })
+                    );
 
                     // set is map updating to false when map is stationary, after map center, zoom and extent are updated.
                     dispatch(isMapUpdatingToggled(false));

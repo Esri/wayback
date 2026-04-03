@@ -54,6 +54,7 @@ import {
 import { WayportExtentLayer } from '@components/WayportExtentLayer';
 import { useManageStatusOfWayportJobs } from '@hooks/useCheckStatusOfWayportJobs';
 import { useBeforeUnloadEvent } from '@hooks/useBeforeUnloadEvent';
+import { MapScaleIndicator } from '@components/MapScaleIndicator/MapScaleIndicator';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
@@ -105,6 +106,8 @@ const AppLayout: React.FC = () => {
                     <WayportExtentLayer />
 
                     <TilePreviewWindow />
+
+                    <MapScaleIndicator />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
