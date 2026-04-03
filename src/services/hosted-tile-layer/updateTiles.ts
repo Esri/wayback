@@ -55,7 +55,7 @@ const getAdminUrlFromServiceUrl = (serviceUrl: string): string => {
  *
  * @see https://developers.arcgis.com/rest/services-reference/online/update-tiles/
  */
-const updateTiles = async ({
+export const updateTiles = async ({
     serviceUrl,
     levels,
     extent,
@@ -129,7 +129,7 @@ type HostedMapServiceAdminJSONResponse = {
  * @returns `true` if the cache status is `SUBMITTED` or `PROCESSING`, `false` otherwise.
  * @throws If required parameters are missing, the HTTP request fails, the API returns an error, or the status field is absent.
  */
-const checkUpdateTilesStatus = async ({
+export const checkUpdateTilesStatus = async ({
     serviceUrl,
     token,
 }: CheckUpdateTilesStatusParams): Promise<boolean> => {
@@ -173,54 +173,54 @@ const checkUpdateTilesStatus = async ({
     );
 };
 
-/**
- * Updates tiles for a hosted tile service and polls until the cache rebuild is complete.
- * Sends an update request via {@link updateTiles}, then repeatedly checks the service's
- * admin endpoint for cache execution status until processing finishes or a timeout is reached.
- *
- * @param params - The parameters for updating tiles.
- * @param params.serviceUrl - The URL of the hosted tile service endpoint to update.
- * @param params.levels - Array of zoom level IDs to update.
- * @param params.extent - The geographic extent of the area to update tiles for.
- * @param params.token - Authentication token for the ArcGIS Portal API.
- * @throws If the update request fails, returns a non-success status, or the polling times out (15 minutes).
- */
-export const updateTilesAndWaitForCompletion = async (
-    params: UpdateTilesParams
-): Promise<void> => {
-    // send the update tiles request
-    const updateResponse = await updateTiles(params);
+// /**
+//  * Updates tiles for a hosted tile service and polls until the cache rebuild is complete.
+//  * Sends an update request via {@link updateTiles}, then repeatedly checks the service's
+//  * admin endpoint for cache execution status until processing finishes or a timeout is reached.
+//  *
+//  * @param params - The parameters for updating tiles.
+//  * @param params.serviceUrl - The URL of the hosted tile service endpoint to update.
+//  * @param params.levels - Array of zoom level IDs to update.
+//  * @param params.extent - The geographic extent of the area to update tiles for.
+//  * @param params.token - Authentication token for the ArcGIS Portal API.
+//  * @throws If the update request fails, returns a non-success status, or the polling times out (15 minutes).
+//  */
+// export const updateTilesAndWaitForCompletion = async (
+//     params: UpdateTilesParams
+// ): Promise<void> => {
+//     // send the update tiles request
+//     const updateResponse = await updateTiles(params);
 
-    if (updateResponse.status !== 'success') {
-        throw new Error(
-            `Failed to start updating tiles for service ${params.serviceUrl}`
-        );
-    }
+//     if (updateResponse.status !== 'success') {
+//         throw new Error(
+//             `Failed to start updating tiles for service ${params.serviceUrl}`
+//         );
+//     }
 
-    // poll the service admin endpoint until the tile update job is completed
-    const maxWaitTime = 15 * 60 * 1000; // 1 hour
-    const startTime = Date.now();
-    const delayBetweenPolls = 5000; // 5 seconds
+//     // poll the service admin endpoint until the tile update job is completed
+//     const maxWaitTime = 15 * 60 * 1000; // 1 hour
+//     const startTime = Date.now();
+//     const delayBetweenPolls = 5000; // 5 seconds
 
-    while (true) {
-        await delay(delayBetweenPolls);
+//     while (true) {
+//         await delay(delayBetweenPolls);
 
-        const isProcessing = await checkUpdateTilesStatus({
-            serviceUrl: params.serviceUrl,
-            token: params.token,
-        });
+//         const isProcessing = await checkUpdateTilesStatus({
+//             serviceUrl: params.serviceUrl,
+//             token: params.token,
+//         });
 
-        if (!isProcessing) {
-            // If not processing, we assume the job is completed. In a more robust implementation, we would check for failed status as well.
-            break;
-        }
+//         if (!isProcessing) {
+//             // If not processing, we assume the job is completed. In a more robust implementation, we would check for failed status as well.
+//             break;
+//         }
 
-        if (Date.now() - startTime > maxWaitTime) {
-            throw new Error(
-                `Timed out waiting for tile update to complete for service ${params.serviceUrl}`
-            );
-        }
-    }
+//         if (Date.now() - startTime > maxWaitTime) {
+//             throw new Error(
+//                 `Timed out waiting for tile update to complete for service ${params.serviceUrl}`
+//             );
+//         }
+//     }
 
-    return;
-};
+//     return;
+// };

@@ -27,13 +27,15 @@ import {
     publishTiledLayer,
     updatePublishedTileLayer,
 } from '@services/hosted-tile-layer/publishTiledLayer';
-import { updateTilesAndWaitForCompletion } from '@services/hosted-tile-layer/updateTiles';
+import {
+    checkUpdateTilesStatus,
+    updateTiles,
+} from '@services/hosted-tile-layer/updateTiles';
 import { updateWayportJob } from './thunks';
 
 type AddTilePackageItemParams = {
     jobId: string;
     token: string;
-    username: string;
     portalRoot: string;
 };
 
@@ -56,7 +58,7 @@ type AddTilePackageItemParams = {
  * @throws {Error} If no `outputTilePackageInfo` is found on the job.
  */
 export const addTilePackageItemThunk =
-    ({ jobId, token, username, portalRoot }: AddTilePackageItemParams) =>
+    ({ jobId, token, portalRoot }: AddTilePackageItemParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobToBePublished = selectWayportJobById(getState(), jobId);
 
@@ -69,6 +71,16 @@ export const addTilePackageItemThunk =
                         jobToBePublished.id
                 );
             }
+
+            // update the job status to indicate the publishing process has started, so that the UI can show a loading status for the job while the tile package item is being created
+            await dispatch(
+                updateWayportJob({
+                    jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job waiting to start',
+                    },
+                })
+            );
 
             const tilePackageUrl =
                 outputTilePackageInfo.alternativeUrl ||
@@ -91,10 +103,11 @@ export const addTilePackageItemThunk =
                     outputTilePackageInfo.alternativeUrl ||
                     outputTilePackageInfo.url,
                 title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
-                username: username,
+                username: jobToBePublished.userId,
                 portalRoot,
                 token,
             });
+
             const tilePackageItemId = addItemResponse.id;
 
             await dispatch(
@@ -106,27 +119,6 @@ export const addTilePackageItemThunk =
                     },
                 })
             );
-
-            // const tilePackageItemId =
-            //     await createTilePackageItemAndWaitForCompletion({
-            //         dataUrl:
-            //             outputTilePackageInfo.alternativeUrl ||
-            //             outputTilePackageInfo.url,
-            //         title: `Wayback Tile Package - ${waybackItem.releaseDateLabel}`,
-            //         username: username,
-            //         portalRoot,
-            //         token,
-            //     });
-
-            // await dispatch(
-            //     updateWayportJob({
-            //         jobId: jobToBePublished.id,
-            //         partialJobData: {
-            //             status: 'publishing job added tile package',
-            //             wayportTilePackageItemId: tilePackageItemId,
-            //         },
-            //     })
-            // );
         } catch (err) {
             console.error(
                 'Failed to add tile package item for job with id of %s. Error: ',
@@ -152,17 +144,11 @@ export const addTilePackageItemThunk =
 type WaitTilePackageIsReadyToPublishParams = {
     jobId: string;
     token: string;
-    username: string;
     portalRoot: string;
 };
 
 export const waitTilePackageIsReadyToPublishThunk =
-    ({
-        jobId,
-        token,
-        username,
-        portalRoot,
-    }: WaitTilePackageIsReadyToPublishParams) =>
+    ({ jobId, token, portalRoot }: WaitTilePackageIsReadyToPublishParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobData = selectWayportJobById(getState(), jobId);
 
@@ -189,7 +175,7 @@ export const waitTilePackageIsReadyToPublishThunk =
                 itemId: tilePackageItemId,
                 token,
                 portalRoot,
-                userId: username,
+                userId: jobData.userId,
             });
 
             if (processingStatusResponse.status === 'completed') {
@@ -235,7 +221,6 @@ export const waitTilePackageIsReadyToPublishThunk =
 type PublishTileLayerParams = {
     jobId: string;
     token: string;
-    username: string;
     portalRoot: string;
 };
 
@@ -261,7 +246,7 @@ type PublishTileLayerParams = {
  *   in the expected status, or if the publish response is invalid.
  */
 export const publishTileLayerThunk =
-    ({ jobId, token, username, portalRoot }: PublishTileLayerParams) =>
+    ({ jobId, token, portalRoot }: PublishTileLayerParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         const jobToBePublished = selectWayportJobById(getState(), jobId);
 
@@ -289,7 +274,7 @@ export const publishTileLayerThunk =
             const serviceResult = await publishTiledLayer({
                 itemId: tilePackageItemId,
                 token,
-                username,
+                username: jobToBePublished.userId,
                 portalRoot,
                 wayportJobId: jobId,
             });
@@ -353,14 +338,7 @@ type UpdateTilesOfWayportTileLayerParams = {
 
 /**
  * Redux thunk that triggers a tile update operation on a previously published
- * Wayport hosted tile layer and waits for it to complete.
- *
- * Steps:
- * 1. Looks up the job by `jobId` from the store and retrieves the tile layer service URL.
- * 2. Sets the job status to `'publishing job updating tiles'`.
- * 3. Derives the tile levels and extent via `getDataToUpdateTilesOfWayportTileLayer`.
- * 4. Calls `updateTilesAndWaitForCompletion` to rebuild the tiles for the given extent and levels.
- * 5. Sets the job status to `'publishing job finished'` upon success.
+ * Wayport hosted tile layer
  *
  * @param params - Parameters required to update the tiles.
  * @param params.jobId - ID of the Wayport job whose tile layer should be updated.
@@ -385,31 +363,35 @@ export const updateTilesOfWayportTileLayerThunk =
 
             const { wayportTileLayerServiceUrl } = jobToBePublished;
 
-            // mark the job as published successfully with the service item id and service url
-            await dispatch(
-                updateWayportJob({
-                    jobId: jobToBePublished.id,
-                    partialJobData: {
-                        status: 'publishing job updating tiles',
-                    },
-                })
-            );
-
             const { fullLevelList, extentInWebMercator } =
                 getDataToUpdateTilesOfWayportTileLayer(jobToBePublished);
 
-            await updateTilesAndWaitForCompletion({
+            const res = await updateTiles({
                 serviceUrl: wayportTileLayerServiceUrl,
                 token,
                 levels: fullLevelList,
                 extent: extentInWebMercator,
             });
 
+            if (res.status !== 'success') {
+                throw new Error(
+                    `Failed to update tiles for tile layer with service url of ${wayportTileLayerServiceUrl}. Update tiles API responded with status of ${res.status} and error message of ${res.error?.message}`
+                );
+            }
+
+            // await updateTilesAndWaitForCompletion({
+            //     serviceUrl: wayportTileLayerServiceUrl,
+            //     token,
+            //     levels: fullLevelList,
+            //     extent: extentInWebMercator,
+            // });
+
             await dispatch(
                 updateWayportJob({
                     jobId: jobToBePublished.id,
                     partialJobData: {
-                        status: 'publishing job finished',
+                        // status: 'publishing job finished',
+                        status: 'publishing job updating tiles',
                     },
                 })
             );
@@ -423,6 +405,76 @@ export const updateTilesOfWayportTileLayerThunk =
             await dispatch(
                 updateWayportJob({
                     jobId: jobToBePublished.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                        errorCaughtWhilePublishWayportTileLayer:
+                            err instanceof Error
+                                ? err.message
+                                : 'Unknown error',
+                    },
+                })
+            );
+        }
+    };
+
+type CheckUpdateTilesStatusParams = {
+    jobId: string;
+    token: string;
+};
+
+export const checkUpdateTilesStatusThunk =
+    ({ jobId, token }: CheckUpdateTilesStatusParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const job = selectWayportJobById(getState(), jobId);
+
+        try {
+            if (!job) {
+                throw new Error(
+                    `Cannot find job with id of ${jobId} to check update tiles status`
+                );
+            }
+
+            if (job.status !== 'publishing job updating tiles') {
+                throw new Error(
+                    `Job with id of ${jobId} is in status of ${job.status}, should only check update tiles status when the job status is "updating tiles"`
+                );
+            }
+
+            const serviceUrl = job.wayportTileLayerServiceUrl;
+
+            if (!serviceUrl) {
+                throw new Error(
+                    `No service url found for job with id of ${jobId} to check update tiles status`
+                );
+            }
+
+            const isUpdating = await checkUpdateTilesStatus({
+                serviceUrl,
+                token,
+            });
+
+            // if the update tiles operation is still in progress, do nothing and keep waiting; if the update tiles operation has completed, then mark the job as finished
+            if (isUpdating) {
+                return;
+            }
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: job.id,
+                    partialJobData: {
+                        status: 'publishing job finished',
+                    },
+                })
+            );
+        } catch (err) {
+            console.error(
+                `Failed to check update tiles status for job ${jobId}. Error: `,
+                err
+            );
+
+            await dispatch(
+                updateWayportJob({
+                    jobId: job.id,
                     partialJobData: {
                         status: 'publishing job failed',
                         errorCaughtWhilePublishWayportTileLayer:
@@ -458,22 +510,11 @@ export const publishWayportTilePackageAsTileLayer =
         }
 
         try {
-            // step 0: update the job status to indicate the publishing process has started, so that the UI can show a loading status for the job while the tile package item is being created
-            await dispatch(
-                updateWayportJob({
-                    jobId: jobToBePublished.id,
-                    partialJobData: {
-                        status: 'publishing job waiting to start',
-                    },
-                })
-            );
-
             // step 1: add tile package item and wait for the item to be created successfully
             await dispatch(
                 addTilePackageItemThunk({
                     jobId,
                     token,
-                    username: jobToBePublished.userId,
                     portalRoot: ARCGIS_PROTAL_ROOT,
                 })
             );
@@ -500,7 +541,6 @@ export const publishWayportTilePackageAsTileLayer =
                     waitTilePackageIsReadyToPublishThunk({
                         jobId,
                         token,
-                        username: jobToBePublished.userId,
                         portalRoot: ARCGIS_PROTAL_ROOT,
                     })
                 );
@@ -527,7 +567,6 @@ export const publishWayportTilePackageAsTileLayer =
                 publishTileLayerThunk({
                     jobId,
                     token,
-                    username: jobToBePublished.userId,
                     portalRoot: ARCGIS_PROTAL_ROOT,
                 })
             );
@@ -539,6 +578,45 @@ export const publishWayportTilePackageAsTileLayer =
                     token,
                 })
             );
+
+            // step 4: wait for update tiles operation to be completed, then mark the job as completely finished
+            const maxWaitTimeInMsForUpdateTiles = 30 * 60 * 1000; // 30 minutes
+            const checkIntervalInMsForUpdateTiles = 30 * 1000; // 30 seconds
+            const startTimeForUpdateTiles = Date.now();
+
+            while (true) {
+                const elapsedTime = Date.now() - startTimeForUpdateTiles;
+
+                if (elapsedTime > maxWaitTimeInMsForUpdateTiles) {
+                    break;
+                }
+
+                await new Promise((resolve) =>
+                    setTimeout(resolve, checkIntervalInMsForUpdateTiles)
+                );
+
+                await dispatch(
+                    checkUpdateTilesStatusThunk({
+                        jobId,
+                        token,
+                    })
+                );
+
+                const updatedJobData = selectWayportJobById(getState(), jobId);
+
+                if (updatedJobData.status !== 'publishing job updating tiles') {
+                    break;
+                }
+
+                if (
+                    Date.now() - startTimeForUpdateTiles >
+                    maxWaitTimeInMsForUpdateTiles
+                ) {
+                    throw new Error(
+                        'Update tiles operation is not completed after waiting for 30 minutes'
+                    );
+                }
+            }
         } catch (err) {
             console.error(
                 'Failed to publish tile layer for job with id of %s. Error: ',
