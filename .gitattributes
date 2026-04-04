@@ -1,3 +1,11 @@
-# Ensures all files use Unix-style line endings (LF) instead of Windows-style (CRLF)
-# across all platforms, maintaining consistency in version control
+# Ensures all files use Unix-style line endings (LF) by default
 * text eol=lf
+
+# Explicitly treat image formats as binary to prevent data corruption
+# from automatic line ending conversions
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.ico binary
