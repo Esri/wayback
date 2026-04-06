@@ -11,6 +11,7 @@ import {
     selectIdsOfOngoingWayportJobs,
 } from '@store/WayportMode/selectors';
 import {
+    clearStartedWayportJobs,
     deleteWayportJobs,
     // downloadOutputTilePackage,
     // initiateNewWayportJob,
@@ -205,6 +206,9 @@ export const WayportPanelContainer = () => {
                     dispatch(publishWayportTilePackageAsTileLayer(jobId));
                 }}
                 openPublishedTileLayerOnClick={openPublishedTileLayer}
+                clearAllButtonOnClick={() => {
+                    dispatch(clearStartedWayportJobs());
+                }}
             />
         </div>
     );

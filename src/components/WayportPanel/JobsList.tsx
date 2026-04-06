@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { JobCard } from './JobCard';
+import { CalciteButton } from '@esri/calcite-components-react';
 
 type JobsListProps = {
     jobs: WayportJob[];
@@ -36,6 +37,7 @@ type JobsListProps = {
     downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
     publishTileLayerButtonOnClick: (jobId: string) => void;
     openPublishedTileLayerOnClick: (job: WayportJob) => void;
+    clearAllButtonOnClick: () => void;
 };
 
 export const JobsList: FC<JobsListProps> = ({
@@ -49,8 +51,16 @@ export const JobsList: FC<JobsListProps> = ({
     downlaodTilePackageButtonOnClick,
     publishTileLayerButtonOnClick,
     openPublishedTileLayerOnClick,
+    clearAllButtonOnClick,
 }) => {
     const { t } = useTranslation();
+
+    const disableRemoveAllJobsButton = useMemo(() => {
+        return jobs.length === 0;
+    }, [jobs]);
+
+    const [showRemoveAllJobWarning, setShowRemoveAllJobWarning] =
+        React.useState(false);
 
     const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
         'wayport job not started': t('wayport_job_not_started_status'),
@@ -76,7 +86,13 @@ export const JobsList: FC<JobsListProps> = ({
         'publishing job failed': t('failed_publishing_tile_layer_status'),
     };
 
-    if (jobs.length === 0 && notSignedIn === false) {
+    if (jobs.length === 0) {
+        // no need to show anything if the user is not signed in, since we don't know if this uses has any jobs created before or not
+        if (notSignedIn) {
+            return null;
+        }
+
+        // if user is signed in but there is no job, show a message to indicate there is no job
         return (
             <div className="text-center opacity-50 mt-2">
                 <p className="text-sm">{t('no_wayport_jobs')}</p>
@@ -84,36 +100,87 @@ export const JobsList: FC<JobsListProps> = ({
         );
     }
 
-    return (
-        <div className="mt-2 overflow-x-hidden">
-            {jobs.map((job) => {
-                const isOngoingJob = idsOfOngoingJobs.includes(job.id);
+    // This is the confirmation message that shows when user clicks the "Clear All" button to remove all jobs.
+    // This is to prevent user from accidentally removing all jobs without confirmation, since this action cannot be undone.
+    if (showRemoveAllJobWarning) {
+        return (
+            <div className="mt-4">
+                <p className="mb-2 text-sm">{t('remove_all_jobs_warning')}</p>
+                <div className="flex gap-2 justify-end">
+                    <CalciteButton
+                        scale={'s'}
+                        appearance="outline"
+                        kind="neutral"
+                        onClick={() => {
+                            setShowRemoveAllJobWarning(false);
+                        }}
+                    >
+                        {t('cancel')}
+                    </CalciteButton>
+                    <CalciteButton
+                        scale={'s'}
+                        kind="danger"
+                        onClick={() => {
+                            clearAllButtonOnClick();
+                            setShowRemoveAllJobWarning(false);
+                        }}
+                    >
+                        {t('remove_all_jobs')}
+                    </CalciteButton>
+                </div>
+            </div>
+        );
+    }
 
-                return (
-                    <JobCard
-                        key={job.id}
-                        job={job}
-                        isOngoingJob={isOngoingJob}
-                        wayportJobStatusLabel={wayportJobStatusLabel}
-                        // wayportTileLayerPublishStatusLabel={
-                        //     wayportTileLayerPublishStatusLabel
-                        // }
-                        idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
-                        shouldDisableZoomToButton={shouldDisableZoomToButton}
-                        onRemove={onRemove}
-                        onZoomTo={onZoomTo}
-                        downlaodTilePackageButtonOnClick={
-                            downlaodTilePackageButtonOnClick
-                        }
-                        publishTileLayerButtonOnClick={
-                            publishTileLayerButtonOnClick
-                        }
-                        openPublishedTileLayerOnClick={
-                            openPublishedTileLayerOnClick
-                        }
-                    />
-                );
-            })}
-        </div>
+    return (
+        <>
+            <div className="flex justify-between items-center mt-4">
+                <h4 className="text-sm">{t('job_history')}</h4>
+                <button
+                    className="text-sm underline"
+                    onClick={() => {
+                        // console.log('Remove all button clicked');
+                        // clearAllButtonOnClick();
+                        setShowRemoveAllJobWarning(true);
+                    }}
+                    disabled={disableRemoveAllJobsButton}
+                >
+                    {t('clear_all')}
+                </button>
+            </div>
+
+            <div className="overflow-x-hidden">
+                {jobs.map((job) => {
+                    const isOngoingJob = idsOfOngoingJobs.includes(job.id);
+
+                    return (
+                        <JobCard
+                            key={job.id}
+                            job={job}
+                            isOngoingJob={isOngoingJob}
+                            wayportJobStatusLabel={wayportJobStatusLabel}
+                            // wayportTileLayerPublishStatusLabel={
+                            //     wayportTileLayerPublishStatusLabel
+                            // }
+                            idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
+                            shouldDisableZoomToButton={
+                                shouldDisableZoomToButton
+                            }
+                            onRemove={onRemove}
+                            onZoomTo={onZoomTo}
+                            downlaodTilePackageButtonOnClick={
+                                downlaodTilePackageButtonOnClick
+                            }
+                            publishTileLayerButtonOnClick={
+                                publishTileLayerButtonOnClick
+                            }
+                            openPublishedTileLayerOnClick={
+                                openPublishedTileLayerOnClick
+                            }
+                        />
+                    );
+                })}
+            </div>
+        </>
     );
 };

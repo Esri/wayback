@@ -47,6 +47,7 @@ import {
     selectNewWayportJob,
     selectPendingWayportJobs,
     selectStaleWayportJobs,
+    selectWayportJobsThatHaveBeenStarted,
 } from './selectors';
 import { updateMapMode } from '@store/Map/thunks';
 import {
@@ -481,6 +482,28 @@ export const checkPendingWayportJobStatus =
         // if (ongoingJobsWithProgressInfo.length) {
         //     dispatch(updateWayportJobsHelper(ongoingJobsWithProgressInfo));
         // }
+    };
+
+export const clearStartedWayportJobs =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        try {
+            // get all wayport jobs that have been started, including pending jobs and finished jobs
+            const allJobs = selectWayportJobsThatHaveBeenStarted(getState());
+
+            if (!allJobs.length) {
+                // console.log('No wayport job found, skipping clearing wayport jobs from IndexedDB');
+                return;
+            }
+
+            await dispatch(deleteWayportJobs(allJobs));
+        } catch (err) {
+            console.error('Failed to clear wayport jobs from IndexedDB:', err);
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to clear wayport jobs. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
     };
 
 // /**
