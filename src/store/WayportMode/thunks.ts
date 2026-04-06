@@ -78,7 +78,12 @@ type InitiateDownloadJobParams = {
 
 // const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
 
-const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+// export const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+
+/**
+ * Wayport job will be removed from the store when it has been finished for more than 1 hour.
+ */
+export const WAYPORT_JOB_TIME_TO_LIVE_IN_MILLISECONDS = 60 * 60 * 1000;
 
 /**
  * Min tile package level should always be 1 by default.
@@ -478,53 +483,53 @@ export const checkPendingWayportJobStatus =
         // }
     };
 
-/**
- * remove wayport jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
- * @returns
- */
-export const clearWayportJobs =
-    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
-        const jobs = selectWayportJobsThatHaveFinished(getState());
+// /**
+//  * remove wayport jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
+//  * @returns
+//  */
+// export const clearWayportJobs =
+//     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const jobs = selectWayportJobsThatHaveFinished(getState());
 
-        if (!jobs.length) {
-            console.log(
-                'No finished wayport job found, skipping cleaning up wayport jobs'
-            );
-            return;
-        }
+//         if (!jobs.length) {
+//             console.log(
+//                 'No finished wayport job found, skipping cleaning up wayport jobs'
+//             );
+//             return;
+//         }
 
-        // unix timestamp of curren time
-        const now = new Date().getTime();
+//         // unix timestamp of curren time
+//         const now = new Date().getTime();
 
-        // find jobs that were finished more than 1 hour ago
-        const jobsToBeRemoved = jobs.filter((job) => {
-            // donwloaded jobs and failed jobs will be removed immediately without waiting for 1 hour, as they are no longer useful for users after they are downloaded or failed
-            if (
-                job.status === 'wayport job downloaded' ||
-                job.status === 'wayport job failed'
-            ) {
-                return true;
-            }
+//         // find jobs that were finished more than 1 hour ago
+//         const jobsToBeRemoved = jobs.filter((job) => {
+//             // donwloaded jobs and failed jobs will be removed immediately without waiting for 1 hour, as they are no longer useful for users after they are downloaded or failed
+//             if (
+//                 job.status === 'wayport job downloaded' ||
+//                 job.status === 'wayport job failed'
+//             ) {
+//                 return true;
+//             }
 
-            // any finished job that is 1 hour old should be removed
-            if (job.finishTime) {
-                const secondsSinceJobWasFinished =
-                    (now - job.finishTime) / 1000;
-                return (
-                    secondsSinceJobWasFinished >
-                    DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
-                );
-            }
+//             // any finished job that is 1 hour old should be removed
+//             if (job.finishTime) {
+//                 const secondsSinceJobWasFinished =
+//                     (now - job.finishTime) / 1000;
+//                 return (
+//                     secondsSinceJobWasFinished >
+//                     DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
+//                 );
+//             }
 
-            return false;
-        });
+//             return false;
+//         });
 
-        if (!jobsToBeRemoved.length) {
-            return;
-        }
+//         if (!jobsToBeRemoved.length) {
+//             return;
+//         }
 
-        dispatch(deleteWayportJobs(jobsToBeRemoved));
-    };
+//         dispatch(deleteWayportJobs(jobsToBeRemoved));
+//     };
 
 // /**
 //  * get output tile package info for finished jobs

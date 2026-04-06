@@ -322,3 +322,24 @@ export const selectWayportJobUpdatingTiles = createSelector(
         return byId[jobId];
     }
 );
+
+export const selectReadyToBeDownloadedWayportJob = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const readyToBeDownloadedJobIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'wayport job finished';
+        });
+
+        if (readyToBeDownloadedJobIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'wayport job finished' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = readyToBeDownloadedJobIds[0];
+
+        return byId[jobId];
+    }
+);

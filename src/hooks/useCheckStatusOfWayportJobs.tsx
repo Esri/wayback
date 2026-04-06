@@ -9,6 +9,7 @@ import {
 import {
     // selectFinishedWayportobsWithoutPackageInfo,
     selectNumOfPendingWayportJobs,
+    selectReadyToBeDownloadedWayportJob,
     selectWayportJobReadyToBePublished,
     selectWayportJobReadyToHaveTilesUpdated,
     selectWayportJobUpdatingTiles,
@@ -17,7 +18,8 @@ import {
 import {
     // assignTilePackageInfoToDownloadJobs,
     checkPendingWayportJobStatus,
-    clearWayportJobs,
+    updateWayportJob,
+    WAYPORT_JOB_TIME_TO_LIVE_IN_MILLISECONDS,
 } from '@store/WayportMode/thunks';
 import { getToken } from '@utils/Esri-OAuth';
 import React, { use, useEffect, useMemo } from 'react';
@@ -48,6 +50,10 @@ export const useManageStatusOfWayportJobs = () => {
 
     const jobReadyToHaveTilesUpdated = useAppSelector(
         selectWayportJobReadyToHaveTilesUpdated
+    );
+
+    const readyToBeDownloadedWayportJob = useAppSelector(
+        selectReadyToBeDownloadedWayportJob
     );
 
     const jobUpdatingTile = useAppSelector(selectWayportJobUpdatingTiles);
@@ -149,6 +155,40 @@ export const useManageStatusOfWayportJobs = () => {
         };
     }, [jobUpdatingTile]);
 
+    useEffect(() => {
+        // if there is no ready to be downloaded job, there is no need to check the status of ready to be downloaded job
+        if (!readyToBeDownloadedWayportJob) {
+            // console.log('No ready to be downloaded job, skip checking job status');
+            return;
+        }
+
+        if (
+            !readyToBeDownloadedWayportJob.finishTime ||
+            readyToBeDownloadedWayportJob.status !== 'wayport job finished'
+        ) {
+            // console.log('Ready to be downloaded job does not have finish time, skip checking if the job is expired');
+            return;
+        }
+
+        const now = new Date().getTime();
+
+        const isExpired =
+            now - readyToBeDownloadedWayportJob.finishTime >
+            WAYPORT_JOB_TIME_TO_LIVE_IN_MILLISECONDS; // 1 hour
+
+        if (isExpired) {
+            // console.log('Ready to be downloaded job has been finished for more than 1 hour, clear the job to keep the download list clean');
+            dispatch(
+                updateWayportJob({
+                    jobId: readyToBeDownloadedWayportJob.id,
+                    partialJobData: {
+                        status: 'wayport job expired',
+                    },
+                })
+            );
+        }
+    }, [readyToBeDownloadedWayportJob]);
+
     // useEffect(() => {
     //     // Skip if there is no finished download job that needs to have tile package info assigned
     //     if (finishedDownloadJobsWithoutPackageInfo.length === 0) {
@@ -163,8 +203,8 @@ export const useManageStatusOfWayportJobs = () => {
     //     );
     // }, [finishedDownloadJobsWithoutPackageInfo]);
 
-    useEffect(() => {
-        // clear download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean.
-        dispatch(clearWayportJobs());
-    }, []);
+    // useEffect(() => {
+    //     // clear download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean.
+    //     dispatch(clearWayportJobs());
+    // }, []);
 };
