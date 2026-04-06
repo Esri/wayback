@@ -17,7 +17,9 @@ export type UpdatesModeDateFilter =
     | 'last-3-months'
     | 'last-6-months'
     | 'last-year'
-    | 'pending';
+    | 'next-week'
+    | 'next-month'
+    | 'next-3-months';
 
 /**
  * The object containing the out statistics for world imagery updates grouped by status.

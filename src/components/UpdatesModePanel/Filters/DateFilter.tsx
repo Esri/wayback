@@ -64,7 +64,7 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
     //     ];
     // }, []);
 
-    const data: RadioButtonData[] = useMemo(() => {
+    const optionsForPublishedUpdates: RadioButtonData[] = useMemo(() => {
         const options: {
             value: UpdatesModeDateFilter;
             label: string;
@@ -95,9 +95,38 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
                 label: t('within_last_year'),
                 checked: false,
             },
+            // {
+            //     value: 'pending',
+            //     label: t('pending'),
+            //     checked: false,
+            // },
+        ];
+
+        return options.map((option) => ({
+            ...option,
+            checked: option.value === selectedDateOption,
+        }));
+    }, [selectedDateOption]);
+
+    const optionsForPendingUpdates: RadioButtonData[] = useMemo(() => {
+        const options: {
+            value: UpdatesModeDateFilter;
+            label: string;
+            checked: boolean;
+        }[] = [
             {
-                value: 'pending',
-                label: t('pending'),
+                value: 'next-week',
+                label: t('within_next_week'),
+                checked: false,
+            },
+            {
+                value: 'next-month',
+                label: t('within_next_month'),
+                checked: false,
+            },
+            {
+                value: 'next-3-months',
+                label: t('within_next_3_months'),
                 checked: false,
             },
         ];
@@ -131,28 +160,54 @@ export const DateFilter: FC<DateFilterProps> = ({ disabled }) => {
         <div className="bg-custom-card-background p-2 mb-2 text-white">
             <div className="mb-2">
                 <HeaderText
-                    title={t('published_date')}
+                    title={t('publication_status')}
                     tooltip={t('published_date_filter_tooltip')}
                 />
             </div>
 
-            <RadioButtonGroup
-                name="date-filter"
-                data={data}
-                disabled={disabled || false}
-                onClick={(value: string) => {
-                    console.log(`Selected date filter: ${value}`);
-                    // Handle the date selection change here
+            <div>
+                <div className="mb-2">
+                    <h3 className="text-custom-theme-blue-light">
+                        {t('published')}
+                    </h3>
+                </div>
+                <RadioButtonGroup
+                    name="date-filter"
+                    data={optionsForPublishedUpdates}
+                    disabled={disabled || false}
+                    onClick={(value: string) => {
+                        console.log(`Selected date filter: ${value}`);
+                        // Handle the date selection change here
 
-                    setSelectedDateOption(value as UpdatesModeDateFilter);
+                        setSelectedDateOption(value as UpdatesModeDateFilter);
 
-                    // dispatch(
-                    //     updatesModeDateRangeChanged(
-                    //         value as UpdatesModeDateFilter
-                    //     )
-                    // );
-                }}
-            />
+                        // dispatch(
+                        //     updatesModeDateRangeChanged(
+                        //         value as UpdatesModeDateFilter
+                        //     )
+                        // );
+                    }}
+                />
+            </div>
+
+            <div className="mt-2">
+                <div className="mb-2">
+                    <h3 className="text-custom-theme-blue-light">
+                        {t('pending')}
+                    </h3>
+                </div>
+
+                <RadioButtonGroup
+                    name="date-filter-pending"
+                    data={optionsForPendingUpdates}
+                    disabled={disabled || false}
+                    onClick={(value: string) => {
+                        console.log(`Selected date filter: ${value}`);
+                        setSelectedDateOption(value as UpdatesModeDateFilter);
+                    }}
+                />
+            </div>
+
             {/* {selectedDateOption === 'custom' && (
                 <CalciteLabel>
                     <CalciteInputDatePicker

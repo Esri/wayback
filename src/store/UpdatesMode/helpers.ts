@@ -35,7 +35,9 @@ const VALID_DATE_FILTERS = [
     'last-3-months',
     'last-6-months',
     'last-year',
-    'pending',
+    'next-week',
+    'next-month',
+    'next-3-months',
 ] as const satisfies readonly UpdatesModeDateFilter[];
 
 /**

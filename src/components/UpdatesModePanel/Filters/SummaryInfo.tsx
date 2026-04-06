@@ -3,6 +3,7 @@ import { HeaderText } from './HeaderText';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAppSelector } from '@store/configureStore';
 import {
+    selectIsPendingOptionsSelected,
     selectUpdatesModeDate,
     selectWorldImageryUpdatesOutStatistics,
 } from '@store/UpdatesMode/selectors';
@@ -20,6 +21,8 @@ export const SummaryInfo = () => {
     const outStatistics = useAppSelector(
         selectWorldImageryUpdatesOutStatistics
     );
+
+    const isPending = useAppSelector(selectIsPendingOptionsSelected);
 
     return (
         <div className="bg-custom-card-background p-2 mb-2 text-white">
@@ -39,7 +42,7 @@ export const SummaryInfo = () => {
 
                     <Trans
                         i18nKey={
-                            updatesModeDateFilter === 'pending'
+                            isPending
                                 ? 'updates_mode_summary_info_pending'
                                 : 'updates_mode_summary_info_published'
                         }
@@ -51,12 +54,11 @@ export const SummaryInfo = () => {
                             strong: (
                                 <strong
                                     style={{
-                                        color:
-                                            updatesModeDateFilter === 'pending'
-                                                ? WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                                      .pending.color
-                                                : WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                                      .published.color,
+                                        color: isPending
+                                            ? WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                                  .pending.color
+                                            : WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
+                                                  .published.color,
                                     }}
                                 />
                             ),

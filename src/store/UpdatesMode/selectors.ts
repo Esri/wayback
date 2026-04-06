@@ -26,3 +26,11 @@ export const selectShouldZoomToSelectedRegion = (state: RootState) =>
 
 export const selectIsLoadingExtentForSelectedRegion = (state: RootState) =>
     state.UpdatesMode.isLoadingExtentForSelectedRegion;
+
+export const selectIsPendingOptionsSelected = createSelector(
+    selectUpdatesModeDate,
+    (dateFilter) =>
+        dateFilter === 'next-week' ||
+        dateFilter === 'next-month' ||
+        dateFilter === 'next-3-months'
+);
