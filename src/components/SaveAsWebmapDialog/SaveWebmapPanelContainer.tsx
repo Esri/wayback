@@ -32,9 +32,13 @@ import { SaveWebmapDialog } from './SaveWebmapDialog';
 import { useSelecteReferenceLayer } from '@components/ReferenceLayer/useSelectedReferenceLayer';
 import createWebmap from './createWebmap';
 import { updateMapMode } from '@store/Map/thunks';
+import { AppContext } from '@contexts/AppContextProvider';
 
 export const SaveWebmapPanelContainer = () => {
     const dispatch = useAppDispatch();
+
+    const { notSignedIn, signedInWithArcGISPublicAccount } =
+        useContext(AppContext);
 
     const activeWaybackItem: IWaybackItem = useAppSelector(
         activeWaybackItemSelector
@@ -89,7 +93,7 @@ export const SaveWebmapPanelContainer = () => {
 
     const portalUser = getSignedInUser();
 
-    const notSignedIn = React.useMemo(() => isAnonymouns(), []);
+    // const notSignedIn = React.useMemo(() => isAnonymouns(), []);
 
     // Determine if the user has privileges to create a web map
     // Org admins and publishers can create content by default
@@ -100,14 +104,16 @@ export const SaveWebmapPanelContainer = () => {
             return false;
         }
 
-        const { role, privileges, orgId } = portalUser || {};
+        if (signedInWithArcGISPublicAccount) {
+            return true;
+        }
+
+        const { role, privileges } = portalUser || {};
 
         return (
             role === 'org_admin' ||
             role === 'org_publisher' ||
-            (privileges && privileges.some((p) => p.endsWith('createItem'))) ||
-            orgId === null ||
-            orgId === undefined
+            (privileges && privileges.some((p) => p.endsWith('createItem')))
         ); // for public account, orgId is null
     }, [notSignedIn, portalUser]);
 
