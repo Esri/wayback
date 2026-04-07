@@ -32,6 +32,10 @@ type JobsListProps = {
      * If true, the zoom to button will be disabled and not clickable.
      */
     shouldDisableZoomToButton: boolean;
+    /**
+     * If true, it means the user has the privileges to publish tile layers to ArcGIS Online, which means the option to publish tile layer will be shown for each job that is finished downloading the tile package.
+     */
+    canPublishTileLayer: boolean;
     onRemove: (job: WayportJob) => void;
     onZoomTo: (job: WayportJob) => void;
     downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
@@ -46,6 +50,7 @@ export const JobsList: FC<JobsListProps> = ({
     idsOfOngoingJobs,
     shouldDisableZoomToButton,
     idOfJobToShowExtentOnMap,
+    canPublishTileLayer,
     onRemove,
     onZoomTo,
     downlaodTilePackageButtonOnClick,
@@ -131,6 +136,7 @@ export const JobsList: FC<JobsListProps> = ({
                             shouldDisableZoomToButton={
                                 shouldDisableZoomToButton
                             }
+                            canPublishTileLayer={false}
                             onRemove={onRemove}
                             onZoomTo={onZoomTo}
                             downlaodTilePackageButtonOnClick={

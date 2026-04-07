@@ -1,7 +1,7 @@
-import React, { use, useContext } from 'react';
+import React, { use, useContext, useMemo } from 'react';
 import { WayportIntroduction } from './WayportIntroduction';
 import { AppContext } from '@contexts/AppContextProvider';
-import { getPortalBaseUrl, signIn } from '@utils/Esri-OAuth';
+import { getPortalBaseUrl, getSignedInUser, signIn } from '@utils/Esri-OAuth';
 import { NewJobDialog } from './NewJobDialog';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 import {
@@ -36,6 +36,39 @@ export const WayportPanelContainer = () => {
 
     const { notSignedIn, signedInWithArcGISPublicAccount } =
         useContext(AppContext);
+
+    const portalUser = getSignedInUser();
+
+    /**
+     * Determine if the user has the privileges to publish tile layers, which is required to be able to publish the exported tile package as a hosted tile layer in ArcGIS Online.
+     * @see https://doc.arcgis.com/en/arcgis-online/manage-data/publish-tiles.htm
+     * @see https://developers.arcgis.com/rest/users-groups-and-items/privileges/
+     */
+    const canPublishTileLayer = useMemo(() => {
+        if (signedInWithArcGISPublicAccount || notSignedIn || !portalUser) {
+            return false;
+        }
+
+        const role = portalUser?.role;
+
+        // only allow users with admin or publisher role to publish tile layers, since publishing tile layers can consume credits, and we want to prevent users with viewer role from publishing tile layers and consuming credits without their knowledge
+        if (role === 'org_admin' || role === 'org_publisher') {
+            return true;
+        }
+
+        // for custom roles, check if the user has the privileges to create items and publish hosted layers,
+        // since publishing tile layers requires both privileges, if the user is missing either of the privileges, they will not be able to publish tile layers
+        const privileges = portalUser?.privileges || [];
+
+        const canCreateContent = privileges.some((privilege) =>
+            privilege.endsWith('createItem')
+        );
+        const canPublishTiles = privileges.some((privilege) =>
+            privilege.endsWith('publishTiles')
+        );
+
+        return canCreateContent && canPublishTiles;
+    }, [signedInWithArcGISPublicAccount, notSignedIn, portalUser]);
 
     // const activeWaybackItem: IWaybackItem = useAppSelector(
     //     activeWaybackItemSelector
@@ -191,6 +224,7 @@ export const WayportPanelContainer = () => {
             <JobsList
                 jobs={jobsHasStarted}
                 notSignedIn={notSignedIn}
+                canPublishTileLayer={canPublishTileLayer}
                 idsOfOngoingJobs={idsOfOngoingJobs}
                 idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
                 shouldDisableZoomToButton={!!newDownloadJob} // disable zoom to button when there is a job that has not been started, to avoid confusion about whether user should click the create button for the new job or zoom to the existing job

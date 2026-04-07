@@ -21,6 +21,10 @@ type JobCardProps = {
      * used to display the current status of the job in the UI.
      * */
     wayportJobStatusLabel: Record<WayportJobStatus, string>;
+    /**
+     * If true, it means the user has the privileges to publish tile layers to ArcGIS Online, which means the option to publish tile layer will be shown for each job that is finished downloading the tile package.
+     */
+    canPublishTileLayer: boolean;
     // /**
     //  * A mapping of PublishWayportTileLayerStatus values to their corresponding user-friendly labels,
     //  * used to display the current status of the tile layer publish/update workflow in the UI.
@@ -42,6 +46,7 @@ export const JobCard: FC<JobCardProps> = ({
     idOfJobToShowExtentOnMap,
     shouldDisableZoomToButton,
     wayportJobStatusLabel,
+    canPublishTileLayer,
     // wayportTileLayerPublishStatusLabel,
     onRemove,
     onZoomTo,
@@ -131,6 +136,7 @@ export const JobCard: FC<JobCardProps> = ({
                             null,
                             job.id
                         )}
+                        disabled={!canPublishTileLayer}
                     >
                         {t('publish_wayport_tile_layer')}
                     </CalciteButton>
