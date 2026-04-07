@@ -32,7 +32,7 @@ export const MapScaleIndicator = () => {
     }
 
     return (
-        <div className="absolute bottom-[16px] px-2 py-[2px] right-0 text-xs bg-[#242424cc] pointer-events-none">
+        <div className="absolute bottom-[20px] right-[4px] px-1 py-[2px] text-xs bg-black bg-opacity-90 pointer-events-none">
             <span>
                 1:{mapScaleFormatted} | 1px: {mapResolutionFormatted}m
             </span>
