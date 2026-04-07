@@ -55,6 +55,10 @@ export const JobCard: FC<JobCardProps> = ({
 
     const { releaseDateLabel } = waybackItem;
 
+    const showLoadingIndicator = useMemo(() => {
+        return isOngoingJob && status !== 'wayport job finished';
+    }, [status, isOngoingJob]);
+
     // const shouldRemoveButtonBeDisabled = checkShouldDisableRemoveButton(job);
 
     /**
@@ -166,7 +170,7 @@ export const JobCard: FC<JobCardProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex items-center shrink-0 pl-1">
                     <div className="w-6 h-6 relative flex items-center justify-center">
-                        {isOngoingJob ? (
+                        {showLoadingIndicator ? (
                             <CalciteLoader inline scale="s" />
                         ) : (
                             <CalciteButton
@@ -176,7 +180,6 @@ export const JobCard: FC<JobCardProps> = ({
                                 color="neutral"
                                 onClick={onRemove.bind(null, job)}
                                 label={t('remove_wayport_job')}
-                                disabled={isOngoingJob}
                             ></CalciteButton>
                         )}
                     </div>
