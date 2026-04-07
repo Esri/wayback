@@ -59,9 +59,6 @@ export const JobsList: FC<JobsListProps> = ({
         return jobs.length === 0;
     }, [jobs]);
 
-    const [showRemoveAllJobWarning, setShowRemoveAllJobWarning] =
-        React.useState(false);
-
     const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
         'wayport job not started': t('wayport_job_not_started_status'),
         'wayport job waiting to start': t(
@@ -100,38 +97,6 @@ export const JobsList: FC<JobsListProps> = ({
         );
     }
 
-    // This is the confirmation message that shows when user clicks the "Clear All" button to remove all jobs.
-    // This is to prevent user from accidentally removing all jobs without confirmation, since this action cannot be undone.
-    if (showRemoveAllJobWarning) {
-        return (
-            <div className="mt-4">
-                <p className="mb-2 text-sm">{t('remove_all_jobs_warning')}</p>
-                <div className="flex gap-2 justify-end">
-                    <CalciteButton
-                        scale={'s'}
-                        appearance="outline"
-                        kind="neutral"
-                        onClick={() => {
-                            setShowRemoveAllJobWarning(false);
-                        }}
-                    >
-                        {t('cancel')}
-                    </CalciteButton>
-                    <CalciteButton
-                        scale={'s'}
-                        kind="danger"
-                        onClick={() => {
-                            clearAllButtonOnClick();
-                            setShowRemoveAllJobWarning(false);
-                        }}
-                    >
-                        {t('remove_all_jobs')}
-                    </CalciteButton>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <>
             <div className="flex justify-between items-center mt-4">
@@ -140,8 +105,8 @@ export const JobsList: FC<JobsListProps> = ({
                     className="text-sm underline"
                     onClick={() => {
                         // console.log('Remove all button clicked');
-                        // clearAllButtonOnClick();
-                        setShowRemoveAllJobWarning(true);
+                        clearAllButtonOnClick();
+                        // setShowRemoveAllJobWarning(true);
                     }}
                     disabled={disableRemoveAllJobsButton}
                 >
