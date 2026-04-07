@@ -220,7 +220,11 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         </div>
                     </div>
 
-                    <div className="w-full">
+                    <div
+                        className={classNames('w-full', {
+                            disabled: disabledNewJobDialog,
+                        })}
+                    >
                         <ul className="text-sm list-disc ml-5 pb-1 mb-2">
                             <li className="mb-2">
                                 {t('download_job_instruction_1')}
@@ -235,82 +239,97 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     </div>
                 </div>
 
-                <Slider
-                    // minValue={minZoom}
-                    // maxValue={maxZoom}
-                    defaultStart={minZoom}
-                    defaultEnd={maxZoom}
-                    onChange={(userSelectedMinZoom, userSelectedMaxZoom) => {
-                        levelsOnChange(
+                <div
+                    className={classNames('w-full', {
+                        disabled: disabledNewJobDialog,
+                    })}
+                >
+                    <Slider
+                        // minValue={minZoom}
+                        // maxValue={maxZoom}
+                        defaultStart={minZoom}
+                        defaultEnd={maxZoom}
+                        onChange={(
                             userSelectedMinZoom,
                             userSelectedMaxZoom
-                        );
-                    }}
-                    draggedHandleOnChange={(handle) => {
-                        // console.log('Handle on dragging changed to: ', handle);
-                        setHandleOnDragging(handle);
-                    }}
-                />
+                        ) => {
+                            levelsOnChange(
+                                userSelectedMinZoom,
+                                userSelectedMaxZoom
+                            );
+                        }}
+                        draggedHandleOnChange={(handle) => {
+                            // console.log('Handle on dragging changed to: ', handle);
+                            setHandleOnDragging(handle);
+                        }}
+                    />
 
-                <div className="flex items-center mb-2">
-                    <div className="mr-2">
-                        {exceedsMaxTileLimit ? (
-                            <CalciteIcon
-                                icon="exclamation-mark-circle"
-                                scale="s"
-                                class="text-red-500"
-                            />
-                        ) : (
-                            <CalciteIcon
-                                icon="check-circle"
-                                scale="s"
-                                class="text-green-500"
-                            />
-                        )}
-                    </div>
-
-                    <p className="text-sm ">
-                        {exceedsMaxTileLimit
-                            ? t(
-                                  'estimated_number_of_tiles_exceeded_max_limit',
-                                  {
-                                      total: numberWithCommas(
-                                          countOfTotalTiles
-                                      ),
-                                      maxLimit: numberWithCommas(
-                                          MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
-                                      ),
-                                      minZoomLevel: minZoom,
-                                      maxZoomLevel: maxZoom,
-                                  }
-                              )
-                            : t('estimated_number_of_tiles', {
-                                  total: numberWithCommas(countOfTotalTiles),
-                                  minZoomLevel: minZoom,
-                                  maxZoomLevel: maxZoom,
-                              })}
-                    </p>
-                </div>
-
-                {signedInUsingPublicAccount && (
-                    <div className="flex items-center mb-2 bg-yellow-100 p-2 rounded">
+                    <div className="flex items-center mb-2">
                         <div className="mr-2">
-                            <CalciteIcon
-                                icon="exclamation-mark-triangle"
-                                scale="s"
-                                class="text-red-500"
-                            />
+                            {exceedsMaxTileLimit ? (
+                                <CalciteIcon
+                                    icon="exclamation-mark-circle"
+                                    scale="s"
+                                    class="text-red-500"
+                                />
+                            ) : (
+                                <CalciteIcon
+                                    icon="check-circle"
+                                    scale="s"
+                                    class="text-green-500"
+                                />
+                            )}
                         </div>
 
                         <p className="text-sm ">
-                            {t('wayport_signed_in_with_public_account_warning')}
+                            {exceedsMaxTileLimit
+                                ? t(
+                                      'estimated_number_of_tiles_exceeded_max_limit',
+                                      {
+                                          total: numberWithCommas(
+                                              countOfTotalTiles
+                                          ),
+                                          maxLimit: numberWithCommas(
+                                              MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT
+                                          ),
+                                          minZoomLevel: minZoom,
+                                          maxZoomLevel: maxZoom,
+                                      }
+                                  )
+                                : t('estimated_number_of_tiles', {
+                                      total: numberWithCommas(
+                                          countOfTotalTiles
+                                      ),
+                                      minZoomLevel: minZoom,
+                                      maxZoomLevel: maxZoom,
+                                  })}
                         </p>
                     </div>
-                )}
 
-                {maxAvailableTileLevel !== null &&
-                    maxZoom !== undefined &&
-                    maxZoom > maxAvailableTileLevel && (
+                    {maxAvailableTileLevel !== null &&
+                        maxZoom !== undefined &&
+                        maxZoom > maxAvailableTileLevel && (
+                            <div className="flex items-center mb-2">
+                                <div className="mr-2">
+                                    <CalciteIcon
+                                        icon="exclamation-mark-triangle"
+                                        scale="s"
+                                        class="text-yellow-500"
+                                    />
+                                </div>
+
+                                <p className="text-sm ">
+                                    {t(
+                                        'wayport_max_zoom_level_exceeded_warning',
+                                        {
+                                            maxZoomLevel: maxAvailableTileLevel,
+                                        }
+                                    )}
+                                </p>
+                            </div>
+                        )}
+
+                    {hasOngoingJob && (
                         <div className="flex items-center mb-2">
                             <div className="mr-2">
                                 <CalciteIcon
@@ -321,42 +340,25 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             </div>
 
                             <p className="text-sm ">
-                                {t('wayport_max_zoom_level_exceeded_warning', {
-                                    maxZoomLevel: maxAvailableTileLevel,
-                                })}
+                                {t('wayport_ongoing_job_warning')}
                             </p>
                         </div>
                     )}
 
-                {hasOngoingJob && (
-                    <div className="flex items-center mb-2">
-                        <div className="mr-2">
-                            <CalciteIcon
-                                icon="exclamation-mark-triangle"
-                                scale="s"
-                                class="text-yellow-500"
-                            />
-                        </div>
-
-                        <p className="text-sm ">
-                            {t('wayport_ongoing_job_warning')}
-                        </p>
+                    <div>
+                        <CalciteButton
+                            class="mt-2"
+                            width="full"
+                            disabled={shouldDisableCreateButton}
+                            appearance="solid"
+                            color="blue"
+                            onClick={() => {
+                                onSubmit(job);
+                            }}
+                        >
+                            {t('create_tile_package')}
+                        </CalciteButton>
                     </div>
-                )}
-
-                <div>
-                    <CalciteButton
-                        class="mt-2"
-                        width="full"
-                        disabled={shouldDisableCreateButton}
-                        appearance="solid"
-                        color="blue"
-                        onClick={() => {
-                            onSubmit(job);
-                        }}
-                    >
-                        {t('create_tile_package')}
-                    </CalciteButton>
                 </div>
             </div>
         );
@@ -369,10 +371,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     return (
         <div
             className={classNames(
-                'relative bg-white bg-opacity-10 p-2 w-full mb-2',
-                {
-                    disabled: disabledNewJobDialog,
-                }
+                'relative bg-white bg-opacity-10 p-2 w-full mb-2'
             )}
         >
             {getContent()}

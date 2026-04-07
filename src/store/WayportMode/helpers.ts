@@ -26,6 +26,14 @@ export const saveNewWayportJobToSessionStorage = (job: WayportJob) => {
 };
 
 /**
+ * This helper function removes the new download job in session storage, this should be called after we restore the new download job from session storage,
+ * or when the user cancels creating a new download job, to clean up the session storage and prevent restoring an outdated job in the future.
+ */
+export const removeNewWayportJobFromSessionStorage = () => {
+    sessionStorage.removeItem(TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY);
+};
+
+/**
  * This helper function retrieves the new download job that is being created from session storage.
  * It also assigns the userId to the job since the job is created when the user is not signed in,
  * we need to assign the userId to the job after the user signs in and we retrieve the job from session storage, so that when we create the job in the backend, we can associate the job with the correct user.
@@ -39,7 +47,8 @@ export const getNewWayportJobFromSessionStorage = (): WayportJob | null => {
 
     // clean up the session storage after retrieving the job since we only want to restore the job once after the user signs in,
     // if we keep the job in session storage, it will keep restoring the same job every time the user refreshes the page or comes back to the app
-    sessionStorage.removeItem(TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY);
+    // sessionStorage.removeItem(TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY);
+    removeNewWayportJobFromSessionStorage();
 
     let job: WayportJob | null = null;
 

@@ -60,6 +60,7 @@ import {
     getNewWayportJobFromSessionStorage,
     getWayportJobOutputInfoHelper,
     normalizeExtent,
+    removeNewWayportJobFromSessionStorage,
     saveNewWayportJobToSessionStorage,
 } from './helpers';
 import { parseDownloadJobProgress } from '@services/wayport/wayportHelpers';
@@ -371,6 +372,29 @@ export const startWayportJob =
                 })
             );
         }
+    };
+
+export const removeNewWayportJob =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const newJob = selectNewWayportJob(getState());
+
+        if (!newJob) {
+            console.error('No new wayport job found to remove');
+            return;
+        }
+
+        if (newJob.status !== 'wayport job not started') {
+            console.error(
+                'the status of the new wayport job is not "not started", cannot remove the new wayport job'
+            );
+            return;
+        }
+
+        // clear the job from the store and indexedDB (if it has been saved to indexedDB) since the user has canceled creating this job
+        await dispatch(deleteWayportJobs([newJob]));
+
+        // clear the job from session storage to prevent restoring the same job again in the future, since the user has canceled creating this job
+        removeNewWayportJobFromSessionStorage();
     };
 
 /**

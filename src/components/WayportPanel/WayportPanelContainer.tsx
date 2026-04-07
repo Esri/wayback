@@ -13,6 +13,7 @@ import {
 import {
     clearStartedWayportJobs,
     deleteWayportJobs,
+    removeNewWayportJob,
     // downloadOutputTilePackage,
     // initiateNewWayportJob,
     // publishWayportTilePackageAsTileLayer,
@@ -151,10 +152,10 @@ export const WayportPanelContainer = () => {
                 notSignedIn={notSignedIn}
                 signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
                 // activeWaybackItem={activeWaybackItem}
-                onRemove={(job) => {
-                    dispatch(deleteWayportJobs([job]));
+                onRemove={() => {
+                    dispatch(removeNewWayportJob());
                 }}
-                onSubmit={(job) => {
+                onSubmit={() => {
                     // console.log('create new download job with state: ', job);
                     dispatch(startWayportJob());
                 }}
