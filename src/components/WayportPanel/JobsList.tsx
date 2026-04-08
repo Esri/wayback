@@ -136,7 +136,7 @@ export const JobsList: FC<JobsListProps> = ({
                             shouldDisableZoomToButton={
                                 shouldDisableZoomToButton
                             }
-                            canPublishTileLayer={false}
+                            canPublishTileLayer={canPublishTileLayer}
                             onRemove={onRemove}
                             onZoomTo={onZoomTo}
                             downlaodTilePackageButtonOnClick={
