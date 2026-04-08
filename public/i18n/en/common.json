@@ -188,6 +188,7 @@
     "remove_all_jobs": "Remove All Jobs",
     "confirm": "Confirm",
     "job_history": "Job History",
+    "insufficient_privileges_to_publish_tile_layer": "Your account does not have permission to publish tile layers. Please refer to the <a class='underline' href='https://doc.arcgis.com/en/arcgis-online/manage-data/publish-tiles.htm' target='_blank' rel='noopener noreferrer'>documentation</a> for information about required roles and privileges.",
     "COUNTRY_NAME_AF": "Afghanistan",
     "COUNTRY_NAME_AL": "Albania",
     "COUNTRY_NAME_DZ": "Algeria",

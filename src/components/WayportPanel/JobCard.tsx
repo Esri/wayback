@@ -1,4 +1,8 @@
-import { CalciteButton, CalciteLoader } from '@esri/calcite-components-react';
+import {
+    CalciteButton,
+    CalciteIcon,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
 import {
     // PublishWayportTileLayerStatus,
     WayportJob,
@@ -128,7 +132,7 @@ export const JobCard: FC<JobCardProps> = ({
             return (
                 <div className="mt-2 ml-2">
                     <CalciteButton
-                        scale="s"
+                        // scale="s"
                         appearance="solid"
                         iconStart="tile-layer"
                         width="full"
@@ -143,7 +147,7 @@ export const JobCard: FC<JobCardProps> = ({
 
                     <CalciteButton
                         class="mt-2"
-                        scale="s"
+                        // scale="s"
                         appearance="solid"
                         iconStart="download-to"
                         width="full"
@@ -155,6 +159,24 @@ export const JobCard: FC<JobCardProps> = ({
                     >
                         {t('download_tile_package')}
                     </CalciteButton>
+
+                    {!canPublishTileLayer && (
+                        <div className="text-xs mt-1 flex items-center">
+                            <CalciteIcon
+                                icon="exclamation-mark-triangle"
+                                scale="s"
+                                className="text-yellow-500"
+                            />
+                            <span
+                                className="ml-2"
+                                dangerouslySetInnerHTML={{
+                                    __html: t(
+                                        'insufficient_privileges_to_publish_tile_layer'
+                                    ),
+                                }}
+                            ></span>
+                        </div>
+                    )}
                 </div>
             );
         }
