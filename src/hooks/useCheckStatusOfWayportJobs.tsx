@@ -14,6 +14,8 @@ import {
     selectWayportJobReadyToHaveTilesUpdated,
     selectWayportJobUpdatingTiles,
     selectWayportJobWaiting4TilePackageToBeAdded,
+    selectWayportJobWaitingToStart,
+    selectWayportPublishingJobWaitingToStart,
 } from '@store/WayportMode/selectors';
 import {
     // assignTilePackageInfoToDownloadJobs,
@@ -57,6 +59,14 @@ export const useManageStatusOfWayportJobs = () => {
     );
 
     const jobUpdatingTile = useAppSelector(selectWayportJobUpdatingTiles);
+
+    const waypoortJobWaitingToStart = useAppSelector(
+        selectWayportJobWaitingToStart
+    );
+
+    const wayportPublishingJobWaitingToStart = useAppSelector(
+        selectWayportPublishingJobWaitingToStart
+    );
 
     useEffect(() => {
         // if there is no pending download job, there is no need to check the status of download jobs
@@ -189,22 +199,34 @@ export const useManageStatusOfWayportJobs = () => {
         }
     }, [readyToBeDownloadedWayportJob]);
 
-    // useEffect(() => {
-    //     // Skip if there is no finished download job that needs to have tile package info assigned
-    //     if (finishedDownloadJobsWithoutPackageInfo.length === 0) {
-    //         // console.log('No finished download job without package info, skip assigning tile package info to download jobs');
-    //         return;
-    //     }
+    useEffect(() => {
+        // When the app is loaded, if there is a wayport job waiting to start, it means the wayport GP server did not return
+        // the job id before the user left from the previous session. Since the job id is not available, there is no way to
+        // check the status of the job. The only thing we can do is mark the job as failed and let the user start a new job.
+        if (waypoortJobWaitingToStart) {
+            dispatch(
+                updateWayportJob({
+                    jobId: waypoortJobWaitingToStart.id,
+                    partialJobData: {
+                        status: 'wayport job failed',
+                    },
+                })
+            );
+        }
 
-    //     dispatch(
-    //         assignTilePackageInfoToDownloadJobs(
-    //             finishedDownloadJobsWithoutPackageInfo
-    //         )
-    //     );
-    // }, [finishedDownloadJobsWithoutPackageInfo]);
-
-    // useEffect(() => {
-    //     // clear download jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean.
-    //     dispatch(clearWayportJobs());
-    // }, []);
+        // Similarly, if there is a wayport publishing job waiting to start, it means the ArcGIS Rest API did not return
+        // the item id for the tile package before the user left from the previous session. Since the item id is not available,
+        // there is no way to check the status of the publishing job. The only thing we can do is mark the publishing job as
+        // failed and let the user start a new publishing job if they want to publish the tile layer.
+        if (wayportPublishingJobWaitingToStart) {
+            dispatch(
+                updateWayportJob({
+                    jobId: wayportPublishingJobWaitingToStart.id,
+                    partialJobData: {
+                        status: 'publishing job failed',
+                    },
+                })
+            );
+        }
+    }, []); // IMPORTANT: the dependency array is empty intentionally, we only want to check if there is a wayport job waiting to start when the component is mounted for the first time
 };

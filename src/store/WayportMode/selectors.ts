@@ -205,6 +205,26 @@ export const selectWayportJobsThatHaveBeenStarted = createSelector(
     }
 );
 
+export const selectWayportJobWaitingToStart = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const jobWaitingToBeStartedIds = ids.filter(
+            (id) => byId[id].status === 'wayport job waiting to start'
+        );
+
+        if (jobWaitingToBeStartedIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'not started' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = jobWaitingToBeStartedIds[0];
+
+        return byId[jobId];
+    }
+);
+
 export const selectWayportJobsThatHaveFinished = createSelector(
     (state: RootState) => state.WayportMode.jobs,
     (jobs) => {
@@ -238,6 +258,27 @@ export const selectTimestampOfZoomToDownloadJobExtentRequest = (
 
 export const selectIdOfJobToShowExtentOnMap = (state: RootState) =>
     state.WayportMode.idOfJobToShowExtentOnMap;
+
+export const selectWayportPublishingJobWaitingToStart = createSelector(
+    (state: RootState) => state.WayportMode.jobs,
+    (jobs) => {
+        const { byId, ids } = jobs;
+
+        const jobWaitingToBePublishedIds = ids.filter((id) => {
+            const { status } = byId[id];
+            return status === 'publishing job waiting to start';
+        });
+
+        if (jobWaitingToBePublishedIds.length === 0) {
+            return null;
+        }
+
+        // there should be only one job at a time in 'publishing job waiting to be published' status, but in case there are multiple jobs in this status, we will just return the first one.
+        const jobId = jobWaitingToBePublishedIds[0];
+
+        return byId[jobId];
+    }
+);
 
 export const selectWayportJobWaiting4TilePackageToBeAdded = createSelector(
     (state: RootState) => state.WayportMode.jobs,
