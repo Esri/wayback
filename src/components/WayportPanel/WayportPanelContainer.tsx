@@ -170,7 +170,9 @@ export const WayportPanelContainer = () => {
             <WayportIntroduction
                 promptToSignIn={notSignedIn}
                 promptToSignInWithOrgAccount={signedInWithArcGISPublicAccount}
-                promptToSelectVersionToExport={!newDownloadJob}
+                promptToSelectVersionToExport={
+                    !newDownloadJob && idsOfOngoingJobs.length === 0
+                } // only prompt to select a wayback item to export when there is no new download job that has not been started and there is no ongoing job, since both of these scenarios indicate that the user has not selected any wayback item to export
                 signInButtonOnClick={() => {
                     signIn();
                 }}

@@ -104,7 +104,7 @@ export const JobsList: FC<JobsListProps> = ({
 
     return (
         <>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mt-2">
                 <h4 className="text-sm">{t('job_history')}</h4>
                 <button
                     className="text-sm underline"
