@@ -24,6 +24,7 @@ import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
 import config from './config';
+import { WORLD_IMAGERY_BASEMAP_URL } from '@constants/index';
 
 interface ICreateWebmapParams {
     title: string;
@@ -70,24 +71,6 @@ const getRequestUrl = () => {
         ? `${credential.server}/sharing/rest/content/users/${credential.userId}/addItem`
         : '';
 };
-
-const WORLD_IMAGERY_BASEMAP_URL_PROD =
-    'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/';
-// const WORLD_IMAGERY_BASEMAP_URL_DEV =
-//     'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
-
-// const WORLD_IMAGERY_BASEMAP_URL =
-//     tier === 'production'
-//         ? WORLD_IMAGERY_BASEMAP_URL_PROD
-//         : WORLD_IMAGERY_BASEMAP_URL_DEV;
-
-/**
- * Base URL for the World Imagery basemap service.
- * If there is a specific URL set in the environment variables,
- * it uses that URL. Otherwise, it defaults to the production URL.
- */
-const WORLD_IMAGERY_BASEMAP_URL =
-    ENV_WORLD_IMAGERY_BASEMAP_URL || WORLD_IMAGERY_BASEMAP_URL_PROD;
 
 const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     const operationalLayers: Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];

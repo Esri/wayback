@@ -1,65 +1,18 @@
 // import { tier } from '@utils/Tier';
 
-/**
- * Vantor's Vivid Advanced basemap product provides committed image currency in a high-resolution,
- * high-quality image layer over defined metropolitan and high-interest areas across the globe.
- *
- * @see https://www.arcgis.com/home/item.html?id=1491ff7659824fe099aafdcbb633ce90
- */
-const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
-// const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_PubPrep_View/FeatureServer/0';
-
-// const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
+import {
+    COMMUNITY_UPDATES_FEATURE_LAYER_URL,
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL,
+    REGIONAL_UPDATES_FEATURE_LAYER_URL,
+} from '@constants/index';
 
 export const VIVID_ADVANCED_FROM_MAXAR_URL =
-    ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL ||
-    VIVID_ADVANCED_FROM_MAXAR_URL_PROD;
-// tier === 'production'
-//     ? VIVID_ADVANCED_FROM_MAXAR_URL_PROD
-//     : VIVID_ADVANCED_FROM_MAXAR_URL_DEV;
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
 
-/**
- * Vantor's Vivid Standard basemap product provides a visually consistent and continuous image layer
- * over large areas through advanced image mosaicking techniques, including tonal balancing and
- * seamline blending across thousands of image strips.
- *
- * @see https://esri.maps.arcgis.com/home/item.html?id=ac2c8e911c3a447d8ac3ba1a8514adf1
- */
-const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
-// const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_PubPrep_View/FeatureServer/0';
-
-// const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
-
-export const VIVID_STANDARD_FROM_MAXAR_URL =
-    ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL ||
-    VIVID_STANDARD_FROM_MAXAR_URL_PROD;
-// tier === 'production'
-//     ? VIVID_STANDARD_FROM_MAXAR_URL_PROD
-//     : VIVID_STANDARD_FROM_MAXAR_URL_DEV;
-
-/**
- * The GIS User Community, including mapping agencies around the world, enhance the ArcGIS World Imagery map by contributing recent,
- * submeter-resolution aerial imagery through the Community Maps Program.
- *
- * @see https://www.arcgis.com/home/item.html?id=50b08c0c86c84169902d8fa00a6f262c
- */
-const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-    'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Community_Blocks_Publication_View/FeatureServer/0';
-// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_PubPrep_view/FeatureServer/0';
-
-// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
+export const VIVID_STANDARD_FROM_MAXAR_URL = REGIONAL_UPDATES_FEATURE_LAYER_URL;
 
 export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
-    ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL ||
-    COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD;
-// tier === 'production'
-//     ? COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD
-//     : COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV;
+    COMMUNITY_UPDATES_FEATURE_LAYER_URL;
 
 /**
  * Fields available in the Imagery Updates layers:

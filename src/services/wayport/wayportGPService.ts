@@ -20,6 +20,7 @@ import Extent from '@arcgis/core/geometry/Extent';
 // import axios from 'axios';
 import { getToken } from '@utils/Esri-OAuth';
 import { IExtent } from '@typings/index';
+import { WAYBACK_EXPORT_GP_SERVICE_ROOT_URL } from '@constants/index';
 
 type GPJobStatus =
     | 'esriJobSubmitted'
@@ -82,23 +83,7 @@ export type WayportTilePackageInfo = {
     size: number;
 };
 
-const WAYPORT_GP_SERVICE_ROOT_PROD =
-    'https://wayport.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport';
-// const WAYPORT_GP_SERVICE_ROOT_DEV =
-//     'https://wayportdev.maptiles.arcgis.com/arcgis/rest/services/Wayport/GPServer/Wayport';
-
-/**
- * The root URL of the Wayport GP service.
- * If there is a specific URL set in the environment variables,
- * it returns that URL. Otherwise, it defaults to the production GP service URL.
- *
- * @returns {string} The Wayport GP service root URL.
- */
-const WAYPORT_GP_SERVICE_ROOT =
-    ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL || WAYPORT_GP_SERVICE_ROOT_PROD;
-// tier === 'production'
-//     ? WAYPORT_GP_SERVICE_ROOT_PROD
-//     : WAYPORT_GP_SERVICE_ROOT_DEV;
+const WAYPORT_GP_SERVICE_ROOT = WAYBACK_EXPORT_GP_SERVICE_ROOT_URL;
 
 /**
  *
