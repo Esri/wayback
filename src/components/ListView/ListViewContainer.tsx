@@ -39,6 +39,7 @@ import {
 } from '@store/WayportMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
+import { selectIsThereAnyOngoingJobs } from '@store/WayportMode/selectors';
 // import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
 
 type Props = {
@@ -92,6 +93,8 @@ const ListViewContainer = () => {
     //     return text;
     // }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
 
+    const hasOngoingExportJob = useAppSelector(selectIsThereAnyOngoingJobs);
+
     return (
         <div
             className="mt-2 fancy-scrollbar"
@@ -122,6 +125,7 @@ const ListViewContainer = () => {
                     rNum4WaybackItemsWithLocalChanges={
                         rNum4WaybackItemsWithLocalChanges
                     }
+                    shouldExportButtonBeDisabled={hasOngoingExportJob}
                     onClick={(releaseNum: number) => {
                         dispatch(setActiveWaybackItem(releaseNum));
                     }}

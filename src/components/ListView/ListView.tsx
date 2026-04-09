@@ -27,6 +27,10 @@ interface IProps {
     shouldOnlyShowItemsWithLocalChange: boolean;
     rNum4SelectedWaybackItems: Array<number>;
     rNum4WaybackItemsWithLocalChanges: Array<number>;
+    /**
+     * If true, the export button will be disabled. This happens when there is an ongoing export task for this release, and the user cannot start another export until the current one is finished.
+     */
+    shouldExportButtonBeDisabled: boolean;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -40,6 +44,7 @@ const ListView: React.FC<IProps> = ({
     rNum4SelectedWaybackItems,
     rNum4WaybackItemsWithLocalChanges,
     shouldOnlyShowItemsWithLocalChange,
+    shouldExportButtonBeDisabled,
     toggleSelect,
     onClick,
     onMouseEnter,
@@ -88,6 +93,9 @@ const ListView: React.FC<IProps> = ({
                         isActive={isActive}
                         isSelected={isSelected}
                         isHighlighted={isHighlighted}
+                        shouldExportButtonBeDisabled={
+                            shouldExportButtonBeDisabled
+                        }
                         toggleSelect={toggleSelect}
                         onClick={onClick}
                         onMouseEnter={onMouseEnter}

@@ -28,6 +28,11 @@ type Props = {
     isActive: boolean;
     isSelected: boolean;
     isHighlighted: boolean;
+    /**
+     * If true, the export button will be disabled and show tooltip to indicate the reason.
+     * This happens when there is an ongoing export task for this release, and the user cannot start another export until the current one is finished.
+     */
+    shouldExportButtonBeDisabled: boolean;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -47,6 +52,7 @@ export const ListViewCard: FC<Props> = ({
     isActive,
     isSelected,
     isHighlighted,
+    shouldExportButtonBeDisabled,
     // shouldDownloadButtonBeDisabled,
     // downloadButtonTooltipText,
     onClick,
@@ -131,17 +137,28 @@ export const ListViewCard: FC<Props> = ({
                             className={classnames(ButtonWrapperClassnames, {
                                 flex: showControlButtons,
                                 'hidden group-hover:flex': !showControlButtons,
-                                // 'cursor-default opacity-50':
-                                //     shouldDownloadButtonBeDisabled,
+                                'cursor-default opacity-50':
+                                    shouldExportButtonBeDisabled,
                             })}
+                            disabled={shouldExportButtonBeDisabled}
                             onClick={() => {
                                 // if (shouldDownloadButtonBeDisabled) {
                                 //     return;
                                 // }
 
+                                if (shouldExportButtonBeDisabled) {
+                                    // Show tooltip to indicate the reason why export button is disabled
+                                    // We will use the "title" attribute of the button to show the tooltip, so no need to do anything here
+                                    return;
+                                }
+
                                 downloadButtonOnClick(data.releaseNum);
                             }}
-                            title={t('export_tile_package_tooltip')}
+                            title={
+                                shouldExportButtonBeDisabled
+                                    ? t('export_tile_package_disabled_tooltip')
+                                    : t('export_tile_package_tooltip')
+                            }
                             aria-label={t('export_tile_package_tooltip')}
                         >
                             <CalciteIcon icon="export" scale="m" />
