@@ -30,8 +30,8 @@ import {
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 import { IS_MOBILE } from '@constants/UI';
-// import { LocaleSwitch } from './LocaleSwitch';
-// import useOnClickOutside from '@hooks/useOnClickOutside';
+import { LocaleSwitch } from './LocaleSwitch';
+import useOnClickOutside from '@hooks/useOnClickOutside';
 // import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
 
 const ReferenceLayerToggleContainer = () => {
@@ -47,7 +47,7 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
-    // const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+    const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
 
     // const isLocaleSwitchOpen = useAppSelector(
     //     selectIsReferenceLayerSwitcherOpen
@@ -55,10 +55,10 @@ const ReferenceLayerToggleContainer = () => {
 
     const isAnimationActive = useAppSelector(selectIsAnimationActive);
 
-    // useOnClickOutside(containerRef, () => {
-    //     // setIsLocaleSwitchOpen(false);
-    //     dispatch(isReferenceLayerSwitcherOpenToggled(false));
-    // });
+    useOnClickOutside(containerRef, () => {
+        setIsLocaleSwitchOpen(false);
+        // dispatch(isReferenceLayerSwitcherOpenToggled(false));
+    });
 
     // useSuggestReferenceLayerLocale();
 
@@ -74,13 +74,13 @@ const ReferenceLayerToggleContainer = () => {
             <ReferenceLayerToggle
                 isActive={isReferenceLayerVisible}
                 onClick={toggleReferenceLayer}
-                // localeSwitchButtonOnClick={() => {
-                //     // setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
-                //     dispatch(isReferenceLayerSwitcherOpenToggled());
-                // }}
+                localeSwitchButtonOnClick={() => {
+                    setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                    // dispatch(isReferenceLayerSwitcherOpenToggled());
+                }}
             />
 
-            {/* {isLocaleSwitchOpen && <LocaleSwitch />} */}
+            {isLocaleSwitchOpen && <LocaleSwitch />}
         </div>
     );
 };

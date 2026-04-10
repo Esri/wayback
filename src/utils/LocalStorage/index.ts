@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-// import { ReferenceLayerLanguage } from '@constants/map';
+import { ReferenceLayerLanguage } from '@constants/map';
 // import { DownloadJob } from '@store/WayportMode/reducer';
 // import { MapCenter } from '@store/Map/reducer';
 
@@ -50,7 +50,7 @@ const cleanUpLocalStorage = () => {
     removeItem(KEYS.shouldOpenSaveWebMapDialog);
     removeItem(KEYS.hashParams);
     removeItem(KEYS.showUpdatesWithLocalChanges);
-    removeItem(KEYS.referenceLayerLocale);
+    // removeItem(KEYS.referenceLayerLocale);
     removeItem(KEYS.downloadJobs);
 };
 cleanUpLocalStorage();
@@ -137,20 +137,26 @@ cleanUpLocalStorage();
 //     return val ? JSON.parse(val) : [];
 // };
 
-// export const setPreferredReferenceLayerLocale = (
-//     locale: ReferenceLayerLanguage
-// ) => {
-//     if (locale) {
-//         setItem(KEYS.referenceLayerLocale, locale);
-//     } else {
-//         removeItem(KEYS.referenceLayerLocale);
-//     }
-// };
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
+export const setPreferredReferenceLayerLocale = (
+    locale: ReferenceLayerLanguage
+) => {
+    if (locale) {
+        localStorage.setItem(KEYS.referenceLayerLocale, locale);
+    } else {
+        localStorage.removeItem(KEYS.referenceLayerLocale);
+    }
+};
 
-// export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
-//     const val = getItem(KEYS.referenceLayerLocale);
-//     return val as ReferenceLayerLanguage;
-// };
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
+export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
+    const val = localStorage.getItem(KEYS.referenceLayerLocale);
+    return val as ReferenceLayerLanguage;
+};
 
 // export {
 //     // saveDefaultMapLocation,

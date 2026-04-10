@@ -33,12 +33,12 @@ import {
     getSwipeWidgetLayersFromHashParams,
 } from '@utils/urlParams';
 
-// import {
-//     // getShouldOpenSaveWebMapDialog,
-//     getDownloadJobsFromLocalStorage,
-//     // getPreferredReferenceLayerLocale,
-//     // getDefaultMapLocation,
-// } from '@utils/LocalStorage';
+import {
+    // getShouldOpenSaveWebMapDialog,
+    // getDownloadJobsFromLocalStorage,
+    getPreferredReferenceLayerLocale,
+    // getDefaultMapLocation,
+} from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,
@@ -183,7 +183,10 @@ const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
         mapExtent,
         center: initialMapCenter?.center,
         zoom: initialMapCenter?.zoom,
-        // referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
+        /**
+         * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+         */
+        referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
     };
 
     return state;

@@ -103,7 +103,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
             {/* only show user avatar when the height is sufficient */}
             <div className="absolute bottom-0 left-0 w-full hidden [@media(min-height:450px)]:block">
-                <LocaleSwitcherToggleButton />
+                {/* <LocaleSwitcherToggleButton /> */}
 
                 <AccountAvatar />
             </div>
