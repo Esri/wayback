@@ -37,9 +37,9 @@ const AboutThisAppContainer = () => {
 
     return (
         <Modal
-            title={'World Imagery Wayback'}
+            title={'Esri | World Imagery Wayback'}
             isOpen={isOpen}
-            width="m"
+            width="l"
             onClose={onCloseHandler}
         >
             <AboutThiAppContent />

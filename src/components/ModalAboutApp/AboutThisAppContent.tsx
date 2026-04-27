@@ -28,7 +28,7 @@ export const AboutThiAppContent: React.FC = () => {
     return (
         <>
             {/* <h2 className="text-3xl mb-4 text-center">World Imagery Wayback</h2> */}
-            <h5 className="text-xl mb-3">{t('about_what_heading')}</h5>
+            {/* <h5 className="text-xl mb-3">{t('about_what_heading')}</h5>
             <p className="mb-6">
                 <Trans
                     i18nKey="about_what_description"
@@ -62,7 +62,37 @@ export const AboutThiAppContent: React.FC = () => {
             <p className="mb-6">{t('about_why_description')}</p>
 
             <h5 className="text-xl mb-2">{t('about_how_heading')}</h5>
-            <p className="mb-6">{t('about_how_description')}</p>
+            <p className="mb-6">{t('about_how_description')}</p> */}
+
+            <h3 className="text-2xl mb-2">{t('about_the_data')}</h3>
+            <p className="mb-3">{t('about_the_data_section_1')}</p>
+            <p className="mb-6">{t('about_the_data_section_2')}</p>
+
+            <h3 className="text-2xl mb-2">{t('about_the_app')}</h3>
+            <p className="mb-3">{t('about_the_app_summary')}</p>
+            <ul className="list-disc list-inside mb-3">
+                <li>{t('about_the_app_feature_1')}</li>
+                <li>{t('about_the_app_feature_2')}</li>
+                <li>{t('about_the_app_feature_3')}</li>
+                <li>{t('about_the_app_feature_4')}</li>
+                <li>{t('about_the_app_feature_5')}</li>
+            </ul>
+            <p
+                className="mb-6"
+                dangerouslySetInnerHTML={{
+                    __html: t('about_the_app_repo_info'),
+                }}
+            />
+
+            <h3 className="text-2xl mb-2">
+                {t('attribution_and_terms_of_use')}
+            </h3>
+            <p className="mb-1">{t('attribution_and_terms_of_use_summary')}</p>
+            <p
+                dangerouslySetInnerHTML={{
+                    __html: t('attribution_and_terms_of_use_esri_master'),
+                }}
+            />
         </>
     );
 };
