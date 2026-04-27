@@ -65,7 +65,12 @@ export const AboutThiAppContent: React.FC = () => {
             <p className="mb-6">{t('about_how_description')}</p> */}
 
             <h3 className="text-2xl mb-2">{t('about_the_data')}</h3>
-            <p className="mb-3">{t('about_the_data_section_1')}</p>
+            <p
+                className="mb-3"
+                dangerouslySetInnerHTML={{
+                    __html: t('about_the_data_section_1'),
+                }}
+            ></p>
             <p className="mb-6">{t('about_the_data_section_2')}</p>
 
             <h3 className="text-2xl mb-2">{t('about_the_app')}</h3>
@@ -87,7 +92,12 @@ export const AboutThiAppContent: React.FC = () => {
             <h3 className="text-2xl mb-2">
                 {t('attribution_and_terms_of_use')}
             </h3>
-            <p className="mb-1">{t('attribution_and_terms_of_use_summary')}</p>
+            <p
+                className="mb-1"
+                dangerouslySetInnerHTML={{
+                    __html: t('attribution_and_terms_of_use_summary'),
+                }}
+            ></p>
             <p
                 dangerouslySetInnerHTML={{
                     __html: t('attribution_and_terms_of_use_esri_master'),
