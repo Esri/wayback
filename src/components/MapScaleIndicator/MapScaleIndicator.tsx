@@ -1,12 +1,22 @@
 import { useAppSelector } from '@store/configureStore';
-import { selectMapResolution, selectMapScale } from '@store/Map/reducer';
+import {
+    selectMapCenterAndZoom,
+    selectMapResolution,
+    selectMapScale,
+    selectMapZoomLevel,
+} from '@store/Map/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const MapScaleIndicator = () => {
+    const { t } = useTranslation();
+
     const mapScale = useAppSelector(selectMapScale);
 
     const mapResolution = useAppSelector(selectMapResolution);
+
+    const mapLevel = useAppSelector(selectMapZoomLevel);
 
     const mapScaleFormatted = useMemo(() => {
         if (mapScale === null || isNaN(mapScale)) {
@@ -34,7 +44,8 @@ export const MapScaleIndicator = () => {
     return (
         <div className="absolute bottom-[20px] right-[4px] px-1 py-[2px] text-xs bg-black bg-opacity-90 pointer-events-none">
             <span>
-                1:{mapScaleFormatted} | 1px: {mapResolutionFormatted}m
+                1:{mapScaleFormatted} | {t('zoom_level', { level: mapLevel })} |
+                1px: {mapResolutionFormatted}m
             </span>
         </div>
     );

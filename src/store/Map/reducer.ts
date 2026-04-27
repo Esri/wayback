@@ -244,4 +244,6 @@ export const selectMapScale = (state: RootState) => state.Map.scale;
 
 export const selectMapResolution = (state: RootState) => state.Map.resolution;
 
+export const selectMapZoomLevel = (state: RootState) => state.Map.zoom;
+
 export default reducer;
