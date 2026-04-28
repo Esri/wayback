@@ -160,8 +160,15 @@ export const JobCard: FC<JobCardProps> = ({
                         {t('download_tile_package')}
                     </CalciteButton>
 
+                    <div className="text-xs mt-2 flex items-center">
+                        <CalciteIcon icon="timer" scale="s" />
+                        <span className="ml-2">
+                            {t('wayport_tile_package_expiration_warning')}
+                        </span>
+                    </div>
+
                     {!canPublishTileLayer && (
-                        <div className="text-xs mt-1 flex items-center">
+                        <div className="text-xs mt-2 flex items-center">
                             <CalciteIcon
                                 icon="exclamation-mark-triangle"
                                 scale="s"
