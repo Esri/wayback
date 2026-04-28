@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import Map from './Map/reducer';
 import SwipeView from './Swipe/reducer';
 import WaybackItems from './Wayback/reducer';
 import AnimationMode from './AnimationMode/reducer';
-import DownloadMode from './DownloadMode/reducer';
+import WayportMode from './WayportMode/reducer';
 import UpdatesMode from './UpdatesMode/reducer';
 
 export default combineReducers({
@@ -28,6 +28,6 @@ export default combineReducers({
     SwipeView,
     WaybackItems,
     AnimationMode,
-    DownloadMode,
+    WayportMode,
     UpdatesMode,
 });

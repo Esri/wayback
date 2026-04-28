@@ -1,65 +1,33 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // import { tier } from '@utils/Tier';
 
-/**
- * Vantor's Vivid Advanced basemap product provides committed image currency in a high-resolution,
- * high-quality image layer over defined metropolitan and high-interest areas across the globe.
- *
- * @see https://esri.maps.arcgis.com/home/item.html?id=28c832d4a4f74738aa5c0073469a532e
- */
-const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
-// const VIVID_ADVANCED_FROM_MAXAR_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Advanced_Blocks_PubPrep_View/FeatureServer/0';
-
-// const VIVID_ADVANCED_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0`;
+import {
+    COMMUNITY_UPDATES_FEATURE_LAYER_URL,
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL,
+    REGIONAL_UPDATES_FEATURE_LAYER_URL,
+} from '@constants/index';
 
 export const VIVID_ADVANCED_FROM_MAXAR_URL =
-    ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL ||
-    VIVID_ADVANCED_FROM_MAXAR_URL_PROD;
-// tier === 'production'
-//     ? VIVID_ADVANCED_FROM_MAXAR_URL_PROD
-//     : VIVID_ADVANCED_FROM_MAXAR_URL_DEV;
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
 
-/**
- * Vantor's Vivid Standard basemap product provides a visually consistent and continuous image layer
- * over large areas through advanced image mosaicking techniques, including tonal balancing and
- * seamline blending across thousands of image strips.
- *
- * @see https://esri.maps.arcgis.com/home/item.html?id=406e94e0348c4c59826182379c1590b4
- */
-const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
-// const VIVID_STANDARD_FROM_MAXAR_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Vivid_Standard_Blocks_PubPrep_View/FeatureServer/0';
-
-// const VIVID_STANDARD_FROM_MAXAR_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0`;
-
-export const VIVID_STANDARD_FROM_MAXAR_URL =
-    ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL ||
-    VIVID_STANDARD_FROM_MAXAR_URL_PROD;
-// tier === 'production'
-//     ? VIVID_STANDARD_FROM_MAXAR_URL_PROD
-//     : VIVID_STANDARD_FROM_MAXAR_URL_DEV;
-
-/**
- * The GIS User Community, including mapping agencies around the world, enhance the ArcGIS World Imagery map by contributing recent,
- * submeter-resolution aerial imagery through the Community Maps Program.
- *
- * @see https://esri.maps.arcgis.com/home/item.html?id=b5d57c5ddbae499faa1b1e343dd132d7
- */
-const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-    'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0';
-// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD =
-//     'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Community_Blocks_PubPrep_view/FeatureServer/0';
-
-// const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV = `https://servicesdev.arcgis.com/VLx4vrvwONglS8iz/arcgis/rest/services/Community_Blocks_Simple_Publication_View/FeatureServer/0`;
+export const VIVID_STANDARD_FROM_MAXAR_URL = REGIONAL_UPDATES_FEATURE_LAYER_URL;
 
 export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
-    ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL ||
-    COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD;
-// tier === 'production'
-//     ? COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_PROD
-//     : COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL_DEV;
+    COMMUNITY_UPDATES_FEATURE_LAYER_URL;
 
 /**
  * Fields available in the Imagery Updates layers:
@@ -123,7 +91,7 @@ export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
 export const WORLD_IMAGERY_UPDATES_LAYER_FIELDS = {
     OBJECTID: 'OBJECTID',
     AREA_NAME: 'AreaName',
-    COUNTRY_NAME: 'CountryName',
+    // COUNTRY_NAME: 'CountryName',
     AREA_SQKM: 'AreaSQKM',
     /**
      * Ground Sample Distance (GSD) is the distance between pixel centers measured on the ground
@@ -131,6 +99,10 @@ export const WORLD_IMAGERY_UPDATES_LAYER_FIELDS = {
     GSD: 'GSD',
     PUB_STATE: 'PubState',
     PUB_DATE: 'PubDate',
+    /**
+     * Tag field contains the ISO Country Code for the update area, e.g. 'US' for United States, 'FR' for France, etc.
+     */
+    COUNTRY_CODE: 'Tag',
 };
 
 /**

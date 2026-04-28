@@ -1,0 +1,184 @@
+// /* Copyright 2024-2026 Esri
+//  *
+//  * Licensed under the Apache License Version 2.0 (the "License");
+//  * you may not use this file except in compliance with the License.
+//  * You may obtain a copy of the License at
+//  *
+//  *     http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  * Unless required by applicable law or agreed to in writing, software
+//  * distributed under the License is distributed on an "AS IS" BASIS,
+//  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  * See the License for the specific language governing permissions and
+//  * limitations under the License.
+//  */
+
+// import React, { FC, useContext, useEffect, useMemo } from 'react';
+// import { useAppSelector } from '@store/configureStore';
+// import {
+//     downloadJobRemoved,
+//     // isDownloadDialogOpenToggled,
+// } from '@store/WayportMode/reducer';
+
+// import {
+//     selectDownloadJobs,
+//     selectIsAddingNewDownloadJob,
+//     // selectIsDownloadDialogOpen,
+//     selectNumOfPendingWayportJobs,
+// } from '@store/WayportMode/selectors';
+
+// import { DownloadDialog } from './DownloadDialog';
+// import { useAppDispatch } from '@store/configureStore';
+// import {
+//     isAnonymouns,
+//     signIn,
+//     signInUsingDifferentAccount,
+// } from '@utils/Esri-OAuth';
+// // import { saveDownloadJobs2LocalStorage } from '@utils/LocalStorage';
+// import {
+//     checkPendingDownloadJobStatus,
+//     startDownloadJob,
+//     updateUserSelectedZoomLevels,
+//     downloadOutputTilePackage,
+//     cleanUpDownloadJobs,
+// } from '@store/WayportMode/thunks';
+// import {
+//     activeDialogUpdated,
+//     isDownloadTilePackageDialogOpenSelector,
+// } from '@store/UI/reducer';
+// import { Modal } from '@components/Modal/Modal';
+// import { AppContext } from '@contexts/AppContextProvider';
+// import { Trans } from 'react-i18next';
+
+// export const DownloadDialogContainer = () => {
+//     const dispatch = useAppDispatch();
+
+//     const isOpen = useAppSelector(isDownloadTilePackageDialogOpenSelector);
+
+//     const jobs = useAppSelector(selectDownloadJobs);
+
+//     const numPendingJobs = useAppSelector(selectNumOfPendingWayportJobs);
+
+//     const isAddingNewDownloadJob = useAppSelector(selectIsAddingNewDownloadJob);
+
+//     // const notSignedIn = useMemo(() => isAnonymouns(), []);
+
+//     const {
+//         notSignedIn,
+//         // withArcGISPublicAccount: signedInWithArcGISPublicAccount,
+//         signedInWithArcGISPublicAccount,
+//     } = useContext(AppContext);
+
+//     const isDisabled = useMemo(
+//         () =>
+//             notSignedIn ||
+//             signedInWithArcGISPublicAccount ||
+//             isAddingNewDownloadJob,
+//         [notSignedIn, signedInWithArcGISPublicAccount, isAddingNewDownloadJob]
+//     );
+
+//     useEffect(() => {
+//         // save jobs to localhost so they can be restored
+//         // saveDownloadJobs2LocalStorage(jobs);
+//         // // prompt anonymouns user to sign in if the user wants to open the download dialog,
+//         // // since exporting job requires the user token
+//         // if (jobs?.length && isAnonymouns() && isOpen) {
+//         //     signIn();
+//         // }
+//     }, [jobs]);
+
+//     // useEffect(() => {
+//     //     updateHashParams('downloadMode', isOpen ? 'true' : null);
+//     // }, [isOpen]);
+
+//     useEffect(() => {
+//         if (numPendingJobs) {
+//             dispatch(checkPendingDownloadJobStatus());
+//         }
+//     }, [numPendingJobs]);
+
+//     useEffect(() => {
+//         if (!isOpen) {
+//             dispatch(cleanUpDownloadJobs());
+//         }
+//     }, [isOpen]);
+
+//     const getTitle = () => {
+//         return (
+//             // <span className="text-2xl mb-8">
+//             //     Wayback Export (
+//             //     <a
+//             //         href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+//             //         target="_blank"
+//             //         rel="noreferrer"
+//             //     >
+//             //         beta
+//             //     </a>
+//             //     )
+//             // </span>
+
+//             <span className="text-2xl mb-8">
+//                 <Trans
+//                     i18nKey="wayback_export_title"
+//                     components={{
+//                         action: (
+//                             <a
+//                                 href="https://doc.arcgis.com/en/arcgis-online/reference/faq.htm#anchor22"
+//                                 target="_blank"
+//                                 rel="noreferrer"
+//                                 className="underline"
+//                             />
+//                         ),
+//                     }}
+//                 />
+//             </span>
+//         );
+//     };
+
+//     if (!isOpen) {
+//         return null;
+//     }
+
+//     return (
+//         <Modal
+//             title={getTitle()}
+//             isOpen={isOpen}
+//             // title="Download Tile Package"
+//             onClose={() => {
+//                 dispatch(activeDialogUpdated());
+//             }}
+//             width="xl"
+//         >
+//             <DownloadDialog
+//                 jobs={jobs}
+//                 isAddingNewDownloadJob={isAddingNewDownloadJob}
+//                 disabled={isDisabled}
+//                 promptToSignIn={notSignedIn}
+//                 promptToSignInWithOrgAccount={signedInWithArcGISPublicAccount}
+//                 closeButtonOnClick={() => {
+//                     dispatch(activeDialogUpdated());
+//                 }}
+//                 removeButtonOnClick={(id) => {
+//                     dispatch(downloadJobRemoved(id));
+//                 }}
+//                 levelsOnChange={(id, levels) => {
+//                     // console.log(id, levels);
+//                     dispatch(updateUserSelectedZoomLevels(id, levels));
+//                 }}
+//                 createTilePackageButtonOnClick={(id: string) => {
+//                     dispatch(startDownloadJob(id));
+//                 }}
+//                 downloadTilePackageButtonOnClick={(id: string) => {
+//                     dispatch(downloadOutputTilePackage(id));
+//                 }}
+//                 signInButtonOnClick={() => {
+//                     if (notSignedIn) {
+//                         signIn();
+//                     } else {
+//                         signInUsingDifferentAccount();
+//                     }
+//                 }}
+//             />
+//         </Modal>
+//     );
+// };

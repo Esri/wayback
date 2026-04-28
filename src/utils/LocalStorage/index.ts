@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  */
 
 import { ReferenceLayerLanguage } from '@constants/map';
-import { DownloadJob } from '@store/DownloadMode/reducer';
-import { IExtentGeomety } from '@typings/index';
+// import { DownloadJob } from '@store/WayportMode/reducer';
+// import { MapCenter } from '@store/Map/reducer';
 
 enum KEYS {
-    defaultExtent = 'WaybackAppDefaultExtent',
+    // defaultExtent = 'WaybackAppDefaultExtent',
+    defaultLocation = 'WaybackAppDefaultLocation',
     showUpdatesWithLocalChanges = 'WaybackAppShouldShowUpdatesWithLocalChanges',
     shouldOpenSaveWebMapDialog = 'WaybackAppShouldOpenSaveWebMapDialog',
     customPortalUrl = 'WaybackAppCustomPortalUrl',
@@ -27,102 +28,143 @@ enum KEYS {
     referenceLayerLocale = 'WaybackAppPreferredReferenceLayerLocale',
 }
 
-const setItem = (key: KEYS, value = '') => {
-    localStorage.setItem(key, value);
-};
+// const setItem = (key: KEYS, value = '') => {
+//     localStorage.setItem(key, value);
+// };
 
-const getItem = (key: KEYS) => {
-    return localStorage.getItem(key) || null;
-};
+// const getItem = (key: KEYS) => {
+//     return localStorage.getItem(key) || null;
+// };
 
 const removeItem = (key: KEYS) => {
     localStorage.removeItem(key);
 };
 
-const saveDefaultExtent = (extent: IExtentGeomety) => {
-    if (!extent) {
-        console.error('default extent is missing');
-        return;
-    }
-    setItem(KEYS.defaultExtent, JSON.stringify(extent));
+/**
+ * Cleans up local storage by removing deprecated keys
+ */
+const cleanUpLocalStorage = () => {
+    // removeItem(KEYS.defaultExtent);
+    removeItem(KEYS.defaultLocation);
+    removeItem(KEYS.customPortalUrl);
+    removeItem(KEYS.shouldOpenSaveWebMapDialog);
+    removeItem(KEYS.hashParams);
+    removeItem(KEYS.showUpdatesWithLocalChanges);
+    // removeItem(KEYS.referenceLayerLocale);
+    removeItem(KEYS.downloadJobs);
 };
+cleanUpLocalStorage();
 
-const getDefaultExtent = (): IExtentGeomety => {
-    const defaultExtent = getItem(KEYS.defaultExtent);
-    return defaultExtent ? JSON.parse(defaultExtent) : null;
-};
+// const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
+//     if (!center || zoom === undefined) {
+//         console.error('default location is missing');
+//         return;
+//     }
 
-// const setShouldShowUpdatesWithLocalChanges = (val = false) => {
-//     setItem(KEYS.showUpdatesWithLocalChanges, JSON.stringify(val));
+//     if (center.lat === undefined || center.lon === undefined) {
+//         console.error('default location is missing lat or lon');
+//         return;
+//     }
+
+//     const location = [center.lon, center.lat, zoom].join(',');
+
+//     setItem(KEYS.defaultLocation, JSON.stringify(location));
 // };
 
-// const getShouldShowUpdatesWithLocalChanges = () => {
-//     return getItem(KEYS.showUpdatesWithLocalChanges) === 'true';
+// const getDefaultMapLocation = (): {
+//     center: MapCenter;
+//     zoom: number;
+// } | null => {
+//     const defaultLocation = getItem(KEYS.defaultLocation);
+
+//     if (!defaultLocation) {
+//         return null;
+//     }
+
+//     const locParts = JSON.parse(defaultLocation).split(',');
+
+//     if (
+//         locParts.length === 3 &&
+//         !isNaN(parseFloat(locParts[0])) &&
+//         !isNaN(parseFloat(locParts[1])) &&
+//         !isNaN(parseInt(locParts[2], 10))
+//     ) {
+//         return {
+//             center: {
+//                 lon: parseFloat(locParts[0]),
+//                 lat: parseFloat(locParts[1]),
+//             },
+//             zoom: parseInt(locParts[2], 10),
+//         };
+//     }
+//     return null;
 // };
 
-const setShouldOpenSaveWebMapDialog = () => {
-    setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
-};
+// const setShouldOpenSaveWebMapDialog = () => {
+//     setItem(KEYS.shouldOpenSaveWebMapDialog, 'true');
+// };
 
-const getCustomPortalUrl = () => {
-    return getItem(KEYS.customPortalUrl);
-};
+// const getCustomPortalUrl = () => {
+//     return getItem(KEYS.customPortalUrl);
+// };
 
-const setCustomPortalUrl = (portalUrl = '') => {
-    portalUrl
-        ? setItem(KEYS.customPortalUrl, portalUrl)
-        : removeItem(KEYS.customPortalUrl);
-};
+// const setCustomPortalUrl = (portalUrl = '') => {
+//     portalUrl
+//         ? setItem(KEYS.customPortalUrl, portalUrl)
+//         : removeItem(KEYS.customPortalUrl);
+// };
 
-const getShouldOpenSaveWebMapDialog = () => {
-    const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
+// const getShouldOpenSaveWebMapDialog = () => {
+//     const val = getItem(KEYS.shouldOpenSaveWebMapDialog);
 
-    if (val) {
-        removeItem(KEYS.shouldOpenSaveWebMapDialog);
-    }
+//     if (val) {
+//         removeItem(KEYS.shouldOpenSaveWebMapDialog);
+//     }
 
-    return val === 'true' ? true : false;
-};
+//     return val === 'true' ? true : false;
+// };
 
-const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
-    if (!jobs || !jobs.length) {
-        removeItem(KEYS.downloadJobs);
-    } else {
-        setItem(KEYS.downloadJobs, JSON.stringify(jobs));
-    }
-};
+// const saveDownloadJobs2LocalStorage = (jobs: DownloadJob[]) => {
+//     if (!jobs || !jobs.length) {
+//         removeItem(KEYS.downloadJobs);
+//     } else {
+//         setItem(KEYS.downloadJobs, JSON.stringify(jobs));
+//     }
+// };
 
-const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
-    const val = getItem(KEYS.downloadJobs);
-    return val ? JSON.parse(val) : [];
-};
+// const getDownloadJobsFromLocalStorage = (): DownloadJob[] => {
+//     const val = getItem(KEYS.downloadJobs);
+//     return val ? JSON.parse(val) : [];
+// };
 
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
 export const setPreferredReferenceLayerLocale = (
     locale: ReferenceLayerLanguage
 ) => {
     if (locale) {
-        setItem(KEYS.referenceLayerLocale, locale);
+        localStorage.setItem(KEYS.referenceLayerLocale, locale);
     } else {
-        removeItem(KEYS.referenceLayerLocale);
+        localStorage.removeItem(KEYS.referenceLayerLocale);
     }
 };
 
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
 export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
-    const val = getItem(KEYS.referenceLayerLocale);
+    const val = localStorage.getItem(KEYS.referenceLayerLocale);
     return val as ReferenceLayerLanguage;
 };
 
-export {
-    saveDefaultExtent,
-    getDefaultExtent,
-    getCustomPortalUrl,
-    setCustomPortalUrl,
-    // setShouldShowUpdatesWithLocalChanges,
-    // getShouldShowUpdatesWithLocalChanges,
-    setShouldOpenSaveWebMapDialog,
-    getShouldOpenSaveWebMapDialog,
-    saveDownloadJobs2LocalStorage,
-    getDownloadJobsFromLocalStorage,
-    // saveHashParams,
-    // getHashParamsFromLocalStorage,
-};
+// export {
+//     // saveDefaultMapLocation,
+//     // getDefaultMapLocation,
+//     // getCustomPortalUrl,
+//     // setCustomPortalUrl,
+//     // setShouldOpenSaveWebMapDialog,
+//     // getShouldOpenSaveWebMapDialog,
+//     saveDownloadJobs2LocalStorage,
+//     getDownloadJobsFromLocalStorage,
+// };

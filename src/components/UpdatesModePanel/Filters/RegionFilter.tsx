@@ -1,3 +1,18 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderText } from './HeaderText';
@@ -19,6 +34,7 @@ import {
 } from '@esri/calcite-components-react';
 import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
 import classNames from 'classnames';
+import { getContryNameByCountryCode } from './helpers';
 
 type RegionFilterProps = {
     /**
@@ -66,8 +82,10 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
         // }
 
         for (const region of listOfRegions) {
+            // const i18nKey = `COUNTRY_NAME_${region.toUpperCase()}`;
+
             options.push({
-                label: region,
+                label: getContryNameByCountryCode(region),
                 value: region,
                 checked: selectedRegion === region, // Default to unchecked
             });
@@ -123,7 +141,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
             <>
                 <div className="w-full mb-2">
                     <CalciteInputText
-                        placeholder="Search region"
+                        placeholder={t('search_region')}
                         value={searchTerm}
                         clearable
                         onCalciteInputTextInput={(event: any) => {
@@ -167,9 +185,11 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                 />
 
                 {selectedRegion && (
-                    <div className="relative flex items-center gap-2 px-2 py-1 text-white rounded-lg bg-custom-theme-blue">
+                    <div className="relative flex items-center gap-2 pl-2 pr-1 py-1 text-white rounded-lg bg-custom-theme-blue">
                         <div className="max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
-                            <span className="text-sm">{selectedRegion}</span>
+                            <span className="text-xs">
+                                {getContryNameByCountryCode(selectedRegion)}
+                            </span>
                         </div>
 
                         <CalciteButton

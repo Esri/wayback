@@ -1,0 +1,172 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// import {
+//     CalciteButton,
+//     CalciteIcon,
+//     CalciteLoader,
+// } from '@esri/calcite-components-react';
+import {
+    // PublishWayportTileLayerStatus,
+    WayportJob,
+    WayportJobStatus,
+} from '@store/WayportMode/reducer';
+import classNames from 'classnames';
+import React, { FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { JobCard } from './JobCard';
+import { CalciteButton } from '@esri/calcite-components-react';
+
+type JobsListProps = {
+    jobs: WayportJob[];
+    /**
+     * If true, it means the user is not signed in with an ArcGIS Online account.
+     */
+    notSignedIn: boolean;
+    /**
+     * Ids of the jobs that are currently ongoing, which means they cannot be removed.
+     */
+    idsOfOngoingJobs: string[];
+    /**
+     * The id of the job that is currently being shown on the map by having its extent displayed on the map.
+     */
+    idOfJobToShowExtentOnMap: string | null;
+    /**
+     * If true, the zoom to button will be disabled and not clickable.
+     */
+    shouldDisableZoomToButton: boolean;
+    /**
+     * If true, it means the user has the privileges to publish tile layers to ArcGIS Online, which means the option to publish tile layer will be shown for each job that is finished downloading the tile package.
+     */
+    canPublishTileLayer: boolean;
+    onRemove: (job: WayportJob) => void;
+    onZoomTo: (job: WayportJob) => void;
+    downlaodTilePackageButtonOnClick: (job: WayportJob) => void;
+    publishTileLayerButtonOnClick: (jobId: string) => void;
+    openPublishedTileLayerOnClick: (job: WayportJob) => void;
+    clearAllButtonOnClick: () => void;
+};
+
+export const JobsList: FC<JobsListProps> = ({
+    jobs,
+    notSignedIn,
+    idsOfOngoingJobs,
+    shouldDisableZoomToButton,
+    idOfJobToShowExtentOnMap,
+    canPublishTileLayer,
+    onRemove,
+    onZoomTo,
+    downlaodTilePackageButtonOnClick,
+    publishTileLayerButtonOnClick,
+    openPublishedTileLayerOnClick,
+    clearAllButtonOnClick,
+}) => {
+    const { t } = useTranslation();
+
+    const disableRemoveAllJobsButton = useMemo(() => {
+        return jobs.length === 0;
+    }, [jobs]);
+
+    const wayportJobStatusLabel: Record<WayportJobStatus, string> = {
+        'wayport job not started': t('wayport_job_not_started_status'),
+        'wayport job waiting to start': t(
+            'wayport_job_waiting_to_start_status'
+        ),
+        'wayport job pending': t('wayport_job_pending_status'),
+        'wayport job finished': t('wayport_job_finished_status'),
+        'wayport job failed': t('wayport_job_failed_status'),
+        'wayport job downloaded': t('wayport_job_downloaded_status'),
+        'wayport job expired': t('wayport_job_expired_status'),
+        'publishing job waiting to start': t('adding_tile_package_item_status'),
+        'publishing job adding tile package': t(
+            'adding_tile_package_item_status'
+        ),
+        'publishing job added tile package': t(
+            'adding_tile_package_item_status'
+        ),
+        'publishing job added tile layer': t('publishing_tile_layer_status'),
+        'publishing job updating tiles': t('updating_tiles_status'),
+        'publishing job updated tiles': t('updating_tiles_status'),
+        'publishing job finished': t('finished_publishing_tile_layer_status'),
+        'publishing job failed': t('failed_publishing_tile_layer_status'),
+    };
+
+    if (jobs.length === 0) {
+        // no need to show anything if the user is not signed in, since we don't know if this uses has any jobs created before or not
+        if (notSignedIn) {
+            return null;
+        }
+
+        // if user is signed in but there is no job, show a message to indicate there is no job
+        return (
+            <div className="text-center opacity-50 mt-2">
+                <p className="text-sm">{t('no_wayport_jobs')}</p>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <div className="flex justify-between items-center mt-2">
+                <h4 className="text-sm">{t('job_history')}</h4>
+                <button
+                    className="text-sm underline"
+                    onClick={() => {
+                        // console.log('Remove all button clicked');
+                        clearAllButtonOnClick();
+                        // setShowRemoveAllJobWarning(true);
+                    }}
+                    disabled={disableRemoveAllJobsButton}
+                >
+                    {t('clear_all')}
+                </button>
+            </div>
+
+            <div className="overflow-x-hidden">
+                {jobs.map((job) => {
+                    const isOngoingJob = idsOfOngoingJobs.includes(job.id);
+
+                    return (
+                        <JobCard
+                            key={job.id}
+                            job={job}
+                            isOngoingJob={isOngoingJob}
+                            wayportJobStatusLabel={wayportJobStatusLabel}
+                            // wayportTileLayerPublishStatusLabel={
+                            //     wayportTileLayerPublishStatusLabel
+                            // }
+                            idOfJobToShowExtentOnMap={idOfJobToShowExtentOnMap}
+                            shouldDisableZoomToButton={
+                                shouldDisableZoomToButton
+                            }
+                            canPublishTileLayer={canPublishTileLayer}
+                            onRemove={onRemove}
+                            onZoomTo={onZoomTo}
+                            downlaodTilePackageButtonOnClick={
+                                downlaodTilePackageButtonOnClick
+                            }
+                            publishTileLayerButtonOnClick={
+                                publishTileLayerButtonOnClick
+                            }
+                            openPublishedTileLayerOnClick={
+                                openPublishedTileLayerOnClick
+                            }
+                        />
+                    );
+                })}
+            </div>
+        </>
+    );
+};

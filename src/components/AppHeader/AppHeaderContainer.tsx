@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import { selectMapMode } from '@store/Map/reducer';
 import { isAboutThisAppModalOpenToggled } from '@store/UI/reducer';
 
 export const AppHeaderContainer = () => {
-    // const isGutterHide = useAppSelector(isGutterHideSelector);
-
     const dispatch = useAppDispatch();
 
     const mode = useAppSelector(selectMapMode);
@@ -40,10 +38,6 @@ export const AppHeaderContainer = () => {
     if (IS_MOBILE) {
         return (
             <MobileHeader
-                // isGutterHide={isGutterHide}
-                // leftNavBtnOnClick={() => {
-                //     dispatch(isGutterHideToggled());
-                // }}
                 infoButtonOnClick={() => {
                     dispatch(isAboutThisAppModalOpenToggled());
                 }}

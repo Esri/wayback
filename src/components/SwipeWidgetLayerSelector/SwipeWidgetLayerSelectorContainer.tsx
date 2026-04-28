@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import {
     releaseNum4LeadingLayerUpdated,
     releaseNum4TrailingLayerUpdated,
     isSwipeWidgetOpenSelector,
-    toggleSwipeWidget,
+    // toggleSwipeWidget,
 } from '@store/Swipe/reducer';
 
 import { IWaybackItem } from '@typings/index';
@@ -40,6 +40,7 @@ import { IWaybackItem } from '@typings/index';
 import SwipeWidgetLayerSelector, {
     SwipeWidgetLayer,
 } from './SwipeWidgetLayerSelector';
+import { updateMapMode } from '@store/Map/thunks';
 
 type Props = {
     targetLayer: SwipeWidgetLayer;
@@ -68,12 +69,18 @@ const SwipeWidgetLayerSelectorContainer: React.FC<Props> = ({
         swipeWidgetTrailingLayerSelector
     );
 
-    const closeBtnOnClick =
-        targetLayer === 'trailing'
-            ? () => {
-                  dispatch(toggleSwipeWidget());
-              }
-            : null;
+    // const closeBtnOnClick =
+    //     targetLayer === 'trailing'
+    //         ? () => {
+    //               dispatch(toggleSwipeWidget());
+    //           }
+    //         : null;
+    const closeBtnOnClick = () => {
+        if (targetLayer === 'trailing') {
+            // dispatch(toggleSwipeWidget());
+            dispatch(updateMapMode('explore'));
+        }
+    };
 
     return isSwipeWidgetOpen && !isMobile ? (
         <SwipeWidgetLayerSelector

@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  */
 
 import React, { useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
@@ -30,41 +31,25 @@ import {
 
 import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
 
-import ListView from './index';
+import ListView from './ListView';
 import { AppContext } from '@contexts/AppContextProvider';
 import {
-    DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
-    addToDownloadList,
-} from '@store/DownloadMode/thunks';
+    // DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+    initiateNewWayportJob,
+} from '@store/WayportMode/thunks';
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
-import { selectHasReachedLimitOfConcurrentDownloadJobs } from '@store/DownloadMode/selectors';
+import { selectIsThereAnyOngoingJobs } from '@store/WayportMode/selectors';
+// import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
 
 type Props = {
     children?: React.ReactNode;
 };
 
-const ListViewWrapper: React.FC<Props> = ({ children }) => {
-    return (
-        <div
-            className="mt-2 fancy-scrollbar"
-            style={{
-                position: 'relative',
-                flexGrow: 1,
-                flexShrink: 0,
-                flexBasis: 200,
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                paddingBottom: '2rem',
-            }}
-        >
-            <div className="mx-4">{children}</div>
-        </div>
-    );
-};
-
 const ListViewContainer = () => {
     const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
 
     const { isMobile } = useContext(AppContext);
 
@@ -86,68 +71,82 @@ const ListViewContainer = () => {
         shouldOnlyShowItemsWithLocalChangeSelector
     );
 
-    const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
-        selectHasReachedLimitOfConcurrentDownloadJobs
-    );
+    // const hasReachedLimitOfConcurrentDownloadJobs = useAppSelector(
+    //     selectHasReachedLimitOfConcurrentWayportJobs
+    // );
 
-    const { zoom } = useAppSelector(selectMapCenterAndZoom);
+    // const { zoom } = useAppSelector(selectMapCenterAndZoom);
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
-    const downloadButtonTooltipText = useMemo(() => {
-        const text =
-            'Export an imagery tile package for the current map extent';
+    // const downloadButtonTooltipText = useMemo(() => {
+    //     const text = t('export_tile_package_tooltip');
 
-        if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
-            return text + ` (zoom in to enable)`;
-        }
+    //     if (zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB) {
+    //         return text + ' ' + t('zoom_in_to_enable');
+    //     }
 
-        if (hasReachedLimitOfConcurrentDownloadJobs) {
-            return 'Reached the maximum limit of 5 concurrent export jobs';
-        }
+    //     if (hasReachedLimitOfConcurrentDownloadJobs) {
+    //         return t('concurrent_export_limit_reached');
+    //     }
 
-        return text;
-    }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
+    //     return text;
+    // }, [zoom, hasReachedLimitOfConcurrentDownloadJobs]);
+
+    const hasOngoingExportJob = useAppSelector(selectIsThereAnyOngoingJobs);
 
     return (
-        <ListViewWrapper>
-            <ListView
-                isMobile={isMobile}
-                waybackItems={waybackItems}
-                activeWaybackItem={activeWaybackItem}
-                shouldDownloadButtonBeDisabled={
-                    hasReachedLimitOfConcurrentDownloadJobs ||
-                    zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
-                }
-                downloadButtonTooltipText={downloadButtonTooltipText}
-                shouldOnlyShowItemsWithLocalChange={
-                    shouldOnlyShowItemsWithLocalChange
-                }
-                rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
-                rNum4WaybackItemsWithLocalChanges={
-                    rNum4WaybackItemsWithLocalChanges
-                }
-                onClick={(releaseNum: number) => {
-                    dispatch(setActiveWaybackItem(releaseNum));
-                }}
-                onMouseEnter={(releaseNum: number) => {
-                    dispatch(setPreviewWaybackItem(releaseNum));
-                }}
-                onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
-                toggleSelect={(releaseNum: number) => {
-                    dispatch(toggleSelectWaybackItem(releaseNum));
-                }}
-                downloadButtonOnClick={(releaseNum: number) => {
-                    dispatch(
-                        addToDownloadList({
-                            releaseNum,
-                            extent: mapExtent,
-                            zoomLevel: zoom,
-                        })
-                    );
-                }}
-            />
-        </ListViewWrapper>
+        <div
+            className="mt-2 fancy-scrollbar"
+            style={{
+                position: 'relative',
+                flexGrow: 1,
+                flexShrink: 0,
+                flexBasis: 200,
+                overflowX: 'hidden',
+                overflowY: 'auto',
+                paddingBottom: '2rem',
+            }}
+        >
+            <div className="mx-4">
+                <ListView
+                    isMobile={isMobile}
+                    waybackItems={waybackItems}
+                    activeWaybackItem={activeWaybackItem}
+                    // shouldDownloadButtonBeDisabled={
+                    //     hasReachedLimitOfConcurrentDownloadJobs ||
+                    //     zoom < DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB
+                    // }
+                    // downloadButtonTooltipText={downloadButtonTooltipText}
+                    shouldOnlyShowItemsWithLocalChange={
+                        shouldOnlyShowItemsWithLocalChange
+                    }
+                    rNum4SelectedWaybackItems={rNum4SelectedWaybackItems}
+                    rNum4WaybackItemsWithLocalChanges={
+                        rNum4WaybackItemsWithLocalChanges
+                    }
+                    shouldExportButtonBeDisabled={hasOngoingExportJob}
+                    onClick={(releaseNum: number) => {
+                        dispatch(setActiveWaybackItem(releaseNum));
+                    }}
+                    onMouseEnter={(releaseNum: number) => {
+                        dispatch(setPreviewWaybackItem(releaseNum));
+                    }}
+                    onMouseOut={() => [dispatch(setPreviewWaybackItem())]}
+                    toggleSelect={(releaseNum: number) => {
+                        dispatch(toggleSelectWaybackItem(releaseNum));
+                    }}
+                    downloadButtonOnClick={(releaseNum: number) => {
+                        dispatch(
+                            initiateNewWayportJob({
+                                releaseNum,
+                                extent: mapExtent,
+                            })
+                        );
+                    }}
+                />
+            </div>
+        </div>
     );
 };
 

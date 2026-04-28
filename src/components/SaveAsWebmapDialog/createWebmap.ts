@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,18 @@ import { IWaybackItem, IExtentGeomety } from '@typings/index';
 // import EsriRquest from 'esri/request';
 
 // import esriRequest from '@arcgis/core/request';
-import esriConfig from '@arcgis/core/config';
+// import esriConfig from '@arcgis/core/config';
 import { getCredential, getToken } from '@utils/Esri-OAuth';
 import { ReferenceLayerData } from '@constants/map';
 import { getWaybackServiceBaseURL } from '@esri/wayback-core';
+import config from './config';
+import { WORLD_IMAGERY_BASEMAP_URL } from '@constants/index';
 
 interface ICreateWebmapParams {
     title: string;
     tags: string;
-    description: string;
+    // description: string;
+    snippet: string;
     mapExtent: IExtentGeomety;
     waybackItemsToSave?: Array<IWaybackItem>;
     referenceLayer: ReferenceLayerData;
@@ -68,24 +71,6 @@ const getRequestUrl = () => {
         ? `${credential.server}/sharing/rest/content/users/${credential.userId}/addItem`
         : '';
 };
-
-const WORLD_IMAGERY_BASEMAP_URL_PROD =
-    'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/';
-// const WORLD_IMAGERY_BASEMAP_URL_DEV =
-//     'https://servicesdev.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/';
-
-// const WORLD_IMAGERY_BASEMAP_URL =
-//     tier === 'production'
-//         ? WORLD_IMAGERY_BASEMAP_URL_PROD
-//         : WORLD_IMAGERY_BASEMAP_URL_DEV;
-
-/**
- * Base URL for the World Imagery basemap service.
- * If there is a specific URL set in the environment variables,
- * it uses that URL. Otherwise, it defaults to the production URL.
- */
-const WORLD_IMAGERY_BASEMAP_URL =
-    ENV_WORLD_IMAGERY_BASEMAP_URL || WORLD_IMAGERY_BASEMAP_URL_PROD;
 
 const getOperationalLayers = (waybackItems: Array<IWaybackItem>) => {
     const operationalLayers: Array<IWaybackLayerInfo | IMetadataLayerInfo> = [];
@@ -162,42 +147,65 @@ const getRequestText = (
     return JSON.stringify(requestText);
 };
 
-const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
-    const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
-    let snippetStr = 'Wayback imagery from ';
+/**
+ * Get the snippet string for the webmap item based on the wayback items included in the webmap.
+ * @param waybackItems
+ * @returns
+ */
+export const getSnippetStr = (waybackItems: Array<IWaybackItem>) => {
+    // const releaseDates = waybackItems.map((d) => d.releaseDateLabel);
+    // let snippetStr = 'Wayback imagery from ';
 
-    if (releaseDates.length === 1) {
-        return snippetStr + releaseDates[0];
-    }
+    // if (releaseDates.length === 1) {
+    //     return snippetStr + releaseDates[0];
+    // }
 
-    snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
-    snippetStr += ' and ' + releaseDates[releaseDates.length - 1]; // add last one to str with and in front, so we will have "a, b, c and d"
-    return snippetStr;
+    // snippetStr += releaseDates.slice(0, releaseDates.length - 1).join(', '); // concat all items but the last one, so we will have "a, b, c"
+    // snippetStr += ' and ' + releaseDates[releaseDates.length - 1]; // add last one to str with and in front, so we will have "a, b, c and d"
+    // return snippetStr;
+
+    const releaseDates =
+        waybackItems && waybackItems?.length > 0
+            ? [...waybackItems]
+                  .sort((a, b) => a.releaseDatetime - b.releaseDatetime)
+                  .map((d) => d.releaseDateLabel)
+                  .join(', ')
+            : 'unknown';
+
+    return `World Imagery, version ${releaseDates}. Created using the World Imagery Wayback application, a global digital archive of Esri's World Imagery map.`;
 };
 
 const createWebmap = async ({
     title = '',
     tags = '',
-    description = '',
+    snippet = '',
     mapExtent = null,
     waybackItemsToSave = [],
     referenceLayer,
 }: ICreateWebmapParams): Promise<ICreateWebmapResponse> => {
     if (!waybackItemsToSave.length) {
-        return null;
+        throw new Error('No wayback items to save in webmap');
     }
 
-    const credential = getCredential();
+    // const credential = getCredential();
 
-    if (credential.server !== 'https://www.arcgis.com') {
-        esriConfig.request.trustedServers.push(credential.server);
-    }
+    // if (credential.server !== 'https://www.arcgis.com') {
+    //     esriConfig.request.trustedServers.push(credential.server);
+    // }
 
     const requestUrl = getRequestUrl();
 
+    const token = getToken();
+
+    if (!requestUrl || !token) {
+        throw new Error(
+            'User is not authenticated. Cannot create webmap without authentication.'
+        );
+    }
+
     const requestBody = new URLSearchParams({
         title,
-        description,
+        description: config.description || '',
         tags,
         extent: mapExtent
             ? [
@@ -207,7 +215,7 @@ const createWebmap = async ({
                   mapExtent.ymax,
               ].join(',')
             : null,
-        snippet: getSnippetStr(waybackItemsToSave),
+        snippet: snippet || getSnippetStr(waybackItemsToSave),
         text: getRequestText(waybackItemsToSave, referenceLayer),
         type: 'Web Map',
         overwrite: 'true',
@@ -215,20 +223,25 @@ const createWebmap = async ({
         token: getToken(),
     });
 
-    try {
-        const createWebmapResponse = await fetch(requestUrl, {
-            method: 'post',
-            body: requestBody,
-        });
-        console.log(createWebmapResponse);
+    const createWebmapResponse = await fetch(requestUrl, {
+        method: 'post',
+        body: requestBody,
+    });
+    // console.log(createWebmapResponse);
 
-        const results = await createWebmapResponse.json();
-
-        return results && !results.error ? results : null;
-    } catch (err) {
-        console.error(err);
-        return null;
+    if (!createWebmapResponse.ok) {
+        throw new Error(
+            `Failed to create webmap: ${createWebmapResponse.statusText}`
+        );
     }
+
+    const res = await createWebmapResponse.json();
+
+    if (res.error) {
+        throw new Error(`Error creating webmap: ${res?.error?.message}`);
+    }
+
+    return res as ICreateWebmapResponse;
 };
 
 export default createWebmap;

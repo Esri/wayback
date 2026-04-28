@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,22 +27,29 @@ import { AppLayout } from '@components/index';
 import { getWaybackItems } from '@esri/wayback-core';
 import { ErrorPage } from '@components/ErrorPage/ErrorPage';
 import { initApp } from '@utils/initApp/initApp';
+import { getAppLanguage } from '@utils/i18n/getAppLanguage';
 
 (async () => {
     const root = createRoot(document.getElementById('appRootDiv'));
 
     try {
+        const appLanguage = getAppLanguage();
+
         // Initialize the application
         // This includes setting up i18next, Esri OAuth, and Adobe Analytics
         await initApp({
             appId: APP_ID,
+            appLanguage,
         });
 
         // fetch wayback items from the Wayback service
         const waybackItems = await getWaybackItems();
 
         // Get the preloaded state for the Redux store
-        const preloadedState = await getPreloadedState(waybackItems);
+        const preloadedState = await getPreloadedState({
+            waybackItems,
+            appLanguage,
+        });
 
         root.render(
             <ReduxProvider store={configureAppStore(preloadedState)}>

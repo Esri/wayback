@@ -1,3 +1,18 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import MapView from '@arcgis/core/views/MapView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import React, { FC, use, useContext, useEffect, useMemo, useRef } from 'react';
@@ -11,13 +26,13 @@ import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
     VIVID_ADVANCED_FROM_MAXAR_URL,
     VIVID_STANDARD_FROM_MAXAR_URL,
-    WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
-    WorldImageryUpdatesStatusEnum,
+    // WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
+    // WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
 import { useTranslation } from 'react-i18next';
 import { useWorldImageryUpdatesLayerWhereClause } from './useWorldImageryUpdatesLayerWhereClause';
-import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
-import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
+// import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+// import { worldImageryUpdatesOutStatisticsChanged } from '@store/UpdatesMode/reducer';
 import {
     getPopupTemplate,
     getUniqueValueRenderer4WorldImageryUpdates,
@@ -26,6 +41,7 @@ import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatistics';
 import { useZoomToSelectedRegion } from './useZoomToSelectedRegion';
 import { AppContext } from '@contexts/AppContextProvider';
+import { useZoomToWorldExtent } from './useZoomToWorldExtent';
 
 type Props = {
     mapView?: MapView;
@@ -149,7 +165,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     useWorldImageryUpdatesStatistics(
         worldImageryUpdatesLayerRef,
         layerURL,
-        whereClause
+        whereClause,
+        isVisible
     );
 
     useZoomToSelectedRegion(
@@ -159,6 +176,8 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
         whereClause,
         mapView
     );
+
+    useZoomToWorldExtent(mapView);
 
     // useEffect(() => {
     //     if (!worldImageryUpdatesLayerRef.current) {

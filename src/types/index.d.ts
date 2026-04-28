@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ interface IMapPointInfo {
     longitude: number;
     latitude: number;
     zoom: number;
-    geometry: IPointGeomety;
+    // geometry: IPointGeomety;
 }
 
 interface IWaybackMetadataQueryResult {
@@ -95,24 +95,31 @@ interface IScreenPoint {
     y: number;
 }
 
-interface IURLParamData {
-    mapExtent?: IExtentGeomety;
-    rNum4SelectedWaybackItems?: Array<number>;
-    shouldOnlyShowItemsWithLocalChange?: boolean;
-    rNum4ActiveWaybackItem?: number;
-    isSwipeWidgetOpen?: boolean;
-    rNum4SwipeWidgetLeadingLayer?: number;
-    rNum4SwipeWidgetTrailingLayer?: number;
-    animationSpeed?: number;
-    rNum4FramesToExclude?: number[];
-    isDownloadDialogOpen?: boolean;
-    activeDialog: AppDialogName;
+export interface ISpatialReference {
+    wkid?: number;
+    latestWkid?: number;
+    vcsWkid?: number;
+    latestVcsWkid?: number;
+    wkt?: string;
+    latestWkt?: string;
 }
 
-interface IStaticTooltipData {
-    content: string;
-    top: number;
-    left: number;
+export interface IExtent {
+    xmin: number;
+    ymin: number;
+    zmin?: number;
+    xmax: number;
+    ymax: number;
+    zmax?: number;
+    spatialReference?: ISpatialReference;
+}
+
+export interface IFeature {
+    geometry?: any;
+    attributes: {
+        [key: string]: any;
+    };
+    // symbol?: ISymbol;
 }
 
 export {
@@ -123,6 +130,4 @@ export {
     IWaybackMetadataQueryResult,
     IScreenPoint,
     IExtentGeomety,
-    IURLParamData,
-    IStaticTooltipData,
 };

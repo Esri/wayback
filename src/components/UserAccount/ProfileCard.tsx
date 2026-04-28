@@ -1,3 +1,18 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import useOnClickOutside from '@hooks/useOnClickOutside';
 import React, { FC, useRef, useEffect } from 'react';
@@ -49,6 +64,7 @@ export const ProfileCard: FC<Props> = ({
         <div
             ref={containerRef}
             className="w-64 background-theme-blue-diagonal-pattern text-white shadow-lg rounded-md p-4"
+            data-testid="user-profile-dialog"
         >
             <div
                 className="absolute top-1 right-1 cursor-pointer"
@@ -57,6 +73,7 @@ export const ProfileCard: FC<Props> = ({
                 }}
             >
                 <CalciteButton
+                    data-testid="close-profile-card-btn"
                     ref={closeButtonRef}
                     appearance="transparent"
                     kind="inverse"
@@ -81,6 +98,7 @@ export const ProfileCard: FC<Props> = ({
                             target="_blank"
                             className="underline text-white"
                             rel="noreferrer"
+                            data-testid="user-profile-name-link"
                         >
                             {userFullName || userName}
                         </a>
@@ -100,6 +118,7 @@ export const ProfileCard: FC<Props> = ({
             </div>
 
             <CalciteButton
+                data-testid="sign-out-btn"
                 appearance="outline"
                 kind="inverse"
                 iconStart="sign-out"

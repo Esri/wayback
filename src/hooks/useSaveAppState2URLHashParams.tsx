@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import {
     saveAnimationSpeedToHashParams,
     saveMapModeToHashParams,
     updateHashParams,
+    saveUpdatesModeDataInURLHashParams,
 } from '@utils/urlParams';
 import { selectMapMode } from '@store/Map/reducer';
 import { selectUpdatesModeState } from '@store/UpdatesMode/selectors';
-import { saveUpdatesModeDataInURLHashParams } from '@store/UpdatesMode/getPreloadedState';
 import { activeDialogSelector } from '@store/UI/reducer';
 
 export const useSaveAppState2URLHashParams = () => {
@@ -39,7 +39,7 @@ export const useSaveAppState2URLHashParams = () => {
 
     const updatesModeData = useAppSelector(selectUpdatesModeState);
 
-    const activeDialog = useAppSelector(activeDialogSelector);
+    // const activeDialog = useAppSelector(activeDialogSelector);
 
     useEffect(() => {
         saveAnimationSpeedToHashParams(
@@ -53,17 +53,17 @@ export const useSaveAppState2URLHashParams = () => {
 
     useEffect(() => {
         if (mode !== 'updates') {
-            updateHashParams('updatesLayer', undefined);
+            updateHashParams('updatesMode', undefined);
         } else {
             saveUpdatesModeDataInURLHashParams(updatesModeData);
         }
     }, [updatesModeData, mode]);
 
-    useEffect(() => {
-        if (activeDialog === 'export' || activeDialog === 'save') {
-            updateHashParams('activeDialog', activeDialog);
-        } else {
-            updateHashParams('activeDialog', undefined);
-        }
-    }, [activeDialog]);
+    // useEffect(() => {
+    //     if (activeDialog === 'save') {
+    //         updateHashParams('activeDialog', activeDialog);
+    //     } else {
+    //         updateHashParams('activeDialog', undefined);
+    //     }
+    // }, [activeDialog]);
 };

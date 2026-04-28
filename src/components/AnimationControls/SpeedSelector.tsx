@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 import { CalciteSlider } from '@esri/calcite-components-react';
 import { ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS } from '@store/AnimationMode/reducer';
 import React, { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     defaultVal: number;
@@ -31,9 +32,7 @@ const SpeedSelector: React.FC<Props> = ({
     disabled,
     onChange,
 }: Props) => {
-    // const sliderRef = React.useRef<any>(null);
-
-    const onChangeDely = React.useRef<NodeJS.Timeout>(null);
+    const { t } = useTranslation();
 
     const calcSliderValue = () => {
         const idx = ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.indexOf(defaultVal);
@@ -51,59 +50,17 @@ const SpeedSelector: React.FC<Props> = ({
         React.useState<number>(calcSliderValue());
 
     useEffect(() => {
-        clearTimeout(onChangeDely.current);
-
-        onChangeDely.current = setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             const speed = ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[sliderValue];
-
             onChange(speed);
         }, 500);
+
+        return () => clearTimeout(timeoutId);
     }, [sliderValue]);
 
-    React.useEffect(() => {
-        // sliderRef.current.addEventListener(
-        //     'calciteSliderChange',
-        //     (evt: any) => {
-        //         clearTimeout(onChangeDely.current);
-        //         onChangeDely.current = setTimeout(() => {
-        //             // console.log('slider on change', evt.target.value)
-        //             // onChange(+evt.target.value)
-        //             // const tickVal = Math.floor(+evt.target.value * 100) / 100;
-        //             // // the max val indciates fastes time and min val indicates slowest, therefore we need to use max val to minus the tick val
-        //             // // to get the actual animation speed, let's say the tick val is 2 and max val is 3, that gives a current speed of 1 second
-        //             // const val = MAX_VAL - tickVal;
-        //             const index = evt.target.value;
-        //             const speed =
-        //                 ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[index];
-        //             onChange(speed);
-        //         }, 500);
-        //     }
-        // );
-        // return () => {
-        //     clearTimeout(onChangeDely.current);
-        // };
-    }, []);
-
-    // React.useEffect(() => {
-    //     console.log(defaultVal)
-    // }, [defaultVal])
-
     return (
-        <div
-            // style={{
-            //     flexGrow: 1,
-            //     display: 'flex',
-            //     alignItems: 'center',
-            // }}
-            className="calcite-theme-dark relative w-full h-[32px] mr-1"
-        >
-            {/* <span className="mr-2 font-semibold">-</span> */}
-
-            <div
-            // style={{
-            //     flexGrow: 1,
-            // }}
-            >
+        <div className="calcite-theme-dark relative w-full h-[32px] mr-1">
+            <div>
                 <CalciteSlider
                     // ref={sliderRef}
                     min={0}
@@ -117,20 +74,15 @@ const SpeedSelector: React.FC<Props> = ({
                     onCalciteSliderInput={(evt: any) => {
                         const index = evt.target.value;
                         setSliderValue(index);
-
-                        // const speed =
-                        //     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS[index];
-
-                        // onChange(speed);
                     }}
                 ></CalciteSlider>
             </div>
 
             <div className="absolute left-0 right-0 top-[12px] text-center pointer-events-none">
-                <span className="text-xs opacity-70">Animation Speed</span>
+                <span className="text-xs opacity-70">
+                    {t('animation_speed')}
+                </span>
             </div>
-
-            {/* <span className="ml-2 font-semibold">+</span> */}
         </div>
     );
 };

@@ -3,8 +3,8 @@
     display: none;
 }
 
-.esri-input, 
-.esri-widget--button, 
+.esri-input,
+.esri-widget--button,
 .esri-menu {
     @apply bg-custom-background;
     /* color: var(--custom-light-blue); */
@@ -18,7 +18,7 @@
     --calcite-color-text-3: var(--default-text-color);
 }
 
-.calcite-mode-dark #appRootDiv .esri-search .esri-search__container  {
+.calcite-mode-dark #appRootDiv .esri-search .esri-search__container {
     --calcite-color-foreground-1: var(--default-ui-bgColor);
     --calcite-color-foreground-2: var(--default-ui-bgColor);
     --calcite-color-foreground-3: var(--default-ui-bgColor);

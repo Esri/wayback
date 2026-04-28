@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 export default {
     // 'modal-id': 'save-as-webmap-dialog',
     title: 'Custom Wayback Imagery Web Map',
-    tags: 'wayback',
+    tags: 'imagery, world imagery, wayback, aerial, basemap, archive',
     description:
         'This custom web map was generated from Wayback layers selected in the World Imagery Wayback app. Wayback imagery is a digital archive of the World Imagery basemap, enabling users to access different versions of World Imagery captured over the years. Each Wayback layer in this web map represents World Imagery as it existed on the date specified.',
 };

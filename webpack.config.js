@@ -1,10 +1,7 @@
-// require('dotenv').config({ path: './.env' }); 
-const dotenv = require('dotenv');
-const fs = require('fs');
 const path = require('path');
 const package = require('./package.json');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -12,61 +9,41 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 
-const {
-    title,
-    author,
-    keywords,
-    description,
-    homepage
-} = package;
+const validateEnv = require('./webpack/validateEnvironmentVariables');
+const loadEnvironmentVariables = require('./webpack/loadEnvironmentVariables');
+const getGlobalConstants = require('./webpack/getGlobalConstants');
 
-module.exports = (env, options)=> {
+const { title, author, keywords, description, homepage } = package;
 
+module.exports = (env, options) => {
     const devMode = options.mode === 'development' ? true : false;
 
     process.env.NODE_ENV = options.mode;
-    
+
     /**
      * Load the environment variables from the specified environment file.
      * The environment file name should be specified using `--env envFileName=.env.development` or `--env envFileName=.env.production`.
      * If the environment file name is not specified, the default value will be `.env`.
      */
     const envFileName = env?.envFileName || '.env';
+    const envConfig = loadEnvironmentVariables(envFileName);
 
-    // Get the path to the environment file
-    const envPath = path.resolve(__dirname, envFileName);
-    console.log(`Using environment file: ${envPath}`);
+    /**
+     * Validate that all required environment variables are set for the specified application.
+     */
+    validateEnv(envConfig);
 
-    // check if the environment file exists
-    if (!fs.existsSync(envPath)) {
-        console.error(`Environment file ${envPath} does not exist. Please create it based on .env.template\n`);
-        process.exit(1);
-    }
-
-    // Load the environment variables
-    const envConfig = dotenv.config({ path: envPath }).parsed || {};
-    console.log(`Loaded environment variables from ${envPath}\n`);
-
-    // throw an error if the environment variables is an empty object
-    if (Object.keys(envConfig).length === 0) {
-        console.error(`No environment variables found in the environment file ${envPath}. Please check the file content or create it based on .env.template\n`);
-        process.exit(1);
-    }
-
-    if(!envConfig.APP_ID) {
-        console.error(
-            `Failed to start/build the application:\n` +
-            `Please ensure that the environment variable APP_ID is set in your .env file.\n` + 
-            `Please refer to the Prerequisites section in README for more information on how to set up your environment variables.`
-        );
-        process.exit(1);
-    }
+    /**
+     * Get global constants to be defined in the webpack build process.
+     * These constants are made available in the application code via webpack's DefinePlugin.
+     */
+    const globalConstants = getGlobalConstants(envConfig);
 
     return {
         devServer: {
             server: 'https',
             host: envConfig.WEBPACK_DEV_SERVER_HOSTNAME || 'localhost',
-            allowedHosts: "all"
+            allowedHosts: 'all',
         },
         entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
@@ -74,7 +51,8 @@ module.exports = (env, options)=> {
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].[contenthash].js',
             publicPath: '',
-            assetModuleFilename: `[name][contenthash][ext][query]`
+            assetModuleFilename: `[name][contenthash][ext][query]`,
+            clean: true,
         },
         devtool: devMode ? 'source-map' : false,
         resolve: {
@@ -95,81 +73,58 @@ module.exports = (env, options)=> {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
                 },
                 {
                     test: /\.html$/,
-                    use: [ 
+                    use: [
                         {
-                            loader: "html-loader",
-                            options: { 
-                                minimize: true
-                            }
-                        }
-                    ]
+                            loader: 'html-loader',
+                            options: {
+                                minimize: true,
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.css$/i,
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
-                            loader: "css-loader", 
+                            loader: 'css-loader',
                             options: {
-                                sourceMap: true
-                            }
+                                sourceMap: true,
+                            },
                         },
                         {
-                            loader: 'postcss-loader'
-                        }
-                    ]
+                            loader: 'postcss-loader',
+                        },
+                    ],
                 },
-                // { 
-                //     test: /\.(woff|woff2|ttf|eot)$/,  
-                //     loader: "file-loader",
-                //     options: {
-                //         name: '[name].[contenthash].[ext]',
-                //     }
-                // },
                 {
                     test: /\.(woff|woff2|ttf|eot)$/,
                     type: 'asset/resource',
                 },
-                // { 
-                //     test: /\.(png|jpg|gif|svg)$/,  
-                //     loader: "file-loader",
-                //     options: {
-                //         name: '[name].[contenthash].[ext]',
-                //     }
-                // },
                 {
                     test: /\.(png|jpg|gif|svg)$/,
                     type: 'asset/resource',
                 },
-            ]
+            ],
         },
         plugins: [
             new ForkTsCheckerWebpackPlugin(),
             new DefinePlugin({
-                // define environment variables to be used in the application
-                APP_ID: JSON.stringify(envConfig.APP_ID),
-                ENV_ARCGIS_PORTAL_ROOT_URL: JSON.stringify(envConfig.ARCGIS_PORTAL_ROOT_URL),
-                ENV_WAYBACK_CONFIG_FILE_URL: JSON.stringify(envConfig.WAYBACK_CONFIG_FILE_URL),
-                ENV_WAYBACK_SUBDOMAINS: JSON.stringify(envConfig.WAYBACK_SUBDOMAINS ? envConfig.WAYBACK_SUBDOMAINS.split(',').map(s => s.trim()) : undefined),
-                ENV_WAYBACK_EXPORT_GP_SERVICE_ROOT_URL: JSON.stringify(envConfig.WAYBACK_EXPORT_GP_SERVICE_ROOT_URL),
-                ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.METROPOLITAN_UPDATES_FEATURE_LAYER_URL),
-                ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.REGIONAL_UPDATES_FEATURE_LAYER_URL),
-                ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL: JSON.stringify(envConfig.COMMUNITY_UPDATES_FEATURE_LAYER_URL),
-                ENV_WORLD_IMAGERY_BASEMAP_URL: JSON.stringify(envConfig.WORLD_IMAGERY_BASEMAP_URL),
+                ...globalConstants,
             }),
             // copy static files from public folder to build directory
             new CopyPlugin({
                 patterns: [
-                    { 
-                        from: "public/**/*", 
+                    {
+                        from: 'public/**/*',
                         globOptions: {
-                            ignore: ["**/index.html"],
+                            ignore: ['**/index.html'],
                         },
-                    }
+                    },
                 ],
             }),
             new HtmlWebPackPlugin({
@@ -182,35 +137,38 @@ module.exports = (env, options)=> {
                     title,
                     description,
                     author,
-                    keywords: Array.isArray(keywords) 
-                        ? package.keywords.join(',') 
+                    keywords: Array.isArray(keywords)
+                        ? package.keywords.join(',')
                         : undefined,
                     'og:title': title,
                     'og:description': description,
                     'og:url': homepage,
                     'og:image': `${homepage}/public/screenshot.jpg`,
-                    "last-modified": new Date().getTime().toString(),
+                    'last-modified': new Date().getTime().toString(),
+                    'last-modified-readable': new Date().toLocaleString(),
                 },
                 minify: {
-                    html5                          : true,
-                    collapseWhitespace             : true,
-                    minifyCSS                      : true,
-                    minifyJS                       : true,
-                    minifyURLs                     : false,
-                    removeComments                 : true,
-                    removeEmptyAttributes          : true,
-                    removeOptionalTags             : true,
-                    removeRedundantAttributes      : true,
-                    removeScriptTypeAttributes     : true,
-                    removeStyleLinkTypeAttributese : true,
-                    useShortDoctype                : true
-                }
+                    html5: true,
+                    collapseWhitespace: true,
+                    minifyCSS: true,
+                    minifyJS: true,
+                    minifyURLs: false,
+                    removeComments: true,
+                    removeEmptyAttributes: true,
+                    removeOptionalTags: true,
+                    removeRedundantAttributes: true,
+                    removeScriptTypeAttributes: true,
+                    removeStyleLinkTypeAttributese: true,
+                    useShortDoctype: true,
+                },
             }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
                 filename: devMode ? '[name].css' : '[name].[contenthash].css',
-                chunkFilename: devMode ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: devMode
+                    ? '[name].css'
+                    : '[name].[contenthash].css',
             }),
             // new CleanWebpackPlugin()
         ].filter(Boolean),
@@ -235,12 +193,11 @@ module.exports = (env, options)=> {
                     terserOptions: {
                         compress: {
                             drop_console: true,
-                        }
-                    }
-                }), 
-                new CssMinimizerPlugin()
-            ]
-        }
-    }
-
+                        },
+                    },
+                }),
+                new CssMinimizerPlugin(),
+            ],
+        },
+    };
 };

@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@ import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-import {
-    isAnimationModeOnSelector,
-    toggleAnimationMode,
-} from '@store/AnimationMode/reducer';
+// import {
+//     isAnimationModeOnSelector,
+//     toggleAnimationMode,
+// } from '@store/AnimationMode/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
 import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
 import { selectMapMode } from '@store/Map/reducer';
 import { ModeToggleButton } from '@components/Gutter/ModeToggleButton';
 import { activeDialogSelector } from '@store/UI/reducer';
 import { useTranslation } from 'react-i18next';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const AnimationModeToogleBtn = () => {
     const dispatch = useAppDispatch();
@@ -52,7 +53,8 @@ export const AnimationModeToogleBtn = () => {
     }, [mode, activeDialog]);
 
     const onClickHandler = useCallback(() => {
-        dispatch(toggleAnimationMode());
+        // dispatch(toggleAnimationMode());
+        dispatch(updateMapMode('animation'));
     }, []);
 
     return !isMobile ? (

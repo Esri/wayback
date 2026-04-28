@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import {
 } from '@esri/calcite-components-react';
 import { AnimationStatus } from '@store/AnimationMode/reducer';
 import React, { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     status: AnimationStatus | null;
@@ -92,59 +93,21 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
     downloadButtonOnClick,
     copyLinkButtonOnClick,
 }: Props) => {
-    // const getIcon = () => {
-    //     // if (status === 'loading') {
-    //     //     return <CalciteLoader inline />;
-    //     // }
-
-    //     if(status === 'playing'){
-    //         return PauseBtn;
-    //     }
-
-    //     return PlayBtn;
-    // };
-    // return (
-    //     <div
-    //         className="mr-2 cursor-pointer"
-    //         style={{
-    //             display: 'flex',
-    //         }}
-    //         onClick={onClick}
-    //     >
-    //         {getIcon()}
-    //     </div>
-    // );
+    const { t } = useTranslation();
 
     return (
         <div className="flex items-center">
             {(status === 'playing' || status === 'pausing') && (
                 <>
-                    {/* <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="link"
-                        label="Copy Link to Clipboard"
-                        scale="s"
-                        onClick={copyLinkButtonOnClick}
-                    /> */}
-
                     <ControlButton
                         icon="link"
-                        label="Copy Link to Clipboard"
+                        label={t('copyLinkToClipboard')}
                         onClick={copyLinkButtonOnClick}
                     />
 
-                    {/* <CalciteButton
-                        appearance="transparent"
-                        kind="neutral"
-                        iconStart="download-to"
-                        label="Download Animation"
-                        scale="s"
-                        onClick={downloadButtonOnClick}
-                    /> */}
                     <ControlButton
                         icon="download-to"
-                        label="Download Animation"
+                        label={t('downloadAnimation')}
                         onClick={downloadButtonOnClick}
                     />
                 </>
@@ -153,17 +116,9 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is no status, show play button to start loading animation frames
                 !status && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="play"
-                    //     label="Start Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'loading')}
-                    // />
                     <ControlButton
                         icon="play"
-                        label="Start Animation"
+                        label={t('startAnimation')}
                         onClick={statusOnChanged.bind(null, 'loading')}
                     />
                 )
@@ -172,17 +127,9 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is playing, show pause button to pause the animation
                 status === 'playing' && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="pause"
-                    //     label="Pause Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'pausing')}
-                    // />
                     <ControlButton
                         icon="pause"
-                        label="Pause Animation"
+                        label={t('pauseAnimation')}
                         onClick={statusOnChanged.bind(null, 'pausing')}
                     />
                 )
@@ -191,17 +138,9 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when animation is paused, show play button to resume the animation
                 status === 'pausing' && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="play"
-                    //     label="Resume Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, 'playing')}
-                    // />
                     <ControlButton
                         icon="play"
-                        label="Resume Animation"
+                        label={t('resumeAnimation')}
                         onClick={statusOnChanged.bind(null, 'playing')}
                     />
                 )
@@ -212,17 +151,9 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
             {
                 // when there is a status, show close button to stop the animation
                 status && (
-                    // <CalciteButton
-                    //     appearance="transparent"
-                    //     kind="neutral"
-                    //     iconStart="x-circle"
-                    //     label="Stop Animation"
-                    //     scale="s"
-                    //     onClick={statusOnChanged.bind(null, null)}
-                    // />
                     <ControlButton
                         icon="x-circle"
-                        label="Stop Animation"
+                        label={t('stopAnimation')}
                         onClick={statusOnChanged.bind(null, null)}
                     />
                 )

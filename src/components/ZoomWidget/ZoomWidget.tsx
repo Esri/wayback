@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ const SearchWidget: React.FC<Props> = ({ mapView }: Props) => {
                 position: 'absolute',
                 top: 50,
                 left: 15,
+                zIndex: 10,
             }}
         ></div>
     );

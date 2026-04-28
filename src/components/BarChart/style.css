@@ -10,7 +10,8 @@
 .bar-chart-container .bar.is-highlighted:hover {
     fill: var(--color-hover-item);
 }
-.bar-chart-container .bar.is-active, .bar-chart-container .bar.is-highlighted.is-active {
+.bar-chart-container .bar.is-active,
+.bar-chart-container .bar.is-highlighted.is-active {
     fill: var(--color-active-item);
 }
 .bar-chart-container .bar.is-hide {
@@ -18,10 +19,10 @@
 }
 
 .bar-chart-container .axis--x path {
-    stroke: rgba(255,255,255,.4);
+    stroke: rgba(255, 255, 255, 0.4);
 }
 .bar-chart-container .axis--x .tick line {
-    stroke: rgba(255,255,255,.4);
+    stroke: rgba(255, 255, 255, 0.4);
 }
 .bar-chart-container .axis--x .tick text {
     fill: #ccc;

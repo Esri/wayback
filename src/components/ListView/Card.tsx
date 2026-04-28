@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,23 @@
 import React, { FC, useContext } from 'react';
 import classnames from 'classnames';
 
-import { IWaybackItem, IStaticTooltipData } from '@typings/index';
+import { IWaybackItem } from '@typings/index';
 // import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
 import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 
-interface Props {
+type Props = {
     data: IWaybackItem;
     isActive: boolean;
     isSelected: boolean;
     isHighlighted: boolean;
     /**
-     * if true, download button should be disabled
+     * If true, the export button will be disabled and show tooltip to indicate the reason.
+     * This happens when there is an ongoing export task for this release, and the user cannot start another export until the current one is finished.
      */
-    shouldDownloadButtonBeDisabled?: boolean;
-    /**
-     * tooltip text for download button
-     */
-    downloadButtonTooltipText: string;
+    shouldExportButtonBeDisabled: boolean;
     toggleSelect?: (releaseNum: number) => void;
     onClick?: (releaseNum: number) => void;
     downloadButtonOnClick: (releaseNum: number) => void;
@@ -44,8 +41,7 @@ interface Props {
         shouldShowPreviewItemTitle: boolean
     ) => void;
     onMouseOut?: () => void;
-    toggleTooltip?: (data?: IStaticTooltipData) => void;
-}
+};
 
 // interface IState {}
 
@@ -56,14 +52,15 @@ export const ListViewCard: FC<Props> = ({
     isActive,
     isSelected,
     isHighlighted,
-    shouldDownloadButtonBeDisabled,
-    downloadButtonTooltipText,
+    shouldExportButtonBeDisabled,
+    // shouldDownloadButtonBeDisabled,
+    // downloadButtonTooltipText,
     onClick,
     onMouseEnter,
     onMouseOut,
     toggleSelect,
     downloadButtonOnClick,
-}: Props) => {
+}) => {
     const { isMobile } = useContext(AppContext);
 
     const { t } = useTranslation();
@@ -93,6 +90,8 @@ export const ListViewCard: FC<Props> = ({
             // that monitors the health of this app
             data-testid={`list-card-${data.releaseNum}`}
             data-release-num={data.releaseNum}
+            data-release-date={data.releaseDateLabel}
+            data-active={isActive}
         >
             <div
                 className={classnames('list-card group', {
@@ -139,19 +138,30 @@ export const ListViewCard: FC<Props> = ({
                                 flex: showControlButtons,
                                 'hidden group-hover:flex': !showControlButtons,
                                 'cursor-default opacity-50':
-                                    shouldDownloadButtonBeDisabled,
+                                    shouldExportButtonBeDisabled,
                             })}
+                            disabled={shouldExportButtonBeDisabled}
                             onClick={() => {
-                                if (shouldDownloadButtonBeDisabled) {
+                                // if (shouldDownloadButtonBeDisabled) {
+                                //     return;
+                                // }
+
+                                if (shouldExportButtonBeDisabled) {
+                                    // Show tooltip to indicate the reason why export button is disabled
+                                    // We will use the "title" attribute of the button to show the tooltip, so no need to do anything here
                                     return;
                                 }
 
                                 downloadButtonOnClick(data.releaseNum);
                             }}
-                            title={downloadButtonTooltipText}
-                            aria-label={downloadButtonTooltipText}
+                            title={
+                                shouldExportButtonBeDisabled
+                                    ? t('export_tile_package_disabled_tooltip')
+                                    : t('export_tile_package_tooltip')
+                            }
+                            aria-label={t('export_tile_package_tooltip')}
                         >
-                            <CalciteIcon icon="download-to" scale="m" />
+                            <CalciteIcon icon="export" scale="m" />
                         </button>
 
                         <button
@@ -163,19 +173,12 @@ export const ListViewCard: FC<Props> = ({
                             onClick={toggleSelect.bind(this, data.releaseNum)}
                             title={labelForToggleAddToWebmapBtn}
                             aria-label={labelForToggleAddToWebmapBtn}
+                            data-testid={`toggle-add-to-webmap-button-${data.releaseNum}`}
                         >
                             <CalciteIcon icon="arcgis-online" scale="m" />
                         </button>
                     </>
                 )}
-
-                {/* <div
-                    className="add-to-webmap-btn cursor-pointer"
-                    // onMouseOver={this.showTooltip}
-                    // onMouseOut={this.hideTooltip}
-                    onClick={toggleSelect.bind(this, data.releaseNum)}
-                    title={tooltipContentAdd2WebmapBtn}
-                ></div> */}
             </div>
         </div>
     );

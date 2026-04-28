@@ -31,7 +31,7 @@
 .popup-container .content-wrap .close-btn {
     position: absolute;
     top: 5px;
-    right: .25rem;
+    right: 0.25rem;
     /* width: 10px; */
     font-size: 0.75rem;
     cursor: pointer;

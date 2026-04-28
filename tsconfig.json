@@ -1,19 +1,85 @@
 {
     "compilerOptions": {
+        // Allow default imports from CommonJS / non-ESM modules at the type level
+        // This does NOT change emitted JavaScript
         "allowSyntheticDefaultImports": true,
+
+        // Do not include or type-check .js/.jsx files in the TypeScript program
+        // Keeps the project strictly TypeScript-only
         "allowJs": false,
-        "jsx": "react",
-        "module": "commonjs",
+
+        // Use the React 17+ automatic JSX runtime
+        // Eliminates the need to import React in JSX files
+        "jsx": "react-jsx",
+
+        // Skip type-checking of declaration files (*.d.ts)
+        // Improves build performance in large projects
+        "skipLibCheck": true,
+
+        // // Base directory for resolving non-relative imports
+        // // Required for path alias configuration via "paths"
+        // "baseUrl": "./",
+
+        // Enforce consistent casing in import paths
+        // Prevents runtime issues on case-sensitive file systems (Linux, CI)
+        "forceConsistentCasingInFileNames": true,
+
+        // Specify built-in library type definitions
+        // DOM: Browser APIs (window, document, etc.)
+        // DOM.Iterable: Enables iteration over DOM collections
+        // ES2022: Built-in JavaScript APIs available in ES2022
+        // Note: ES2023 can be enabled when all tooling supports it
+        "lib": ["DOM", "DOM.Iterable", "ES2022"],
+
+        // JavaScript version to emit
+        // ES2022 supports features such as class fields and top-level await
+        "target": "ES2022",
+
+        // Emit native ES module syntax (import/export)
+        // Module transformation is handled by the bundler or runtime
+        "module": "ESNext",
+
+        // Module resolution strategy optimized for modern bundlers (Vite, Webpack, Rollup)
+        // Respects package.json "exports"/"imports" fields
+        // Does NOT require explicit file extensions in relative imports
+        "moduleResolution": "Bundler",
+
+        // Improve interoperability between CommonJS and ES Modules
+        // Affects emitted JavaScript and enables natural default imports
+        "esModuleInterop": true,
+
+        // Report errors when variables or parameters implicitly have type 'any'
+        // Helps catch missing or incomplete typings early
         "noImplicitAny": true,
-        "outDir": "./build/",
-        "preserveConstEnums": true,
+
+        // // Preserve const enum declarations in emitted JavaScript
+        // // Prevents inlining so enums exist at runtime
+        // // May increase bundle size and reduce tree-shaking
+        // "preserveConstEnums": true,
+
+        // Remove all comments from emitted JavaScript
+        // Reduces output size for production builds
         "removeComments": true,
+
+        // Do not generate source map files
+        // Disabling source maps reduces build output size
         "sourceMap": false,
-        "target": "es5",
+
+        // Allow importing JSON files as modules
+        // Example: import config from './config.json'
         "resolveJsonModule": true,
-        //"suppressImplicitAnyIndexErrors": true, Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.ts
-        "typeRoots": [ "./src/types", "./node_modules/@types"],
-        "lib": [ "es2020", "dom" ],
+
+        "strict": false,
+
+        // Explicit directories to search for global type definitions
+        // NOTE: When specified, TypeScript ONLY searches these directories
+        "typeRoots": [
+            "./src/types", // Project-specific global typings
+            "./node_modules/@types" // Third-party typings from DefinitelyTyped
+        ],
+
+        // Path aliases for cleaner, more maintainable imports
+        // Must be mirrored in bundler and test runner configuration
         "paths": {
             "@components/*": ["./src/components/*"],
             "@constants/*": ["./src/constants/*"],
@@ -23,12 +89,18 @@
             "@store/*": ["./src/store/*"],
             "@styles/*": ["./src/style/*"],
             "@typings/*": ["./src/types/*"],
-            "@utils/*": ["./src/utils/*"],
+            "@utils/*": ["./src/utils/*"]
         }
-
     },
-    "exclude": ["node_modules", "typings"],
+
+    // Files and directories excluded from compilation
+    "exclude": [
+        "node_modules", // Dependency packages (excluded by default, listed explicitly)
+        "typings" // Legacy or external typings not part of this project
+    ],
+
+    // Files included in compilation
     "include": [
-        "./src/**/**/*"
+        "./src/**/*" // All TypeScript and TSX files under src
     ]
 }

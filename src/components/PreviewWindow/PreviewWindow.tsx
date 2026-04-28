@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ import MapView from '@arcgis/core/views/MapView';
 
 // import styled from 'styled-components';
 import { generateFrames } from './utils';
+import { useTranslation } from 'react-i18next';
+import { ca } from 'date-fns/locale';
+import { CalciteLoader } from '@esri/calcite-components-react';
 
-export const PREVIEW_WINDOW_WIDTH = 500;
-export const PREVIEW_WINDOW_HEIGHT = 300;
+export const PREVIEW_WINDOW_WIDTH = 800;
+export const PREVIEW_WINDOW_HEIGHT = 800 * 0.75; // 4:3 aspect ratio
 
 type Props = {
     mapView?: MapView;
@@ -36,9 +39,15 @@ const PreviewWindow: React.FC<Props> = ({
     alternativeRNum4RreviewWaybackItem,
     mapView,
 }: Props) => {
+    const { t } = useTranslation();
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [imageUrl, setImageUrl] = useState<string>();
+
+    // indicate whether the preview window image is being fetched
+    const [isFetchingPreviewWindowImage, setIsFetchingPreviewWindowImage] =
+        useState<boolean>(false);
 
     // left position of map view container DIV relative to the window
     const mapViewContainerLeftPos = useMemo(() => {
@@ -51,6 +60,26 @@ const PreviewWindow: React.FC<Props> = ({
         return left;
     }, [mapView]);
 
+    const previewWindowSize = useMemo(() => {
+        if (!mapView) {
+            return { width: 0, height: 0 };
+        }
+
+        const mapViewWidth = mapView.width;
+        const mapViewHeight = mapView.height;
+
+        const maxWidth = Math.min(PREVIEW_WINDOW_WIDTH, mapViewWidth as number);
+        const maxHeight = Math.min(
+            PREVIEW_WINDOW_HEIGHT,
+            mapViewHeight as number
+        );
+
+        return {
+            width: maxWidth as number,
+            height: maxHeight as number,
+        };
+    }, [mapView?.width, mapView?.height]);
+
     const fetchPreviewWindowImage = async (releaseNum: number) => {
         const container = containerRef.current;
 
@@ -59,21 +88,30 @@ const PreviewWindow: React.FC<Props> = ({
 
         const { offsetHeight, offsetWidth } = container;
 
-        const [image] = await generateFrames({
-            frameRect: {
-                // elemRect.left is the left position of the container DIV relative to map view container,
-                // therefore, we need to add the mapViewContainerLeft to it to get the
-                // left position of the container DIV relative to window
-                screenX: elemRect.left - mapViewContainerLeftPos,
-                screenY: elemRect.top,
-                width: offsetWidth,
-                height: offsetHeight,
-            },
-            mapView,
-            releaseNums: [releaseNum.toString()],
-        });
+        setIsFetchingPreviewWindowImage(true);
 
-        setImageUrl(image);
+        try {
+            const [image] = await generateFrames({
+                frameRect: {
+                    // elemRect.left is the left position of the container DIV relative to map view container,
+                    // therefore, we need to add the mapViewContainerLeft to it to get the
+                    // left position of the container DIV relative to window
+                    screenX: elemRect.left - mapViewContainerLeftPos,
+                    screenY: elemRect.top,
+                    width: offsetWidth,
+                    height: offsetHeight,
+                },
+                mapView,
+                releaseNums: [releaseNum.toString()],
+            });
+
+            setImageUrl(image);
+        } catch (error) {
+            console.error('Error generating preview window image:', error);
+            setImageUrl('');
+        } finally {
+            setIsFetchingPreviewWindowImage(false);
+        }
     };
 
     useEffect(() => {
@@ -94,22 +132,47 @@ const PreviewWindow: React.FC<Props> = ({
             className="preview-window-container"
             ref={containerRef}
             style={{
-                top: `calc(50% - ${PREVIEW_WINDOW_HEIGHT / 2}px)`,
-                left: `calc(50% - ${PREVIEW_WINDOW_WIDTH / 2}px)`,
-                width: `${PREVIEW_WINDOW_WIDTH}px`,
-                height: `${PREVIEW_WINDOW_HEIGHT}px`,
+                top: `calc(50% - ${previewWindowSize.height / 2}px)`,
+                left: `calc(50% - ${previewWindowSize.width / 2}px)`,
+                width: `${previewWindowSize.width}px`,
+                height: `${previewWindowSize.height}px`,
+                background: imageUrl
+                    ? `url(${imageUrl}) center center / contain no-repeat`
+                    : 'transparent',
             }}
+            data-testid="preview-window-container"
+            data-release-num={previewWaybackItem?.releaseNum || ''}
         >
-            {imageUrl && <img src={imageUrl} />}
-            <div className="preview-item-info">
-                <span
-                    style={{
-                        fontSize: '.95rem',
-                    }}
-                >
-                    <b>Wayback {previewWaybackItem.releaseDateLabel}</b> preview
-                </span>
+            {/* {imageUrl && (
+                <img
+                    src={imageUrl}
+                    className="absolute top-0 left-0 w-full h-full"
+                />
+            )} */}
+            <div className="absolute bottom-0 left-0 w-full px-2 py-1 text-white flex justify-center">
+                <div className="bg-black bg-opacity-60 px-2 rounded-md">
+                    <span>
+                        <b>{previewWaybackItem.releaseDateLabel}</b>{' '}
+                        {t('preview')}
+                    </span>
+                </div>
             </div>
+            {/* <div className="absolute top-0 left-0 w-full px-2 py-1 text-white bg-custom-theme-blue bg-opacity-80">
+                <div className="flex items-center gap-2">
+                    <span
+                        style={{
+                            fontSize: '.95rem',
+                        }}
+                    >
+                        <b>Wayback {previewWaybackItem.releaseDateLabel}</b>{' '}
+                        {t('preview')}
+                    </span>
+
+                    {isFetchingPreviewWindowImage && (
+                        <CalciteLoader inline={true} label="loading" />
+                    )}
+                </div>
+            </div> */}
         </div>
     );
 };

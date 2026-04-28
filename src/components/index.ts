@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ export { default as Sidebar } from './Sidebar/SidebarContainer';
 export { default as SearchWidget } from './SearchWidget/SearchWidget';
 // export { default as ShareDialog } from './ShareDialog/ShareDialogContainer';
 export { default as SwipeWidget } from './SwipeWidget/SwipeWidgetContainer';
-export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
-export { default as SettingDialog } from './SettingDialog/SettingDialogContainer';
+// export { default as SaveAsWebMapDialog } from './SaveAsWebmapDialog/SaveAsWebmapDialogContainer';
+// export { default as SettingDialog } from './SettingDialog/SettingDialogContainer';
 export { default as SidebarToggleBtn } from './SidebarToggleBtn/SidebarToogleBtnContainer';
 export { default as SwipeWidgetLayerSelector } from './SwipeWidgetLayerSelector/SwipeWidgetLayerSelectorContainer';
-export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
+// export { default as ShowLocalChangesCheckboxToggle } from './ShowLocalChangesCheckboxToggle/ShowLocalChangesCheckboxToggleContainer';
 export { default as Title4ActiveItem } from './Title4ActiveItem/Title4ActiveItemContainer';
 export { default as WaybackLayer } from './WaybackLayer/WaybackLayerContainer';
 export { default as AnimationControls } from './AnimationControls/AnimationControls';
@@ -41,4 +41,4 @@ export { default as LayerSelector } from './LayerSelector/LayerSelector';
 export { default as ZoomWidget } from './ZoomWidget/ZoomWidget';
 
 export { default as TilePreviewWindow } from './PreviewWindow/PreviewWindowContainer';
-export { DownloadDialog } from './DownloadDialog';
+// export { DownloadDialog } from './DownloadDialog';

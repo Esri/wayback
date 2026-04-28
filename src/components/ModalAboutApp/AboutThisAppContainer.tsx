@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ const AboutThisAppContainer = () => {
 
     return (
         <Modal
-            title={'World Imagery Wayback'}
+            title={'Esri | World Imagery Wayback'}
             isOpen={isOpen}
-            width="m"
+            width="l"
             onClose={onCloseHandler}
         >
             <AboutThiAppContent />

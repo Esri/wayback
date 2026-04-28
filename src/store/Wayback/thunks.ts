@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ import { Point } from '@arcgis/core/geometry';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     isLoadingWaybackItemsToggled,
+    localChangesQueryDurationMsUpdated,
     releaseNum4ItemsWithLocalChangesUpdated,
 } from './reducer';
 import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
@@ -25,7 +26,15 @@ import { logger } from '@utils/IndexedDBLogger';
 let abortController: AbortController = null;
 
 export const queryLocalChanges =
-    (point: Point, zoom: number) =>
+    ({
+        longitude,
+        latitude,
+        zoom,
+    }: {
+        longitude: number;
+        latitude: number;
+        zoom: number;
+    }) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         try {
             if (abortController) {
@@ -36,23 +45,31 @@ export const queryLocalChanges =
 
             dispatch(isLoadingWaybackItemsToggled(true));
 
+            // const now = performance.now();
+
             const waybackItems = await getWaybackItemsWithLocalChanges(
                 {
-                    longitude: point.longitude,
-                    latitude: point.latitude,
+                    longitude,
+                    latitude,
                 },
                 zoom,
                 abortController
             );
 
-            // console.log(waybackItems);
+            // // calculate elapsed time for getting local changes
+            // const localChangesQueryDurationMs = performance.now() - now;
 
+            // console.log(waybackItems);
             const rNums = waybackItems.map((d) => d.releaseNum);
 
             // console.log(rNums);
             dispatch(releaseNum4ItemsWithLocalChangesUpdated(rNums));
 
             dispatch(isLoadingWaybackItemsToggled(false));
+
+            // dispatch(
+            //     localChangesQueryDurationMsUpdated(localChangesQueryDurationMs)
+            // );
         } catch (err) {
             console.log('Error querying local changes:', err);
 
@@ -63,8 +80,8 @@ export const queryLocalChanges =
 
             logger.log('error_querying_local_changes', {
                 point: {
-                    longitude: point.longitude,
-                    latitude: point.latitude,
+                    longitude: longitude,
+                    latitude: latitude,
                 },
                 zoom,
                 error: (err as Error).message,

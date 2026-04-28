@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import './style.css';
+// import './style.css';
 import React from 'react';
 import classNames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
@@ -22,74 +22,67 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
     selectedWaybackItems: Array<number>;
-    disabled: boolean;
+    // disabled: boolean;
     /**
-     * Whether the SaveAsWebmap dialog is open or not
+     * If true, the create webmap panel is open. This prop is used to determine the style of the button.
      */
     active: boolean;
-    onClick?: (val: boolean) => void;
-    clearAll?: () => void;
+    onClick?: () => void;
+    // clearAll?: () => void;
 }
 
 // interface IState {}
 export const SaveAsWebmapBtn: React.FC<IProps> = ({
     selectedWaybackItems,
-    disabled,
+    // disabled,
     active,
     onClick,
-    clearAll,
+    // clearAll,
 }) => {
     const { t } = useTranslation();
 
-    const isActive = selectedWaybackItems.length > 0;
+    const hasSelectedItems = selectedWaybackItems.length > 0;
 
-    const tooltipContent = isActive
-        ? t('open_save_webmap_button_tooltip')
-        : t('open_save_webmap_button_tooltip_disabled');
+    const tooltipContent = t('toggle_save_webmap_panel');
 
-    const onClickHandler = () => {
-        if (isActive && onClick) {
-            onClick(true);
-        }
-    };
+    // const onClickHandler = () => {
+    //     if (isActive && onClick) {
+    //         onClick(true);
+    //     }
+    // };
 
     return (
         <div
             className={classNames(
-                'save-as-webmap-btn-container relative w-full text-center py-1',
+                'relative w-full text-center py-2 px-1 cursor-pointer z-10',
                 {
-                    'opacity-50 pointer-events-none': disabled,
+                    // 'opacity-50 pointer-events-none': disabled,
                     'bg-black text-white': active,
                 }
             )}
         >
-            <div className="relative">
-                <button
-                    className={classNames('relative', {
-                        'cursor-pointer': isActive,
-                    })}
-                    aria-label={'save as web map'}
-                    onClick={onClickHandler}
-                    title={tooltipContent}
-                >
-                    <CalciteIcon icon="arcgis-online" scale="l" />
-                </button>
-
-                {isActive && (
-                    <IndicatorBubble>
-                        <span>{selectedWaybackItems.length}</span>
-                    </IndicatorBubble>
+            <button
+                className={classNames(
+                    'relative flex mx-auto items-center justify-center'
                 )}
-            </div>
+                aria-label={tooltipContent}
+                onClick={onClick}
+                title={tooltipContent}
+                // disabled={disabled}
+                data-testid="save-as-webmap-button"
+            >
+                <CalciteIcon icon="arcgis-online" scale="l" />
+            </button>
 
-            {isActive && (
-                <button
-                    className="mx-auto text-center cursor-pointer text-xs"
-                    aria-label="clear all selected items"
-                    onClick={clearAll}
-                >
-                    clear all
-                </button>
+            {hasSelectedItems && (
+                <IndicatorBubble>
+                    <span
+                        data-testid="selected-wayback-items-count"
+                        data-count={selectedWaybackItems?.length || 0}
+                    >
+                        {selectedWaybackItems.length}
+                    </span>
+                </IndicatorBubble>
             )}
         </div>
     );

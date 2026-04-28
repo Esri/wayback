@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,13 @@ export type MapCenter = {
     lat: number;
 };
 
-export type MapMode = 'explore' | 'swipe' | 'animation' | 'updates';
+export type MapMode =
+    | 'explore'
+    | 'swipe'
+    | 'animation'
+    | 'updates'
+    | 'wayport'
+    | 'save-webmap';
 
 export type MapState = {
     mode: MapMode;
@@ -48,23 +54,30 @@ export type MapState = {
     /**
      * Represents the level of detail (LOD) at the center of the view.
      */
-    zoom?: number;
+    zoom: number;
     /**
      * Represents the view's center point
      */
-    center?: MapCenter;
+    center: MapCenter;
+    /**
+     * Indicates whether the map view is currently updating (e.g., during zooming or panning).
+     * This can be used to prevent certain actions from being triggered while the map is still updating, which can help improve performance and user experience.
+     */
+    isUpdaing: boolean; // indicates whether the map view is currently updating (e.g., during zooming or panning)
+    /**
+     * Map scale at the current view
+     */
+    scale: number;
+    /**
+     * Map resolution at the current view, in map units per pixel. For example, if the spatial reference of the map is Web Mercator, the resolution is in meters per pixel.
+     */
+    resolution: number;
     /**
      * The locale of the reference layer that is set by the user
+     *
+     * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
      */
     referenceLayerLocale: ReferenceLayerLanguage;
-    /**
-     * The locale of the reference layer that is suggested by the app
-     */
-    suggestedReferenceLayerLocale: ReferenceLayerLanguage | null;
-    /**
-     * if true, the reference layer switcher is open
-     */
-    isReferenceLayerSwitcherOpen: boolean;
 };
 
 export const initialMapState: MapState = {
@@ -76,9 +89,13 @@ export const initialMapState: MapState = {
     isReferenceLayerVisible: true,
     zoom: null,
     center: null,
-    referenceLayerLocale: ReferenceLayerLanguage.EnglishUS,
-    suggestedReferenceLayerLocale: null,
-    isReferenceLayerSwitcherOpen: false,
+    scale: null,
+    resolution: null,
+    isUpdaing: false,
+    /**
+     * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+     */
+    referenceLayerLocale: null,
 };
 
 const slice = createSlice({
@@ -116,37 +133,37 @@ const slice = createSlice({
         ) => {
             state.isQueryingMetadata = action.payload;
         },
-        mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
-            state.center = action.payload;
+        // mapCenterUpdated: (state, action: PayloadAction<MapCenter>) => {
+        //     state.center = action.payload;
+        // },
+        // zoomUpdated: (state, action: PayloadAction<number>) => {
+        //     state.zoom = action.payload;
+        // },
+        mapCenterAndZoomUpdated: (
+            state,
+            action: PayloadAction<{ center: MapCenter; zoom: number }>
+        ) => {
+            state.center = action.payload.center;
+            state.zoom = action.payload.zoom;
         },
-        zoomUpdated: (state, action: PayloadAction<number>) => {
-            state.zoom = action.payload;
+        isMapUpdatingToggled: (state, action: PayloadAction<boolean>) => {
+            state.isUpdaing = action.payload;
         },
+        mapScaleAndResolutionUpdated: (
+            state,
+            action: PayloadAction<{ scale: number; resolution: number }>
+        ) => {
+            state.scale = action.payload.scale;
+            state.resolution = action.payload.resolution;
+        },
+        /**
+         * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+         */
         referenceLayerLocaleUpdated: (
             state,
             action: PayloadAction<ReferenceLayerLanguage>
         ) => {
             state.referenceLayerLocale = action.payload;
-        },
-        suggestedReferenceLayerLocaleUpdated: (
-            state,
-            action: PayloadAction<ReferenceLayerLanguage | null>
-        ) => {
-            state.suggestedReferenceLayerLocale = action.payload;
-        },
-        isReferenceLayerSwitcherOpenToggled: (
-            state,
-            action: PayloadAction<boolean>
-        ) => {
-            if (action.payload === undefined) {
-                state.isReferenceLayerSwitcherOpen =
-                    !state.isReferenceLayerSwitcherOpen;
-                return;
-            } else {
-                state.isReferenceLayerSwitcherOpen = action.payload;
-            }
-
-            // state.isReferenceLayerSwitcherOpen = action.payload;
         },
     },
 });
@@ -160,11 +177,13 @@ export const {
     metadataPopupAnchorUpdated,
     isReferenceLayerVisibleToggled,
     isQueryingMetadataToggled,
-    mapCenterUpdated,
-    zoomUpdated,
+    mapCenterAndZoomUpdated,
+    // zoomUpdated,
+    isMapUpdatingToggled,
+    mapScaleAndResolutionUpdated,
     referenceLayerLocaleUpdated,
-    suggestedReferenceLayerLocaleUpdated,
-    isReferenceLayerSwitcherOpenToggled,
+    // suggestedReferenceLayerLocaleUpdated,
+    // isReferenceLayerSwitcherOpenToggled,
 } = slice.actions;
 
 export const selectMapMode = (state: RootState) => state.Map.mode;
@@ -185,14 +204,19 @@ export const metadataPopupAnchorSelector = (state: RootState) =>
 
 export const selectMapCenter = (state: RootState) => state.Map.center;
 
+export const selectIsMapUpdating = (state: RootState) => state.Map.isUpdaing;
+
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
 export const selectReferenceLayerLocale = (state: RootState) =>
     state.Map.referenceLayerLocale;
 
-export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
-    state.Map.suggestedReferenceLayerLocale;
+// export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
+//     state.Map.suggestedReferenceLayerLocale;
 
-export const selectIsReferenceLayerSwitcherOpen = (state: RootState) =>
-    state.Map.isReferenceLayerSwitcherOpen;
+// export const selectIsReferenceLayerSwitcherOpen = (state: RootState) =>
+//     state.Map.isReferenceLayerSwitcherOpen;
 
 /**
  * Select center and zoom of the map
@@ -209,5 +233,17 @@ export const selectMapCenterAndZoom = createSelector(
         };
     }
 );
+
+export const selectIsWayportModeOn = (state: RootState) =>
+    state.Map.mode === 'wayport';
+
+export const selectIsSaveWebmapModeOn = (state: RootState) =>
+    state.Map.mode === 'save-webmap';
+
+export const selectMapScale = (state: RootState) => state.Map.scale;
+
+export const selectMapResolution = (state: RootState) => state.Map.resolution;
+
+export const selectMapZoomLevel = (state: RootState) => state.Map.zoom;
 
 export default reducer;

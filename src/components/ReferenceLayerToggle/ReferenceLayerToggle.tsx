@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
     );
 
     return (
-        <div className="relative w-full h-full flex items-center justify-between ">
+        <div className="relative w-full h-full flex items-center justify-between">
             <div className="flex items-center ml-2">
                 <button
                     className="mx-2 cursor-pointer"
@@ -65,10 +65,12 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 >
                     {icon}
                 </button>
-                <div className=" text-sm">{t('reference_label_overlay')}</div>
+                <div className=" text-sm mr-2">
+                    {t('reference_label_overlay')}
+                </div>
             </div>
-            {/* 
-            <button
+
+            {/* <button
                 className="mr-2 flex items-center cursor-pointer"
                 title={t('choose_label_language')}
                 aria-label={t('choose_label_language')}
@@ -83,9 +85,7 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 onClick={localeSwitchButtonOnClick}
                 label={t('choose_label_language')}
                 iconStart="language"
-            >
-                {/* <CalciteIcon icon="language" scale="s"></CalciteIcon> */}
-            </CalciteButton>
+            ></CalciteButton>
         </div>
     );
 };

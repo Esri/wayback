@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ const BarChartContainer: React.FC = () => {
     }
 
     return (
-        <div className="hidden md:block">
+        <div className="w-full">
             <BarChart
                 waybackItems={waybackItems}
                 activeWaybackItem={activeWaybackItem}

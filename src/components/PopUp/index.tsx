@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 
 // import { loadModules } from 'esri-loader';
 import './style.css';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { dateFns } from 'helper-toolkit-ts';
 
 import {
@@ -23,7 +23,13 @@ import {
     IScreenPoint,
     // IWaybackItem,
 } from '@typings/index';
-import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
+import {
+    CalciteButton,
+    CalciteIcon,
+    CalciteLoader,
+} from '@esri/calcite-components-react';
+import { Trans, useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 interface IProps {
     /**
@@ -35,28 +41,58 @@ interface IProps {
     onClose: () => void;
 }
 
-const Width = 360;
-const PositionOffset = 22.5;
+const WIDTH = 360;
+const POSITION_OFFSET = 22.5;
 
-const PopUp: FC<IProps> = (props: IProps) => {
-    const { metadata, isQueryingMetadata, metadataAnchorScreenPoint, onClose } =
-        props;
+const PopUp: FC<IProps> = ({
+    metadata,
+    isQueryingMetadata,
+    metadataAnchorScreenPoint,
+    onClose,
+}: IProps) => {
+    const { t } = useTranslation();
 
-    const formatMetadataDate = () => {
-        const { metadata } = props;
-        const { date } = metadata;
+    const {
+        provider,
+        source,
+        resolution,
+        accuracy,
+        releaseDate,
+        date,
+        queryLocation,
+    } = metadata || {};
+
+    const formattedDate = useMemo(() => {
+        if (!date) {
+            return '';
+        }
 
         const metadataDate = new Date(date);
 
-        const year = metadataDate.getFullYear();
-        const month = dateFns.getMonthName(metadataDate.getMonth(), true);
-        const day = metadataDate.getDate();
+        // const year = metadataDate.getFullYear();
+        // const month = dateFns.getMonthName(metadataDate.getMonth(), true);
+        // const day = metadataDate.getDate();
 
-        return `${month} ${day}, ${year}`;
-    };
+        // return `${month} ${day}, ${year}`;
+
+        return format(metadataDate, 'yyyy-MM-dd');
+    }, [date]);
+
+    const containerStyle = useMemo(() => {
+        if (!metadataAnchorScreenPoint) {
+            return {};
+        }
+
+        return {
+            position: 'absolute',
+            top: metadataAnchorScreenPoint.y - POSITION_OFFSET,
+            left: metadataAnchorScreenPoint.x - POSITION_OFFSET,
+            width: WIDTH,
+        } as React.CSSProperties;
+    }, [metadataAnchorScreenPoint]);
 
     const copyQueryLocation = () => {
-        const { queryLocation } = metadata;
+        // const { queryLocation } = metadata;
 
         const text = `x: ${queryLocation.longitude.toFixed(
             5
@@ -72,49 +108,17 @@ const PopUp: FC<IProps> = (props: IProps) => {
         return null;
     }
 
-    const containerStyle = {
-        position: 'absolute',
-        top: metadataAnchorScreenPoint.y - PositionOffset,
-        left: metadataAnchorScreenPoint.x - PositionOffset,
-        width: Width,
-    } as React.CSSProperties;
-
     if (isQueryingMetadata) {
         return (
             <div className="popup-container" style={containerStyle}>
                 <div className="reticle-wrap"></div>
 
                 <div className="content-wrap text-white">
-                    <CalciteLoader text="Fetching Metadata..." scale="s" />
+                    <CalciteLoader text={t('fetching_metadata')} scale="s" />
                 </div>
             </div>
         );
     }
-
-    const {
-        provider,
-        source,
-        resolution,
-        accuracy,
-        releaseDate,
-        date,
-        queryLocation,
-    } = metadata;
-
-    // const releaseDate = 'targetLayer.releaseDateLabel';
-    const formattedDate = formatMetadataDate();
-
-    const providerAndCaptureDateInfo = date ? (
-        <span>
-            {provider} ({source}) image captured on <b>{formattedDate}</b> as
-            shown in the <b>{releaseDate}</b> version of the World Imagery map.
-        </span>
-    ) : (
-        <span>
-            {provider} ({source}) imagery as shown in the <b>{releaseDate}</b>{' '}
-            version of the World Imagery map.
-        </span>
-    );
 
     return (
         <div className="popup-container" style={containerStyle}>
@@ -125,37 +129,60 @@ const PopUp: FC<IProps> = (props: IProps) => {
                 // this "data-testid" attribute will be used by the script that monitors the health of this app
                 data-testid="popup-content"
             >
+                <div className="close-btn text-white">
+                    <CalciteButton
+                        appearance="transparent"
+                        kind="neutral"
+                        scale="s"
+                        iconStart="x"
+                        label={t('closed_metadata_popup')}
+                        data-testid="popup-close-button"
+                        onClick={onClose}
+                    ></CalciteButton>
+                </div>
+
                 <div className="text-wrap">
-                    <p className="mb-2">{providerAndCaptureDateInfo}</p>
                     <p className="mb-2">
-                        <b>Resolution</b>: Pixels in the source image
-                        <br />
-                        represent a ground distance of{' '}
-                        <b>{+resolution.toFixed(2)} meters</b>.
+                        {
+                            <Trans
+                                i18nKey={
+                                    date
+                                        ? 'metadata_provider_source_with_acquisition_date'
+                                        : 'metadata_provider_source'
+                                }
+                                values={{
+                                    provider,
+                                    source,
+                                    formattedDate,
+                                    releaseDate,
+                                }}
+                                components={{ b: <b /> }}
+                            />
+                        }
                     </p>
                     <p className="mb-2">
-                        <b>Accuracy</b>: Objects displayed in this image
-                        <br />
-                        are within <b>{+accuracy.toFixed(2)} meters</b> of true
-                        location.
+                        <Trans
+                            i18nKey="metadata_resolution"
+                            values={{ resolution: +resolution.toFixed(2) }}
+                            components={{ b: <b /> }}
+                        />
+                    </p>
+                    <p className="mb-2">
+                        <Trans
+                            i18nKey="metadata_accuracy"
+                            values={{ accuracy: +accuracy.toFixed(2) }}
+                            components={{ b: <b /> }}
+                        />
                     </p>
 
                     <p
                         className="cursor-pointer hover:underline"
-                        title="click to copy the coordinates of this location"
+                        title={t('copy_coordinates')}
                         onClick={copyQueryLocation}
                     >
                         x: {queryLocation.longitude.toFixed(4)}
                         {'  '}y: {queryLocation.latitude.toFixed(4)}
                     </p>
-                </div>
-
-                <div
-                    className="close-btn text-white text-center cursor-pointer"
-                    onClick={onClose}
-                >
-                    {/* <span className="icon-ui-close"></span> */}
-                    <CalciteIcon icon="x" />
                 </div>
             </div>
         </div>

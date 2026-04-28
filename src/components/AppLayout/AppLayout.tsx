@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,30 +28,44 @@ import {
     Sidebar,
     SearchWidget,
     SwipeWidget,
-    SaveAsWebMapDialog,
-    SettingDialog,
+    // SaveAsWebMapDialog,
+    // SettingDialog,
     SwipeWidgetLayerSelector,
     TilePreviewWindow,
     WaybackLayer,
     ZoomWidget,
-    DownloadDialog,
+    // DownloadDialog,
 } from '..';
 // import { AppContext } from '@contexts/AppContextProvider';
 import { AnimationLayer } from '@components/AnimationLayer/AnimationLayer';
 import { useSaveAppState2URLHashParams } from '@hooks/useSaveAppState2URLHashParams';
 import { useRevalidateToken } from '@hooks/useRevalidateToken';
-import { Notification } from '@components/Notification';
+// import { Notification } from '@components/Notification';
 
 import { AppHeader } from '@components/AppHeader';
 
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import { WorldImageryUpdatesLayers } from '@components/WorldImageryUpdatesLayers';
 import { ProfileCard } from '@components/UserAccount';
+import {
+    LocaleSuggestion,
+    LocaleSwitcherDialog,
+} from '@components/LocaleSwitcher';
+import { WayportExtentLayer } from '@components/WayportExtentLayer';
+import { useManageStatusOfWayportJobs } from '@hooks/useCheckStatusOfWayportJobs';
+import { useBeforeUnloadEvent } from '@hooks/useBeforeUnloadEvent';
+import { MapScaleIndicator } from '@components/MapScaleIndicator/MapScaleIndicator';
 
 const AppLayout: React.FC = () => {
     useSaveAppState2URLHashParams();
 
     useRevalidateToken();
+
+    // This custom hook is used to check and manage the status of pending Wayport export jobs at a regular interval, and update the job status in the store.
+    useManageStatusOfWayportJobs();
+
+    // confirm with user before leaving the app if there are ongoing export jobs to prevent accidental loss of progress
+    useBeforeUnloadEvent();
 
     return (
         <ErrorBoundary>
@@ -71,8 +85,6 @@ const AppLayout: React.FC = () => {
 
                     <ReferenceLayer />
 
-                    <TilePreviewWindow />
-
                     <MetadataPopup />
 
                     <MetadataQueryTask />
@@ -87,21 +99,31 @@ const AppLayout: React.FC = () => {
 
                     <ZoomWidget />
 
-                    <Notification />
+                    {/* <Notification /> */}
 
                     <WorldImageryUpdatesLayers />
+
+                    <WayportExtentLayer />
+
+                    <TilePreviewWindow />
+
+                    <MapScaleIndicator />
                 </MapView>
 
                 <SwipeWidgetLayerSelector targetLayer="trailing" />
             </MapViewWrapper>
 
-            <SaveAsWebMapDialog />
+            {/* <SaveAsWebMapDialog /> */}
 
-            <SettingDialog />
+            {/* <SettingDialog /> */}
 
-            <DownloadDialog />
+            {/* <DownloadDialog /> */}
 
             <ProfileCard />
+
+            {/* <LocaleSwitcherDialog /> */}
+
+            {/* <LocaleSuggestion /> */}
 
             <AboutThisApp />
 

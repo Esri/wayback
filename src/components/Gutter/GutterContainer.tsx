@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import {
     activeDialogSelector,
     // isShareModalOpenToggled,
     isAboutThisAppModalOpenToggled,
-    isSettingModalOpenToggled,
+    // isSettingModalOpenToggled,
     // isGutterHideSelector,
 } from '@store/UI/reducer';
 import { AppContext } from '@contexts/AppContextProvider';
@@ -36,8 +36,9 @@ import { UpdatesModeToggleButton } from '@components/Gutter/UpdatesModeToggleBut
 import { AccountAvatar } from '@components/UserAccount';
 import { SwipeModeToggleBtnContainerButton } from './SwipeModeToggleButton';
 import { AnimationModeToggleButton } from './AnimationModeToggleButton';
-import { DownloadTilePackageDialogToggleButton } from './DownloadTilePackageDialogToggleButton';
+import { WaportModeToggleButton } from './WaportModeToggleButton';
 import { SaveWebmapDialogToggleButton } from './SaveDialogToggleButton';
+import { LocaleSwitcherToggleButton } from '@components/LocaleSwitcher';
 
 type Props = {
     children?: React.ReactNode;
@@ -67,9 +68,9 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
         dispatch(isAboutThisAppModalOpenToggled());
     };
 
-    const settingButtonOnClick = () => {
-        dispatch(isSettingModalOpenToggled());
-    };
+    // const settingButtonOnClick = () => {
+    //     dispatch(isSettingModalOpenToggled());
+    // };
 
     const copyButtonOnClick = () => {
         copy2clipboard(window.location.href);
@@ -86,7 +87,7 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
             shouldDisableActionButton={isAnimationModeOn}
             aboutButtonOnClick={aboutButtonOnClick}
             // copyButtonOnClick={copyButtonOnClick}
-            settingButtonOnClick={settingButtonOnClick}
+            // settingButtonOnClick={settingButtonOnClick}
         >
             <ExploreModeToggleButton />
 
@@ -94,13 +95,16 @@ const GutterContainer: React.FC<Props> = ({ children }) => {
 
             <AnimationModeToggleButton />
 
-            <UpdatesModeToggleButton />
-
-            <DownloadTilePackageDialogToggleButton />
+            <WaportModeToggleButton />
 
             <SaveWebmapDialogToggleButton />
 
-            <div className="absolute bottom-0 left-0 w-full">
+            <UpdatesModeToggleButton />
+
+            {/* only show user avatar when the height is sufficient */}
+            <div className="absolute bottom-0 left-0 w-full hidden [@media(min-height:450px)]:block">
+                {/* <LocaleSwitcherToggleButton /> */}
+
                 <AccountAvatar />
             </div>
         </Gutter>

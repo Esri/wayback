@@ -1,0 +1,224 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// import { IExtent } from '@typings/index';
+// import { tier } from '@utils/Tier';
+import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercatorUtils';
+import Extent from '@arcgis/core/geometry/Extent';
+// import axios from 'axios';
+import { getToken } from '@utils/Esri-OAuth';
+import { IExtent } from '@typings/index';
+import { WAYBACK_EXPORT_GP_SERVICE_ROOT_URL } from '@constants/index';
+
+type GPJobStatus =
+    | 'esriJobSubmitted'
+    | 'esriJobExecuting'
+    | 'esriJobSucceeded'
+    | 'esriJobFailed';
+
+type SubmitJobParams = {
+    /**
+     * map extent of this job
+     */
+    extent: IExtent;
+    /**
+     * identifier of a wayback item (e.g. `WB_2014_R01`) that will be used as clump name
+     */
+    layerIdentifier: string;
+    /**
+     * user selected zoom levels
+     */
+    levels: number[];
+};
+
+type SubmitJobResponse = {
+    jobId: string;
+    jobStatus: GPJobStatus;
+};
+
+export type CheckJobStatusResponse = {
+    jobId: string;
+    jobStatus: GPJobStatus;
+    results?: {
+        output: {
+            paramUrl: string;
+        };
+    };
+    progress?: {
+        type?: string;
+        message?: string;
+    };
+    messages?: {
+        type?: string;
+        description?: string;
+    }[];
+};
+
+type GetJobOutputResponse = {
+    paramName: string;
+    dataType: string;
+    value: {
+        /**
+         * @example
+         * https://34.220.147.218:6443/arcgis/rest/directories/arcgisjobs/wayport_gpserver/j94219d68f2874618a5c778db93a1ed9b/scratch/wayport.tpkx
+         */
+        url: string;
+    };
+};
+
+export type WayportTilePackageInfo = {
+    url: string;
+    size: number;
+};
+
+const WAYPORT_GP_SERVICE_ROOT = WAYBACK_EXPORT_GP_SERVICE_ROOT_URL;
+
+/**
+ *
+ * @param param0
+ * @returns
+ *
+ * @see https://developers.arcgis.com/rest/services-reference/enterprise/submit-gp-job.htm
+ */
+export const submitJob = async ({
+    extent,
+    layerIdentifier,
+    levels,
+}: SubmitJobParams): Promise<SubmitJobResponse> => {
+    const token = getToken();
+
+    if (!token) {
+        throw new Error(
+            'User is not authenticated. Please sign in to submit a job.'
+        );
+    }
+
+    // the GP service prefers extent in web mercator projection
+    const extentInWebMercator = geographicToWebMercator(
+        new Extent({
+            xmin: extent.xmin,
+            ymin: extent.ymin,
+            xmax: extent.xmax,
+            ymax: extent.ymax,
+            spatialReference: {
+                wkid: 4326,
+            },
+        })
+    ) as Extent;
+
+    const [minZoom, maxZoom] = levels;
+
+    const { xmin, ymin, xmax, ymax } = extentInWebMercator;
+
+    const params = new URLSearchParams({
+        f: 'json',
+        token,
+        clump: layerIdentifier,
+        levels: `${minZoom}-${maxZoom}`,
+        extent: `${xmin} ${ymin} ${xmax} ${ymax} PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Mercator_Auxiliary_Sphere"],PARAMETER["False_Easting",0.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",0.0],PARAMETER["Standard_Parallel_1",0.0],PARAMETER["Auxiliary_Sphere_Type",0.0],UNIT["Meter",1.0]]`,
+    });
+
+    const res = await fetch(
+        `${WAYPORT_GP_SERVICE_ROOT}/submitJob?${params.toString()}`
+    );
+
+    if (!res.ok) {
+        throw new Error(
+            `Failed to submit job. Server responded with status ${res.status}: ${res.statusText}`
+        );
+    }
+
+    const data = await res.json();
+
+    if (data.error) {
+        throw data.error;
+    }
+
+    return data as SubmitJobResponse;
+};
+
+export const checkJobStatus = async (
+    jobId: string
+): Promise<CheckJobStatusResponse> => {
+    try {
+        const res = await fetch(
+            `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}?f=json&token=${getToken()}`
+        );
+
+        if (!res.ok) {
+            throw new Error(
+                `Failed to check job status. Server responded with status ${res.status}: ${res.statusText}`
+            );
+        }
+
+        const data = await res.json();
+
+        if (data.error) {
+            throw data.error;
+        }
+
+        return data as CheckJobStatusResponse;
+    } catch (error) {
+        console.error('Error checking job status:', error);
+
+        return {
+            jobId,
+            jobStatus: 'esriJobFailed',
+        };
+    }
+};
+
+export const getJobOutputInfo = async (
+    jobId: string
+): Promise<WayportTilePackageInfo> => {
+    const outputRes = await fetch(
+        `${WAYPORT_GP_SERVICE_ROOT}/jobs/${jobId}/results/output?f=json&token=${getToken()}`
+    );
+
+    if (!outputRes.ok) {
+        throw new Error(
+            `Failed to get job output info. Server responded with status ${outputRes.status}: ${outputRes.statusText}`
+        );
+    }
+
+    const outputData = await outputRes.json();
+
+    if (outputData.error) {
+        throw outputData.error;
+    }
+
+    const data = outputData as GetJobOutputResponse;
+
+    const url = data?.value?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    const tilePackageHeaders = await fetch(url, {
+        method: 'HEAD',
+    });
+
+    if (!tilePackageHeaders.ok) {
+        throw new Error(
+            `Failed to get tile package headers. Server responded with status ${tilePackageHeaders.status}: ${tilePackageHeaders.statusText}`
+        );
+    }
+
+    return {
+        url,
+        size: +tilePackageHeaders.headers.get('Content-Length'),
+    };
+};

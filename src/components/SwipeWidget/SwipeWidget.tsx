@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ const SwipeWidget: React.FC<Props> = ({
             mapView.map.remove(existingLayer);
         }
 
-        const newLayer = await getWaybackLayer(layerItem);
+        const newLayer = getWaybackLayer(layerItem);
         layersRef.current[layerIndex] = newLayer;
         mapView.map.add(newLayer, 1);
 
@@ -157,7 +157,11 @@ const SwipeWidget: React.FC<Props> = ({
     // }
 
     useEffect(() => {
-        isOpen && mapView ? init() : hide();
+        if (isOpen && mapView) {
+            init();
+        } else {
+            hide();
+        }
     }, [isOpen, mapView]);
 
     useEffect(() => {

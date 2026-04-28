@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ export const Modal: FC<Props> = ({
                 aria-modal="true"
                 aria-labelledby={titleId}
                 className={classnames(
-                    'relative max-w-full h-auto bg-custom-modal-content-background ',
+                    'relative max-w-full h-screen md:h-auto w-screen md:w-auto bg-custom-modal-content-background ',
                     {
                         'md:max-w-6xl': width === 'xl',
                         'md:max-w-5xl': width === 'l',
@@ -90,6 +90,7 @@ export const Modal: FC<Props> = ({
                         kind="neutral"
                         label={t('close')}
                         onClick={onClose}
+                        data-testid="modal-close-button"
                     />
                 </div>
 

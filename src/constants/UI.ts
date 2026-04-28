@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,29 @@ import { isMobileDevice } from 'helper-toolkit-ts/dist/misc';
  */
 export const COPIED_LINK_MESSAGE_TIME_TO_STAY_OPEN_IN_MILLISECONDS = 3000;
 
+/**
+ * Whether the application is running in a mobile device
+ */
 export const IS_MOBILE = isMobileDevice();
+
+/**
+ * Whether to enable the performance analyze tool based on URL query parameter and hosting environment
+ */
+export const SHOULD_ENABLE_PERFORMANCE_ANALYZE_TOOL =
+    window.location.search.includes('enablePerformanceAnalyzeTool=true') &&
+    window.location.hostname !== 'livingatlas.arcgis.com'
+        ? true
+        : false;
 
 /**
  * Color for world imagery updates layer based on the status of the update
  */
 export const WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS = {
     pending: {
-        color: '#ff9900', // RGB: (255, 153, 0)
-        fill: 'rgba(255, 153, 0, .5)',
-        fillColorArray: [255, 153, 0, 255],
-        outline: 'rgba(255, 153, 0, .9)',
+        color: '#FF00FF', // RGB: (0, 255, 179)
+        fill: 'rgba(255, 0, 255, .5)',
+        fillColorArray: [255, 0, 255, 255],
+        outline: 'rgba(255, 0, 255, .9)',
     },
     published: {
         color: '#00ffb3', // RGB: (0, 255, 179)

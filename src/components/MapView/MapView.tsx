@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
 import EsriMap from '@arcgis/core/Map';
-import { when } from '@arcgis/core/core/reactiveUtils';
+import { watch, when } from '@arcgis/core/core/reactiveUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import Extent from '@arcgis/core/geometry/Extent';
 import TileInfo from '@arcgis/core/layers/support/TileInfo';
@@ -39,8 +39,19 @@ interface Props {
      * deafult zoom level
      */
     zoom?: number;
-    onUpdateEnd: (centerPoint: IMapPointInfo) => void;
-    onExtentChange: (extent: IExtentGeomety) => void;
+    /**
+     * Emitted when the MapView's stationary event is triggered, which indicates the end of a view navigation such as zooming or panning. The event payload includes the current center point information and the map extent.
+     * @param payload
+     * @returns
+     */
+    onStationary: (payload: {
+        mapCenterPointInfo: IMapPointInfo;
+        mapExtent: IExtentGeomety;
+        mapScale: number;
+        mapResolution: number;
+    }) => void;
+    onUpdating: (isUpdating: boolean) => void;
+    // onExtentChange: (extent: IExtentGeomety) => void;
     children?: React.ReactNode;
 }
 
@@ -48,8 +59,9 @@ const MapViewComponent: React.FC<Props> = ({
     initialExtent,
     center,
     zoom,
-    onUpdateEnd,
-    onExtentChange,
+    onStationary,
+    onUpdating,
+    // onExtentChange,
     children,
 }: Props) => {
     // const stringifiedMapExtentRef = useRef<string>();
@@ -93,6 +105,7 @@ const MapViewComponent: React.FC<Props> = ({
         setMapView(view);
 
         view.when(() => {
+            console.log('MapView initialized');
             initEventHandlers(view);
         });
     };
@@ -116,12 +129,29 @@ const MapViewComponent: React.FC<Props> = ({
                     latitude: center.latitude,
                     longitude: center.longitude,
                     zoom: view.zoom, //getCurrZoomLevel(mapView),
-                    geometry: center.toJSON(),
+                    // geometry: center.toJSON(),
                 };
 
-                onUpdateEnd(mapViewCenterPointInfo);
+                // onStationary(mapViewCenterPointInfo);
 
-                onExtentChange(extent.toJSON());
+                // onExtentChange(extent.toJSON());
+
+                onStationary({
+                    mapCenterPointInfo: mapViewCenterPointInfo,
+                    mapExtent: extent.toJSON(),
+                    mapScale: view.scale,
+                    mapResolution: view.resolution,
+                });
+            }
+        );
+
+        watch(
+            () => view.updating,
+            (updating) => {
+                // console.log('map updating: ', updating);
+                // setIsMapUpdating(updating);
+
+                onUpdating(updating);
             }
         );
     };
@@ -164,11 +194,16 @@ const MapViewComponent: React.FC<Props> = ({
                     width: '100%',
                     height: '100%',
                 }}
+                data-testid="map-view-container"
                 ref={mapDivRef}
             ></div>
 
             {mapView
                 ? React.Children.map(children, (child) => {
+                      if (!child) {
+                          return null;
+                      }
+
                       return React.cloneElement(
                           child as React.ReactElement<any>,
                           {

@@ -1,0 +1,800 @@
+/* Copyright 2024-2026 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { IExtent } from '@typings/index';
+import { StoreDispatch, StoreGetState } from '../configureStore';
+// import { batch } from 'react-redux';
+import {
+    WayportJob,
+    WayportJobStatus,
+    wayportJobCreated,
+    wayportJobRemoved,
+    wayportJobsUpdated,
+    errorMessageUpdated,
+    idOfJobBeingCreatedUpdated,
+    idOfJobToShowExtentOnMapUpdated,
+    // idOfSelectedJobUpdated,
+    // isAddingNewDownloadJobToggled,
+    // isDownloadDialogOpenToggled,
+} from './reducer';
+import { nanoid } from 'nanoid';
+import {
+    getTileEstimationsInOutputBundle,
+    TileEstimation,
+} from '@services/wayport/getTileEstimationsInOutputBundle';
+import {
+    checkJobStatus,
+    getJobOutputInfo,
+    submitJob,
+} from '@services/wayport/wayportGPService';
+import {
+    selectWayportJobById,
+    selectWayportJobsThatHaveFinished,
+    // selectFinishedWayportobsWithoutPackageInfo,
+    // selectDownloadJobs,
+    selectNewWayportJob,
+    selectPendingWayportJobs,
+    selectStaleWayportJobs,
+    selectWayportJobsThatHaveBeenStarted,
+} from './selectors';
+import { updateMapMode } from '@store/Map/thunks';
+import {
+    setActiveWaybackItem,
+    setPreviewWaybackItem,
+} from '@store/Wayback/reducer';
+import { getSignedInUser, getToken, signIn } from '@utils/Esri-OAuth';
+import { wayportJobsStore } from '@utils/wayportJobsStore';
+import {
+    getNewWayportJobFromSessionStorage,
+    getWayportJobOutputInfoHelper,
+    normalizeExtent,
+    removeNewWayportJobFromSessionStorage,
+    saveNewWayportJobToSessionStorage,
+} from './helpers';
+import { parseDownloadJobProgress } from '@services/wayport/wayportHelpers';
+
+type InitiateDownloadJobParams = {
+    /**
+     * user selected wayback release number
+     */
+    releaseNum: number;
+    /**
+     * current map extent
+     */
+    extent: IExtent;
+};
+
+// let checkDownloadJobStatusTimeout: NodeJS.Timeout;
+
+// const CHECK_JOB_STATUS_DELAY_IN_SECONDS = 15;
+
+// export const DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS = 3600;
+
+/**
+ * Wayport job will be removed from the store when it has been finished for more than 1 hour.
+ */
+export const WAYPORT_JOB_TIME_TO_LIVE_IN_MILLISECONDS = 60 * 60 * 1000;
+
+/**
+ * Min tile package level should always be 1 by default.
+ *
+ * @see https://github.com/vannizhang/wayback/issues/90
+ */
+export const DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB = 1;
+
+/**
+ * Max tile package level is set to 23.
+ */
+export const DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB = 23;
+
+/**
+ * Prepares the application state for a new wayport job.
+ *
+ * @param releaseNum - The release number to set as the active wayback item
+ * @returns A thunk function that dispatches actions to update the store
+ *
+ * @remarks
+ * This thunk performs the following operations:
+ * - Switches the map mode to 'wayport'
+ * - Sets the active wayback item to the specified release number
+ * - Closes the preview window by clearing the active preview item
+ * - Toggles the "adding new wayport job" flag to indicate a new job is being created
+ */
+const prepareForNewDownloadJob =
+    (releaseNum: number) => (dispatch: StoreDispatch) => {
+        // clear the id of the job being created in the store since we are starting to create a new job,
+        // and the previous job being created (if any) will be cleared later when the new job is created
+        dispatch(idOfJobBeingCreatedUpdated(null));
+
+        // clear the id of the job that is being shown extent on map, so that the extent of that job will be removed from the map before we create a new job and show the new job's extent on the map
+        dispatch(updateIdOfWayportJobToShowExtentOnMap(null));
+
+        // switch to wayport mode
+        dispatch(updateMapMode('wayport'));
+
+        // set active wayback item to the selected release number
+        dispatch(setActiveWaybackItem(releaseNum));
+
+        // close preview window as we are no longer in explore mode
+        dispatch(setPreviewWaybackItem(null));
+    };
+
+/**
+ * Initiates a new wayport job with the specified release number and extent.
+ *
+ * @param params - The parameters for initiating the wayport job
+ * @param params.releaseNum - The release number of the wayback item to download
+ * @param params.extent - The geographic extent for the wayport job
+ */
+export const initiateNewWayportJob =
+    ({ releaseNum, extent }: InitiateDownloadJobParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // console.log(waybackItem, zoomLevel, extent);
+
+        if (!extent) {
+            console.error('Cannot add to download list without a valid extent');
+            return;
+        }
+
+        if (!releaseNum && releaseNum !== 0) {
+            console.error(
+                'Cannot add to download list without a valid release number'
+            );
+            return;
+        }
+
+        // prepare application state for new wayport job
+        dispatch(prepareForNewDownloadJob(releaseNum));
+
+        const { WaybackItems } = getState();
+
+        const { byReleaseNumber } = WaybackItems;
+
+        // get the signed in user id to associate with this wayport job
+        const signedInUserId = getSignedInUser();
+
+        const userId = signedInUserId?.username || '';
+
+        const newDownloadJobToAdd: WayportJob = {
+            id: nanoid(),
+            waybackItem: {
+                ...byReleaseNumber[releaseNum],
+            },
+            extent: normalizeExtent(extent),
+            status: 'wayport job not started',
+            // tileEstimations and related info are set to null initially
+            // as they will be updated when user adjust the export extent
+            tileEstimations: null,
+            minZoomLevel: DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+            maxZoomLevel: DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
+            levels: [
+                DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
+                DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
+            ],
+            userId,
+            createdAt: new Date().getTime(),
+        };
+
+        if (!userId) {
+            // save the new wayport job data to session storage so that we can restore the job after user signs in
+            saveNewWayportJobToSessionStorage(newDownloadJobToAdd);
+        }
+
+        dispatch(createWayportJobHelper(newDownloadJobToAdd));
+    };
+
+/**
+ * This thunk function is used to update the new wayport job data when user adjust the export extent or zoom levels.
+ * @param updatedJobData
+ * @returns
+ */
+export const updateNewWayportJob =
+    ({
+        extent,
+        levels,
+        tileEstimations,
+    }: {
+        extent?: IExtent;
+        levels?: number[];
+        tileEstimations?: TileEstimation[];
+    }) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const newJob = selectNewWayportJob(getState());
+
+        if (!newJob) {
+            console.error('No new wayport job found to update');
+            return;
+        }
+
+        if (newJob.status !== 'wayport job not started') {
+            // console.error('the status of the new wayport job is not "not started", cannot update the new wayport job data');
+            return;
+        }
+
+        const updatedJobData = {
+            ...newJob,
+        };
+
+        if (tileEstimations !== undefined) {
+            updatedJobData.tileEstimations = tileEstimations;
+        }
+
+        if (levels !== undefined) {
+            updatedJobData.levels = levels;
+        }
+
+        if (extent !== undefined) {
+            updatedJobData.extent = extent;
+        }
+
+        // dispatch(updateWayportJobsHelper([updatedJobData]));
+        dispatch(
+            updateWayportJob({
+                jobId: newJob.id,
+                partialJobData: updatedJobData,
+            })
+        );
+    };
+
+/**
+ * Restores a new wayport job from session storage and dispatches it to the store.
+ *
+ * This thunk checks if a user is signed in and if a wayport job exists in session storage.
+ * If both conditions are met, it dispatches the stored wayport job to create a new wayport job in the store.
+ *
+ * @returns A thunk function that takes a dispatch parameter and returns void
+ *
+ * @remarks
+ * - If no user is signed in, the operation is skipped silently
+ * - If no wayport job is found in session storage, the operation is skipped silently
+ */
+export const restoreNewWayportJobFromSessionStorage =
+    () => (dispatch: StoreDispatch) => {
+        const signedInUser = getSignedInUser();
+
+        if (!signedInUser) {
+            // console.log('No signed in user, skipping restoring new wayport job from session storage');
+            return;
+        }
+
+        const newWayportJobFromStorage = getNewWayportJobFromSessionStorage();
+
+        if (!newWayportJobFromStorage) {
+            // console.log('No new wayport job found in session storage to restore');
+            return;
+        }
+
+        // Update the userId for the job retrieved from session storage.
+        // The job was created before sign-in, so we assign the signed-in user's ID
+        // to ensure proper association with the user when creating the job in the backend.
+        const downloadJobToBeCreated: WayportJob = {
+            ...newWayportJobFromStorage,
+            userId: signedInUser.username,
+        };
+
+        dispatch(createWayportJobHelper(downloadJobToBeCreated));
+    };
+
+export const startWayportJob =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // const { DownloadMode } = getState();
+
+        // const { jobs } = DownloadMode;
+
+        // const { byId } = jobs;
+
+        // if (!byId[id]) {
+        //     console.error('cannot find job data with job id of %s', id);
+        //     return;
+        // }
+
+        const newDownloadJob = selectNewWayportJob(getState());
+
+        if (!newDownloadJob) {
+            console.error('No new wayport job found to start');
+            return;
+        }
+
+        const { extent, levels, waybackItem, id, userId } = newDownloadJob;
+
+        // set the job status to "waiting to start" immediately to provide feedback in the UI that the job is being processed,
+        // dispatch(updateWayportJobStatus(id, 'wayport job waiting to start'));
+        await dispatch(
+            updateWayportJob({
+                jobId: id,
+                partialJobData: {
+                    status: 'wayport job waiting to start',
+                },
+            })
+        );
+
+        // set the id of the job to show extent on map to the new job's id so that the extent of the new job will be shown on the map while the job is being started
+        dispatch(updateIdOfWayportJobToShowExtentOnMap(id));
+
+        try {
+            if (!userId) {
+                throw new Error(
+                    'Missing user ID for the wayport job. Please make sure you are signed in before starting the wayport job.'
+                );
+            }
+
+            const res = await submitJob({
+                extent,
+                levels,
+                layerIdentifier: waybackItem.layerIdentifier,
+            });
+
+            // const submittedJob: WayportJob = {
+            //     ...newDownloadJob,
+            //     GPJobId: res.jobId,
+            //     status: 'wayport job pending',
+            // };
+
+            // dispatch(updateWayportJobsHelper([submittedJob]));
+            dispatch(
+                updateWayportJob({
+                    jobId: id,
+                    partialJobData: {
+                        GPJobId: res.jobId,
+                        status: 'wayport job pending',
+                    },
+                })
+            );
+        } catch (err) {
+            // console.log(err);
+
+            // const failedJob: WayportJob = {
+            //     ...newDownloadJob,
+            //     status: 'wayport job failed',
+            //     errorMessage: err.message || 'Unknown error',
+            // };
+
+            // dispatch(updateWayportJobsHelper([failedJob]));
+            dispatch(
+                updateWayportJob({
+                    jobId: id,
+                    partialJobData: {
+                        status: 'wayport job failed',
+                        errorMessage: err.message || 'Unknown error',
+                    },
+                })
+            );
+        }
+    };
+
+export const removeNewWayportJob =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const newJob = selectNewWayportJob(getState());
+
+        if (!newJob) {
+            console.error('No new wayport job found to remove');
+            return;
+        }
+
+        if (newJob.status !== 'wayport job not started') {
+            console.error(
+                'the status of the new wayport job is not "not started", cannot remove the new wayport job'
+            );
+            return;
+        }
+
+        // clear the job from the store and indexedDB (if it has been saved to indexedDB) since the user has canceled creating this job
+        await dispatch(deleteWayportJobs([newJob]));
+
+        // clear the job from session storage to prevent restoring the same job again in the future, since the user has canceled creating this job
+        removeNewWayportJobFromSessionStorage();
+    };
+
+/**
+ * This thunk function is used to check the status of pending wayport jobs, and update the job status in the store based on the response from Wayport GP service.
+ * @returns
+ */
+export const checkPendingWayportJobStatus =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        // clearTimeout(checkDownloadJobStatusTimeout);
+
+        const pendingJobs = selectPendingWayportJobs(getState());
+
+        if (!pendingJobs.length) {
+            return;
+        }
+
+        const checkJobStatusRequests = pendingJobs.map((downloadJob) => {
+            return checkJobStatus(downloadJob.GPJobId);
+        });
+
+        // wait for all check job status requests to be settled,
+        const checkJobStatusResponses = await Promise.all(
+            checkJobStatusRequests
+        );
+
+        // const finishedJobs: WayportJob[] = [];
+
+        // const ongoingJobsWithProgressInfo: WayportJob[] = [];
+
+        for (let i = 0; i < checkJobStatusResponses.length; i++) {
+            // const fulfilledResponse = fulfilledResponses[i];
+
+            const res = checkJobStatusResponses[i];
+
+            // if the response is invalid or doesn't contain jobStatus, skip updating the job status for that job
+            if (!res || !res?.jobStatus) {
+                continue;
+            }
+
+            if (
+                res.jobStatus === 'esriJobSucceeded' ||
+                res.jobStatus === 'esriJobFailed'
+            ) {
+                const existingJobData = pendingJobs[i];
+
+                const status: WayportJobStatus =
+                    res.jobStatus === 'esriJobSucceeded'
+                        ? 'wayport job finished'
+                        : 'wayport job failed';
+
+                const finishTime: number = new Date().getTime();
+
+                const jobOutputInfo =
+                    status === 'wayport job finished'
+                        ? await getWayportJobOutputInfoHelper(
+                              existingJobData.GPJobId,
+                              res
+                          )
+                        : null;
+
+                // // update the status, finish time, and alternative output name (if any) for the finished job
+                // const updatedJobData: WayportJob = {
+                //     ...existingJobData,
+                //     status,
+                //     finishTime,
+                //     outputTilePackageInfo: jobOutputInfo,
+                // };
+
+                // finishedJobs.push(updatedJobData);
+                await dispatch(
+                    updateWayportJob({
+                        jobId: existingJobData.id,
+                        partialJobData: {
+                            status,
+                            finishTime,
+                            outputTilePackageInfo: jobOutputInfo,
+                        },
+                    })
+                );
+            }
+
+            if (res.jobStatus === 'esriJobExecuting') {
+                const progressInfo = parseDownloadJobProgress(res);
+
+                if (progressInfo && progressInfo?.totalBundles > 0) {
+                    const existingJobData = pendingJobs[i];
+
+                    // ongoingJobsWithProgressInfo.push({
+                    //     ...existingJobData,
+                    //     progressInfo,
+                    // });
+
+                    await dispatch(
+                        updateWayportJob({
+                            jobId: existingJobData.id,
+                            partialJobData: {
+                                progressInfo,
+                            },
+                        })
+                    );
+                }
+            }
+        }
+
+        // if (finishedJobs.length) {
+        //     dispatch(updateWayportJobsHelper(finishedJobs));
+        // }
+
+        // if (ongoingJobsWithProgressInfo.length) {
+        //     dispatch(updateWayportJobsHelper(ongoingJobsWithProgressInfo));
+        // }
+    };
+
+export const clearStartedWayportJobs =
+    () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        try {
+            // get all wayport jobs that have been started, including pending jobs and finished jobs
+            const allJobs = selectWayportJobsThatHaveBeenStarted(getState());
+
+            if (!allJobs.length) {
+                // console.log('No wayport job found, skipping clearing wayport jobs from IndexedDB');
+                return;
+            }
+
+            await dispatch(deleteWayportJobs(allJobs));
+        } catch (err) {
+            console.error('Failed to clear wayport jobs from IndexedDB:', err);
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to clear wayport jobs. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+// /**
+//  * remove wayport jobs that has been downloaded or failed, or has been finished for more than 1 hour, to keep the download list clean and avoid confusion for users.
+//  * @returns
+//  */
+// export const clearWayportJobs =
+//     () => async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const jobs = selectWayportJobsThatHaveFinished(getState());
+
+//         if (!jobs.length) {
+//             console.log(
+//                 'No finished wayport job found, skipping cleaning up wayport jobs'
+//             );
+//             return;
+//         }
+
+//         // unix timestamp of curren time
+//         const now = new Date().getTime();
+
+//         // find jobs that were finished more than 1 hour ago
+//         const jobsToBeRemoved = jobs.filter((job) => {
+//             // donwloaded jobs and failed jobs will be removed immediately without waiting for 1 hour, as they are no longer useful for users after they are downloaded or failed
+//             if (
+//                 job.status === 'wayport job downloaded' ||
+//                 job.status === 'wayport job failed'
+//             ) {
+//                 return true;
+//             }
+
+//             // any finished job that is 1 hour old should be removed
+//             if (job.finishTime) {
+//                 const secondsSinceJobWasFinished =
+//                     (now - job.finishTime) / 1000;
+//                 return (
+//                     secondsSinceJobWasFinished >
+//                     DOWNLOAD_JOB_TIME_TO_LIVE_IN_SECONDS
+//                 );
+//             }
+
+//             return false;
+//         });
+
+//         if (!jobsToBeRemoved.length) {
+//             return;
+//         }
+
+//         dispatch(deleteWayportJobs(jobsToBeRemoved));
+//     };
+
+// /**
+//  * get output tile package info for finished jobs
+//  * @returns
+//  */
+// export const assignTilePackageInfoToDownloadJobs =
+//     (finishedDownloadJobsWithoutPackageInfo: WayportJob[]) =>
+//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         // const finishedDownloadJobsWithoutPackageInfo = selectFinishedWayportobsWithoutPackageInfo(getState());
+
+//         if (!finishedDownloadJobsWithoutPackageInfo.length) {
+//             return;
+//         }
+
+//         const tilePackageInfoRequests =
+//             finishedDownloadJobsWithoutPackageInfo.map((job) => {
+//                 return getJobOutputInfo(job.GPJobId);
+//             });
+
+//         const tilePackageInfoResponses = await Promise.all(
+//             tilePackageInfoRequests
+//         );
+//         // console.log(tilePackageInfoResponses);
+
+//         const jobsWithOutputTilePackageInfo: WayportJob[] = [];
+
+//         for (let i = 0; i < tilePackageInfoResponses.length; i++) {
+//             const tilePackageInfo = tilePackageInfoResponses[i];
+
+//             // if tile package info is not available for the job, skip updating the job with tile package info
+//             if (!tilePackageInfo) {
+//                 continue;
+//             }
+
+//             const existingJobData = finishedDownloadJobsWithoutPackageInfo[i];
+
+//             jobsWithOutputTilePackageInfo.push({
+//                 ...existingJobData,
+//                 outputTilePackageInfo: tilePackageInfo,
+//             });
+//         }
+
+//         if (jobsWithOutputTilePackageInfo.length) {
+//             dispatch(updateWayportJobsHelper(jobsWithOutputTilePackageInfo));
+//         }
+//         // console.log(tilePackageInfoResponses)
+//     };
+
+/**
+ * This thunk function is used to create a new wayport job and persist it to IndexedDB when user add a wayback item to the download list.
+ * It dispatches the action to update the store with the new wayport job data only after the new wayport job is successfully persisted to IndexedDB,
+ * so that we can ensure the store is always in sync with IndexedDB.
+ *
+ * @param jobData data of the new wayport job to be created and added to the store and persisted to IndexedDB
+ * @returns void
+ */
+const createWayportJobHelper =
+    (jobToBeCreated: WayportJob) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const staleDownloadJobs = selectStaleWayportJobs(getState());
+
+        try {
+            // Clear up stale wayport jobs before adding the new wayport job to
+            // avoid potential conflict between the new wayport job and the stale wayport jobs
+            if (staleDownloadJobs && staleDownloadJobs.length > 0) {
+                await dispatch(deleteWayportJobs(staleDownloadJobs));
+            }
+
+            if (jobToBeCreated.id && jobToBeCreated.userId) {
+                await wayportJobsStore.addJob(jobToBeCreated);
+            }
+
+            dispatch(wayportJobCreated(jobToBeCreated));
+        } catch (err) {
+            console.error('Failed to add wayport job to IndexedDB:', err);
+            // return;
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to create wayport job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+type UpdateWayportJobParams = {
+    jobId: string;
+    partialJobData: Partial<WayportJob>;
+};
+
+export const updateWayportJob =
+    ({ jobId, partialJobData }: UpdateWayportJobParams) =>
+    async (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const existingJobData = selectWayportJobById(getState(), jobId);
+
+        if (!existingJobData) {
+            console.error('cannot find job data with job id of %s', jobId);
+            return;
+        }
+
+        const updatedJobData: WayportJob = {
+            ...existingJobData,
+            ...partialJobData,
+        };
+
+        try {
+            if (!updatedJobData.id || !updatedJobData.userId) {
+                console.warn(
+                    'job id or userId is missing for job data, cannot update the job in IndexedDB:',
+                    updatedJobData
+                );
+            } else {
+                await wayportJobsStore.updateJob(updatedJobData);
+            }
+
+            dispatch(wayportJobsUpdated([updatedJobData]));
+        } catch (err) {
+            console.error('Failed to update wayport job in IndexedDB:', err);
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to update wayport job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+// /**
+//  * This thunk function is used to update the wayport job data when there is any change for the existing wayport jobs,
+//  * such as when user adjust the export extent/zoom levels for a pending job,
+//  * or when the status/tile package info of a pending job is updated after checking with Wayport GP service.
+//  *
+//  * It also persists the updated wayport job data to IndexedDB so that the wayport job data can be retained even after page refresh.
+//  * @param updatedJobsData an array of updated wayport job data to be updated in the store and persisted to IndexedDB
+//  * @returns
+//  */
+// const updateWayportJobsHelper =
+//     (updatedJobsData: WayportJob[]) =>
+//     async (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         if (!updatedJobsData || !updatedJobsData.length) {
+//             return;
+//         }
+
+//         for (const job of updatedJobsData) {
+//             await dispatch(updateWayportJob(job));
+//         }
+
+//         // try {
+//         //     for (const job of updatedJobsData) {
+//         //         if (!job.id || !job.userId) {
+//         //             console.warn(
+//         //                 'job id or userId is missing for job data, cannot update the job in IndexedDB:',
+//         //                 job
+//         //             );
+//         //             continue;
+//         //         }
+
+//         //         await wayportJobsStore.updateJob(job);
+//         //     }
+
+//         //     dispatch(wayportJobsUpdated(updatedJobsData));
+//         // } catch (err) {
+//         //     console.error('Failed to update wayport jobs in IndexedDB:', err);
+
+//         //     dispatch(
+//         //         errorMessageUpdated(
+//         //             `Failed to update wayport job. Error: ${err.message || 'Unknown error'}`
+//         //         )
+//         //     );
+//         // }
+//     };
+
+/**
+ * This thunk function is used to delete wayport jobs from the store and IndexedDB when user delete wayport jobs from the download list in the UI.
+ * @param jobsToBeDeleted an array of wayport jobs to be deleted from the store and IndexedDB
+ * @returns void
+ */
+export const deleteWayportJobs =
+    (jobsToBeDeleted: WayportJob[]) => async (dispatch: StoreDispatch) => {
+        try {
+            for (const job of jobsToBeDeleted) {
+                if (!job.id) {
+                    console.error('job id is missing for job data:', job);
+                    continue;
+                }
+
+                await wayportJobsStore.deleteJob(job.id);
+                dispatch(wayportJobRemoved(job.id));
+            }
+        } catch (err) {
+            console.error('Failed to delete wayport job from IndexedDB:', err);
+
+            dispatch(
+                errorMessageUpdated(
+                    `Failed to delete wayport job. Error: ${err.message || 'Unknown error'}`
+                )
+            );
+        }
+    };
+
+export const updateIdOfWayportJobToShowExtentOnMap =
+    (idOfJobToShow: string | null) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        const requestedOn = idOfJobToShow ? new Date().getTime() : 0;
+
+        dispatch(
+            idOfJobToShowExtentOnMapUpdated({
+                idOfJobToShow,
+                requestedOn,
+            })
+        );
+    };
+
+// export const toggleWayportMode =
+//     () => (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         const mode = selectMapMode(getState());
+
+//         const targetMode: MapMode = mode === 'wayport' ? 'explore' : 'wayport';
+
+//         dispatch(updateMapMode(targetMode));
+//     };

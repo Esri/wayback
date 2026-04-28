@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ interface IProps {
     activeDialog: AppDialogName;
     shouldDisableActionButton: boolean;
     aboutButtonOnClick: () => void;
-    settingButtonOnClick: () => void;
+    // settingButtonOnClick: () => void;
     children?: React.ReactNode;
 }
 
@@ -34,14 +34,14 @@ export const Gutter: FC<IProps> = ({
     shouldDisableActionButton,
     // copyButtonOnClick,
     aboutButtonOnClick,
-    settingButtonOnClick,
+    // settingButtonOnClick,
     children,
 }) => {
     return (
         <div className="gutter-container background-theme-blue-diagonal-pattern">
             <div className="pt-1">
                 <div
-                    className={classNames('gutter-nav-btn', {
+                    className={classNames('gutter-nav-btn hover:text-white', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'about',
                     })}
@@ -56,7 +56,7 @@ export const Gutter: FC<IProps> = ({
                     </button>
                 </div>
 
-                <div
+                {/* <div
                     className={classNames('gutter-nav-btn', {
                         disabled: shouldDisableActionButton,
                         'bg-black text-white': activeDialog === 'setting',
@@ -71,7 +71,7 @@ export const Gutter: FC<IProps> = ({
                     >
                         <CalciteIcon icon="gear" scale="l" />
                     </button>
-                </div>
+                </div> */}
 
                 {/* <div
                     className="gutter-nav-btn mb-0"

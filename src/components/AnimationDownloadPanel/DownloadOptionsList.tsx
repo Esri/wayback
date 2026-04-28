@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import React, { FC, useRef } from 'react';
-import { VIDEO_SIZE_OPTIONS } from './config';
+import React, { FC, useMemo, useRef } from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 type DimensionInfoProps = {
     width: number;
@@ -96,6 +96,34 @@ export const DownloadOptionsList: FC<Props> = ({
     onMouseLeave,
     onClick,
 }) => {
+    const { t } = useTranslation();
+
+    const options = useMemo(() => {
+        return [
+            {
+                title: t('horizontal'),
+                dimensions: [
+                    [1920, 1080], // aspect ratio 16:9
+                    [1080, 720], // aspect ratio 3:2
+                ],
+            },
+            {
+                title: t('square'),
+                dimensions: [
+                    [1080, 1080], // aspect ratio 1:1
+                    [720, 720], // aspect ratio 1:1
+                ],
+            },
+            {
+                title: t('vertical'),
+                dimensions: [
+                    [1080, 1920], // aspect ratio 9:16
+                    [720, 1080], // aspect ratio 2:3
+                ],
+            },
+        ];
+    }, []);
+
     return (
         <div
             className={classNames(
@@ -103,7 +131,7 @@ export const DownloadOptionsList: FC<Props> = ({
             )}
         >
             <div className="relative w-full p-2">
-                {VIDEO_SIZE_OPTIONS.map((d) => {
+                {options.map((d) => {
                     const { title, dimensions } = d;
 
                     return (

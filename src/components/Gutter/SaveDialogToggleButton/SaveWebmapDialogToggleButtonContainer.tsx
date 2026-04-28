@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
     releaseNum4SelectedItemsSelector,
-    releaseNum4SelectedItemsCleaned,
+    // releaseNum4SelectedItemsCleaned,
 } from '@store/Wayback/reducer';
 
 // import { AppContext } from '@contexts/AppContextProvider';
@@ -32,14 +32,16 @@ import {
 // } from '@utils/LocalStorage';
 
 import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
-import {
-    isSaveAsWebmapDialogOpenSelector,
-    isSaveAsWebmapDialogOpenToggled,
-} from '@store/UI/reducer';
+// import {
+//     isSaveAsWebmapDialogOpenSelector,
+//     isSaveAsWebmapDialogOpenToggled,
+// } from '@store/UI/reducer';
 import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
-import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
-import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
-import { activeDialogUpdated } from '@store/UI/reducer';
+// import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
+// import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
+// import { activeDialogUpdated } from '@store/UI/reducer';
+import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';
+import { updateMapMode } from '@store/Map/thunks';
 
 export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
@@ -53,50 +55,49 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     // const isSwipeWidgetOpen: boolean = useAppSelector(
     //     isSwipeWidgetOpenSelector
     // );
-    const isAnimationModeOn: boolean = useAppSelector(
-        isAnimationModeOnSelector
-    );
+    // const isAnimationModeOn: boolean = useAppSelector(
+    //     isAnimationModeOnSelector
+    // );
 
-    const isDisabled = useMemo(() => {
-        return (
-            // isSwipeWidgetOpen ||
-            isAnimationModeOn || rNum4SelectedWaybackItems?.length === 0
-        );
-    }, [isAnimationModeOn, rNum4SelectedWaybackItems]);
+    // const isDisabled = useMemo(() => {
+    //     return isAnimationModeOn;
+    // }, [isAnimationModeOn]);
 
-    const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
-        isSaveAsWebmapDialogOpenSelector
-    );
+    const isSaveWebmapModeOn = useAppSelector(selectIsSaveWebmapModeOn);
 
-    const clearAllBtnOnClick = () => {
-        dispatch(releaseNum4SelectedItemsCleaned());
+    // const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
+    //     isSaveAsWebmapDialogOpenSelector
+    // );
 
-        // close the SaveAsWebmapDialog if it's open since there is no selected items
-        if (isSaveAsWebmapDialogOpen) {
-            dispatch(activeDialogUpdated());
-        }
-    };
+    // const clearAllBtnOnClick = () => {
+    //     dispatch(releaseNum4SelectedItemsCleaned());
 
-    const onClickHandler = () => {
-        if (isDisabled) {
-            return;
-        }
+    //     // close the SaveAsWebmapDialog if it's open since there is no selected items
+    //     if (isSaveAsWebmapDialogOpen) {
+    //         dispatch(activeDialogUpdated());
+    //     }
+    // };
 
-        dispatch(isSaveAsWebmapDialogOpenToggled());
+    // const onClickHandler = () => {
+    //     // if (isDisabled) {
+    //     //     return;
+    //     // }
 
-        // if (isAnonymouns()) {
-        //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
-        //     setShouldOpenSaveWebMapDialog();
+    //     dispatch(toggleSaveWebmapMode());
 
-        //     // // save hash params in local storage so the current app state can be restored after sigining in
-        //     // saveHashParams();
+    //     // if (isAnonymouns()) {
+    //     //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
+    //     //     setShouldOpenSaveWebMapDialog();
 
-        //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
-        //     signIn();
-        // } else {
-        //     dispatch(isSaveAsWebmapDialogOpenToggled());
-        // }
-    };
+    //     //     // // save hash params in local storage so the current app state can be restored after sigining in
+    //     //     // saveHashParams();
+
+    //     //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
+    //     //     signIn();
+    //     // } else {
+    //     //     dispatch(isSaveAsWebmapDialogOpenToggled());
+    //     // }
+    // };
 
     useEffect(() => {
         saveReleaseNum4SelectedWaybackItemsToHashParams(
@@ -107,10 +108,13 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     return (
         <SaveAsWebmapBtn
             selectedWaybackItems={rNum4SelectedWaybackItems}
-            active={isSaveAsWebmapDialogOpen}
-            disabled={isDisabled}
-            onClick={onClickHandler}
-            clearAll={clearAllBtnOnClick}
+            // active={isSaveAsWebmapDialogOpen}
+            active={isSaveWebmapModeOn}
+            // disabled={isDisabled}
+            onClick={() => {
+                dispatch(updateMapMode('save-webmap'));
+            }}
+            // clearAll={clearAllBtnOnClick}
         />
     );
 };

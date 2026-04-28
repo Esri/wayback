@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import { IWaybackItem } from '@typings/index';
 
 import { LayerSelector } from '../';
 import { useTranslation } from 'react-i18next';
+import { CalciteIcon } from '@esri/calcite-components-react';
 
 type Props = {
     // waybackItems: IWaybackItem[];
@@ -57,8 +58,6 @@ const FramesSeletor: React.FC<Props> = ({
             .sort((a, b) => b.releaseDatetime - a.releaseDatetime)
             .map((d) => {
                 const { releaseDateLabel, itemID, releaseNum } = d;
-                // const isSelected =
-                //     activeItem && activeItem.itemID === itemID;
 
                 const isExcluded = rNum2Exclude.indexOf(releaseNum) > -1;
 
@@ -66,40 +65,9 @@ const FramesSeletor: React.FC<Props> = ({
                     releaseDate: releaseDateLabel,
                 });
 
-                const checkbox = isExcluded ? (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        height="16"
-                        width="16"
-                    >
-                        <path
-                            d="M14.071 15a.929.929 0 0 0 .929-.929V2.93a.929.929 0 0 0-.929-.93H2.93a.929.929 0 0 0-.93.929V14.07a.929.929 0 0 0 .929.929zM3 3h11v11H3z"
-                            fill="#fff"
-                        />
-                        <path fill="none" d="M0 0h16v16H0z" />
-                    </svg>
-                ) : (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        height="16"
-                        width="16"
-                    >
-                        <path
-                            d="M14.071 15a.929.929 0 0 0 .929-.929V2.93a.929.929 0 0 0-.929-.93H2.93a.929.929 0 0 0-.93.929V14.07a.929.929 0 0 0 .929.929zM3 3h11v11H3zm9.262 2l.738.738-5.443 5.43-2.822-2.822.738-.738 2.084 2.088z"
-                            fill="#fff"
-                        />
-                        <path fill="none" d="M0 0h16v16H0z" />
-                    </svg>
-                );
-
                 return (
                     <LayerSelector
-                        // className={classNames}
                         key={itemID}
-                        // isSelected={isSelected}
-                        // onClick={onSelect.bind(this, d)}
                         onClick={setActiveFrame.bind(this, releaseNum)}
                         showBoarderOnLeft={
                             releaseNum4ActiveFrame === releaseNum
@@ -113,18 +81,21 @@ const FramesSeletor: React.FC<Props> = ({
                             }}
                         >
                             <button
-                                className="flex items-center mr-2 cursor-pointer"
-                                // style={{
-                                //     display: 'flex',
-                                //     alignItems: 'center',
-                                // }}
+                                className="flex items-center mr-2 cursor-pointer text-white"
                                 onClick={(evt) => {
                                     evt.stopPropagation();
                                     toggleFrame(releaseNum);
                                 }}
                                 aria-label={label}
                             >
-                                {checkbox}
+                                {isExcluded ? (
+                                    <CalciteIcon icon="square" scale="s" />
+                                ) : (
+                                    <CalciteIcon
+                                        icon="check-square"
+                                        scale="s"
+                                    />
+                                )}
                             </button>
 
                             <span>{releaseDateLabel}</span>

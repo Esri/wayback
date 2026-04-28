@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import React from 'react';
 export const AppHeaderText = () => {
     return (
         <div className="text-white text-center">
-            <span className="text-xl font-light">
+            <span className="text-xl font-light whitespace-nowrap">
                 Esri | World Imagery{' '}
                 <span className="text-white font-medium">Wayback</span>
             </span>

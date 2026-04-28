@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Define your copyright statement
-const copyrightStatement = `/* Copyright 2024 Esri
+const copyrightStatement = `/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,39 +21,53 @@ const copyrightStatement = `/* Copyright 2024 Esri
 function addCopyright(directory) {
     fs.readdir(directory, (err, files) => {
         if (err) {
-            console.error("Error reading directory:", err);
+            console.error('Error reading directory:', err);
             return;
         }
 
-        files.forEach(file => {
+        files.forEach((file) => {
             const filePath = path.join(directory, file);
 
             fs.stat(filePath, (err, stats) => {
                 if (err) {
-                    console.error("Error retrieving file stats:", err);
+                    console.error('Error retrieving file stats:', err);
                     return;
                 }
 
                 if (stats.isDirectory()) {
                     addCopyright(filePath);
-                } else if (file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.tsx')) {
+                } else if (
+                    file.endsWith('.js') ||
+                    file.endsWith('.ts') ||
+                    file.endsWith('.tsx')
+                ) {
                     fs.readFile(filePath, 'utf8', (err, data) => {
                         if (err) {
-                            console.error("Error reading file:", err);
+                            console.error('Error reading file:', err);
                             return;
                         }
 
                         if (!data.startsWith(copyrightStatement)) {
-                            fs.writeFile(filePath, `${copyrightStatement}\n\n${data}`, {
-                                encoding: 'utf8',
-                                flag: 'w'
-                            }, err => {
-                                if (err) {
-                                    console.error("Error writing to file:", err);
-                                } else {
-                                    console.log(`Copyright added to ${filePath}`);
+                            fs.writeFile(
+                                filePath,
+                                `${copyrightStatement}\n\n${data}`,
+                                {
+                                    encoding: 'utf8',
+                                    flag: 'w',
+                                },
+                                (err) => {
+                                    if (err) {
+                                        console.error(
+                                            'Error writing to file:',
+                                            err
+                                        );
+                                    } else {
+                                        console.log(
+                                            `Copyright added to ${filePath}`
+                                        );
+                                    }
                                 }
-                            });
+                            );
                         }
                     });
                 }

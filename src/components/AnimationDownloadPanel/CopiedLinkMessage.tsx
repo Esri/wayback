@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { useAppSelector } from '@store/configureStore';
 import { CalciteIcon } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 export const CopiedLinkMessage = () => {
     const linkIsCopied = useAppSelector(selectAnimationLinkIsCopied);
+
+    const { t } = useTranslation();
 
     if (!linkIsCopied) {
         return null;
@@ -36,7 +39,7 @@ export const CopiedLinkMessage = () => {
         >
             <div className=" flex items-center">
                 <CalciteIcon scale="s" icon="check" />
-                <span className="ml-1">{'link copied to clipboard'}</span>
+                <span className="ml-1">{t('link_copied_to_clipboard')}</span>
             </div>
         </div>
     );

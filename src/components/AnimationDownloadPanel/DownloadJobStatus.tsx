@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ import React, { FC } from 'react';
 import { DownloadJobStatus } from './DownloadPanel';
 import classNames from 'classnames';
 import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     status: DownloadJobStatus;
@@ -37,6 +38,8 @@ export const DownloadJobStatusInfo: FC<Props> = ({
     cancelButtonOnClick,
     closeButtonOnClick,
 }) => {
+    const { t } = useTranslation();
+
     if (!status) {
         return null;
     }
@@ -52,12 +55,12 @@ export const DownloadJobStatusInfo: FC<Props> = ({
             {status === 'pending' && (
                 <div className="flex items-center">
                     <CalciteLoader inline />
-                    <span className="mx-1">Creating MP4.</span>
+                    <span className="mx-1">{t('creating_mp4')}</span>
                     <span
                         className="underline cursor-pointer opacity-70 hover:opacity-100"
                         onClick={cancelButtonOnClick}
                     >
-                        Cancel
+                        {t('cancel')}
                     </span>
                 </div>
             )}
@@ -66,8 +69,8 @@ export const DownloadJobStatusInfo: FC<Props> = ({
                 <div className="flex items-center">
                     <p className="mr-2">
                         {status === 'finished'
-                            ? 'Complete! Check browser downloads for the MP4 file.'
-                            : 'Failed to create MP4.'}
+                            ? t('download_complete_message')
+                            : t('failed_to_create_mp4')}
                     </p>
 
                     <CalciteIcon

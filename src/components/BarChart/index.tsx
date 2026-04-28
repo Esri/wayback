@@ -1,4 +1,4 @@
-/* Copyright 2024 Esri
+/* Copyright 2024-2026 Esri
  *
  * Licensed under the Apache License Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  */
 
 import './style.css';
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 import { IWaybackItem } from '@typings/index';
@@ -33,108 +33,53 @@ interface IProps {
     onMouseOut?: () => void;
 }
 
-interface IState {
-    svg: any;
-    height: number;
-    width: number;
-    xScale: d3.ScaleTime<any, any>;
-}
+const ContainerClassName = 'bar-chart-container';
+const BarRectGroupClassName = 'wayback-release-bars';
+const BarRectClassName = 'bar';
 
-class BarChart extends React.PureComponent<IProps, IState> {
-    private readonly ContainerClassName = 'bar-chart-container';
-    private readonly BarRectGroupClassName = 'wayback-release-bars';
-    private readonly BarRectClassName = 'bar';
-    private containerRef = React.createRef<HTMLDivElement>();
+const BarChart: React.FC<IProps> = ({
+    waybackItems,
+    activeWaybackItem,
+    rNum4WaybackItemsWithLocalChanges,
+    shouldOnlyShowItemsWithLocalChange,
+    onClick,
+    onMouseEnter,
+    onMouseOut,
+}) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [svg, setSvg] = useState<any>(null);
 
-    constructor(props: IProps) {
-        super(props);
+    const getBars = () => {
+        if (!svg) return null;
+        const bars = svg.selectAll('.' + BarRectClassName);
+        return bars || null;
+    };
 
-        this.state = {
-            svg: null,
-            xScale: null,
-            height: 0,
-            width: 0,
-        };
-    }
+    const drawBars = (
+        svgElement: any,
+        xScaleFunc: d3.ScaleTime<any, any>,
+        chartHeight: number,
+        chartWidth: number
+    ) => {
+        const BarWidth = chartWidth / waybackItems.length;
 
-    initSvg() {
-        const { waybackItems } = this.props;
-
-        const container = this.containerRef.current;
-        const margin = { top: 10, right: 15, bottom: 20, left: 15 };
-
-        const width = container.offsetWidth - margin.left - margin.right;
-        const height = container.offsetHeight - margin.top - margin.bottom;
-
-        const xScale = d3
-            .scaleTime()
-            .range([0, width])
-            .domain([
-                waybackItems[waybackItems.length - 1].releaseDatetime,
-                waybackItems[0].releaseDatetime,
-            ]);
-
-        const svg = d3
-            .select(container)
-            .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .attr('class', 'wayback-releases-overview-chart')
-            .append('g')
-            .attr(
-                'transform',
-                'translate(' + margin.left + ',' + margin.top + ')'
-            );
-
-        const xAxis = d3.axisBottom(xScale).ticks(5);
-
-        svg.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + height + ')')
-            .call(xAxis);
-
-        this.setState(
-            {
-                svg,
-                xScale,
-                width,
-                height,
-            },
-            () => {
-                this.drawBars();
-            }
-        );
-    }
-
-    drawBars() {
-        const { svg, xScale, height, width } = this.state;
-        const {
-            waybackItems,
-            activeWaybackItem,
-            rNum4WaybackItemsWithLocalChanges,
-            shouldOnlyShowItemsWithLocalChange,
-            onClick,
-            onMouseEnter,
-            onMouseOut,
-        } = this.props;
-
-        const BarWidth = width / waybackItems.length;
-
-        const existingBars = svg.selectAll('.' + this.BarRectClassName);
+        const existingBars = svgElement.selectAll('.' + BarRectClassName);
 
         if (existingBars) {
             existingBars.remove().exit();
         }
 
-        const bars = svg
+        const bars = svgElement
             .append('g')
-            .attr('class', this.BarRectGroupClassName)
-            .selectAll('.' + this.BarRectClassName)
+            .attr('class', BarRectGroupClassName)
+            .selectAll('.' + BarRectClassName)
             .data(waybackItems)
             .enter()
             .append('rect')
+            .attr('data-release-num', (d: IWaybackItem) => d.releaseNum)
+            .attr('data-release-date', (d: IWaybackItem) => d.releaseDateLabel)
             .attr('class', (d: IWaybackItem) => {
-                const classes = [this.BarRectClassName];
+                const classes = [BarRectClassName];
 
                 const hasLocalChange =
                     rNum4WaybackItemsWithLocalChanges.includes(d.releaseNum);
@@ -154,24 +99,20 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 return classes.join(' ');
             })
             .attr('x', (d: IWaybackItem) => {
-                return xScale(d.releaseDatetime);
+                return xScaleFunc(d.releaseDatetime);
             })
             .attr('y', 0)
             .attr('width', (d: IWaybackItem, i: number) => {
-                // return d.isHighlighted ? 4 : barWidth;
                 return BarWidth;
             })
-            .attr('height', height)
+            .attr('height', chartHeight)
             .on('click', function () {
-                // onClick(d.releaseNum);
-
                 const d = d3.select(this).data()[0] as IWaybackItem;
 
                 if (!d) {
                     return;
                 }
 
-                // console.log(d)
                 onClick(d.releaseNum);
             })
             .on('mouseover', function () {
@@ -181,24 +122,65 @@ class BarChart extends React.PureComponent<IProps, IState> {
                     return;
                 }
 
-                // console.log(d)
                 onMouseEnter(d.releaseNum, true);
             })
             .on('mouseout', (d: IWaybackItem) => {
                 onMouseOut();
             });
-    }
+    };
 
-    getBars() {
-        const { svg } = this.state;
-        const bars = svg.selectAll('.' + this.BarRectClassName);
-        return bars || null;
-    }
+    const initSvg = () => {
+        const container = containerRef.current;
+        if (!container) return;
 
-    setActiveBar() {
-        const { activeWaybackItem } = this.props;
+        const margin = { top: 10, right: 15, bottom: 20, left: 15 };
 
-        const bars = this.getBars();
+        const chartWidth = container.offsetWidth - margin.left - margin.right;
+        const chartHeight = container.offsetHeight - margin.top - margin.bottom;
+
+        const xScaleFunc = d3
+            .scaleTime()
+            .range([0, chartWidth])
+            .domain([
+                waybackItems[waybackItems.length - 1].releaseDatetime,
+                waybackItems[0].releaseDatetime,
+            ]);
+
+        const svgElement = d3
+            .select(container)
+            .append('svg')
+            .attr('width', chartWidth + margin.left + margin.right)
+            .attr('height', chartHeight + margin.top + margin.bottom)
+            .attr('class', 'wayback-releases-overview-chart')
+            .append('g')
+            .attr(
+                'transform',
+                'translate(' + margin.left + ',' + margin.top + ')'
+            );
+
+        const xAxis = d3.axisBottom(xScaleFunc).ticks(5);
+
+        svgElement
+            .append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + chartHeight + ')')
+            .call(xAxis);
+
+        setSvg(svgElement);
+
+        drawBars(svgElement, xScaleFunc, chartHeight, chartWidth);
+    };
+
+    // Initialize SVG on mount
+    useEffect(() => {
+        if (waybackItems && !svg) {
+            initSvg();
+        }
+    }, [waybackItems, svg]);
+
+    // Update active bar when activeWaybackItem changes
+    useEffect(() => {
+        const bars = getBars();
 
         if (bars) {
             bars.classed('is-active', false);
@@ -207,14 +189,11 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 return d.releaseNum === activeWaybackItem.releaseNum;
             }).classed('is-active', true);
         }
-    }
+    }, [activeWaybackItem, svg]);
 
-    setHighlightedBars() {
-        const {
-            rNum4WaybackItemsWithLocalChanges,
-            shouldOnlyShowItemsWithLocalChange,
-        } = this.props;
-        const bars = this.getBars();
+    // Update highlighted bars when rNum4WaybackItemsWithLocalChanges changes
+    useEffect(() => {
+        const bars = getBars();
 
         if (bars) {
             bars.classed('is-highlighted', false);
@@ -237,15 +216,11 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 }).classed('is-hide', true);
             }
         }
-    }
+    }, [rNum4WaybackItemsWithLocalChanges, svg]);
 
-    toggleDisplayItemsWithLocalChange() {
-        const {
-            shouldOnlyShowItemsWithLocalChange,
-            rNum4WaybackItemsWithLocalChanges,
-        } = this.props;
-
-        const bars = this.getBars();
+    // Toggle display items with local change
+    useEffect(() => {
+        const bars = getBars();
 
         if (bars) {
             bars.classed('is-hide', false);
@@ -260,50 +235,20 @@ class BarChart extends React.PureComponent<IProps, IState> {
                 }).classed('is-hide', true);
             }
         }
-    }
+    }, [shouldOnlyShowItemsWithLocalChange, svg]);
 
-    componentDidMount() {
-        const { svg } = this.state;
-        const { waybackItems } = this.props;
-
-        if (!svg && waybackItems) {
-            this.initSvg();
-        }
-    }
-
-    componentDidUpdate(prevProps: IProps, prevState: IState) {
-        if (prevProps.activeWaybackItem !== this.props.activeWaybackItem) {
-            this.setActiveBar();
-        }
-
-        if (
-            prevProps.rNum4WaybackItemsWithLocalChanges !==
-            this.props.rNum4WaybackItemsWithLocalChanges
-        ) {
-            this.setHighlightedBars();
-        }
-
-        if (
-            prevProps.shouldOnlyShowItemsWithLocalChange !==
-            this.props.shouldOnlyShowItemsWithLocalChange
-        ) {
-            this.toggleDisplayItemsWithLocalChange();
-        }
-    }
-
-    render() {
-        return (
-            <div
-                className={this.ContainerClassName}
-                ref={this.containerRef}
-                style={{
-                    width: '100%',
-                    height: '55px',
-                    marginBottom: '.5rem',
-                }}
-            ></div>
-        );
-    }
-}
+    return (
+        <div
+            className={ContainerClassName}
+            ref={containerRef}
+            data-testid="releases-bar-chart"
+            style={{
+                width: '100%',
+                height: '55px',
+                marginBottom: '.5rem',
+            }}
+        ></div>
+    );
+};
 
 export default BarChart;
