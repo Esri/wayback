@@ -145,7 +145,7 @@
     "updates_mode_summary_info_pending": "<strong>{{sites}}</strong> pending areas covering <strong>{{areas}} km²</strong>.",
     "updates_mode_summary_info_published": "<strong>{{sites}}</strong> published areas covering <strong>{{areas}} km²</strong>",
     "summary": "Summary",
-    "download_job_instruction_1": "The number of tiles exported is based on extent and level of detail.",
+    "download_job_instruction_1": "The number of tile exported is based on the selected area and levels of detail.",
     "download_job_instruction_2": "Maximum of 150,000 tiles per export request.",
     "estimated_number_of_tiles": "The selected area and levels include ~{{total}} tiles.",
     "estimated_number_of_tiles_exceeded_max_limit": "The selected area and levels include ~{{total}} tiles. This exceeds the maximum export request limit.",
