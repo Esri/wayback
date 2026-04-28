@@ -10,14 +10,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Locale Switcher dialog to allow users to change the app's language.
 - Add Locale Suggestion component to prompt users to switch to their browser's language if it matches a supported locale.
-- Added End-to-End tests for multiple features using Playwright.
 
 ### Changed
-- Moved the strings from the React components to the i18next translation files for better internationalization support.
-- Adjusted the size of the wayback preview window to be slightly bigger for better visibility.
-- Removed the Settings Dialog and related codes.
-- Update TypeScript to version 5.9.3 and it's configuration.
-- Update @arcgis/core to version 4.34 and adjust CSS import path.
+
+## 2026-04-28
+
+### Added
+- Added a screenshot capture tool.
+- Added the Scale, Zoom Level, and Pixel Size indicator to the map.
+- Added end-to-end tests for multiple features using Playwright.
+- Added Dishui Lake, Shanghai to interesting places list.
+
+### Changed
+- Enhanced the Export Tile Package mode:
+    - Added support to save the wayback tile package as a hosted imagery layer in ArcGIS Online.
+    - Added an extent selection tool to the map, allowing users to specify the area for tile package export.
+    - Added a support to track the progress of tile package export jobs and display the status in the UI.
+    - Replaced the dialog with a dedicated panel for export controls, offering greater flexibility and a better user experience.
+    - Added a preview window showing example tile images at a given zoom level.
+    - Improved status tracking logic to provide more accurate and granular updates for export jobs, giving users clearer feedback on progress.
+    - Saved export job history to IndexedDB and displayed it in the panel, allowing users to track jobs and easily access exported tile packages.
+- Enhanced the Save as a Web Map mode:
+    - Added a list of selected versions in the Save as Web Map panel, allowing users to review and manage versions before saving.
+    - Moved the Save as Web Map controls to a dedicated panel for a better user experience, also allowing users to adjust the web map extent using the map.
+- Enhanced the Updates mode:
+    - Combined the Status and Publication Date filters into a single filter with multiple options, making it easier to filter updates by different criteria.
+    - Updated the Region filter to display normalized region names based on country and region codes, replacing inconsistent labels from the feature service.
+    - Updated the style of the Updates layer to improve visibility in certain parts of the world.
+- Reorganized the mode control buttons in the gutter for a cleaner, more consistent experience across different modes.
+- Updated the About this App dialog.
+- Moved strings from React components to i18next translation files for better internationalization support.
+- Slightly increased the size of the wayback preview window for better visibility.
+- Removed the Settings dialog and related code.
+- Updated TypeScript to version 5.9.3 and updated its configuration.
+- Updated `@arcgis/core` to version 4.34 and adjusted the CSS import path.
+- Improved webpack configuration to better handle loading of environment variables and other app-specific settings; moved webpack-related code into a dedicated `webpack` directory for better organization.
 
 ## 2025-10-28
 
