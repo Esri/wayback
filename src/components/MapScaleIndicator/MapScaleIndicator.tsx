@@ -27,30 +27,83 @@ import { useTranslation } from 'react-i18next';
 export const MapScaleIndicator = () => {
     const { t } = useTranslation();
 
+    const mapCenter = useAppSelector(selectMapCenterAndZoom)?.center;
+
     const mapScale = useAppSelector(selectMapScale);
 
     const mapResolution = useAppSelector(selectMapResolution);
 
     const mapLevel = useAppSelector(selectMapZoomLevel);
 
-    const mapScaleFormatted = useMemo(() => {
-        if (mapScale === null || isNaN(mapScale)) {
+    const actualScale = useMemo(() => {
+        if (mapScale === null || isNaN(mapScale) || mapCenter === null) {
             return null;
         }
-        return numberWithCommas(+mapScale.toFixed(0));
-    }, [mapScale]);
+
+        // get the latitude from the map center
+        const latitude = mapCenter.lat;
+        // This is the scale at the equator
+        const nominalScale = mapScale;
+
+        // Convert latitude to radians
+        const latRadians = latitude * (Math.PI / 180);
+
+        // Calculate the true scale denominator
+        const trueScale = nominalScale * Math.cos(latRadians);
+
+        return trueScale;
+    }, [mapScale, mapCenter?.lat]);
+
+    const actualResolution = useMemo(() => {
+        if (
+            mapResolution === null ||
+            isNaN(mapResolution) ||
+            mapCenter === null
+        ) {
+            return null;
+        }
+
+        // get the latitude from the map center
+        const latitude = mapCenter.lat;
+        // This is the resolution at the equator
+        const nominalResolution = mapResolution;
+
+        // Convert latitude to radians
+        const latRadians = latitude * (Math.PI / 180);
+
+        console.log('Calculating actual resolution:');
+        console.log('Latitude (degrees):', latitude);
+        console.log('Latitude (radians):', latRadians);
+        console.log('Nominal resolution at equator:', nominalResolution);
+        console.log('Cosine of latitude:', Math.cos(latRadians));
+        console.log(
+            'Actual resolution:',
+            nominalResolution * Math.cos(latRadians)
+        );
+
+        // Calculate the true resolution
+        const trueResolution = nominalResolution * Math.cos(latRadians);
+        return trueResolution;
+    }, [mapResolution, mapCenter?.lat]);
+
+    const mapScaleFormatted = useMemo(() => {
+        if (actualScale === null || isNaN(actualScale)) {
+            return null;
+        }
+        return numberWithCommas(+actualScale.toFixed(0));
+    }, [actualScale]);
 
     const mapResolutionFormatted = useMemo(() => {
-        if (mapResolution === null || isNaN(mapResolution)) {
+        if (actualResolution === null || isNaN(actualResolution)) {
             return null;
         }
 
-        if (mapResolution >= 1) {
-            return numberWithCommas(+mapResolution.toFixed(0));
+        if (actualResolution >= 1) {
+            return numberWithCommas(+actualResolution.toFixed(0));
         }
 
-        return numberWithCommas(+mapResolution.toFixed(2));
-    }, [mapResolution]);
+        return numberWithCommas(+actualResolution.toFixed(2));
+    }, [actualResolution]);
 
     if (mapScaleFormatted === null || mapResolutionFormatted === null) {
         return null;
