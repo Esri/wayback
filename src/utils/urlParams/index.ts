@@ -76,16 +76,16 @@ export const getHashParamValueByKey = (
     return hashParams.get(key);
 };
 
-export const saveReleaseNum4SelectedWaybackItemsToHashParams = (
-    rNum4SelectedWaybackItems: number[]
-): void => {
-    const key: ParamKey = 'selected';
-    const value = rNum4SelectedWaybackItems.length
-        ? rNum4SelectedWaybackItems.join(',')
-        : null;
+// export const saveReleaseNum4SelectedWaybackItemsToHashParams = (
+//     rNum4SelectedWaybackItems: number[]
+// ): void => {
+//     const key: ParamKey = 'selected';
+//     const value = rNum4SelectedWaybackItems.length
+//         ? rNum4SelectedWaybackItems.join(',')
+//         : null;
 
-    updateHashParams(key, value);
-};
+//     updateHashParams(key, value);
+// };
 
 export const saveReleaseNum4ActiveWaybackItemToHashParams = (
     rNum4ActiveWaybackItem: number
@@ -266,18 +266,18 @@ export const getReleaseNumForActiveWaybackItemFromHashParams = (
     return +value;
 };
 
-export const getReleaseNumsForSelectedWaybackItemsFromHashParams = (
-    hashParams: URLSearchParams
-): number[] => {
-    const value = getHashParamValueByKey('selected', hashParams);
-    if (!value) {
-        return [];
-    }
-    return value
-        .split(',')
-        .filter((d) => /\d/.test(d))
-        .map((d) => +d);
-};
+// export const getReleaseNumsForSelectedWaybackItemsFromHashParams = (
+//     hashParams: URLSearchParams
+// ): number[] => {
+//     const value = getHashParamValueByKey('selected', hashParams);
+//     if (!value) {
+//         return [];
+//     }
+//     return value
+//         .split(',')
+//         .filter((d) => /\d/.test(d))
+//         .map((d) => +d);
+// };
 
 /**
  * Save Updates Mode data in the URL hash params

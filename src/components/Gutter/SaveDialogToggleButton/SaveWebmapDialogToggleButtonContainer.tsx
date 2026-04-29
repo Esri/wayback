@@ -36,12 +36,13 @@ import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
 //     isSaveAsWebmapDialogOpenSelector,
 //     isSaveAsWebmapDialogOpenToggled,
 // } from '@store/UI/reducer';
-import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
+// import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
 // import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
 // import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
 // import { activeDialogUpdated } from '@store/UI/reducer';
 import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';
 import { updateMapMode } from '@store/Map/thunks';
+import { saveReleaseNumOfItemsToBeSaved2Webmap2SessionStorage } from '@utils/seesionStorage/sessionStorage';
 
 export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
@@ -100,7 +101,7 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
     // };
 
     useEffect(() => {
-        saveReleaseNum4SelectedWaybackItemsToHashParams(
+        saveReleaseNumOfItemsToBeSaved2Webmap2SessionStorage(
             rNum4SelectedWaybackItems
         );
     }, [rNum4SelectedWaybackItems]);

@@ -29,7 +29,7 @@ import {
     getMapModeFromHashParams,
     getReleaseNum4FramesToExcludeFromHashParams,
     getReleaseNumForActiveWaybackItemFromHashParams,
-    getReleaseNumsForSelectedWaybackItemsFromHashParams,
+    // getReleaseNumsForSelectedWaybackItemsFromHashParams,
     getSwipeWidgetLayersFromHashParams,
 } from '@utils/urlParams';
 
@@ -54,6 +54,7 @@ import { getPreloadedState4UpdatesMode } from './UpdatesMode/getPreloadedState';
 import { getRandomInterestingPlace } from '@utils/interesting-places';
 import { getPreloadedState4Wayportmode } from './WayportMode/getPreloadedState';
 import { getSignedInUser } from '@utils/Esri-OAuth';
+import { getReleaseNumOfItemsToBeSaved2WebmapFromSessionStorage } from '@utils/seesionStorage/sessionStorage';
 
 const getPreloadedState4UI = (
     hashParams: URLSearchParams,
@@ -84,7 +85,7 @@ const getPreloadedState4WaybackItems = (
         getReleaseNumForActiveWaybackItemFromHashParams(hashParams);
 
     const releaseNum4SelectedItems =
-        getReleaseNumsForSelectedWaybackItemsFromHashParams(hashParams);
+        getReleaseNumOfItemsToBeSaved2WebmapFromSessionStorage();
 
     const byReleaseNumber: {
         [key: number]: IWaybackItem;
