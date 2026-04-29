@@ -144,13 +144,17 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
 
                     // dispatch(zoomUpdated(mapCenterPointInfo.zoom));
 
+                    const zoomLevel = !isNaN(mapCenterPointInfo.zoom)
+                        ? Number.parseInt(mapCenterPointInfo.zoom.toFixed(0))
+                        : 0;
+
                     dispatch(
                         mapCenterAndZoomUpdated({
                             center: {
                                 lon: mapCenterPointInfo.longitude,
                                 lat: mapCenterPointInfo.latitude,
                             },
-                            zoom: mapCenterPointInfo.zoom,
+                            zoom: zoomLevel,
                         })
                     );
 
