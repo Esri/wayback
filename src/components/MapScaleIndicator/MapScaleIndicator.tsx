@@ -71,16 +71,6 @@ export const MapScaleIndicator = () => {
         // Convert latitude to radians
         const latRadians = latitude * (Math.PI / 180);
 
-        console.log('Calculating actual resolution:');
-        console.log('Latitude (degrees):', latitude);
-        console.log('Latitude (radians):', latRadians);
-        console.log('Nominal resolution at equator:', nominalResolution);
-        console.log('Cosine of latitude:', Math.cos(latRadians));
-        console.log(
-            'Actual resolution:',
-            nominalResolution * Math.cos(latRadians)
-        );
-
         // Calculate the true resolution
         const trueResolution = nominalResolution * Math.cos(latRadians);
         return trueResolution;
