@@ -67,7 +67,7 @@ export const Modal: FC<Props> = ({
                 aria-modal="true"
                 aria-labelledby={titleId}
                 className={classnames(
-                    'relative max-w-full h-screen md:h-auto w-screen md:w-auto bg-custom-modal-content-background ',
+                    'relative max-w-full h-full md:h-auto w-screen md:w-auto bg-custom-modal-content-background ',
                     {
                         'md:max-w-6xl': width === 'xl',
                         'md:max-w-5xl': width === 'l',
