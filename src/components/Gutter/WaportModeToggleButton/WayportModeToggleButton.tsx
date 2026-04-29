@@ -35,6 +35,7 @@ import { useTranslation } from 'react-i18next';
 import { selectIsWayportModeOn } from '@store/Map/reducer';
 // import { toggleWayportMode } from '@store/WayportMode/thunks';
 import { updateMapMode } from '@store/Map/thunks';
+import { activeDialogSelector } from '@store/UI/reducer';
 
 export const WaportModeToggleButton = () => {
     const dispatch = useAppDispatch();
@@ -64,6 +65,10 @@ export const WaportModeToggleButton = () => {
         numOfFinishedJobs === numOfJobs;
 
     const isWayportModeOn = useAppSelector(selectIsWayportModeOn);
+
+    const activeModal = useAppSelector(activeDialogSelector);
+
+    const shouldHighlightButton = isWayportModeOn && !activeModal;
 
     const getIndicator = () => {
         if (!numOfJobs) {
@@ -111,7 +116,7 @@ export const WaportModeToggleButton = () => {
                 // }
                 {
                     // 'opacity-50 pointer-events-none': shouldDisableActionButton,
-                    'bg-black text-white': isWayportModeOn,
+                    'bg-black text-white': shouldHighlightButton,
                     // disabled: shouldDisableActionButton,
                 }
             )}

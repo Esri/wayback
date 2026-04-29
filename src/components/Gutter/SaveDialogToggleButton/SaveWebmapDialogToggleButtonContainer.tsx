@@ -14,91 +14,27 @@
  */
 
 import React, { useContext, useEffect, useMemo } from 'react';
-
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
-// import { isSwipeWidgetOpenSelector } from '@store/Swipe/reducer';
-
-import {
-    releaseNum4SelectedItemsSelector,
-    // releaseNum4SelectedItemsCleaned,
-} from '@store/Wayback/reducer';
-
-// import { AppContext } from '@contexts/AppContextProvider';
-
-// import {
-//     // saveHashParams,
-//     setShouldOpenSaveWebMapDialog,
-// } from '@utils/LocalStorage';
-
+import { releaseNum4SelectedItemsSelector } from '@store/Wayback/reducer';
 import { SaveAsWebmapBtn } from './SaveDialogToggleButton';
-// import {
-//     isSaveAsWebmapDialogOpenSelector,
-//     isSaveAsWebmapDialogOpenToggled,
-// } from '@store/UI/reducer';
-// import { saveReleaseNum4SelectedWaybackItemsToHashParams } from '@utils/urlParams';
-// import { isAnimationModeOnSelector } from '@store/AnimationMode/reducer';
-// import { isAnonymouns, signIn } from '@utils/Esri-OAuth';
-// import { activeDialogUpdated } from '@store/UI/reducer';
 import { selectIsSaveWebmapModeOn } from '@store/Map/reducer';
 import { updateMapMode } from '@store/Map/thunks';
 import { saveReleaseNumOfItemsToBeSaved2Webmap2SessionStorage } from '@utils/seesionStorage/sessionStorage';
+import { activeDialogSelector } from '@store/UI/reducer';
 
 export const SaveWebmapDialogToggleButtonContainer = () => {
     const dispatch = useAppDispatch();
-
-    // const { userSession, oauthUtils } = useContext(AppContext);
 
     const rNum4SelectedWaybackItems: number[] = useAppSelector(
         releaseNum4SelectedItemsSelector
     );
 
-    // const isSwipeWidgetOpen: boolean = useAppSelector(
-    //     isSwipeWidgetOpenSelector
-    // );
-    // const isAnimationModeOn: boolean = useAppSelector(
-    //     isAnimationModeOnSelector
-    // );
-
-    // const isDisabled = useMemo(() => {
-    //     return isAnimationModeOn;
-    // }, [isAnimationModeOn]);
-
     const isSaveWebmapModeOn = useAppSelector(selectIsSaveWebmapModeOn);
 
-    // const isSaveAsWebmapDialogOpen: boolean = useAppSelector(
-    //     isSaveAsWebmapDialogOpenSelector
-    // );
+    const activeModal = useAppSelector(activeDialogSelector);
 
-    // const clearAllBtnOnClick = () => {
-    //     dispatch(releaseNum4SelectedItemsCleaned());
-
-    //     // close the SaveAsWebmapDialog if it's open since there is no selected items
-    //     if (isSaveAsWebmapDialogOpen) {
-    //         dispatch(activeDialogUpdated());
-    //     }
-    // };
-
-    // const onClickHandler = () => {
-    //     // if (isDisabled) {
-    //     //     return;
-    //     // }
-
-    //     dispatch(toggleSaveWebmapMode());
-
-    //     // if (isAnonymouns()) {
-    //     //     // set the ShouldOpenSaveWebMapDialog flag in local storage as true, when the app knows to open the dialog after user is signed in
-    //     //     setShouldOpenSaveWebMapDialog();
-
-    //     //     // // save hash params in local storage so the current app state can be restored after sigining in
-    //     //     // saveHashParams();
-
-    //     //     // sign in first before opening the save as web map dialog because the userSession is required to create web map
-    //     //     signIn();
-    //     // } else {
-    //     //     dispatch(isSaveAsWebmapDialogOpenToggled());
-    //     // }
-    // };
+    const shouldHighlightButton = isSaveWebmapModeOn && !activeModal;
 
     useEffect(() => {
         saveReleaseNumOfItemsToBeSaved2Webmap2SessionStorage(
@@ -110,7 +46,7 @@ export const SaveWebmapDialogToggleButtonContainer = () => {
         <SaveAsWebmapBtn
             selectedWaybackItems={rNum4SelectedWaybackItems}
             // active={isSaveAsWebmapDialogOpen}
-            active={isSaveWebmapModeOn}
+            active={shouldHighlightButton}
             // disabled={isDisabled}
             onClick={() => {
                 dispatch(updateMapMode('save-webmap'));
