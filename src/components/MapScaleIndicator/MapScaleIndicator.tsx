@@ -27,30 +27,93 @@ import { useTranslation } from 'react-i18next';
 export const MapScaleIndicator = () => {
     const { t } = useTranslation();
 
+    const mapCenterAndZoom = useAppSelector(selectMapCenterAndZoom);
+
+    const mapCenter = mapCenterAndZoom?.center;
+
+    const zoomLevel = mapCenterAndZoom?.zoom;
+
     const mapScale = useAppSelector(selectMapScale);
 
     const mapResolution = useAppSelector(selectMapResolution);
 
     const mapLevel = useAppSelector(selectMapZoomLevel);
 
-    const mapScaleFormatted = useMemo(() => {
-        if (mapScale === null || isNaN(mapScale)) {
+    const actualScale = useMemo(() => {
+        if (mapScale === null || isNaN(mapScale) || mapCenter === null) {
             return null;
         }
-        return numberWithCommas(+mapScale.toFixed(0));
-    }, [mapScale]);
+
+        // get the latitude from the map center
+        const latitude = mapCenter.lat;
+        // This is the scale at the equator
+        const nominalScale = mapScale;
+
+        // Convert latitude to radians
+        const latRadians = latitude * (Math.PI / 180);
+
+        // Calculate the true scale denominator
+        const trueScale = nominalScale * Math.cos(latRadians);
+
+        return trueScale;
+    }, [mapScale, mapCenter?.lat]);
+
+    const actualResolution = useMemo(() => {
+        if (
+            mapResolution === null ||
+            isNaN(mapResolution) ||
+            mapCenter === null
+        ) {
+            return null;
+        }
+
+        // get the latitude from the map center
+        const latitude = mapCenter.lat;
+
+        // // This is the resolution at the equator
+        // const nominalResolution = mapResolution;
+
+        // // Convert latitude to radians
+        // const latRadians = latitude * (Math.PI / 180);
+
+        // // Calculate the true resolution
+        // const trueResolution = nominalResolution * Math.cos(latRadians);
+        // return trueResolution;
+
+        // Constant: meters/pixel at the Equator for zoom level 0.
+        // Web Mercator uses a standard tile size of 256x256 pixels. At zoom level 0, the entire circumference of the Earth (roughly 40,075,016.686 meters) fits into one 256-pixel tile.
+        // This means the nominal resolution at zoom level 0 is about 156,543.04 meters/pixel.
+        const EQUATORIAL_RESOLUTION = 156543.04;
+
+        // Convert latitude to radians
+        const latRadians = latitude * (Math.PI / 180);
+
+        // Calculate the true resolution based on the zoom level and latitude
+        const trueResolution =
+            (EQUATORIAL_RESOLUTION * Math.cos(latRadians)) /
+            Math.pow(2, zoomLevel);
+
+        return trueResolution;
+    }, [mapResolution, mapCenter?.lat, zoomLevel]);
+
+    const mapScaleFormatted = useMemo(() => {
+        if (actualScale === null || isNaN(actualScale)) {
+            return null;
+        }
+        return numberWithCommas(+actualScale.toFixed(0));
+    }, [actualScale]);
 
     const mapResolutionFormatted = useMemo(() => {
-        if (mapResolution === null || isNaN(mapResolution)) {
+        if (actualResolution === null || isNaN(actualResolution)) {
             return null;
         }
 
-        if (mapResolution >= 1) {
-            return numberWithCommas(+mapResolution.toFixed(0));
+        if (actualResolution >= 1) {
+            return numberWithCommas(+actualResolution.toFixed(0));
         }
 
-        return numberWithCommas(+mapResolution.toFixed(2));
-    }, [mapResolution]);
+        return numberWithCommas(+actualResolution.toFixed(2));
+    }, [actualResolution]);
 
     if (mapScaleFormatted === null || mapResolutionFormatted === null) {
         return null;
