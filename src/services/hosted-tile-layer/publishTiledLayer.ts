@@ -14,7 +14,10 @@
  */
 
 import { getItem } from '@services/portal-item/getItem';
-import { updateItem } from '@services/portal-item/updateItem';
+import {
+    updateItem,
+    updateItemWithThumbnail,
+} from '@services/portal-item/updateItem';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { logger } from '@utils/IndexedDBLogger';
 import { nanoid } from 'nanoid';
@@ -24,6 +27,7 @@ import {
     WAYBACK_TILE_LAYER_TAGS,
 } from './constants';
 import { calcActualResolution } from '@utils/snippets/calcActualResolution';
+import { generateThumbnailImage4WayportTiledLayer } from './generateThumbnailImage4WayportTiledLayer';
 
 type PublishTiledLayerParams = {
     /**
@@ -254,6 +258,19 @@ export const updatePublishedTileLayer = async ({
             },
             token,
             portalRoot,
+        });
+
+        // after the item metadata is updated, we also want to update the thumbnail of the published tile layer item to make it more identifiable.
+        // We will generate a new thumbnail image based on the tiles that intersect with the wayport job extent at the zoom level when the wayport job extent was created or updated,
+        // and then update the item thumbnail with the generated image.
+        const thumbnailBase64 =
+            await generateThumbnailImage4WayportTiledLayer(wayprotJob);
+
+        await updateItemWithThumbnail({
+            item,
+            token,
+            portalRoot,
+            thumbnailAsBase64: thumbnailBase64,
         });
     } catch (error) {
         logger.log('error_updating_published_wayport_tile_layer', error);
