@@ -52,6 +52,10 @@ export type ItemDataToBeUpdated = {
      * Extent to be updated for the item
      */
     extent?: string;
+    /**
+     * The description for the item.
+     */
+    description?: string;
 };
 
 export const getUpdateItemRequestURL = (item: IItem, portalRoot: string) => {

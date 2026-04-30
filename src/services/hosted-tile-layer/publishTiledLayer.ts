@@ -249,6 +249,7 @@ export const updatePublishedTileLayer = async ({
                 extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
                 licenseInfo: WAYBACK_TILE_LAYER_LICENSE_INTO,
                 accessInformation: WAYBACK_TILE_LAYER_ACCESS_INFORMATION,
+                description: getDescriptionForPublishedLayer(wayprotJob),
             },
             token,
             portalRoot,
@@ -266,4 +267,38 @@ const getSnippetForPublishedLayer = (wayprotJob: WayportJob): string => {
     const maxZoom = levels?.[1];
 
     return `This tile layer was generated from the World Imagery Wayback App. The imagery tiles were extracted from the ${releaseDateLabel || 'unknow'} version of the World Imagery basemap, including zoom levels ${minZoom ?? 'unknow min level'} through ${maxZoom ?? 'unknown max level'}.`;
+};
+
+const getDescriptionForPublishedLayer = (wayprotJob: WayportJob): string => {
+    const {
+        waybackItem,
+        levels,
+        extent,
+        zoomLevelOfMapWhenCreatingOrUpdatingExtent,
+    } = wayprotJob || {};
+    const { releaseDateLabel } = waybackItem || {};
+
+    const centerLon = (extent.xmax - extent.xmin) / 2 + extent.xmin;
+    const centerLat = (extent.ymax - extent.ymin) / 2 + extent.ymin;
+
+    const appLink = `https://livingatlas.arcgis.com/wayback/#mapCenter=${centerLon}%2C${centerLat}%2C${zoomLevelOfMapWhenCreatingOrUpdatingExtent}&mode=explore&active=${waybackItem.releaseNum}`;
+
+    const content: string[] = [
+        `<span>This hosted tile layer provides a cached snapshot of the Esri World Imagery basemap. The imagery tiles were extracted from the ${releaseDateLabel} release in the <a target="_blank" href="${appLink}" rel="nofollow ugc noopener noreferrer"><strong>World Imagery Wayback App</strong></a>.</span>`,
+        `<br>`,
+        '<span><span style="font-size:18px;"><strong>Key Properties</strong></span>',
+        `<span><strong>Extent</strong>: ${extent.xmin.toFixed(5)}, ${extent.ymin.toFixed(5)}, ${extent.xmax.toFixed(5)}, ${extent.ymax.toFixed(5)} </span>`,
+        '<span><strong>Max Spatial Resolution</strong>: <highest spatial res based on latitude to the nearest hundredth of a meter e.g. 0.3m or 1.2m></span>',
+        '<span><strong>Coordinate System</strong>: Web Mercator Auxiliary Sphere WGS84 (EPSG:3857)</span>',
+        `<span><strong>Min Tile Level</strong>: ${levels[0]}</span>`,
+        `<span><strong>Max Tile Level</strong>: ${levels[1]}</span>`,
+        `<span><strong>World Imagery Publication Date</strong>: ${releaseDateLabel}</span>`,
+        `<br>`,
+        '<span style="font-size:18px;"><strong>References and Resources</strong></span>',
+        '<a target="_blank" href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" rel="nofollow ugc noopener noreferrer"><strong>World Imagery</strong></a>',
+        '<a target="_blank" href="https://www.esri.com/arcgis-blog/tag/wayback" rel="nofollow ugc noopener noreferrer"><strong>Wayback Articles and Tutorials</strong></a>',
+        '<a target="_blank" href="https://github.com/Esri/wayback" rel="nofollow ugc noopener noreferrer"><strong>Wayback GitHub</strong></a>',
+    ];
+
+    return content.join('<br>');
 };
