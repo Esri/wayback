@@ -18,6 +18,10 @@ import { updateItem } from '@services/portal-item/updateItem';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { logger } from '@utils/IndexedDBLogger';
 import { nanoid } from 'nanoid';
+import {
+    WAYBACK_TILE_LAYER_LICENSE_INTO,
+    WAYBACK_TILE_LAYER_TAGS,
+} from './constants';
 
 type PublishTiledLayerParams = {
     /**
@@ -244,8 +248,9 @@ export const updatePublishedTileLayer = async ({
             itemDataToBeUpdated: {
                 title: newTitle,
                 snippet: newSnippet,
-                tags: 'Wayback, World Imagery, Tile Layer, GeoAI, Esri, Living Atlas',
+                tags: WAYBACK_TILE_LAYER_TAGS,
                 extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
+                licenseInfo: WAYBACK_TILE_LAYER_LICENSE_INTO,
             },
             token,
             portalRoot,
