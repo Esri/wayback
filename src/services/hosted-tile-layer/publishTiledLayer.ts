@@ -23,6 +23,7 @@ import {
     WAYBACK_TILE_LAYER_LICENSE_INTO,
     WAYBACK_TILE_LAYER_TAGS,
 } from './constants';
+import { calcActualResolution } from '@utils/snippets/calcActualResolution';
 
 type PublishTiledLayerParams = {
     /**
@@ -276,10 +277,17 @@ const getDescriptionForPublishedLayer = (wayprotJob: WayportJob): string => {
         extent,
         zoomLevelOfMapWhenCreatingOrUpdatingExtent,
     } = wayprotJob || {};
+
     const { releaseDateLabel } = waybackItem || {};
+
+    const minLevel = levels?.[0];
+    const maxLevel = levels?.[1];
 
     const centerLon = (extent.xmax - extent.xmin) / 2 + extent.xmin;
     const centerLat = (extent.ymax - extent.ymin) / 2 + extent.ymin;
+
+    // calculate the actual spatial resolution for the max zoom level based on the latitude of the center of the layer extent, and use it in the description to provide more information about the layer. The resolution is calculated to the nearest hundredth of a meter and presented in meters (e.g. 0.3m or 1.2m).
+    const maxResolution = calcActualResolution(centerLat, maxLevel || 0);
 
     const appLink = `https://livingatlas.arcgis.com/wayback/#mapCenter=${centerLon}%2C${centerLat}%2C${zoomLevelOfMapWhenCreatingOrUpdatingExtent}&mode=explore&active=${waybackItem.releaseNum}`;
 
@@ -288,10 +296,10 @@ const getDescriptionForPublishedLayer = (wayprotJob: WayportJob): string => {
         `<br>`,
         '<span><span style="font-size:18px;"><strong>Key Properties</strong></span>',
         `<span><strong>Extent</strong>: ${extent.xmin.toFixed(5)}, ${extent.ymin.toFixed(5)}, ${extent.xmax.toFixed(5)}, ${extent.ymax.toFixed(5)} </span>`,
-        '<span><strong>Max Spatial Resolution</strong>: <highest spatial res based on latitude to the nearest hundredth of a meter e.g. 0.3m or 1.2m></span>',
+        `<span><strong>Max Spatial Resolution</strong>: ${maxResolution > 1 ? maxResolution.toFixed(1) : maxResolution.toFixed(2)}m</span>`,
         '<span><strong>Coordinate System</strong>: Web Mercator Auxiliary Sphere WGS84 (EPSG:3857)</span>',
-        `<span><strong>Min Tile Level</strong>: ${levels[0]}</span>`,
-        `<span><strong>Max Tile Level</strong>: ${levels[1]}</span>`,
+        `<span><strong>Min Tile Level</strong>: ${minLevel}</span>`,
+        `<span><strong>Max Tile Level</strong>: ${maxLevel}</span>`,
         `<span><strong>World Imagery Publication Date</strong>: ${releaseDateLabel}</span>`,
         `<br>`,
         '<span style="font-size:18px;"><strong>References and Resources</strong></span>',
