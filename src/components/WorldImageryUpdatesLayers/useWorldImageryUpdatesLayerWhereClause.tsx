@@ -91,20 +91,23 @@ export const useWorldImageryUpdatesLayerWhereClause = (
 
             // Add date filter for published updates if a "last" option is selected and the number of days to subtract is greater than 0
             if (!isPendingOptionsSelected && daysToSubtractForPublished > 0) {
-                const dateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtractForPublished} AND CURRENT_TIMESTAMP)`;
+                const dateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtractForPublished} AND CURRENT_TIMESTAMP`;
                 whereClauses.push(dateQuery);
             }
 
-            // Add date filter for pending updates if a "next" option is selected and the number of days to add is greater than 0
+            // Add date filter for pending updates when a "next" option is selected and daysToAdd > 0.
+            // Use `CURRENT_TIMESTAMP - 1` as the lower bound instead of `CURRENT_TIMESTAMP` to capture
+            // pending updates whose PUB_DATE is set to today but at a time earlier than the current moment,
+            // which would otherwise be excluded by the time-aware BETWEEN comparison.
             if (isPendingOptionsSelected && daysToAddForPending > 0) {
-                const pendingDateQuery = `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP AND CURRENT_TIMESTAMP + ${daysToAddForPending})`;
+                const pendingDateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 1 AND CURRENT_TIMESTAMP + ${daysToAddForPending}`;
                 whereClauses.push(pendingDateQuery);
             }
 
             // Add status filter based on date filter
             const statusQuery = isPendingOptionsSelected
-                ? `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}')`
-                : `(${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.published}')`;
+                ? `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.pending}'`
+                : `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_STATE} = '${WorldImageryUpdatesStatusEnum.published}'`;
 
             whereClauses.push(statusQuery);
         }
