@@ -150,10 +150,12 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
             <WayportExtentEditor
                 mapView={mapView}
                 extent={extentOfNewDownloadJob}
-                onExtentChange={(updatedExtent) => {
+                onExtentChange={({ extent, zoomLevel }) => {
                     dispatch(
                         updateNewWayportJob({
-                            extent: updatedExtent,
+                            extent,
+                            zoomLevelOfMapWhenCreatingOrUpdatingExtent:
+                                zoomLevel,
                         })
                     );
                 }}

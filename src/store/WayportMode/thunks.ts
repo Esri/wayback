@@ -74,6 +74,10 @@ type InitiateDownloadJobParams = {
      * current map extent
      */
     extent: IExtent;
+    /**
+     * current map zoom level when user creates the wayport job.
+     */
+    zoomLevel: number;
 };
 
 // let checkDownloadJobStatusTimeout: NodeJS.Timeout;
@@ -139,7 +143,7 @@ const prepareForNewDownloadJob =
  * @param params.extent - The geographic extent for the wayport job
  */
 export const initiateNewWayportJob =
-    ({ releaseNum, extent }: InitiateDownloadJobParams) =>
+    ({ releaseNum, extent, zoomLevel }: InitiateDownloadJobParams) =>
     async (dispatch: StoreDispatch, getState: StoreGetState) => {
         // console.log(waybackItem, zoomLevel, extent);
 
@@ -173,6 +177,7 @@ export const initiateNewWayportJob =
                 ...byReleaseNumber[releaseNum],
             },
             extent: normalizeExtent(extent),
+            zoomLevelOfMapWhenCreatingOrUpdatingExtent: zoomLevel,
             status: 'wayport job not started',
             // tileEstimations and related info are set to null initially
             // as they will be updated when user adjust the export extent
@@ -205,10 +210,12 @@ export const updateNewWayportJob =
         extent,
         levels,
         tileEstimations,
+        zoomLevelOfMapWhenCreatingOrUpdatingExtent,
     }: {
         extent?: IExtent;
         levels?: number[];
         tileEstimations?: TileEstimation[];
+        zoomLevelOfMapWhenCreatingOrUpdatingExtent?: number;
     }) =>
     (dispatch: StoreDispatch, getState: StoreGetState) => {
         const newJob = selectNewWayportJob(getState());
@@ -237,6 +244,11 @@ export const updateNewWayportJob =
 
         if (extent !== undefined) {
             updatedJobData.extent = extent;
+        }
+
+        if (zoomLevelOfMapWhenCreatingOrUpdatingExtent !== undefined) {
+            updatedJobData.zoomLevelOfMapWhenCreatingOrUpdatingExtent =
+                zoomLevelOfMapWhenCreatingOrUpdatingExtent;
         }
 
         // dispatch(updateWayportJobsHelper([updatedJobData]));
