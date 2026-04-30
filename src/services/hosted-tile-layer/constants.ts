@@ -3,3 +3,5 @@ export const WAYBACK_TILE_LAYER_LICENSE_INTO = `
 `;
 
 export const WAYBACK_TILE_LAYER_TAGS = `Wayback, World Imagery, Tile Layer, GeoAI, Esri, Living Atlas`;
+
+export const WAYBACK_TILE_LAYER_ACCESS_INFORMATION = `Esri, Vantor, Earthstar Geographics, and the GIS User Community`;

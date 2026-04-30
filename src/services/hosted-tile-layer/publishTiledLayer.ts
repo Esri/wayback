@@ -19,6 +19,7 @@ import { WayportJob } from '@store/WayportMode/reducer';
 import { logger } from '@utils/IndexedDBLogger';
 import { nanoid } from 'nanoid';
 import {
+    WAYBACK_TILE_LAYER_ACCESS_INFORMATION,
     WAYBACK_TILE_LAYER_LICENSE_INTO,
     WAYBACK_TILE_LAYER_TAGS,
 } from './constants';
@@ -237,11 +238,7 @@ export const updatePublishedTileLayer = async ({
 
         const newTitle = `Wayback Tile Layer - ${releaseDateLabel}`;
 
-        const newSnippet = [
-            `This tile layer was published by World Imagery Wayback App on ${new Date().toLocaleDateString()}.`,
-            `It is based on a tile package that was generated from the ${releaseDateLabel} version of the World Imagery basemap.`,
-            `This tile layer includes cached tile between zoom levels ${levels?.[0]} and ${levels?.[1]}.`,
-        ].join(' ');
+        const newSnippet = getSnippetForPublishedLayer(wayprotJob);
 
         await updateItem({
             item,
@@ -251,6 +248,7 @@ export const updatePublishedTileLayer = async ({
                 tags: WAYBACK_TILE_LAYER_TAGS,
                 extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
                 licenseInfo: WAYBACK_TILE_LAYER_LICENSE_INTO,
+                accessInformation: WAYBACK_TILE_LAYER_ACCESS_INFORMATION,
             },
             token,
             portalRoot,
@@ -259,4 +257,13 @@ export const updatePublishedTileLayer = async ({
         logger.log('error_updating_published_wayport_tile_layer', error);
         console.error('Error updating published tile layer item:', error);
     }
+};
+
+const getSnippetForPublishedLayer = (wayprotJob: WayportJob): string => {
+    const { waybackItem, levels } = wayprotJob || {};
+    const { releaseDateLabel } = waybackItem || {};
+    const minZoom = levels?.[0];
+    const maxZoom = levels?.[1];
+
+    return `This tile layer was generated from the World Imagery Wayback App. The imagery tiles were extracted from the ${releaseDateLabel || 'unknow'} version of the World Imagery basemap, including zoom levels ${minZoom ?? 'unknow min level'} through ${maxZoom ?? 'unknown max level'}.`;
 };
