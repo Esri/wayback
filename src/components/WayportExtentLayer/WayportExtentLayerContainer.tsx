@@ -29,6 +29,8 @@ import { useGetTileEstimations } from './useGetEstimatedTileCount';
 import { updateNewWayportJob } from '@store/WayportMode/thunks';
 import { useRestoreNewWayportJob } from './useRestoreNewWayportJob';
 import { WayportExtentEditor } from './WayportExtentViewer';
+import { useIsCreateExportJobDisabled } from '@components/WayportPanel/useIsCreateExportJobDisabled';
+import { SignInPrompt } from './SignInPrompt';
 
 type Props = {
     mapView?: MapView;
@@ -38,6 +40,9 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     const dispatch = useAppDispatch();
 
     const mode = useAppSelector(selectMapMode);
+
+    // check if the create new job dialog should be disabled based on user's sign in status
+    const isCreateExportJobDisabled = useIsCreateExportJobDisabled();
 
     const newDownloadJob = useAppSelector(selectNewWayportJob);
 
@@ -123,9 +128,10 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     //     },
     // });
 
-    const { tileEstimations, isGettingEstimations } = useGetTileEstimations({
+    const { tileEstimations } = useGetTileEstimations({
         releaseNum: newDownloadJob?.waybackItem?.releaseNum || null,
         extent: extentOfNewDownloadJob,
+        isCreateExportJobDisabled,
     });
 
     useEffect(() => {
@@ -147,19 +153,25 @@ export const WayportExtentLayerContainer: FC<Props> = ({ mapView }) => {
     // Otherwise, show the wayport extent layer which just displays the extent without editing capabilities.
     if (mode === 'wayport' && newDownloadJob && extentOfNewDownloadJob) {
         return (
-            <WayportExtentEditor
-                mapView={mapView}
-                extent={extentOfNewDownloadJob}
-                onExtentChange={({ extent, zoomLevel }) => {
-                    dispatch(
-                        updateNewWayportJob({
-                            extent,
-                            zoomLevelOfMapWhenCreatingOrUpdatingExtent:
-                                zoomLevel,
-                        })
-                    );
-                }}
-            />
+            <>
+                {isCreateExportJobDisabled ? (
+                    <SignInPrompt />
+                ) : (
+                    <WayportExtentEditor
+                        mapView={mapView}
+                        extent={extentOfNewDownloadJob}
+                        onExtentChange={({ extent, zoomLevel }) => {
+                            dispatch(
+                                updateNewWayportJob({
+                                    extent,
+                                    zoomLevelOfMapWhenCreatingOrUpdatingExtent:
+                                        zoomLevel,
+                                })
+                            );
+                        }}
+                    />
+                )}
+            </>
         );
     }
 
