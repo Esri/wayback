@@ -29,19 +29,9 @@ import { selectIsThereAnyOngoingJobs } from '@store/WayportMode/selectors';
 type NewJobDialogProps = {
     job: WayportJob | null;
     /**
-     * If true, the user is not signed in. We will disable the create button in the new job dialog and show a prompt to sign in to users in this case as they need to be signed in to create a Wayport export job.
+     * If true, the new job dialog will be in a disabled as the user is either not signed in or signed in with an ArcGIS public account, which does not have the privileges to create new export jobs
      */
-    notSignedIn: boolean;
-    /**
-     * If true, it means the user is signed in with an ArcGIS public account.
-     * We will show a warning message to users as they will need to sign in with an organizational account to create Wayport export jobs.
-     */
-    signedInUsingPublicAccount: boolean;
-    // /**
-    //  * The active wayback item that is being displayed on the map. We will show the release date of the active wayback item in the create a new job message,
-    //  * and use it as the default release date for the new job when user clicks the action in the prompt message to create a new job.
-    //  */
-    // activeWaybackItem: IWaybackItem | null;
+    disabled: boolean;
     /**
      * Emit when user changes the zoom levels selection in the new job dialog, with the selected min and max zoom levels as the parameters.
      * @param minZoom
@@ -77,8 +67,7 @@ type NewJobDialogProps = {
 
 export const NewJobDialog: FC<NewJobDialogProps> = ({
     job,
-    notSignedIn,
-    signedInUsingPublicAccount,
+    disabled,
     // activeWaybackItem,
     levelsOnChange,
     onRemove,
@@ -96,9 +85,6 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
         useState<SliderHandleType>(null);
 
     const hasOngoingJob = useAppSelector(selectIsThereAnyOngoingJobs);
-
-    // determine if the create button should be disabled or not based on user's sign in status
-    const disabledNewJobDialog = notSignedIn || signedInUsingPublicAccount;
 
     // calculate total tiles based on levels selected
     const countOfTotalTiles: number = useMemo(() => {
@@ -149,8 +135,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
     }, [countOfTotalTiles]);
 
     const shouldDisableCreateButton = useMemo(() => {
-        return disabledNewJobDialog || exceedsMaxTileLimit || hasOngoingJob;
-    }, [exceedsMaxTileLimit, disabledNewJobDialog, hasOngoingJob]);
+        return disabled || exceedsMaxTileLimit || hasOngoingJob;
+    }, [exceedsMaxTileLimit, disabled, hasOngoingJob]);
 
     const maxAvailableTileLevel = useMemo(() => {
         if (!tileEstimations || !tileEstimations.length) {
@@ -237,7 +223,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
                     <div
                         className={classNames('w-full', {
-                            disabled: disabledNewJobDialog,
+                            disabled,
                         })}
                     >
                         <ul className="text-sm list-disc ml-5 pb-1 mb-2">
@@ -256,7 +242,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
                 <div
                     className={classNames('w-full', {
-                        disabled: disabledNewJobDialog,
+                        disabled,
                     })}
                 >
                     <Slider
@@ -279,7 +265,11 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         }}
                     />
 
-                    <div className="flex items-center mb-2">
+                    <div
+                        className={classNames('flex items-center mb-2', {
+                            hidden: disabled,
+                        })}
+                    >
                         <div className="mr-2">
                             {exceedsMaxTileLimit ? (
                                 <CalciteIcon
@@ -323,7 +313,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
 
                     {maxAvailableTileLevel !== null &&
                         maxZoom !== undefined &&
-                        maxZoom > maxAvailableTileLevel && (
+                        maxZoom > maxAvailableTileLevel &&
+                        disabled === false && (
                             <div className="flex items-center mb-2">
                                 <div className="mr-2">
                                     <CalciteIcon
