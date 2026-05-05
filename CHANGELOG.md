@@ -11,7 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Locale Switcher dialog to allow users to change the app's language.
 - Add Locale Suggestion component to prompt users to switch to their browser's language if it matches a supported locale.
 
+## 2026-04-28 (Patches)
+
 ### Changed
+- Enhanced the Export Tile Package Tool:
+    - Improved metadata inclusion (Item Description, License, Attribution, Tags, and Thumbnail) for hosted tiled layer items.
+    - Disabled the Extent Selection Tool for unauthenticated users and added a sign-in prompt.
+- Fixes for the Updates mode: fixed the date filter logic for the World Imagery updates layer to improve the accuracy of pending updates.
+- Map Scale Indicator Update: updated the component to display the actual scale and resolution based on the map center's latitude.
+
 
 ## 2026-04-28
 
