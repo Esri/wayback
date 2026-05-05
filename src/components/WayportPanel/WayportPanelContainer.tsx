@@ -45,6 +45,7 @@ import { JobsList } from './JobsList';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { publishWayportTilePackageAsTileLayer } from '@store/WayportMode/publishTileLayerThunks';
 import { updateMapMode } from '@store/Map/thunks';
+import { useIsCreateExportJobDisabled } from './useIsCreateExportJobDisabled';
 
 export const WayportPanelContainer = () => {
     const dispatch = useAppDispatch();
@@ -54,13 +55,16 @@ export const WayportPanelContainer = () => {
 
     const portalUser = getSignedInUser();
 
+    // check if the create new job dialog should be disabled based on user's sign in status
+    const isCreateExportJobDisabled = useIsCreateExportJobDisabled();
+
     /**
      * Determine if the user has the privileges to publish tile layers, which is required to be able to publish the exported tile package as a hosted tile layer in ArcGIS Online.
      * @see https://doc.arcgis.com/en/arcgis-online/manage-data/publish-tiles.htm
      * @see https://developers.arcgis.com/rest/users-groups-and-items/privileges/
      */
     const canPublishTileLayer = useMemo(() => {
-        if (signedInWithArcGISPublicAccount || notSignedIn || !portalUser) {
+        if (isCreateExportJobDisabled || !portalUser) {
             return false;
         }
 
@@ -83,7 +87,7 @@ export const WayportPanelContainer = () => {
         );
 
         return canCreateContent && canPublishTiles;
-    }, [signedInWithArcGISPublicAccount, notSignedIn, portalUser]);
+    }, [isCreateExportJobDisabled, portalUser]);
 
     // const activeWaybackItem: IWaybackItem = useAppSelector(
     //     activeWaybackItemSelector
@@ -199,9 +203,7 @@ export const WayportPanelContainer = () => {
             <NewJobDialog
                 // disabled={disabled}
                 job={newDownloadJob}
-                notSignedIn={notSignedIn}
-                signedInUsingPublicAccount={signedInWithArcGISPublicAccount}
-                // activeWaybackItem={activeWaybackItem}
+                disabled={isCreateExportJobDisabled}
                 onRemove={() => {
                     dispatch(removeNewWayportJob());
                 }}

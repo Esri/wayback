@@ -75,7 +75,7 @@ const ListViewContainer = () => {
     //     selectHasReachedLimitOfConcurrentWayportJobs
     // );
 
-    // const { zoom } = useAppSelector(selectMapCenterAndZoom);
+    const { zoom } = useAppSelector(selectMapCenterAndZoom);
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
@@ -141,6 +141,7 @@ const ListViewContainer = () => {
                             initiateNewWayportJob({
                                 releaseNum,
                                 extent: mapExtent,
+                                zoomLevel: zoom,
                             })
                         );
                     }}

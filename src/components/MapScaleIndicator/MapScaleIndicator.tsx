@@ -20,6 +20,7 @@ import {
     selectMapScale,
     selectMapZoomLevel,
 } from '@store/Map/reducer';
+import { calcActualResolution } from '@utils/snippets/calcActualResolution';
 import { numberWithCommas } from '@utils/snippets/numbers';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -80,20 +81,20 @@ export const MapScaleIndicator = () => {
         // const trueResolution = nominalResolution * Math.cos(latRadians);
         // return trueResolution;
 
-        // Constant: meters/pixel at the Equator for zoom level 0.
-        // Web Mercator uses a standard tile size of 256x256 pixels. At zoom level 0, the entire circumference of the Earth (roughly 40,075,016.686 meters) fits into one 256-pixel tile.
-        // This means the nominal resolution at zoom level 0 is about 156,543.04 meters/pixel.
-        const EQUATORIAL_RESOLUTION = 156543.04;
+        // // Constant: meters/pixel at the Equator for zoom level 0.
+        // // Web Mercator uses a standard tile size of 256x256 pixels. At zoom level 0, the entire circumference of the Earth (roughly 40,075,016.686 meters) fits into one 256-pixel tile.
+        // // This means the nominal resolution at zoom level 0 is about 156,543.04 meters/pixel.
+        // const EQUATORIAL_RESOLUTION = 156543.04;
 
-        // Convert latitude to radians
-        const latRadians = latitude * (Math.PI / 180);
+        // // Convert latitude to radians
+        // const latRadians = latitude * (Math.PI / 180);
 
-        // Calculate the true resolution based on the zoom level and latitude
-        const trueResolution =
-            (EQUATORIAL_RESOLUTION * Math.cos(latRadians)) /
-            Math.pow(2, zoomLevel);
+        // // Calculate the true resolution based on the zoom level and latitude
+        // const trueResolution =
+        //     (EQUATORIAL_RESOLUTION * Math.cos(latRadians)) /
+        //     Math.pow(2, zoomLevel);
 
-        return trueResolution;
+        return calcActualResolution(latitude, zoomLevel);
     }, [mapResolution, mapCenter?.lat, zoomLevel]);
 
     const mapScaleFormatted = useMemo(() => {

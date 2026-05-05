@@ -14,10 +14,20 @@
  */
 
 import { getItem } from '@services/portal-item/getItem';
-import { updateItem } from '@services/portal-item/updateItem';
+import {
+    updateItem,
+    updateItemWithThumbnail,
+} from '@services/portal-item/updateItem';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { logger } from '@utils/IndexedDBLogger';
 import { nanoid } from 'nanoid';
+import {
+    WAYBACK_TILE_LAYER_ACCESS_INFORMATION,
+    WAYBACK_TILE_LAYER_LICENSE_INTO,
+    WAYBACK_TILE_LAYER_TAGS,
+} from './constants';
+import { calcActualResolution } from '@utils/snippets/calcActualResolution';
+import { generateThumbnailImage4WayportTiledLayer } from './generateThumbnailImage4WayportTiledLayer';
 
 type PublishTiledLayerParams = {
     /**
@@ -233,25 +243,87 @@ export const updatePublishedTileLayer = async ({
 
         const newTitle = `Wayback Tile Layer - ${releaseDateLabel}`;
 
-        const newSnippet = [
-            `This tile layer was published by World Imagery Wayback App on ${new Date().toLocaleDateString()}.`,
-            `It is based on a tile package that was generated from the ${releaseDateLabel} version of the World Imagery basemap.`,
-            `This tile layer includes cached tile between zoom levels ${levels?.[0]} and ${levels?.[1]}.`,
-        ].join(' ');
+        const newSnippet = getSnippetForPublishedLayer(wayprotJob);
 
         await updateItem({
             item,
             itemDataToBeUpdated: {
                 title: newTitle,
                 snippet: newSnippet,
-                tags: 'Wayback, World Imagery, Tile Layer, GeoAI, Esri, Living Atlas',
+                tags: WAYBACK_TILE_LAYER_TAGS,
                 extent: `${extent?.xmin}, ${extent?.ymin}, ${extent?.xmax}, ${extent?.ymax}`,
+                licenseInfo: WAYBACK_TILE_LAYER_LICENSE_INTO,
+                accessInformation: WAYBACK_TILE_LAYER_ACCESS_INFORMATION,
+                description: getDescriptionForPublishedLayer(wayprotJob),
             },
             token,
             portalRoot,
+        });
+
+        // after the item metadata is updated, we also want to update the thumbnail of the published tile layer item to make it more identifiable.
+        // We will generate a new thumbnail image based on the tiles that intersect with the wayport job extent at the zoom level when the wayport job extent was created or updated,
+        // and then update the item thumbnail with the generated image.
+        const thumbnailBase64 =
+            await generateThumbnailImage4WayportTiledLayer(wayprotJob);
+
+        await updateItemWithThumbnail({
+            item,
+            token,
+            portalRoot,
+            thumbnailAsBase64: thumbnailBase64,
         });
     } catch (error) {
         logger.log('error_updating_published_wayport_tile_layer', error);
         console.error('Error updating published tile layer item:', error);
     }
+};
+
+const getSnippetForPublishedLayer = (wayprotJob: WayportJob): string => {
+    const { waybackItem, levels } = wayprotJob || {};
+    const { releaseDateLabel } = waybackItem || {};
+    const minZoom = levels?.[0];
+    const maxZoom = levels?.[1];
+
+    return `This tile layer was generated from the World Imagery Wayback App. The imagery tiles were extracted from the ${releaseDateLabel || 'unknow'} version of the World Imagery basemap, including zoom levels ${minZoom ?? 'unknow min level'} through ${maxZoom ?? 'unknown max level'}.`;
+};
+
+const getDescriptionForPublishedLayer = (wayprotJob: WayportJob): string => {
+    const {
+        waybackItem,
+        levels,
+        extent,
+        zoomLevelOfMapWhenCreatingOrUpdatingExtent,
+    } = wayprotJob || {};
+
+    const { releaseDateLabel } = waybackItem || {};
+
+    const minLevel = levels?.[0];
+    const maxLevel = levels?.[1];
+
+    const centerLon = (extent.xmax - extent.xmin) / 2 + extent.xmin;
+    const centerLat = (extent.ymax - extent.ymin) / 2 + extent.ymin;
+
+    // calculate the actual spatial resolution for the max zoom level based on the latitude of the center of the layer extent, and use it in the description to provide more information about the layer. The resolution is calculated to the nearest hundredth of a meter and presented in meters (e.g. 0.3m or 1.2m).
+    const maxResolution = calcActualResolution(centerLat, maxLevel || 0);
+
+    const appLink = `https://livingatlas.arcgis.com/wayback/#mapCenter=${centerLon}%2C${centerLat}%2C${zoomLevelOfMapWhenCreatingOrUpdatingExtent}&mode=explore&active=${waybackItem.releaseNum}`;
+
+    const content: string[] = [
+        `<span>This hosted tile layer provides a cached snapshot of the Esri World Imagery basemap. The imagery tiles were extracted from the ${releaseDateLabel} release in the <a target="_blank" href="${appLink}" rel="nofollow ugc noopener noreferrer"><strong>World Imagery Wayback App</strong></a>.</span>`,
+        `<br>`,
+        '<span><span style="font-size:18px;"><strong>Key Properties</strong></span>',
+        `<span><strong>Extent</strong>: ${extent.xmin.toFixed(5)}, ${extent.ymin.toFixed(5)}, ${extent.xmax.toFixed(5)}, ${extent.ymax.toFixed(5)} </span>`,
+        `<span><strong>Max Spatial Resolution</strong>: ${maxResolution > 1 ? maxResolution.toFixed(1) : maxResolution.toFixed(2)}m</span>`,
+        '<span><strong>Coordinate System</strong>: Web Mercator Auxiliary Sphere WGS84 (EPSG:3857)</span>',
+        `<span><strong>Min Tile Level</strong>: ${minLevel}</span>`,
+        `<span><strong>Max Tile Level</strong>: ${maxLevel}</span>`,
+        `<span><strong>World Imagery Publication Date</strong>: ${releaseDateLabel}</span>`,
+        `<br>`,
+        '<span style="font-size:18px;"><strong>References and Resources</strong></span>',
+        '<a target="_blank" href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" rel="nofollow ugc noopener noreferrer"><strong>World Imagery</strong></a>',
+        '<a target="_blank" href="https://www.esri.com/arcgis-blog/tag/wayback" rel="nofollow ugc noopener noreferrer"><strong>Wayback Articles and Tutorials</strong></a>',
+        '<a target="_blank" href="https://github.com/Esri/wayback" rel="nofollow ugc noopener noreferrer"><strong>Wayback GitHub</strong></a>',
+    ];
+
+    return content.join('<br>');
 };

@@ -39,7 +39,7 @@ type Corner = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 type Props = {
     mapView: MapView;
     extent: IExtent;
-    onExtentChange: (extent: IExtent) => void;
+    onExtentChange: (payload: { extent: IExtent; zoomLevel: number }) => void;
 };
 
 export const WayportExtentEditor: FC<Props> = ({
@@ -293,7 +293,10 @@ export const WayportExtentEditor: FC<Props> = ({
         setExtentSize(extentSize);
         // console.log('Calculated size of new extent:', extentSize);
 
-        onExtentChange(newExtent);
+        onExtentChange({
+            extent: newExtent,
+            zoomLevel: mapCenterAndZoom?.zoom || 0,
+        });
     }, [
         dimensions,
         mapCenterAndZoom?.zoom,

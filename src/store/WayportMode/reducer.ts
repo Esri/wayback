@@ -98,6 +98,11 @@ export type WayportJob = {
      */
     extent: IExtent;
     /**
+     * Map level at the time when this wayport job is created or when the extent is last updated.
+     * This is used to generate the thumbnail for the wayback item in ArcGIS Portal and should be updated when user updates the extent of the wayport job, so that the thumbnail can reflect the extent of the wayport job.
+     */
+    zoomLevelOfMapWhenCreatingOrUpdatingExtent: number;
+    /**
      * This wayport job has a minimum zoom level. We use the zoom level of the map when user creates this job as the minimum zoom level .
      * Users are not allowed to select a zoom level lower than the minZoomLevel.
      * For example, if the user's current zoom level is 12, they can only choose zoom levels 12 and above (12-16), but not 10-16.

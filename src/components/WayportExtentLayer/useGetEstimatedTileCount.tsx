@@ -30,6 +30,10 @@ type Props = {
      * user selected extent for the download job
      */
     extent: IExtent;
+    /**
+     * If true, the tile estimation will not be fetched and the hook will return null. This is used to prevent fetching tile estimation when user is not signed in, as the estimation is not needed and the API requires authentication.
+     */
+    isCreateExportJobDisabled: boolean;
 };
 
 /**
@@ -39,7 +43,11 @@ type Props = {
  * @param params.extent user selected extent for the download job
  * @returns an array of tile estimation by zoom level and a boolean indicating whether the estimation is being fetched
  */
-export const useGetTileEstimations = ({ releaseNum, extent }: Props) => {
+export const useGetTileEstimations = ({
+    releaseNum,
+    extent,
+    isCreateExportJobDisabled,
+}: Props) => {
     const [tileEstimations, setTileEstimations] =
         React.useState<TileEstimation[]>(null);
 
@@ -68,13 +76,13 @@ export const useGetTileEstimations = ({ releaseNum, extent }: Props) => {
     };
 
     React.useEffect(() => {
-        if (!releaseNum || !extent) {
+        if (!releaseNum || !extent || isCreateExportJobDisabled) {
             setTileEstimations(null);
             return;
         }
 
         getTileEstimations();
-    }, [releaseNum, extent]);
+    }, [releaseNum, extent, isCreateExportJobDisabled]);
 
     return {
         tileEstimations,
