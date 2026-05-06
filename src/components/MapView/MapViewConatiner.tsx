@@ -60,23 +60,9 @@ type Props = {
 const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useAppDispatch();
 
-    const mapExtent = useAppSelector(mapExtentSelector);
-
     const animationStatus = useAppSelector(selectAnimationStatus);
 
     const { center, zoom } = useAppSelector(selectMapCenterAndZoom) || {};
-
-    // still need to use default map extent as some old urls may still have it
-    const defaultMapExtent = useMemo((): IExtentGeomety => {
-        // no need to use default map extent if center and zoom are already defined
-        if (center && zoom) {
-            return null;
-        }
-
-        return mapExtent;
-    }, []);
-
-    // const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
     const appMode = useAppSelector(selectMapMode);
 
@@ -123,7 +109,6 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     return (
         <div className="relative shrink-0 grow bg-black">
             <MapView
-                initialExtent={defaultMapExtent}
                 center={center}
                 zoom={zoom}
                 onStationary={({
@@ -132,18 +117,6 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                     mapResolution,
                     mapScale,
                 }) => {
-                    // queryVersionsWithLocalChanges(mapCenterPoint);
-                    // setQueryLocation(mapCenterPointInfo);
-
-                    // dispatch(
-                    //     mapCenterUpdated({
-                    //         lon: mapCenterPointInfo.longitude,
-                    //         lat: mapCenterPointInfo.latitude,
-                    //     })
-                    // );
-
-                    // dispatch(zoomUpdated(mapCenterPointInfo.zoom));
-
                     const zoomLevel = !isNaN(mapCenterPointInfo.zoom)
                         ? Number.parseInt(mapCenterPointInfo.zoom.toFixed(0))
                         : 0;

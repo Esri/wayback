@@ -205,11 +205,15 @@ export const selectIsMapUpdating = (state: RootState) => state.Map.isUpdaing;
  */
 export const selectMapCenterAndZoom = createSelector(
     (state: RootState) => state.Map.zoom,
-    (state: RootState) => state.Map.center,
-    (zoom, center) => {
+    (state: RootState) => state.Map.center.lat,
+    (state: RootState) => state.Map.center.lon,
+    (zoom, lat, lon) => {
         return {
             zoom,
-            center,
+            center: {
+                lat,
+                lon,
+            },
         };
     }
 );
