@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { CalciteSlider } from '@esri/calcite-components-react';
 import { ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS } from '@store/AnimationMode/reducer';
+import { is } from 'date-fns/locale';
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -61,7 +61,7 @@ const SpeedSelector: React.FC<Props> = ({
     return (
         <div className="calcite-theme-dark relative w-full h-[32px] mr-1">
             <div>
-                <CalciteSlider
+                <calcite-slider
                     // ref={sliderRef}
                     min={0}
                     max={ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS.length - 1}
@@ -71,11 +71,12 @@ const SpeedSelector: React.FC<Props> = ({
                     scale="s"
                     value={sliderValue}
                     disabled={disabled}
-                    onCalciteSliderInput={(evt: any) => {
-                        const index = evt.target.value;
+                    oncalciteSliderInput={(evt) => {
+                        const value = evt.target.value;
+                        const index = isNaN(Number(value)) ? 0 : Number(value);
                         setSliderValue(index);
                     }}
-                ></CalciteSlider>
+                ></calcite-slider>
             </div>
 
             <div className="absolute left-0 right-0 top-[12px] text-center pointer-events-none">

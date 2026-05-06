@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import useOnClickOutside from '@hooks/useOnClickOutside';
 import React, { FC, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,17 +47,10 @@ export const ProfileCard: FC<Props> = ({
         userData || {};
 
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const closeButtonRef = useRef<HTMLCalciteButtonElement>(null);
 
     useOnClickOutside(containerRef, () => {
         closeProfileCard();
     });
-
-    useEffect(() => {
-        if (closeButtonRef.current) {
-            closeButtonRef.current.setFocus();
-        }
-    }, []);
 
     return (
         <div
@@ -72,9 +64,8 @@ export const ProfileCard: FC<Props> = ({
                     '--calcite-color-text-inverse': 'var(--default-text-color)',
                 }}
             >
-                <CalciteButton
+                <calcite-button
                     data-testid="close-profile-card-btn"
-                    ref={closeButtonRef}
                     appearance="transparent"
                     kind="inverse"
                     iconStart="x"
@@ -83,7 +74,7 @@ export const ProfileCard: FC<Props> = ({
                         closeProfileCard();
                     }}
                     label={t('close')}
-                ></CalciteButton>
+                ></calcite-button>
             </div>
 
             <div className="flex mb-4">
@@ -117,7 +108,7 @@ export const ProfileCard: FC<Props> = ({
                 </div>
             </div>
 
-            <CalciteButton
+            <calcite-button
                 data-testid="sign-out-btn"
                 appearance="outline"
                 kind="inverse"
@@ -129,7 +120,7 @@ export const ProfileCard: FC<Props> = ({
                 label={t('sign_out')}
             >
                 <span>{t('sign_out')}</span>
-            </CalciteButton>
+            </calcite-button>
         </div>
     );
 };

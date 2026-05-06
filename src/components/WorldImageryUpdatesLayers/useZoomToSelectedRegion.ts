@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { Extent } from '@arcgis/core/geometry';
+import Extent from '@arcgis/core/geometry/Extent';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import MapView from '@arcgis/core/views/MapView';
 import { ImageryUpdatesCategory } from '@services/world-imagery-updates/config';

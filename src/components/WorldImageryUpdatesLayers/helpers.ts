@@ -21,6 +21,7 @@ import {
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol.js';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+import { PopupTemplateProperties } from '@arcgis/core/PopupTemplate';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
     'vivid-advanced': 'Vantor Vivid Advanced imagery',
@@ -30,7 +31,7 @@ const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
 
 export const getPopupTemplate = (
     category: ImageryUpdatesCategory
-): __esri.PopupTemplateProperties => {
+): PopupTemplateProperties => {
     const layerTitle = LayerTitleByCategory[category];
 
     return {
@@ -116,7 +117,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                         miterLimit: 10,
                                         width: 1.5,
                                         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                            .published.fillColorArray,
+                                            .published.fillColorArray as [
+                                            number,
+                                            number,
+                                            number,
+                                            number,
+                                        ],
                                     },
                                     {
                                         type: 'CIMHatchFill',
@@ -134,7 +140,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                                     width: 1.5,
                                                     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
                                                         .published
-                                                        .fillColorArray,
+                                                        .fillColorArray as [
+                                                        number,
+                                                        number,
+                                                        number,
+                                                        number,
+                                                    ],
                                                 },
                                             ],
                                         },
@@ -177,7 +188,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                         miterLimit: 10,
                                         width: 1.5,
                                         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                            .pending.fillColorArray,
+                                            .pending.fillColorArray as [
+                                            number,
+                                            number,
+                                            number,
+                                            number,
+                                        ],
                                     },
                                     {
                                         type: 'CIMHatchFill',
@@ -194,7 +210,13 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                                     miterLimit: 10,
                                                     width: 1.5,
                                                     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                                        .pending.fillColorArray,
+                                                        .pending
+                                                        .fillColorArray as [
+                                                        number,
+                                                        number,
+                                                        number,
+                                                        number,
+                                                    ],
                                                 },
                                             ],
                                         },

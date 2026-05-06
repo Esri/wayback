@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { Extent } from '@arcgis/core/geometry';
+import Extent from '@arcgis/core/geometry/Extent';
 
 /**
  * Returns an Extent that's been shifted to within +/- 180.

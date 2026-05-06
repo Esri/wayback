@@ -16,13 +16,6 @@
 import React, { FC, use, useEffect, useState } from 'react';
 import config from './config';
 import { Trans, useTranslation } from 'react-i18next';
-import classNames from 'classnames';
-import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteInputText,
-    CalciteTextArea,
-} from '@esri/calcite-components-react';
 import { WaybackItem } from '@esri/wayback-core';
 import { getSnippetStr } from './createWebmap';
 
@@ -79,7 +72,7 @@ export const WebmapInputForm: FC<Props> = ({
         <div className="mt-4">
             <div className="w-full mb-2">
                 <h5>{t('webmap_title_label')}</h5>
-                <CalciteInputText
+                <calcite-input-text
                     // type="text"
                     placeholder={t('webmap_title_placeholder')}
                     spellCheck="false"
@@ -90,7 +83,7 @@ export const WebmapInputForm: FC<Props> = ({
                     status={title ? 'valid' : 'invalid'}
                     value={title}
                     // onChange={(e) => setTitle(e.target.value)}
-                    onCalciteInputTextInput={(e) => {
+                    oncalciteInputTextInput={(e) => {
                         const val = e.target.value;
                         setTitle(val);
                     }}
@@ -102,7 +95,7 @@ export const WebmapInputForm: FC<Props> = ({
 
             <div className="w-full mb-2">
                 <h5>{t('webmap_snippet_label')}</h5>
-                <CalciteInputText
+                <calcite-input-text
                     placeholder={t('webmap_snippet_placeholder')}
                     spellCheck="false"
                     // className={classNames('w-full outline-none p-1', {
@@ -113,24 +106,24 @@ export const WebmapInputForm: FC<Props> = ({
                     // spellCheck="false"
                     value={snippet}
                     // onChange={(e) => setDescription(e.target.value)}
-                    onCalciteInputTextInput={(e) => {
+                    oncalciteInputTextInput={(e) => {
                         const val = e.target.value;
                         setSnippet(val);
                     }}
                     disabled={shouldDisableInputFields}
-                ></CalciteInputText>
+                ></calcite-input-text>
             </div>
 
             <div className="w-full mb-2">
                 <h5>{t('webmap_tags_label')}</h5>
-                <CalciteInputText
+                <calcite-input-text
                     // type="text"
                     className="w-full outline-none p-1"
                     spellCheck="false"
                     placeholder={t('webmap_tags_placeholder')}
                     value={tags}
                     // onChange={(e) => setTags(e.target.value)}
-                    onCalciteInputTextInput={(e) => {
+                    oncalciteInputTextInput={(e) => {
                         const val = e.target.value;
                         setTags(val);
                     }}
@@ -138,7 +131,7 @@ export const WebmapInputForm: FC<Props> = ({
                 />
             </div>
 
-            <CalciteButton
+            <calcite-button
                 onClick={() => saveButtonOnClick({ title, tags, snippet })}
                 loading={isCreatingWebmap}
                 width={'full'}
@@ -153,7 +146,7 @@ export const WebmapInputForm: FC<Props> = ({
                 {isCreatingWebmap
                     ? t('creating_wayback_map')
                     : t('create_wayback_map')}
-            </CalciteButton>
+            </calcite-button>
 
             {notSignedIn === false && !canCreateWebmap && (
                 <div className="mt-2 text-sm">

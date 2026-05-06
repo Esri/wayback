@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'https://js.arcgis.com/4.34/@arcgis/core/assets/esri/themes/dark/main.css';
-@import url('@esri/calcite-components/dist/calcite/calcite.css');
-/* @import './calcite-web/css/calcite-web.min.css'; */
+@import 'https://js.arcgis.com/5.0.18/@arcgis/core/assets/esri/themes/dark/main.css';
 @import './variables.css';
 @import './customized-modal.css';
 @import './customized-tooltip.css';

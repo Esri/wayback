@@ -91,7 +91,7 @@ export const WayportExtentLayer: FC<Props> = ({
             // so that the extent boundary can be fully shown on the map
             mapView.goTo({
                 target: geometry,
-                duration: 1000,
+                // duration: 1000,
             });
         }
     }, [extent, visible, mapView, timestampOfZoomToDownloadJobExtentRequest]);

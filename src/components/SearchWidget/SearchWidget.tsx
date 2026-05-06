@@ -20,10 +20,10 @@ import Graphic from '@arcgis/core/Graphic';
 import Search from '@arcgis/core/widgets/Search';
 
 type SearchResult = {
-    extent: Extent;
-    feature: Graphic;
-    name: string;
-    target: string;
+    extent?: Extent;
+    feature?: Graphic;
+    name?: string;
+    target?: Graphic;
 };
 
 type Props = {

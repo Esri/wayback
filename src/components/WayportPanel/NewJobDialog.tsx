@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import { MAX_NUMBER_TO_TILES_PER_WAYPORT_EXPORT } from '@services/wayport/getTileEstimationsInOutputBundle';
 import { WayportJob } from '@store/WayportMode/reducer';
 import { numberWithCommas } from '@utils/snippets/numbers';
@@ -185,10 +184,10 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     <div className="w-full relative mb-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                                <CalciteIcon
+                                <calcite-icon
                                     icon="information"
                                     scale="s"
-                                    class="text-custom-theme-blue-light mr-2"
+                                    className="text-custom-theme-blue-light mr-2"
                                 />
 
                                 <span className=" text-custom-theme-blue-light font-light">
@@ -201,7 +200,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             </div>
 
                             <div className="flex items-center">
-                                {/* <CalciteButton
+                                {/* <calcite-button
                                     class="ml-1"
                                     scale="s"
                                     iconEnd="search"
@@ -210,13 +209,13 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                                     onClick={onZoomToExtentRequested}
                                 /> */}
 
-                                <CalciteButton
+                                <calcite-button
                                     width="full"
                                     appearance="transparent"
                                     scale="s"
                                     iconEnd="x"
                                     onClick={onRemove.bind(null, job)}
-                                ></CalciteButton>
+                                ></calcite-button>
                             </div>
                         </div>
                     </div>
@@ -272,16 +271,16 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     >
                         <div className="mr-2">
                             {exceedsMaxTileLimit ? (
-                                <CalciteIcon
+                                <calcite-icon
                                     icon="exclamation-mark-circle"
                                     scale="s"
-                                    class="text-red-500"
+                                    className="text-red-500"
                                 />
                             ) : (
-                                <CalciteIcon
+                                <calcite-icon
                                     icon="check-circle"
                                     scale="s"
-                                    class="text-green-500"
+                                    className="text-green-500"
                                 />
                             )}
                         </div>
@@ -317,10 +316,10 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                         disabled === false && (
                             <div className="flex items-center mb-2">
                                 <div className="mr-2">
-                                    <CalciteIcon
+                                    <calcite-icon
                                         icon="exclamation-mark-triangle"
                                         scale="s"
-                                        class="text-yellow-500"
+                                        className="text-yellow-500"
                                     />
                                 </div>
 
@@ -338,10 +337,10 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     {hasOngoingJob && (
                         <div className="flex items-center mb-2">
                             <div className="mr-2">
-                                <CalciteIcon
+                                <calcite-icon
                                     icon="exclamation-mark-triangle"
                                     scale="s"
-                                    class="text-yellow-500"
+                                    className="text-yellow-500"
                                 />
                             </div>
 
@@ -352,8 +351,8 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                     )}
 
                     <div>
-                        <CalciteButton
-                            class="mt-2"
+                        <calcite-button
+                            className="mt-2"
                             width="full"
                             disabled={shouldDisableCreateButton}
                             appearance="solid"
@@ -363,7 +362,7 @@ export const NewJobDialog: FC<NewJobDialogProps> = ({
                             }}
                         >
                             {t('create_tile_package')}
-                        </CalciteButton>
+                        </calcite-button>
                     </div>
                 </div>
             </div>

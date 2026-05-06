@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteIcon } from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 type Props = {
@@ -31,7 +30,7 @@ export const LocaleSwitherToggleButton: FC<Props> = ({ onClick }) => {
                 title={t('switch_language')}
                 onClick={onClick}
             >
-                <CalciteIcon icon="language-2" scale="m" />
+                <calcite-icon icon="language2" scale="m" />
             </button>
         </div>
     );

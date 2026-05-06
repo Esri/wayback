@@ -12,12 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// import {
-//     CalciteButton,
-//     CalciteIcon,
-//     CalciteLoader,
-// } from '@esri/calcite-components-react';
 import {
     // PublishWayportTileLayerStatus,
     WayportJob,
@@ -27,7 +21,6 @@ import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { JobCard } from './JobCard';
-import { CalciteButton } from '@esri/calcite-components-react';
 
 type JobsListProps = {
     jobs: WayportJob[];

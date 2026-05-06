@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
-import {
-    CalciteIcon,
-    CalciteLoader,
-    CalciteTooltip,
-} from '@esri/calcite-components-react';
 import { nanoid } from 'nanoid';
 import React, { FC } from 'react';
 
@@ -39,16 +34,16 @@ export const HeaderText: FC<Props> = ({
         <div className="relative flex items-center text-custom-theme-blue-light">
             <div className="flex items-center justify-center w-4 h-4 mr-1">
                 {showLoadingIndicator ? (
-                    <CalciteLoader inline scale="s" />
+                    <calcite-loader label="loading" inline scale="s" />
                 ) : (
                     <>
-                        <CalciteIcon
+                        <calcite-icon
                             id={tooltipAnchorId}
                             icon="information"
                             scale="s"
                         />
 
-                        <CalciteTooltip
+                        <calcite-tooltip
                             referenceElement={tooltipAnchorId}
                             overlayPositioning="fixed"
                             placement="bottom-start"
@@ -60,7 +55,7 @@ export const HeaderText: FC<Props> = ({
                                     __html: tooltip,
                                 }}
                             ></div>
-                        </CalciteTooltip>
+                        </calcite-tooltip>
                     </>
                 )}
             </div>

@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteButton } from '@esri/calcite-components-react';
 import { WaybackItem } from '@esri/wayback-core';
 import classNames from 'classnames';
 import React, { FC } from 'react';
@@ -53,14 +52,14 @@ export const WebmapLayersList: FC<Props> = ({
                 </span>
 
                 {!disableRemoveAction && (
-                    <CalciteButton
+                    <calcite-button
                         onClick={clearAllSelectedItemsOnClick}
                         appearance="transparent"
                         kind="neutral"
                         scale="s"
                     >
                         {t('clear_all')}
-                    </CalciteButton>
+                    </calcite-button>
                 )}
             </div>
 
@@ -91,7 +90,7 @@ export const WebmapLayersList: FC<Props> = ({
                     </button>
 
                     {!disableRemoveAction && (
-                        <CalciteButton
+                        <calcite-button
                             appearance="transparent"
                             kind="neutral"
                             scale="s"

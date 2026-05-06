@@ -17,7 +17,6 @@
 //     selectAnimationStatus,
 //     selectIsAnimationPlaying,
 // } from '@shared/store/UI/selectors';
-import { CalciteLoader } from '@esri/calcite-components-react';
 import {
     selectAnimationStatus,
     selectIsAnimationPlaying,
@@ -79,7 +78,8 @@ export const MapActionButton: FC<Props> = ({
             <div className="w-map-action-button-size h-map-action-button-size flex items-center justify-center bg-custom-background cursor-pointer">
                 {showLoadingIndicator ? (
                     <div className="w-full h-full flex items-center justify-center text-center">
-                        <CalciteLoader
+                        <calcite-loader
+                            label={'loading'}
                             scale="m"
                             inline
                             style={{ marginRight: 0 } as React.CSSProperties}

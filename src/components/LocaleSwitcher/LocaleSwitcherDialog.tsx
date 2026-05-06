@@ -13,15 +13,7 @@
  * limitations under the License.
  */
 
-import {
-    CalciteButton,
-    CalciteLabel,
-    CalciteOption,
-    CalciteSelect,
-} from '@esri/calcite-components-react';
 import useOnClickOutside from '@hooks/useOnClickOutside';
-import { useAppSelector } from '@store/configureStore';
-import { selectAppLanguage } from '@store/UI/reducer';
 import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -76,7 +68,7 @@ export const LocaleSwitcherDialog: FC<Props> = ({
             <div className="w-full p-1 flex items-center justify-between">
                 <h4 className="text-sm">{t('choose_language')}</h4>
 
-                <CalciteButton
+                <calcite-button
                     data-testid="close-locale-switcher-dialog-button"
                     appearance="transparent"
                     kind="inverse"
@@ -86,10 +78,11 @@ export const LocaleSwitcherDialog: FC<Props> = ({
                         onClose();
                     }}
                     label={t('close')}
-                ></CalciteButton>
+                ></calcite-button>
             </div>
-            <CalciteSelect
-                onCalciteSelectChange={(event) => {
+            <calcite-select
+                label={t('select_language')}
+                oncalciteSelectChange={(event) => {
                     const selected = event.target.selectedOption;
                     setSelectedLocale(selected.value);
                 }}
@@ -99,19 +92,19 @@ export const LocaleSwitcherDialog: FC<Props> = ({
             >
                 {data.map((locale) => {
                     return (
-                        <CalciteOption
+                        <calcite-option
                             key={locale.code}
                             value={locale.code}
                             selected={selectedLocale === locale.code}
                         >
                             {locale.label}
-                        </CalciteOption>
+                        </calcite-option>
                     );
                 })}
-            </CalciteSelect>
+            </calcite-select>
 
             <div className="mt-2 flex justify-end">
-                <CalciteButton
+                <calcite-button
                     scale={'s'}
                     disabled={selectedLocale === appLanguage}
                     appearance="outline"
@@ -124,10 +117,10 @@ export const LocaleSwitcherDialog: FC<Props> = ({
                     }}
                 >
                     {t('switch_language')}
-                </CalciteButton>
+                </calcite-button>
 
                 {/* <div className="w-1/2">
-                    <CalciteButton
+                    <calcite-button
                         scale={'s'}
                         appearance="outline"
                         kind="inverse"
@@ -139,7 +132,7 @@ export const LocaleSwitcherDialog: FC<Props> = ({
                         iconStart='x'
                     >
                         {t('cancel')}
-                    </CalciteButton>
+                    </calcite-button>
                 </div> */}
             </div>
         </div>

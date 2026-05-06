@@ -15,7 +15,6 @@
 
 import React, { FC } from 'react';
 import classNames from 'classnames';
-import { CalciteIcon } from '@esri/calcite-components-react';
 
 type Props = {
     /**
@@ -87,7 +86,7 @@ export const ModeToggleButton: FC<Props> = ({
                 aria-label={label}
                 title={tooltip}
             >
-                <CalciteIcon icon={icon} scale="l" />
+                <calcite-icon icon={icon as any} scale="l" />
             </button>
         </div>
     );

@@ -14,11 +14,6 @@
  */
 
 import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
-import {
     // PublishWayportTileLayerStatus,
     WayportJob,
     WayportJobStatus,
@@ -127,7 +122,7 @@ export const JobCard: FC<JobCardProps> = ({
         if (status === 'publishing job finished') {
             return (
                 <div className="mt-2 ml-2">
-                    <CalciteButton
+                    <calcite-button
                         scale="s"
                         appearance="solid"
                         iconStart="launch"
@@ -137,7 +132,7 @@ export const JobCard: FC<JobCardProps> = ({
                         // disabled={!job.outputTilePackageInfo?.url}
                     >
                         {t('open_wayport_tile_layer')}
-                    </CalciteButton>
+                    </calcite-button>
                 </div>
             );
         }
@@ -146,7 +141,7 @@ export const JobCard: FC<JobCardProps> = ({
         if (status === 'wayport job finished') {
             return (
                 <div className="mt-2 ml-2">
-                    <CalciteButton
+                    <calcite-button
                         // scale="s"
                         appearance="solid"
                         iconStart="tile-layer"
@@ -158,10 +153,10 @@ export const JobCard: FC<JobCardProps> = ({
                         disabled={!canPublishTileLayer}
                     >
                         {t('publish_wayport_tile_layer')}
-                    </CalciteButton>
+                    </calcite-button>
 
-                    <CalciteButton
-                        class="mt-2"
+                    <calcite-button
+                        className="mt-2"
                         // scale="s"
                         appearance="solid"
                         iconStart="download-to"
@@ -173,10 +168,10 @@ export const JobCard: FC<JobCardProps> = ({
                         label={t('download_tile_package')}
                     >
                         {t('download_tile_package')}
-                    </CalciteButton>
+                    </calcite-button>
 
                     <div className="text-xs mt-2 flex items-center">
-                        <CalciteIcon icon="timer" scale="s" />
+                        <calcite-icon icon="timer" scale="s" />
                         <span className="ml-2">
                             {t('wayport_tile_package_expiration_warning')}
                         </span>
@@ -184,7 +179,7 @@ export const JobCard: FC<JobCardProps> = ({
 
                     {!canPublishTileLayer && (
                         <div className="text-xs mt-2 flex items-center">
-                            <CalciteIcon
+                            <calcite-icon
                                 icon="exclamation-mark-triangle"
                                 scale="s"
                                 className="text-yellow-500"
@@ -221,20 +216,20 @@ export const JobCard: FC<JobCardProps> = ({
                 <div className="flex items-center shrink-0 pl-1">
                     <div className="w-6 h-6 relative flex items-center justify-center">
                         {showLoadingIndicator ? (
-                            <CalciteLoader inline scale="s" />
+                            <calcite-loader inline scale="s" label="loading" />
                         ) : (
-                            <CalciteButton
+                            <calcite-button
                                 scale="s"
                                 iconStart="x"
                                 appearance="transparent"
                                 color="neutral"
                                 onClick={onRemove.bind(null, job)}
                                 label={t('remove_wayport_job')}
-                            ></CalciteButton>
+                            ></calcite-button>
                         )}
                     </div>
 
-                    <CalciteButton
+                    <calcite-button
                         scale="s"
                         iconStart="search"
                         appearance="transparent"
@@ -242,7 +237,7 @@ export const JobCard: FC<JobCardProps> = ({
                         onClick={onZoomTo.bind(null, job)}
                         label={t('zoom_to_wayport_job')}
                         disabled={shouldDisableZoomToButton}
-                    ></CalciteButton>
+                    ></calcite-button>
 
                     <span className="ml-1">{releaseDateLabel}</span>
                 </div>

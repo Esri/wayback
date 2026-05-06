@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

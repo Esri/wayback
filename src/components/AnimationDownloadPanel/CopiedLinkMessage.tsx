@@ -17,7 +17,6 @@ import { selectAnimationLinkIsCopied } from '@store/AnimationMode/reducer';
 import classNames from 'classnames';
 import React from 'react';
 import { useAppSelector } from '@store/configureStore';
-import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 
 export const CopiedLinkMessage = () => {
@@ -38,7 +37,7 @@ export const CopiedLinkMessage = () => {
             )}
         >
             <div className=" flex items-center">
-                <CalciteIcon scale="s" icon="check" />
+                <calcite-icon scale="s" icon="check" />
                 <span className="ml-1">{t('link_copied_to_clipboard')}</span>
             </div>
         </div>

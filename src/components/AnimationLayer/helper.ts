@@ -14,6 +14,7 @@
  */
 
 import MapView from '@arcgis/core/views/MapView';
+import { Screenshot } from '@arcgis/core/views/types';
 import { getReferenceLayer } from '@components/ReferenceLayer/helper';
 import { convertCanvas2HtmlImageElement } from '@utils/snippets/convertCanvas2HtmlImageElement';
 import { loadImageAsHTMLIMageElement } from '@utils/snippets/loadImage';
@@ -27,7 +28,7 @@ type GetScreenshotOfBasemapLayersParams = {
 };
 
 type GetScreenshotOfBasemapLayersOutput = {
-    referenceLayersScreenshot: __esri.Screenshot | null;
+    referenceLayersScreenshot: Screenshot | null;
 };
 
 /**

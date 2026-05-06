@@ -19,7 +19,6 @@ import { IWaybackItem } from '@typings/index';
 // import classnames from 'classnames';
 
 import { LayerSelector } from '../';
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import { Trans, useTranslation } from 'react-i18next';
 
 export const SwipeWidgetLayerSelectorWidth = 220;
@@ -128,7 +127,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
 
         return (
             <div className="absolute top-1 right-1 text-white">
-                <CalciteButton
+                <calcite-button
                     appearance="transparent"
                     kind="neutral"
                     onClick={onClose}

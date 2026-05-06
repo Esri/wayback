@@ -27,11 +27,6 @@ import {
     selectIsLoadingExtentForSelectedRegion,
     selectUpdatesModeRegion,
 } from '@store/UpdatesMode/selectors';
-import {
-    CalciteButton,
-    CalciteInputText,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
 import { changeSelectedRegionForUpdatesMode } from '@store/UpdatesMode/thunks';
 import classNames from 'classnames';
 import { getContryNameByCountryCode } from './helpers';
@@ -107,7 +102,11 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
         if (isLoading) {
             return (
                 <div className="text-center">
-                    <CalciteLoader scale="s" text={t('loading')} />
+                    <calcite-loader
+                        label={t('loading')}
+                        scale="s"
+                        text={t('loading')}
+                    />
                     {/* <p className="">{t('loading')}</p> */}
                 </div>
             );
@@ -140,15 +139,15 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
         return (
             <>
                 <div className="w-full mb-2">
-                    <CalciteInputText
+                    <calcite-input-text
                         placeholder={t('search_region')}
                         value={searchTerm}
                         clearable
-                        onCalciteInputTextInput={(event: any) => {
+                        oncalciteInputTextInput={(event) => {
                             const value = event.target.value || '';
                             setSearchTerm(value);
                         }}
-                    ></CalciteInputText>
+                    ></calcite-input-text>
                 </div>
 
                 <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden">
@@ -192,7 +191,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                             </span>
                         </div>
 
-                        <CalciteButton
+                        <calcite-button
                             appearance="transparent"
                             kind="neutral"
                             icon-start="x"

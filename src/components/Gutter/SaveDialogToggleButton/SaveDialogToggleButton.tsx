@@ -17,7 +17,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
-import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 
 interface IProps {
@@ -71,7 +70,7 @@ export const SaveAsWebmapBtn: React.FC<IProps> = ({
                 // disabled={disabled}
                 data-testid="save-as-webmap-button"
             >
-                <CalciteIcon icon="arcgis-online" scale="l" />
+                <calcite-icon icon="arcgis-online" scale="l" />
             </button>
 
             {hasSelectedItems && (

@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
-import {
-    CalciteLabel,
-    CalciteRadioButton,
-    CalciteRadioButtonGroup,
-} from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 
 export type RadioButtonData = {
@@ -53,10 +48,10 @@ export const RadioButtonGroup: FC<Props> = ({
     onClick,
 }) => {
     return (
-        <CalciteRadioButtonGroup
+        <calcite-radio-button-group
             name={name}
             layout="vertical"
-            onCalciteRadioButtonGroupChange={(event: any) => {
+            oncalciteRadioButtonGroupChange={(event: any) => {
                 // if (onClick) {
                 //     onClick(event.target.value);
                 // }
@@ -70,20 +65,20 @@ export const RadioButtonGroup: FC<Props> = ({
             }}
         >
             {data.map((item, index) => (
-                <CalciteLabel
+                <calcite-label
                     layout="inline"
                     key={item.value + index}
-                    class="text-xs cursor-pointer"
+                    className="text-xs cursor-pointer"
                     // onClick={onClick.bind(null, item.value)}
                 >
-                    <CalciteRadioButton
+                    <calcite-radio-button
                         value={item.value}
                         checked={item.checked || undefined}
                         disabled={disabled || undefined}
-                    ></CalciteRadioButton>
+                    ></calcite-radio-button>
                     {item.label}
-                </CalciteLabel>
+                </calcite-label>
             ))}
-        </CalciteRadioButtonGroup>
+        </calcite-radio-button-group>
     );
 };

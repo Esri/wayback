@@ -12,8 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { CalciteIcon } from '@esri/calcite-components-react';
 import classNames from 'classnames';
 import React, { FC } from 'react';
 import { UserData } from './useUserData';
@@ -96,7 +94,7 @@ export const AccountAvatar: FC<Props> = ({
             return <span className="text-white font-medium">{initials}</span>;
         }
 
-        return <CalciteIcon icon="user" scale="m" />;
+        return <calcite-icon icon="user" scale="m" />;
     };
     return (
         <div

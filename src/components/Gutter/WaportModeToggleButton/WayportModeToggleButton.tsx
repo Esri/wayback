@@ -25,7 +25,6 @@ import { useAppSelector } from '@store/configureStore';
 import { useAppDispatch } from '@store/configureStore';
 import classnames from 'classnames';
 import { IndicatorBubble } from '@components/IndicatorBubble/IndicatorBubble';
-import { CalciteIcon, CalciteLoader } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 // import {
 //     isDownloadDialogOpenToggled,
@@ -138,7 +137,7 @@ export const WaportModeToggleButton = () => {
                     dispatch(updateMapMode('wayport'));
                 }}
             >
-                <CalciteIcon icon="export" scale="l" />
+                <calcite-icon icon="export" scale="l" />
             </button>
             {getIndicator()}
         </div>
