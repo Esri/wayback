@@ -69,9 +69,9 @@ const MapViewComponent: React.FC<Props> = ({
         when(
             () => view.stationary === true,
             () => {
-                console.log(
-                    'MapView is stationary, updating map center, zoom and extent in the store, and query local changes based on the new map center and zoom level'
-                );
+                // console.log(
+                //     'MapView is stationary, updating map center, zoom and extent in the store, and query local changes based on the new map center and zoom level'
+                // );
 
                 const center = view?.center;
 
