@@ -119,25 +119,25 @@ const MapViewComponent: React.FC<Props> = ({
         setMapView(view);
     }, []);
 
-    // Handle center and zoom changes from outside the map view (e.g. fly-to or reset)
-    useEffect(() => {
-        if (!mapView || !center) {
-            return;
-        }
+    // // Handle center and zoom changes from outside the map view (e.g. fly-to or reset)
+    // useEffect(() => {
+    //     if (!mapView || !center) {
+    //         return;
+    //     }
 
-        const { lon: longitude, lat: latitude } = center;
+    //     const { lon: longitude, lat: latitude } = center;
 
-        if (
-            mapView.center.longitude.toFixed(6) === longitude.toFixed(6) &&
-            mapView.center.latitude.toFixed(6) === latitude.toFixed(6) &&
-            mapView.zoom.toFixed(3) === zoom.toFixed(3)
-        ) {
-            // console.log('MapView center and zoom are already at the target values, no need to call goTo()');
-            return;
-        }
+    //     if (
+    //         mapView.center.longitude.toFixed(6) === longitude.toFixed(6) &&
+    //         mapView.center.latitude.toFixed(6) === latitude.toFixed(6) &&
+    //         mapView.zoom.toFixed(3) === zoom.toFixed(3)
+    //     ) {
+    //         // console.log('MapView center and zoom are already at the target values, no need to call goTo()');
+    //         return;
+    //     }
 
-        mapView.goTo({ center: [longitude, latitude], zoom });
-    }, [center, zoom]);
+    //     mapView.goTo({ center: [longitude, latitude], zoom });
+    // }, [center, zoom]);
 
     return (
         <>
@@ -152,7 +152,7 @@ const MapViewComponent: React.FC<Props> = ({
                     constraints={
                         new MapViewConstraints({
                             lods: TileInfo.create().lods,
-                            snapToZoom: false,
+                            snapToZoom: true,
                             rotationEnabled: false,
                         })
                     }

@@ -30,18 +30,7 @@ import {
     mapScaleAndResolutionUpdated,
 } from '@store/Map/reducer';
 
-// import {
-//     isLoadingWaybackItemsToggled,
-//     // activeWaybackItemSelector,
-//     releaseNum4ItemsWithLocalChangesUpdated,
-//     // previewWaybackItemSelector
-// } from '@store/Wayback/reducer';
-
 import MapView from './MapView';
-
-// import AppConfig from '../../app-config';
-import { IExtentGeomety, IMapPointInfo } from '@typings/index';
-// import { getDefaultExtent } from '@utils/LocalStorage';
 import { saveMapCenterToHashParams } from '@utils/urlParams';
 // import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import {
