@@ -18,7 +18,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ArcGISMapView from '@arcgis/core/views/MapView';
 import { watch, when } from '@arcgis/core/core/reactiveUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
-import Extent from '@arcgis/core/geometry/Extent';
 import TileInfo from '@arcgis/core/layers/support/TileInfo';
 import MapViewConstraints from '@arcgis/core/views/2d/MapViewConstraints';
 import '@arcgis/map-components/components/arcgis-map';

@@ -41,6 +41,7 @@ import {
 import { queryLocalChanges } from '@store/Wayback/thunks';
 // import { Point } from '@arcgis/core/geometry';
 import { MapActionButtonGroup } from './MapActionButtonGroup';
+import classNames from 'classnames';
 
 type Props = {
     children?: React.ReactNode;
@@ -96,7 +97,12 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [animationStatus]);
 
     return (
-        <div className="relative shrink-0 grow bg-black">
+        <div
+            className={classNames(
+                'relative shrink-0 grow bg-black',
+                'calcite-theme-override'
+            )}
+        >
             <MapView
                 center={center}
                 zoom={zoom}

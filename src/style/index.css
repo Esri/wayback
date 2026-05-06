@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'https://js.arcgis.com/5.0.18/@arcgis/core/assets/esri/themes/dark/main.css';
+/* @import 'https://js.arcgis.com/5.0.18/@arcgis/core/assets/esri/themes/dark/main.css'; */
 @import './variables.css';
 @import './customized-modal.css';
 @import './customized-tooltip.css';
