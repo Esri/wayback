@@ -14,5 +14,5 @@
     --calcite-color-text-2: var(--default-text-color);
     --calcite-color-text-3: var(--default-text-color);
 
-    --calcite-color-border-3: var(--default-text-color);
+    --calcite-color-border-3: var(--default-text-color-50);
 }

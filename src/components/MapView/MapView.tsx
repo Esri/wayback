@@ -106,12 +106,20 @@ const MapViewComponent: React.FC<Props> = ({
     useEffect(() => {
         const arcgisMapElement = document.querySelector('arcgis-map') as any;
 
-        const view = arcgisMapElement.view;
+        const view = arcgisMapElement.view as ArcGISMapView;
 
         if (!(view instanceof ArcGISMapView)) {
             console.error('The view is not an instance of ArcGISMapView');
             return;
         }
+
+        view.popup.visibleElements = {
+            collapseButton: false,
+            actionBar: false,
+        };
+        view.popup.dockOptions = {
+            buttonEnabled: false,
+        };
 
         initEventHandlers(view);
 
