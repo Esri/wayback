@@ -18,9 +18,10 @@ import React, { useRef, useEffect } from 'react';
 import { IWaybackItem } from '@typings/index';
 
 import MapView from '@arcgis/core/views/MapView';
-import Swipe from '@arcgis/core/widgets/Swipe';
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
-import { watch } from '@arcgis/core/core/reactiveUtils';
+import { ArcgisSwipe } from '@arcgis/map-components/components/arcgis-swipe';
+import '@arcgis/map-components/components/arcgis-swipe';
+import { ArcgisMap } from '@arcgis/map-components/components/arcgis-map';
 
 import { getWaybackLayer } from '../WaybackLayer/getWaybackLayer';
 
@@ -44,63 +45,52 @@ const SwipeWidget: React.FC<Props> = ({
     positionOnChange,
     // onLoaded
 }) => {
-    const swipeWidgetRef = useRef<Swipe>(null);
+    const swipeWidgetRef = useRef<ArcgisSwipe | null>(null);
     const layersRef = useRef<WebTileLayer[]>([]);
 
     const init = async () => {
-        if (swipeWidgetRef.current) {
-            show();
-        } else {
-            const leadingLayer = getWaybackLayer(waybackItem4LeadingLayer);
-            const trailingLayer = getWaybackLayer(waybackItem4TrailingLayer);
+        const leadingLayer = getWaybackLayer(waybackItem4LeadingLayer);
+        const trailingLayer = getWaybackLayer(waybackItem4TrailingLayer);
 
-            layersRef.current = [leadingLayer, trailingLayer];
+        layersRef.current = [leadingLayer, trailingLayer];
 
-            mapView.map.addMany(layersRef.current, 1);
+        mapView.map.addMany(layersRef.current, 1);
 
-            const swipe = new Swipe({
-                view: mapView,
-                leadingLayers: [leadingLayer],
-                trailingLayers: [trailingLayer],
-                direction: 'horizontal',
-                position: 50, // position set to middle of the view (50%)
-            });
+        const mapViewComponent = document.querySelector(
+            'arcgis-map'
+        ) as ArcgisMap;
 
-            swipeWidgetRef.current = swipe;
-
-            mapView.ui.add(swipe);
-
-            addEventHandlers(swipe);
-
-            // onLoaded();
-        }
-    };
-
-    const addEventHandlers = (swipeWidget: Swipe) => {
-        watch(
-            () => swipeWidget.position,
-            (position: number) => {
-                positionOnChange(position);
-            }
-        );
-    };
-
-    const show = () => {
-        mapView.ui.add(swipeWidgetRef.current);
-
-        layersRef.current.forEach((layer) => {
-            layer.visible = true;
-        });
-    };
-
-    const hide = () => {
-        if (swipeWidgetRef.current) {
-            mapView.ui.remove(swipeWidgetRef.current);
+        if (!mapViewComponent) {
+            console.error('MapView component not found in the DOM');
+            return;
         }
 
-        layersRef.current.forEach((layer) => {
-            layer.visible = false;
+        const swipeComponent = document.createElement(
+            'arcgis-swipe'
+        ) as ArcgisSwipe;
+        swipeComponent.position = 50;
+        swipeComponent.view = mapView;
+        swipeComponent.startLayers.add(leadingLayer);
+        swipeComponent.endLayers.add(trailingLayer);
+
+        mapViewComponent.appendChild(swipeComponent);
+
+        swipeComponent.addEventListener('arcgisSwipeInput', () => {
+            positionOnChange(swipeWidgetRef.current.position);
         });
+
+        swipeWidgetRef.current = swipeComponent;
+    };
+
+    const destroy = () => {
+        if (swipeWidgetRef.current) {
+            swipeWidgetRef.current.destroy();
+            swipeWidgetRef.current = null;
+        }
+
+        if (mapView && layersRef.current.length > 0) {
+            mapView.map.removeMany(layersRef.current);
+        }
     };
 
     const setLayer = async (
@@ -124,11 +114,11 @@ const SwipeWidget: React.FC<Props> = ({
         mapView.map.add(newLayer, 1);
 
         if (layerType === 'leading') {
-            swipeWidgetRef.current.leadingLayers.removeAll();
-            swipeWidgetRef.current.leadingLayers.add(newLayer);
+            swipeWidgetRef.current.startLayers.removeAll();
+            swipeWidgetRef.current.startLayers.add(newLayer);
         } else {
-            swipeWidgetRef.current.trailingLayers.removeAll();
-            swipeWidgetRef.current.trailingLayers.add(newLayer);
+            swipeWidgetRef.current.endLayers.removeAll();
+            swipeWidgetRef.current.endLayers.add(newLayer);
         }
     };
 
@@ -160,7 +150,7 @@ const SwipeWidget: React.FC<Props> = ({
         if (isOpen && mapView) {
             init();
         } else {
-            hide();
+            destroy();
         }
     }, [isOpen, mapView]);
 
