@@ -147,7 +147,7 @@ const MapViewComponent: React.FC<Props> = ({
                 <arcgis-map
                     center={initialCenterRef.current}
                     zoom={initialZoomRef.current}
-                    popupDisabled={true}
+                    // popupDisabled={true}
                     constraints={
                         new MapViewConstraints({
                             lods: TileInfo.create().lods,
