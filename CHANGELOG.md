@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Locale Switcher dialog to allow users to change the app's language.
 - Add Locale Suggestion component to prompt users to switch to their browser's language if it matches a supported locale.
 
+### Changed
+- Upgraded `@arcgis/core` to version 5 and migrated from deprecated ArcGIS widgets to the new ArcGIS map components.
+- Removed the `calcite-components-react` wrapper and migrated to using `calcite-components` web components directly in React.
+
 ## 2026-04-28 (Patches)
 
 ### Changed
