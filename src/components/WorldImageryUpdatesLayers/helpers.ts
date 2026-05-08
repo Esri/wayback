@@ -51,13 +51,14 @@ export const getPopupTemplate = (
                 title: 'PubResult',
                 expression: `
                     var monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var strDate = monthList[Month($feature.PubDate)] + " " + Day($feature.PubDate) + ", " + Year($feature.PubDate);
+                    var utcDate = ToUTC($feature.PubDate);
+                    var strDate = monthList[Month(utcDate)] + " " + Day(utcDate) + ", " + Year(utcDate);
                     var pubQY = when(
-                        Month($feature.PubDate) <= 2, "Q1 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 5, "Q2 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 8, "Q3 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 11, "Q4 " + Year($feature.PubDate),
-                        Year($feature.PubDate)
+                        Month(utcDate) <= 2, "Q1 " + Year(utcDate),
+                        Month(utcDate) <= 5, "Q2 " + Year(utcDate),
+                        Month(utcDate) <= 8, "Q3 " + Year(utcDate),
+                        Month(utcDate) <= 11, "Q4 " + Year(utcDate),
+                        Year(utcDate)
                     );
                     if ($feature.PubState == 'Pending') {
                         return "${layerTitle} for this area is scheduled to be published in " + pubQY + ".";
