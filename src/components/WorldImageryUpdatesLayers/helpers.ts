@@ -231,3 +231,24 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
             ],
         });
     };
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/**
+ * Formats a Date object into a UTC timestamp string suitable for query filters.
+ * @param date - The date to format.
+ * @returns A string in the format `YYYY-MM-DD 00:00:00.000`.
+ */
+export const formatTimestamp = (date: Date): string => {
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} 00:00:00.000`;
+};
+
+/**
+ * Returns a new Date shifted by the given number of days from the provided date.
+ * @param date - The starting date.
+ * @param days - Number of days to shift (positive to go forward, negative to go back).
+ * @returns A new Date offset by the specified number of days.
+ */
+export const shiftDays = (date: Date, days: number): Date => {
+    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+};
