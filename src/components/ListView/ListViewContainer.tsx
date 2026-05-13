@@ -27,6 +27,7 @@ import {
     setActiveWaybackItem,
     toggleSelectWaybackItem,
     selectWaybackItemsByReleaseNum,
+    selectIsLoadingWaybackItems,
 } from '@store/Wayback/reducer';
 
 import { shouldOnlyShowItemsWithLocalChangeSelector } from '@store/UI/reducer';
@@ -40,6 +41,7 @@ import {
 import { IWaybackItem } from '@typings/index';
 import { mapExtentSelector, selectMapCenterAndZoom } from '@store/Map/reducer';
 import { selectIsThereAnyOngoingJobs } from '@store/WayportMode/selectors';
+import classNames from 'classnames';
 // import { selectHasReachedLimitOfConcurrentWayportJobs } from '@store/WayportMode/selectors';
 
 type Props = {
@@ -79,6 +81,8 @@ const ListViewContainer = () => {
 
     const mapExtent = useAppSelector(mapExtentSelector);
 
+    const isLoading = useAppSelector(selectIsLoadingWaybackItems);
+
     // const downloadButtonTooltipText = useMemo(() => {
     //     const text = t('export_tile_package_tooltip');
 
@@ -108,7 +112,11 @@ const ListViewContainer = () => {
                 paddingBottom: '2rem',
             }}
         >
-            <div className="mx-4">
+            <div
+                className={classNames('mx-4', {
+                    disabled: isLoading,
+                })}
+            >
                 <ListView
                     isMobile={isMobile}
                     waybackItems={waybackItems}

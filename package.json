@@ -102,7 +102,7 @@
         "@arcgis/map-components": "^5.0.19",
         "@esri/arcgis-rest-portal": "^4.10.1",
         "@esri/calcite-components": "^5.0.2",
-        "@esri/wayback-core": "^1.0.10",
+        "@esri/wayback-core": "^1.1.0-beta.0",
         "@reduxjs/toolkit": "^2.6.1",
         "@vannizhang/images-to-video-converter-client": "^1.1.14",
         "axios": "^1.6.2",
