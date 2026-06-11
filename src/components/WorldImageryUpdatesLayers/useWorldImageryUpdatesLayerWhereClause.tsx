@@ -27,6 +27,7 @@ import {
     // selectUpdatesModeStatus,
 } from '@store/UpdatesMode/selectors';
 import React, { useMemo } from 'react';
+import { formatTimestamp, shiftDays } from './helpers';
 
 const daysToSubtract: Record<UpdatesModeDateFilter, number> = {
     'last-week': 7,
@@ -70,6 +71,8 @@ export const useWorldImageryUpdatesLayerWhereClause = (
     );
 
     const whereClause: string = useMemo(() => {
+        const now = new Date();
+
         const whereClauses: string[] = [
             `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} IS NOT NULL`,
         ];
@@ -89,18 +92,19 @@ export const useWorldImageryUpdatesLayerWhereClause = (
             const daysToSubtractForPublished = daysToSubtract[dateFilter];
             const daysToAddForPending = daysToAdd[dateFilter];
 
-            // Add date filter for published updates if a "last" option is selected and the number of days to subtract is greater than 0
+            // Add date filter for published updates when a "published" option is selected and daysToSubtract > 0.
+            // The range spans from (today - N days) at midnight to today at midnight (UTC), inclusive.
             if (!isPendingOptionsSelected && daysToSubtractForPublished > 0) {
-                const dateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - ${daysToSubtractForPublished} AND CURRENT_TIMESTAMP`;
+                const dateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN TIMESTAMP '${formatTimestamp(shiftDays(now, -daysToSubtractForPublished))}' AND TIMESTAMP '${formatTimestamp(now)}'`;
                 whereClauses.push(dateQuery);
             }
 
-            // Add date filter for pending updates when a "next" option is selected and daysToAdd > 0.
-            // Use `CURRENT_TIMESTAMP - 1` as the lower bound instead of `CURRENT_TIMESTAMP` to capture
-            // pending updates whose PUB_DATE is set to today but at a time earlier than the current moment,
-            // which would otherwise be excluded by the time-aware BETWEEN comparison.
+            // Add date filter for pending updates when a "pending" option is selected and daysToAdd > 0.
+            // The lower bound uses today at midnight (00:00:00 UTC) via formatTimestamp, so any pending
+            // update whose PUB_DATE falls on today (at any time) is included in the results.
+            // The upper bound is (today + N days) at midnight (UTC), inclusive.
             if (isPendingOptionsSelected && daysToAddForPending > 0) {
-                const pendingDateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN CURRENT_TIMESTAMP - 1 AND CURRENT_TIMESTAMP + ${daysToAddForPending}`;
+                const pendingDateQuery = `${WORLD_IMAGERY_UPDATES_LAYER_FIELDS.PUB_DATE} BETWEEN TIMESTAMP '${formatTimestamp(now)}' AND TIMESTAMP '${formatTimestamp(shiftDays(now, daysToAddForPending))}'`;
                 whereClauses.push(pendingDateQuery);
             }
 

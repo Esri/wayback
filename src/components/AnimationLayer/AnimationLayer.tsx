@@ -44,7 +44,6 @@ import {
 import { AnimationDownloadPanel } from '@components/AnimationDownloadPanel';
 import { useFrameDataForDownloadJob } from './useFrameDataForDownloadJob';
 import { delay } from '@utils/snippets/delay';
-import { CalciteLoader } from '@esri/calcite-components-react';
 import { once } from '@arcgis/core/core/reactiveUtils';
 import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
 
@@ -68,7 +67,20 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     /**
      * wayback items with local changes
      */
-    const waybackItems = useAppSelector(waybackItemsWithLocalChangesSelector);
+    const waybackItemsUnsorted = useAppSelector(
+        waybackItemsWithLocalChangesSelector
+    );
+
+    const waybackItems = useMemo(() => {
+        if (!waybackItemsUnsorted?.length) {
+            return [];
+        }
+
+        // sort wayback items by release number in ascending order to make sure the animation plays in the correct order
+        return [...waybackItemsUnsorted].sort(
+            (a, b) => a.releaseDatetime - b.releaseDatetime
+        );
+    }, [waybackItemsUnsorted]);
 
     /**
      * release num of wayback items to be excluded from the animation
@@ -234,7 +246,7 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
             )}
         >
             {animationStatus === 'loading' && (
-                <CalciteLoader scale="l"></CalciteLoader>
+                <calcite-loader label="loading" scale="l"></calcite-loader>
             )}
 
             <CloseButton

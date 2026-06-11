@@ -30,18 +30,7 @@ import {
     mapScaleAndResolutionUpdated,
 } from '@store/Map/reducer';
 
-// import {
-//     isLoadingWaybackItemsToggled,
-//     // activeWaybackItemSelector,
-//     releaseNum4ItemsWithLocalChangesUpdated,
-//     // previewWaybackItemSelector
-// } from '@store/Wayback/reducer';
-
 import MapView from './MapView';
-
-// import AppConfig from '../../app-config';
-import { IExtentGeomety, IMapPointInfo } from '@typings/index';
-// import { getDefaultExtent } from '@utils/LocalStorage';
 import { saveMapCenterToHashParams } from '@utils/urlParams';
 // import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import {
@@ -52,6 +41,7 @@ import {
 import { queryLocalChanges } from '@store/Wayback/thunks';
 // import { Point } from '@arcgis/core/geometry';
 import { MapActionButtonGroup } from './MapActionButtonGroup';
+import classNames from 'classnames';
 
 type Props = {
     children?: React.ReactNode;
@@ -60,23 +50,9 @@ type Props = {
 const MapViewConatiner: React.FC<Props> = ({ children }) => {
     const dispatch = useAppDispatch();
 
-    const mapExtent = useAppSelector(mapExtentSelector);
-
     const animationStatus = useAppSelector(selectAnimationStatus);
 
     const { center, zoom } = useAppSelector(selectMapCenterAndZoom) || {};
-
-    // still need to use default map extent as some old urls may still have it
-    const defaultMapExtent = useMemo((): IExtentGeomety => {
-        // no need to use default map extent if center and zoom are already defined
-        if (center && zoom) {
-            return null;
-        }
-
-        return mapExtent;
-    }, []);
-
-    // const [queryLocation, setQueryLocation] = useState<IMapPointInfo>(null);
 
     const appMode = useAppSelector(selectMapMode);
 
@@ -121,9 +97,13 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
     }, [animationStatus]);
 
     return (
-        <div className="relative shrink-0 grow bg-black">
+        <div
+            className={classNames(
+                'relative shrink-0 grow bg-black',
+                'calcite-theme-override'
+            )}
+        >
             <MapView
-                initialExtent={defaultMapExtent}
                 center={center}
                 zoom={zoom}
                 onStationary={({
@@ -132,18 +112,6 @@ const MapViewConatiner: React.FC<Props> = ({ children }) => {
                     mapResolution,
                     mapScale,
                 }) => {
-                    // queryVersionsWithLocalChanges(mapCenterPoint);
-                    // setQueryLocation(mapCenterPointInfo);
-
-                    // dispatch(
-                    //     mapCenterUpdated({
-                    //         lon: mapCenterPointInfo.longitude,
-                    //         lat: mapCenterPointInfo.latitude,
-                    //     })
-                    // );
-
-                    // dispatch(zoomUpdated(mapCenterPointInfo.zoom));
-
                     const zoomLevel = !isNaN(mapCenterPointInfo.zoom)
                         ? Number.parseInt(mapCenterPointInfo.zoom.toFixed(0))
                         : 0;

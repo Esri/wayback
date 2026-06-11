@@ -13,8 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteButton } from '@esri/calcite-components-react';
-import { useAppDispatch } from '@store/configureStore';
 import { getPortalBaseUrl } from '@utils/Esri-OAuth';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -61,7 +59,7 @@ export const OpenSavedWebmap: FC<Props> = ({ itemId, onWebmapOpened }) => {
                 {t('webmap_ready_message')}
             </p>
             <div>
-                <CalciteButton
+                <calcite-button
                     width="full"
                     label={t('open_wayback_map')}
                     data-testid="open-wayback-webmap-button"
@@ -69,7 +67,7 @@ export const OpenSavedWebmap: FC<Props> = ({ itemId, onWebmapOpened }) => {
                     onClick={openWebmapInNewTab}
                 >
                     {t('open_wayback_map')}
-                </CalciteButton>
+                </calcite-button>
             </div>
         </div>
     );

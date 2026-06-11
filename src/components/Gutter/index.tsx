@@ -15,7 +15,6 @@
 
 import './style.css';
 import React, { FC, useState } from 'react';
-import { CalciteIcon } from '@esri/calcite-components-react';
 import { AppDialogName } from '@store/UI/reducer';
 import classNames from 'classnames';
 
@@ -52,7 +51,7 @@ export const Gutter: FC<IProps> = ({
                         aria-label="About this app"
                         onClick={aboutButtonOnClick}
                     >
-                        <CalciteIcon icon="information" scale="l" />
+                        <calcite-icon icon="information" scale="l" />
                     </button>
                 </div>
 

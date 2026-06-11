@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
-import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -37,7 +32,7 @@ export const LocalChangesToggle: FC<IProps> = ({
 
     return (
         <div className="flex items-center my-1 pl-2">
-            <CalciteButton
+            <calcite-button
                 appearance="transparent"
                 kind="neutral"
                 scale="s"
@@ -46,7 +41,7 @@ export const LocalChangesToggle: FC<IProps> = ({
                 iconStart={isActive ? 'check-square' : 'square'}
             >
                 {/* {t('show_only_local_changes')} */}
-            </CalciteButton>
+            </calcite-button>
 
             <div className="flex items-center gap-x-2">
                 <span className="text-sm ml-1">
@@ -58,7 +53,7 @@ export const LocalChangesToggle: FC<IProps> = ({
                     />
                 </span>
 
-                {loading && <CalciteLoader inline scale="s" />}
+                {loading && <calcite-loader label="loading" inline scale="s" />}
             </div>
         </div>
     );

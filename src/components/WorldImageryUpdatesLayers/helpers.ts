@@ -21,6 +21,7 @@ import {
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol.js';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
+import { PopupTemplateProperties } from '@arcgis/core/PopupTemplate';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
     'vivid-advanced': 'Vantor Vivid Advanced imagery',
@@ -30,7 +31,7 @@ const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
 
 export const getPopupTemplate = (
     category: ImageryUpdatesCategory
-): __esri.PopupTemplateProperties => {
+): PopupTemplateProperties => {
     const layerTitle = LayerTitleByCategory[category];
 
     return {
@@ -50,13 +51,14 @@ export const getPopupTemplate = (
                 title: 'PubResult',
                 expression: `
                     var monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var strDate = monthList[Month($feature.PubDate)] + " " + Day($feature.PubDate) + ", " + Year($feature.PubDate);
+                    var utcDate = ToUTC($feature.PubDate);
+                    var strDate = monthList[Month(utcDate)] + " " + Day(utcDate) + ", " + Year(utcDate);
                     var pubQY = when(
-                        Month($feature.PubDate) <= 2, "Q1 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 5, "Q2 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 8, "Q3 " + Year($feature.PubDate),
-                        Month($feature.PubDate) <= 11, "Q4 " + Year($feature.PubDate),
-                        Year($feature.PubDate)
+                        Month(utcDate) <= 2, "Q1 " + Year(utcDate),
+                        Month(utcDate) <= 5, "Q2 " + Year(utcDate),
+                        Month(utcDate) <= 8, "Q3 " + Year(utcDate),
+                        Month(utcDate) <= 11, "Q4 " + Year(utcDate),
+                        Year(utcDate)
                     );
                     if ($feature.PubState == 'Pending') {
                         return "${layerTitle} for this area is scheduled to be published in " + pubQY + ".";
@@ -116,7 +118,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                         miterLimit: 10,
                                         width: 1.5,
                                         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                            .published.fillColorArray,
+                                            .published.fillColorArray as [
+                                            number,
+                                            number,
+                                            number,
+                                            number,
+                                        ],
                                     },
                                     {
                                         type: 'CIMHatchFill',
@@ -134,7 +141,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                                     width: 1.5,
                                                     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
                                                         .published
-                                                        .fillColorArray,
+                                                        .fillColorArray as [
+                                                        number,
+                                                        number,
+                                                        number,
+                                                        number,
+                                                    ],
                                                 },
                                             ],
                                         },
@@ -177,7 +189,12 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                         miterLimit: 10,
                                         width: 1.5,
                                         color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                            .pending.fillColorArray,
+                                            .pending.fillColorArray as [
+                                            number,
+                                            number,
+                                            number,
+                                            number,
+                                        ],
                                     },
                                     {
                                         type: 'CIMHatchFill',
@@ -194,7 +211,13 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
                                                     miterLimit: 10,
                                                     width: 1.5,
                                                     color: WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS
-                                                        .pending.fillColorArray,
+                                                        .pending
+                                                        .fillColorArray as [
+                                                        number,
+                                                        number,
+                                                        number,
+                                                        number,
+                                                    ],
                                                 },
                                             ],
                                         },
@@ -209,3 +232,24 @@ export const getUniqueValueRenderer4WorldImageryUpdates =
             ],
         });
     };
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/**
+ * Formats a Date object into a UTC timestamp string suitable for query filters.
+ * @param date - The date to format.
+ * @returns A string in the format `YYYY-MM-DD 00:00:00.000`.
+ */
+export const formatTimestamp = (date: Date): string => {
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} 00:00:00.000`;
+};
+
+/**
+ * Returns a new Date shifted by the given number of days from the provided date.
+ * @param date - The starting date.
+ * @param days - Number of days to shift (positive to go forward, negative to go back).
+ * @returns A new Date offset by the specified number of days.
+ */
+export const shiftDays = (date: Date, days: number): Date => {
+    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+};

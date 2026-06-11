@@ -19,7 +19,6 @@ import classnames from 'classnames';
 import { IWaybackItem } from '@typings/index';
 // import { getArcGISOnlinePortalUrl } from '@utils/Tier';
 import { AppContext } from '@contexts/AppContextProvider';
-import { CalciteIcon } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 import { ARCGIS_PROTAL_ROOT } from '@constants/index';
 
@@ -127,7 +126,7 @@ export const ListViewCard: FC<Props> = ({
                     title={t('learn_more_about_release')}
                     aria-label={t('learn_more_about_release')}
                 >
-                    <CalciteIcon icon="information" scale="m" />
+                    <calcite-icon icon="information" scale="m" />
                 </button>
 
                 {/* The download and save web map buttons should not be displayed in mobile view */}
@@ -161,7 +160,7 @@ export const ListViewCard: FC<Props> = ({
                             }
                             aria-label={t('export_tile_package_tooltip')}
                         >
-                            <CalciteIcon icon="export" scale="m" />
+                            <calcite-icon icon="export" scale="m" />
                         </button>
 
                         <button
@@ -175,7 +174,7 @@ export const ListViewCard: FC<Props> = ({
                             aria-label={labelForToggleAddToWebmapBtn}
                             data-testid={`toggle-add-to-webmap-button-${data.releaseNum}`}
                         >
-                            <CalciteIcon icon="arcgis-online" scale="m" />
+                            <calcite-icon icon="arcgis-online" scale="m" />
                         </button>
                     </>
                 )}

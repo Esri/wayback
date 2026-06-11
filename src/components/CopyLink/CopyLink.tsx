@@ -14,7 +14,6 @@
  */
 
 import { MapActionButton } from '@components/MapView/MapActionButton';
-import { CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -39,10 +38,10 @@ export const CopyLink = () => {
         >
             {hasCopied ? (
                 // check icon
-                <CalciteIcon icon="check" scale="m" />
+                <calcite-icon icon="check" scale="m" />
             ) : (
                 // link icon
-                <CalciteIcon icon="link" scale="m" />
+                <calcite-icon icon="link" scale="m" />
             )}
         </MapActionButton>
     );

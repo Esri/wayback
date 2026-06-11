@@ -23,11 +23,6 @@ import {
     IScreenPoint,
     // IWaybackItem,
 } from '@typings/index';
-import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
@@ -114,7 +109,11 @@ const PopUp: FC<IProps> = ({
                 <div className="reticle-wrap"></div>
 
                 <div className="content-wrap text-white">
-                    <CalciteLoader text={t('fetching_metadata')} scale="s" />
+                    <calcite-loader
+                        label={'loading'}
+                        text={t('fetching_metadata')}
+                        scale="s"
+                    />
                 </div>
             </div>
         );
@@ -130,7 +129,7 @@ const PopUp: FC<IProps> = ({
                 data-testid="popup-content"
             >
                 <div className="close-btn text-white">
-                    <CalciteButton
+                    <calcite-button
                         appearance="transparent"
                         kind="neutral"
                         scale="s"
@@ -138,7 +137,7 @@ const PopUp: FC<IProps> = ({
                         label={t('closed_metadata_popup')}
                         data-testid="popup-close-button"
                         onClick={onClose}
-                    ></CalciteButton>
+                    ></calcite-button>
                 </div>
 
                 <div className="text-wrap">

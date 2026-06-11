@@ -12,8 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { CalciteSlider } from '@esri/calcite-components-react';
 import {
     DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB,
     DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB,
@@ -47,7 +45,7 @@ export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
     }, [value]);
 
     return (
-        <CalciteSlider
+        <calcite-slider
             min={DEFAULT_MIN_LEVEL_4_DOWNLOAD_JOB}
             max={DEFAULT_MAX_LEVEL_4_DOWNLOAD_JOB}
             minValue={value[0]}
@@ -55,7 +53,7 @@ export const ScaleRangeSelector: React.FC<ScaleRangeSelectorProps> = ({
             ticks={1}
             // labelTicks={true}
             labelHandles={true}
-            onCalciteSliderChange={(evt) => {
+            oncalciteSliderChange={(evt) => {
                 const taget = evt.target;
                 const value = taget.value;
                 // console.log('Slider changed: ', value);

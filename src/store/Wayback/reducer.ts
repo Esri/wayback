@@ -159,7 +159,7 @@ export const {
     localChangesQueryDurationMsUpdated,
 } = slice.actions;
 
-let delay4SetPreviewWaybackItem: NodeJS.Timeout;
+let delay4SetPreviewWaybackItem: ReturnType<typeof setTimeout> = null;
 
 export const setActiveWaybackItem =
     (releaseNumber: number) =>
@@ -191,7 +191,7 @@ export const setPreviewWaybackItem =
     (dispatch: StoreDispatch, getState: StoreGetState) => {
         clearTimeout(delay4SetPreviewWaybackItem);
 
-        delay4SetPreviewWaybackItem = global.setTimeout(() => {
+        delay4SetPreviewWaybackItem = setTimeout(() => {
             const { allReleaseNumbers, releaseNum4ItemsWithLocalChanges } =
                 getState().WaybackItems;
 

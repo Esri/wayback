@@ -16,39 +16,25 @@
 import React, { useEffect, useRef } from 'react';
 
 import MapView from '@arcgis/core/views/MapView';
-import Zoom from '@arcgis/core/widgets/Zoom';
+import '@arcgis/map-components/components/arcgis-zoom';
 
 type Props = {
     mapView?: MapView;
 };
 
-const SearchWidget: React.FC<Props> = ({ mapView }: Props) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const init = () => {
-        const zoom = new Zoom({
-            view: mapView,
-            container: containerRef.current,
-        });
-    };
-
-    useEffect(() => {
-        if (mapView) {
-            init();
-        }
-    }, [mapView]);
-
+const ZoomWidget: React.FC<Props> = ({ mapView }: Props) => {
     return (
         <div
-            ref={containerRef}
             style={{
                 position: 'absolute',
                 top: 50,
                 left: 15,
                 zIndex: 10,
             }}
-        ></div>
+        >
+            <arcgis-zoom layout="vertical" view={mapView}></arcgis-zoom>
+        </div>
     );
 };
 
-export default SearchWidget;
+export default ZoomWidget;

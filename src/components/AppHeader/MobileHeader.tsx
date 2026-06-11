@@ -15,7 +15,6 @@
 
 import React from 'react';
 import { AppHeaderText } from './AppHeaderText';
-import { CalciteIcon } from '@esri/calcite-components-react';
 
 interface IProps {
     infoButtonOnClick?: () => void;
@@ -28,7 +27,7 @@ const TitleText: React.FC<IProps> = ({ infoButtonOnClick }) => {
                 className="flex justify-center items-center fill-white w-[30px] h-[30px] leading-[30px] mr-4"
                 onClick={infoButtonOnClick}
             >
-                <CalciteIcon icon="information" />
+                <calcite-icon icon="information" />
             </div>
             <AppHeaderText />
         </div>

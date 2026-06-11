@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { Extent, Point } from '@arcgis/core/geometry';
 import MapView from '@arcgis/core/views/MapView';
 import { useAppSelector } from '@store/configureStore';
 import {
@@ -24,6 +23,8 @@ import { IExtent } from '@typings/index';
 import classNames from 'classnames';
 import React, { useState, useRef, FC, useEffect, useMemo } from 'react';
 import { calculateSizeOfExtent } from './useCalculateSizeOfExtent';
+import Point from '@arcgis/core/geometry/Point';
+import Extent from '@arcgis/core/geometry/Extent';
 
 const MIN_SIZE = 256;
 

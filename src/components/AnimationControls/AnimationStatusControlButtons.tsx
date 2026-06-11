@@ -12,12 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {
-    CalciteButton,
-    CalciteIcon,
-    CalciteLoader,
-} from '@esri/calcite-components-react';
 import { AnimationStatus } from '@store/AnimationMode/reducer';
 import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -82,7 +76,7 @@ const ControlButton: FC<ControlButtonProps> = ({ icon, label, onClick }) => {
             title={label}
             type="button"
         >
-            <CalciteIcon icon={icon} />
+            <calcite-icon icon={icon as any} />
         </button>
     );
 };
@@ -146,7 +140,7 @@ export const AnimationStatusControlButtons: React.FC<Props> = ({
                 )
             }
 
-            {status === 'loading' && <CalciteLoader inline />}
+            {status === 'loading' && <calcite-loader label="loading" inline />}
 
             {
                 // when there is a status, show close button to stop the animation

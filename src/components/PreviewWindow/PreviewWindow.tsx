@@ -22,8 +22,6 @@ import MapView from '@arcgis/core/views/MapView';
 // import styled from 'styled-components';
 import { generateFrames } from './utils';
 import { useTranslation } from 'react-i18next';
-import { ca } from 'date-fns/locale';
-import { CalciteLoader } from '@esri/calcite-components-react';
 
 export const PREVIEW_WINDOW_WIDTH = 800;
 export const PREVIEW_WINDOW_HEIGHT = 800 * 0.75; // 4:3 aspect ratio

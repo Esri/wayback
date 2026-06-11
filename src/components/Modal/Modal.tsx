@@ -15,7 +15,6 @@
 
 import React, { FC, JSX, ReactNode, useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
-import { CalciteButton } from '@esri/calcite-components-react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -82,7 +81,7 @@ export const Modal: FC<Props> = ({
                             {title || 'Dialog'}
                         </h2>
                     </header>
-                    <CalciteButton
+                    <calcite-button
                         ref={closeButtonRef}
                         icon-start="x"
                         scale="l"

@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CalciteButton, CalciteIcon } from '@esri/calcite-components-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -79,13 +78,13 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 <CalciteIcon icon="language" scale="s"></CalciteIcon>
             </button> */}
 
-            <CalciteButton
+            <calcite-button
                 appearance="transparent"
                 kind="neutral"
                 onClick={localeSwitchButtonOnClick}
                 label={t('choose_label_language')}
                 iconStart="language"
-            ></CalciteButton>
+            ></calcite-button>
         </div>
     );
 };

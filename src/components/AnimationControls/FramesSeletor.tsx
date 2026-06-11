@@ -19,7 +19,6 @@ import { IWaybackItem } from '@typings/index';
 
 import { LayerSelector } from '../';
 import { useTranslation } from 'react-i18next';
-import { CalciteIcon } from '@esri/calcite-components-react';
 
 type Props = {
     // waybackItems: IWaybackItem[];
@@ -89,9 +88,9 @@ const FramesSeletor: React.FC<Props> = ({
                                 aria-label={label}
                             >
                                 {isExcluded ? (
-                                    <CalciteIcon icon="square" scale="s" />
+                                    <calcite-icon icon="square" scale="s" />
                                 ) : (
-                                    <CalciteIcon
+                                    <calcite-icon
                                         icon="check-square"
                                         scale="s"
                                     />

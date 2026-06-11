@@ -13,12 +13,7 @@
  * limitations under the License.
  */
 
-import {
-    CalciteButton,
-    CalciteCheckbox,
-    CalciteIcon,
-    CalciteLabel,
-} from '@esri/calcite-components-react';
+import { ja } from 'date-fns/locale';
 import React, { FC, useEffect, useMemo } from 'react';
 
 type LocaleSuggestionProps = {
@@ -67,6 +62,34 @@ const localeSwitcherStringsByLocale: LocaleSwitcherStringsByLocale = {
             'La aplicación está disponible en español. ¿Desea cambiar?',
         do_not_show_again: 'No volver a mostrar este mensaje',
     },
+    de: {
+        switch_language: 'Sprache wechseln',
+        cancel: 'Abbrechen',
+        locale_switcher_suggestion_message:
+            'Die App ist auf Deutsch verfügbar. Möchten Sie wechseln?',
+        do_not_show_again: 'Diese Nachricht nicht mehr anzeigen',
+    },
+    fr: {
+        switch_language: 'Changer de langue',
+        cancel: 'Annuler',
+        locale_switcher_suggestion_message:
+            "L'application est disponible en français. Voulez-vous changer?",
+        do_not_show_again: 'Ne plus afficher ce message',
+    },
+    ja: {
+        switch_language: '言語を切り替える',
+        cancel: 'キャンセル',
+        locale_switcher_suggestion_message:
+            'このアプリは日本語で利用できます。切り替えますか？',
+        do_not_show_again: 'このメッセージを再度表示しない',
+    },
+    'pt-BR': {
+        switch_language: 'Mudar idioma',
+        cancel: 'Cancelar',
+        locale_switcher_suggestion_message:
+            'O aplicativo está disponível em português. Você gostaria de mudar?',
+        do_not_show_again: 'Não mostrar esta mensagem novamente',
+    },
     zh: {
         switch_language: '切换语言',
         cancel: '取消',
@@ -108,10 +131,10 @@ export const LocaleSuggestion: FC<LocaleSuggestionProps> = ({
                 </div>
 
                 <div className="text-sm mb-1">
-                    <CalciteLabel layout="inline">
-                        <CalciteCheckbox
+                    <calcite-label layout="inline">
+                        <calcite-checkbox
                             checked={shouldDisableSuggestion}
-                            onCalciteCheckboxChange={() => {
+                            oncalciteCheckboxChange={() => {
                                 // onDisableSuggestion();
                                 setShouldDisableSuggestion(
                                     !shouldDisableSuggestion
@@ -121,12 +144,12 @@ export const LocaleSuggestion: FC<LocaleSuggestionProps> = ({
                         <span className="text-sm">
                             {strings.do_not_show_again}
                         </span>
-                    </CalciteLabel>
+                    </calcite-label>
                 </div>
 
                 <div className="flex gap-2">
                     <div className="w-1/2">
-                        <CalciteButton
+                        <calcite-button
                             appearance="outline"
                             kind="neutral"
                             width="full"
@@ -136,10 +159,10 @@ export const LocaleSuggestion: FC<LocaleSuggestionProps> = ({
                             }}
                         >
                             {strings.cancel}
-                        </CalciteButton>
+                        </calcite-button>
                     </div>
                     <div className="w-1/2">
-                        <CalciteButton
+                        <calcite-button
                             appearance="outline"
                             kind="neutral"
                             width="full"
@@ -149,7 +172,7 @@ export const LocaleSuggestion: FC<LocaleSuggestionProps> = ({
                             }}
                         >
                             {strings.switch_language}
-                        </CalciteButton>
+                        </calcite-button>
                     </div>
                 </div>
             </div>

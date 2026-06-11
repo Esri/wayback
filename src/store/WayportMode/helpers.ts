@@ -15,7 +15,6 @@
 
 import { IExtent } from '@typings/index';
 import { WayportJob } from './reducer';
-import { Extent } from '@arcgis/core/geometry';
 import {
     CheckJobStatusResponse,
     getJobOutputInfo,
@@ -24,6 +23,7 @@ import { geographicToWebMercator } from '@arcgis/core/geometry/support/webMercat
 import { ca } from 'date-fns/locale';
 import { extractAlternativeFileNameFromMessages } from '@services/wayport/wayportHelpers';
 import { t } from 'i18next';
+import Extent from '@arcgis/core/geometry/Extent';
 
 const TEMP_NEW_DOWNLOAD_JOB_SESSION_STORAGE_KEY = 'wayback_new_download_job';
 

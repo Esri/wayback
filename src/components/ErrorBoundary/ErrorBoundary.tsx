@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { CalciteButton } from '@esri/calcite-components-react';
 import React, { PureComponent, ReactNode } from 'react';
 
 interface Props {
@@ -66,7 +65,7 @@ export default class ErrorBoundary extends PureComponent<Props, State> {
                     </div>
 
                     <div className="text-center mt-8">
-                        <CalciteButton
+                        <calcite-button
                             onClick={() => {
                                 // Reload the app
                                 window.location.hash = '';
@@ -77,7 +76,7 @@ export default class ErrorBoundary extends PureComponent<Props, State> {
                             appearance="outline"
                         >
                             Reload App
-                        </CalciteButton>
+                        </calcite-button>
                     </div>
                 </div>
             </div>

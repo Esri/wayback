@@ -6,6 +6,7 @@
     align-content: stretch;
     align-items: stretch;
     pointer-events: none;
+    z-index: 1;
 }
 
 .popup-container .content-wrap {

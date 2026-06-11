@@ -12,8 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { CalciteButton } from '@esri/calcite-components-react';
 import { WaybackItem } from '@esri/wayback-core';
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';

@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { Point } from '@arcgis/core/geometry';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     isLoadingWaybackItemsToggled,
@@ -24,6 +23,11 @@ import { getWaybackItemsWithLocalChanges } from '@esri/wayback-core';
 import { logger } from '@utils/IndexedDBLogger';
 
 let abortController: AbortController = null;
+
+// Temporarily add this flag to URL to only use size to filter duplicates, which is a more aggressive way to filter duplicates and can significantly reduce the number of wayback items with local changes, thus improving the performance of querying local changes. This is a temporary solution until we have a better way to filter duplicates without relying on size, which can be inaccurate in some cases (e.g., when the image is resized or compressed).
+const ONLY_USE_SIZE_TO_FILTER_DUPLICATES = window.location.search.includes(
+    'onlyUseSizeToFilterDuplicates=true'
+);
 
 export const queryLocalChanges =
     ({
@@ -53,7 +57,11 @@ export const queryLocalChanges =
                     latitude,
                 },
                 zoom,
-                abortController
+                {
+                    signal: abortController.signal,
+                    onlyUseSizeToFilterDuplicates:
+                        ONLY_USE_SIZE_TO_FILTER_DUPLICATES,
+                }
             );
 
             // // calculate elapsed time for getting local changes
