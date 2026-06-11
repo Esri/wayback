@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@store/configureStore';
 
 import {
+    selectIsLoadingWaybackItems,
     setActiveWaybackItem,
     // releaseNum4ItemsWithLocalChangesSelector,
     // allWaybackItemsSelector,
@@ -96,6 +97,8 @@ const AnimationControls = () => {
     const isAnimationActive =
         animationStatus === 'playing' || animationStatus === 'pausing';
 
+    const isLoadingWaybackItems = useAppSelector(selectIsLoadingWaybackItems);
+
     const getContent = () => {
         if (
             !waybackItemsWithLocalChanges ||
@@ -104,7 +107,9 @@ const AnimationControls = () => {
             return (
                 <div className="text-center">
                     <p className="mt-4 text-sm">
-                        {t('loading_versions_with_local_changes')}
+                        {isLoadingWaybackItems
+                            ? t('loading_versions_with_local_changes')
+                            : t('no_version_to_animate')}
                     </p>
                 </div>
             );
@@ -129,15 +134,16 @@ const AnimationControls = () => {
                             />
                         )}
 
-                        {!isAnimationActive && (
-                            <div className="grow leading-tight">
-                                <span className="text-sm opacity-70">
-                                    {animationStatus === 'loading'
-                                        ? t('loading_animation_frames')
-                                        : t('choose_versions_to_animate')}
-                                </span>
-                            </div>
-                        )}
+                        {!isAnimationActive &&
+                            waybackItemsWithLocalChanges.length > 0 && (
+                                <div className="grow leading-tight">
+                                    <span className="text-sm opacity-70">
+                                        {animationStatus === 'loading'
+                                            ? t('loading_animation_frames')
+                                            : t('choose_versions_to_animate')}
+                                    </span>
+                                </div>
+                            )}
 
                         <AnimationStatusControlButtons
                             status={animationStatus}
