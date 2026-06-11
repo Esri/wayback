@@ -78,13 +78,13 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 <CalciteIcon icon="language" scale="s"></CalciteIcon>
             </button> */}
 
-            <CalciteButton
+            <calcite-button
                 appearance="transparent"
                 kind="neutral"
                 onClick={localeSwitchButtonOnClick}
                 label={t('choose_label_language')}
                 iconStart="language"
-            ></CalciteButton>
+            ></calcite-button>
         </div>
     );
 };
