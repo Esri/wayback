@@ -72,11 +72,12 @@ export type MapState = {
      * Map resolution at the current view, in map units per pixel. For example, if the spatial reference of the map is Web Mercator, the resolution is in meters per pixel.
      */
     resolution: number;
-    // /**
-    //  * The locale of the reference layer that is set by the user
-    //  *
-    //  */
-    // referenceLayerLocale: ReferenceLayerLanguage;
+    /**
+     * The locale of the reference layer that is set by the user
+     *
+     * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+     */
+    referenceLayerLocale: ReferenceLayerLanguage;
 };
 
 export const initialMapState: MapState = {
@@ -91,6 +92,10 @@ export const initialMapState: MapState = {
     scale: null,
     resolution: null,
     isUpdaing: false,
+    /**
+     * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+     */
+    referenceLayerLocale: null,
 };
 
 const slice = createSlice({
@@ -151,6 +156,15 @@ const slice = createSlice({
             state.scale = action.payload.scale;
             state.resolution = action.payload.resolution;
         },
+        /**
+         * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+         */
+        referenceLayerLocaleUpdated: (
+            state,
+            action: PayloadAction<ReferenceLayerLanguage>
+        ) => {
+            state.referenceLayerLocale = action.payload;
+        },
     },
 });
 
@@ -167,7 +181,7 @@ export const {
     // zoomUpdated,
     isMapUpdatingToggled,
     mapScaleAndResolutionUpdated,
-    // referenceLayerLocaleUpdated,
+    referenceLayerLocaleUpdated,
     // suggestedReferenceLayerLocaleUpdated,
     // isReferenceLayerSwitcherOpenToggled,
 } = slice.actions;
@@ -191,6 +205,12 @@ export const metadataPopupAnchorSelector = (state: RootState) =>
 export const selectMapCenter = (state: RootState) => state.Map.center;
 
 export const selectIsMapUpdating = (state: RootState) => state.Map.isUpdaing;
+
+/**
+ * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
+ */
+export const selectReferenceLayerLocale = (state: RootState) =>
+    state.Map.referenceLayerLocale;
 
 // export const selectSuggestedReferenceLayerLocale = (state: RootState) =>
 //     state.Map.suggestedReferenceLayerLocale;

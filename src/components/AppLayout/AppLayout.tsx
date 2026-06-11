@@ -121,9 +121,9 @@ const AppLayout: React.FC = () => {
 
             <ProfileCard />
 
-            <LocaleSwitcherDialog />
+            {/* <LocaleSwitcherDialog /> */}
 
-            <LocaleSuggestion />
+            {/* <LocaleSuggestion /> */}
 
             <AboutThisApp />
 
