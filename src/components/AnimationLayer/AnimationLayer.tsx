@@ -67,7 +67,20 @@ export const AnimationLayer: FC<Props> = ({ mapView }: Props) => {
     /**
      * wayback items with local changes
      */
-    const waybackItems = useAppSelector(waybackItemsWithLocalChangesSelector);
+    const waybackItemsUnsorted = useAppSelector(
+        waybackItemsWithLocalChangesSelector
+    );
+
+    const waybackItems = useMemo(() => {
+        if (!waybackItemsUnsorted?.length) {
+            return [];
+        }
+
+        // sort wayback items by release number in ascending order to make sure the animation plays in the correct order
+        return [...waybackItemsUnsorted].sort(
+            (a, b) => a.releaseDatetime - b.releaseDatetime
+        );
+    }, [waybackItemsUnsorted]);
 
     /**
      * release num of wayback items to be excluded from the animation
