@@ -8,6 +8,15 @@ import { DEFAULT_APP_URL } from './constants';
 
 const TIMEOUT_LONG = 1000 * 30; // 30 seconds
 
+const popupDataForRelease20240627 = {
+    provider: 'Nearmap',
+    sourceDesc: '2024-06-27 Release',
+    acquisitionDate: '2024-05-01',
+    releaseDate: '2024-06-27',
+    sampRes: 0.07,
+    srcAcc: 0.25,
+};
+
 test.describe('Wayback - Map Popup', () => {
     test('Verify Popup functionalities', async ({ page }) => {
         await mockNetworkRequests(page);
@@ -44,12 +53,7 @@ test.describe('Wayback - Map Popup', () => {
         // verify it contains expected content
         await verifyPopupContent({
             popupContainer,
-            provider: 'Nearmap',
-            sourceDesc: '2024-06-27 Release',
-            acquisitionDate: '2024-05-01',
-            releaseDate: '2024-06-27',
-            sampRes: 0.07,
-            srcAcc: 0.25,
+            ...popupDataForRelease20240627,
         });
 
         // locate the close button and click it to close the popup
@@ -93,86 +97,111 @@ test.describe('Wayback - Map Popup', () => {
         await resetMockedNetworkRequest(page);
     });
 
-    // test('Verfiy Popup in Switch Mode', async ({ page }) => {
-    //     await mockNetworkRequests(page);
+    test('Verfiy Popup in Switch Mode', async ({ page }) => {
+        await mockNetworkRequests(page);
 
-    //     // Navigate to the Switch Mode page
-    //     await page.goto(
-    //         DEFAULT_APP_URL +
-    //             '&mode=swipe'
-    //     );
+        // Navigate to the Switch Mode page
+        await page.goto(DEFAULT_APP_URL + '&mode=swipe');
 
-    //     // find map view container
-    //     const mapViewContainer = page.getByTestId('map-view-container');
-    //     const mapView = mapViewContainer.locator('div.esri-view-root');
-    //     await expect(mapView).toBeVisible({
-    //         timeout: TIMEOUT_LONG,
-    //     });
+        // find map view container
+        const mapViewContainer = page.getByTestId('map-view-container');
+        const mapView = mapViewContainer.locator('div.esri-view-root');
+        await expect(mapView).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
 
-    //     // click on the left side of the swipe map to open a popup
-    //     await mapViewContainer.click({ position: { x: 200, y: 300 } });
+        // verify that the swipe widget layer selectors are visible
+        const swipeWidgetLayerSelectorLeading = page.getByTestId(
+            'swipe-widget-layer-selector-leading'
+        );
+        await expect(swipeWidgetLayerSelectorLeading).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
 
-    //     // Verify that the popup appears
-    //     const popupContainer = page.getByTestId('popup-content');
-    //     await expect(popupContainer).toBeVisible({
-    //         timeout: TIMEOUT_LONG,
-    //     });
+        // find the leading layer selector for the release 2024-06-27,
+        // we want to select this release because it is the one that we have mocked data for
+        const leadingLayerSelector =
+            swipeWidgetLayerSelectorLeading.getByText('2024-06-27');
+        await expect(leadingLayerSelector).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await leadingLayerSelector.click();
 
-    //     // verify it contains expected content
-    //     await verifyPopupContent({
-    //         popupContainer,
-    //         provider: 'Nearmap',
-    //         sourceDesc: 'Redlands, CA',
-    //         acquisitionDate: '2024-05-01',
-    //         releaseDate: '2024-06-27',
-    //         sampRes: 0.05,
-    //         srcAcc: 0.25,
-    //     });
+        const swipeWidgetLayerSelectorTrailing = page.getByTestId(
+            'swipe-widget-layer-selector-trailing'
+        );
+        await expect(swipeWidgetLayerSelectorTrailing).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
 
-    //     // find the close button and click it to close the popup
-    //     const popupCloseButton = page.getByTestId('popup-close-button');
-    //     await popupCloseButton.click();
+        // find the trailing layer selector for the release 2016-02-04,
+        // we want to select this release because it is the one that we have mocked data for
+        const trailingLayerSelector =
+            swipeWidgetLayerSelectorTrailing.getByText('2016-02-04');
+        await expect(trailingLayerSelector).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await trailingLayerSelector.click();
 
-    //     // Verify the popup is closed
-    //     await expect(popupContainer).toBeHidden({
-    //         timeout: TIMEOUT_LONG,
-    //     });
+        // click on the left side of the swipe map to open a popup
+        await mapViewContainer.click({ position: { x: 200, y: 300 } });
 
-    //     // get width of the map view container
-    //     const mapViewBoundingBox = await mapView.boundingBox();
-    //     if (!mapViewBoundingBox) {
-    //         throw new Error('Failed to get map view bounding box');
-    //     }
-    //     // get width of the map view
-    //     const mapViewWidth = mapViewBoundingBox.width;
+        // Verify that the popup appears
+        const popupContainer = page.getByTestId('popup-content');
+        await expect(popupContainer).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
 
-    //     // get swipe position x (center + 50px), which is on the right side of the swipe map
-    //     const swipePositionX = mapViewWidth / 2 + 50;
+        // verify it contains expected content
+        await verifyPopupContent({
+            popupContainer,
+            ...popupDataForRelease20240627,
+        });
 
-    //     // click on the right side of the swipe map to open a popup
-    //     await mapViewContainer.click({
-    //         position: { x: swipePositionX, y: 300 },
-    //     });
+        // find the close button and click it to close the popup
+        const popupCloseButton = page.getByTestId('popup-close-button');
+        await popupCloseButton.click();
 
-    //     // Verify that the popup appears
-    //     await expect(popupContainer).toBeVisible({
-    //         timeout: TIMEOUT_LONG,
-    //     });
+        // Verify the popup is closed
+        await expect(popupContainer).toBeHidden({
+            timeout: TIMEOUT_LONG,
+        });
 
-    //     // verify it contains expected content
-    //     await verifyPopupContent({
-    //         popupContainer,
-    //         provider: 'Microsoft',
-    //         sourceDesc: 'UC-G',
-    //         acquisitionDate: '2015-11-21',
-    //         releaseDate: '2016-02-04',
-    //         sampRes: 0.5,
-    //         srcAcc: 4.25,
-    //     });
+        // get width of the map view container
+        const mapViewBoundingBox = await mapView.boundingBox();
+        if (!mapViewBoundingBox) {
+            throw new Error('Failed to get map view bounding box');
+        }
+        // get width of the map view
+        const mapViewWidth = mapViewBoundingBox.width;
 
-    //     // Clean up mocked network requests
-    //     await resetMockedNetworkRequest(page);
-    // });
+        // get swipe position x (center + 50px), which is on the right side of the swipe map
+        const swipePositionX = mapViewWidth / 2 + 50;
+
+        // click on the right side of the swipe map to open a popup
+        await mapViewContainer.click({
+            position: { x: swipePositionX, y: 300 },
+        });
+
+        // Verify that the popup appears
+        await expect(popupContainer).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+
+        // verify it contains expected content
+        await verifyPopupContent({
+            popupContainer,
+            provider: 'Nearmap',
+            sourceDesc: '2016-02-04 Release',
+            acquisitionDate: '2015-11-21',
+            releaseDate: '2016-02-04',
+            sampRes: 0.07,
+            srcAcc: 0.75,
+        });
+
+        // Clean up mocked network requests
+        await resetMockedNetworkRequest(page);
+    });
 });
 
 /**
