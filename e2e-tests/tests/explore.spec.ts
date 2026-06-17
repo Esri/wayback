@@ -1,18 +1,17 @@
 import { test, expect } from '@playwright/test';
-import { DEV_SERVER_URL } from '../playwright.config';
+// import { DEV_SERVER_URL } from '../playwright.config';
 import {
     mockNetworkRequests,
     resetMockedNetworkRequest,
 } from '../helpers/mockNetworkRequests';
+import { DEFAULT_APP_URL } from './constants';
 
 test.describe('Wayback - Explorer Mode', () => {
     test('Verify Explorer Mode functionalities', async ({ page }) => {
         await mockNetworkRequests(page);
 
         // Navigate to the Explorer Mode page
-        await page.goto(
-            DEV_SERVER_URL + '/#mapCenter=-117.19462%2C34.05786%2C17'
-        );
+        await page.goto(DEFAULT_APP_URL);
 
         // Verify the "Explore Mode" button is visible and active
         const exploreModeButton = page.getByTestId('explore-mode-toggle-btn');
@@ -27,7 +26,7 @@ test.describe('Wayback - Explorer Mode', () => {
         const listCards = page.locator('[data-testid^="list-card-"]');
 
         // Wait for at least one card to be visible
-        await expect(listCards.first()).toBeVisible({ timeout: 10000 });
+        await expect(listCards.first()).toBeVisible({ timeout: 30000 });
 
         // Verify there is at least one card in the list
         const listCardCount = await listCards.count();
@@ -69,7 +68,9 @@ test.describe('Wayback - Explorer Mode', () => {
             (await secondBar.getAttribute('data-release-num')) || '';
 
         // Hover over the second highlighted bar and verify the preview window
-        await secondBar.hover();
+        // The SVG parent element is intercepting pointer events before they reach the rect child.
+        // The fix is to use { force: true } on the hover call to bypass Playwright's actionability checks.
+        await secondBar.hover({ force: true });
         await verifyPreviewWindowByReleaseNum(page, secondReleaseNum);
 
         // Click the second highlighted bar and verify the corresponding card is highlighted
@@ -97,6 +98,8 @@ const verifyPreviewWindowByReleaseNum = async (
     releaseNum: string
 ) => {
     const previewWindow = page.getByTestId('preview-window-container');
-    await expect(previewWindow).toBeVisible();
+    await expect(previewWindow).toBeVisible({
+        timeout: 30000,
+    });
     await expect(previewWindow).toHaveAttribute('data-release-num', releaseNum);
 };

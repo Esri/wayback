@@ -2,6 +2,8 @@ import { test, expect, Page } from '@playwright/test';
 import {
     mockedMetadataQueryResponse,
     mockedMetadataQueryResponse2014R1,
+    mockedWaybackConfigResponse,
+    mockedTilemapResponses,
 } from './mockedResponse';
 
 /**
@@ -14,6 +16,15 @@ export const mockNetworkRequests = async (page: Page) => {
     await page.route('https://mtags.arcgis.com/tags-min.js', (route) =>
         route.abort()
     );
+
+    await page.route('**/waybackconfig.json', async (route) => {
+        console.log('Mocked waybackconfig.json request intercepted');
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedWaybackConfigResponse),
+        });
+    });
 
     await page.route(
         '**/sharing/rest/content/users/*/addItem',
@@ -75,6 +86,26 @@ export const mockNetworkRequests = async (page: Page) => {
             });
         }
     );
+
+    // Mocked response for World Imagery tilemap requests, returned in sequence, looping back to the start after the last one
+    let tilemapRequestCount = 0;
+    await page.route(
+        '**/arcgis/rest/services/World_Imagery/MapServer/tilemap/**',
+        async (route) => {
+            const index = tilemapRequestCount;
+            console.log(
+                `Mocked World Imagery tilemap request intercepted (response #${index})`
+            );
+            tilemapRequestCount =
+                (tilemapRequestCount + 1) % mockedTilemapResponses.length;
+
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockedTilemapResponses[index]),
+            });
+        }
+    );
 };
 
 /**
@@ -93,4 +124,8 @@ export const resetMockedNetworkRequest = async (page: Page) => {
     await page.unroute(
         '**/arcgis/rest/services/World_Imagery_Metadata_*/MapServer/*/query*'
     );
+    await page.unroute(
+        '**/arcgis/rest/services/World_Imagery/MapServer/tilemap/**'
+    );
+    await page.unroute('**/waybackconfig.json');
 };
