@@ -1,42 +1,4 @@
 export const mockedMetadataQueryResponse = {
-    displayFieldName: 'NICE_NAME',
-    fieldAliases: {
-        SRC_DATE2: 'SRC_DATE2',
-        NICE_DESC: 'NICE_DESC',
-        SRC_DESC: 'SRC_DESC',
-        SAMP_RES: 'SAMP_RES',
-        SRC_ACC: 'SRC_ACC',
-    },
-    fields: [
-        {
-            name: 'SRC_DATE2',
-            type: 'esriFieldTypeDate',
-            alias: 'SRC_DATE2',
-            length: 8,
-        },
-        {
-            name: 'NICE_DESC',
-            type: 'esriFieldTypeString',
-            alias: 'NICE_DESC',
-            length: 25,
-        },
-        {
-            name: 'SRC_DESC',
-            type: 'esriFieldTypeString',
-            alias: 'SRC_DESC',
-            length: 25,
-        },
-        {
-            name: 'SAMP_RES',
-            type: 'esriFieldTypeDouble',
-            alias: 'SAMP_RES',
-        },
-        {
-            name: 'SRC_ACC',
-            type: 'esriFieldTypeDouble',
-            alias: 'SRC_ACC',
-        },
-    ],
     features: [
         {
             attributes: {
@@ -51,44 +13,6 @@ export const mockedMetadataQueryResponse = {
 };
 
 export const mockedMetadataQueryResponse2014R1 = {
-    displayFieldName: 'NICE_NAME',
-    fieldAliases: {
-        SRC_DATE2: 'SRC_DATE2',
-        NICE_DESC: 'NICE_DESC',
-        SRC_DESC: 'SRC_DESC',
-        SAMP_RES: 'SAMP_RES',
-        SRC_ACC: 'SRC_ACC',
-    },
-    fields: [
-        {
-            name: 'SRC_DATE2',
-            type: 'esriFieldTypeDate',
-            alias: 'SRC_DATE2',
-            length: 8,
-        },
-        {
-            name: 'NICE_DESC',
-            type: 'esriFieldTypeString',
-            alias: 'NICE_DESC',
-            length: 25,
-        },
-        {
-            name: 'SRC_DESC',
-            type: 'esriFieldTypeString',
-            alias: 'SRC_DESC',
-            length: 25,
-        },
-        {
-            name: 'SAMP_RES',
-            type: 'esriFieldTypeDouble',
-            alias: 'SAMP_RES',
-        },
-        {
-            name: 'SRC_ACC',
-            type: 'esriFieldTypeDouble',
-            alias: 'SRC_ACC',
-        },
-    ],
     features: [
         {
             attributes: {
@@ -97,6 +21,51 @@ export const mockedMetadataQueryResponse2014R1 = {
                 SRC_DESC: 'UC-G',
                 SAMP_RES: 0.5,
                 SRC_ACC: 4.25,
+            },
+        },
+    ],
+};
+
+// mocked metatdata query response for 2016_r3 (release num 6354)
+export const mockedMetadataQueryResponse2016R3 = {
+    features: [
+        {
+            attributes: {
+                SRC_DATE2: 1448150400000,
+                NICE_DESC: 'Nearmap',
+                SRC_DESC: '2016-02-04 Release',
+                SAMP_RES: 0.070000000000000007,
+                SRC_ACC: 0.75,
+            },
+        },
+    ],
+};
+
+// mocked metatdata query response for 2018_r5 (release num 20399)
+export const mockedMetadataQueryResponse2018R5 = {
+    features: [
+        {
+            attributes: {
+                SRC_DATE2: 1510531200000,
+                NICE_DESC: 'Nearmap',
+                SRC_DESC: '2018-04-11 Release',
+                SAMP_RES: null,
+                SRC_ACC: null,
+            },
+        },
+    ],
+};
+
+// mocked metatdata query response for 2024_r7 (release num 39767)
+export const mockedMetadataQueryResponse2024R7 = {
+    features: [
+        {
+            attributes: {
+                SRC_DATE2: 1714608000000,
+                NICE_DESC: 'Nearmap',
+                SRC_DESC: '2024-06-27 Release',
+                SAMP_RES: 0.074999999999999997,
+                SRC_ACC: 0.25,
             },
         },
     ],

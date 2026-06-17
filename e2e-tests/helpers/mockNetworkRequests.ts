@@ -4,6 +4,9 @@ import {
     mockedMetadataQueryResponse2014R1,
     mockedWaybackConfigResponse,
     mockedTilemapResponses,
+    mockedMetadataQueryResponse2016R3,
+    mockedMetadataQueryResponse2018R5,
+    mockedMetadataQueryResponse2024R7,
 } from './mockedResponse';
 
 /**
@@ -75,6 +78,36 @@ export const mockNetworkRequests = async (page: Page) => {
                     status: 200,
                     contentType: 'application/json',
                     body: JSON.stringify(mockedMetadataQueryResponse2014R1),
+                });
+            }
+
+            if (url.includes('World_Imagery_Metadata_2016_r03')) {
+                console.log('Using mockedMetadataQueryResponse for 2016_r03');
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockedMetadataQueryResponse2016R3),
+                });
+            }
+
+            if (url.includes('World_Imagery_Metadata_2018_r05')) {
+                console.log('Using mockedMetadataQueryResponse for 2018_r05');
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockedMetadataQueryResponse2018R5),
+                });
+            }
+
+            if (url.includes('World_Imagery_Metadata_2024_r07')) {
+                console.log('Using mockedMetadataQueryResponse for 2024_r07');
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockedMetadataQueryResponse2024R7),
                 });
             }
 
