@@ -174,6 +174,7 @@ export const SaveWebmapDialog: FC<Props> = ({
                             action: (
                                 <button
                                     className="font-semibold underline cursor-pointer text-custom-theme-blue-light"
+                                    data-testid="prompt-to-select-wayback-item-to-save-as-webmap"
                                     // onClick={chooseActiveItemOnClick.bind(
                                     //     null,
                                     //     activeWaybackItem.releaseNum

@@ -173,6 +173,7 @@ export const ListViewCard: FC<Props> = ({
                             title={labelForToggleAddToWebmapBtn}
                             aria-label={labelForToggleAddToWebmapBtn}
                             data-testid={`toggle-add-to-webmap-button-${data.releaseNum}`}
+                            data-is-selected={isSelected}
                         >
                             <calcite-icon icon="arcgis-online" scale="m" />
                         </button>
