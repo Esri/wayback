@@ -49,7 +49,10 @@ export const SummaryInfo = () => {
             </div>
 
             <div>
-                <p className="text-sm font-bolder">
+                <p
+                    className="text-sm font-bolder"
+                    data-testid="updates-mode-summary-info"
+                >
                     {/* {t('updates_mode_summary_info', {
                         sites: outStatistics?.count || 0,
                         areas: formatArea(outStatistics.area, appLanguage),

@@ -75,6 +75,7 @@ export const RadioButtonGroup: FC<Props> = ({
                         value={item.value}
                         checked={item.checked || undefined}
                         disabled={disabled || undefined}
+                        data-testid={`${name}-radio-button-${item.value}`}
                     ></calcite-radio-button>
                     {item.label}
                 </calcite-label>

@@ -48,6 +48,49 @@ test.describe('Wayback - Updates Mode', () => {
         // Verify that the sign-in prompt is no longer visible
         await expect(signInPrompt).toBeHidden();
 
+        // by default, the category filter should be set to 'vivid-advanced', so verify that the corresponding radio button is checked
+        const vividAdvancedRadioButton = page.getByTestId(
+            'category-filter-radio-button-vivid-advanced'
+        );
+        await expect(vividAdvancedRadioButton).toHaveAttribute('checked');
+        // check the summary info is displayed with the correct statistics from the mocked response
+        const summaryInfo = page.getByTestId('updates-mode-summary-info');
+
+        // find the vivid-standard and community-contributed radio buttons and verify that they are not checked
+        const vividStandardRadioButton = page.getByTestId(
+            'category-filter-radio-button-vivid-standard'
+        );
+        await expect(vividStandardRadioButton).not.toHaveAttribute('checked');
+
+        // click the vivid-standard radio button and verify that it is checked and the summary info is updated with the corresponding mocked statistics
+        await vividStandardRadioButton.click();
+        await expect(vividStandardRadioButton).toHaveAttribute('checked');
+        await expect(summaryInfo).toHaveText(
+            '999 published areas covering 90.0M km²'
+        );
+
+        // click the community-contributed radio button and verify that it is checked and the summary info is updated with the corresponding mocked statistics
+        const communityContributedRadioButton = page.getByTestId(
+            'category-filter-radio-button-community-contributed'
+        );
+        await expect(communityContributedRadioButton).not.toHaveAttribute(
+            'checked'
+        );
+        await communityContributedRadioButton.click();
+        await expect(communityContributedRadioButton).toHaveAttribute(
+            'checked'
+        );
+        await expect(summaryInfo).toHaveText(
+            '333 published areas covering 30K km²'
+        );
+
+        // click back the vivid-advanced radio button and verify that it is checked and the summary info is updated with the corresponding mocked statistics
+        await vividAdvancedRadioButton.click();
+        await expect(vividAdvancedRadioButton).toHaveAttribute('checked');
+        await expect(summaryInfo).toHaveText(
+            '666 published areas covering 6.0M km²'
+        );
+
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);
     });
