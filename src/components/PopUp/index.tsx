@@ -59,7 +59,7 @@ const PopUp: FC<IProps> = ({
 
     const formattedDate = useMemo(() => {
         if (!date) {
-            return '';
+            return 'unknown';
         }
 
         const metadataDate = new Date(date);
@@ -72,6 +72,22 @@ const PopUp: FC<IProps> = ({
 
         return format(metadataDate, 'yyyy-MM-dd');
     }, [date]);
+
+    const formattedResolution = useMemo(() => {
+        if (!resolution || isNaN(resolution)) {
+            return 'unknown';
+        }
+
+        return `${resolution.toFixed(2)}`;
+    }, [resolution]);
+
+    const formattedAccuracy = useMemo(() => {
+        if (!accuracy || isNaN(accuracy)) {
+            return 'unknown';
+        }
+
+        return `${accuracy.toFixed(2)}`;
+    }, [accuracy]);
 
     const containerStyle = useMemo(() => {
         if (!metadataAnchorScreenPoint) {
@@ -150,10 +166,12 @@ const PopUp: FC<IProps> = ({
                                         : 'metadata_provider_source'
                                 }
                                 values={{
-                                    provider,
-                                    source,
-                                    formattedDate,
-                                    releaseDate,
+                                    provider: provider || 'unknown provider',
+                                    source: source || 'unknown source',
+                                    formattedDate:
+                                        formattedDate || 'unknown date',
+                                    releaseDate:
+                                        releaseDate || 'unknown release date',
                                 }}
                                 components={{ b: <b /> }}
                             />
@@ -162,14 +180,14 @@ const PopUp: FC<IProps> = ({
                     <p className="mb-2">
                         <Trans
                             i18nKey="metadata_resolution"
-                            values={{ resolution: +resolution.toFixed(2) }}
+                            values={{ resolution: formattedResolution }}
                             components={{ b: <b /> }}
                         />
                     </p>
                     <p className="mb-2">
                         <Trans
                             i18nKey="metadata_accuracy"
-                            values={{ accuracy: +accuracy.toFixed(2) }}
+                            values={{ accuracy: formattedAccuracy }}
                             components={{ b: <b /> }}
                         />
                     </p>
