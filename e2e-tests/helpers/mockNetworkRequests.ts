@@ -8,6 +8,16 @@ import {
     mockedMetadataQueryResponse2018R5,
     mockedMetadataQueryResponse2024R7,
 } from './mockedResponse';
+import {
+    MOCKED_UNIQUE_REGIONS_FOR_METRO_UPDATES,
+    MOCKED_UNIQUE_REGIONS_FOR_REGIONS_UPDATES,
+    MOCKED_UNIQUE_REGIONS_FOR_COMMUNITY_UPDATES,
+    MOCKED_STATISTIC_RESPONSE_FOR_METRO_UPDATES_US,
+    MOCKED_STATISTIC_RESPONSE_FOR_METRO_UPDATES_ALL,
+    MOCKED_STATISTIC_RESPONSE_4_COMMUNITY_UPDATES_ALL,
+    MOCKED_STATISTIC_RESPONSE_4_REGIONAL_UPDATES_ALL,
+    MOCKED_UPDATES_LAYER_EXTENT_RESPONSE,
+} from './mockedResponseForUpdatesLayers';
 
 /**
  * Mock the network requests for the Wayback app.
@@ -139,6 +149,158 @@ export const mockNetworkRequests = async (page: Page) => {
             });
         }
     );
+
+    await page.route(
+        '**/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0/query*',
+        async (route) => {
+            console.log(
+                'Mocked Vivid_Advanced_Blocks_Publication_View query intercepted'
+            );
+
+            // if query contains "outFields=Tag", return mocked response with 4 features with different tags, otherwise return empty features
+            const url = route.request().url();
+            if (url.includes('outFields=Tag&returnDistinctValues=true')) {
+                console.log(
+                    'intercepted query to fetch unique regions from Vivid_Advanced_Blocks_Publication_View, returning mocked response with 4 unique regions'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        MOCKED_UNIQUE_REGIONS_FOR_METRO_UPDATES
+                    ),
+                });
+            }
+
+            if (url.includes('eturnGeometry=false&returnExtentOnly=true')) {
+                console.log(
+                    'intercepted query to fetch extent from Vivid_Advanced_Blocks_Publication_View, returning mocked response with extent'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(MOCKED_UPDATES_LAYER_EXTENT_RESPONSE),
+                });
+            }
+
+            if (url.includes('outStatistics')) {
+                console.log(
+                    'intercepted query with outStatistics from Vivid_Advanced_Blocks_Publication_View, returning mocked statistic response'
+                );
+                const shouldReturnResponseForUS = url.includes(
+                    'Tag%20%3D%20%27US%27'
+                );
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        shouldReturnResponseForUS
+                            ? MOCKED_STATISTIC_RESPONSE_FOR_METRO_UPDATES_US
+                            : MOCKED_STATISTIC_RESPONSE_FOR_METRO_UPDATES_ALL
+                    ),
+                });
+            }
+        }
+    );
+
+    await page.route(
+        '**/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0/query*',
+        async (route) => {
+            console.log(
+                'Mocked Vivid_Standard_Blocks_Publication_View query intercepted'
+            );
+
+            // if query contains "outFields=Tag", return mocked response with 3 features with different tags, otherwise return empty features
+            const url = route.request().url();
+            if (url.includes('outFields=Tag&returnDistinctValues=true')) {
+                console.log(
+                    'intercepted query to fetch unique regions from Vivid_Standard_Blocks_Publication_View, returning mocked response with 3 unique regions'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        MOCKED_UNIQUE_REGIONS_FOR_REGIONS_UPDATES
+                    ),
+                });
+            }
+
+            if (url.includes('eturnGeometry=false&returnExtentOnly=true')) {
+                console.log(
+                    'intercepted query to fetch extent from Vivid_Standard_Blocks_Publication_View, returning mocked response with extent'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(MOCKED_UPDATES_LAYER_EXTENT_RESPONSE),
+                });
+            }
+
+            if (url.includes('outStatistics')) {
+                console.log(
+                    'intercepted query with outStatistics from Vivid_Standard_Blocks_Publication_View, returning mocked statistic response'
+                );
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        MOCKED_STATISTIC_RESPONSE_4_REGIONAL_UPDATES_ALL
+                    ),
+                });
+            }
+        }
+    );
+
+    await page.route(
+        '**/rest/services/Community_Blocks_Publication_View/FeatureServer/0/query*',
+        async (route) => {
+            console.log(
+                'Mocked Community_Blocks_Publication_View query intercepted'
+            );
+
+            // if query contains "outFields=Tag", return mocked response with 2 features with different tags, otherwise return empty features
+            const url = route.request().url();
+            if (url.includes('outFields=Tag&returnDistinctValues=true')) {
+                console.log(
+                    'intercepted query to fetch unique regions from Community_Blocks_Publication_View, returning mocked response with 2 unique regions'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        MOCKED_UNIQUE_REGIONS_FOR_COMMUNITY_UPDATES
+                    ),
+                });
+            }
+
+            if (url.includes('eturnGeometry=false&returnExtentOnly=true')) {
+                console.log(
+                    'intercepted query to fetch extent from Community_Blocks_Publication_View, returning mocked response with extent'
+                );
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(MOCKED_UPDATES_LAYER_EXTENT_RESPONSE),
+                });
+            }
+
+            if (url.includes('outStatistics')) {
+                console.log(
+                    'intercepted query with outStatistics from Community_Blocks_Publication_View, returning mocked statistic response'
+                );
+
+                return await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(
+                        MOCKED_STATISTIC_RESPONSE_4_COMMUNITY_UPDATES_ALL
+                    ),
+                });
+            }
+        }
+    );
 };
 
 /**
@@ -161,4 +323,16 @@ export const resetMockedNetworkRequest = async (page: Page) => {
         '**/arcgis/rest/services/World_Imagery/MapServer/tilemap/**'
     );
     await page.unroute('**/waybackconfig.json');
+
+    await page.unroute(
+        '**/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0/query*'
+    );
+
+    await page.unroute(
+        '**/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0/query*'
+    );
+
+    await page.unroute(
+        '**/rest/services/Community_Blocks_Publication_View/FeatureServer/0/query*'
+    );
 };

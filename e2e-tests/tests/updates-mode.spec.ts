@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { DEV_SERVER_URL } from '../playwright.config';
 import {
     mockNetworkRequests,
     resetMockedNetworkRequest,
 } from '../helpers/mockNetworkRequests';
 import { signInWithArcGISOnline } from '../helpers/signInWithArcGISOnline';
+import { DEFAULT_APP_URL } from './constants';
 
 test.describe('Wayback - Updates Mode', () => {
     test('Updates Mode shows sign-in prompt for anonymous user and enables filters after authentication', async ({
@@ -13,9 +13,7 @@ test.describe('Wayback - Updates Mode', () => {
         await mockNetworkRequests(page);
 
         // Navigate to the page
-        await page.goto(
-            DEV_SERVER_URL + '/#mapCenter=-117.19462%2C34.05786%2C17'
-        );
+        await page.goto(DEFAULT_APP_URL);
 
         // locate and click the Updates Mode button to open updates mode
         const updatesModeButton = page.getByTestId('updates-mode-toggle-btn');
