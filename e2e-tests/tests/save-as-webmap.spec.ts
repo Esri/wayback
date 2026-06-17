@@ -181,59 +181,6 @@ test.describe('Wayback - Save as Webmap', () => {
         );
         await expect(openWaybackWebmapButton).toBeVisible();
 
-        // // verify that the Save as Webmap dialog appears
-        // const saveAsWebmapDialogContent = page.getByTestId(
-        //     'save-as-webmap-dialog-content'
-        // );
-        // await expect(saveAsWebmapDialogContent).toBeVisible();
-
-        // // Verify that the "Sign In to Save Webmap" button is visible
-        // const signInToSaveWebmapButton = page.getByTestId(
-        //     'sign-in-to-save-webmap-button'
-        // );
-        // await expect(signInToSaveWebmapButton).toBeVisible();
-
-        // // verify that the "Create Wayback Webmap" button is visible but disabled
-        // const createWaybackWebmapButton = page.getByTestId(
-        //     'create-wayback-webmap-button'
-        // );
-        // await expect(createWaybackWebmapButton).toBeVisible();
-        // await expect(createWaybackWebmapButton).toHaveAttribute('disabled');
-
-        // // click the "Sign In to Save Webmap" button
-        // await signInToSaveWebmapButton.click();
-
-        // // perform sign in with ArcGIS Online
-        // await signInWithArcGISOnline(page);
-
-        // // verify the Save as Webmap dialog is still visible after sign in
-        // await expect(saveAsWebmapDialogContent).toBeVisible();
-
-        // // verify that the "Create Wayback Webmap" button is now enabled
-        // await expect(createWaybackWebmapButton).toBeEnabled();
-
-        // // remove the title input to make the required field missing
-        // const webmapTitleInput = page.getByTestId('webmap-title-input');
-        // await webmapTitleInput.fill('');
-
-        // // verify that the "Create Wayback Webmap" button is disabled
-        // await expect(createWaybackWebmapButton).toHaveAttribute('disabled');
-
-        // // fill in the title input
-        // await webmapTitleInput.fill('My Wayback Webmap');
-
-        // // verify that the "Create Wayback Webmap" button is enabled
-        // await expect(createWaybackWebmapButton).toBeEnabled();
-
-        // // click the "Create Wayback Webmap" button
-        // await createWaybackWebmapButton.click();
-
-        // // verify that the "Open Wayback Map" button is visible
-        // const openWaybackWebmapButton = page.getByTestId(
-        //     'open-wayback-webmap-button'
-        // );
-        // await expect(openWaybackWebmapButton).toBeVisible();
-
         await resetMockedNetworkRequest(page);
     });
 });
