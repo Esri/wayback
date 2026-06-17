@@ -80,6 +80,11 @@ The `explore.spec.ts` file contains tests that verify the functionality of the "
 6. **URL Hash Validation**
     - Ensures the URL hash reflects the currently selected release.
 
+7. **Toggle Local Changes**
+    - Verifies the "Show Only Local Changes" toggle button is visible and functional.
+    - Confirms that activating the toggle filters the card list to show only releases with local changes.
+    - Validates that the card list updates correctly when the toggle is activated or deactivated.
+
 ## Test User Profile Dialog
 
 ### Running the User Profile Dialog Tests

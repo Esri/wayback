@@ -32,6 +32,9 @@ test.describe('Wayback - Explorer Mode', () => {
         const listCardCount = await listCards.count();
         expect(listCardCount).toBeGreaterThan(0);
 
+        // For the mocked data, there should be exactly 3 releases with local changes, so we expect 3 cards in the list.
+        expect(listCardCount).toBe(3);
+
         // Click the first card in the list and verify it is selected
         const firstCard = listCards.nth(0);
         await expect(firstCard).toBeVisible();
@@ -82,6 +85,26 @@ test.describe('Wayback - Explorer Mode', () => {
         // verify the hash in the URL corresponds to the selected release
         const url = page.url();
         expect(url).toContain(`active=${secondReleaseNum}`);
+
+        // find the "Show Only Local Changes" toggle button and it should be active by default, click it to turn it off, and verify the button state changes accordingly
+        const localChangesToggleBtn = page.getByTestId(
+            'local-changes-toggle-btn'
+        );
+        await expect(localChangesToggleBtn).toBeVisible();
+        await expect(localChangesToggleBtn).toHaveAttribute(
+            'data-checked',
+            'true'
+        );
+
+        await localChangesToggleBtn.click();
+        await expect(localChangesToggleBtn).toHaveAttribute(
+            'data-checked',
+            'false'
+        );
+
+        // After turning off the "Show Only Local Changes" toggle, all cards should be visible in the list
+        const updatedListCardCount = await listCards.count();
+        expect(updatedListCardCount).toBeGreaterThan(100); // With the mocked data, there should be more than 100 cards in the list when all changes are shown
 
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);
