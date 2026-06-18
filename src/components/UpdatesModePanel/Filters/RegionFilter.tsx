@@ -154,14 +154,14 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                 <div
                     className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden"
                     data-testid="region-filter-options-container"
-                    data-num-options={filteredData.length}
+                    data-num-options={filteredData?.length || 0}
                 >
                     <RadioButtonGroup
                         name="region-filter"
                         data={filteredData}
                         disabled={disabled || false}
                         onClick={(value: string) => {
-                            console.log(`Selected region: ${value}`);
+                            // console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
 
                             // // set the flag to zoom to the selected region
