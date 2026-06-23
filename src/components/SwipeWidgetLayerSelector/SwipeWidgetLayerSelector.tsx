@@ -150,6 +150,7 @@ const SwipeWidgetLayerSelector: React.FC<Props> = ({
                 right: targetLayerType === 'trailing' ? 0 : 'unset',
                 boxSizing: 'border-box',
             }}
+            data-testid={`swipe-widget-layer-selector-${targetLayerType}`}
         >
             {getCloseBtn()}
             {getTitle()}

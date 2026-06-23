@@ -147,16 +147,21 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                             const value = event.target.value || '';
                             setSearchTerm(value);
                         }}
+                        data-testid="region-filter-search-input"
                     ></calcite-input-text>
                 </div>
 
-                <div className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden">
+                <div
+                    className="overflow-y-auto fancy-scrollbar max-h-[200px] p-1 overflow-x-hidden"
+                    data-testid="region-filter-options-container"
+                    data-num-options={filteredData?.length || 0}
+                >
                     <RadioButtonGroup
                         name="region-filter"
                         data={filteredData}
                         disabled={disabled || false}
                         onClick={(value: string) => {
-                            console.log(`Selected region: ${value}`);
+                            // console.log(`Selected region: ${value}`);
                             // Handle the region selection change here
 
                             // // set the flag to zoom to the selected region
@@ -186,7 +191,10 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                 {selectedRegion && (
                     <div className="relative flex items-center gap-2 pl-2 pr-1 py-1 text-white rounded-lg bg-custom-theme-blue">
                         <div className="max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
-                            <span className="text-xs">
+                            <span
+                                className="text-xs"
+                                data-testid="selected-region-name"
+                            >
                                 {getContryNameByCountryCode(selectedRegion)}
                             </span>
                         </div>
@@ -196,6 +204,7 @@ export const RegionFilter: FC<RegionFilterProps> = ({ disabled }) => {
                             kind="neutral"
                             icon-start="x"
                             scale="s"
+                            data-testid="clear-selected-region-button"
                             onClick={() => {
                                 dispatch(
                                     changeSelectedRegionForUpdatesMode('')

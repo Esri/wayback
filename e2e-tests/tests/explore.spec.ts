@@ -1,18 +1,17 @@
 import { test, expect } from '@playwright/test';
-import { DEV_SERVER_URL } from '../playwright.config';
+// import { DEV_SERVER_URL } from '../playwright.config';
 import {
     mockNetworkRequests,
     resetMockedNetworkRequest,
 } from '../helpers/mockNetworkRequests';
+import { DEFAULT_APP_URL } from './constants';
 
 test.describe('Wayback - Explorer Mode', () => {
     test('Verify Explorer Mode functionalities', async ({ page }) => {
         await mockNetworkRequests(page);
 
         // Navigate to the Explorer Mode page
-        await page.goto(
-            DEV_SERVER_URL + '/#mapCenter=-117.19462%2C34.05786%2C17'
-        );
+        await page.goto(DEFAULT_APP_URL);
 
         // Verify the "Explore Mode" button is visible and active
         const exploreModeButton = page.getByTestId('explore-mode-toggle-btn');
@@ -27,11 +26,14 @@ test.describe('Wayback - Explorer Mode', () => {
         const listCards = page.locator('[data-testid^="list-card-"]');
 
         // Wait for at least one card to be visible
-        await expect(listCards.first()).toBeVisible({ timeout: 10000 });
+        await expect(listCards.first()).toBeVisible({ timeout: 30000 });
 
         // Verify there is at least one card in the list
         const listCardCount = await listCards.count();
         expect(listCardCount).toBeGreaterThan(0);
+
+        // For the mocked data, there should be exactly 3 releases with local changes, so we expect 3 cards in the list.
+        expect(listCardCount).toBe(3);
 
         // Click the first card in the list and verify it is selected
         const firstCard = listCards.nth(0);
@@ -69,7 +71,9 @@ test.describe('Wayback - Explorer Mode', () => {
             (await secondBar.getAttribute('data-release-num')) || '';
 
         // Hover over the second highlighted bar and verify the preview window
-        await secondBar.hover();
+        // The SVG parent element is intercepting pointer events before they reach the rect child.
+        // The fix is to use { force: true } on the hover call to bypass Playwright's actionability checks.
+        await secondBar.hover({ force: true });
         await verifyPreviewWindowByReleaseNum(page, secondReleaseNum);
 
         // Click the second highlighted bar and verify the corresponding card is highlighted
@@ -81,6 +85,26 @@ test.describe('Wayback - Explorer Mode', () => {
         // verify the hash in the URL corresponds to the selected release
         const url = page.url();
         expect(url).toContain(`active=${secondReleaseNum}`);
+
+        // find the "Show Only Local Changes" toggle button and it should be active by default, click it to turn it off, and verify the button state changes accordingly
+        const localChangesToggleBtn = page.getByTestId(
+            'local-changes-toggle-btn'
+        );
+        await expect(localChangesToggleBtn).toBeVisible();
+        await expect(localChangesToggleBtn).toHaveAttribute(
+            'data-checked',
+            'true'
+        );
+
+        await localChangesToggleBtn.click();
+        await expect(localChangesToggleBtn).toHaveAttribute(
+            'data-checked',
+            'false'
+        );
+
+        // After turning off the "Show Only Local Changes" toggle, all cards should be visible in the list
+        const updatedListCardCount = await listCards.count();
+        expect(updatedListCardCount).toBeGreaterThan(100); // With the mocked data, there should be more than 100 cards in the list when all changes are shown
 
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);
@@ -97,6 +121,8 @@ const verifyPreviewWindowByReleaseNum = async (
     releaseNum: string
 ) => {
     const previewWindow = page.getByTestId('preview-window-container');
-    await expect(previewWindow).toBeVisible();
+    await expect(previewWindow).toBeVisible({
+        timeout: 30000,
+    });
     await expect(previewWindow).toHaveAttribute('data-release-num', releaseNum);
 };

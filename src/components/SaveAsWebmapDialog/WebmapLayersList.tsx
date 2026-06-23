@@ -45,7 +45,7 @@ export const WebmapLayersList: FC<Props> = ({
     }
 
     return (
-        <div className="">
+        <div className="" data-testid="webmap-layers-list">
             <div className="flex items-center justify-between mb-1">
                 <span className="text-white font-light text-sm">
                     {t('selected_layers')}
@@ -77,6 +77,7 @@ export const WebmapLayersList: FC<Props> = ({
                                 activeWaybackItem?.releaseNum,
                         }
                     )}
+                    data-testid={`webmap-layer-item-${item.releaseNum}`}
                 >
                     <button
                         onClick={setActiveWaybackItemOnClick.bind(
@@ -99,6 +100,7 @@ export const WebmapLayersList: FC<Props> = ({
                                 null,
                                 item.releaseNum
                             )}
+                            data-testid={`remove-webmap-layer-button-${item.releaseNum}`}
                         />
                     )}
                 </div>

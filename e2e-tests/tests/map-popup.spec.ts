@@ -1,20 +1,28 @@
 import { test, expect, Locator } from '@playwright/test';
-import { DEV_SERVER_URL } from '../playwright.config';
+// import { DEV_SERVER_URL } from '../playwright.config';
 import {
     mockNetworkRequests,
     resetMockedNetworkRequest,
 } from '../helpers/mockNetworkRequests';
+import { DEFAULT_APP_URL } from './constants';
 
 const TIMEOUT_LONG = 1000 * 30; // 30 seconds
+
+const popupDataForRelease20240627 = {
+    provider: 'Nearmap',
+    sourceDesc: '2024-06-27 Release',
+    acquisitionDate: '2024-05-01',
+    releaseDate: '2024-06-27',
+    sampRes: 0.07,
+    srcAcc: 0.25,
+};
 
 test.describe('Wayback - Map Popup', () => {
     test('Verify Popup functionalities', async ({ page }) => {
         await mockNetworkRequests(page);
 
         // Navigate to the Explorer Mode page
-        await page.goto(
-            DEV_SERVER_URL + '/#mapCenter=-117.19462%2C34.05786%2C17'
-        );
+        await page.goto(DEFAULT_APP_URL);
 
         // find map view container
         const mapViewContainer = page.getByTestId('map-view-container');
@@ -22,6 +30,16 @@ test.describe('Wayback - Map Popup', () => {
         await expect(mapView).toBeVisible({
             timeout: TIMEOUT_LONG,
         });
+
+        // select the card for the first release with local changes (2024-06-27) based on the mocked data
+        const listCardsContainer = page.getByTestId('card-list');
+        const listCardForRelease20240627 = listCardsContainer.locator(
+            '[data-release-date="2024-06-27"]'
+        );
+        await expect(listCardForRelease20240627).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await listCardForRelease20240627.click();
 
         // Click on the map to open a popup
         await mapViewContainer.click({ position: { x: 300, y: 300 } });
@@ -35,11 +53,7 @@ test.describe('Wayback - Map Popup', () => {
         // verify it contains expected content
         await verifyPopupContent({
             popupContainer,
-            provider: 'Nearmap',
-            sourceDesc: 'Redlands, CA',
-            acquisitionDate: 'May 1, 2024',
-            sampRes: 0.05,
-            srcAcc: 0.25,
+            ...popupDataForRelease20240627,
         });
 
         // locate the close button and click it to close the popup
@@ -51,6 +65,34 @@ test.describe('Wayback - Map Popup', () => {
             timeout: TIMEOUT_LONG,
         });
 
+        // find list card for the release without sample resolution and source accuracy (2018-04-11) based on the mocked data, and click on it
+        const listCardForRelease20180411 = listCardsContainer.locator(
+            '[data-release-date="2018-04-11"]'
+        );
+        await expect(listCardForRelease20180411).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await listCardForRelease20180411.click();
+
+        // Click on the map to open a popup
+        await mapViewContainer.click({ position: { x: 300, y: 300 } });
+
+        // Verify that the popup appears
+        await expect(popupContainer).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+
+        // verify it contains expected content with "unknown" for sample resolution and source accuracy
+        await verifyPopupContent({
+            popupContainer,
+            provider: 'Nearmap',
+            sourceDesc: '2018-04-11 Release',
+            acquisitionDate: '2017-11-12',
+            releaseDate: '2018-04-11',
+            sampRes: 'unknown',
+            srcAcc: 'unknown',
+        });
+
         // Clean up mocked network requests
         await resetMockedNetworkRequest(page);
     });
@@ -58,11 +100,8 @@ test.describe('Wayback - Map Popup', () => {
     test('Verfiy Popup in Switch Mode', async ({ page }) => {
         await mockNetworkRequests(page);
 
-        // Navigate to the Explorer Mode page
-        await page.goto(
-            DEV_SERVER_URL +
-                '/#mapCenter=-117.19462%2C34.05786%2C17&&mode=swipe'
-        );
+        // Navigate to the Switch Mode page
+        await page.goto(DEFAULT_APP_URL + '&mode=swipe');
 
         // find map view container
         const mapViewContainer = page.getByTestId('map-view-container');
@@ -70,6 +109,39 @@ test.describe('Wayback - Map Popup', () => {
         await expect(mapView).toBeVisible({
             timeout: TIMEOUT_LONG,
         });
+
+        // verify that the swipe widget layer selectors are visible
+        const swipeWidgetLayerSelectorLeading = page.getByTestId(
+            'swipe-widget-layer-selector-leading'
+        );
+        await expect(swipeWidgetLayerSelectorLeading).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+
+        // find the leading layer selector for the release 2024-06-27,
+        // we want to select this release because it is the one that we have mocked data for
+        const leadingLayerSelector =
+            swipeWidgetLayerSelectorLeading.getByText('2024-06-27');
+        await expect(leadingLayerSelector).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await leadingLayerSelector.click();
+
+        const swipeWidgetLayerSelectorTrailing = page.getByTestId(
+            'swipe-widget-layer-selector-trailing'
+        );
+        await expect(swipeWidgetLayerSelectorTrailing).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+
+        // find the trailing layer selector for the release 2016-02-04,
+        // we want to select this release because it is the one that we have mocked data for
+        const trailingLayerSelector =
+            swipeWidgetLayerSelectorTrailing.getByText('2016-02-04');
+        await expect(trailingLayerSelector).toBeVisible({
+            timeout: TIMEOUT_LONG,
+        });
+        await trailingLayerSelector.click();
 
         // click on the left side of the swipe map to open a popup
         await mapViewContainer.click({ position: { x: 200, y: 300 } });
@@ -83,11 +155,7 @@ test.describe('Wayback - Map Popup', () => {
         // verify it contains expected content
         await verifyPopupContent({
             popupContainer,
-            provider: 'Nearmap',
-            sourceDesc: 'Redlands, CA',
-            acquisitionDate: 'May 1, 2024',
-            sampRes: 0.05,
-            srcAcc: 0.25,
+            ...popupDataForRelease20240627,
         });
 
         // find the close button and click it to close the popup
@@ -123,11 +191,12 @@ test.describe('Wayback - Map Popup', () => {
         // verify it contains expected content
         await verifyPopupContent({
             popupContainer,
-            provider: 'Microsoft',
-            sourceDesc: 'UC-G',
-            acquisitionDate: 'May 24, 2010',
-            sampRes: 0.5,
-            srcAcc: 4.25,
+            provider: 'Nearmap',
+            sourceDesc: '2016-02-04 Release',
+            acquisitionDate: '2015-11-21',
+            releaseDate: '2016-02-04',
+            sampRes: 0.07,
+            srcAcc: 0.75,
         });
 
         // Clean up mocked network requests
@@ -160,6 +229,7 @@ const verifyPopupContent = async ({
     provider,
     sourceDesc,
     acquisitionDate,
+    releaseDate,
     sampRes,
     srcAcc,
 }: {
@@ -176,24 +246,28 @@ const verifyPopupContent = async ({
      */
     sourceDesc: string;
     /**
-     * The acquisition date string.
+     * The acquisition date string in format 'YYYY-MM-DD'
      */
     acquisitionDate: string;
     /**
+     * release date string in format 'YYYY-MM-DD'
+     */
+    releaseDate: string;
+    /**
      * Sample resolution.
      */
-    sampRes: number;
+    sampRes: string | number;
     /**
      * Source accuracy.
      */
-    srcAcc: number;
+    srcAcc: number | string;
 }) => {
     await expect(popupContainer).toBeVisible({
         timeout: TIMEOUT_LONG,
     });
     // verify it contains expected content
     await expect(popupContainer).toContainText(
-        `${provider} (${sourceDesc}) image captured on ${acquisitionDate}`
+        `${provider} (${sourceDesc}) image captured on ${acquisitionDate} as shown in the ${releaseDate} version of the World Imagery map. `
     );
     await expect(popupContainer).toContainText(
         `Pixels in the source image represent a ground distance of ${sampRes} meters`

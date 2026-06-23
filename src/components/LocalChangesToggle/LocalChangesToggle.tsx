@@ -39,6 +39,8 @@ export const LocalChangesToggle: FC<IProps> = ({
                 onClick={onChange}
                 label={t('show_only_local_changes')}
                 iconStart={isActive ? 'check-square' : 'square'}
+                data-testid="local-changes-toggle-btn"
+                data-checked={isActive ? 'true' : 'false'}
             >
                 {/* {t('show_only_local_changes')} */}
             </calcite-button>

@@ -111,6 +111,7 @@ export const WebmapInputForm: FC<Props> = ({
                         setSnippet(val);
                     }}
                     disabled={shouldDisableInputFields}
+                    data-testid="webmap-snippet-input"
                 ></calcite-input-text>
             </div>
 
@@ -128,6 +129,7 @@ export const WebmapInputForm: FC<Props> = ({
                         setTags(val);
                     }}
                     disabled={shouldDisableInputFields}
+                    data-testid="webmap-tags-input"
                 />
             </div>
 
