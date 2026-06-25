@@ -22,6 +22,7 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol.js';
 import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { PopupTemplateProperties } from '@arcgis/core/PopupTemplate';
+import { t } from 'i18next';
 
 const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
     'vivid-advanced': 'Vantor Vivid Advanced imagery',
@@ -33,6 +34,27 @@ export const getPopupTemplate = (
     category: ImageryUpdatesCategory
 ): PopupTemplateProperties => {
     const layerTitle = LayerTitleByCategory[category];
+
+    /**
+     * `pubQY` and `strDate` are Arcade variables computed at runtime inside the expression below,
+     * so they can't be passed through i18next as real values. Instead we splice the literal Arcade
+     * concatenation syntax (`" + pubQY + "`) in as the interpolated value, with escaping disabled,
+     * so translators can still reposition the variable within the sentence for their locale.
+     */
+    const pendingMessage = t('popup_pub_result_pending', {
+        layerTitle,
+        pubQY: '" + pubQY + "',
+        interpolation: { escapeValue: false },
+    });
+    const publishedMessage = t('popup_pub_result_published', {
+        layerTitle,
+        strDate: '" + strDate + "',
+        interpolation: { escapeValue: false },
+    });
+    const resolutionMessage = t('popup_image_resolution', {
+        resolution: '" + Round($feature.GSD, 2) + "',
+        interpolation: { escapeValue: false },
+    });
 
     return {
         expressionInfos: [
@@ -50,9 +72,9 @@ export const getPopupTemplate = (
                 name: 'expr1',
                 title: 'PubResult',
                 expression: `
-                    var monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    var monthList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
                     var utcDate = ToUTC($feature.PubDate);
-                    var strDate = monthList[Month(utcDate)] + " " + Day(utcDate) + ", " + Year(utcDate);
+                    var strDate =Year(utcDate) + "-" + monthList[Month(utcDate)] + "-" + Day(utcDate);
                     var pubQY = when(
                         Month(utcDate) <= 2, "Q1 " + Year(utcDate),
                         Month(utcDate) <= 5, "Q2 " + Year(utcDate),
@@ -61,9 +83,9 @@ export const getPopupTemplate = (
                         Year(utcDate)
                     );
                     if ($feature.PubState == 'Pending') {
-                        return "${layerTitle} for this area is scheduled to be published in " + pubQY + ".";
+                        return "${pendingMessage}";
                     } else if ($feature.PubState == 'Published') {
-                        return "${layerTitle} for this area was published on " + strDate + ".";
+                        return "${publishedMessage}";
                     }
                 `,
                 returnType: 'string',
@@ -72,13 +94,13 @@ export const getPopupTemplate = (
                 name: 'expr2',
                 title: 'ImageResolution',
                 expression: `
-                    "Pixels in this imagery represent a ground distance of " + Round($feature.GSD, 2) + " meters.";
+                    "${resolutionMessage}";
                 `,
                 returnType: 'string',
             },
         ],
         title: '{expression/expr0}',
-        content: `<p><strong><u>Publication</u>:</strong>&nbsp;&nbsp;{expression/expr1}<br /><strong><u>Resolution</u>:</strong>&nbsp; &nbsp;{expression/expr2}</p>`,
+        content: `<p><strong><u>${t('publication')}</u>:</strong>&nbsp;&nbsp;{expression/expr1}<br /><strong><u>${t('resolution')}</u>:</strong>&nbsp; &nbsp;{expression/expr2}</p>`,
     };
 };
 
