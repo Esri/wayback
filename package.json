@@ -69,9 +69,9 @@
         "autoprefixer": "^10.4.14",
         "babel-loader": "^10.0.0",
         "clean-webpack-plugin": "^3.0.0",
-        "copy-webpack-plugin": "^13.0.0",
+        "copy-webpack-plugin": "^14.0.0",
         "css-loader": "^7.1.2",
-        "css-minimizer-webpack-plugin": "^7.0.2",
+        "css-minimizer-webpack-plugin": "^8.0.0",
         "dotenv": "^16.4.5",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^8.8.0",
@@ -82,7 +82,7 @@
         "html-webpack-plugin": "^5.6.3",
         "husky": "^8.0.3",
         "jest": "^29.5.0",
-        "lint-staged": "^13.2.2",
+        "lint-staged": "^17.0.8",
         "mini-css-extract-plugin": "^2.9.2",
         "postcss": "^8.4.24",
         "postcss-loader": "^7.3.2",
@@ -98,10 +98,10 @@
         "webpack-dev-server": "^5.2.2"
     },
     "dependencies": {
-        "@arcgis/core": "^5.0.19",
-        "@arcgis/map-components": "^5.0.19",
+        "@arcgis/core": "^5.1.8",
+        "@arcgis/map-components": "^5.1.8",
         "@esri/arcgis-rest-portal": "^4.10.1",
-        "@esri/calcite-components": "^5.0.2",
+        "@esri/calcite-components": "^5.1.1",
         "@esri/wayback-core": "^1.1.0",
         "@reduxjs/toolkit": "^2.6.1",
         "@vannizhang/images-to-video-converter-client": "^1.1.14",
@@ -118,5 +118,8 @@
         "react-i18next": "^15.4.1",
         "react-redux": "^9.2.0",
         "redux": "^5.0.1"
+    },
+    "overrides": {
+        "uuid": "^11.1.1"
     }
 }
