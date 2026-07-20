@@ -19,6 +19,7 @@ import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     MapMode,
     mapModeChanged,
+    shouldUseHybridReferenceLayerToggled,
     // referenceLayerLocaleUpdated,
 } from './reducer';
 import { activeDialogUpdated } from '@store/UI/reducer';
@@ -36,6 +37,14 @@ export const updateMapMode = (mode: MapMode) => (dispatch: StoreDispatch) => {
     // close any active dialog when switching map mode
     dispatch(activeDialogUpdated());
 };
+
+export const updateShouldUseHybridReferenceLayer =
+    (shouldUseHybridReferenceLayer: boolean) =>
+    (dispatch: StoreDispatch, getState: StoreGetState) => {
+        dispatch(
+            shouldUseHybridReferenceLayerToggled(shouldUseHybridReferenceLayer)
+        );
+    };
 
 // export const toggleSaveWebmapMode =
 //     () => (dispatch: StoreDispatch, getState: StoreGetState) => {

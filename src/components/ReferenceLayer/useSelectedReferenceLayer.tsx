@@ -13,16 +13,34 @@
  * limitations under the License.
  */
 
-import { HYBRID_REFERENCE_LAYERS } from '@constants/map';
+import {
+    HYBRID_REFERENCE_LAYERS,
+    ReferenceLayerLanguage,
+} from '@constants/map';
 // import { selectReferenceLayerLocale } from '@store/Map/reducer';
 import React, { useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
 import { selectAppLanguage } from '@store/UI/reducer';
+import { selectShouldUseHybridReferenceLayer } from '@store/Map/reducer';
 
 export const useSelecteReferenceLayer = () => {
     const appLanguage = useAppSelector(selectAppLanguage);
 
+    const shouldUseHybridReferenceLayer = useAppSelector(
+        selectShouldUseHybridReferenceLayer
+    );
+
     const selectedLayer = useMemo(() => {
+        // If the user has chosen to use the hybrid reference layer, return that layer regardless of the app language
+        if (shouldUseHybridReferenceLayer) {
+            return (
+                HYBRID_REFERENCE_LAYERS.filter(
+                    (layer) =>
+                        layer.language === ReferenceLayerLanguage.LocalLanguage
+                )[0] || HYBRID_REFERENCE_LAYERS[0]
+            );
+        }
+
         const layer = HYBRID_REFERENCE_LAYERS.filter(
             (layer) => layer.languageCode === appLanguage
         )[0];
@@ -39,7 +57,7 @@ export const useSelecteReferenceLayer = () => {
                 (layer) => layer.languageCode === 'en'
             )[0] || HYBRID_REFERENCE_LAYERS[0]
         );
-    }, [appLanguage]);
+    }, [appLanguage, shouldUseHybridReferenceLayer]);
 
     return selectedLayer;
 };

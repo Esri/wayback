@@ -77,6 +77,11 @@ export type MapState = {
     //  *
     //  */
     // referenceLayerLocale: ReferenceLayerLanguage;
+    /**
+     * If true, use the hybrid reference layer instead of the reference layer matching the selected locale.
+     * This is useful for users who want to see the hybrid reference layer regardless of their selected locale as we only have a limited number of languages the app supports.
+     */
+    shouldUseHybridReferenceLayer: boolean;
 };
 
 export const initialMapState: MapState = {
@@ -91,6 +96,7 @@ export const initialMapState: MapState = {
     scale: null,
     resolution: null,
     isUpdaing: false,
+    shouldUseHybridReferenceLayer: false,
 };
 
 const slice = createSlice({
@@ -151,6 +157,12 @@ const slice = createSlice({
             state.scale = action.payload.scale;
             state.resolution = action.payload.resolution;
         },
+        shouldUseHybridReferenceLayerToggled: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.shouldUseHybridReferenceLayer = action.payload;
+        },
     },
 });
 
@@ -167,6 +179,7 @@ export const {
     // zoomUpdated,
     isMapUpdatingToggled,
     mapScaleAndResolutionUpdated,
+    shouldUseHybridReferenceLayerToggled,
     // referenceLayerLocaleUpdated,
     // suggestedReferenceLayerLocaleUpdated,
     // isReferenceLayerSwitcherOpenToggled,
@@ -229,5 +242,8 @@ export const selectMapScale = (state: RootState) => state.Map.scale;
 export const selectMapResolution = (state: RootState) => state.Map.resolution;
 
 export const selectMapZoomLevel = (state: RootState) => state.Map.zoom;
+
+export const selectShouldUseHybridReferenceLayer = (state: RootState) =>
+    state.Map.shouldUseHybridReferenceLayer;
 
 export default reducer;

@@ -19,12 +19,14 @@ interface IProps {
     isActive: boolean;
     onClick: () => void;
     // localeSwitchButtonOnClick: () => void;
+    referenceLayerSettingsButtonOnClick: () => void;
 }
 
 const ReferenceLayerToggle: React.FC<IProps> = ({
     isActive,
     onClick,
     // localeSwitchButtonOnClick,
+    referenceLayerSettingsButtonOnClick,
 }) => {
     const { t } = useTranslation();
 
@@ -85,6 +87,14 @@ const ReferenceLayerToggle: React.FC<IProps> = ({
                 label={t('choose_label_language')}
                 iconStart="language"
             ></CalciteButton> */}
+
+            <calcite-button
+                appearance="transparent"
+                kind="neutral"
+                onClick={referenceLayerSettingsButtonOnClick}
+                label={t('reference_layer_settings')}
+                iconStart="layer-settings"
+            ></calcite-button>
         </div>
     );
 };
