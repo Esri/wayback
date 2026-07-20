@@ -23,6 +23,7 @@ import {
     // referenceLayerLocaleUpdated,
 } from './reducer';
 import { activeDialogUpdated } from '@store/UI/reducer';
+import { setShouldUseHybridReferenceLayer } from '@utils/LocalStorage';
 // import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 
 // export const updateReferenceLayerLocale =
@@ -44,6 +45,8 @@ export const updateShouldUseHybridReferenceLayer =
         dispatch(
             shouldUseHybridReferenceLayerToggled(shouldUseHybridReferenceLayer)
         );
+
+        setShouldUseHybridReferenceLayer(shouldUseHybridReferenceLayer);
     };
 
 // export const toggleSaveWebmapMode =

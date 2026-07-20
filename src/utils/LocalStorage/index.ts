@@ -26,6 +26,7 @@ enum KEYS {
     hashParams = 'WaybackAppHashParam',
     downloadJobs = 'WaybackAppDownloadJobs',
     referenceLayerLocale = 'WaybackAppPreferredReferenceLayerLocale',
+    shouldUseHybridReferenceLayer = 'WaybackAppShouldUseHybridReferenceLayer',
 }
 
 // const setItem = (key: KEYS, value = '') => {
@@ -54,6 +55,21 @@ const cleanUpLocalStorage = () => {
     removeItem(KEYS.downloadJobs);
 };
 cleanUpLocalStorage();
+
+export const setShouldUseHybridReferenceLayer = (
+    shouldUseHybridReferenceLayer: boolean
+) => {
+    if (shouldUseHybridReferenceLayer) {
+        localStorage.setItem(KEYS.shouldUseHybridReferenceLayer, 'true');
+    } else {
+        localStorage.removeItem(KEYS.shouldUseHybridReferenceLayer);
+    }
+};
+
+export const getShouldUseHybridReferenceLayer = (): boolean => {
+    const val = localStorage.getItem(KEYS.shouldUseHybridReferenceLayer);
+    return val === 'true' ? true : false;
+};
 
 // const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
 //     if (!center || zoom === undefined) {

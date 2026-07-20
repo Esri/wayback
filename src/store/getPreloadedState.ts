@@ -33,11 +33,12 @@ import {
     getSwipeWidgetLayersFromHashParams,
 } from '@utils/urlParams';
 
-import {} from // getShouldOpenSaveWebMapDialog,
-// getDownloadJobsFromLocalStorage,
-// getPreferredReferenceLayerLocale,
-// getDefaultMapLocation,
-'@utils/LocalStorage';
+import {
+    getShouldUseHybridReferenceLayer, // getShouldOpenSaveWebMapDialog,
+    // getDownloadJobsFromLocalStorage,
+    // getPreferredReferenceLayerLocale,
+    // getDefaultMapLocation,
+} from '@utils/LocalStorage';
 import {
     ANIMATION_SPEED_OPTIONS_IN_MILLISECONDS,
     AnimationModeState,
@@ -184,6 +185,7 @@ const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
         center: initialMapCenter?.center,
         zoom: initialMapCenter?.zoom,
         // referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
+        shouldUseHybridReferenceLayer: getShouldUseHybridReferenceLayer(),
     };
 
     return state;
