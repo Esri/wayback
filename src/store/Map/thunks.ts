@@ -19,20 +19,17 @@ import { StoreDispatch, StoreGetState } from '../configureStore';
 import {
     MapMode,
     mapModeChanged,
-    referenceLayerLocaleUpdated,
+    // referenceLayerLocaleUpdated,
 } from './reducer';
 import { activeDialogUpdated } from '@store/UI/reducer';
-import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
+// import { setPreferredReferenceLayerLocale } from '@utils/LocalStorage';
 
-/**
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-export const updateReferenceLayerLocale =
-    (locale: ReferenceLayerLanguage) =>
-    (dispatch: StoreDispatch, getState: StoreGetState) => {
-        setPreferredReferenceLayerLocale(locale);
-        dispatch(referenceLayerLocaleUpdated(locale));
-    };
+// export const updateReferenceLayerLocale =
+//     (locale: ReferenceLayerLanguage) =>
+//     (dispatch: StoreDispatch, getState: StoreGetState) => {
+//         setPreferredReferenceLayerLocale(locale);
+//         dispatch(referenceLayerLocaleUpdated(locale));
+//     };
 
 export const updateMapMode = (mode: MapMode) => (dispatch: StoreDispatch) => {
     dispatch(mapModeChanged(mode));

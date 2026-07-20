@@ -50,7 +50,7 @@ const cleanUpLocalStorage = () => {
     removeItem(KEYS.shouldOpenSaveWebMapDialog);
     removeItem(KEYS.hashParams);
     removeItem(KEYS.showUpdatesWithLocalChanges);
-    // removeItem(KEYS.referenceLayerLocale);
+    removeItem(KEYS.referenceLayerLocale);
     removeItem(KEYS.downloadJobs);
 };
 cleanUpLocalStorage();
@@ -137,26 +137,20 @@ cleanUpLocalStorage();
 //     return val ? JSON.parse(val) : [];
 // };
 
-/**
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-export const setPreferredReferenceLayerLocale = (
-    locale: ReferenceLayerLanguage
-) => {
-    if (locale) {
-        localStorage.setItem(KEYS.referenceLayerLocale, locale);
-    } else {
-        localStorage.removeItem(KEYS.referenceLayerLocale);
-    }
-};
+// export const setPreferredReferenceLayerLocale = (
+//     locale: ReferenceLayerLanguage
+// ) => {
+//     if (locale) {
+//         localStorage.setItem(KEYS.referenceLayerLocale, locale);
+//     } else {
+//         localStorage.removeItem(KEYS.referenceLayerLocale);
+//     }
+// };
 
-/**
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
-    const val = localStorage.getItem(KEYS.referenceLayerLocale);
-    return val as ReferenceLayerLanguage;
-};
+// export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
+//     const val = localStorage.getItem(KEYS.referenceLayerLocale);
+//     return val as ReferenceLayerLanguage;
+// };
 
 // export {
 //     // saveDefaultMapLocation,
