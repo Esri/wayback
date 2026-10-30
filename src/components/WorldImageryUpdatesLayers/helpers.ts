@@ -24,31 +24,23 @@ import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { PopupTemplateProperties } from '@arcgis/core/PopupTemplate';
 import { t } from 'i18next';
 
-/**
- * Returns an Arcade snippet that resolves the product name from the provider prefix
- * (first five letters) of the `AdminName` field, e.g. `EABUS_0762` -> `Airbus Metro`.
- * Unmatched prefixes fall back to Vantor.
- * @param suffix - The product suffix to append to the provider name, e.g. `Metro` or `Regional`.
- */
-const getProductNameArcade = (suffix: 'Metro' | 'Regional'): string => {
-    return `Decode(
-        Upper(Left(DefaultValue($feature, 'AdminName', ''), 5)),
-        'EVADV', 'Vantor Vivid Mosaic ${suffix}',
-        'ENEAR', 'Nearmap ${suffix}',
-        'EABUS', 'Airbus ${suffix}',
-        'Vantor Vivid Mosaic ${suffix}'
-    )`;
-};
-
 const getProductNameArcadeByCategory = (
     category: ImageryUpdatesCategory
 ): string => {
     if (category === 'metro') {
-        return getProductNameArcade('Metro');
+        const VantorProdName = 'Vantor Vivid Mosaic Metro imagery';
+
+        return `Decode(
+            Upper(Left(DefaultValue($feature, 'AdminName', ''), 5)),
+            'EVADV', '${VantorProdName}',
+            'ENEAR', 'Nearmap Metro imagery',
+            'EABUS', 'Airbus Metro imagery',
+            '${VantorProdName}'
+        )`;
     }
 
     if (category === 'regional') {
-        return `'Vantor Vivid Mosaic Global'`;
+        return `'Vantor Vivid Mosaic Global imagery'`;
     }
 
     return `'Community Maps imagery'`;
