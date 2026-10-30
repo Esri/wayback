@@ -21,10 +21,10 @@ import {
     REGIONAL_UPDATES_FEATURE_LAYER_URL,
 } from '@constants/index';
 
-export const VIVID_ADVANCED_FROM_MAXAR_URL =
-    METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
+// export const VIVID_ADVANCED_FROM_MAXAR_URL =
+//     METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
 
-export const VIVID_STANDARD_FROM_MAXAR_URL = REGIONAL_UPDATES_FEATURE_LAYER_URL;
+// export const VIVID_STANDARD_FROM_MAXAR_URL = REGIONAL_UPDATES_FEATURE_LAYER_URL;
 
 export const COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL =
     COMMUNITY_UPDATES_FEATURE_LAYER_URL;
@@ -121,11 +121,11 @@ export enum WorldImageryUpdatesStatusEnum {
 /**
  * Imagery Updates Categories
  *
- * - `vivid-advanced`: Imagery updates from Vantor's Vivid Advanced basemap product.
- * - `vivid-standard`: Imagery updates from Vantor's Vivid Standard basemap product.
+ * - `metro`: High-resolution, up-to-date imagery focused on major metro and high-interest areas worldwide.
+ * - `regional`: Seamlessly blended high-resolution imagery offering consistent coverage across large regions.
  * - `community-contributed`: Imagery updates contributed by the GIS User Community.
  */
 export type ImageryUpdatesCategory =
-    | 'vivid-advanced'
-    | 'vivid-standard'
+    | 'metro'
+    | 'regional'
     | 'community-contributed';

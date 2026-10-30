@@ -126,7 +126,7 @@ export const initialUpdatesModeState: UpdatesModeState = {
     //     WorldImageryUpdatesStatusEnum.pending,
     //     WorldImageryUpdatesStatusEnum.published,
     // ],
-    category: 'vivid-advanced',
+    category: 'metro',
     region: '',
     allRegions: [],
     dateFilter: 'last-year',

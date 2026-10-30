@@ -14,21 +14,23 @@
  */
 
 import {
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL,
+    REGIONAL_UPDATES_FEATURE_LAYER_URL,
+} from '@constants/index';
+import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
     ImageryUpdatesCategory,
-    VIVID_ADVANCED_FROM_MAXAR_URL,
-    VIVID_STANDARD_FROM_MAXAR_URL,
 } from './config';
 
 export const getImageryUpdatesUrl = (
     category: ImageryUpdatesCategory
 ): string => {
-    if (category === 'vivid-advanced') {
-        return VIVID_ADVANCED_FROM_MAXAR_URL;
+    if (category === 'metro') {
+        return METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
     }
 
-    if (category === 'vivid-standard') {
-        return VIVID_STANDARD_FROM_MAXAR_URL;
+    if (category === 'regional') {
+        return REGIONAL_UPDATES_FEATURE_LAYER_URL;
     }
 
     if (category === 'community-contributed') {

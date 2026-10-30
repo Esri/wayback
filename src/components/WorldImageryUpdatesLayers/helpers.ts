@@ -43,12 +43,12 @@ const getProductNameArcade = (suffix: 'Metro' | 'Regional'): string => {
 const getProductNameArcadeByCategory = (
     category: ImageryUpdatesCategory
 ): string => {
-    if (category === 'vivid-advanced') {
+    if (category === 'metro') {
         return getProductNameArcade('Metro');
     }
 
-    if (category === 'vivid-standard') {
-        return getProductNameArcade('Regional');
+    if (category === 'regional') {
+        return `'Vantor Vivid Mosaic Global'`;
     }
 
     return `'Community Maps imagery'`;
