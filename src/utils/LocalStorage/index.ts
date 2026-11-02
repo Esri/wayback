@@ -26,6 +26,7 @@ enum KEYS {
     hashParams = 'WaybackAppHashParam',
     downloadJobs = 'WaybackAppDownloadJobs',
     referenceLayerLocale = 'WaybackAppPreferredReferenceLayerLocale',
+    shouldUseHybridReferenceLayer = 'WaybackAppShouldUseHybridReferenceLayer',
 }
 
 // const setItem = (key: KEYS, value = '') => {
@@ -50,10 +51,25 @@ const cleanUpLocalStorage = () => {
     removeItem(KEYS.shouldOpenSaveWebMapDialog);
     removeItem(KEYS.hashParams);
     removeItem(KEYS.showUpdatesWithLocalChanges);
-    // removeItem(KEYS.referenceLayerLocale);
+    removeItem(KEYS.referenceLayerLocale);
     removeItem(KEYS.downloadJobs);
 };
 cleanUpLocalStorage();
+
+export const setShouldUseHybridReferenceLayer = (
+    shouldUseHybridReferenceLayer: boolean
+) => {
+    if (shouldUseHybridReferenceLayer) {
+        localStorage.setItem(KEYS.shouldUseHybridReferenceLayer, 'true');
+    } else {
+        localStorage.removeItem(KEYS.shouldUseHybridReferenceLayer);
+    }
+};
+
+export const getShouldUseHybridReferenceLayer = (): boolean => {
+    const val = localStorage.getItem(KEYS.shouldUseHybridReferenceLayer);
+    return val === 'true' ? true : false;
+};
 
 // const saveDefaultMapLocation = (center: MapCenter, zoom: number) => {
 //     if (!center || zoom === undefined) {
@@ -137,26 +153,20 @@ cleanUpLocalStorage();
 //     return val ? JSON.parse(val) : [];
 // };
 
-/**
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-export const setPreferredReferenceLayerLocale = (
-    locale: ReferenceLayerLanguage
-) => {
-    if (locale) {
-        localStorage.setItem(KEYS.referenceLayerLocale, locale);
-    } else {
-        localStorage.removeItem(KEYS.referenceLayerLocale);
-    }
-};
+// export const setPreferredReferenceLayerLocale = (
+//     locale: ReferenceLayerLanguage
+// ) => {
+//     if (locale) {
+//         localStorage.setItem(KEYS.referenceLayerLocale, locale);
+//     } else {
+//         localStorage.removeItem(KEYS.referenceLayerLocale);
+//     }
+// };
 
-/**
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
-    const val = localStorage.getItem(KEYS.referenceLayerLocale);
-    return val as ReferenceLayerLanguage;
-};
+// export const getPreferredReferenceLayerLocale = (): ReferenceLayerLanguage => {
+//     const val = localStorage.getItem(KEYS.referenceLayerLocale);
+//     return val as ReferenceLayerLanguage;
+// };
 
 // export {
 //     // saveDefaultMapLocation,

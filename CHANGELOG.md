@@ -5,11 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 2026-11-02
 
 ### Added
 - Add Locale Switcher dialog to allow users to change the app's language.
 - Add Locale Suggestion component to prompt users to switch to their browser's language if it matches a supported locale.
+- Add Reference Layer Settings, allowing users to choose between the Hybrid Reference Layer in local language and the reference layer in the app's language. The selection is saved in local storage.
+
+### Changed
+- Updated the Updates mode to reflect the new World Imagery product structure
+- Removed the legacy reference layer locale switch, which is replaced by the new Reference Layer Settings and the app-level Locale Switcher.
+
+### Fixed
+- Fixed an issue where the map popup could fail when metadata contains null values.
 
 ## 2026-06-11
 

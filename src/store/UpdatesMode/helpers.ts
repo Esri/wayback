@@ -21,8 +21,8 @@ import { UpdatesModeDateFilter } from './reducer';
  */
 const VALID_CATEGORIES = [
     'community-contributed',
-    'vivid-advanced',
-    'vivid-standard',
+    'metro',
+    'regional',
 ] as const satisfies readonly ImageryUpdatesCategory[];
 
 /**

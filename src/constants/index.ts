@@ -37,13 +37,13 @@ export const WAYBACK_EXPORT_GP_SERVICE_ROOT_URL =
  * published to the World Imagery Basemap in the last year or are pending publication.
  *
  * Can be overridden by setting METROPOLITAN_UPDATES_FEATURE_LAYER_URL in environment variables.
- * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0' if not specified.
+ * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Metropolitan_Blocks_Publication_View/FeatureServer/0' if not specified.
  *
  * @see https://www.arcgis.com/home/item.html?id=1491ff7659824fe099aafdcbb633ce90
  */
 export const METROPOLITAN_UPDATES_FEATURE_LAYER_URL =
     ENV_METROPOLITAN_UPDATES_FEATURE_LAYER_URL ||
-    'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0';
+    'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Metropolitan_Blocks_Publication_View/FeatureServer/0';
 
 /**
  * Feature layer URL for the Vivid Standard Block Publication View.
@@ -52,13 +52,13 @@ export const METROPOLITAN_UPDATES_FEATURE_LAYER_URL =
  * published to the World Imagery Basemap in the last year or are pending publication.
  *
  * Can be overridden by setting REGIONAL_UPDATES_FEATURE_LAYER_URL in environment variables.
- * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0' if not specified.
+ * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Regional_Blocks_Publication_View/FeatureServer/0' if not specified.
  *
  * @see https://www.arcgis.com/home/item.html?id=ac2c8e911c3a447d8ac3ba1a8514adf1
  */
 export const REGIONAL_UPDATES_FEATURE_LAYER_URL =
     ENV_REGIONAL_UPDATES_FEATURE_LAYER_URL ||
-    'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Vivid_Standard_Blocks_Publication_View/FeatureServer/0';
+    'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Regional_Blocks_Publication_View/FeatureServer/0';
 
 /**
  * Feature layer URL for the Community Blocks Publication View.
@@ -68,13 +68,13 @@ export const REGIONAL_UPDATES_FEATURE_LAYER_URL =
  * last year or are pending publication.
  *
  * Can be overridden by setting COMMUNITY_UPDATES_FEATURE_LAYER_URL in environment variables.
- * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Community_Blocks_Publication_View/FeatureServer/0' if not specified.
+ * Defaults to 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Community_Blocks_Publication_View/FeatureServer/0' if not specified.
  *
  * @see https://www.arcgis.com/home/item.html?id=db783b28d17c409bb0f0537c40ac09bd
  */
 export const COMMUNITY_UPDATES_FEATURE_LAYER_URL =
     ENV_COMMUNITY_UPDATES_FEATURE_LAYER_URL ||
-    'https://services.arcgis.com/jIL9msH9OI208GCb/ArcGIS/rest/services/Community_Blocks_Publication_View/FeatureServer/0';
+    'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Community_Blocks_Publication_View/FeatureServer/0';
 
 /**
  * Root URL of the World Imagery Basemap service.

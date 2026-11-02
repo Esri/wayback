@@ -13,61 +13,51 @@
  * limitations under the License.
  */
 
-// import { HYBRID_REFERENCE_LAYERS } from '@constants/map';
-// // import { selectReferenceLayerLocale } from '@store/Map/reducer';
-// import React, { useMemo } from 'react';
-// import { useAppSelector } from '@store/configureStore';
-// import { selectAppLanguage } from '@store/UI/reducer';
-
-// export const useSelecteReferenceLayer = () => {
-//     const appLanguage = useAppSelector(selectAppLanguage);
-
-//     const selectedLayer = useMemo(() => {
-//         const layer = HYBRID_REFERENCE_LAYERS.filter(
-//             (layer) => layer.languageCode === appLanguage
-//         )[0];
-
-//         if (layer) {
-//             console.warn(
-//                 'Could not find reference layer for app language:',
-//                 appLanguage
-//             );
-//             return layer;
-//         }
-
-//         return (
-//             HYBRID_REFERENCE_LAYERS.filter(
-//                 (layer) => layer.languageCode === 'en'
-//             )[0] || HYBRID_REFERENCE_LAYERS[0]
-//         );
-//     }, [appLanguage]);
-
-//     return selectedLayer;
-// };
-
-/**
- * IMPORTANT - THE SECTION ABOVE IS THE UPDATED CODE THAT WE SHOULD USE ONCE THE APP LANGUAGE FEATURE IS READY TO BE RELEASED.
- *
- * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
- */
-import { HYBRID_REFERENCE_LAYERS } from '@constants/map';
-import { selectReferenceLayerLocale } from '@store/Map/reducer';
+import {
+    HYBRID_REFERENCE_LAYERS,
+    ReferenceLayerLanguage,
+} from '@constants/map';
+// import { selectReferenceLayerLocale } from '@store/Map/reducer';
 import React, { useMemo } from 'react';
 import { useAppSelector } from '@store/configureStore';
+import { selectAppLanguage } from '@store/UI/reducer';
+import { selectShouldUseHybridReferenceLayer } from '@store/Map/reducer';
 
 export const useSelecteReferenceLayer = () => {
-    const selectedReferenceLayerLanguage = useAppSelector(
-        selectReferenceLayerLocale
+    const appLanguage = useAppSelector(selectAppLanguage);
+
+    const shouldUseHybridReferenceLayer = useAppSelector(
+        selectShouldUseHybridReferenceLayer
     );
 
     const selectedLayer = useMemo(() => {
-        const layer =
-            HYBRID_REFERENCE_LAYERS.filter(
-                (layer) => layer.language === selectedReferenceLayerLanguage
-            )[0] || HYBRID_REFERENCE_LAYERS[0];
+        // If the user has chosen to use the hybrid reference layer, return that layer regardless of the app language
+        if (shouldUseHybridReferenceLayer) {
+            return (
+                HYBRID_REFERENCE_LAYERS.filter(
+                    (layer) =>
+                        layer.language === ReferenceLayerLanguage.LocalLanguage
+                )[0] || HYBRID_REFERENCE_LAYERS[0]
+            );
+        }
 
-        return layer;
-    }, [selectedReferenceLayerLanguage]);
+        const layer = HYBRID_REFERENCE_LAYERS.filter(
+            (layer) => layer.languageCode === appLanguage
+        )[0];
+
+        if (layer) {
+            console.log(
+                `Selected reference layer locale: ${layer.language} (${layer.languageCode})`
+            );
+            return layer;
+        }
+
+        return (
+            HYBRID_REFERENCE_LAYERS.filter(
+                (layer) => layer.languageCode === 'en'
+            )[0] || HYBRID_REFERENCE_LAYERS[0]
+        );
+    }, [appLanguage, shouldUseHybridReferenceLayer]);
 
     return selectedLayer;
 };

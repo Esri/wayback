@@ -24,30 +24,44 @@ import { WORLD_IMAGERY_UPDATES_LAYER_FILL_COLORS } from '@constants/UI';
 import { PopupTemplateProperties } from '@arcgis/core/PopupTemplate';
 import { t } from 'i18next';
 
-const LayerTitleByCategory: Record<ImageryUpdatesCategory, string> = {
-    'vivid-advanced': 'Vantor Vivid Advanced imagery',
-    'vivid-standard': 'Vantor Vivid Standard imagery',
-    'community-contributed': 'Community Maps imagery',
+const getProductNameArcadeByCategory = (
+    category: ImageryUpdatesCategory
+): string => {
+    if (category === 'metro') {
+        const VantorProdName = 'Vantor Vivid Mosaic Metro imagery';
+
+        return `Decode(
+            Upper(Left(DefaultValue($feature, 'AdminName', ''), 5)),
+            'EVADV', '${VantorProdName}',
+            'ENEAR', 'Nearmap Metro imagery',
+            'EABUS', 'Airbus Metro imagery',
+            '${VantorProdName}'
+        )`;
+    }
+
+    if (category === 'regional') {
+        return `'Vantor Vivid Mosaic Regional imagery'`;
+    }
+
+    return `'Community Maps imagery'`;
 };
 
 export const getPopupTemplate = (
     category: ImageryUpdatesCategory
 ): PopupTemplateProperties => {
-    const layerTitle = LayerTitleByCategory[category];
-
     /**
-     * `pubQY` and `strDate` are Arcade variables computed at runtime inside the expression below,
+     * `productName`, `pubQY` and `strDate` are Arcade variables computed at runtime inside the expression below,
      * so they can't be passed through i18next as real values. Instead we splice the literal Arcade
      * concatenation syntax (`" + pubQY + "`) in as the interpolated value, with escaping disabled,
      * so translators can still reposition the variable within the sentence for their locale.
      */
     const pendingMessage = t('popup_pub_result_pending', {
-        layerTitle,
+        productName: '" + productName + "',
         pubQY: '" + pubQY + "',
         interpolation: { escapeValue: false },
     });
     const publishedMessage = t('popup_pub_result_published', {
-        layerTitle,
+        productName: '" + productName + "',
         strDate: '" + strDate + "',
         interpolation: { escapeValue: false },
     });
@@ -57,6 +71,11 @@ export const getPopupTemplate = (
     });
 
     return {
+        /**
+         * `AdminName` is only referenced by the Arcade expressions, and the popup does not
+         * reliably fetch it on its own, so request all fields to make sure it is available.
+         */
+        outFields: ['*'],
         expressionInfos: [
             {
                 name: 'expr0',
@@ -72,7 +91,8 @@ export const getPopupTemplate = (
                 name: 'expr1',
                 title: 'PubResult',
                 expression: `
-                    var monthList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                    var productName = ${getProductNameArcadeByCategory(category)};
+                    var monthList =["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
                     var utcDate = ToUTC($feature.PubDate);
                     var strDate =Year(utcDate) + "-" + monthList[Month(utcDate)] + "-" + Day(utcDate);
                     var pubQY = when(

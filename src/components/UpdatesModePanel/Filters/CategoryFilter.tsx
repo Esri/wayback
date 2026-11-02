@@ -47,12 +47,12 @@ export const CategoryFilter: FC<CategoryFilterProps> = ({ disabled }) => {
         }[] = [
             {
                 label: t('metropolitan_updates'),
-                value: 'vivid-advanced',
+                value: 'metro',
                 checked: false,
             },
             {
                 label: t('regional_updates'),
-                value: 'vivid-standard',
+                value: 'regional',
                 checked: false,
             },
             {

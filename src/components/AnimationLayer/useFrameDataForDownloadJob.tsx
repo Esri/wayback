@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import ImageElement from '@arcgis/core/layers/support/ImageElement';
+// import ImageElement from '@arcgis/core/layers/support/ImageElement';
 import {
     isReferenceLayerVisibleSelector,
     selectMapCenter,
@@ -125,10 +125,9 @@ export const useFrameDataForDownloadJob = ({
 
                 const frameData: AnimationFrameDataWithReleaseNumAsKey = {
                     image: images[i],
-                    imageInfo: `${item.releaseDateLabel}  |  x ${lon.toFixed(
-                        3
-                    )} y ${lat.toFixed(3)}`,
+                    imageInfo: `x ${lon.toFixed(3)} y ${lat.toFixed(3)}`,
                     key: item.releaseNum.toString(),
+                    acquisitionDate: item.releaseDateLabel,
                 };
 
                 data.push(frameData);

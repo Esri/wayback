@@ -24,8 +24,6 @@ import {
 } from '@store/UpdatesMode/selectors';
 import {
     COMMUNITY_COMTRIBUTED_IMAGERY_UPDATES_URL,
-    VIVID_ADVANCED_FROM_MAXAR_URL,
-    VIVID_STANDARD_FROM_MAXAR_URL,
     // WORLD_IMAGERY_UPDATES_LAYER_FIELDS,
     // WorldImageryUpdatesStatusEnum,
 } from '@services/world-imagery-updates/config';
@@ -42,6 +40,10 @@ import { useWorldImageryUpdatesStatistics } from './useWorldImageryUpdatesStatis
 import { useZoomToSelectedRegion } from './useZoomToSelectedRegion';
 import { AppContext } from '@contexts/AppContextProvider';
 import { useZoomToWorldExtent } from './useZoomToWorldExtent';
+import {
+    METROPOLITAN_UPDATES_FEATURE_LAYER_URL,
+    REGIONAL_UPDATES_FEATURE_LAYER_URL,
+} from '@constants/index';
 
 type Props = {
     mapView?: MapView;
@@ -70,12 +72,12 @@ export const WorldImageryUpdatesLayers: FC<Props> = ({ mapView }) => {
     const { notSignedIn } = useContext(AppContext);
 
     const layerURL = useMemo(() => {
-        if (catgegory === 'vivid-advanced') {
-            return VIVID_ADVANCED_FROM_MAXAR_URL;
+        if (catgegory === 'metro') {
+            return METROPOLITAN_UPDATES_FEATURE_LAYER_URL;
         }
 
-        if (catgegory === 'vivid-standard') {
-            return VIVID_STANDARD_FROM_MAXAR_URL;
+        if (catgegory === 'regional') {
+            return REGIONAL_UPDATES_FEATURE_LAYER_URL;
         }
 
         if (catgegory === 'community-contributed') {

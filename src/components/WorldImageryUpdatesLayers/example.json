@@ -7,7 +7,7 @@
                 {
                     "id": "1965e9f780a-layer-63",
                     "title": "symbology",
-                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0",
+                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Metropolitan_Blocks_Publication_View/FeatureServer/0",
                     "visibility": true,
                     "itemId": "8f5bccc72f384427ba35f4dfbcf3cf36",
                     "layerType": "ArcGISFeatureLayer",
@@ -251,7 +251,7 @@
                 {
                     "id": "1965ea2fb22-layer-64",
                     "title": "Thick stroke, blur, destination in",
-                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Vivid_Advanced_Blocks_Publication_View/FeatureServer/0",
+                    "url": "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Metropolitan_Blocks_Publication_View/FeatureServer/0",
                     "visibility": true,
                     "itemId": "8f5bccc72f384427ba35f4dfbcf3cf36",
                     "layerType": "ArcGISFeatureLayer",

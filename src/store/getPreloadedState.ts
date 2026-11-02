@@ -34,9 +34,9 @@ import {
 } from '@utils/urlParams';
 
 import {
-    // getShouldOpenSaveWebMapDialog,
+    getShouldUseHybridReferenceLayer, // getShouldOpenSaveWebMapDialog,
     // getDownloadJobsFromLocalStorage,
-    getPreferredReferenceLayerLocale,
+    // getPreferredReferenceLayerLocale,
     // getDefaultMapLocation,
 } from '@utils/LocalStorage';
 import {
@@ -184,10 +184,8 @@ const getPreloadedState4Map = (hashParams: URLSearchParams): MapState => {
         mapExtent,
         center: initialMapCenter?.center,
         zoom: initialMapCenter?.zoom,
-        /**
-         * THIS IS THE LEGACY CODE THAT WILL BE USED TEMPORARILY UNTIL WE ARE READY TO RELEASE THE APP LANGUAGE FEATURE.
-         */
-        referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
+        // referenceLayerLocale: getPreferredReferenceLayerLocale() || null, //ReferenceLayerLanguage.English,
+        shouldUseHybridReferenceLayer: getShouldUseHybridReferenceLayer(),
     };
 
     return state;

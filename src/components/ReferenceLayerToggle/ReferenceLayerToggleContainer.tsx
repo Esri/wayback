@@ -24,14 +24,17 @@ import {
     // isReferenceLayerSwitcherOpenToggled,
     isReferenceLayerVisibleSelector,
     isReferenceLayerVisibleToggled,
+    selectShouldUseHybridReferenceLayer,
     // selectIsReferenceLayerSwitcherOpen,
 } from '@store/Map/reducer';
 // import { MobileHide } from '../MobileVisibility';
 
 import ReferenceLayerToggle from './ReferenceLayerToggle';
 import { IS_MOBILE } from '@constants/UI';
-import { LocaleSwitch } from './LocaleSwitch';
 import useOnClickOutside from '@hooks/useOnClickOutside';
+import { ReferenceLayerSetting } from './ReferenceLayerSetting';
+// import { LocaleSwitch } from './LocaleSwitch';
+// import useOnClickOutside from '@hooks/useOnClickOutside';
 // import { useSuggestReferenceLayerLocale } from './useSuggestReferenceLayerLocale';
 
 const ReferenceLayerToggleContainer = () => {
@@ -47,7 +50,10 @@ const ReferenceLayerToggleContainer = () => {
         dispatch(isReferenceLayerVisibleToggled());
     }, []);
 
-    const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+    // const [isLocaleSwitchOpen, setIsLocaleSwitchOpen] = useState(false);
+
+    const [isReferenceLayerSettingsOpen, setIsReferenceLayerSettingsOpen] =
+        useState(false);
 
     // const isLocaleSwitchOpen = useAppSelector(
     //     selectIsReferenceLayerSwitcherOpen
@@ -55,9 +61,17 @@ const ReferenceLayerToggleContainer = () => {
 
     const isAnimationActive = useAppSelector(selectIsAnimationActive);
 
+    const shouldUseHybridReferenceLayer = useAppSelector(
+        selectShouldUseHybridReferenceLayer
+    );
+
+    // useOnClickOutside(containerRef, () => {
+    //     setIsLocaleSwitchOpen(false);
+    //     // dispatch(isReferenceLayerSwitcherOpenToggled(false));
+    // });
+
     useOnClickOutside(containerRef, () => {
-        setIsLocaleSwitchOpen(false);
-        // dispatch(isReferenceLayerSwitcherOpenToggled(false));
+        setIsReferenceLayerSettingsOpen(false);
     });
 
     // useSuggestReferenceLayerLocale();
@@ -74,13 +88,24 @@ const ReferenceLayerToggleContainer = () => {
             <ReferenceLayerToggle
                 isActive={isReferenceLayerVisible}
                 onClick={toggleReferenceLayer}
-                localeSwitchButtonOnClick={() => {
-                    setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
-                    // dispatch(isReferenceLayerSwitcherOpenToggled());
+                // localeSwitchButtonOnClick={() => {
+                //     setIsLocaleSwitchOpen(!isLocaleSwitchOpen);
+                //     // dispatch(isReferenceLayerSwitcherOpenToggled());
+                // }}
+                referenceLayerSettingsButtonOnClick={() => {
+                    setIsReferenceLayerSettingsOpen(
+                        !isReferenceLayerSettingsOpen
+                    );
                 }}
             />
 
-            {isLocaleSwitchOpen && <LocaleSwitch />}
+            {isReferenceLayerSettingsOpen && (
+                <ReferenceLayerSetting
+                    shouldUseHybridReferenceLayer={
+                        shouldUseHybridReferenceLayer
+                    }
+                />
+            )}
         </div>
     );
 };
