@@ -40,7 +40,7 @@ const getProductNameArcadeByCategory = (
     }
 
     if (category === 'regional') {
-        return `'Vantor Vivid Mosaic Global imagery'`;
+        return `'Vantor Vivid Mosaic Regional imagery'`;
     }
 
     return `'Community Maps imagery'`;
